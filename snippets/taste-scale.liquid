@@ -1,0 +1,44 @@
+ <style>
+    .product-taste-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 20px;
+    }
+    .product-taste-one,
+    .product-taste-two,
+    .product-taste-three,
+    .product-taste-four,
+    .product-taste-five {
+      height: 5px;
+      width: 65px;
+      
+    }
+    .product-taste-one {
+      background-color: #1b4f72;
+    }
+    .product-taste-two {
+      background-color: #8b4513;
+    }
+    .product-taste-three {
+      background-color: #d60540;
+    }
+    .product-taste-four {
+      background-color: #c4823e;
+    }
+    .product-taste-five {
+      background-color: #ffdf70;
+    }
+    .highlighted {
+      border: 2px solid black;
+      transform: scale(1.2);
+    }
+  </style>
+{{ taste }}
+  <div class="product-taste-wrapper">
+    <div class="product-taste-one {% if taste == 'one' %}highlighted{% endif %}"> </div>
+    <div class="product-taste-two {% if taste == 'two' %}highlighted{% endif %}"> </div>
+    <div class="product-taste-three {% if taste == 'three' %}highlighted{% endif %}"> </div>
+    <div class="product-taste-four {% if taste == 'four' %}highlighted{% endif %}"> </div>
+    <div class="product-taste-five {% if taste == 'frooty' %}highlighted{% endif %}"> </div>
+  </div>

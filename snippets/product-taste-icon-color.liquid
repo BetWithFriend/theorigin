@@ -1,0 +1,90 @@
+<!-- snippets/product-taste-icon-color.liquid -->
+<div class="selection-wrapper">
+  <!-- Dynamic Text Section -->
+  
+  <!-- <script>
+  console.log('boom', {{ tastes |  json}});
+</script> -->
+ {% if tastes.size > 0 %}
+  {% for taste in tastes %}
+    <!-- Conditional Color -->
+    {% case taste %}
+      {% when 'frooty' %}
+      <span>פירותי</span>
+        <span class="selection-color" style="background-color: #FFDF70;" aria-label="Yellow Indicator"></span>
+      {% when 'chocolate' %}
+      <span>פירותי מתוק</span>
+        <span class="selection-color" style="background-color: #8B4513;" aria-label="Brown Indicator"></span>
+      {% when 'sweet-chocolate' %}
+      <span>מתוק מאוזן</span>
+        <span class="selection-color" style="background-color: #C4823E;" aria-label="Orange Indicator"></span>
+      {% when 'balanced-sweet' %}
+      <span>מתוק שוקולדי</span>
+        <span class="selection-color" style="background-color: #D60540;" aria-label="Red Indicator"></span>
+      {% when 'sweet-frooty' %}
+      <span>שוקולדי</span>
+        <span class="selection-color" style="background-color: #FF974A;" aria-label="Orange Indicator"></span>
+    {% endcase %}
+    
+    <!-- Conditional Icons -->
+    <div class="selection-icons">
+      {% case taste %}
+        {% when 'espresso' %}
+          <img src="{{ 'brew-Espresso.png' | asset_url }}" alt="Espresso Brew" class="icon">
+        {% when 'turkish' %}
+          <img src="{{ 'brew-Turkish.png' | asset_url }}" alt="Turkish Brew" class="icon">
+        {% when 'chemex' %}
+          <img src="{{ 'brew-Chemex.png' | asset_url }}" alt="Chemex Brew" class="icon">
+        {% when 'moka' %}
+          <img src="{{ 'brew-Moka.png' | asset_url }}" alt="Moka Brew" class="icon">
+      {% endcase %}
+    </div>
+  {% endfor %}
+{% endif %}
+</div>
+  
+
+<style>
+  .selection-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* For right-to-left alignment */
+  gap: 8px; /* Space between items */
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.selection-text {
+  font-size: 16px;
+  color: #333;
+}
+
+.selection-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.selection-icons {
+  display: flex;
+  gap: 4px; /* Space between icons */
+}
+
+.selection-icons .icon {
+  width: 24px;
+  height: 24px;
+}
+  .product-taste-icons {
+  /* margin-top: 10px; /* Add space between the image and the icons */
+  text-align: center; /* Center the icons horizontally */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-taste-icons img {
+  width: 24px; /* Ensure icons are a consistent size */
+  height: 24px;
+  margin: 0 5px; /* Add spacing between multiple icons */
+}
+</style>
