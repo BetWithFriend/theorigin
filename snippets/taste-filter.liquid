@@ -1,0 +1,131 @@
+<!-- snippets/filter-dropdown.liquid -->
+
+<div class="dropdown-filter">
+  <button class="dropdown-button" onclick="toggleDropdown()">סינון לפי טעמים</button>
+  <div class="dropdown-menu" id="dropdownMenu">
+
+    <div class="dropdown-item" onclick="filterByTag('fruit')">
+      <span>פירותי</span>
+      <div class="dropdown-icons">
+        <!-- <img src="{{ 'icon-fruity.svg' | asset_url }}" alt="Fruity Icon" /> -->
+        <span class="color-circle" style="background-color: #FFDF70;"></span>
+      </div>
+    </div>
+    <div class="dropdown-item {% if taste == 'frooty' %}highlighted{% endif %}" onclick="filterByTag('sweet-fruit')">
+      <span>פירותי מתוק</span>
+      <div class="dropdown-icons">
+        <!-- <img src="{{ 'icon-sweet.svg' | asset_url }}" alt="Sweet Icon" /> -->
+        <span class="color-circle" style="background-color: #FF974A;"></span>
+      </div>
+    </div>
+    <div class="dropdown-item" onclick="filterByTag('rich')">
+      <span>מתוק מאוזן</span>
+      <div class="dropdown-icons">
+        <!-- <img src="{{ 'icon-rich.svg' | asset_url }}" alt="Rich Icon" /> -->
+        <span class="color-circle" style="background-color: #D60540;"></span>
+      </div>
+    </div>
+    <div class="dropdown-item" onclick="filterByTag('chocolatey')">
+      <span>מתוק שוקולדי</span>
+      <div class="dropdown-icons">
+        <!-- <img src="{{ 'icon-choco.svg' | asset_url }}" alt="Chocolate sweet Icon" /> -->
+        <span class="color-circle" style="background-color: #C4823E;"></span>
+      </div>
+    </div>
+    <div class="dropdown-item" onclick="filterByTag('chocolatey')">
+      <span>שוקולדי</span>
+      <div class="dropdown-icons">
+        <!-- <img src="{{ 'icon-choco.svg' | asset_url }}" alt="Chocolate Icon" /> -->
+        <span class="color-circle" style="background-color: #8B4513;"></span>
+      </div>
+    </div>
+    <div class="dropdown-item" onclick="filterByTag('all')">
+      <span>הכל</span>
+    </div>
+
+  </div>
+</div>
+
+
+<style>
+  .dropdown-filter {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .dropdown-button {
+    font-family:  'Noto Sans', sans-serif;
+    width: 100%;
+    color: #767676;
+    background-color: #ffffff;
+    border: 1px solid #0000001A;
+    padding: 11px 16px;
+    text-align: right;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 400;
+    border-radius: 4px;
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    z-index: 10;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .dropdown-item {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .dropdown-item:hover {
+    background-color: #f4f4f4;
+  }
+
+  .dropdown-icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .color-circle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+  }
+</style>
+
+<script>
+  function toggleDropdown() {
+    const menu = document.getElementById('dropdownMenu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function filterByTag(sTaste) {
+    
+   // Update the selected taste in a hidden input or URL parameter
+    const form = document.createElement('form');
+    form.method = 'GET'; // You can use POST if needed
+    form.action = window.location.href.split('?')[0]; // Reload the same page
+
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'selected_taste';
+    input.value = sTaste;
+
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit(); // Submit the form to reload the page with the selected taste
+  }
+</script>

@@ -1,0 +1,114 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image_banner": {
+      "type": "image-banner",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "הקפה הטוב בישראל במקום אחד",
+            "heading_size": "h0"
+          }
+        },
+        "text_Ed7DgE": {
+          "type": "text",
+          "settings": {
+            "text": "קפה מקולי הקפה המובחרים של ישראל - קלייה טרייה, כחול-לבן, מעסקים קטנים שנבחרו בקפידה",
+            "text_style": "body"
+          }
+        },
+        "button": {
+          "type": "buttons",
+          "settings": {
+            "button_label_1": "לחנות",
+            "button_link_1": "shopify://collections/all",
+            "button_style_secondary_1": true,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text_Ed7DgE",
+        "button"
+      ],
+      "custom_css": [
+        ".banner__media {/*border-radius: 16px;*/ background-color: #ffffff; overflow: hidden;}",
+        ".banner__heading {color: #fff;}",
+        ".banner__text {color: #fff;}"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/a-photo-of-an-artisanal-coffee-roastery-_MoSJ00xaS_usKY2ThCEN_Q_H9YLQU_ATY6Frs0nGgo43A.jpg",
+        "image_overlay_opacity": 40,
+        "image_height": "medium",
+        "desktop_content_position": "middle-right",
+        "show_text_box": false,
+        "desktop_content_alignment": "right",
+        "color_scheme": "scheme-06547adb-270b-4f76-92a3-0bb7bcf58e12",
+        "image_behavior": "ambient",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": false,
+        "show_text_below": false
+      }
+    },
+    "custom_liquid_aWGKXY": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "",
+        "color_scheme": "scheme-06547adb-270b-4f76-92a3-0bb7bcf58e12",
+        "padding_top": 64,
+        "padding_bottom": 0
+      }
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "custom_css": [
+        ".title {font-size: 65px; text-align: right; font-weight: 700;}",
+        ".gradient {border-radius: 16px;}",
+        ".card__content {text-align: right;}",
+        ".card-information {text-align: right;}"
+      ],
+      "settings": {
+        "title": "מה מעניין עכשיו",
+        "heading_size": "h0",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "all",
+        "products_to_show": 6,
+        "columns_desktop": 3,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "enable_desktop_slider": false,
+        "color_scheme": "scheme-1",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 44,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "image_banner",
+    "custom_liquid_aWGKXY",
+    "featured_collection"
+  ]
+}
