@@ -3,42 +3,65 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 20px;
+      height: 30px;
+      width: 100%;
+      margin-bottom: 20px;
+      font-family: 'Noto Sans', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      position: relative;
     }
-    .product-taste-one,
-    .product-taste-two,
-    .product-taste-three,
-    .product-taste-four,
-    .product-taste-five {
+    .product-taste-earth,
+    .product-taste-chocolate,
+    .product-taste-sweet,
+    .product-taste-balanced-sweet,
+    .product-taste-frooty {
       height: 5px;
       width: 65px;
-      
+      padding: 2px 7px;
     }
-    .product-taste-one {
+    .product-taste-earth {
       background-color: #1b4f72;
     }
-    .product-taste-two {
+    .product-taste-chocolate {
       background-color: #8b4513;
     }
-    .product-taste-three {
+    .product-taste-sweet {
       background-color: #d60540;
     }
-    .product-taste-four {
+    .product-taste-balanced-sweet {
       background-color: #c4823e;
     }
-    .product-taste-five {
+    .product-taste-frooty {
       background-color: #ffdf70;
     }
     .highlighted {
       border: 2px solid black;
       transform: scale(1.2);
     }
+
+    .taste-indicator {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid white;
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+      transition: left 0.3s ease-in-out;
+    }
+
+    .taste-indicator.earth { left: 79%; background-color: #1b4f72; } /* Left */
+    .taste-indicator.chocolate { left: 64%; background-color: #8b4513; } /* 25% */
+    .taste-indicator.sweet { left: 49%; background-color: #d60540; } /* Middle */
+    .taste-indicator.balanced-sweet { left: 34%; background-color: #c4823e; } /* 75% */
+    .taste-indicator.frooty { left: 19%; background-color: #ffdf70; } /* Right */
   </style>
-{{ taste }}
-  <div class="product-taste-wrapper">
-    <div class="product-taste-one {% if taste == 'one' %}highlighted{% endif %}"> </div>
-    <div class="product-taste-two {% if taste == 'two' %}highlighted{% endif %}"> </div>
-    <div class="product-taste-three {% if taste == 'three' %}highlighted{% endif %}"> </div>
-    <div class="product-taste-four {% if taste == 'four' %}highlighted{% endif %}"> </div>
-    <div class="product-taste-five {% if taste == 'frooty' %}highlighted{% endif %}"> </div>
+  <div class="product-taste-wrapper" dir="rtl">
+    <div class="product-taste-earth">אדמתי</div>
+    <div class="product-taste-chocolate"> </div>
+    <div class="product-taste-sweet">מתקתק</div>
+    <div class="product-taste-balanced-sweet"> </div>
+    <div class="product-taste-frooty">פירותי</div>
+  
+    <div class="taste-indicator {{ taste }}"> </div>
   </div>

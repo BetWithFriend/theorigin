@@ -1,42 +1,65 @@
 <!-- snippets/filter-dropdown.liquid -->
 
 <div class="dropdown-filter">
-  <button class="dropdown-button" onclick="toggleDropdown()">סינון לפי טעמים</button>
+  <button class="dropdown-button" onclick="toggleDropdown()">סינון לפי טעמים
+    <img src="{{ 'dropdown-icon.png' | asset_url }}" alt="Dropdown Icon" class="dropdown-icon">
+  </button>
+
   <div class="dropdown-menu" id="dropdownMenu">
 
     <div class="dropdown-item" onclick="filterByTag('fruit')">
-      <span>פירותי</span>
       <div class="dropdown-icons">
-        <!-- <img src="{{ 'icon-fruity.svg' | asset_url }}" alt="Fruity Icon" /> -->
+        <span>פירותי</span>
         <span class="color-circle" style="background-color: #FFDF70;"></span>
+      </div>
+      <div class="dropdown-icons">
+        <img class="dropdown-icon-img dropdown-hidden" src="" alt="empty" /> 
+      <img class="dropdown-icon-img" src="{{ 'dropdown-brew-v60.png' | asset_url }}" alt="v60 Icon" /> 
+      <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Icon" /> 
       </div>
     </div>
     <div class="dropdown-item {% if taste == 'frooty' %}highlighted{% endif %}" onclick="filterByTag('sweet-fruit')">
-      <span>פירותי מתוק</span>
       <div class="dropdown-icons">
-        <!-- <img src="{{ 'icon-sweet.svg' | asset_url }}" alt="Sweet Icon" /> -->
-        <span class="color-circle" style="background-color: #FF974A;"></span>
+      <span>פירותי מתוק</span>
+      <span class="color-circle" style="background-color: #FF974A;"></span>
+      </div>
+      <div class="dropdown-icons">
+        <img class="dropdown-icon-img dropdown-hidden" src="" alt="empty" /> 
+        <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Chemex.png' | asset_url }}" alt="v60 Icon" /> 
+        <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Icon" /> 
       </div>
     </div>
     <div class="dropdown-item" onclick="filterByTag('rich')">
-      <span>מתוק מאוזן</span>
       <div class="dropdown-icons">
-        <!-- <img src="{{ 'icon-rich.svg' | asset_url }}" alt="Rich Icon" /> -->
+        <span>מתוק מאוזן</span>
         <span class="color-circle" style="background-color: #D60540;"></span>
       </div>
-    </div>
-    <div class="dropdown-item" onclick="filterByTag('chocolatey')">
-      <span>מתוק שוקולדי</span>
       <div class="dropdown-icons">
-        <!-- <img src="{{ 'icon-choco.svg' | asset_url }}" alt="Chocolate sweet Icon" /> -->
-        <span class="color-circle" style="background-color: #C4823E;"></span>
+        <img class="dropdown-icon-img dropdown-hidden" src="" alt="empty" /> 
+        <img class="dropdown-icon-img dropdown-hidden" src="" alt="empty" /> 
+        <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Icon" /> 
       </div>
     </div>
     <div class="dropdown-item" onclick="filterByTag('chocolatey')">
-      <span>שוקולדי</span>
       <div class="dropdown-icons">
-        <!-- <img src="{{ 'icon-choco.svg' | asset_url }}" alt="Chocolate Icon" /> -->
+        <span>מתוק שוקולדי</span>
+        <span class="color-circle" style="background-color: #C4823E;"></span>
+      </div>
+      <div class="dropdown-icons">
+        <img class="dropdown-icon-img " src="{{  'dropdown-brew-Moka.png' | asset_url }}" alt="Moka Icon" /> 
+        <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Chemex.png' | asset_url }}" alt="v60 Icon" /> 
+        <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Icon" /> 
+      </div>
+    </div>
+    <div class="dropdown-item" onclick="filterByTag('chocolatey')">
+      <div class="dropdown-icons">
+        <span>שוקולדי</span>
         <span class="color-circle" style="background-color: #8B4513;"></span>
+      </div>
+      <div class="dropdown-icons">
+        <img class="dropdown-icon-img " src="{{  'dropdown-brew-Moka.png' | asset_url }}" alt="Moka Icon" /> 
+        <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Turkish.png' | asset_url }}" alt="Turkish Icon" /> 
+        <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Icon" />         
       </div>
     </div>
     <div class="dropdown-item" onclick="filterByTag('all')">
@@ -54,6 +77,9 @@
     max-width: 400px;
     margin: 0 auto;
   }
+  .dropdown-hidden {
+    visibility: hidden
+  }
 
   .dropdown-button {
     font-family:  'Noto Sans', sans-serif;
@@ -67,6 +93,10 @@
     cursor: pointer;
     font-weight: 400;
     border-radius: 4px;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    justify-content: space-between;
   }
 
   .dropdown-menu {
@@ -82,11 +112,12 @@
   }
 
   .dropdown-item {
-    padding: 10px 15px;
+    padding: 12px 32px;
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
     align-items: center;
     cursor: pointer;
+    gap: 112px;
   }
 
   .dropdown-item:hover {
@@ -98,12 +129,26 @@
     align-items: center;
     gap: 8px;
   }
+  .dropdown-icon {
+    width: 12px;
+  }
 
   .color-circle {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    border-radius: 30px;
   }
+
+  .dropdown-button {
+  /* background: url("{{ 'dropdown-icon.svg' | asset_url }}") no-repeat right center; */
+  background-size: 16px; /* Adjust as needed */
+  padding-right: 24px; /* Make space for the icon */
+}
+
+.dropdown-icon-img {
+  height: 24px;
+  width: 24px;
+}
 </style>
 
 <script>
