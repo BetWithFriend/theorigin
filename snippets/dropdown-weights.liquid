@@ -1,0 +1,82 @@
+<div class="dropdown-weight">
+  <button class="dropdown-weight-toggle" type="button" id="weightDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    משקל
+    <img src="{{ 'dropdown-icon.png' | asset_url }}" alt="Dropdown Icon" class="dropdown-weight-icon" />
+  </button>
+
+  <div class="dropdown-weight-menu" aria-labelledby="weightDropdown">
+    {% for weight in weights %}       
+    <div class="dropdown-item" onclick="filterByvariant('{{ weight }}')">
+      <div class="dropdown-weight-icons">
+        <span>{{ weight }}</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  </div>
+
+<style>
+  .dropdown-weight {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown-weight-toggle {
+    font-family:  'Noto Sans', sans-serif;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 700;
+    padding: 8px 16px;
+    cursor: pointer;
+    background-color: #E3E0DA;
+    border: 1px solid #303030;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 112px;
+    height: 40px;
+  }
+  .dropdown-weight-menu {
+    display: none;
+    position: absolute;
+    background-color: #E3E0DA;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 2;
+  }
+  .dropdown-weight:hover .dropdown-weight-menu {
+    display: block;
+  }
+  .dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+  }
+  .dropdown-weight-icons {
+    display: flex;
+    align-items: center;
+  }
+  .dropdown-weight-icon {
+    width: 12px;
+  }
+</style>
+
+<script>
+  function filterByvariant(variant) {
+    // Close the dropdown
+    document.querySelector('.dropdown-weight-menu').style.display = 'none';
+
+    // Show the selected variant in the button
+    document.getElementById('weightDropdown').childNodes[0].nodeValue = variant;
+  }
+
+  // Ensure the dropdown can be toggled
+  document.getElementById('weightDropdown').addEventListener('click', function() {
+    var dropdownMenu = document.querySelector('.dropdown-weight-menu');
+    if (dropdownMenu.style.display === 'block') {
+      dropdownMenu.style.display = 'none';
+    } else {
+      dropdownMenu.style.display = 'block';
+    }
+  });
+</script>

@@ -9,7 +9,7 @@
   {% for taste in tastes %}
     <!-- Conditional Color -->
     {% case taste %}
-      {% when 'frooty' %}
+      {% when 'fruity' %}
       <span>פירותי</span>
         <span class="selection-color" style="background-color: #FFDF70;" aria-label="Yellow Indicator"></span>
       {% when 'chocolate' %}
@@ -21,7 +21,7 @@
       {% when 'balanced-sweet' %}
       <span>מתוק שוקולדי</span>
         <span class="selection-color" style="background-color: #D60540;" aria-label="Red Indicator"></span>
-      {% when 'sweet-frooty' %}
+      {% when 'sweet-fruity' %}
       <span>שוקולדי</span>
         <span class="selection-color" style="background-color: #FF974A;" aria-label="Orange Indicator"></span>
     {% endcase %}

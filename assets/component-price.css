@@ -19,8 +19,12 @@
 }
 
 .price .price-item {
-  display: inline-block;
-  margin: 0 1rem 0 0;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  text-align: right;
+  /* display: inline-block; */
+  /* margin: 0 1rem 0 0; */
 }
 
 .price__regular .price-item--regular {
@@ -74,9 +78,10 @@
 }
 
 .price--on-sale .price__sale {
-  display: initial;
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  gap: 20px;
 }
 
 .price--center {

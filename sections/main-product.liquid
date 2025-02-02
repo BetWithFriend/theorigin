@@ -79,11 +79,14 @@
       <div class="grid__item product__media-wrapper">
         {% render 'product-media-gallery', variant_images: variant_images %}
       </div>
-               {% if product.tags.size > 0 %}
-                {% assign product_taste = product.tags.first | strip %}
-                {% render 'taste-scale', taste: product_taste %}
-                {% endif %}
-      <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+
+      {% comment %} Render the taste scale {% endcomment %}
+      {% if product.tags.size > 0 %}
+      {% assign product_taste = product.tags.first | strip %}
+      {% render 'taste-scale', taste: product_taste %}
+      {% endif %}
+
+   <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section dir="rtl"
           id="ProductInfo-{{ section.id }}"
           class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
@@ -119,17 +122,22 @@
                     price_class: 'price--large'
                   -%}
                 </div>
+
+                <div class="product-variants-wrapper">
+
+                {% assign grind_size = product.metafields.custom.origin_grind_size %}
+                {% assign grind_size_array = grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
+                {% render 'variant-dropdown' , grind_size: grind_size_array %}
+
+                {% assign weights = product.metafields.custom.weight %}
+                {% assign weights_array = weights | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
+                {% render 'dropdown-weights' , weights: weights_array %}
+                </div>
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
                     <span>{{ 'products.product.volume_pricing.note' | t }}</span>
                   </div>
                 {%- endif -%}
-              
-                {% comment %} {% if product.tags.size > 0 %}
-                {% assign product_taste = product.tags.first | strip %}
-                {% render 'taste-scale', taste: product_taste %}
-                {% endif %} {% endcomment %}
-              
                 {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
                   <div class="product__tax caption rte">
                     {%- if cart.duties_included and cart.taxes_included -%}

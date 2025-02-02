@@ -29,8 +29,29 @@
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
       }
+    },
+    {
+      "key": "origin_grind_size",
+      "namespace": "custom",
+      "name": "origin_grind_size",
+      "description": "",
+      "type": {
+        "name": "list.single_line_text_field",
+        "category": "TEXT"
+      }
     }
   ],
-  "variant": [],
+  "variant": [
+    {
+      "key": "origin_grind_size",
+      "namespace": "Bloom",
+      "name": "Bloom Origin Grind Size",
+      "description": "",
+      "type": {
+        "name": "list.single_line_text_field",
+        "category": "TEXT"
+      }
+    }
+  ],
   "shop": []
 }
