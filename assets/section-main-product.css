@@ -190,7 +190,15 @@ product-info {
 }
 
 .product-form__submit {
-  margin-bottom: 1rem;
+  width: 342px;
+  height: 59px;
+  padding: 16px 48px;
+  border-radius: 15px;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: #E3E0DA;
+  /* margin-bottom: 1rem; */
 }
 
 .product-form__submit[aria-disabled='true'] + .shopify-payment-button .shopify-payment-button__button[disabled],
@@ -364,6 +372,9 @@ a.product__text {
 }
 
 .product-form__buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   max-width: 44rem;
 }
 
@@ -423,7 +434,8 @@ a.product__text {
   .product-variants-wrapper {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
+    gap: 24px;
   }
 }
 

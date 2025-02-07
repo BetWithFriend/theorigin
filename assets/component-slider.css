@@ -35,7 +35,7 @@ slider-component.slider-component-full-width {
 @media screen and (max-width: 749px) {
   .slider.slider--mobile {
     position: relative;
-    flex-wrap: inherit;
+    /* flex-wrap: inherit; */
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;

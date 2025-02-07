@@ -124,15 +124,21 @@
                 </div>
 
                 <div class="product-variants-wrapper">
+                  {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
 
-                {% assign grind_size = product.metafields.custom.origin_grind_size %}
-                {% assign grind_size_array = grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
+                {% comment %} {% assign grind_size = product.metafields.custom.origin_grind_size %} {% endcomment %}
+                {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
                 {% render 'variant-dropdown' , grind_size: grind_size_array %}
 
-                {% assign weights = product.metafields.custom.weight %}
-                {% assign weights_array = weights | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
+                {% comment %} {% assign weights = product.metafields.custom.weight %} {% endcomment %}
+                {% assign weights_array = vendor.allowed_weights %}
                 {% render 'dropdown-weights' , weights: weights_array %}
-                </div>
+
+                {% comment %} {% assign quantity = product.metafields.custom.product_quantity %} {% endcomment %}
+                {% assign quantity_array = vendor.quantity %}
+                {% render 'dropdown-quantity' , quantity: quantity_array %}
+              </div>
+               
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
                     <span>{{ 'products.product.volume_pricing.note' | t }}</span>
@@ -743,6 +749,7 @@
   </div>
 </product-info>
 
+{% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description %}
 {% schema %}
 {
   "name": "t:sections.main-product.name",

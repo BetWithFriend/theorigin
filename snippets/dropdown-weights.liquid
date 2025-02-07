@@ -3,12 +3,11 @@
     משקל
     <img src="{{ 'dropdown-icon.png' | asset_url }}" alt="Dropdown Icon" class="dropdown-weight-icon" />
   </button>
-
   <div class="dropdown-weight-menu" aria-labelledby="weightDropdown">
-    {% for weight in weights %}       
+    {% for weight in weights.value %}      
     <div class="dropdown-item" onclick="filterByvariant('{{ weight }}')">
-      <div class="dropdown-weight-icons">
-        <span>{{ weight }}</span>
+      <div class="dropdown-weight-icons" dir="ltr">
+        <span>{{ weight.value }} {{ weight.unit }} </span>
       </div>
     </div>
     {% endfor %}
@@ -41,7 +40,7 @@
     display: none;
     position: absolute;
     background-color: #E3E0DA;
-    min-width: 160px;
+    width: 112px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     z-index: 2;
   }
@@ -55,6 +54,7 @@
   .dropdown-weight-icons {
     display: flex;
     align-items: center;
+    text-align: right;
   }
   .dropdown-weight-icon {
     width: 12px;

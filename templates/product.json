@@ -15,7 +15,7 @@
         "@media (max-width: 768px) {.product__title {flex-direction: column; display: flex; align-items: center; justify-content: center; margin-bottom: unset; } .product-title-text {font-weight: 700; font-size: 48px; line-height: 65px; color: #1c201d; } .product_subtitle > p {font-weight: 400; font-size: 15px; line-height: 20px; color: #1c201d; margin: 2px; }}"
       ],
       "settings": {
-        "custom_liquid": "<div class=\"product__title\" {{ block.shopify_attributes }}>\n                  <div class=\"product-title-text\">{{ product.title }}</div>\n                  <div class=\"product_subtitle\">{{ product.description }}</div>\n                </div>",
+        "custom_liquid": "<div class=\"product__title\" {{ block.shopify_attributes }}>\n                  <div class=\"product-title-text\">{{ product.title }}</div>\n                  <div class=\"product_subtitle\">{{ product.metafields.custom.product_origin }}</div>\n                </div>",
         "color_scheme": "scheme-1397de02-f2a7-4295-9df3-ed962137881c",
         "padding_top": 0,
         "padding_bottom": 0
@@ -49,6 +49,7 @@
         },
         "quantity_selector": {
           "type": "quantity_selector",
+          "disabled": true,
           "settings": {}
         },
         "buy_buttons": {
@@ -81,9 +82,9 @@
         "description",
         "share"
       ],
-      "custom_css": [
-        "@media (max-width: 768px) {.quantity {border-radius: 10px; } .product-form__buttons {display: flex; align-items: center; justify-content: center; } .product-form__submit {height: 59px; width: 336px; } .price-item--regular {font-size: 24px; line-height: 32px; font-weight: 700; text-align: right; direction: initial; }}"
-      ],
+      // "custom_css": [
+      //   "@media (max-width: 768px) {.quantity {border-radius: 10px; } .product-form__buttons {display: flex; align-items: center; justify-content: center; } .product-form__submit {height: 59px; width: 336px; } .price-item--regular {font-size: 24px; line-height: 32px; font-weight: 700; text-align: right; direction: initial; }}"
+      // ],
       "settings": {
         "enable_sticky_info": true,
         "color_scheme": "scheme-1397de02-f2a7-4295-9df3-ed962137881c",
@@ -108,7 +109,7 @@
         ".product-vendor-img {width: 61px;}"
       ],
       "settings": {
-        "custom_liquid": "<div class=\"product-vendor-wrapper\">\n\n    <div class=\"product-vendor-text\" dir=\"rtl\">\n         בית קליה קטן מפרדס חנה עם התמחות מיוחדת בקפה ספשלטי\n    </div>\n<img class=\"product-vendor-img\" alt=\"\" src=\"{{ 'bloom_logo.png' | asset_url }}\"/>\n</div>",
+        // "custom_liquid": "<div class=\"product-vendor-wrapper\">\n\n    <div class=\"product-vendor-text\" dir=\"rtl\">\n         בית קליה קטן מפרדס חנה עם התמחות מיוחדת בקפה ספשלטי\n    </div>\n<img class=\"product-vendor-img\" alt=\"\" src=\"{{ 'bloom_logo.png' | asset_url }}\"/>\n</div>",
         "color_scheme": "scheme-1397de02-f2a7-4295-9df3-ed962137881c",
         "padding_top": 0,
         "padding_bottom": 0

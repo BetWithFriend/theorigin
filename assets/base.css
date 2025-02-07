@@ -961,11 +961,12 @@ summary::-webkit-details-marker {
     max-width: none;
   }
 }
-
+.product__info-wrapper {
+  padding: 0 24px;
+}
 .grid--1-col .grid__item {
   max-width: 100%;
   width: 100%;
-  padding: 0 24px;
 }
 
 .grid--3-col .grid__item {
@@ -1093,7 +1094,7 @@ summary::-webkit-details-marker {
   }
 
   .grid--peek.slider .grid__item:first-of-type {
-    margin-left: 1.5rem;
+    /* margin-left: 1.5rem; */
   }
 
   /* Fix to show some space at the end of our sliders in all browsers */

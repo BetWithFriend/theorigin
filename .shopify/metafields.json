@@ -2,7 +2,58 @@
   "article": [],
   "blog": [],
   "brand": [],
-  "collection": [],
+  "collection": [
+    {
+      "key": "vendor_name",
+      "namespace": "custom",
+      "name": "Vendor Name",
+      "description": "Coffee Roaster Name",
+      "type": {
+        "name": "single_line_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "banner_file",
+      "namespace": "custom",
+      "name": "Banner File",
+      "description": "",
+      "type": {
+        "name": "file_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "vendor_story",
+      "namespace": "custom",
+      "name": "Vendor Story",
+      "description": "",
+      "type": {
+        "name": "rich_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "location",
+      "namespace": "custom",
+      "name": "Location",
+      "description": "",
+      "type": {
+        "name": "single_line_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "open_year",
+      "namespace": "custom",
+      "name": "Open Year",
+      "description": "",
+      "type": {
+        "name": "date",
+        "category": "DATE_TIME"
+      }
+    }
+  ],
   "company": [],
   "company_location": [],
   "location": [],
@@ -33,19 +84,49 @@
     {
       "key": "origin_grind_size",
       "namespace": "custom",
-      "name": "origin_grind_size",
+      "name": "Grind",
       "description": "",
       "type": {
         "name": "list.single_line_text_field",
         "category": "TEXT"
       }
+    },
+    {
+      "key": "weight",
+      "namespace": "custom",
+      "name": "Weight",
+      "description": "",
+      "type": {
+        "name": "list.single_line_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "product_quantity",
+      "namespace": "custom",
+      "name": "Product Quantity",
+      "description": "",
+      "type": {
+        "name": "list.number_integer",
+        "category": "NUMBER"
+      }
+    },
+    {
+      "key": "coffee_vendor",
+      "namespace": "vendor_info",
+      "name": "Vendor Info",
+      "description": "",
+      "type": {
+        "name": "metaobject_reference",
+        "category": "REFERENCE"
+      }
     }
   ],
   "variant": [
     {
-      "key": "origin_grind_size",
-      "namespace": "Bloom",
-      "name": "Bloom Origin Grind Size",
+      "key": "grind_size",
+      "namespace": "custom",
+      "name": "Grind Size",
       "description": "",
       "type": {
         "name": "list.single_line_text_field",

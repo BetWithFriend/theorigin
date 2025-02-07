@@ -1,0 +1,37 @@
+
+<!-- snippets/product-collection-info.liquid -->
+ <div class="product-collection-wrapper">
+    <div class="">
+        <img src="{{ vendor_logo.value | img_url: 'small' }}" alt="{{ product.featured_image.alt | escape }}">
+    </div>
+
+
+        <div class="collection-text">
+            {{ vendor_description.value }}
+        </div> 
+      
+ </div>
+
+
+ <style>
+    .product-collection-wrapper {
+        height: 105px;
+        width: 100%;
+        background-color: #DAD7D1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        flex-direction: row-reverse;
+        padding: 16px 24px;
+    }
+
+    .collection-text {
+        font-family: 'Noto Sans', sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 22px;
+        color: #1C201D;
+        text-align: right;
+    }
+ </style>
