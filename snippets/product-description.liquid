@@ -1,0 +1,168 @@
+<div class="product-description-wrapper" id="product-description" dir="rtl">
+    <div class="product-description-text">
+        {{ product_description |  strip_html }}
+    </div>
+    
+</div>
+<div id="read-more" class="read-more">קרא עוד</div>
+<div class="product-description-details-wrapper">
+    <div class="product-description-divider">
+        <hr  class="product-description-divider-line"/>
+        <img class="product-description-divider-img" src="{{ 'divider.png' | asset_url }}" alt="Divider" />
+    </div>
+</div>
+<div class="product-description-details-images-wrapper">
+    {% for brew_img in brew_images.value %}
+        <img class="product-description-img" src="{{ brew_img | asset_url | replace: "files/", ""  }}" alt="Brew Image" />
+    {% endfor %}
+</div>
+
+<div class="product-description-divider">
+    <hr  class="product-description-divider-line"/>
+</div>
+
+<div class="product-details-wrapper" dir="rtl">
+    <div class="product-details-item-wrapper">
+        <div class="product-details-item-title">דרגת קלייה</div>
+        <div class="product-details-item">{{ product_details.roast_level.value }}</div>
+    </div>
+    <div class="product-details-item-wrapper">
+        <div class="product-details-item-title">טעמים</div>
+        <div class="product-details-item">{{ product_details.product_tastes.value }}</div>
+    </div>
+    <div class="product-details-item-wrapper">
+        <div class="product-details-item-title">קטגוריה</div>
+        <div class="product-details-item">{{ product_details.product_category.value }}</div>
+    </div>
+    <div class="product-details-item-wrapper">
+        <div class="product-details-item-title">שיטת עיבוד</div>
+        <div class="product-details-item">{{ product_details.product_process.value }}</div>
+    </div>
+    <div class="product-details-item-wrapper">
+        <div class="product-details-item-title">גובה גידול</div>
+        <div class="product-details-item">{{ product_details.product_height.value }}</div>
+    </div>
+</div>
+
+<div class="product-description-divider">
+    <hr  class="product-description-divider-line"/>
+</div>
+
+<div class="product-location-img-wrapper">
+    <img class="product-location-img" src="{{ product_details.product_location_image.value  | asset_url | replace: "files/", "" }}" alt="Product Location Image" />
+</div>
+
+<style>
+    .product-location-img {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .product-details-item {
+         font-family: 'Noto Sans', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        color: #1C201D;
+        width: 50%;
+        text-align: right;
+    }
+    .product-details-item-title {
+        font-family: 'Noto Sans', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        color: #9F9F9F;
+        width: 50%;
+        text-align: right;
+}
+    .product-details-wrapper {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        padding: 0 24px;
+        gap: 16px;
+        flex-direction: column;
+    }
+    .product-details-item-wrapper {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-around;
+        gap: 40px;
+    }
+    .product-description-details-images-wrapper {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        justify-content: center;
+    }
+    .product-description-img {
+        height: 65px;
+
+    }
+    .product-description-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        position: relative;
+    }
+    .product-description-divider-line {
+        width: 60%;
+        border: 1px solid #C8C8C7;
+        position: relative;
+    }
+    .product-description-divider-img {
+        position: absolute;
+        background-color: #FBFCFE; /* Matches background to "cut" the line */
+        padding: 0 10px; /* Ensures space around the image */
+        height: 52px;
+    }
+    .product-description-wrapper {
+        background-color: #FBFCFE;
+        overflow: hidden;
+        max-height: calc(28px * 8); /* 5 full lines of text */
+        padding: 40px 24px; /* Padding stays intact */
+        transition: max-height 0.3s ease-in-out;
+        position: relative;
+    }
+
+    .product-description-wrapper.expanded {
+        max-height: 330px; /* Large enough for full content */
+    }
+
+    .product-description-text {
+        font-family: 'Noto Sans', sans-serif;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 27px;
+    }
+
+    .read-more {
+        width: 100%;
+        padding: 0 24px;
+        text-align: right;
+        display: block;
+        font-family: 'Noto Sans', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 21px;
+        cursor: pointer;
+        color: #AD7B7E;
+        margin-top: 16px;
+    }
+</style>
+
+<script>
+    document.getElementById('read-more').addEventListener('click', function() {
+        var description = document.getElementById('product-description');
+        if (description.classList.contains('expanded')) {
+            description.classList.remove('expanded');
+            this.textContent = 'קרא עוד';
+        } else {
+            description.classList.add('expanded');
+            this.textContent = 'סגור';
+        }
+    });
+</script>

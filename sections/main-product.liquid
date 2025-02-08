@@ -749,7 +749,13 @@
   </div>
 </product-info>
 
+{% assign product_details = product.metafields.custom.product_info.value %}
+
 {% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description %}
+{%  render 'product-description' | 
+    product_description: product.description,
+    brew_images: product.metafields.custom.product_brew_image,
+    product_details: product_details %}
 {% schema %}
 {
   "name": "t:sections.main-product.name",
