@@ -92,16 +92,6 @@
       }
     },
     {
-      "key": "product_origin",
-      "namespace": "custom",
-      "name": "product_origin",
-      "description": "",
-      "type": {
-        "name": "single_line_text_field",
-        "category": "TEXT"
-      }
-    },
-    {
       "key": "product_brew_image",
       "namespace": "custom",
       "name": "product Brew Images",
@@ -109,6 +99,86 @@
       "type": {
         "name": "list.file_reference",
         "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "altitude",
+      "namespace": "custom",
+      "name": "Coffee Altitude",
+      "description": "",
+      "type": {
+        "name": "single_line_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "coffee_roast_level",
+      "namespace": "custom",
+      "name": "Coffee Roast Level",
+      "description": "",
+      "type": {
+        "name": "single_line_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "coffee_tastes",
+      "namespace": "custom",
+      "name": "Coffee Tastes",
+      "description": "",
+      "type": {
+        "name": "list.single_line_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "coffee_type",
+      "namespace": "custom",
+      "name": "Coffee Type",
+      "description": "",
+      "type": {
+        "name": "single_line_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "coffee_process",
+      "namespace": "custom",
+      "name": "Coffee Process",
+      "description": "",
+      "type": {
+        "name": "single_line_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "coffee_origin_image",
+      "namespace": "custom",
+      "name": "Coffee Origin Image",
+      "description": "",
+      "type": {
+        "name": "file_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "coffee_taste",
+      "namespace": "custom",
+      "name": "Coffee Taste",
+      "description": "",
+      "type": {
+        "name": "single_line_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "coffee_prep_methods",
+      "namespace": "custom",
+      "name": "Coffee Prep Methods",
+      "description": "",
+      "type": {
+        "name": "list.single_line_text_field",
+        "category": "TEXT"
       }
     }
   ],

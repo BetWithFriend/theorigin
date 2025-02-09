@@ -749,13 +749,29 @@
   </div>
 </product-info>
 
-{% assign product_details = product.metafields.custom.product_info.value %}
+{% assign coffee_details = product.metafields.custom.product_info.value %}
+{% assign coffee_origin_image = product.metafields.custom.coffee_origin_image.value %}
+{% assign coffee_tastes = product.metafields.custom.coffee_tastes.value %}
+{% assign coffee_roast_level = product.metafields.custom.coffee_roast_level.value %}
+{% assign coffee_altitude = product.metafields.custom.altitude.value %}
+{% assign coffee_process = product.metafields.custom.coffee_process.value %}
+{% assign coffee_type = product.metafields.custom.coffee_type.value %}
+
 
 {% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description %}
 {%  render 'product-description' | 
     product_description: product.description,
     brew_images: product.metafields.custom.product_brew_image,
-    product_details: product_details %}
+    product_details: product_details
+    coffee_origin_image: coffee_origin_image,
+    coffee_tastes: coffee_tastes | split " ",
+    coffee_roast_level: coffee_roast_level,
+    coffee_altitude: coffee_altitude,
+    coffee_process: coffee_process,
+    coffee_type: coffee_type,
+    vendor_logo: vendor.vendor_logo
+    vendor_story: vendor.vendor_details.value
+    %}
 {% schema %}
 {
   "name": "t:sections.main-product.name",

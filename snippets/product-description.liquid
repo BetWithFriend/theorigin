@@ -2,9 +2,9 @@
     <div class="product-description-text">
         {{ product_description |  strip_html }}
     </div>
-    
 </div>
 <div id="read-more" class="read-more">קרא עוד</div>
+
 <div class="product-description-details-wrapper">
     <div class="product-description-divider">
         <hr  class="product-description-divider-line"/>
@@ -24,23 +24,23 @@
 <div class="product-details-wrapper" dir="rtl">
     <div class="product-details-item-wrapper">
         <div class="product-details-item-title">דרגת קלייה</div>
-        <div class="product-details-item">{{ product_details.roast_level.value }}</div>
+        <div class="product-details-item">{{ coffee_roast_level }}</div>
     </div>
     <div class="product-details-item-wrapper">
         <div class="product-details-item-title">טעמים</div>
-        <div class="product-details-item">{{ product_details.product_tastes.value }}</div>
+        <div class="product-details-item">{{ coffee_tastes | join: ", "}}</div>
     </div>
     <div class="product-details-item-wrapper">
         <div class="product-details-item-title">קטגוריה</div>
-        <div class="product-details-item">{{ product_details.product_category.value }}</div>
+        <div class="product-details-item">{{ coffee_type }}</div>
     </div>
     <div class="product-details-item-wrapper">
         <div class="product-details-item-title">שיטת עיבוד</div>
-        <div class="product-details-item">{{ product_details.product_process.value }}</div>
+        <div class="product-details-item">{{ coffee_process }}</div>
     </div>
     <div class="product-details-item-wrapper">
         <div class="product-details-item-title">גובה גידול</div>
-        <div class="product-details-item">{{ product_details.product_height.value }}</div>
+        <div class="product-details-item">{{ coffee_altitude }}</div>
     </div>
 </div>
 
@@ -49,10 +49,88 @@
 </div>
 
 <div class="product-location-img-wrapper">
-    <img class="product-location-img" src="{{ product_details.product_location_image.value  | asset_url | replace: "files/", "" }}" alt="Product Location Image" />
+    <img class="product-location-img" src="{{ coffee_origin_image  | asset_url | replace: "files/", "" }}" alt="Product Location Image" />
 </div>
 
+<div class="product-details-vendor-details-wrapper">
+    <div class="product-details-vendor-details-title">
+        בית הקליה
+    </div>
+    <div class="product-details-vendor-image-wrapper">
+        <img src="{{ vendor_logo.value | img_url: 'small' }}" alt="{{ product.featured_image.alt | escape }}">
+    </div>
+    <div class="product-details-vendor-story-wrapper" dir="rtl" id="product-details-vendor-story-wrapper">
+        <div class="product-details-vendor-story">
+            {%- if vendor_story != blank -%}
+                <div class="rich-text">
+                  {%- for block in vendor_story.children -%}
+                    {%- case block.type -%}
+                      {%- when 'paragraph' -%}
+                        <p class="rich-text__paragraph">
+                          {%- for child in block.children -%}
+                            {%- if child.type == 'text' -%}
+                              {{- child.value | newline_to_br -}}
+                            {%- endif -%}
+                          {%- endfor -%}
+                        </p>
+                    {%- endcase -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+        </div>
+    </div>
+    <div dir="rtl" id="read-more-vendor-story" class="read-more-vendor-story">המשך לקרוא...</div>    
+</div>
+
+
 <style>
+    .product-details-vendor-story-wrapper {
+        overflow: hidden;
+        max-height: calc(23px * 20); /* 5 full lines of text */
+        transition: max-height 0.3s ease-in-out;
+        position: relative;
+    }
+    .product-details-vendor-story-wrapper.expanded {
+        max-height: 1800px; /* Large enough for full content */
+    }
+    .read-more-vendor-story {
+        width: 100%;
+        padding: 0 24px;
+        display: block;
+        text-align: right;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        text-decoration: underline;
+        color: #AD7B7E;
+    }
+    .product-details-vendor-story {
+        font-family: 'Noto Sans', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;  
+        color: #636270;
+    }
+    .product-details-vendor-image-wrapper {
+        width: 110px;
+    }
+    .product-details-vendor-details-title {
+        font-family: 'Noto Sans', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        color: #636270;
+    }
+    .product-details-vendor-details-wrapper {
+        display: flex;
+        align-items: end;
+        justify-content: center;
+        padding: 40px 24px 16px 24px;
+        width: 100%;
+        background-color: #E6E3DE;
+        flex-direction: column;
+        gap: 16px;
+    }
     .product-location-img {
         width: 100%;
         box-sizing: border-box;
@@ -89,7 +167,7 @@
         width: 100%;
         align-items: center;
         justify-content: space-around;
-        gap: 40px;
+        /* gap: 40px; */
     }
     .product-description-details-images-wrapper {
         display: flex;
@@ -122,7 +200,7 @@
     .product-description-wrapper {
         background-color: #FBFCFE;
         overflow: hidden;
-        max-height: calc(28px * 8); /* 5 full lines of text */
+        max-height: calc(28px * 8); /* 8 full lines of text */
         padding: 40px 24px; /* Padding stays intact */
         transition: max-height 0.3s ease-in-out;
         position: relative;
@@ -156,12 +234,23 @@
 
 <script>
     document.getElementById('read-more').addEventListener('click', function() {
-        var description = document.getElementById('product-description');
+        const description = document.getElementById('product-description');
         if (description.classList.contains('expanded')) {
             description.classList.remove('expanded');
             this.textContent = 'קרא עוד';
         } else {
             description.classList.add('expanded');
+            this.textContent = 'סגור';
+        }
+    });
+
+    document.getElementById('read-more-vendor-story').addEventListener('click', function() {
+        const vendor_description = document.getElementById('product-details-vendor-story-wrapper');
+        if (vendor_description.classList.contains('expanded')) {
+            vendor_description.classList.remove('expanded');
+            this.textContent = 'המשך לקרוא...';
+        } else {
+            vendor_description.classList.add('expanded');
             this.textContent = 'סגור';
         }
     });
