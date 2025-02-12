@@ -15,14 +15,14 @@
         "heading": {
           "type": "heading",
           "settings": {
-            "heading": "הקפה הטוב בישראל במקום אחד",
+            "heading": "כל הקפה הטוב בישראל במקום אחד",
             "heading_size": "h0"
           }
         },
         "text_Ed7DgE": {
           "type": "text",
           "settings": {
-            "text": "קפה מקולי הקפה המובחרים של ישראל - קלייה טרייה, כחול-לבן, מעסקים קטנים שנבחרו בקפידה",
+            "text": "קפה מפולי הקפה המובחרים של ישראל - קלייה טרייה, כחול-לבן, מעסקים קטנים שנבחרו בקפידה",
             "text_style": "body"
           }
         },
@@ -43,20 +43,15 @@
         "text_Ed7DgE",
         "button"
       ],
-      "custom_css": [
-        ".banner__media {/*border-radius: 16px;*/ background-color: #ffffff; overflow: hidden;}",
-        ".banner__heading {color: #fff;}",
-        ".banner__text {color: #fff;}"
-      ],
+      "custom_css": [],
       "settings": {
-        "image": "shopify://shop_images/a-photo-of-an-artisanal-coffee-roastery-_MoSJ00xaS_usKY2ThCEN_Q_H9YLQU_ATY6Frs0nGgo43A.jpg",
-        "image_overlay_opacity": 40,
-        "image_height": "medium",
+        "image_overlay_opacity": 0,
+        "image_height": "large",
         "desktop_content_position": "middle-right",
         "show_text_box": false,
         "desktop_content_alignment": "right",
         "color_scheme": "scheme-06547adb-270b-4f76-92a3-0bb7bcf58e12",
-        "image_behavior": "ambient",
+        "image_behavior": "none",
         "mobile_content_alignment": "center",
         "stack_images_on_mobile": false,
         "show_text_below": false

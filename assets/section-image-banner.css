@@ -4,6 +4,14 @@
   flex-direction: column;
   z-index: auto;
   isolation: isolate;
+  background-color: #E6E3DE;
+  height: 500px;
+}
+.main-page-top-img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;
 }
 
 .banner__box {
@@ -240,6 +248,13 @@
 
   .banner:not(.banner--mobile-bottom) .button--secondary {
     --alpha-button-background: 0;
+    background-color: #B5888B;
+    width: 291px;
+    height: 59px;
+    color: #FBFCFE;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 20px;
+    line-height: 27px;
   }
 
   .banner--stacked:not(.banner--mobile-bottom):not(.banner--adapt) .banner__content {
@@ -339,7 +354,8 @@
 }
 
 .banner__box {
-  padding: 4rem 1.5rem;
+  margin-top: 35px;
+  padding: 0 4rem;
   position: relative;
   height: fit-content;
   align-items: center;
@@ -435,10 +451,20 @@
 
 .banner__heading {
   margin-bottom: 0;
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 48px;
+  line-height: 51px;
+  font-weight: 700;
+  color: #333634;
 }
 
 .banner__box .banner__heading + * {
   margin-top: 1rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color: #333634;
 }
 
 .banner__buttons {
@@ -472,7 +498,7 @@
 }
 
 .banner__box > * + .banner__buttons {
-  margin-top: 2rem;
+  margin-top: 48px;
 }
 
 @media screen and (max-width: 749px) {

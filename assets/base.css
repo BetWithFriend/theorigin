@@ -1159,6 +1159,7 @@ summary::-webkit-details-marker {
 .media > *:not(.zoom):not(.deferred-media__poster-button),
 .media model-viewer {
   display: block;
+  /* display: none; */
   max-width: 100%;
   position: absolute;
   top: 0;
@@ -1313,7 +1314,7 @@ button.shopify-payment-button__button--unbranded {
 }
 
 .button--secondary:after {
-  --border-opacity: var(--buttons-border-opacity);
+  /* --border-opacity: var(--buttons-border-opacity); */
 }
 
 .button:focus-visible,
@@ -3050,6 +3051,9 @@ details-disclosure > details {
   }
   .content-container--full-width-mobile:after {
     display: none;
+  }
+  .header__heading-logo {
+    max-width: 95px;
   }
 }
 
