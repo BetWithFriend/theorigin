@@ -1,0 +1,34 @@
+{{ 'our-vendors.css' | asset_url | stylesheet_tag }}
+<div class="our-vendors-wrapper">
+    <div class="our-vendors-title">
+        בתי הקלייה שלנו
+    </div>
+    <div class="our-vendors-logo-wrapper">
+        <div class="our-vendor-logo">
+            <img class="our-vendor-logo-img" src="{{ 'logo_canopy.png' | asset_url }}" alt="Vendor Logo" />
+        </div>
+        <div class="our-vendor-logo">
+            <img class="our-vendor-logo-img" src="{{ 'logo_sybaris.png' | asset_url }}" alt="Vendor Logo" />
+        </div>
+        <div class="our-vendor-logo">
+            <img class="our-vendor-logo-img" src="{{ 'logo_blooms.png' | asset_url }}" alt="Vendor Logo" />
+        </div>
+        <div class="our-vendor-logo">
+            <img class="our-vendor-logo-img" src="{{ 'logo_youneedcoffee.png' | asset_url }}" alt="Vendor Logo" />
+        </div>
+    </div>
+</div>
+<div class="product-description-divider">
+        <hr  class="product-description-divider-line"/>
+        <img class="product-description-divider-img" src="{{ 'our-vendors-divider-img.png' | asset_url }}" alt="Divider" />
+</div>
+<div class="our-vendors-mantra-wrapper">
+    <div class="our-vendors-mantra-text">
+        אנחנו מאמינים שכל אחד ראוי לחוות את הקסם שבכוס קפה מושלמת. יצאנו למסע לגלות את בתי הקלייה הייחודיים של ישראל - אומנים אמיתיים שמקדישים את חייהם ליצירת קפה יוצא דופן, ולהנגיש אותם לכל חובב קפה בצורה קלה.
+    </div>
+</div>
+
+<div class="product-description-divider">
+        <hr  class="product-description-divider-line"/>
+        {% comment %} <img class="product-description-divider-img" src="{{ 'our-vendors-divider-img.png' | asset_url }}" alt="Divider" /> {% endcomment %}
+</div>

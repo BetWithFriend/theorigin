@@ -1,0 +1,99 @@
+.our-vendors-wrapper {
+    position: relative;
+    /* display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    /* margin-top: 50px; */
+    /* background-color: #FBFCFE; */
+}
+.our-vendors-wrapper::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 24px;
+    background: linear-gradient(to left, #FBFCFE 0%, transparent 100%);
+    pointer-events: none;
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.our-vendors-logo-wrapper::-webkit-scrollbar {
+    display: none;
+}
+.our-vendors-title {
+    margin-top:  56px;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 20px;
+    line-height: 27px;
+    font-weight: 600;
+    color: #636270;
+    padding: 16px 24px;
+    text-align: right;
+}
+
+.our-vendors-logo-wrapper {
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    gap: 16px;
+    overflow-x: auto;
+    width: 100%;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.our-vendor-logo {
+    width: 140px;
+    height: 100px;
+    background-color: #F5F4F2;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto; /* Prevent logo shrinking */
+}
+
+/* Optional: Add smooth scrolling behavior */
+.our-vendors-logo-wrapper {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+.our-vendor-logo-img {
+    width: 60%;
+}
+
+.product-description-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+}
+.product-description-divider-line {
+    width: 60%;
+    border: 1px solid #9F9F9F;
+    position: relative;
+}
+.product-description-divider-img {
+    position: absolute;
+    /* background-color: #FBFCFE; Matches background to "cut" the line */
+    padding: 0 10px; /* Ensures space around the image */
+    height: 52px;
+}
+
+.our-vendors-mantra-wrapper {
+    padding: 6px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.our-vendors-mantra-text {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 400;
+    color: #1C201D;
+    text-align: center; 
+}

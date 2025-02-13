@@ -1,0 +1,65 @@
+.blends-filter-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    padding: 0 30px;
+}
+
+.blends-filter-item-wrpper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 150px;
+}
+
+.blends-filter-item {
+    background-color: #F5F4F2;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.blends-filter-icon {
+    width: 117px;
+    height: 80px;
+}
+
+.blend-filter-text {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 16px;
+    line-height: 17px;
+    font-weight: 600;
+    color: #1C201D;
+    text-align: center; 
+}
+
+@media screen and (max-width: 768px) {
+    .blends-filter-wrapper {
+        padding: 0 16px;
+    }
+    
+    .blends-filter-item-wrpper {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+    }
+    
+    .blends-filter-item {
+        width: calc(50% - 6px); /* 50% minus half of the gap */
+    }
+    
+    .blends-filter-icon {
+        width: 100%;
+        height: auto;
+        max-width: 80px;
+    }
+    
+    .blend-filter-text {
+        font-size: 14px;
+        padding: 8px 4px;
+    }
+}
