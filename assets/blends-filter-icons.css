@@ -14,7 +14,7 @@
 }
 
 .blends-filter-item {
-    background-color: #F5F4F2;
+    
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -37,7 +37,7 @@
 
 @media screen and (max-width: 768px) {
     .blends-filter-wrapper {
-        padding: 0 16px;
+        padding: 56px 16px;
     }
     
     .blends-filter-item-wrpper {
@@ -45,17 +45,27 @@
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 12px;
+        gap: 32px;
     }
     
     .blends-filter-item {
-        width: calc(50% - 6px); /* 50% minus half of the gap */
+        width: calc(50% - 20px); /* 50% minus half of the gap */
+    }
+
+    .blends-filter-icon-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        height: 150px;
+        background-color: #F5F4F2;
+        padding: 35px 16px
     }
     
     .blends-filter-icon {
         width: 100%;
         height: auto;
-        max-width: 80px;
+        /* max-width: 80px; */
     }
     
     .blend-filter-text {

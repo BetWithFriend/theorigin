@@ -1,0 +1,56 @@
+.discover-roaster-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    justify-content: center;
+    align-items: center;
+    margin: 56px 16px;
+    padding: 48px 32px;
+    /* width: 90%; */
+    background-color: #333634;
+    border-radius: 16px;
+}
+
+.discover-roaster-title {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 36px;
+    line-height: 50px;
+    font-weight: 700;
+    color: #B5888B;
+    text-align: center;
+}
+
+.discover-roaster-subtitle {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 400;
+    color: #FBFCFE;
+    text-align: center;
+}
+
+.discover-roaster-divider-line {
+    width: 45%;
+    border: 1px solid #FBFCFE;
+    position: relative;
+    margin: 0; 
+}
+
+.discover-roaster-img {
+    width: 162px;
+}
+
+.discover-roaster-btn {
+    width: 171px;
+    height: 59px;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 20px;
+    line-height: 27px;
+    font-weight: 400;
+    color: #FBFCFE;
+    background-color: #B5888B;
+    border: none;
+    border-radius: 15px;
+    padding: 16px 24px;
+    cursor: pointer;
+}

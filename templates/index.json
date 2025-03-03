@@ -123,6 +123,34 @@
         "padding_bottom": 36
       }
     },
+    "discover_the_roaster": {
+      "type": "discover-the-roaster",
+      "settings": {
+        "title": "",
+        "heading_size": "h0",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "all",
+        "products_to_show": 6,
+        "columns_desktop": 3,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "enable_desktop_slider": false,
+        "color_scheme": "scheme-1",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 44,
+        "padding_bottom": 36
+      }
+    },
     "featured_collection": {
       "type": "featured-collection",
       "disabled": true,
@@ -164,6 +192,7 @@
     "custom_liquid_aWGKXY",
     "our_vendors",
     "blends_filter_icons",
+    "discover_the_roaster",
     "featured_collection"
   ]
 }
