@@ -51,6 +51,8 @@
     background-color: #B5888B;
     border: none;
     border-radius: 15px;
-    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
 }
