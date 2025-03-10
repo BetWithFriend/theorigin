@@ -1,9 +1,6 @@
-{{ 'discover-the-roaster.css' | asset_url | stylesheet_tag }}
-<div class="discover-roaster-wrapper">
-    <div class="discover-roaster-title">גלו את בתי הקלייה</div>
-    <div class="discover-roaster-subtitle">האומנים שמקדישים את חייהם ליצירת קפה יוצא דופן, באהבה ובתשומת לב לכל פול.</div>
-    <hr class="discover-roaster-divider-line" />
-    <img class="discover-roaster-img" src="{{ 'discover-roaster-img.png' | asset_url }}" alt="discover image" />
-    <div class="discover-roaster-btn">לבתי הקלייה</div>
-</div>
-
+{% render 'main-page-black-component' | 
+title: 'גלו את בתי הקלייה',
+description: 'האומנים שמקדישים את חייהם ליצירת קפה יוצא דופן, באהבה ובתשומת לב לכל פול.',
+com_image: 'discover-roaster-img.png',
+btn_text: 'לבתי הקלייה'
+%}

@@ -1,4 +1,14 @@
-.discover-roaster-wrapper {
+{{ 'discover-the-roaster.css' | asset_url | stylesheet_tag }}
+<div class="discover-roaster-wrapper">
+    <div class="discover-roaster-title">{{ title  }}</div>
+    <div class="discover-roaster-subtitle">{{ description }}</div>
+    <hr class="discover-roaster-divider-line" />
+    <img class="discover-roaster-img" src="{{ com_image | asset_url }}" alt="discover image" />
+    <div class="discover-roaster-btn">{{ btn_text }}</div>
+</div>
+
+<style>
+    .discover-roaster-wrapper {
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -56,3 +66,4 @@
     justify-content: center;
     cursor: pointer;
 }
+</style>
