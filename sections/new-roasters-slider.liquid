@@ -1,0 +1,45 @@
+{{ 'new-roasters-slider.css' | asset_url | stylesheet_tag }}
+<div class="new-roasters-slider-wrapper">
+    <div class="new-roasters-slider-title" dir="rtl">בתי קלייה חדשים</div>
+    <div class="new-rosters-slider-content-wrapper" dir="rtl">
+     {% for vendor in shop.metaobjects.vendor_definitions.values %}
+        <script>
+             console.log('boom' ,{{ vendor | json }})
+        </script>
+        <div class="new-roasters-slider-content-wrapper" dir="rtl">
+            <div class="new-roastes-slider-top">
+                <div class="new-roastes-slider-roaster-logo-wrapper">
+                    <img class="new-roastes-slider-roaster-logo" src="{{ vendor.vendor_logo | img_url: 'small' }}" alt="">
+                </div>
+                <div class="new-roastes-slider-roaster-id">
+                    <div class="new-roastes-slider-roaster-id-content">מיקום: חיפה</div>
+                    <div class="new-roastes-slider-roaster-id-content">הקמה: 1981</div>
+                </div>
+            </div>
+            <div class="new-roastes-slider-roaster-video-wrapper">
+                <img class="new-roastes-slider-roaster-video" src="{{ vendor.vendor_video | img_url: 'small' }}" alt="">
+            </div>
+            <div class="new-roastes-slider-roaster-description">            
+        {%- if vendor.vendor_details != blank -%}
+                <div class="rich-text">
+                  {%- for block in vendor.vendor_details.value.children -%}
+                    {%- case block.type -%}
+                      {%- when 'paragraph' -%}
+                        <p class="rich-text__paragraph">
+                          {%- for child in block.children -%}
+                            {%- if child.type == 'text' -%}
+                              {{- child.value | newline_to_br -}}
+                            {%- endif -%}
+                          {%- endfor -%}
+                        </p>
+                    {%- endcase -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}</div>
+        </div>
+     {% endfor %} 
+    </div>
+</div>
+
+
+

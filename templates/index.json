@@ -139,6 +139,14 @@
       "type": "find-your-coffee",
       "settings": {}
     },
+    "new_roasters_slider": {
+      "type": "new-roasters-slider",
+      "settings": {}
+    },
+    "main_page_footer_info": {
+      "type": "main-page-footer-info",
+      "settings": {}
+    },
     "featured_collection": {
       "type": "featured-collection",
       "disabled": true,
@@ -184,6 +192,8 @@
     "featured_collection_ErHj6f",
     "featured_collection_qNARrT",
     "find_your_coffee",
+    "new_roasters_slider",
+    "main_page_footer_info",
     "featured_collection"
   ]
 }

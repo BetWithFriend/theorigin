@@ -1,0 +1,101 @@
+.footer_main_page_top {
+    width: 100%;
+}
+
+.main-footer-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.main-footer-info-wrapper {
+    background-color: #B5888B;
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.main-footer-info-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+}
+.main-footer-info-divider-line {
+    width: 60%;
+    border: 1px solid #FBFCFE;
+    position: relative;
+}
+.main-footer-info-divider-img {
+    position: absolute;
+    /* background-color: #FBFCFE; Matches background to "cut" the line */
+    padding: 0 10px; /* Ensures space around the image */
+    height: 52px;
+}
+
+.main-footer-info-about-us {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 30px;
+    text-align: center;
+    width: 100%;
+    padding: 16px 24px;
+    color: #FBFCFE;
+}
+
+.main-footer-info-shop-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    padding: 16px 24px;
+    gap: 8px;
+}
+
+.main-footer-info-shop-img {
+    width: 48px;
+    height: 48px;
+}
+
+.main-footer-info-shop-title {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 27px;
+    text-align: center;
+    width: 100%;
+    color: #FBFCFE;
+}
+
+.main-footer-info-shop-description {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 21px;
+    text-align: center;
+    width: 100%;
+    color: #FBFCFE;
+}
+
+.main-footer-info-shop-btn {
+    width: 342px;
+    height: 59px;
+    border-radius: 15px;
+    padding: 16px 80px;
+    background-color: #FBFCFE;
+    cursor: pointer;
+    color: #333634;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 27px;
+    text-align: center;
+    margin: 48px 0;
+}

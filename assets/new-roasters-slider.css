@@ -1,0 +1,90 @@
+.new-roasters-slider-wrapper {
+    position: relative;
+}
+.new-roasters-slider-wrapper::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 24px;
+    background: linear-gradient(to left, #FBFCFE 0%, transparent 100%);
+    pointer-events: none;
+
+}
+
+.new-roasters-slider-title {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 27px;
+    text-align: right;
+    width: 100%;
+    padding: 16px 32px;
+}
+
+.new-roasters-slider-content-wrapper {
+    background-color: #E6E3DE;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.new-rosters-slider-content-wrapper {
+    margin: 16px 0;
+    padding: 16px 0;
+    display: flex;
+    align-items: flex-start;
+    /* justify-content: center; */
+    gap: 16px;
+    overflow-x: auto;
+    width: 100%;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    /* flex-direction: row-reverse; */
+    overflow-y: hidden;
+    height: 800px;
+}
+
+.new-roastes-slider-top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    padding: 16px 32px;
+    /* flex-direction: column; */
+}
+
+.new-roastes-slider-roaster-logo {
+    width: 124px;
+}
+
+.new-roastes-slider-roaster-id {
+    background-color: #FBFCFE;
+    width: 154px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.new-roastes-slider-roaster-id-content {
+    white-space: nowrap;
+}
+
+.new-roastes-slider-roaster-video {
+    width: 326px;
+    border-radius: 8px;
+}
+
+.new-roastes-slider-roaster-description {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 25px;
+    text-align: right;
+    padding: 0 32px;
+}
