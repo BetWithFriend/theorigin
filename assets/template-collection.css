@@ -70,6 +70,7 @@
 
 .collection__title.title-wrapper {
   margin-bottom: 2.5rem;
+  background-color: #ffffff;
 }
 
 .collection__title .title:not(:only-child) {

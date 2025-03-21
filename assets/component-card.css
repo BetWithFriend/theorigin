@@ -15,6 +15,8 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: #F5F4F2;
+  overflow-y: hidden;
 }
 
 .card.card--horizontal {
@@ -79,7 +81,7 @@
   /* Fix for Safari border bug on hover */
   z-index: 0;
   border-radius: calc(var(--border-radius) - var(--border-width) - var(--image-padding));
-  margin-bottom: 72px;
+  /* margin-bottom: 72px; */
 }
 
 .card--card .card__inner .card__media {
@@ -448,8 +450,13 @@
 }
 
 .card--standard > .card__content .card__information {
-  padding-left: 0;
-  padding-right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  /* padding-left: 0;
+  padding-right: 0; */
 }
 
 .card--card.card--media .card__inner .card__information,
@@ -620,6 +627,6 @@
 
 @media (max-width: 768px) {
 .card--standard > .card__content {
-  padding: 0 24px;
+  /* padding: 0 24px; */
 }
 }
