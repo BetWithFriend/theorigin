@@ -9,6 +9,14 @@
  */
 {
   "sections": {
+    "vendors_collection":  {
+      "type": "vendors-collection",
+      "settings": {
+        "title": "המיוחדים של פברואר",
+        "heading_size": "h2",
+        "description": ""
+      }
+    },
     "image_with_text_aazhxx": {
       "type": "image-with-text",
       "blocks": {
@@ -40,6 +48,7 @@
         "text_9cAbec",
         "button_BKhAAg"
       ],
+      "disabled": true,
       "settings": {
         "image": "shopify://shop_images/youneedcoffeelogo.png",
         "height": "adapt",
@@ -87,6 +96,7 @@
         "text_aWgwDD",
         "button_PywVHq"
       ],
+      "disabled": true,
       "settings": {
         "image": "shopify://shop_images/image_131.png",
         "height": "adapt",
@@ -134,6 +144,7 @@
         "text_beynAx",
         "button_w9Ke7W"
       ],
+      "disabled": true,
       "settings": {
         "image": "shopify://shop_images/image_138.png",
         "height": "adapt",
@@ -181,6 +192,7 @@
         "text_9qCjyD",
         "button_eLNcUx"
       ],
+      "disabled": true,
       "settings": {
         "image": "shopify://shop_images/canopylogo.png",
         "height": "adapt",
@@ -269,6 +281,7 @@
     }
   },
   "order": [
+    "vendors_collection",
     "image_with_text_aazhxx",
     "image_with_text_WHN7KN",
     "image_with_text_Q6EJRM",

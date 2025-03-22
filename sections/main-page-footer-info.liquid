@@ -32,7 +32,14 @@
                 <div class="main-footer-info-shop-title">תמיד זמינים</div>
                 <div class="main-footer-info-shop-description" dir="rtl">שירות אישי ועזרה בווטסאפ מתי שצריך</div>
             </div>
-            <div class="main-footer-info-shop-btn">לחנות</div>
+            <div onclick="goToStore()" class="main-footer-info-shop-btn">לחנות</div>
         </div>
         </div>
 </div>
+
+<script>
+    function goToStore() {
+        window.location.href = "{{ section.settings.collection.url }}/collections/all";
+    }
+</script>
+{% comment %} href="{{ section.settings.collection.url }}" {% endcomment %}

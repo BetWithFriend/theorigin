@@ -17,6 +17,7 @@
   height: 100%;
   background-color: #F5F4F2;
   overflow-y: hidden;
+  border-radius: 8px;
 }
 
 .card.card--horizontal {

@@ -3,9 +3,6 @@
     <div class="new-roasters-slider-title" dir="rtl">בתי קלייה חדשים</div>
     <div class="new-rosters-slider-content-wrapper" dir="rtl">
      {% for vendor in shop.metaobjects.vendor_definitions.values %}
-        <script>
-             console.log('boom' ,{{ vendor | json }})
-        </script>
         <div class="new-roasters-slider-content-wrapper" dir="rtl">
             <div class="new-roastes-slider-top">
                 <div class="new-roastes-slider-roaster-logo-wrapper">
@@ -35,11 +32,79 @@
                     {%- endcase -%}
                   {%- endfor -%}
                 </div>
-              {%- endif -%}</div>
+              {%- endif -%}
+              </div>
         </div>
      {% endfor %} 
     </div>
+    <div class="new-roasters-slider-action-wrapper">
+        <img onclick="slideVendor('left')" class="new-roasters-slider-arrow" src="{{ 'arrow_vendor_left.png' |  asset_url }}"/>
+        <div class="new-roasters-slider-bullets-wrapper">
+            {% for vendor in shop.metaobjects.vendor_definitions.values %}
+                <div class="new-roasters-slider-bullet"> </div>
+            {% endfor %} 
+        </div>
+        <img onclick="slideVendor('right')" class="new-roasters-slider-arrow" src="{{ 'arrow_vendor_right.png' |  asset_url }}"/>
+    </div>
 </div>
+
+<script>
+  let currentIndex = 0;
+    const slides = document.querySelectorAll('.new-rosters-slider-content-wrapper > .new-roasters-slider-content-wrapper');
+    const bullets = document.querySelectorAll('.new-roasters-slider-bullet');
+    
+    // Set initial state
+    updateSlides();
+    updateBullets();
+    
+    // Add click handlers for left and right arrows directly
+    const leftArrow = document.querySelector('.new-roasters-slider-arrow[src*="arrow_vendor_left"]');
+    const rightArrow = document.querySelector('.new-roasters-slider-arrow[src*="arrow_vendor_right"]');
+    
+    if (leftArrow) {
+      leftArrow.addEventListener('click', function() {
+        slideVendor('left');
+      });
+      leftArrow.removeAttribute('onclick'); // Remove inline handler
+    }
+    
+    if (rightArrow) {
+      rightArrow.addEventListener('click', function() {
+        slideVendor('right');
+      });
+      rightArrow.removeAttribute('onclick'); // Remove inline handler
+    }
+    
+    function slideVendor(direction) {
+      if (direction === 'left') {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      } else if (direction === 'right') {
+        currentIndex = (currentIndex + 1) % slides.length;
+      }
+      
+      updateSlides();
+      updateBullets();
+    }
+    
+    function updateSlides() {
+      slides.forEach((slide, index) => {
+        // Hide all slides
+        slide.style.display = index === currentIndex ? 'flex' : 'none';
+      });
+    }
+    
+    function updateBullets() {
+      bullets.forEach((bullet, index) => {
+        // Update active bullet
+        bullet.style.opacity = index === currentIndex ? '1' : '0.4';
+        bullet.style.backgroundColor = index === currentIndex ? 'rgba(28, 32, 29, 1)' : 'rgba(154, 156, 170, 1);';
+      });
+    }
+    
+    // Keep the original function for backwards compatibility
+    window.slideVendor = slideVendor;
+
+</script>
 
 
 

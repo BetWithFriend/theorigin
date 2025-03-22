@@ -1,0 +1,109 @@
+.vendors-collection-wrapper {
+    background-color: #FBFCFE;
+}
+.vendors-collection-title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 32px;
+}
+
+.vendors-collection-title-main {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 48px;
+    text-align: center;
+    color: #333634;
+    width: 100%;
+}
+
+.vendors-collection-title-submain {
+    background-color: #E6E3DE;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 32px;
+    text-align: center;
+    border-radius: 70px;
+    color: #333634;
+    width: 100%;
+}
+
+.vendors-collection-content-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 24px;
+    /* background-color: #E6E3DE; */
+    width: 100%;
+    margin-bottom: 56px;
+    /* padding: 16px 24px; */
+}
+
+.vendors-collection-content-title {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 27px;
+    text-align: right;
+    width: 100%;
+    padding: 16px 32px;
+}
+
+.vendors-collection-items-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.vendors-collection-vendor-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 163px;
+    height: 184px;
+}
+
+.vendors-collection-vendor-logo-wrapper {
+    background-color: #F5F4F2;
+    border-radius: 16px;
+    width: 163px;
+    height: 136px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vendors-collection-vendor-name {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: right;
+    color: #1C201D;
+}
+
+.vendors-collection-vendor-location {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: right;
+    color: #1C201D;
+}
+
+.vendors-collection-vendor-description-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 
+}
