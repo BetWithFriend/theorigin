@@ -1,0 +1,162 @@
+{% assign vendor_handle = page.metafields.custom.vendor | replace: '-', ' '  %}
+{% assign selected_vendor = null %}
+{% for vendor in shop.metaobjects.vendor_definitions.values %}
+    {% assign current_vendor_name = vendor.vendor_name | downcase %}
+    {% if current_vendor_name == vendor_handle %}
+      {% assign selected_vendor = vendor %}
+    {% endif %}
+  {% endfor %}
+
+{% if selected_vendor %}
+    <div class="vendor-page-main-wrapper">
+        <img class="vendor-page-logo" src="{{ selected_vendor.vendor_logo | img_url: 'medium' }}" />
+        <div class="vendor-page-title-wrapper" dir="rtl">
+            <div class="vendor-page-vendor-name">הקמה: <span style="color:#1C201D">{{ selected_vendor.vendor_name }}</span></div>
+            <div class="vendor-page-vendor-location">מיקום: <span style="color:#1C201D">{{ selected_vendor.vendor_location }}</span></div>
+        </div>
+        <video controls class="vendor-page-vendor-video">
+            <source src="{{ selected_vendor.vendor_video | file_url }}" type="video/mp4">
+        </video>
+        <div class="vendor-page-description-wrapper" id="vendor-page-descriptionn-wrapper">
+            <div class="vendor-page-description-title">הסיפור שלנו</div>
+            <div class="vendor-page-description" dir="rtl">
+                {%- if selected_vendor.vendor_details != blank -%}
+                    <div class="rich-text">
+                      {%- for block in selected_vendor.vendor_details.value.children -%}
+                        {%- case block.type -%}
+                          {%- when 'paragraph' -%}
+                            <p class="rich-text__paragraph">
+                              {%- for child in block.children -%}
+                                {%- if child.type == 'text' -%}
+                                  {{- child.value | newline_to_br -}}
+                                {%- endif -%}
+                              {%- endfor -%}
+                            </p>
+                        {%- endcase -%}
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+                </div> 
+                <div id="read-more" class="read-more">המשך לקרוא</div>
+            </div>
+    </div>
+{% else %}
+  <p>Vendor not found.</p>
+{% endif %}
+
+<script>
+     document.getElementById('read-more').addEventListener('click', function() {
+        const description = document.getElementById('vendor-page-descriptionn-wrapper');
+        if (description.classList.contains('expanded')) {
+            description.classList.remove('expanded');
+            this.textContent = 'המשך לקרוא';
+        } else {
+            description.classList.add('expanded');
+            this.textContent = 'סגור';
+        }
+    });
+</script>
+
+<style>
+ .vendor-page-main-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+    gap: 16px;
+ }
+
+ .vendor-page-logo {
+    width: 30%;
+ }
+
+ .vendor-page-title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 16px
+ }
+
+ .vendor-page-vendor-name {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: right;
+    color: #555555;
+ }
+
+ .vendor-page-vendor-location {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: right;
+    color: #555555;
+ }
+
+ .vendor-page-vendor-video {
+    width: 100%;
+    padding: 24px 0;
+ }
+
+ .vendor-page-description-wrapper {
+    width: 100%;
+    max-height: calc(20px * 15 + 20px); /* 8 full lines of text */
+    background-color: #E6E3DE;
+    padding: 16px 24px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+    position: relative;
+ }
+
+ .vendor-page-description-wrapper.expanded {
+    max-height: 1800px;
+ }
+
+.vendor-page-description-title {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    color: #555555;
+    text-align: right;
+}
+
+.vendor-page-description {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 25px;
+    color: #1C201D;
+    text-align: right;
+}
+
+.read-more {
+    position: absolute;
+    bottom: 0;
+    right: 24px;
+    background: linear-gradient(to top, #E6E3DE 80%, transparent); /* subtle fade */
+    padding: 20px 0;
+    width: 100%;
+    text-align: right;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+    cursor: pointer;
+    color: #1C201D;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 1;
+    }
+
+    .vendor-page-description-wrapper.expanded .read-more {
+    position: static;
+    background: none;
+    padding-top: 16px;
+    width: 100%;
+}
+
+</style>

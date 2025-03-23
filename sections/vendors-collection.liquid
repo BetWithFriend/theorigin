@@ -9,7 +9,7 @@
         <div class="vendors-collection-content-title">בתי הקלייה שלנו</div>
         <div class="vendors-collection-items-wrapper">
             {% for vendor in shop.metaobjects.vendor_definitions.values %}
-                <div class="vendors-collection-vendor-item">
+                <div onclick="goToVendorPage('{{ vendor.vendor_name.value }}')" class="vendors-collection-vendor-item">
                     <div class="vendors-collection-vendor-logo-wrapper">
                         <img class="vendors-collection-vendor-logo" src="{{ vendor.vendor_logo | img_url: 'small' }}" >
                     </div>
@@ -24,5 +24,7 @@
 </div>
 
 <script>
-    console.log('boom', {{ shop.metaobjects.vendor_definitions.values | json }})
+    function goToVendorPage(vendorName) {
+        window.location.href = "{{ section.settings.collection.url }}/pages/vendor-" + vendorName.replaceAll(' ', '-');
+    }
 </script>

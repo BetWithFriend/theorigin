@@ -9,13 +9,9 @@
  */
 {
   "sections": {
-    "vendors_collection":  {
+    "vendors_collection": {
       "type": "vendors-collection",
-      "settings": {
-        "title": "המיוחדים של פברואר",
-        "heading_size": "h2",
-        "description": ""
-      }
+      "settings": {}
     },
     "image_with_text_aazhxx": {
       "type": "image-with-text",
