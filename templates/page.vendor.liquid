@@ -39,6 +39,8 @@
                 </div> 
                 <div id="read-more" class="read-more">המשך לקרוא</div>
             </div>
+            {% assign collection = collections['blooms-collection'].products | json %}
+            {% section 'featured-collection'  %}
     </div>
 {% else %}
   <p>Vendor not found.</p>

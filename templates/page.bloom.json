@@ -137,7 +137,7 @@
         "description": "",
         "show_description": false,
         "description_style": "body",
-        "collection": "bloom-collection",
+        "collection": "blooms-collection",
         "products_to_show": 4,
         "columns_desktop": 4,
         "full_width": false,
