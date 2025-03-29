@@ -39,11 +39,14 @@
 {%- endstyle -%}
 
 {%- liquid
+  if page.metafields.custom.featured_collection
+    assign collection_handle = page.metafields.custom.featured_collection 
+    assign featured_collection = collections[collection_handle].products
+    assign products_to_display = featured_collection
+  else
+    assign products_to_display = section.settings.collection.products
+  endif
 
-  assign collection_handle = page.metafields.custom.featured_collection 
-  assign featured_collection = collections[collection_handle].products
-
-  assign products_to_display = featured_collection
 
   if section.settings.collection.all_products_count > section.settings.products_to_show
     assign products_to_display = section.settings.products_to_show
@@ -99,8 +102,9 @@
         aria-label="{{ 'general.slider.name' | t }}"
       >
         {% assign skip_card_product_styles = false %}
-        {%- for product in products_to_display limit: section.settings.products_to_show -%}
-          {% comment %} {%- for product in featured_collection.products limit: section.settings.products_to_show -%} {% endcomment %}
+
+        {% comment %} {%- for product in  section.settings.collection.products limit: section.settings.products_to_show -%} {% endcomment %}
+          {%- for product in products_to_display limit: section.settings.products_to_show -%}
           <li
             id="Slide-{{ section.id }}-{{ forloop.index }}"
             class="grid__item{% if show_mobile_slider or show_desktop_slider %} slider__slide{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
@@ -507,3 +511,7 @@
   ]
 }
 {% endschema %}
+
+<script>
+  console.log('boom2', {{ products_to_display  |  json}})
+</script>

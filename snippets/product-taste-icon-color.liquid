@@ -26,13 +26,13 @@
     <!-- Conditional Icons -->
     <div class="selection-icons">
       {% case taste %}
-        {% when 'espresso' %}
+        {% when 'prep:espresso' %}
           <img src="{{ 'brew-Espresso.png' | asset_url }}" alt="Espresso Brew" class="icon">
         {% when 'turkish' %}
           <img src="{{ 'brew-Turkish.png' | asset_url }}" alt="Turkish Brew" class="icon">
         {% when 'chemex' %}
           <img src="{{ 'brew-Chemex.png' | asset_url }}" alt="Chemex Brew" class="icon">
-        {% when 'moka' %}
+        {% when 'prep:mokapot' %}
           <img src="{{ 'brew-Moka.png' | asset_url }}" alt="Moka Brew" class="icon">
       {% endcase %}
     </div>
