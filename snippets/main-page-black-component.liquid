@@ -4,7 +4,7 @@
     <div class="discover-roaster-subtitle">{{ description }}</div>
     <hr class="discover-roaster-divider-line" />
     <img class="discover-roaster-img" src="{{ com_image | asset_url }}" alt="discover image" />
-    <div class="discover-roaster-btn">{{ btn_text }}</div>
+    <div onclick="goToPage('{{ btn_url }}')" class="discover-roaster-btn">{{ btn_text }}</div>
 </div>
 
 <style>
@@ -67,3 +67,9 @@
     cursor: pointer;
 }
 </style>
+
+<script>
+    function goToPage(url_postfix) {
+        window.location.href = "{{ section.settings.collection.url }}" + url_postfix;
+    }
+</script>
