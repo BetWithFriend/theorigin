@@ -24,18 +24,22 @@
     {% endcase %}
     
     <!-- Conditional Icons -->
-    <div class="selection-icons">
-      {% case taste %}
-        {% when 'prep:espresso' %}
-          <img src="{{ 'brew-Espresso.png' | asset_url }}" alt="Espresso Brew" class="icon">
-        {% when 'turkish' %}
-          <img src="{{ 'brew-Turkish.png' | asset_url }}" alt="Turkish Brew" class="icon">
-        {% when 'chemex' %}
-          <img src="{{ 'brew-Chemex.png' | asset_url }}" alt="Chemex Brew" class="icon">
-        {% when 'prep:mokapot' %}
-          <img src="{{ 'brew-Moka.png' | asset_url }}" alt="Moka Brew" class="icon">
-      {% endcase %}
-    </div>
+    {% if taste contains 'prep:' %}
+      <div class="selection-icons">
+        {% case taste %}
+          {% when 'prep:espresso' %}
+          <img src="{{ 'brew-Espresso.png' | asset_url }}" alt="Espresso Brew" class="icon" />
+          {% when 'prep:turkish' %}
+          <img src="{{ 'brew-Turkish.png' | asset_url }}" alt="Turkish Brew" class="icon" />
+          {% when 'prep:milk' %}
+          <img src="{{ 'brew-Milk.png' | asset_url }}" alt="Milk Brew" class="icon" />
+          {% when 'prep:mokapot' %}
+          <img src="{{ 'brew-Moka.png' | asset_url }}" alt="Moka Brew" class="icon" />
+          {% when 'prep:filter' %}
+          <img src="{{ 'brew-Filter.png' | asset_url }}" alt="Filter Brew" class="icon" />
+        {% endcase %}
+      </div>
+  {% endif %}
   {% endfor %}
 {% endif %}
 </div>
@@ -48,6 +52,7 @@
   justify-content: flex-end; /* For right-to-left alignment */
   gap: 8px; /* Space between items */
   font-family: 'Noto Sans', sans-serif;
+  flex-direction: row-reverse;
 }
 
 .selection-text {
