@@ -18,7 +18,7 @@
   background-color: #F5F4F2;
   overflow-y: hidden;
   border-radius: 8px;
-  padding: 32px;
+  padding: 24px;
 }
 
 .card.card--horizontal {
@@ -143,7 +143,7 @@
 
 .card__information {
   grid-row-start: 2;
-  padding: 1.3rem 1rem;
+  /* padding: 1.3rem 1rem; */
 }
 
 .card:not(.ratio) > .card__content {

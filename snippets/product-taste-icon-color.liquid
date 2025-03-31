@@ -6,51 +6,54 @@
   {% for taste in tastes %}
     <!-- Conditional Color -->
     {% case taste %}
-      {% when 'fruity' %}
+      {% when 'Fruity' %}
       <span>פירותי</span>
         <span class="selection-color" style="background-color: #FFDF70;" aria-label="Yellow Indicator"></span>
-      {% when 'chocolate' %}
+      {% when 'Chocolate' %}
       <span>פירותי מתוק</span>
         <span class="selection-color" style="background-color: #8B4513;" aria-label="Brown Indicator"></span>
-      {% when 'sweet-chocolate' %}
+      {% when 'Sweet-Chocolate' %}
       <span>מתוק מאוזן</span>
         <span class="selection-color" style="background-color: #C4823E;" aria-label="Orange Indicator"></span>
-      {% when 'balanced-sweet' %}
+      {% when 'Sweet' %}
       <span>מתוק שוקולדי</span>
         <span class="selection-color" style="background-color: #D60540;" aria-label="Red Indicator"></span>
-      {% when 'sweet-fruity' %}
+      {% when 'Fruity-Sweet' %}
       <span>שוקולדי</span>
         <span class="selection-color" style="background-color: #FF974A;" aria-label="Orange Indicator"></span>
     {% endcase %}
-    
-    <!-- Conditional Icons -->
-    {% if taste contains 'prep:' %}
-      <div class="selection-icons">
-        {% case taste %}
-          {% when 'prep:espresso' %}
-          <img src="{{ 'brew-Espresso.png' | asset_url }}" alt="Espresso Brew" class="icon" />
-          {% when 'prep:turkish' %}
-          <img src="{{ 'brew-Turkish.png' | asset_url }}" alt="Turkish Brew" class="icon" />
-          {% when 'prep:milk' %}
-          <img src="{{ 'brew-Milk.png' | asset_url }}" alt="Milk Brew" class="icon" />
-          {% when 'prep:mokapot' %}
-          <img src="{{ 'brew-Moka.png' | asset_url }}" alt="Moka Brew" class="icon" />
-          {% when 'prep:filter' %}
-          <img src="{{ 'brew-Filter.png' | asset_url }}" alt="Filter Brew" class="icon" />
-        {% endcase %}
-      </div>
-  {% endif %}
   {% endfor %}
 {% endif %}
 </div>
+    <!-- Conditional Icons -->
+    <div class="selection-icons">
+    {% if prep_methods.size > 0 %}
+      {% for method in prep_methods %}
+        {% assign updated_method = method | strip | remove: '"' %}
+     
+        {% case updated_method %}
+          {% when 'Espresso' %}
+          <img src="{{ 'brew-Espresso.png' | asset_url }}" alt="Espresso Brew" class="icon" />
+          {% when 'Black' %}
+          <img src="{{ 'brew-Turkish.png' | asset_url }}" alt="Turkish Brew" class="icon" />
+          {% when 'Aeropress' %}
+          <img src="{{ 'brew-Milk.png' | asset_url }}" alt="Milk Brew" class="icon" />
+          {% when 'MokaPot' %}
+          <img src="{{ 'brew-Moka.png' | asset_url }}" alt="Moka Brew" class="icon" />
+          {% when 'Filter' %}
+          <img src="{{ 'brew-Filter.png' | asset_url }}" alt="Filter Brew" class="icon" />
+        {% endcase %}
   
+  {% endfor %}
+{% endif %}
+</div>
 
 <style>
   .selection-wrapper {
   display: flex;
   align-items: center;
-  justify-content: flex-end; /* For right-to-left alignment */
-  gap: 8px; /* Space between items */
+  justify-content: center;
+  gap: 4px;
   font-family: 'Noto Sans', sans-serif;
   flex-direction: row-reverse;
 }
@@ -69,7 +72,8 @@
 
 .selection-icons {
   display: flex;
-  gap: 4px; /* Space between icons */
+  gap: 4px;
+  /* width: 24px; */
 }
 
 .selection-icons .icon {
@@ -78,15 +82,17 @@
 }
   .product-taste-icons {
   /* margin-top: 10px; /* Add space between the image and the icons */
-  text-align: center; /* Center the icons horizontally */
+    text-align: center; /* Center the icons horizontally */
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: row-reverse;
+    gap: 16px;
 }
 
 .product-taste-icons img {
   width: 24px; /* Ensure icons are a consistent size */
   height: 24px;
-  margin: 0 5px; /* Add spacing between multiple icons */
+  /* margin: 0 5px;  */
 }
 </style>
