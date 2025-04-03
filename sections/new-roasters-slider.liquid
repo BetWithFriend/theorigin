@@ -17,22 +17,22 @@
                 <img class="new-roastes-slider-roaster-video" src="{{ vendor.vendor_video | img_url: 'small' }}" alt="">
             </div>
             <div class="new-roastes-slider-roaster-description">            
-        {%- if vendor.vendor_details != blank -%}
+            {%- if vendor.vendor_details != blank -%}
                 <div class="rich-text">
                   {%- for block in vendor.vendor_details.value.children -%}
                     {%- case block.type -%}
                       {%- when 'paragraph' -%}
-                        <p class="rich-text__paragraph">
+                        <div class="rich-text__paragraph">
                           {%- for child in block.children -%}
                             {%- if child.type == 'text' -%}
                               {{- child.value | newline_to_br -}}
                             {%- endif -%}
                           {%- endfor -%}
-                        </p>
+                        </div>
                     {%- endcase -%}
                   {%- endfor -%}
                 </div>
-              {%- endif -%}
+            {%- endif -%}
               </div>
         </div>
      {% endfor %} 

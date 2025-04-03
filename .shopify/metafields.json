@@ -59,7 +59,28 @@
   "location": [],
   "market": [],
   "order": [],
-  "page": [],
+  "page": [
+    {
+      "key": "vendor",
+      "namespace": "custom",
+      "name": "vendor",
+      "description": "",
+      "type": {
+        "name": "single_line_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "featured_collection",
+      "namespace": "custom",
+      "name": "featured_collection",
+      "description": "",
+      "type": {
+        "name": "single_line_text_field",
+        "category": "TEXT"
+      }
+    }
+  ],
   "product": [
     {
       "key": "coffee-product-form",
@@ -186,6 +207,16 @@
       "namespace": "shopify",
       "name": "Country",
       "description": "Specifies the country associated with the product, such as Japan or Germany",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "dietary-preferences",
+      "namespace": "shopify",
+      "name": "Dietary preferences",
+      "description": "Helps identify products suitable for specific diets, e.g. vegan, nut free",
       "type": {
         "name": "list.metaobject_reference",
         "category": "REFERENCE"

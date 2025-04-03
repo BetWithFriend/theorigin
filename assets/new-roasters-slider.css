@@ -8,7 +8,7 @@
     top: 0;
     height: 100%;
     width: 24px;
-    background: linear-gradient(to left, #FBFCFE 0%, transparent 100%);
+    /* background: linear-gradient(to left, #FBFCFE 0%, transparent 100%); */
     pointer-events: none;
 
 }
@@ -30,7 +30,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 24px;
+    gap: 16px;
 }
 
 .new-rosters-slider-content-wrapper {
@@ -122,4 +122,12 @@
 .new-roasters-slider-arrow {
     width: 40px;
     height: 40px;
+}
+
+.rich-text__paragraph {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 25px;
+    text-align: right;
 }

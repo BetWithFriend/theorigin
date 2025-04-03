@@ -1,7 +1,7 @@
 {% comment %} {{ 'discover-the-roaster.css' | asset_url | stylesheet_tag }} {% endcomment %}
 <div class="discover-roaster-wrapper">
     <div class="discover-roaster-title">{{ title  }}</div>
-    <div class="discover-roaster-subtitle">{{ description }}</div>
+    <div class="discover-roaster-subtitle" dir="rtl">{{ description }}</div>
     <hr class="discover-roaster-divider-line" />
     <img class="discover-roaster-img" src="{{ com_image | asset_url }}" alt="discover image" />
     <div onclick="goToPage('{{ btn_url }}')" class="discover-roaster-btn">{{ btn_text }}</div>

@@ -1,8 +1,11 @@
 <!-- snippets/filter-dropdown.liquid -->
 
-<div class="dropdown-filter">
-  <button class="dropdown-button" onclick="toggleDropdown()">סינון לפי טעמים
-    <img src="{{ 'dropdown-icon.png' | asset_url }}" alt="Dropdown Icon" class="dropdown-icon">
+<div class="dropdown-filters">
+  <button class="dropdown-button" onclick="toggleDropdown()">טעם
+    <img src="{{ 'dropdown-icon.png' | asset_url }}" alt="Dropdown Icon" class="dropdown-icon" />
+  </button>
+  <button class="dropdown-button" onclick="toggleDropdown()">הכנה
+    <img src="{{ 'dropdown-icon.png' | asset_url }}" alt="Dropdown Icon" class="dropdown-icon" />
   </button>
 
   <div class="dropdown-menu" id="dropdownMenu">
@@ -71,32 +74,33 @@
 
 
 <style>
-  .dropdown-filter {
+  .dropdown-filters {
     position: relative;
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .dropdown-hidden {
     visibility: hidden
   }
 
   .dropdown-button {
+    height: 60px;
     font-family:  'Noto Sans', sans-serif;
     width: 100%;
     color: #767676;
     background-color: #ffffff;
-    border: 1px solid #0000001A;
+    /* border: 1px solid #0000001A; */
     padding: 11px 16px;
-    text-align: right;
+    text-align: center;
     font-size: 16px;
     cursor: pointer;
     font-weight: 400;
-    border-radius: 4px;
+    /* border-radius: 4px; */
     display: flex;
     align-items: center;
-    flex-direction: row-reverse;
-    justify-content: space-between;
+    /* flex-direction: row-reverse; */
+    justify-content: center;
   }
 
   .dropdown-menu {
@@ -142,8 +146,14 @@
 
   .dropdown-button {
   /* background: url("{{ 'dropdown-icon.svg' | asset_url }}") no-repeat right center; */
-  background-size: 16px; /* Adjust as needed */
-  padding-right: 24px; /* Make space for the icon */
+  /* background-size: 16px;
+  padding-right: 24px;  */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 30%;
+  border: none;
 }
 
 .dropdown-icon-img {
