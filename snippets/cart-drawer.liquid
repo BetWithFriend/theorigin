@@ -88,38 +88,38 @@
           <div id="CartDrawer-CartItems" class="drawer__contents js-contents">
             {%- if cart != empty -%}
               <div class="drawer__cart-items-wrapper">
-                <table class="cart-items" role="table">
-                  <thead role="rowgroup">
-                    <tr role="row">
-                      <th id="CartDrawer-ColumnProductImage" role="columnheader">
+                {% comment %} <table class="cart-items" role="table">
+                  <thead role="rowgroup"> {% endcomment %}
+                    <div role="row">
+                      <div id="CartDrawer-ColumnProductImage" role="columnheader">
                         <span class="visually-hidden">{{ 'sections.cart.headings.image' | t }}</span>
-                      </th>
-                      <th
+                      </div>
+                      <div
                         id="CartDrawer-ColumnProduct"
                         class="caption-with-letter-spacing"
                         scope="col"
                         role="columnheader"
                       >
                         {{ 'sections.cart.headings.product' | t }}
-                      </th>
-                      <th
+                      </div>
+                      <div
                         id="CartDrawer-ColumnTotal"
                         class="right caption-with-letter-spacing"
                         scope="col"
                         role="columnheader"
                       >
                         {{ 'sections.cart.headings.total' | t }}
-                      </th>
-                      <th id="CartDrawer-ColumnQuantity" role="columnheader">
+                      </div>
+                      <div id="CartDrawer-ColumnQuantity" role="columnheader">
                         <span class="visually-hidden">{{ 'sections.cart.headings.quantity' | t }}</span>
-                      </th>
-                    </tr>
-                  </thead>
+                      </div>
+                    </div>
+                  {% comment %} </thead> {% endcomment %}
 
-                  <tbody role="rowgroup">
+                  {% comment %} <tbody role="rowgroup"> {% endcomment %}
                     {%- for item in cart.items -%}
-                      <tr id="CartDrawer-Item-{{ item.index | plus: 1 }}" class="cart-item" role="row">
-                        <td class="cart-item__media" role="cell" headers="CartDrawer-ColumnProductImage">
+                      <div id="CartDrawer-Item-{{ item.index | plus: 1 }}" class="cart-item" role="row">
+                        <div class="cart-item__media" role="cell" headers="CartDrawer-ColumnProductImage">
                           {% if item.image %}
                             {% comment %} Leave empty space due to a:empty CSS display: none rule {% endcomment %}
                             <a href="{{ item.url }}" class="cart-item__link" tabindex="-1" aria-hidden="true"> </a>
@@ -132,9 +132,9 @@
                               height="{{ 150 | divided_by: item.image.aspect_ratio | ceil }}"
                             >
                           {% endif %}
-                        </td>
+                        </div>
 
-                        <td class="cart-item__details" role="cell" headers="CartDrawer-ColumnProduct">
+                        <div class="cart-item__details" role="cell" headers="CartDrawer-ColumnProduct">
                           {%- if settings.show_vendor -%}
                             <p class="caption-with-letter-spacing light">{{ item.product.vendor }}</p>
                           {%- endif -%}
@@ -220,9 +220,9 @@
                               </li>
                             {%- endfor -%}
                           </ul>
-                        </td>
+                        </div>
 
-                        <td class="cart-item__totals right" role="cell" headers="CartDrawer-ColumnTotal">
+                        <div class="cart-item__totals right" role="cell" headers="CartDrawer-ColumnTotal">
                           {%- render 'loading-spinner' -%}
                           <div class="cart-item__price-wrapper">
                             {%- if item.original_line_price != item.final_line_price -%}
@@ -261,7 +261,7 @@
                               </div>
                             {%- endif -%}
                           </div>
-                        </td>
+                        </div>
                         {%- liquid
                           assign has_qty_rules = false
                           if item.variant.quantity_rule.increment > 1 or item.variant.quantity_rule.min > 1 or item.variant.quantity_rule.max != null
@@ -273,7 +273,7 @@
                             assign has_vol_pricing = true
                           endif
                         -%}
-                        <td
+                        <div
                           class="cart-item__quantity {% if has_qty_rules or has_vol_pricing %} cart-item__quantity--info{% endif %}"
                           role="cell"
                           headers="CartDrawer-ColumnQuantity"
@@ -439,11 +439,11 @@
                               </span>
                             </div>
                           </quantity-popover>
-                        </td>
-                      </tr>
+                        </div>
+                      </div>
                     {%- endfor -%}
-                  </tbody>
-                </table>
+                  {% comment %} </tbody>
+                </table> {% endcomment %}
               </div>
             {%- endif -%}
             <p id="CartDrawer-LiveRegionText" class="visually-hidden" role="status"></p>

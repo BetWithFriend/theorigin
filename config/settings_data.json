@@ -165,7 +165,7 @@
           "quick_add": "none",
           "columns_mobile": "1",
           "swipe_on_mobile": false,
-          "padding_top": 36,
+          "padding_top": 0,
           "padding_bottom": 36
         }
       }
@@ -213,7 +213,7 @@
           "button": "#ffffff",
           "button_label": "#121212",
           "secondary_button_label": "#ffffff",
-          "shadow": "#121212"
+          "shadow": "#ffffff"
         }
       },
       "scheme-5": {
@@ -229,13 +229,13 @@
       },
       "scheme-06547adb-270b-4f76-92a3-0bb7bcf58e12": {
         "settings": {
-          "background": "#fbfcfe",
+          "background": "#ffffff",
           "background_gradient": "",
           "text": "#1e1e1e",
           "button": "#121212",
           "button_label": "#fbfcfe",
           "secondary_button_label": "#fbfcfe",
-          "shadow": "#121212"
+          "shadow": "#ffffff"
         }
       },
       "scheme-1397de02-f2a7-4295-9df3-ed962137881c": {

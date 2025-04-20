@@ -13,13 +13,13 @@
       <span>פירותי מתוק</span>
         <span class="selection-color" style="background-color: #8B4513;" aria-label="Brown Indicator"></span>
       {% when 'Sweet-Chocolate' %}
-      <span>מתוק מאוזן</span>
+      <span>מתוק שוקולדי</span>
         <span class="selection-color" style="background-color: #C4823E;" aria-label="Orange Indicator"></span>
       {% when 'Sweet' %}
-      <span>מתוק שוקולדי</span>
+      <span>מתוק מאוזן</span>
         <span class="selection-color" style="background-color: #D60540;" aria-label="Red Indicator"></span>
       {% when 'Fruity-Sweet' %}
-      <span>שוקולדי</span>
+      <span>פירותי מתוק</span>
         <span class="selection-color" style="background-color: #FF974A;" aria-label="Orange Indicator"></span>
     {% endcase %}
   {% endfor %}
@@ -89,6 +89,7 @@
     justify-content: center;
     flex-direction: row-reverse;
     gap: 16px;
+    white-space: nowrap;
 }
 
 .product-taste-icons img {

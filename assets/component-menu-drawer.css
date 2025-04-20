@@ -27,7 +27,7 @@ menu-drawer > details[open] > summary::before {
 
 .menu-drawer {
   position: absolute;
-  transform: translateX(-100%);
+  transform: translateX(100%);
   visibility: hidden;
   z-index: 3;
   left: 0;
@@ -56,6 +56,7 @@ menu-drawer > details[open] > summary::before {
 details[open].menu-opening > .menu-drawer__submenu {
   transform: translateX(0);
   visibility: visible;
+  background-color: #E6E3DE;
 }
 
 .js .menu-drawer__navigation .submenu-open {
@@ -96,6 +97,7 @@ details[open].menu-opening > .menu-drawer__submenu {
 
 .js .menu-drawer__menu li {
   margin-bottom: 0.2rem;
+  width: 100%;
 }
 
 .menu-drawer__menu-item {
@@ -182,6 +184,7 @@ details[open].menu-opening > .menu-drawer__submenu {
 @media screen and (max-width: 749px) {
   .header--has-account:where(:not(.header--has-social):not(.header--has-localizations)) .menu-drawer__utility-links {
     padding: 2rem 3rem;
+  display: none;
   }
 }
 

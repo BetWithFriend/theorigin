@@ -20,7 +20,7 @@
     line-height: 27px;
     text-align: right;
     width: 100%;
-    padding: 16px 32px;
+    padding: 0 32px;
 }
 
 .new-roasters-slider-content-wrapper {
@@ -34,7 +34,7 @@
 }
 
 .new-rosters-slider-content-wrapper {
-    margin: 16px 0;
+    margin-bottom: 16px;
     padding: 16px 0;
     display: flex;
     align-items: flex-start;

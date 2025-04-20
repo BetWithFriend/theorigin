@@ -221,6 +221,26 @@
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
       }
+    },
+    {
+      "key": "coffee-roast",
+      "namespace": "shopify",
+      "name": "Coffee roast",
+      "description": "Defines the roast level of coffee products, e.g. light, medium, dark",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "caffeine-content",
+      "namespace": "shopify",
+      "name": "Caffeine content",
+      "description": "Indicates the amount of caffeine present in a product, e.g. decaffeinated, low caffeine",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
     }
   ],
   "variant": [

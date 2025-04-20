@@ -291,7 +291,7 @@
       }
     },
     "cart": {
-      "title": "Your cart",
+      "title": "העגלה שלך",
       "caption": "Cart items",
       "remove_title": "Remove {{ title }}",
       "estimated_total": "Estimated total",

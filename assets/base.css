@@ -811,6 +811,11 @@ summary::-webkit-details-marker {
 
 .title-wrapper-with-link .title {
   margin: 0;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 24px;
+    line-height: 24px;
+    font-weight: 700;
+    color: #1C201D;
 }
 
 .title .link {
@@ -823,7 +828,7 @@ summary::-webkit-details-marker {
 
 .title-wrapper-with-link {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-end;
   gap: 1rem;
   margin-bottom: 3rem;
@@ -919,10 +924,22 @@ summary::-webkit-details-marker {
   margin-bottom: 2rem;
   padding: 0;
   list-style: none;
-  column-gap: var(--grid-mobile-horizontal-spacing);
-  row-gap: var(--grid-mobile-vertical-spacing);
+  background-color: #F5F4F2;;
+  /* column-gap: var(--grid-mobile-horizontal-spacing); */
+  /* row-gap: var(--grid-mobile-vertical-spacing); */
   /* Ido */
-  gap: 48px;
+  /* gap: 48px; */
+}
+
+.card-product-divider {
+  width: 85%;
+  /* padding: 0 24px; */
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #F5F4F2; */
+  border: 0.5px solid #CDCDCD;
 }
 
 @media screen and (min-width: 750px) {

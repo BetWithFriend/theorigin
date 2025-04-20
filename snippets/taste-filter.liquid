@@ -10,114 +10,81 @@
   <div class="dropdown-menu-wrapper">
     <div class="dropdown-menu" id="dropdownMenu-taste">
 
-      <div class="dropdown-item" onclick="filterByTag('Fruity')">
+      <div class="dropdown-item">
         <div class="dropdown-icons">
-          <input type="checkbox" name="Fruity" value="Fruity">
+          <input class="dropdown-icons-input" type="checkbox" name="Fruity" value="Fruity">
           <span class="color-circle" style="background-color: #FFDF70;"></span>
           <span>פירותי</span>
         </div>
-        {% comment %} <div class="dropdown-icons">
-          <img class="dropdown-icon-img dropdown-hidden" src="" alt="empty" /> 
-        <img class="dropdown-icon-img" src="{{ 'dropdown-brew-v60.png' | asset_url }}" alt="v60 Icon" /> 
-        <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Icon" /> 
-        </div> {% endcomment %}
       </div>
-      <div class="dropdown-item {% if taste == 'fruity' %}highlighted{% endif %}" onclick="filterByTag('Fruity-Sweet')">
+      <div class="dropdown-item">
         <div class="dropdown-icons">
-        <input type="checkbox" name="Fruity-Sweet" value="Fruity-Sweet">
+        <input class="dropdown-icons-input"  type="checkbox" name="Fruity-Sweet" value="Fruity-Sweet">
         <span class="color-circle" style="background-color: #FF974A;"></span>
         <span>פירותי מתוק</span>
         </div>
-        {% comment %} <div class="dropdown-icons">
-          <img class="dropdown-icon-img dropdown-hidden" src="" alt="empty" /> 
-          <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Chemex.png' | asset_url }}" alt="v60 Icon" /> 
-          <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Icon" /> 
-        </div> {% endcomment %}
       </div>
-      <div class="dropdown-item" onclick="filterByTag('Sweet')">
+      <div class="dropdown-item" >
         <div class="dropdown-icons">
-          <input type="checkbox" name="Sweet" value="Sweet">
+          <input class="dropdown-icons-input"  type="checkbox" name="Sweet" value="Sweet">
           <span class="color-circle" style="background-color: #D60540;"></span>
           <span>מתוק מאוזן</span>
         </div>
-        {% comment %} <div class="dropdown-icons">
-          <img class="dropdown-icon-img dropdown-hidden" src="" alt="empty" /> 
-          <img class="dropdown-icon-img dropdown-hidden" src="" alt="empty" /> 
-          <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Icon" /> 
-        </div> {% endcomment %}
       </div>
-      <div class="dropdown-item" onclick="filterByTag('Sweet-Chocolate')">
+      <div class="dropdown-item" >
         <div class="dropdown-icons">
-          <input type="checkbox" name="Sweet-Chocolate" value="Sweet-Chocolate">
+          <input class="dropdown-icons-input"  type="checkbox" name="Sweet-Chocolate" value="Sweet-Chocolate">
           <span class="color-circle" style="background-color: #C4823E;"></span>
           <span>מתוק שוקולדי</span>
         </div>
-        {% comment %} <div class="dropdown-icons">
-          <img class="dropdown-icon-img " src="{{  'dropdown-brew-Moka.png' | asset_url }}" alt="Moka Icon" /> 
-          <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Chemex.png' | asset_url }}" alt="v60 Icon" /> 
-          <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Icon" /> 
-        </div> {% endcomment %}
       </div>
-      <div class="dropdown-item" onclick="filterByTag('Chocolate')">
+      <div class="dropdown-item" >
         <div class="dropdown-icons">
-          <input type="checkbox" name="Chocolate" value="Chocolate">
+          <input class="dropdown-icons-input"  type="checkbox" name="Chocolate" value="Chocolate">
           <span class="color-circle" style="background-color: #8B4513;"></span>
           <span>שוקולדי</span>
         </div>
-        {% comment %} <div class="dropdown-icons">
-          <img class="dropdown-icon-img " src="{{  'dropdown-brew-Moka.png' | asset_url }}" alt="Moka Icon" /> 
-          <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Turkish.png' | asset_url }}" alt="Turkish Icon" /> 
-          <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Icon" />         
-        </div> {% endcomment %}
       </div>
-      {% comment %} <div class="dropdown-item" onclick="filterByTag('All')">
-        <input type="checkbox" name="All" value="All">
-        <span class="color-circle"> </span>
-        <span>הכל</span>
-      </div> {% endcomment %}
-
+      <div class="dropdown-menu-btn"  onclick="filterByTag('taste')">בחר</div>
     </div>
+
     <div class="dropdown-menu" id="dropdownMenu-prep">
-        <div class="dropdown-item" onclick="filterByTag('Filter')">
+        <div class="dropdown-item">
         <div class="dropdown-icons">
-          <input type="checkbox" name="Filter" value="Filter">
+          <input class="dropdown-icons-input"  type="checkbox" name="Filter" value="Filter">
           <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Filter.png' | asset_url }}" alt="Filter Icon" /> 
           <span>פילטר</span>
           </div>
         </div>
-        <div class="dropdown-item" onclick="filterByTag('Black')">
+        <div class="dropdown-item">
           <div class="dropdown-icons">
-            <input type="checkbox" name="Black" value="Black">
+            <input class="dropdown-icons-input"  type="checkbox" name="Black" value="Black">
             <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Turkish.png' | asset_url }}" alt="Turkish Icon" /> 
             <span>קפה שחור</span>
           </div>
         </div>
-        <div class="dropdown-item" onclick="filterByTag('Moka')">
+        <div class="dropdown-item">
           <div class="dropdown-icons">
-            <input type="checkbox" name="Moka" value="Moka">
+            <input class="dropdown-icons-input"  type="checkbox" name="Moka" value="Moka">
             <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Moka.png' | asset_url }}" alt="Espresso Icon" /> 
             <span>מקינטה</span>
           </div>
         </div>
-        <div class="dropdown-item" onclick="filterByTag('Espresso')">
+        <div class="dropdown-item">
           <div class="dropdown-icons">
-            <input type="checkbox" name="Espresso" value="Espresso">
+            <input class="dropdown-icons-input"  type="checkbox" name="Espresso" value="Espresso">
             <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Icon" /> 
             <span>אספרסו</span>
           </div>
         </div>
-        <div class="dropdown-item" onclick="filterByTag('Chemex')">
+        <div class="dropdown-item">
           <div class="dropdown-icons">
-            <input type="checkbox" name="Chemex" value="Chemex">
+            <input class="dropdown-icons-input"  type="checkbox" name="Chemex" value="Chemex">
             <img class="dropdown-icon-img " src="{{  'dropdown-brew-Chemex.png' | asset_url }}" alt="Moka Icon" />
             <span>חליטה</span>
           </div>
         </div>
-        {% comment %} <div class="dropdown-item" onclick="filterByTag('All')">
-          <input type="checkbox" name="All" value="All">
-          <span>הכל</span>
-        </div> {% endcomment %}
-
+        <div class="dropdown-menu-btn"  onclick="filterByTag('prep')">בחר</div>
     </div>
   </div>
 </div>
@@ -134,6 +101,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
   }
   .dropdown-hidden {
     visibility: hidden
@@ -163,7 +131,7 @@
     position: absolute;
     border: 1px solid #DEDBD666;
     border-radius: 4px;
-    width: 45%;
+    width: 47%;
     background-color: #fff;
     border: 1px solid #ddd;
     z-index: 10;
@@ -173,14 +141,20 @@
   #dropdownMenu-taste {
     top: 50px;
     right: 0;
+    gap: 32px;
+    padding: 16px;
+    width: 200px;
   }
   #dropdownMenu-prep {
     top: 50px;
     left: 0;
+    gap: 32px;
+    padding: 16px;
+    width: 200px;
   }
 
   .dropdown-item {
-    padding: 8px 16px;
+    /* padding: 8px 8px; */
     display: flex;
     justify-content: start;
     align-items: center;
@@ -195,17 +169,24 @@
   .dropdown-icons {
     display: flex;
     align-items: center;
-    gap: 8px;
+    /* gap: 8px; */
     white-space: nowrap;
   }
   .dropdown-icon {
     width: 12px;
   }
 
+  .dropdown-icons-input {
+    width: 22px !important;
+    height: 22px !important;
+    margin-left: 10px;
+  }
+
   .color-circle {
     width: 24px;
     height: 24px;
     border-radius: 30px;
+    margin-left: 8px;
   }
 
   .dropdown-button {
@@ -224,10 +205,33 @@
   height: 24px;
   width: 24px;
 }
+
+.dropdown-menu-btn {
+  background-color: #1C201D;
+  width: 113px;
+  height: 40px;
+  border-radius: 8px;
+  padding: 16px 40px;
+  font-family:  'Noto Sans', sans-serif;
+  font-size: 18px;
+  color: #E3E0DA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
+}
 </style>
 
 <script>
   function toggleDropdown(menuType) {
+    // Close the opened menu when selection second menu
+    const menuTaste = document.getElementById('dropdownMenu-taste')
+    const menuPrep = document.getElementById('dropdownMenu-prep')
+    if (menuType === 'taste') { 
+      menuPrep.style.display = 'none'
+    } else {
+      menuTaste.style.display = 'none'
+    }
     const menu = document.getElementById('dropdownMenu-' + menuType);
     menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
     menu.style.flexDirection = menu.style.display === 'flex' ? 'column' : 'flex';
@@ -235,22 +239,51 @@
     menu.style.justifyContent = menu.style.display === 'flex' ? 'end' : 'flex';
     menu.style.gpa = menu.style.display === '8px' ? 'end' : '8px';
     menu.style.margin = menu.style.display === '0px 10px' ? 'end' : '0px 10px';
+    menu.style.paddingTop = menu.style.display === 'flex' ? '16px' : '0px';
   }
 
-  function filterByTag(sTaste) {
-    console.log('boom');
-  //  // Update the selected taste in a hidden input or URL parameter
-  //   const form = document.createElement('form');
-  //   form.method = 'GET'; // You can use POST if needed
-  //   form.action = window.location.href.split('?')[0]; // Reload the same page
+  function filterByTag(type) {
+    // Get all checked checkboxes
+    // const checkedTags = Array.from(document.querySelectorAll('.dropdown-icons input[type="checkbox"]:checked'))
+    //   .map(checkbox => checkbox.value);
+    //   console.log('boom', checkedTags)
 
-  //   const input = document.createElement('input');
-  //   input.type = 'hidden';
-  //   input.name = 'selected_taste';
-  //   input.value = sTaste;
+    const checkedTags = [];
 
-  //   form.appendChild(input);
-  //   document.body.appendChild(form);
-  //   form.submit(); // Submit the form to reload the page with the selected taste
+    // Only select checkboxes inside the dropdownMenu-taste div
+    const checkboxes = document.querySelectorAll('#dropdownMenu-' + type + ' .dropdown-icons-input:checked');
+
+    checkboxes.forEach(checkbox => {
+      checkedTags.push(checkbox.value);
+    });
+
+    // Loop over all product cards
+    document.querySelectorAll('.grid__item').forEach(card => {
+      
+        const prepMethods = card.dataset.prepMethods;
+
+        // If no checkboxes are selected, show all products
+        if (checkedTags.length === 0) {
+          card.style.display = 'block';
+          return;
+        }
+        // Split the string into flavor profile and methods array
+        const flavorPart = prepMethods.substring(0, prepMethods.indexOf('[')).trim();
+        const methodsString = prepMethods.substring(prepMethods.indexOf('['));
+        const methodsArray = JSON.parse(methodsString);
+        methodsArray.push(flavorPart)
+        console.log(methodsArray, 'boom2')
+
+        // Check if any tag matches either the flavor or the methods
+        const matchesAllFilters = checkedTags.every(tag => methodsArray.includes(tag));
+        // const show = checkedTags.some(tag => 
+        //   tag === flavorPart || methodsArray.includes(tag)
+        // );
+        // Check if any selected tag is in the product's prep methods
+        // const show = checkedTags.some(tag => prepMethods.includes(tag));
+
+        card.style.display = matchesAllFilters ? 'block' : 'none';
+      
+    });
   }
 </script>

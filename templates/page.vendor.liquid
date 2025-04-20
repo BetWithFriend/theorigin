@@ -40,6 +40,8 @@
                 <div id="read-more" class="read-more">המשך לקרוא</div>
             </div>
             {% assign collection = collections['blooms-collection'].products | json %}
+            {% assign product_taste = collection.products %} 
+            {% render 'taste-filter', tastes: product_taste %} 
             {% section 'featured-collection'  %}
     </div>
 {% else %}
@@ -152,6 +154,7 @@
     color: #1C201D;
     transition: opacity 0.2s ease-in-out;
     z-index: 1;
+    text-decoration: underline;
     }
 
     .vendor-page-description-wrapper.expanded .read-more {

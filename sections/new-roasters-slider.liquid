@@ -38,13 +38,13 @@
      {% endfor %} 
     </div>
     <div class="new-roasters-slider-action-wrapper">
-        <img onclick="slideVendor('left')" class="new-roasters-slider-arrow" src="{{ 'arrow_vendor_left.png' |  asset_url }}"/>
+      <img onclick="slideVendor('right')" class="new-roasters-slider-arrow" src="{{ 'arrow_vendor_right.png' |  asset_url }}"/>
         <div class="new-roasters-slider-bullets-wrapper">
             {% for vendor in shop.metaobjects.vendor_definitions.values %}
                 <div class="new-roasters-slider-bullet"> </div>
             {% endfor %} 
         </div>
-        <img onclick="slideVendor('right')" class="new-roasters-slider-arrow" src="{{ 'arrow_vendor_right.png' |  asset_url }}"/>
+        <img onclick="slideVendor('left')" class="new-roasters-slider-arrow" src="{{ 'arrow_vendor_left.png' |  asset_url }}"/>
     </div>
 </div>
 

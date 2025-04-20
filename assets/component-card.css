@@ -14,11 +14,11 @@
 .card:not(.ratio) {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  /* height: 100%; */
   background-color: #F5F4F2;
   overflow-y: hidden;
   border-radius: 8px;
-  padding: 24px;
+  padding: 32px 24px 0 24px;
 }
 
 .card.card--horizontal {
@@ -129,7 +129,7 @@
 }
 
 .card__content {
-  display: grid;
+  /* display: grid; */
   /* Ido */
   /* grid-template-rows: minmax(0, 1fr) max-content minmax(0, 1fr); */
   padding: 1rem;
