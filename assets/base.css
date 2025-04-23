@@ -924,7 +924,7 @@ summary::-webkit-details-marker {
   margin-bottom: 2rem;
   padding: 0;
   list-style: none;
-  background-color: #F5F4F2;;
+  /* background-color: #F5F4F2; */
   /* column-gap: var(--grid-mobile-horizontal-spacing); */
   /* row-gap: var(--grid-mobile-vertical-spacing); */
   /* Ido */

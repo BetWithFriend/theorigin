@@ -45,7 +45,7 @@
           <span>שוקולדי</span>
         </div>
       </div>
-      <div class="dropdown-menu-btn"  onclick="filterByTag('taste')">בחר</div>
+      <div class="dropdown-menu-btn" data-type="taste" onclick="filterByTag('taste')">הצג הכל</div>
     </div>
 
     <div class="dropdown-menu" id="dropdownMenu-prep">
@@ -84,7 +84,7 @@
             <span>חליטה</span>
           </div>
         </div>
-        <div class="dropdown-menu-btn"  onclick="filterByTag('prep')">בחר</div>
+        <div class="dropdown-menu-btn" data-type="prep" onclick="filterByTag('prep')">הצג הכל</div>
     </div>
   </div>
 </div>
@@ -139,14 +139,14 @@
   }
 
   #dropdownMenu-taste {
-    top: 50px;
+    top: 60px;
     right: 0;
     gap: 32px;
     padding: 16px;
     width: 200px;
   }
   #dropdownMenu-prep {
-    top: 50px;
+    top: 60px;
     left: 0;
     gap: 32px;
     padding: 16px;
@@ -211,7 +211,7 @@
   width: 113px;
   height: 40px;
   border-radius: 8px;
-  padding: 16px 40px;
+  padding: 16px 10px;
   font-family:  'Noto Sans', sans-serif;
   font-size: 18px;
   color: #E3E0DA;
@@ -242,48 +242,47 @@
     menu.style.paddingTop = menu.style.display === 'flex' ? '16px' : '0px';
   }
 
-  function filterByTag(type) {
-    // Get all checked checkboxes
-    // const checkedTags = Array.from(document.querySelectorAll('.dropdown-icons input[type="checkbox"]:checked'))
-    //   .map(checkbox => checkbox.value);
-    //   console.log('boom', checkedTags)
+  function filterByTag() {
+  // Gather checked checkboxes from both dropdowns
+  const tasteChecked = Array.from(document.querySelectorAll('#dropdownMenu-taste .dropdown-icons-input:checked'))
+    .map(checkbox => checkbox.value);
+  const prepChecked = Array.from(document.querySelectorAll('#dropdownMenu-prep .dropdown-icons-input:checked'))
+    .map(checkbox => checkbox.value);
 
-    const checkedTags = [];
+  document.querySelectorAll('.grid__item').forEach(card => {
+    const prepMethods = card.dataset.prepMethods;
 
-    // Only select checkboxes inside the dropdownMenu-taste div
-    const checkboxes = document.querySelectorAll('#dropdownMenu-' + type + ' .dropdown-icons-input:checked');
+    if (!prepMethods) return;
 
-    checkboxes.forEach(checkbox => {
-      checkedTags.push(checkbox.value);
-    });
+    const flavorPart = prepMethods.substring(0, prepMethods.indexOf('[')).trim();
+    const methodsString = prepMethods.substring(prepMethods.indexOf('['));
+    const methodsArray = JSON.parse(methodsString);
 
-    // Loop over all product cards
-    document.querySelectorAll('.grid__item').forEach(card => {
-      
-        const prepMethods = card.dataset.prepMethods;
+    // OR logic inside each category
+    const tasteMatch = tasteChecked.length === 0 || tasteChecked.includes(flavorPart);
+    const prepMatch = prepChecked.length === 0 || prepChecked.some(tag => methodsArray.includes(tag));
 
-        // If no checkboxes are selected, show all products
-        if (checkedTags.length === 0) {
-          card.style.display = 'block';
-          return;
-        }
-        // Split the string into flavor profile and methods array
-        const flavorPart = prepMethods.substring(0, prepMethods.indexOf('[')).trim();
-        const methodsString = prepMethods.substring(prepMethods.indexOf('['));
-        const methodsArray = JSON.parse(methodsString);
-        methodsArray.push(flavorPart)
-        console.log(methodsArray, 'boom2')
+    // AND logic between taste and prep
+    const show = tasteMatch && prepMatch;
+    card.style.display = show ? 'block' : 'none';
+  });
+}
 
-        // Check if any tag matches either the flavor or the methods
-        const matchesAllFilters = checkedTags.every(tag => methodsArray.includes(tag));
-        // const show = checkedTags.some(tag => 
-        //   tag === flavorPart || methodsArray.includes(tag)
-        // );
-        // Check if any selected tag is in the product's prep methods
-        // const show = checkedTags.some(tag => prepMethods.includes(tag));
+document.querySelectorAll('.dropdown-icons-input').forEach(input => {
+  input.addEventListener('change', () => {
+    updateDropdownButtonText('taste');
+    updateDropdownButtonText('prep');
+  });
+});
 
-        card.style.display = matchesAllFilters ? 'block' : 'none';
-      
-    });
+function updateDropdownButtonText(type) {
+  const selectedCheckboxes = document.querySelectorAll(`#dropdownMenu-${type} .dropdown-icons-input:checked`);
+  const button = document.querySelector(`.dropdown-menu-btn[data-type="${type}"]`);
+  
+  if (selectedCheckboxes.length > 0) {
+    button.textContent = 'בחר';
+  } else {
+    button.textContent = `הצג הכל`;
   }
+}
 </script>

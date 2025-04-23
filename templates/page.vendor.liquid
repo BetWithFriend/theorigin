@@ -14,7 +14,11 @@
             <div class="vendor-page-vendor-name">הקמה: <span style="color:#1C201D">{{ selected_vendor.vendor_name }}</span></div>
             <div class="vendor-page-vendor-location">מיקום: <span style="color:#1C201D">{{ selected_vendor.vendor_location }}</span></div>
         </div>
-        <video controls class="vendor-page-vendor-video">
+        <video 
+          id="vendorVideo"
+          controls 
+          class="vendor-page-vendor-video"
+        >
             <source src="{{ selected_vendor.vendor_video | file_url }}" type="video/mp4">
         </video>
         <div class="vendor-page-description-wrapper" id="vendor-page-descriptionn-wrapper">
@@ -59,6 +63,7 @@
             this.textContent = 'סגור';
         }
     });
+
 </script>
 
 <style>

@@ -9,12 +9,12 @@
                     <img class="new-roastes-slider-roaster-logo" src="{{ vendor.vendor_logo | img_url: 'small' }}" alt="">
                 </div>
                 <div class="new-roastes-slider-roaster-id">
-                    <div class="new-roastes-slider-roaster-id-content">מיקום: חיפה</div>
-                    <div class="new-roastes-slider-roaster-id-content">הקמה: 1981</div>
+                    <div class="new-roastes-slider-roaster-id-content">מיקום: {{vendor.vendor_location}}</div>
+                    <div class="new-roastes-slider-roaster-id-content">הקמה: {{vendor.vendor_year_establishment}}</div>
                 </div>
             </div>
             <div class="new-roastes-slider-roaster-video-wrapper">
-                <img class="new-roastes-slider-roaster-video" src="{{ vendor.vendor_video | img_url: 'small' }}" alt="">
+                <img class="new-roastes-slider-roaster-video" src="{{ vendor.vendor_video | img_url: 'large' }}" alt="">
             </div>
             <div class="new-roastes-slider-roaster-description">            
             {%- if vendor.vendor_details != blank -%}

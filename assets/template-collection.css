@@ -3,6 +3,10 @@
     flex: 0 0 100%;
     max-width: 100%;
   }
+
+  .product-grid-container {
+    background-color: #F5F4F2;
+  }
 }
 
 @media screen and (max-width: 989px) {
