@@ -26,7 +26,7 @@
 {% endif %}
 </div>
     <!-- Conditional Icons -->
-    <div class="selection-icons">
+    {% comment %} <div class="selection-icons">
     {% if prep_methods.size > 0 %}
       {% for method in prep_methods %}
         {% assign updated_method = method | strip | remove: '"' %}
@@ -46,7 +46,7 @@
   
   {% endfor %}
 {% endif %}
-</div>
+</div> {% endcomment %}
 
 <style>
   .selection-wrapper {

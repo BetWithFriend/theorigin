@@ -1,6 +1,6 @@
 <div class="product-description-wrapper" id="product-description" dir="rtl">
     <div class="product-description-text">
-        {{ product_description |  strip_html }}
+        {{ product_description  }}
     </div>
 </div>
 <div id="read-more" class="read-more">קרא עוד</div>
@@ -207,7 +207,7 @@
     }
 
     .product-description-wrapper.expanded {
-        max-height: 330px; /* Large enough for full content */
+        max-height: none; /* Large enough for full content */
     }
 
     .product-description-text {

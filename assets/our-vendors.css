@@ -76,6 +76,7 @@
     width: 60%;
     border: 1px solid #9F9F9F;
     position: relative;
+    margin: 32px;
 }
 .product-description-divider-img {
     position: absolute;

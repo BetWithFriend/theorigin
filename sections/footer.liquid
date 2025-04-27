@@ -61,7 +61,10 @@
             </div>
           </div>
           <div class="contact-us-wrapper">
-              <div class="contact-us">צור קשר</div>
+              <div class="contact-us" onclick="goToPage('privacy')">מדיניות הפרטיות</div>
+              <div class="contact-us" onclick="goToPage('regulation')">תקנון האתר</div>
+              <div class="contact-us" onclick="goToPage('accessability')">נגישות</div>
+              <div class="contact-us" onclick="goToPage('delivery')">מדינות משלוחים והחזרות</div>
               <div class="contact-us-phone">054-5631523</div>
               <div class="contact-us-email">hi@theorigin.co.il</div>
           </div>
@@ -362,6 +365,13 @@
     </div>
   </div>
 </footer>
+
+<script>
+  function goToPage (pageName) {
+    console.log('boom');
+    // window.hre
+  }
+</script>
 
 {% schema %}
 {

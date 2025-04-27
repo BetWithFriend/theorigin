@@ -18,7 +18,12 @@
       "blocks": {
         "heading": {
           "settings": {
-            "heading": "כל הקפה הטוב בישראל במקום אחד"
+            "heading": "הקפה הטוב בישראל"
+          }
+        },
+        "heading_2": {
+          "settings": {
+            "heading": "במקום אחד"
           }
         }
       }

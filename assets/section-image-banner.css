@@ -251,7 +251,8 @@
     background-color: #B5888B;
     width: 291px;
     height: 59px;
-    color: #FBFCFE;
+    /* color: #FBFCFE; */
+    color: #000000;
     font-family: 'Noto Sans', sans-serif;
     font-size: 20px;
     line-height: 27px;
@@ -452,7 +453,7 @@
 .banner__heading {
   margin-bottom: 0;
   font-family: 'Noto Sans', sans-serif;
-  font-size: 48px;
+  font-size: 32px;
   line-height: 51px;
   font-weight: 700;
   color: #333634;

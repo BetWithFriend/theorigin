@@ -45,7 +45,7 @@
     scrollbar-width: none;
     -ms-overflow-style: none; 
     overflow-y: hidden;
-    height: 800px;
+    /* height: 800px; */
 }
 
 .new-roastes-slider-top {
@@ -85,7 +85,10 @@
     font-size: 16px;
     line-height: 25px;
     text-align: right;
-    padding: 0 32px;
+    padding: 8px 32px;
+    height: 225px;
+    overflow: hidden;
+    margin-bottom: 48px;
 }
 
 .new-roasters-slider-action-wrapper {

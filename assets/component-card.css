@@ -18,7 +18,7 @@
   background-color: #F5F4F2;
   overflow-y: hidden;
   border-radius: 8px;
-  padding: 32px 24px 0 24px;
+  /* padding: 24px 0; */
 }
 
 .card.card--horizontal {
@@ -51,6 +51,7 @@
   box-sizing: border-box;
   border-radius: var(--border-radius);
   border: var(--border-width) solid rgba(var(--color-foreground), var(--border-opacity));
+  /* padding: 24px 0; */
 }
 
 .card--card:after,
@@ -318,10 +319,10 @@
 
 .card__media .media img {
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center center;
   width: 100%;
-  padding: 0 24px;
+  /* padding: 0 24px; */
 }
 
 .card__inner:not(.ratio) > .card__content {
@@ -459,6 +460,14 @@
   gap: 16px;
   /* padding-left: 0;
   padding-right: 0; */
+}
+
+.card__information-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 40px;
 }
 
 .card--card.card--media .card__inner .card__information,

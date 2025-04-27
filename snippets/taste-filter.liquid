@@ -265,6 +265,12 @@
     // AND logic between taste and prep
     const show = tasteMatch && prepMatch;
     card.style.display = show ? 'block' : 'none';
+
+    // Close the menu after selecting
+    const menuTaste = document.getElementById('dropdownMenu-taste');
+    const menuPrep = document.getElementById('dropdownMenu-prep');
+    menuPrep.style.display = 'none';
+    menuTaste.style.display = 'none';
   });
 }
 

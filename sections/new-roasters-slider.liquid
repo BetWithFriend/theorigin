@@ -22,13 +22,13 @@
                   {%- for block in vendor.vendor_details.value.children -%}
                     {%- case block.type -%}
                       {%- when 'paragraph' -%}
-                        <div class="rich-text__paragraph">
+                        <p class="rich-text__paragraph">
                           {%- for child in block.children -%}
                             {%- if child.type == 'text' -%}
                               {{- child.value | newline_to_br -}}
                             {%- endif -%}
                           {%- endfor -%}
-                        </div>
+                        </p>
                     {%- endcase -%}
                   {%- endfor -%}
                 </div>
