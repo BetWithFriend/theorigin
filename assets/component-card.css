@@ -54,6 +54,13 @@
   /* padding: 24px 0; */
 }
 
+.product-card-wrapper-item {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 16px;
+  height: 257px;
+}
+
 .card--card:after,
 .card--standard .card__inner:after {
   content: '';
@@ -466,8 +473,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  gap: 40px;
+  /* width: 100%; */
+  /* gap: 40px; */
 }
 
 .card--card.card--media .card__inner .card__information,

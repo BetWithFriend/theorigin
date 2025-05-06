@@ -11,6 +11,7 @@
       font-size: 12px;
       position: relative;
     }
+
     .product-taste-earth,
     .product-taste-sweet-chocolate,
     .product-taste-sweet,
@@ -39,15 +40,20 @@
       border: 2px solid black;
       transform: scale(1.2);
     }
+    .taste-text {
+      padding-top: 14px;
+    }
 
     .taste-indicator {
+      top: 20px;
       position: absolute;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+      background-color: transparent !important;
+      /* border-radius: 50%;
       border: 2px solid #E3E0DA;
       box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-      transition: left 0.3s ease-in-out;
+      transition: left 0.3s ease-in-out;  */
     }
 
     .taste-indicator.earth { left: 79%; background-color: #1b4f72; } /* Left */
@@ -57,11 +63,23 @@
     .taste-indicator.Fruity { left: 19%; background-color: #ffdf70; } /* Right */
   </style>
   <div class="product-taste-wrapper" dir="rtl">
-    <div class="product-taste-earth">אדמתי</div>
+    <div class="product-taste-earth"> 
+      <div class="color-block">
+        <div class="taste-text">אדמתי</div>
+      </div>
+    </div>
     <div class="product-taste-sweet-chocolate"> </div>
-    <div class="product-taste-sweet">מתקתק</div>
+    <div class="product-taste-sweet">
+      <div class="color-block">
+        <div class="taste-text">מתקתק</div>
+      </div>
+    </div>
     <div class="product-taste-fruity-sweet"> </div>
-    <div class="product-taste-fruity">פירותי</div>
+    <div class="product-taste-fruity">
+      <div class="color-block">
+        <div class="taste-text">פירותי</div>
+      </div>
+    </div>
   
-    <div class="taste-indicator {{ taste }}"> </div>
+    <img src="{{ 'taste-indicator.png' | asset_url }}"  class="taste-indicator {{ taste }}"  alt="taste-indicator"/>
   </div>

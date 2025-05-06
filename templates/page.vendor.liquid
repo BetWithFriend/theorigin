@@ -8,6 +8,7 @@
   {% endfor %}
 
 {% if selected_vendor %}
+  {% render 'breadcrumbs' %}
     <div class="vendor-page-main-wrapper">
         <img class="vendor-page-logo" src="{{ selected_vendor.vendor_logo | img_url: 'medium' }}" />
         <div class="vendor-page-title-wrapper" dir="rtl">

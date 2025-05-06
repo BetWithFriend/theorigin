@@ -74,6 +74,15 @@
 
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
   <div class="page-width">
+    <div class="product-title">{{ product.title }}</div>
+    <div class="product-source-wrapper">
+      {% for pSource in product.metafields.custom.coffee_source.value %}
+        <div class="product-source">{{ pSource|  append: ' ' }}</div>
+      {% endfor %}
+    </div>
+    <div class="product-main-price-wrapper">
+      {% render 'price' %}
+    </div>
      <div class="background-stripe"> </div>
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
       <div class="grid__item product__media-wrapper">
@@ -82,7 +91,7 @@
 
       {% comment %} Render the taste scale {% endcomment %}
       {% if product.tags.size > 0 %}
-      {% assign product_taste = product.tags.first | strip %}
+      {% assign product_taste = product.metafields.custom.coffee_taste %}
       {% render 'taste-scale', taste: product_taste %}
       {% endif %}
 
@@ -122,21 +131,22 @@
                     price_class: 'price--large'
                   -%}
                 </div>
-
                 <div class="product-variants-wrapper">
-                  {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
+                {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
 
-                {% comment %} {% assign grind_size = product.metafields.custom.origin_grind_size %} {% endcomment %}
-                {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
-                {% render 'variant-dropdown' , grind_size: grind_size_array %}
 
                 {% comment %} {% assign weights = product.metafields.custom.weight %} {% endcomment %}
                 {% assign weights_array = vendor.allowed_weights %}
                 {% render 'dropdown-weights' , weights: weights_array %}
 
+                {% comment %} {% assign grind_size = product.metafields.custom.origin_grind_size %} {% endcomment %}
+                {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
+                {% render 'variant-dropdown' , grind_size: grind_size_array %}
+
+
                 {% comment %} {% assign quantity = product.metafields.custom.product_quantity %} {% endcomment %}
-                {% assign quantity_array = vendor.quantity %}
-                {% render 'dropdown-quantity' , quantity: quantity_array %}
+                {% comment %} {% assign quantity_array = vendor.quantity %}
+                {% render 'dropdown-quantity' , quantity: quantity_array %} {% endcomment %}
               </div>
                
                 {%- if product.quantity_price_breaks_configured? -%}
@@ -757,13 +767,12 @@
 {% assign coffee_process = product.metafields.custom.coffee_process.value %}
 {% assign coffee_type = product.metafields.custom.coffee_type.value %}
 
-
 {% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description %}
 {%  render 'product-description' | 
     product_description: product.description,
     brew_images: product.metafields.custom.product_brew_image,
-    product_details: product_details
-    coffee_origin_image: coffee_origin_image,
+    product_details: product_details,
+    coffee_origin_image: product.metafields.custom.coffee_origin_image,
     coffee_tastes: coffee_tastes | split " ",
     coffee_roast_level: coffee_roast_level,
     coffee_altitude: coffee_altitude,

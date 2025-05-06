@@ -12,8 +12,10 @@
     </div>
 </div>
 <div class="product-description-details-images-wrapper">
-    {% for brew_img in brew_images.value %}
-        <img class="product-description-img" src="{{ brew_img | asset_url | replace: "files/", ""  }}" alt="Brew Image" />
+    {% assign coffee_prep_methods_raw = product.metafields.custom.coffee_prep_methods | strip %}
+    {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
+    {% for brew_img in coffee_prep_methods %}
+        <img class="product-description-img" src="{{ brew_img  | strip | remove: '"' | append: '.png' | asset_url | replace: "files/", "" }}" alt="Brew Image" />
     {% endfor %}
 </div>
 
@@ -49,7 +51,7 @@
 </div>
 
 <div class="product-location-img-wrapper">
-    <img class="product-location-img" src="{{ coffee_origin_image  | asset_url | replace: "files/", "" }}" alt="Product Location Image" />
+    <img class="product-location-img" src="{{ coffee_origin_image.value  | img_url: 'master'  }}" alt="Product Location Image" />
 </div>
 
 <div class="product-details-vendor-details-wrapper">
@@ -79,7 +81,7 @@
               {%- endif -%}
         </div>
     </div>
-    <div dir="rtl" id="read-more-vendor-story" class="read-more-vendor-story">המשך לקרוא...</div>    
+    <div dir="rtl" id="read-more-vendor-story" class="read-more-vendor-story">המשך לקרוא</div>    
 </div>
 
 
@@ -87,7 +89,7 @@
     .product-details-vendor-story-wrapper {
         overflow: hidden;
         max-height: calc(23px * 20); /* 5 full lines of text */
-        transition: max-height 0.3s ease-in-out;
+        transition: max-height 0.6s ease-in-out;
         position: relative;
     }
     .product-details-vendor-story-wrapper.expanded {
@@ -95,14 +97,14 @@
     }
     .read-more-vendor-story {
         width: 100%;
-        padding: 0 24px;
+        /* padding: 0 24px; */
         display: block;
         text-align: right;
         font-weight: 400;
         font-size: 16px;
         line-height: 22px;
         text-decoration: underline;
-        color: #AD7B7E;
+        color: #1C201D;
     }
     .product-details-vendor-story {
         font-family: 'Noto Sans', sans-serif;
@@ -207,7 +209,7 @@
     }
 
     .product-description-wrapper.expanded {
-        max-height: none; /* Large enough for full content */
+        max-height: 1800px; /* Large enough for full content */
     }
 
     .product-description-text {

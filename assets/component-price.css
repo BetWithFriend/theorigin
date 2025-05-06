@@ -26,8 +26,8 @@
   /* display: inline-block; */
   /* margin: 0 1rem 0 0; */
   font-family: 'Noto Sans', sans-serif;
-font-size: 18px;
-line-height: 21px;
+font-size: 24px;
+line-height: 24px;
 font-weight: 700;
 color: #1C201D
 }
@@ -47,6 +47,7 @@ color: #1C201D
 }
 
 .price--large {
+  display: none;
   font-size: 1.6rem;
   line-height: calc(1 + 0.5 / var(--font-body-scale));
   letter-spacing: 0.13rem;

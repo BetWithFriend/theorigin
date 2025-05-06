@@ -11,11 +11,12 @@
   "sections": {
     "custom_liquid_XJU7LR": {
       "type": "custom-liquid",
+      "disabled": true,
       "custom_css": [
         "@media (max-width: 768px) {.product__title {flex-direction: column; display: flex; align-items: center; justify-content: center; margin-bottom: unset; } .product-title-text {font-weight: 700; font-size: 48px; line-height: 65px; color: #1c201d; } .product_subtitle > p {font-weight: 400; font-size: 15px; line-height: 20px; color: #1c201d; margin: 2px; }}"
       ],
       "settings": {
-        "custom_liquid": "<div class=\"product__title\" {{ block.shopify_attributes }}>\n                  <div class=\"product-title-text\">{{ product.title }}</div>\n                  <div class=\"product_subtitle\">{{ product.metafields.custom.product_origin }}</div>\n                </div>",
+        "custom_liquid": "{% render 'breadcrumbs' %} <div class=\"product__title\" {{ block.shopify_attributes }}>\n                  <div class=\"product-title-text\">{{ product.title }}</div>\n                  <div class=\"product_subtitle\">{{ product.metafields.custom.product_origin }}</div>\n                </div>",
         "color_scheme": "scheme-1397de02-f2a7-4295-9df3-ed962137881c",
         "padding_top": 0,
         "padding_bottom": 0
@@ -29,16 +30,16 @@
           "disabled": true,
           "settings": {}
         },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
         "custom_liquid_YmBTdm": {
           "type": "custom_liquid",
           "disabled": true,
           "settings": {
             "custom_liquid": "<div class=\"product-taste-wrapper\">\n<div class=\"product-taste-one\"> </div>\n<div class=\"product-taste-two\"> </div>\n<div class=\"product-taste-three\"> </div>\n<div class=\"product-taste-four\"> </div>\n<div class=\"product-taste-five\"> </div>\n</div>"
           }
-        },
-        "price": {
-          "type": "price",
-          "settings": {}
         },
         "variant_picker": {
           "type": "variant_picker",
@@ -74,8 +75,8 @@
       },
       "block_order": [
         "title",
-        "custom_liquid_YmBTdm",
         "price",
+        "custom_liquid_YmBTdm",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",

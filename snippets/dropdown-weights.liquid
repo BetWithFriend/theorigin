@@ -5,7 +5,7 @@
   </button>
   <div class="dropdown-weight-menu" aria-labelledby="weightDropdown">
     {% for weight in weights.value %}      
-    <div class="dropdown-item" onclick="filterByvariant('{{ weight }}')">
+    <div class="dropdown-item" onclick="filterByweight('{{ weight }}')">
       <div class="dropdown-weight-icons" dir="ltr">
         <span>{{ weight.value }} {{ weight.unit }} </span>
       </div>
@@ -27,13 +27,13 @@
     padding: 8px 16px;
     cursor: pointer;
     background-color: #E3E0DA;
-    border: 1px solid #303030;
+    border: 1px solid #30303033;
     border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    width: 112px;
+    width: 159px;
     height: 40px;
   }
   .dropdown-weight-menu {
@@ -62,12 +62,13 @@
 </style>
 
 <script>
-  function filterByvariant(variant) {
+  function filterByweight(variant) {
     // Close the dropdown
     document.querySelector('.dropdown-weight-menu').style.display = 'none';
 
     // Show the selected variant in the button
     document.getElementById('weightDropdown').childNodes[0].nodeValue = variant;
+    console.log('boom')
   }
 
   // Ensure the dropdown can be toggled
