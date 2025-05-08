@@ -241,6 +241,16 @@
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
       }
+    },
+    {
+      "key": "coffee_source",
+      "namespace": "custom",
+      "name": "Coffee Source",
+      "description": "Where the coffee is sourced from",
+      "type": {
+        "name": "list.single_line_text_field",
+        "category": "TEXT"
+      }
     }
   ],
   "variant": [

@@ -22,7 +22,7 @@
         "text_Ed7DgE": {
           "type": "text",
           "settings": {
-            "text": "קפה מפולי הקפה המובחרים של ישראל - קלייה טרייה, כחול-לבן, מעסקים קטנים שנבחרו בקפידה",
+            "text": "פולי הקפה המובחרים של ישראל - קלייה טרייה, כחול לבן, מבתי קלייה מקומיים שנבחרו בקפידה",
             "text_style": "body"
           }
         },
@@ -30,7 +30,7 @@
           "type": "buttons",
           "settings": {
             "button_label_1": "לחנות",
-            "button_link_1": "shopify://collections/all",
+            "button_link_1": "shopify://collections/coffee",
             "button_style_secondary_1": true,
             "button_label_2": "",
             "button_link_2": "",
@@ -82,7 +82,7 @@
     "featured_collection_ErHj6f": {
       "type": "featured-collection",
       "settings": {
-        "title": "הבלנדים המומלצים של פברואר",
+        "title": "המומלצים של מאי",
         "heading_size": "h2",
         "description": "",
         "show_description": true,
@@ -110,7 +110,7 @@
     "featured_collection_qNARrT": {
       "type": "featured-collection",
       "settings": {
-        "title": "המיוחדים של פברואר",
+        "title": "המיוחדים של מאי",
         "heading_size": "h2",
         "description": "",
         "show_description": true,

@@ -19,6 +19,7 @@
           id="vendorVideo"
           controls 
           class="vendor-page-vendor-video"
+          poster="{{ selected_vendor.vendor_video_poster | file_url }}"
         >
             <source src="{{ selected_vendor.vendor_video | file_url }}" type="video/mp4">
         </video>
