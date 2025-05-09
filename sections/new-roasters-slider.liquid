@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="new-roastes-slider-roaster-video-wrapper">
-                <img class="new-roastes-slider-roaster-video" src="{{ vendor.vendor_video | img_url: 'large' }}" alt="">
+                <img class="new-roastes-slider-roaster-video" src="{{ vendor.vendor_video_poster | file_url }}" alt="">
             </div>
             <div class="new-roastes-slider-roaster-description">            
             {%- if vendor.vendor_details != blank -%}

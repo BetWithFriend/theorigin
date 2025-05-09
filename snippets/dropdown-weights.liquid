@@ -5,7 +5,7 @@
   </button>
   <div class="dropdown-weight-menu" aria-labelledby="weightDropdown">
     {% for weight in weights.value %}      
-    <div class="dropdown-item" onclick="filterByweight('{{ weight }}')">
+    <div class="dropdown-item-weight" onclick="filterByweight('{{ weight }}')">
       <div class="dropdown-weight-icons" dir="ltr">
         <span>{{ weight.value }} {{ weight.unit }} </span>
       </div>
@@ -47,7 +47,7 @@
   .dropdown-weight:hover .dropdown-weight-menu {
     display: block;
   }
-  .dropdown-item {
+  .dropdown-item-weight {
     padding: 10px;
     cursor: pointer;
   }
@@ -62,6 +62,21 @@
 </style>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Select the first item from the dropdown
+    const firstItem = document.querySelector('.dropdown-item-weight');
+    if (firstItem) {
+      // Get the text from the first item
+      const firstItemText = firstItem.querySelector('span').innerText.trim();
+      
+      // Set the dropdown button text to the first item's text
+      document.getElementById('weightDropdown').childNodes[0].nodeValue = firstItemText;
+      
+      // Mark the first item as selected
+      firstItem.classList.add('selected');
+    }
+  });
+
   function filterByweight(variant) {
     // Close the dropdown
     document.querySelector('.dropdown-weight-menu').style.display = 'none';

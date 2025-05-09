@@ -248,11 +248,11 @@
 
   .banner:not(.banner--mobile-bottom) .button--secondary {
     --alpha-button-background: 0;
-    background-color: #B5888B;
+    background-color: #333634;
     width: 291px;
     height: 59px;
     /* color: #FBFCFE; */
-    color: #000000;
+    color: #FBFCFE;
     font-family: 'Noto Sans', sans-serif;
     font-size: 20px;
     line-height: 27px;

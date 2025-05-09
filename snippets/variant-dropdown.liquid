@@ -62,6 +62,22 @@
 </style>
 
 <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Select the first item from the dropdown
+    const firstItem = document.querySelector('.dropdown-item');
+    if (firstItem) {
+      console.log('boom', firstItem)
+      // Get the text from the first item
+      const firstItemText = firstItem.querySelector('span').innerText.trim();
+      
+      // Set the dropdown button text to the first item's text
+      document.getElementById('variantDropdown').childNodes[0].nodeValue = firstItemText;
+      
+      // Mark the first item as selected
+      firstItem.classList.add('selected');
+    }
+  });
+
   function filterByvariant(variant) {
     // Close the dropdown
     document.querySelector('.dropdown-menu').style.display = 'none';

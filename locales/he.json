@@ -3738,7 +3738,7 @@
       "estimated_total": "סה\"כ משוער",
       "new_estimated_total": "סה\"כ משוער חדש",
       "note": "הזמינו הוראות מיוחדות",
-      "checkout": "בדוק",
+      "checkout": "הזמן",
       "empty": "העגלה שלך ריקה",
       "cart_error": "אירעה שגיאה בעת עדכון העגלה שלך. אנא נסה שוב.",
       "cart_quantity_error_html": "אתה יכול להוסיף רק {{ quantity }} של פריט זה לעגלה שלך.",

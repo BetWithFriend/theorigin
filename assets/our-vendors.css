@@ -71,6 +71,7 @@
     justify-content: center;
     width: 100%;
     position: relative;
+    height: 62px;
 }
 .product-description-divider-line {
     width: 60%;
