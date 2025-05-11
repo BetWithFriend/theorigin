@@ -1,0 +1,22 @@
+.about-us-wrapper {
+    background-color: #E6E3DE;
+    padding: 24px;
+}
+.about-us-title {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 20px;
+    line-height: 25px;
+    font-weight: 700;
+    color: #555555;
+    text-align: right;
+    margin-bottom: 16px;
+}
+
+.about-us-content {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 16px;
+    line-height: 25px;
+    font-weight: 400;
+    color: #1C201D;
+    text-align: right;
+}

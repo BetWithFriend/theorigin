@@ -1,0 +1,282 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "about_us": {
+      "type": "about-us",
+      "settings": {}
+    },
+    "image_with_text_aazhxx": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_mTdQEE": {
+          "type": "heading",
+          "settings": {
+            "heading": "YOU NEED COFFEE",
+            "heading_size": "h1"
+          }
+        },
+        "text_9cAbec": {
+          "type": "text",
+          "settings": {
+            "text": "",
+            "text_style": "body"
+          }
+        },
+        "button_BKhAAg": {
+          "type": "button",
+          "settings": {
+            "button_label": "כנסו להכיר",
+            "button_link": "shopify://pages/you-need-coffee",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_mTdQEE",
+        "text_9cAbec",
+        "button_BKhAAg"
+      ],
+      "disabled": true,
+      "settings": {
+        "image": "shopify://shop_images/youneedcoffeelogo.png",
+        "height": "adapt",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "image_with_text_WHN7KN": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_dEUGbc": {
+          "type": "heading",
+          "settings": {
+            "heading": "BLOOM",
+            "heading_size": "h1"
+          }
+        },
+        "text_aWgwDD": {
+          "type": "text",
+          "settings": {
+            "text": "",
+            "text_style": "body"
+          }
+        },
+        "button_PywVHq": {
+          "type": "button",
+          "settings": {
+            "button_label": "כנסו להכיר",
+            "button_link": "shopify://pages/bloom",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_dEUGbc",
+        "text_aWgwDD",
+        "button_PywVHq"
+      ],
+      "disabled": true,
+      "settings": {
+        "image": "shopify://shop_images/image_131.png",
+        "height": "adapt",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "image_with_text_Q6EJRM": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_p6JTxx": {
+          "type": "heading",
+          "settings": {
+            "heading": "SYBARIS",
+            "heading_size": "h1"
+          }
+        },
+        "text_beynAx": {
+          "type": "text",
+          "settings": {
+            "text": "",
+            "text_style": "body"
+          }
+        },
+        "button_w9Ke7W": {
+          "type": "button",
+          "settings": {
+            "button_label": "כנסו להכיר",
+            "button_link": "shopify://pages/sybaris",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_p6JTxx",
+        "text_beynAx",
+        "button_w9Ke7W"
+      ],
+      "disabled": true,
+      "settings": {
+        "image": "shopify://shop_images/image_138.png",
+        "height": "adapt",
+        "desktop_image_width": "large",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "image_with_text_wt89TR": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_AYzGgD": {
+          "type": "heading",
+          "settings": {
+            "heading": "CANOPY",
+            "heading_size": "h1"
+          }
+        },
+        "text_9qCjyD": {
+          "type": "text",
+          "settings": {
+            "text": "",
+            "text_style": "body"
+          }
+        },
+        "button_eLNcUx": {
+          "type": "button",
+          "settings": {
+            "button_label": "כנסו להכיר",
+            "button_link": "shopify://pages/sybaris",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_AYzGgD",
+        "text_9qCjyD",
+        "button_eLNcUx"
+      ],
+      "disabled": true,
+      "settings": {
+        "image": "shopify://shop_images/canopylogo.png",
+        "height": "adapt",
+        "desktop_image_width": "large",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "multirow_kGdHCQ": {
+      "type": "multirow",
+      "blocks": {
+        "row_rnrz6P": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/image_131.png",
+            "caption": "",
+            "heading": "BLOOMS",
+            "text": "<p>שמי אסף, איש קפה ובעל בית קלייה ובית קפה ספשלטי.<br/><br/>קרוב ל-20 שנה אני רודף אחר האהבה הגדולה שלי – הקפה. הכל התחיל אחרי שסיימתי צבא, גיליתי את הקסם בעת השתתפותי בקורס ברמנים. הקפה היה אותו החלק הבולט, המרשים, שלא יכולתי להתעלם ממנו.<br/><br/>שילבתי את לימודי והקריירה הראשונית שלי בתחום הקפה, בתפקידים שונים כגון בריסטה , ומנהל במסעדות ובתי קפה. אף ניסיתי לשנות את הכיוון ולהתמקצע בתחום ההשקעות, האשראי והפנסיה. אך הלב שלי נשאר בעולם הקפה.<br/><br/>בגיל 31 החיים הפנו אותי למלבורן, אוסטרליה, ללימודי קולינריה. זה היה מעין גורל, שוב התמקדתי בקפה, הפעם ברמה הגבוהה ביותר. במלבורן, פגשתי את עולם הקפה הספשלטי, והוקסמתי, 6 שנים התעסקתי שם רק בקפה, בתי קליה ובתי קפה ספשלטי..<br/><br/>המשך לקרוא...</p>",
+            "button_label": "כנס לחנות",
+            "button_link": "shopify://pages/bloom"
+          }
+        },
+        "row_nDHzqR": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/image_135.png",
+            "caption": "",
+            "heading": "You Need Coffee",
+            "text": "<p>בית הקלייה YOU NEED COFFEE הוא בית קליה משפחתי שנפתח בשנת 2011 בירושלים.<br/><br/>האהבה שלנו לקפה התפתחה מתוך הרגשת שליחות ויכולות כמעט על טבעיות לחבר אנשים. קיבלנו השראה מהסבא וסבתא שלנו אשר היו בין מקימי קיבוץ האומנים עין הוד - וחלקו איתנו את התשוקה לעשייה ואומנות.<br/><br/>בשבילנו קפה הוא עוד סוג של אומנות, אומנות שאנחנו מאוד טובים בה ורוצים לחלוק עם העולם.<br/><br/>המשך לקרוא...</p>",
+            "button_label": "כנס לחנות",
+            "button_link": "shopify://pages/you-need-coffee"
+          }
+        },
+        "row_4Vp4Tr": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/image_138.png",
+            "caption": "",
+            "heading": "SYBARIS",
+            "text": "<p>פתחנו את קפה סיבריס בירושלים, בשנת 2021.<br/> <br/>בחרנו בירושלים, עיר הולדנו,<br/>במטרה לתת לאוהבי הקפה קפה איכותי בעל טעמים מיוחדים. <br/><br/>ברגע שתכנסו לסיבריס, תבינו שתקבלו חוויית קפה ייחודי שאין באף מקום אחר. הקפה שלנו נקלה ממש במקום, בירושלים, תמיד טרי ותמיד איכותי.<br/><br/>אנחנו מייבאים את הקפה הירוק בעצמנו מחוות גידול קטנות בדרום ומרכז אמריקה ופיתחנו תהליך קלייה ייחודי אשר יודע להוציא את המיטב מהפולים.<br/><br/>המשך לקרוא...</p>",
+            "button_label": "כנסו לחנות",
+            "button_link": "shopify://pages/sybaris"
+          }
+        }
+      },
+      "block_order": [
+        "row_rnrz6P",
+        "row_nDHzqR",
+        "row_4Vp4Tr"
+      ],
+      "disabled": true,
+      "custom_css": [
+        ".image-with-text__content > * + * {text-align: right; direction: rtl;}"
+      ],
+      "settings": {
+        "image_height": "medium",
+        "desktop_image_width": "medium",
+        "heading_size": "h1",
+        "text_style": "body",
+        "button_style": "secondary",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "image_layout": "alternate-left",
+        "section_color_scheme": "",
+        "row_color_scheme": "",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "about_us"
+  ]
+}

@@ -1,10 +1,15 @@
 <!-- snippets/filter-dropdown.liquid -->
 
 <div class="dropdown-filters">
-  <button class="dropdown-button" onclick="toggleDropdown('taste')">טעם
+  <button id="dropdown-button-taste" class="dropdown-button" onclick="toggleDropdown('taste')">
+      טעם
+      <div class="selected-icons" id="selected-icons-taste"></div>
     <img src="{{ 'dropdown-icon.png' | asset_url }}" alt="Dropdown Icon" class="dropdown-icon" />
   </button>
-  <button class="dropdown-button" onclick="toggleDropdown('prep')">הכנה
+  <div class="dropdown-divider"> </div>
+  <button id="dropdown-button-prep" class="dropdown-button" onclick="toggleDropdown('prep')">
+      הכנה
+      <div class="selected-icons" id="selected-icons-prep"></div>
     <img src="{{ 'dropdown-icon.png' | asset_url }}" alt="Dropdown Icon" class="dropdown-icon" />
   </button>
   <div class="dropdown-menu-wrapper">
@@ -196,9 +201,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 16px;
   width: 30%;
   border: none;
+}
+
+.dropdown-divider {
+  border: 1px solid #CDCDCD;
+    width: 1px;
+    display: block;
+    height: 45px;
 }
 
 .dropdown-icon-img {
@@ -219,6 +231,20 @@
   align-items: center;
   justify-content: center;
   margin: 16px 0;
+}
+
+.selected-icons {
+  display: flex;
+  gap: 4px;
+  /* margin-left: 4px; */
+}
+
+#selected-icons-taste .color-circle,
+#selected-icons-prep img {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-left: 0;
 }
 </style>
 
@@ -272,14 +298,16 @@
     menuPrep.style.display = 'none';
     menuTaste.style.display = 'none';
   });
+  updateDropdownButtonText('taste');
+  updateDropdownButtonText('prep');
 }
 
-document.querySelectorAll('.dropdown-icons-input').forEach(input => {
-  input.addEventListener('change', () => {
-    updateDropdownButtonText('taste');
-    updateDropdownButtonText('prep');
-  });
-});
+// document.querySelectorAll('.dropdown-icons-input').forEach(input => {
+//   input.addEventListener('change', () => {
+//     updateDropdownButtonText('taste');
+//     updateDropdownButtonText('prep');
+//   });
+// });
 
 function updateDropdownButtonText(type) {
   const selectedCheckboxes = document.querySelectorAll(`#dropdownMenu-${type} .dropdown-icons-input:checked`);
@@ -290,5 +318,41 @@ function updateDropdownButtonText(type) {
   } else {
     button.textContent = `הצג הכל`;
   }
+}
+
+function updateDropdownButtonText(type) {
+  const selectedCheckboxes = document.querySelectorAll(`#dropdownMenu-${type} .dropdown-icons-input:checked`);
+  const button = document.querySelector(`.dropdown-menu-btn[data-type="${type}"]`);
+  
+  if (selectedCheckboxes.length > 0) {
+    button.textContent = 'בחר';
+  } else {
+    button.textContent = `הצג הכל`;
+  }
+
+  // Now update the small icons/colors on the main button
+  const selectedIconsContainer = document.getElementById(`selected-icons-${type}`);
+  selectedIconsContainer.innerHTML = ''; // Clear previous
+
+  selectedCheckboxes.forEach((checkbox, index) => {
+    if (index >= 3) return; // Max 3 icons
+
+    const label = checkbox.closest('label');
+    if (type === 'taste') {
+      // Clone the color-circle
+      const colorCircle = label.querySelector('.color-circle');
+      if (colorCircle) {
+        const clone = colorCircle.cloneNode(true);
+        selectedIconsContainer.appendChild(clone);
+      }
+    } else if (type === 'prep') {
+      // Clone the icon img
+      const iconImg = label.querySelector('.dropdown-icon-img');
+      if (iconImg) {
+        const clone = iconImg.cloneNode(true);
+        selectedIconsContainer.appendChild(clone);
+      }
+    }
+  });
 }
 </script>
