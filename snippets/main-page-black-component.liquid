@@ -3,7 +3,7 @@
     <div class="discover-roaster-title">{{ title  }}</div>
     <div class="discover-roaster-subtitle" dir="rtl">{{ description }}</div>
     <hr class="discover-roaster-divider-line" />
-    <img class="discover-roaster-img" src="{{ com_image | asset_url }}" alt="discover image" />
+    <img class="discover-roaster-img {{ img_class }}" src="{{ com_image | asset_url }}" alt="discover image" />
     <div onclick="goToPage('{{ btn_url }}')" class="discover-roaster-btn">{{ btn_text }}</div>
 </div>
 
@@ -47,6 +47,10 @@
 }
 
 .discover-roaster-img {
+    width: 117px;
+}
+
+.find-your-coffee-img {
     width: 162px;
 }
 

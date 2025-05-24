@@ -1,0 +1,130 @@
+{% comment %}
+  Quantity Counter Snippet
+  Usage: {% render 'quantity-counter', product: product, field_id: 'quantity' %}
+{% endcomment %}
+
+<div class="quantity-counter" data-quantity-counter>
+    <button 
+      type="button" 
+      class="quantity-counter__button quantity-counter__decrease" 
+      data-quantity-decrease 
+      aria-label="Decrease quantity">
+      &minus;
+    </button>
+  
+    <span class="quantity-counter__value" data-quantity-value>1</span>
+    
+    <input 
+      type="hidden" 
+      name="{{ field_id | default: 'quantity' }}" 
+      value="1" 
+      data-quantity-input 
+      min="1" 
+      max="{{ product.quantity_price_breaks_configured | default: 10 }}"
+    >
+  
+    <button 
+      type="button" 
+      class="quantity-counter__button quantity-counter__increase" 
+      data-quantity-increase 
+      aria-label="Increase quantity">
+      &plus;
+    </button>
+  </div>
+  
+  <style>
+    .quantity-counter {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'Noto Sans', sans-serif;
+      font-size: 16px;
+      line-height: 22px;
+      font-weight: 700;
+      padding: 8px 16px;
+      background-color: #E3E0DA;
+      border: 1px solid #30303033;
+      border-radius: 4px;
+      width: 100px;
+      height: 40px;
+    }
+  
+    .quantity-counter__button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-size: 20px;
+      line-height: 1;
+      color: #303030;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      transition: opacity 0.2s ease;
+    }
+  
+    .quantity-counter__button:hover {
+      opacity: 0.7;
+    }
+  
+    .quantity-counter__button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  
+    .quantity-counter__value {
+      min-width: 24px;
+      text-align: center;
+    }
+  </style>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const quantityCounters = document.querySelectorAll('[data-quantity-counter]');
+      
+      quantityCounters.forEach(counter => {
+        const decreaseBtn = counter.querySelector('[data-quantity-decrease]');
+        const increaseBtn = counter.querySelector('[data-quantity-increase]');
+        const valueDisplay = counter.querySelector('[data-quantity-value]');
+        const input = counter.querySelector('[data-quantity-input]');
+        
+        const min = parseInt(input.getAttribute('min') || 1);
+        const max = parseInt(input.getAttribute('max') || 10);
+        
+        // Update display and form values
+        function updateValue(newValue) {
+          // Ensure value is within bounds
+          newValue = Math.max(min, Math.min(max, newValue));
+          
+          // Update displayed value
+          valueDisplay.textContent = newValue;
+          
+          // Update hidden input
+          input.value = newValue;
+          
+          // Dispatch change event for any listeners (like cart forms)
+          const event = new Event('change', { bubbles: true });
+          input.dispatchEvent(event);
+          
+          // Update button states
+          decreaseBtn.disabled = newValue <= min;
+          increaseBtn.disabled = newValue >= max;
+        }
+        
+        // Initialize
+        updateValue(parseInt(input.value));
+        
+        // Set up event listeners
+        decreaseBtn.addEventListener('click', () => {
+          updateValue(parseInt(valueDisplay.textContent) - 1);
+        });
+        
+        increaseBtn.addEventListener('click', () => {
+          updateValue(parseInt(valueDisplay.textContent) + 1);
+        });
+      });
+    });
+  </script>

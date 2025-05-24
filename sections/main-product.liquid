@@ -136,12 +136,17 @@
 
 
                 {% comment %} {% assign weights = product.metafields.custom.weight %} {% endcomment %}
-                {% assign weights_array = vendor.allowed_weights %}
-                {% render 'dropdown-weights' , weights: weights_array %}
+                 {% comment %} {% assign grind_size = product.metafields.custom.origin_grind_size %} {% endcomment %}
 
-                {% comment %} {% assign grind_size = product.metafields.custom.origin_grind_size %} {% endcomment %}
+                
                 {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
                 {% render 'variant-dropdown' , grind_size: grind_size_array %}
+                
+                {% assign weights_array = vendor.allowed_weights %}
+                {% render 'dropdown-weights' , weights: weights_array %}
+                
+                {% assign num_to_order = 1 %}
+                {% render 'quantity-counter' , num_to_order: num_to_order %}
 
 
                 {% comment %} {% assign quantity = product.metafields.custom.product_quantity %} {% endcomment %}

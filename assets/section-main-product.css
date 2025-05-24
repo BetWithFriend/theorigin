@@ -436,7 +436,7 @@ a.product__text {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 24px;
+    gap: 12px;
   }
 }
 

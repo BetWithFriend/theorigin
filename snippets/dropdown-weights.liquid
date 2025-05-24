@@ -7,7 +7,8 @@
     {% for weight in weights.value %}      
     <div class="dropdown-item-weight" onclick="filterByweight('{{ weight }}')">
       <div class="dropdown-weight-icons" dir="ltr">
-        <span>{{ weight.value }} {{ weight.unit }} </span>
+        <!--<span>{{ weight.value | remove: '.0' }} {{ weight.unit }} </span> -->
+        <span>{{ weight.value | remove: '.0' }} ג</span>
       </div>
     </div>
     {% endfor %}
@@ -33,7 +34,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    width: 159px;
+    width: 110px;
     height: 40px;
   }
   .dropdown-weight-menu {

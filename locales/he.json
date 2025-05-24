@@ -328,7 +328,7 @@
         "full_title": "{{pageTitle}} - {{shopName}} - קופה"
       },
       "contact": {
-        "title": "מידע",
+        "title": "צור קשר",
         "address_title": "כתובת",
         "shipping_used_as_billing_notice": "זו תשמש גם ככתובת החיוב שלך עבור הזמנה זו.",
         "delivery_option_title": "שיטת משלוח",

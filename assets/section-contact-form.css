@@ -1,3 +1,17 @@
+.contact-us-form-wrapper {
+  background-color: #E6E3DE;
+  padding: 24px;
+}
+
+.field__input {
+  text-align: right;
+}
+
+.field__label {
+  right: calc(var(--inputs-border-width) + 2rem);
+  left: auto;
+}
+
 .contact img {
   max-width: 100%;
 }

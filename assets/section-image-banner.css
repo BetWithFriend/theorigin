@@ -11,7 +11,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 150px;
+  width: 130px;
 }
 
 .banner__box {
@@ -453,8 +453,8 @@
 .banner__heading {
   margin-bottom: 0;
   font-family: 'Noto Sans', sans-serif;
-  font-size: 32px;
-  line-height: 51px;
+  font-size: 48px;
+  line-height: 62px;
   font-weight: 700;
   color: #333634;
 }

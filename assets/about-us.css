@@ -20,3 +20,15 @@
     color: #1C201D;
     text-align: right;
 }
+
+.about-us-image {
+    width: 100%;
+    height: auto;
+    margin-top: 16px
+}
+
+.about-us-image img {
+    width: 100%;
+    height: auto;
+    margin-top: 16px;
+}

@@ -16,6 +16,7 @@
     justify-self: center;
     flex-direction: column;
     width: 100%;
+    margin-top: -1px;
 }
 
 .main-footer-info-divider {
