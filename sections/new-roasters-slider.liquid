@@ -19,7 +19,8 @@
             <div class="new-roastes-slider-roaster-description">            
             {%- if vendor.vendor_details != blank -%}
                 <div class="rich-text">
-                  {%- for block in vendor.vendor_details.value.children -%}
+                  {{ vendor.vendor_short_description.value }}
+                  {% comment %} {%- for block in vendor.vendor_details.value.children -%}
                     {%- case block.type -%}
                       {%- when 'paragraph' -%}
                         <p class="rich-text__paragraph">
@@ -30,7 +31,7 @@
                           {%- endfor -%}
                         </p>
                     {%- endcase -%}
-                  {%- endfor -%}
+                  {%- endfor -%} {% endcomment %}
                 </div>
             {%- endif -%}
               </div>

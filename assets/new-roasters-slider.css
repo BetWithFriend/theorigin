@@ -96,7 +96,7 @@
     padding: 8px 32px;
     height: 225px;
     max-height: calc(25px * 10);
-    overflow-y: auto;
+    /* overflow-y: auto; */
     margin-bottom: 48px;
 }
 

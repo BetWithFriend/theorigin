@@ -157,10 +157,10 @@
   } */
   .full-unstyled-link {
     font-family: 'Noto Sans', sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 22px;
-    font-weight: 400;
-    color: #1E1E1E;
+    font-weight: 700;
+    color: #1C201D;
   }
     
 }
@@ -970,11 +970,11 @@ summary::-webkit-details-marker {
   margin-bottom: 2rem;
   padding: 0;
   list-style: none;
-  /* background-color: #F5F4F2; */
+  background-color: #ffffff;
   /* column-gap: var(--grid-mobile-horizontal-spacing); */
   /* row-gap: var(--grid-mobile-vertical-spacing); */
   /* Ido */
-  /* gap: 48px; */
+  gap: 8px;
 }
 
 .card-product-divider {
@@ -1070,7 +1070,11 @@ summary::-webkit-details-marker {
 @media screen and (max-width: 989px) {
   .grid--1-col-tablet-down .grid__item {
     width: 100%;
-    max-width: 100%;
+    max-width: 95%;
+    margin: 0 auto;
+    background-color: #F5F4F2;
+    border-radius: 8px;
+    padding: 24px 32px 16px 0;
   }
 
   .slider--tablet.grid--peek {

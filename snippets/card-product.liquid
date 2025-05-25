@@ -42,15 +42,6 @@
   -%}
   <!-- {% assign vendor_logo = card_product.vendor | append: '_logo'| handle | append: '.png' %} -->
   <div class="card-wrapper product-card-wrapper underline-links-hover">
-    <!-- <div class="card-vendor-logo">
-      <img 
-        src="{{ vendor_logo | asset_url }}" 
-        alt="{{ product.vendor }}" 
-      class="card-vendor-logo-img"
-      width="{{ card_product.featured_media.width }}"
-      height="{{ card_product.featured_media.height }}"
-      />
-    </div> -->
     <div
       class="
         card card--{{ settings.card_style }}
@@ -63,9 +54,6 @@
       "
       style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
     >
-    {% comment %} 
-      <div class="product-card-wrapper-item">
-       {% endcomment %}
       <div
         class="card__inner {% if settings.card_style == 'standard' %}color-{{ settings.card_color_scheme }} gradient{% endif %}{% if card_product.featured_media or settings.card_style == 'standard' %} ratio{% endif %}"
         style="--ratio-percent: 100%;"
@@ -189,7 +177,6 @@
             {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
             {% render 'product-taste-icon-color', tastes: coffee_tastes, prep_methods: coffee_prep_methods  %}
           </div>
-          {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
           <div class="card-information">
             <!-- {%- if show_vendor -%}
               <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>

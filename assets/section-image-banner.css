@@ -468,6 +468,10 @@
   color: #333634;
 }
 
+.banner__text > h2 {
+  font-size: 16px;
+}
+
 .banner__buttons {
   display: inline-flex;
   flex-wrap: wrap;

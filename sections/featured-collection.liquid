@@ -124,6 +124,8 @@
               section_id: section.id,
               quick_add: section.settings.quick_add
             %}
+            <hr class="card-product-divider"/>
+            {% render 'price', product: product %}
           </li>
           {%- assign skip_card_product_styles = true -%}
         {%- else -%}

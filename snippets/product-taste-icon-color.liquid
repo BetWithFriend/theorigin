@@ -26,27 +26,27 @@
 {% endif %}
 </div>
     <!-- Conditional Icons -->
-    {% comment %} <div class="selection-icons">
+     <div class="selection-icons">
     {% if prep_methods.size > 0 %}
       {% for method in prep_methods %}
         {% assign updated_method = method | strip | remove: '"' %}
      
         {% case updated_method %}
           {% when 'Espresso' %}
-          <img src="{{ 'brew-Espresso.png' | asset_url }}" alt="Espresso Brew" class="icon" />
+          <img src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Brew" class="icon" />
           {% when 'Black' %}
-          <img src="{{ 'brew-Turkish.png' | asset_url }}" alt="Turkish Brew" class="icon" />
+          <img src="{{ 'dropdown-brew-Turkish.png' | asset_url }}" alt="Turkish Brew" class="icon" />
           {% when 'Aeropress' %}
-          <img src="{{ 'brew-Milk.png' | asset_url }}" alt="Milk Brew" class="icon" />
+          <img src="{{ 'dropdown-brew-Chemex.png' | asset_url }}" alt="Chemex Brew" class="icon" />
           {% when 'MokaPot' %}
-          <img src="{{ 'brew-Moka.png' | asset_url }}" alt="Moka Brew" class="icon" />
+          <img src="{{ 'dropdown-brew-Moka.png' | asset_url }}" alt="Moka Brew" class="icon" />
           {% when 'Filter' %}
-          <img src="{{ 'brew-Filter.png' | asset_url }}" alt="Filter Brew" class="icon" />
+          <img src="{{ 'dropdown-brew-Filter.png' | asset_url }}" alt="Filter Brew" class="icon" />
         {% endcase %}
   
   {% endfor %}
 {% endif %}
-</div> {% endcomment %}
+</div>
 
 <style>
   .selection-wrapper {
@@ -57,6 +57,7 @@
   font-family: 'Noto Sans', sans-serif;
   flex-direction: row-reverse;
   line-height: 30px;
+  font-size: 14px;
 }
 
 .selection-text {
@@ -75,6 +76,8 @@
   display: flex;
   gap: 4px;
   height: 30px;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 .selection-icons .icon {
@@ -83,13 +86,14 @@
 }
   .product-taste-icons {
   /* margin-top: 10px; /* Add space between the image and the icons */
-    text-align: center; /* Center the icons horizontally */
+    /* text-align: center; */
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row-reverse;
+    align-items: start;
+    justify-content: start;
+    flex-direction: column;
     gap: 16px;
     white-space: nowrap;
+    width: 100%;
 }
 
 .product-taste-icons img {

@@ -179,6 +179,7 @@
                     section_id: section.id
                   %}
                   <hr class="card-product-divider"/>
+                  {% render 'price', product: product %}
                 </li>
                 {%- assign skip_card_product_styles = true -%}
               {%- endfor -%}
