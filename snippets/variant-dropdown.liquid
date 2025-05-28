@@ -6,7 +6,7 @@
 
   <div class="dropdown-menu" aria-labelledby="variantDropdown">
     {% for size in grind_size  %}       
-    <div class="dropdown-item" onclick="filterByvariant('{{ size }}')">
+    <div class="dropdown-item" onclick="filterByvariant('{{ size }}'); selectGrind('{{ size }}')">
       <div class="dropdown-icons">
         <span>{{ size }}</span>
       </div>

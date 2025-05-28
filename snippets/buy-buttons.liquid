@@ -181,3 +181,15 @@
     <script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
 </div>
+<script>
+  console.log('boom', {{ properties_weight.value }})
+  function selectWeight(weight) {
+    document.getElementById('properties_weight').value = weight;
+    document.getElementById('weightDropdown').childNodes[0].nodeValue = weight;
+  }
+
+  function selectGrind(grind) {
+    document.getElementById('properties_grind').value = grind;
+    document.getElementById('variantDropdown').childNodes[0].nodeValue = grind;
+  }
+</script>

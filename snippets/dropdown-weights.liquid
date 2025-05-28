@@ -5,7 +5,7 @@
   </button>
   <div class="dropdown-weight-menu" aria-labelledby="weightDropdown">
     {% for weight in weights.value %}      
-    <div class="dropdown-item-weight" onclick="filterByweight('{{ weight }}')">
+    <div class="dropdown-item-weight" onclick="filterByweight('{{ weight }}'); selectWeight('{{ weight }}')">
       <div class="dropdown-weight-icons" dir="ltr">
         <!--<span>{{ weight.value | remove: '.0' }} {{ weight.unit }} </span> -->
         <span>{{ weight.value | remove: '.0' }} ג</span>

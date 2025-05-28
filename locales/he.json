@@ -3847,15 +3847,15 @@
         "pinterest": "פינטרסט"
       }
     },
-    "continue_shopping": "המשך קניות",
+    "continue_shopping": "המשך לקנות",
     "search": {
       "search": "חיפוש",
       "reset": "נקה"
     },
     "cart": {
-      "view": "צפה בעגלת קניות ({{ count }})",
+      "view": "לרכישה",
       "view_empty_cart": "צפה בעגלת קניות",
-      "item_added": "הפריט נוסף לעגלת הקניות"
+      "item_added": "העגלה שלך"
     }
   }
 }
