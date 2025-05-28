@@ -119,7 +119,7 @@ cart-items .title-wrapper-with-link {
   color: #1C201D;
   display: flex;
   align-items: end;
-  flex-direction: column;
+  /* flex-direction: column; */
   justify-content: center;
   /* font-size: 1.4rem;
   word-break: break-word;

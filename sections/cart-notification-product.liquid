@@ -2,7 +2,7 @@
   {%- for item in cart.items -%}
     <div id="cart-notification-product-{{ item.key }}" class="cart-item">
       {%- if item.image -%}
-        <div class="cart-notification-product__image global-media-settings">
+        <div class="cart-notification-product__image global-media-settings cart-img-item">
           <img
             src="{{ item.image | image_url: width: 140 }}"
             alt="{{ item.image.alt | escape }}"
@@ -16,7 +16,6 @@
         {%- if settings.show_vendor -%}
           <p class="caption-with-letter-spacing light">{{ item.product.vendor }}</p>
         {%- endif -%}
-        <script>console.log('boom', {{item | json}})</script>
         <h3 class="cart-notification-product__name h4">{{ item.product.title | escape }}</h3>
         <div class="cart-notification-weight">{{ item.product.weight }}</div>
         <dl>
@@ -28,12 +27,16 @@
               </div>
             {%- endfor -%}
           {%- endunless -%}
+          {%- assign first_property_printed = false -%}
           {%- for property in item.properties -%}
             {%- assign property_first_char = property.first | slice: 0 -%}
             {%- if property.last != blank and property_first_char != '_' -%}
+              {%- if first_property_printed -%}
+              / 
+              {%- endif -%}
               <div class="product-option">
-                <dt>{{ property.first }}:</dt>
-                <dd>
+                {{ property.last }}
+                {% comment %} <dd>
                   {%- if property.last contains '/uploads/' -%}
                     <a href="{{ property.last }}" class="link" target="_blank">
                       {{ property.last | split: '/' | last }}
@@ -41,17 +44,18 @@
                   {%- else -%}
                     {{ property.last }}
                   {%- endif -%}
-                </dd>
+                </dd> {% endcomment %}
               </div>
+              {%- assign first_property_printed = true -%}
             {%- endif -%}
-          {%- endfor -%}
+          {%- endfor -%} 
         </dl>
         {%- if item.selling_plan_allocation != null -%}
           <p class="product-option">{{ item.selling_plan_allocation.selling_plan.name }}</p>
         {%- endif -%}
       </div>
       <div>
-        {%  render 'price' %}
+        {%  render 'price', class_added: 'price_item_cart' %}
       </div>
     </div>
   {%- endfor -%}

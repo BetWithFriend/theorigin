@@ -67,18 +67,26 @@
         >
 
           <!-- ADD YOUR CUSTOM DATA -->
-           <script>console.log('boom', {{product_grind}})</script>
+           <script>console.log('buy-buttons >>', '{{ product_weight }}')</script>
           <input
           type="hidden"
           name="properties[Weight]"
+          id="properties_weight"
           value="{{ product_weight }}"
         >
 
         <input
           type="hidden"
           name="properties[Grind]"
+          id="properties_grind"
           value="{{ product_grind }}"
         >
+
+          <input
+            type="hidden"
+            name="quantity"
+            value="{{ product_quantity | default: 1 }}"
+          >
 
         {%- if gift_card_recipient_feature_active -%}
           {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}

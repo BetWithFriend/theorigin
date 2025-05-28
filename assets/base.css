@@ -970,11 +970,15 @@ summary::-webkit-details-marker {
   margin-bottom: 2rem;
   padding: 0;
   list-style: none;
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
   /* column-gap: var(--grid-mobile-horizontal-spacing); */
   /* row-gap: var(--grid-mobile-vertical-spacing); */
   /* Ido */
   gap: 8px;
+}
+
+.grid.product-grid {
+  background-color: #ffffff;
 }
 
 .card-product-divider {
@@ -2159,6 +2163,9 @@ input[type='checkbox'] {
 .modal__close-button .icon {
   width: 1.7rem;
   height: 1.7rem;
+  position: absolute;
+  right: 16px;
+  top: 16px;
 }
 
 .modal__content {

@@ -49,9 +49,9 @@
       "reset": "Clear search term"
     },
     "cart": {
-      "view": "View cart ({{ count }})",
-      "view_empty_cart": "View cart",
-      "item_added": "Item added to your cart"
+      "view": "לרכישה",
+      "view_empty_cart": "לרכישה",
+      "item_added": "העגלה שלך"
     },
     "share": {
       "close": "Close share",

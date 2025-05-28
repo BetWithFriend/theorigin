@@ -504,15 +504,16 @@
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
               {%- when 'buy_buttons' -%}
+                <script>console.log("main-product >>", {{ weights_array.value[0].value }})</script>
                 {%- render 'buy-buttons',
                   block: block,
                   product: product,
                   product_form_id: product_form_id,
                   section_id: section.id,
                   show_pickup_availability: true,
-                  product_weight: document.getElementById('weightDropdown').childNodes[0].nodeValue,
-                  product_grind: document.getElementById('variantDropdown').childNodes[0].nodeValue 
-
+                  product_weight: weights_array.value[0].value,
+                  product_grind: grind_size_array[0],
+                  product_quantity: 1
                 -%}
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}

@@ -5,12 +5,12 @@
   z-index: auto;
   isolation: isolate;
   background-color: #E6E3DE;
-  height: 500px;
+  /* height: 500px; */
 }
 .main-page-top-img {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   width: 130px;
 }
 
@@ -84,7 +84,7 @@
   }
 
   .banner--large:not(.banner--mobile-bottom):not(.banner--adapt) .banner__content {
-    min-height: 39rem;
+    min-height: 35rem;
   }
 }
 
@@ -238,6 +238,10 @@
 
   .banner:not(.banner--mobile-bottom):not(.email-signup-banner) .banner__box {
     background: transparent;
+    text-align: right;
+    padding: 24px;
+    margin-top: 0;
+    padding-top: 0
   }
 
   .banner:not(.banner--mobile-bottom) .banner__box {
@@ -453,10 +457,11 @@
 .banner__heading {
   margin-bottom: 0;
   font-family: 'Noto Sans', sans-serif;
-  font-size: 48px;
-  line-height: 62px;
-  font-weight: 700;
+  font-size: 40px;
+  line-height: 50px;
+  font-weight: 600;
   color: #333634;
+  width: 80%;
 }
 
 .banner__box .banner__heading + * {
@@ -470,6 +475,8 @@
 
 .banner__text > h2 {
   font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
 }
 
 .banner__buttons {
@@ -503,7 +510,11 @@
 }
 
 .banner__box > * + .banner__buttons {
-  margin-top: 48px;
+  margin-top: 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media screen and (max-width: 749px) {

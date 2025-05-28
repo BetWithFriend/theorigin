@@ -142,9 +142,19 @@
                           {%- for property in item.properties -%}
                             {%- assign property_first_char = property.first | slice: 0 -%}
                             {%- if property.last != blank and property_first_char != '_' -%}
+                              {% comment %} TRANSLATE {% endcomment %}
+                              {% comment %} {%- assign prop_name = property.first == 'Grind' ? 'טחינה' : property.first -%}
+                              {%- assign prop_name = property.first == 'Weight' ? 'משקל' : property.first -%} {% endcomment %}
+                              {%- if property.first == 'Grind' -%}
+                                {%- assign prop_name = 'טחינה' -%}
+                              {%- elsif property.first == 'Weight' -%}
+                                {%- assign prop_name = 'משקל' -%}
+                              {%- endif -%}
+                              <script>console.log('cart prop>>', '{{ property.first }}', ' - ', '{{ property.last }}', ' -- ', '{{ prop_name }}')</script>
                               <div class="product-option">
-                                <dt>{{ property.first }}:</dt>
-                                <dd>
+                                {% comment %} <dt>{{ property.first }}:</dt> {% endcomment %}
+                                <dt>{{ prop_name }}: {{ property.last }}</dt>
+                                {% comment %} <dd>
                                   {%- if property.last contains '/uploads/' -%}
                                     <a href="{{ property.last }}" class="link" target="_blank">
                                       {{ property.last | split: '/' | last }}
@@ -152,7 +162,7 @@
                                   {%- else -%}
                                     {{ property.last }}
                                   {%- endif -%}
-                                </dd>
+                                </dd> {% endcomment %}
                               </div>
                             {%- endif -%}
                           {%- endfor -%}

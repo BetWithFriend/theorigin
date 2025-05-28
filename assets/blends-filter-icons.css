@@ -14,7 +14,7 @@
 }
 
 .blends-filter-item {
-    gap: 5px;
+    gap: 10px;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -45,12 +45,14 @@
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 32px;
+        gap: 18px;
     }
     
     .blends-filter-item {
         /* width: calc(50% - 29px);  */
         width: 150px;
+        border: 1px solid rgba(245, 244, 242, 1)
+        
     }
 
     .blends-filter-icon-wrapper {
@@ -58,15 +60,16 @@
         align-items: center;
         justify-content: center;
         width: 150px;
-        height: 150px;
+        height: 88px;
         background-color: #F5F4F2;
-        padding: 35px 16px
+        padding: 35px 16px;
+        border-radius: 8px;
     }
     
     .blends-filter-icon {
         width: 100%;
         height: auto;
-        padding: 28px;
+        padding: 11px 34px;
         /* max-width: 80px; */
     }
     

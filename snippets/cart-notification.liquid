@@ -21,7 +21,7 @@
     >
       <div class="cart-notification__header">
         <h2 class="cart-notification__heading caption-large text-body">
-          {{- 'icon-checkmark.svg' | inline_asset_content -}}
+          {% comment %} {{- 'icon-checkmark.svg' | inline_asset_content -}} {% endcomment %}
           {{ 'general.cart.item_added' | t }}
         </h2>
         <button
@@ -34,23 +34,25 @@
           </span>
         </button>
       </div>
+      <hr  class="cart-notification-divider"/>
       <div id="cart-notification-product" class="cart-notification-product" dir="rtl"></div>
       <div class="cart-notification__links">
         <a
           href="{{ routes.cart_url }}"
           id="cart-notification-button"
-          class="button button--secondary button--full-width"
+          class="button button--secondary button--full-width cart-btn-buy"
         >
           {{- 'general.cart.view_empty_cart' | t -}}
         </a>
-        <form action="{{ routes.cart_url }}" method="post" id="cart-notification-form">
-          <button class="button button--primary button--full-width" name="checkout">
+        {% comment %} <form action="{{ routes.cart_url }}" method="post" id="cart-notification-form">
+          <button class="button button--primary button--full-width cart-btn-checkout" name="checkout">
             {{ 'sections.cart.checkout' | t }}
           </button>
-        </form>
-        <button type="button" class="link button-label">{{ 'general.continue_shopping' | t }}</button>
+        </form> {% endcomment %}
+        <button type="button" class="button button--primary button--full-width cart-btn-checkout cart-btn-checkout">המשך לקנות</button>
       </div>
     </div>
+    <div class="cart-notification-overlay"> </div>
   </div>
 </cart-notification>
 {% style %}

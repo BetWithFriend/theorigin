@@ -76,10 +76,19 @@
 .collection__title.title-wrapper {
   margin-bottom: 2.5rem;
   background-color: #ffffff;
+  padding-right: 24px;
 }
 
 .collection__title .title:not(:only-child) {
   margin-bottom: 1rem;
+}
+
+.collection__title .title {
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #636270;
+  /* padding: 0px 24px; */
 }
 
 @media screen and (min-width: 990px) {
