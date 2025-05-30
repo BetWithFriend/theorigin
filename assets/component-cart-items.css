@@ -101,6 +101,30 @@ cart-items .title-wrapper-with-link {
   border-radius: 8px;
 }
 
+.cart-total-delivery-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  text-align: right;
+  padding: 16px;
+}
+
+.cart-total-delivery {
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 500;
+  color: #1C201D;
+}
+.cart-total-delivery-sum {
+    font-family: 'Noto Sans', sans-serif;
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 500;
+  color: #1C201D;
+}
+
 .cart-item__name:hover {
   text-decoration: underline;
   text-underline-offset: 0.3rem;
