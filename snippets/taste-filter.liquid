@@ -202,7 +202,7 @@
   align-items: center;
   justify-content: center;
   gap: 16px;
-  width: 30%;
+  width: 40%;
   border: none;
 }
 
@@ -269,11 +269,11 @@
   }
 
   function filterByTag() {
-  // Gather checked checkboxes from both dropdowns
-  const tasteChecked = Array.from(document.querySelectorAll('#dropdownMenu-taste .dropdown-icons-input:checked'))
-    .map(checkbox => checkbox.value);
-  const prepChecked = Array.from(document.querySelectorAll('#dropdownMenu-prep .dropdown-icons-input:checked'))
-    .map(checkbox => checkbox.value);
+    // Gather checked checkboxes from both dropdowns
+    const tasteChecked = Array.from(document.querySelectorAll('#dropdownMenu-taste .dropdown-icons-input:checked'))
+      .map(checkbox => checkbox.value);
+    const prepChecked = Array.from(document.querySelectorAll('#dropdownMenu-prep .dropdown-icons-input:checked'))
+      .map(checkbox => checkbox.value);
 
   document.querySelectorAll('.grid__item').forEach(card => {
     const prepMethods = card.dataset.prepMethods;
@@ -333,9 +333,15 @@ function updateDropdownButtonText(type) {
   // Now update the small icons/colors on the main button
   const selectedIconsContainer = document.getElementById(`selected-icons-${type}`);
   selectedIconsContainer.innerHTML = ''; // Clear previous
+  const selectIconsParent = document.getElementById(`dropdown-button-${type}`);
 
   selectedCheckboxes.forEach((checkbox, index) => {
-    if (index >= 3) return; // Max 3 icons
+    if (index >= 3) return;
+    {% comment %} if (index >= 2) {
+      selectIconsParent.style.width = '40%';
+      return; // Max 3 icons
+    }
+    selectIconsParent.style.width = '30%'; {% endcomment %}
 
     const label = checkbox.closest('label');
     if (type === 'taste') {

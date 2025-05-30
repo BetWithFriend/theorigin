@@ -3,6 +3,24 @@
   display: block;
 }
 
+.cart-page {
+  background-color: #F5F4F2;
+  padding: 16px;
+}
+
+.cart-page-title-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    margin: 16px 0;
+}
+
+.cart-footer-wrapper {
+  background-color: #F5F4F2;
+}
+
 .cart__empty-text,
 .is-empty .cart__contents,
 cart-items.is-empty .title-wrapper-with-link,
@@ -154,7 +172,7 @@ cart-items {
 }
 
 .cart__ctas button {
-  width: 100%;
+  /* width: 100%; */
 }
 
 .cart__ctas > * + * {

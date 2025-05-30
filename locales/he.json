@@ -3735,10 +3735,10 @@
       "title": "העגלה שלך",
       "caption": "פריטי עגלה",
       "remove_title": "הסר את {{ title }}",
-      "estimated_total": "סה\"כ משוער",
+      "estimated_total": "סה״כ",
       "new_estimated_total": "סה\"כ משוער חדש",
       "note": "הזמינו הוראות מיוחדות",
-      "checkout": "הזמן",
+      "checkout": "לרכישה",
       "empty": "העגלה שלך ריקה",
       "cart_error": "אירעה שגיאה בעת עדכון העגלה שלך. אנא נסה שוב.",
       "cart_quantity_error_html": "אתה יכול להוסיף רק {{ quantity }} של פריט זה לעגלה שלך.",
@@ -3854,7 +3854,7 @@
     },
     "cart": {
       "view": "לרכישה",
-      "view_empty_cart": "צפה בעגלת קניות",
+      "view_empty_cart": "לרכישה",
       "item_added": "העגלה שלך"
     }
   }

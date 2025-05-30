@@ -474,11 +474,15 @@
 }
 
 .card__information-top {
-  display: flex;
+  /* display: flex; */
   align-items: center;
   justify-content: center;
   /* width: 100%; */
   /* gap: 40px; */
+}
+
+.card__information-vendor-name {
+  font-size: 14px;
 }
 
 .card--card.card--media .card__inner .card__information,
