@@ -36,7 +36,7 @@
       </div>
       <hr  class="cart-notification-divider"/>
       <div id="cart-notification-product" class="cart-notification-product" dir="rtl"></div>
-      <div class="cart-notification__links">
+      <div class="cart-notification__links cart_drawer">
         <a
           href="{{ routes.cart_url }}"
           id="cart-notification-button"
@@ -60,3 +60,23 @@
     display: none;
   }
 {% endstyle %}
+
+<script>
+  // Function to set the header height CSS variable
+  function setHeaderHeight() {
+    const headerWrapper = document.querySelector('.header-wrapper');
+    
+    if (headerWrapper) {
+      const headerHeight = headerWrapper.offsetHeight;
+      document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+    }
+  }
+
+  // Set initial height when DOM is loaded
+  document.addEventListener('DOMContentLoaded', setHeaderHeight);
+
+  // Update height when window is resized (in case header height changes)
+  window.addEventListener('resize', setHeaderHeight);
+
+  setHeaderHeight();
+</script>

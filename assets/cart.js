@@ -176,14 +176,63 @@ class CartItems extends HTMLElement {
         if (cartFooter) cartFooter.classList.toggle('is-empty', parsedState.item_count === 0);
         if (cartDrawerWrapper) cartDrawerWrapper.classList.toggle('is-empty', parsedState.item_count === 0);
 
-        this.getSectionsToRender().forEach((section) => {
-          const elementToReplace =
-            document.getElementById(section.id).querySelector(section.selector) || document.getElementById(section.id);
+        // First pass: Update cart items and preserve footer position
+    const cartItemsSection = this.getSectionsToRender().find(s => s.id === 'main-cart-items');
+    if (cartItemsSection?.exists) {
+      const footerElement = document.getElementById('main-cart-footer');
+      let footerInfo = null;
+      
+      // Check if footer is inside cart items
+      if (footerElement && cartItemsSection.elementToReplace.contains(footerElement)) {
+        footerInfo = {
+          parent: footerElement.parentElement,
+          nextSibling: footerElement.nextSibling,
+          sectionId: footerElement.dataset.id
+        };
+      }
+      
+      // Update cart items
+      const sectionData = parsedState.sections[cartItemsSection.section];
+      cartItemsSection.elementToReplace.innerHTML = this.getSectionInnerHTML(sectionData, cartItemsSection.selector);
+      
+      // Restore footer placeholder if needed
+      if (footerInfo) {
+        const newFooter = document.createElement('div');
+        newFooter.id = 'main-cart-footer';
+        newFooter.dataset.id = footerInfo.sectionId;
+        newFooter.innerHTML = '<div class="js-contents"></div>'; // Add the selector container
+        
+        if (footerInfo.nextSibling) {
+          footerInfo.parent.insertBefore(newFooter, footerInfo.nextSibling);
+        } else {
+          footerInfo.parent.appendChild(newFooter);
+        }
+      }
+    }
+
+    // Second pass: Update all other sections including the restored footer
+    this.getSectionsToRender()
+      .filter(section => section.id !== 'main-cart-items')
+      .forEach((section) => {
+        const container = document.getElementById(section.id);
+        const elementToReplace = container?.querySelector(section.selector) || container;
+        
+        if (elementToReplace && parsedState.sections[section.section]) {
           elementToReplace.innerHTML = this.getSectionInnerHTML(
             parsedState.sections[section.section],
             section.selector
           );
-        });
+        }
+      });
+
+        // this.getSectionsToRender().forEach((section) => {
+        //   const elementToReplace =
+        //     document.getElementById(section.id).querySelector(section.selector) || document.getElementById(section.id);
+        //   elementToReplace.innerHTML = this.getSectionInnerHTML(
+        //     parsedState.sections[section.section],
+        //     section.selector
+        //   );
+        // });
         const updatedValue = parsedState.items[line - 1] ? parsedState.items[line - 1].quantity : undefined;
         let message = '';
         if (items.length === parsedState.items.length && updatedValue !== parseInt(quantityElement.value)) {

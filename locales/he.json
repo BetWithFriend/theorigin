@@ -1814,7 +1814,7 @@
         "reduced_label": "מופחת",
         "reduced_with_quantity_label": "נותרו רק %{quantity_available}",
         "remove_from_cart_button_label": "הסר מהעגלה",
-        "continue_shopping_button_label": "המשך",
+        "continue_shopping_button_label": "המשך בקניה",
         "go_back_to_cart_button_label": "חזור לעגלה שלי",
         "remove": "הסרה",
         "return_to_store_label": "חזור לחנות",
@@ -3848,7 +3848,7 @@
         "pinterest": "פינטרסט"
       }
     },
-    "continue_shopping": "המשך לקנות",
+    "continue_shopping": "המשך בקניה",
     "search": {
       "search": "חיפוש",
       "reset": "נקה"
