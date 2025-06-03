@@ -2,6 +2,7 @@
     position: relative;
     margin-bottom: 120px;
 }
+
 .new-roasters-slider-wrapper::after {
     content: '';
     position: absolute;
@@ -142,4 +143,14 @@
     font-size: 16px;
     line-height: 25px;
     text-align: right;
+}
+
+@media screen and (min-width: 768px) {
+    .new-roasters-slider-wrapper {
+        margin-top: 36px;
+    }
+
+    .new-roasters-slider-title {
+        padding: 0;
+    }
 }

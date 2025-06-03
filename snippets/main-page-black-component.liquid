@@ -1,14 +1,16 @@
 {% comment %} {{ 'discover-the-roaster.css' | asset_url | stylesheet_tag }} {% endcomment %}
 <div class="discover-roaster-wrapper">
-    <div class="discover-roaster-title">{{ title  }}</div>
-    <div class="discover-roaster-subtitle" dir="rtl">{{ description }}</div>
+    <div class="discover_roaster-title-wrap">
+        <div class="discover-roaster-title">{{ title  }}</div>
+        <div class="discover-roaster-subtitle" dir="rtl">{{ description }}</div>
+    </div>
     {% comment %} <hr class="discover-roaster-divider-line" /> {% endcomment %}
 <!-- <img class="discover-roaster-img {{ img_class }}" src="{{ com_image | asset_url }}" alt="discover image" /> -->
     <div onclick="goToPage('{{ btn_url }}')" class="discover-roaster-btn">{{ btn_text }}</div>
 </div>
 
 <style>
-    .discover-roaster-wrapper {
+.discover-roaster-wrapper {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -19,6 +21,14 @@
     /* width: 90%; */
     background-color: #333634;
     border-radius: 16px;
+}
+
+.discover_roaster-title-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
 }
 
 .discover-roaster-title {
@@ -70,6 +80,30 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+    .discover-roaster-wrapper {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin: 0;
+        padding: 32px;
+    }
+
+    .discover_roaster-title-wrap {
+        align-items: flex-start;
+        margin-right: 120px;
+    }
+
+    .discover-roaster-title {
+        text-align: right;
+    }
+
+    .discover-roaster-btn {
+        margin-left: 120px;
+    }
 }
 </style>
 

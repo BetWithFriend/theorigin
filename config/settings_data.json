@@ -445,7 +445,7 @@
   },
   "platform_customizations": {
     "custom_css": [
-      "body {margin: 48px 40px; background-color: #ffffff !important;}",
+      "body {background-color: #ffffff !important;}",
       "@media (max-width: 768px) {body {margin: unset; }}"
     ]
   }

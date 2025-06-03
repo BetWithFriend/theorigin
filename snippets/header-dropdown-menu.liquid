@@ -7,9 +7,9 @@
 
 <nav class="header__inline-menu">
   <ul class="list-menu list-menu--inline" role="list">
-    {%- for link in section.settings.menu.links -%}
-      <li>
+    {%- for link in section.settings.menu.links -%}    
         {%- if link.links != blank -%}
+          <li>
           <header-menu>
             <details id="Details-HeaderMenu-{{ forloop.index }}">
               <summary
@@ -79,25 +79,29 @@
               </ul>
             </details>
           </header-menu>
+        </li>
         {%- else -%}
-          <a
-            id="HeaderMenu-{{ link.handle }}"
-            href="{{ link.url }}"
-            class="header__menu-item list-menu__item link link--text focus-inset"
-            {% if link.current %}
-              aria-current="page"
-            {% endif %}
-          >
-            <span
-              {%- if link.current %}
-                class="header__active-menu-item"
+          {%- if link.url != "/" -%}
+            <li>
+            <a
+              id="HeaderMenu-{{ link.handle }}"
+              href="{{ link.url }}"
+              class="header__menu-item list-menu__item link link--text focus-inset"
+              {% if link.current %}
+                aria-current="page"
               {% endif %}
             >
-              {{- link.title | escape -}}
-            </span>
-          </a>
+              <span
+                {%- if link.current %}
+                  class="header__active-menu-item--roman-disable"
+                {% endif %}
+              >
+                {{- link.title | escape -}}
+              </span>
+            </a>
+          </li>
+          {%- endif -%}
         {%- endif -%}
-      </li>
     {%- endfor -%}
   </ul>
 </nav>

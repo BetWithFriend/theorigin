@@ -29,6 +29,302 @@
   }
 {%- endstyle -%}
 
+{%- style -%}
+        .video-banner {
+            position: relative;
+            width: 100vw;
+            height: 80vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+        }
+
+        .video-placeholder.loaded {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+       .image-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: opacity 0.8s ease;
+            z-index: 1;
+        }
+
+        .image-placeholder.loaded {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+            z-index: 2;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .banner-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .banner-video.loaded {
+            opacity: 1;
+        }
+
+        /* Video overlay - separate from content overlay */
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+
+        /* Overlay content */
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            z-index: 2;
+            padding: 20px;
+        }
+
+        .banner-title {
+            /*font-size: clamp(2rem, 5vw, 4rem);*/
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            /*text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);*/
+            animation: fadeInUp 1s ease 0.5s both;
+        }
+
+        .banner-subtitle {
+            /*font-size: clamp(1rem, 2.5vw, 1.5rem);*/
+            font-size: 16px;
+            margin-bottom: 40px;
+            /*text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);*/
+            animation: fadeInUp 1s ease 0.7s both;
+            color: white;
+        }
+
+        .main-cta-button {
+            padding: 10px 24px;
+            font-size: 20px;
+            /*background: linear-gradient(45deg, #ff6b6b, #ee5a52);*/
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 1s ease 0.9s both;
+            width: 290px;
+        }
+
+        .main-cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            /*background: linear-gradient(45deg, #ee5a52, #ff6b6b);*/
+            background-color: #eeeeee;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Video controls */
+        .video-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 3;
+            display: flex;
+            gap: 10px;
+            display: none;
+        }
+
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            z-index: 3;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        /* Mobile optimization */
+        @media (max-width: 768px) {
+            .banner-overlay {
+                padding: 15px;
+            }
+            
+            .main-cta-button {
+                padding: 10px 24px;
+                font-size: 20px;
+            }
+            
+            .video-controls {
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        /* Network quality indicator */
+        .network-indicator {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            z-index: 3;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: none;
+        }
+
+        .network-indicator.show {
+            opacity: 1;
+        }
+
+        @media (min-width: 768px) {
+          .video-banner {
+            margin: 0px;
+            width: auto;
+            height: 50vh;
+            border-radius: 16px;
+          }
+
+          .banner-title {
+            font-size: 52px;
+          }
+
+          .banner-subtitle {
+            font-size: 18px;
+          }
+
+          .scroll-indicator {
+            display: none;
+          }
+        }
+{%- endstyle -%}
+
 {%- liquid
   assign full_width = '100vw'
   assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
@@ -51,6 +347,56 @@
   endif
 -%}
 
+  <section class="video-banner">
+        <!-- Network quality indicator -->
+        <div class="network-indicator" id="networkIndicator">טוען וידאו...</div>
+        
+        <!-- Static image placeholder -->
+        <div class="image-placeholder" id="imagePlaceholder" style="background-image: url('https://cdn.shopify.com/s/files/1/0701/9151/3657/files/HP-Video-Test3-still.jpg?v=1748807776');"> </div>
+
+        <!-- Loading overlay with spinner -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner"></div>
+        </div>
+        
+        <!-- Video element -->
+        <video 
+            class="banner-video" 
+            id="bannerVideo"
+            muted 
+            loop 
+            playsinline
+            preload="none"
+        >
+            <source id="videoSource" type="video/mp4">
+            הדפדפן לא תומך בוידאו
+        </video>
+        
+        <!-- Video overlay -->
+        <div class="video-overlay"> </div>
+        
+        <!-- Overlay content -->
+        <div class="banner-overlay">
+            <h1 class="banner-title">הקפה הטוב בישראל במקום אחד</h1>
+            <p class="banner-subtitle">פולי קפה טריים, ישירות מבתי קלייה מקומיים נבחרים – הקפה הכי טרי שמגיע עד הבית</p>
+            <a href="/collections/coffee" role="link" class="main-cta-button">לחנות</a>
+        </div>
+        
+        <!-- Video controls -->
+        <div class="video-controls">
+            <button class="control-btn" id="muteBtn" title="Unmute">🔇</button>
+            <button class="control-btn" id="playBtn" title="Pause">⏸️</button>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="scroll-indicator">
+            <div style="margin-bottom: 5px;">גללו להמשך</div>
+            <div style="font-size: 1.5rem; text-align: center;">↓</div>
+        </div>
+    </section>
+
+
+{% comment %} 
 <div
   id="Banner-{{ section.id }}"
   class="banner banner--content-align-{{ section.settings.desktop_content_alignment }} banner--content-align-mobile-{{ section.settings.mobile_content_alignment }} banner--{{ section.settings.image_height }}{% if section.settings.stack_images_on_mobile and section.settings.image != blank and section.settings.image_2 != blank %} banner--stacked{% endif %}{% if section.settings.image_height == 'adapt' and section.settings.image != blank %} banner--adapt{% endif %}{% if section.settings.show_text_below %} banner--mobile-bottom{%- endif -%}{% if section.settings.show_text_box == false %} banner--desktop-transparent{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
@@ -115,6 +461,7 @@
       }}
     </div>
   {%- endif -%}
+
   <div class="banner__content banner__content--{{ section.settings.desktop_content_position }} page-width{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
     <img src={{ 'mainpage_top.png' |  asset_url }} alt="אוריגין - עלי ופולי קפה בעמוד הראשי" class="main-page-top-img"/>
     <div class="banner__box content-container content-container--full-width-mobile color-{{ section.settings.color_scheme }} gradient">
@@ -165,7 +512,412 @@
       {%- endfor -%}
     </div>
   </div>
-</div>
+</div> {% endcomment %}
+
+    <script>
+        class ProgressiveVideoLoader {
+            constructor() {
+                this.video = document.getElementById('bannerVideo');
+                this.imagePlaceholder = document.getElementById('imagePlaceholder');
+                this.loadingOverlay = document.getElementById('loadingOverlay');
+                this.networkIndicator = document.getElementById('networkIndicator');
+                this.videoSource = document.getElementById('videoSource');
+                
+                // Demo video URLs and static images - replace with your actual files
+                this.videos = {
+                    desktop: {
+                        image: 'https://cdn.shopify.com/s/files/1/0701/9151/3657/files/HP-Video-Test3-still.jpg?v=1748807776',
+                        hd: 'https://cdn.shopify.com/videos/c/o/v/8d5ea9603ffb412a86016b10cee80311.mp4'
+                    },
+                    mobile: {
+                        image: 'https://cdn.shopify.com/s/files/1/0701/9151/3657/files/HP-Video-Test3-still.jpg?v=1748807776',
+                        hd: 'https://cdn.shopify.com/videos/c/o/v/8d5ea9603ffb412a86016b10cee80311.mp4'
+                    }
+                };
+                
+                this.deviceType = 'desktop';
+                this.isVideoLoaded = false;
+                this.networkSpeed = 'unknown';
+                
+                this.init();
+            }
+            
+            init() {
+                this.detectDeviceType();
+                this.loadStaticImage();
+                this.detectNetworkSpeed();
+                this.loadVideo();
+                this.setupControls();
+                this.setupIntersectionObserver();
+                this.setupResizeListener();
+            }
+            
+            detectDeviceType() {
+                // Check screen size and touch capability
+                const isMobile = window.innerWidth <= 768 || 
+                                ('ontouchstart' in window) || 
+                                (navigator.maxTouchPoints > 0);
+                
+                this.deviceType = isMobile ? 'mobile' : 'desktop';
+                
+                // Update video element attributes for mobile
+                if (this.deviceType === 'mobile') {
+                    this.video.setAttribute('webkit-playsinline', 'true');
+                    this.video.setAttribute('playsinline', 'true');
+                }
+                
+                console.log(`Device detected: ${this.deviceType}`);
+            }
+            
+            detectNetworkSpeed() {
+                // Use Network Information API if available
+                if ('connection' in navigator) {
+                    const connection = navigator.connection;
+                    const effectiveType = connection.effectiveType;
+                    
+                    if (effectiveType === '4g') {
+                        this.networkSpeed = 'fast';
+                    } else if (effectiveType === '3g') {
+                        this.networkSpeed = 'medium';
+                    } else {
+                        this.networkSpeed = 'slow';
+                    }
+                } else {
+                    // Fallback: measure download speed with a small image
+                    this.measureDownloadSpeed();
+                }
+            }
+            
+            measureDownloadSpeed() {
+                const startTime = Date.now();
+                const img = new Image();
+                
+                img.onload = () => {
+                    const endTime = Date.now();
+                    const duration = (endTime - startTime) / 1000;
+                    
+                    // Estimate based on small image load time
+                    if (duration < 0.5) {
+                        this.networkSpeed = 'fast';
+                    } else if (duration < 2) {
+                        this.networkSpeed = 'medium';
+                    } else {
+                        this.networkSpeed = 'slow';
+                    }
+                    
+                    this.updateNetworkIndicator();
+                };
+                
+                img.src = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAACAAIDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=';
+            }
+            
+            updateNetworkIndicator() {
+                this.networkIndicator.textContent = `Network: ${this.networkSpeed}`;
+                this.networkIndicator.classList.add('show');
+                
+                setTimeout(() => {
+                    this.networkIndicator.classList.remove('show');
+                }, 3000);
+            }
+            
+            loadStaticImage() {
+                const imageSet = this.videos[this.deviceType];
+                
+                // Set the background image
+                this.imagePlaceholder.style.backgroundImage = `url('${imageSet.image}')`;
+                
+                // Show loading spinner while image loads
+                this.networkIndicator.textContent = `Loading ${this.deviceType} image...`;
+                this.networkIndicator.classList.add('show');
+                
+                // Preload the image to ensure smooth transition
+                const img = new Image();
+                img.onload = () => {
+                    this.networkIndicator.textContent = 'Image loaded';
+                    setTimeout(() => {
+                        this.networkIndicator.classList.remove('show');
+                    }, 1000);
+                };
+                img.onerror = () => {
+                    this.networkIndicator.textContent = 'Image failed to load';
+                    setTimeout(() => {
+                        this.networkIndicator.classList.remove('show');
+                    }, 2000);
+                };
+                img.src = imageSet.image;
+            }
+            
+            async loadVideo() {
+                // Start loading HD video in background
+                const videoSet = this.videos[this.deviceType];
+                
+                this.networkIndicator.textContent = `Loading ${this.deviceType} video...`;
+                this.networkIndicator.classList.add('show');
+                
+                this.videoSource.src = videoSet.hd;
+                this.video.load();
+                
+                try {
+                    // Wait for video to be ready
+                    await new Promise((resolve, reject) => {
+                        this.video.addEventListener('canplay', resolve, { once: true });
+                        this.video.addEventListener('error', reject, { once: true });
+                    });
+                    
+                    this.showVideo();
+                    this.isVideoLoaded = true;
+                    
+                } catch (error) {
+                    console.error('Video failed to load:', error);
+                    this.networkIndicator.textContent = 'Video unavailable - showing image';
+                    setTimeout(() => {
+                        this.networkIndicator.classList.remove('show');
+                    }, 3000);
+                }
+            }
+            
+            async upgradeToHD() {
+                if (this.currentQuality === 'hd') return;
+                
+                const videoSet = this.videos[this.deviceType];
+                
+                this.networkIndicator.textContent = `Upgrading to ${this.deviceType} HD...`;
+                this.networkIndicator.classList.add('show');
+                
+                // Store current state
+                const currentTime = this.video.currentTime;
+                const wasPlaying = !this.video.paused;
+                
+                try {
+                    // Pause current video to avoid conflicts
+                    if (!this.video.paused) {
+                        this.video.pause();
+                    }
+                    
+                    // Create and preload HD video
+                    const hdVideo = document.createElement('video');
+                    hdVideo.muted = true;
+                    hdVideo.loop = true;
+                    hdVideo.playsinline = true;
+                    hdVideo.preload = 'auto';
+                    
+                    if (this.deviceType === 'mobile') {
+                        hdVideo.setAttribute('webkit-playsinline', 'true');
+                    }
+                    
+                    const hdSource = document.createElement('source');
+                    hdSource.src = videoSet.hd;
+                    hdSource.type = 'video/mp4';
+                    hdVideo.appendChild(hdSource);
+                    
+                    // Wait for HD video to be ready
+                    await new Promise((resolve, reject) => {
+                        hdVideo.addEventListener('canplay', resolve, { once: true });
+                        hdVideo.addEventListener('error', reject, { once: true });
+                        hdVideo.load();
+                    });
+                    
+                    // Sync time with HD video
+                    hdVideo.currentTime = currentTime;
+                    
+                    // Wait a bit to ensure time is set
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    
+                    // Now switch the main video source
+                    this.videoSource.src = videoSet.hd;
+                    this.video.load();
+                    
+                    // Wait for main video to be ready with new source
+                    await new Promise((resolve, reject) => {
+                        this.video.addEventListener('canplay', resolve, { once: true });
+                        this.video.addEventListener('error', reject, { once: true });
+                    });
+                    
+                    // Sync time and resume playback
+                    this.video.currentTime = currentTime;
+                    
+                    if (wasPlaying) {
+                        try {
+                            await this.video.play();
+                        } catch (playError) {
+                            console.log('Play was interrupted, but continuing with HD upgrade');
+                        }
+                    }
+                    
+                    this.currentQuality = 'hd';
+                    
+                    this.networkIndicator.textContent = `${this.deviceType} HD quality loaded`;
+                    setTimeout(() => {
+                        this.networkIndicator.classList.remove('show');
+                    }, 2000);
+                    
+                } catch (error) {
+                    console.error('HD upgrade failed:', error);
+                    this.networkIndicator.textContent = 'HD upgrade failed';
+                    setTimeout(() => {
+                        this.networkIndicator.classList.remove('show');
+                    }, 2000);
+                    
+                    // Resume original video if it was playing
+                    if (wasPlaying) {
+                        try {
+                            await this.video.play();
+                        } catch (playError) {
+                            console.log('Failed to resume original video playback');
+                        }
+                    }
+                }
+            }
+            
+            showVideo() {
+                // Hide loading overlay
+                this.loadingOverlay.classList.add('hidden');
+                
+                // Show video with fade in
+                this.video.classList.add('loaded');
+                
+                // Start video playback
+                this.video.play().catch(e => {
+                    console.log('Autoplay prevented:', e);
+                });
+                
+                // Fade out static image after a delay to ensure smooth transition
+                setTimeout(() => {
+                    this.imagePlaceholder.classList.add('loaded');
+                }, 500);
+                
+                this.networkIndicator.textContent = `${this.deviceType} video ready`;
+                setTimeout(() => {
+                    this.networkIndicator.classList.remove('show');
+                }, 2000);
+            }
+            
+            setupControls() {
+                const muteBtn = document.getElementById('muteBtn');
+                const playBtn = document.getElementById('playBtn');
+                
+                muteBtn.addEventListener('click', () => {
+                    this.video.muted = !this.video.muted;
+                    muteBtn.textContent = this.video.muted ? '🔇' : '🔊';
+                    muteBtn.title = this.video.muted ? 'Unmute' : 'Mute';
+                });
+                
+                playBtn.addEventListener('click', () => {
+                    if (this.video.paused) {
+                        this.video.play();
+                        playBtn.textContent = '⏸️';
+                        playBtn.title = 'Pause';
+                    } else {
+                        this.video.pause();
+                        playBtn.textContent = '▶️';
+                        playBtn.title = 'Play';
+                    }
+                });
+            }
+            
+            setupIntersectionObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            if (this.video.paused) {
+                                this.video.play();
+                            }
+                        } else {
+                            if (!this.video.paused) {
+                                this.video.pause();
+                            }
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                observer.observe(this.video);
+            }
+            
+            setupResizeListener() {
+                let resizeTimeout;
+                
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        const currentDeviceType = this.deviceType;
+                        this.detectDeviceType();
+                        
+                        // If device type changed, reload appropriate video
+                        if (currentDeviceType !== this.deviceType) {
+                            console.log(`Device type changed from ${currentDeviceType} to ${this.deviceType}`);
+                            this.switchDeviceVideo();
+                        }
+                    }, 250);
+                });
+            }
+            
+            async switchDeviceVideo() {
+                const currentTime = this.video.currentTime;
+                const wasPlaying = !this.video.paused;
+                
+                // Show loading indicator
+                this.networkIndicator.textContent = `Switching to ${this.deviceType} video...`;
+                this.networkIndicator.classList.add('show');
+                
+                try {
+                    // Pause current video to avoid conflicts
+                    if (!this.video.paused) {
+                        this.video.pause();
+                    }
+                    
+                    // Reset quality to compressed for new device type
+                    this.currentQuality = 'compressed';
+                    this.isLoaded = false;
+                    
+                    // Load new video
+                    const videoSet = this.videos[this.deviceType];
+                    this.videoSource.src = videoSet.compressed;
+                    this.video.load();
+                    
+                    // Wait for new video to be ready
+                    await new Promise((resolve, reject) => {
+                        this.video.addEventListener('canplay', resolve, { once: true });
+                        this.video.addEventListener('error', reject, { once: true });
+                    });
+                    
+                    // Sync time and play state
+                    this.video.currentTime = currentTime;
+                    
+                    if (wasPlaying) {
+                        try {
+                            await this.video.play();
+                        } catch (playError) {
+                            console.log('Play was interrupted during device switch');
+                        }
+                    }
+                    
+                    this.isLoaded = true;
+                    
+                    this.networkIndicator.textContent = `${this.deviceType} video loaded`;
+                    setTimeout(() => {
+                        this.networkIndicator.classList.remove('show');
+                    }, 2000);
+                    
+                    // Upgrade to HD if network allows
+                    if (this.networkSpeed === 'fast' || this.networkSpeed === 'medium') {
+                        setTimeout(() => this.upgradeToHD(), 2000);
+                    }
+                    
+                } catch (error) {
+                    console.error('Device video switch failed:', error);
+                    this.networkIndicator.textContent = 'Video switch failed';
+                    setTimeout(() => {
+                        this.networkIndicator.classList.remove('show');
+                    }, 2000);
+                }
+            }
+        }
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new ProgressiveVideoLoader();
+        });
+    </script>
 
 {% schema %}
 {

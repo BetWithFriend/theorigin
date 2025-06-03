@@ -96,9 +96,9 @@
     margin-bottom: 2.5rem;
   }
 
-  .collection__title.title-wrapper--self-padded-tablet-down {
+  /* .collection__title.title-wrapper--self-padded-tablet-down {
     padding: 0 5rem;
-  }
+  } */
 
   .collection slider-component:not(.page-width-desktop) {
     padding: 0;
@@ -107,6 +107,11 @@
   .collection--full-width slider-component:not(.slider-component-desktop) {
     padding: 0 1.5rem;
     max-width: none;
+  }
+
+  .collection__title.title-wrapper {
+    margin: 0;
+    padding-right: 0;
   }
 }
 

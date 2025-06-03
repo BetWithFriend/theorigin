@@ -81,6 +81,12 @@
       padding-top: 0.5rem;
     }
   }
+
+  @media screen and (min-width: 750px) {
+    .list-menu {
+      flex-direction: row-reverse;
+    }
+  }
 </style>
 
 {%- style -%}
@@ -95,9 +101,12 @@
     margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
   }
 
-  @media screen and (min-width: 750px) {
+
+  /* adaptation for desktop */
+  @media screen and (min-width: 768px) {
     .section-header {
       margin-bottom: {{ section.settings.margin_bottom }}px;
+      position: relative;
     }
   }
 
@@ -174,15 +183,7 @@
       {%- endif -%}
     {%- endif -%}
 
-    {%- liquid
-      if section.settings.menu != blank
-        if section.settings.menu_type_desktop == 'dropdown'
-          render 'header-dropdown-menu'
-        elsif section.settings.menu_type_desktop != 'drawer'
-          render 'header-mega-menu'
-        endif
-      endif
-    %}
+
 
     {%- if section.settings.logo_position == 'middle-center' -%}
       {%- if request.page_type == 'index' -%}
@@ -215,7 +216,19 @@
       {%- endif -%}
     {%- endif -%}
 
+    <!-- ROMAN -->
+    {%- liquid
+      if section.settings.menu != blank
+        if section.settings.menu_type_desktop == 'dropdown'
+          render 'header-dropdown-menu'
+        elsif section.settings.menu_type_desktop != 'drawer'
+          render 'header-mega-menu'
+        endif
+      endif
+    %}
+
     <div class="header__icons{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header__icons--localization header-localization{% endif %}">
+      <!-- Roman: Remove localization menu
       <div class="desktop-localization-wrapper">
         {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
           <localization-form class="small-hide medium-hide" data-prevent-hide>
@@ -239,9 +252,11 @@
           </localization-form>
         {%- endif -%}
       </div>
+    -->
       <!--Ido - Remove search from header  -->
       <!-- {% render 'header-search', input_id: 'Search-In-Modal' %} -->
 
+      <!-- Roman: Remove account from header 
       {%- if shop.customer_accounts_enabled -%}
         <a
           href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
@@ -270,6 +285,7 @@
           </span>
         </a>
       {%- endif -%}
+    -->
 
       {%- for block in section.blocks -%}
         {%- case block.type -%}

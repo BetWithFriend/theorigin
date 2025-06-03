@@ -83,7 +83,7 @@ slider-component.slider-component-full-width {
   }
 }
 
-@media screen and (max-width: 989px) {
+@media screen and (max-width: 2000px) {
   .slider.slider--tablet {
     position: relative;
     flex-wrap: inherit;
