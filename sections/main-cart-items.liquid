@@ -79,10 +79,27 @@
               </thead>
 
               {% comment %} <tbody> {% endcomment %}
-               <div class="cart-items-wrapper">
-                {%- for item in cart.items -%}
-                  <div class="cart-item" id="CartItem-{{ item.index | plus: 1 }}">
-                    <div class="cart-item__media">
+               {%- assign vendors = "" -%}
+
+            {%- for item in cart.items -%}
+              {%- unless vendors contains item.vendor -%}
+                {%- assign vendors = vendors | append: item.vendor | append: "," -%}
+              {%- endunless -%}
+            {%- endfor -%}
+
+        {%- assign vendor_array = vendors | split: "," | uniq | sort -%}
+
+            <div class="cart-items-wrapper">
+                {%- for vendor in vendor_array -%}
+                  <div class="cart-item-wrapper"> 
+                    <h3>{{ vendor }}</h3> 
+                 {%- for item in cart.items -%}
+                   
+                   {%- if item.vendor == vendor -%}
+                    
+
+                      <div class="cart-item" id="CartItem-{{ item.index | plus: 1 }}">
+                       <div class="cart-item__media">
                       {% if item.image %}
                         {% comment %} Leave empty space due to a:empty CSS display: none rule {% endcomment %}
                         <a href="{{ item.url }}" class="cart-item__link" aria-hidden="true" tabindex="-1"> </a>
@@ -136,10 +153,10 @@
                         </div>
                         {%- assign first_property_printed = true -%}
                       {%- endif -%}
-                    {%- endfor -%} 
+                  {%- endfor -%} 
                   </dl>
 
-                <quantity-popover>
+                     <quantity-popover>
                       <div class="cart-item__quantity-wrapper quantity-popover-wrapper">
                         <label class="visually-hidden" for="Quantity-{{ item.index | plus: 1 }}">
                           {{ 'products.product.quantity.label' | t }}
@@ -467,14 +484,17 @@
                         {%- endif -%}
                       </div>
                     </div>
-                  </div>
-
+                </div>  
+                  {%- endif -%}
+                {%- endfor -%}  
+                  </div> 
                 {%- endfor -%}
-              {% comment %} </tbody>
-            </table> {% endcomment %}
-          {%- endif -%}
-        </div>
-      </div>
+                </div>
+                    {% comment %} </tbody>
+                 </table> {% endcomment %}
+                 {%- endif -%}
+            </div>
+      
       <div class="cart-total-delivery-wrapper">
         <div class="cart-total-delivery">
           {{ 'sections.cart.cart_delivery' | t }}

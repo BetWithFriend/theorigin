@@ -97,6 +97,14 @@ cart-items .title-wrapper-with-link {
 }
 
 .cart-items-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cart-item-wrapper {
   border: 1px solid #CDCDCD;
   border-radius: 8px;
 }
