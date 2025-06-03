@@ -62,35 +62,44 @@ class CartItems extends HTMLElement {
   }
 
   validateQuantity(event) {
-    const inputValue = parseInt(event.target.value);
-    const index = event.target.dataset.index;
+    const input = event.target; // Get a direct reference to the input element
+    const inputValue = parseInt(input.value);
+    const index = input.dataset.index;
+    const minQuantity = parseInt(input.dataset.min) || 0; // Get min, default to 0 if not set
+    const maxQuantity = parseInt(input.max) || Infinity; // Get max, default to Infinity
+    const step = parseInt(input.step) || 1; // Get step, default to 1
+
     let message = '';
 
-    // Handle quantity 0 -> remove item
+    // --- CRUCIAL CHANGE HERE ---
+    // If the input value is 0, always remove the item.
+    // This bypasses min/max/step validation for the "remove" action.
     if (inputValue === 0) {
-      this.updateQuantity(index, 0, document.activeElement.getAttribute('name'), event.target.dataset.quantityVariantId);
-      event.target.setCustomValidity(''); // Clear any validation message
-      return; // Exit early as the item will be removed
+      this.updateQuantity(index, 0, document.activeElement.getAttribute('name'), input.dataset.quantityVariantId);
+      input.setCustomValidity(''); // Clear any validation message from the browser
+      input.reportValidity(); // Clear validation UI
+      return; // Stop further validation as the item is being removed
     }
 
-    if (inputValue < event.target.dataset.min) {
-      message = window.quickOrderListStrings.min_error.replace('[min]', event.target.dataset.min);
-    } else if (inputValue > parseInt(event.target.max)) {
-      message = window.quickOrderListStrings.max_error.replace('[max]', event.target.max);
-    } else if (inputValue % parseInt(event.target.step) !== 0) {
-      message = window.quickOrderListStrings.step_error.replace('[step]', event.target.step);
+    // Now, apply the standard validation rules for non-zero quantities
+    if (inputValue < minQuantity) {
+      message = window.quickOrderListStrings.min_error.replace('[min]', minQuantity);
+    } else if (inputValue > maxQuantity) {
+      message = window.quickOrderListStrings.max_error.replace('[max]', maxQuantity);
+    } else if (inputValue % step !== 0) {
+      message = window.quickOrderListStrings.step_error.replace('[step]', step);
     }
 
     if (message) {
-      this.setValidity(event, index, message);
+      this.setValidity(event, index, message); // This will set custom validity and reset input
     } else {
-      event.target.setCustomValidity('');
-      event.target.reportValidity();
+      input.setCustomValidity('');
+      input.reportValidity();
       this.updateQuantity(
         index,
         inputValue,
         document.activeElement.getAttribute('name'),
-        event.target.dataset.quantityVariantId
+        input.dataset.quantityVariantId
       );
     }
   }
@@ -215,18 +224,13 @@ class CartItems extends HTMLElement {
           return;
         }
 
-        this.classList.toggle('is-empty', parsedState.item_count === 0);
+        this.classList.toggle('is-empty', parsedState.item_count === 0); // This toggles a class on the cart-items element itself
         const cartDrawerWrapper = document.querySelector('cart-drawer');
         if (cartDrawerWrapper) cartDrawerWrapper.classList.toggle('is-empty', parsedState.item_count === 0);
 
-
-        // --- CORE FIX START ---
-        // 1. Update the cart-items section first
+        // --- CORE FIX: Update cart-items' innerHTML and let delegation handle events ---
         const mainCartItemsSectionData = parsedState.sections[this.dataset.id];
         if (mainCartItemsSectionData) {
-          // Replace the content of the .js-contents div within the cart-items custom element
-          // This will re-render the cart items, and crucially, re-initialize new instances
-          // of CartRemoveButton with their event listeners.
           const currentJsContents = this.querySelector('.js-contents');
           if (currentJsContents) {
             currentJsContents.innerHTML = this.getSectionInnerHTML(mainCartItemsSectionData, '.js-contents');
@@ -240,7 +244,6 @@ class CartItems extends HTMLElement {
             const container = document.getElementById(section.id);
             if (!container) return; // Ensure container exists
 
-            // If the element to replace is the container itself, or a specific selector within it
             const elementToReplace = section.selector ? container.querySelector(section.selector) : container;
 
             if (elementToReplace && parsedState.sections[section.section]) {
@@ -251,7 +254,6 @@ class CartItems extends HTMLElement {
             }
           });
 
-        // Re-query the cart footer after updates
         const updatedCartFooter = document.getElementById('main-cart-footer');
         if (updatedCartFooter) {
           updatedCartFooter.classList.toggle('is-empty', parsedState.item_count === 0);

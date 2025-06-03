@@ -90,7 +90,8 @@
     function updateSlides() {
       slides.forEach((slide, index) => {
         // Hide all slides
-        slide.style.display = index === currentIndex ? 'flex' : 'none';
+        {% comment %} slide.style.display = index === currentIndex ? 'flex' : 'none'; {% endcomment %}
+         slide.style.display = index === currentIndex ? 'grid' : 'none';
       });
     }
     
