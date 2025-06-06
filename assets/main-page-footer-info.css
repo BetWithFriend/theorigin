@@ -26,6 +26,7 @@
     width: 100%;
     position: relative;
 }
+
 .main-footer-info-divider-line {
     width: 60%;
     border: 1px solid #FBFCFE;
@@ -36,7 +37,8 @@
 .main-footer-info-divider-img {
     position: absolute;
     /* background-color: #FBFCFE; Matches background to "cut" the line */
-    padding: 0 10px; /* Ensures space around the image */
+    padding: 0 10px;
+    /* Ensures space around the image */
     height: 52px;
 }
 
@@ -107,7 +109,8 @@
     .main-footer-info-shop-wrap-flex {
         display: flex;
         flex-wrap: wrap;
-        gap: 32px 24px; /* row gap, column gap */
+        gap: 32px 24px;
+        /* row gap, column gap */
         justify-content: center;
     }
 
