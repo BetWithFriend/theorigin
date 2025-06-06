@@ -148,7 +148,7 @@
               data-id="{{ section.id }}"
               class="
                 grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down
-                grid--{{ section.settings.columns_desktop }}-col-desktop
+                grid--3-col-desktop
                 {% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %}
               "
             >
@@ -159,7 +159,7 @@
                   {%- assign lazy_load = true -%}
                 {%- endif -%}
                 <li
-                  class="grid__item {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                  class="grid__item grid-item-feed {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                    data-prep-methods="{{ product.metafields.custom.coffee_taste }} {{ product.metafields.custom.coffee_prep_methods | escape }}"
                   {% if settings.animations_reveal_on_scroll %}
                     data-cascade

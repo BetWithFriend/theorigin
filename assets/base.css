@@ -3812,12 +3812,13 @@ details-disclosure > details {
   }
 
   #MainContent {
-    max-width: 1200px;
+    /* max-width: 1200px; */
+    max-width: var(--page-width);
     margin: 0px 48px;
   }
 }
 
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1440px) {
   #MainContent {
     margin: 0 auto;
   }

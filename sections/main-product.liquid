@@ -1,6 +1,88 @@
+<style>
+  @media screen and (min-width: 769px) {
+    #main-product-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* Two equal columns */
+      gap: 1rem; /* Spacing between grid items */
+    }
+
+    .product-container {
+      margin: 0;
+      grid-column-start: 1;
+      grid-row-start: 1;
+      margin-bottom: -10px;
+      border-radius: 16px 16px 0 0;
+    }
+
+    #product-description-wrapper {
+      margin: 0;
+      grid-column-start: 2;
+      grid-row-start: 1;
+      grid-row-end: span 2; /* Make div2 span two rows */
+    }
+
+    #product-description-wrapper > div {
+      width: 400px;
+      margin: 0 auto;
+    }
+
+    #product-description-wrapper > div.product-location-img-wrapper {
+      width: 390px;
+    }
+
+    #product-description {
+      background-color: transparent;
+    }
+
+    .product-details-vendor-details-wrapper {
+      margin: 0;
+      grid-column-start: 1;
+      grid-row-start: 2;
+      border-radius: 0 0 16px 16px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+    }
+
+    .product-collection-wrapper {
+      display: none !important;
+    }
+
+    .product {
+      display: block;
+    }
+
+    .product > div {
+      margin: 0 auto;
+    }
+
+    .product-variants-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+    }
+
+    #product-dropdowns-form-wrapper {
+      max-width: 100%;
+      width: 100%;
+      padding: 0;
+      padding-top: 24px;
+    }
+  }
+
+  @media screen and (min-width: 1050px) {
+    #product-description-wrapper > div {
+      width: 515px;
+      margin: 0 auto;
+    }
+  }
+</style>
+
+<div id="main-product-container">
 <product-info
   id="MainProduct-{{ section.id }}"
-  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}"
+  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }} product-container"
   data-section="{{ section.id }}"
   data-product-id="{{ product.id }}"
   data-update-url="true"
@@ -95,7 +177,7 @@
       {% render 'taste-scale', taste: product_taste %}
       {% endif %}
 
-   <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+   <div id="product-dropdowns-form-wrapper" class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section dir="rtl"
           id="ProductInfo-{{ section.id }}"
           class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
@@ -777,6 +859,7 @@
 {% assign coffee_type = product.metafields.custom.coffee_type.value %}
 
 {% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description %}
+
 {%  render 'product-description' | 
     product_description: product.description,
     brew_images: product.metafields.custom.product_brew_image,
@@ -790,6 +873,9 @@
     vendor_logo: vendor.vendor_logo
     vendor_story: vendor.vendor_details.value
     %}
+</div>
+
+
 {% schema %}
 {
   "name": "t:sections.main-product.name",

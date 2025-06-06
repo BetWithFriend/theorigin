@@ -1,57 +1,62 @@
-<div class="product-description-wrapper" id="product-description" dir="rtl">
-    <div class="product-description-text">
-        {{ product_description  }}
+<div id="product-description-wrapper" >
+    <div class="product-description-wrapper-main">
+        <div class="product-description-wrapper" id="product-description" dir="rtl">
+            <div class="product-description-text">
+                {{ product_description  }}
+            </div>
+        </div>
+        <div id="read-more" class="read-more">קרא עוד</div>
     </div>
-</div>
-<div id="read-more" class="read-more">קרא עוד</div>
 
-<div class="product-description-details-wrapper">
+    <div class="product-description-details-wrapper">
+        <div class="product-description-divider">
+            <hr  class="product-description-divider-line"/>
+            <img class="product-description-divider-img" src="{{ 'divider.png' | asset_url }}" alt="Divider" />
+        </div>
+    </div>
+    <div class="product-description-details-images-wrapper">
+        {% assign coffee_prep_methods_raw = product.metafields.custom.coffee_prep_methods | strip %}
+        {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
+        {% for brew_img in coffee_prep_methods %}
+            <img class="product-description-img" src="{{ brew_img  | strip | remove: '"' | append: '.png' | asset_url | replace: "files/", "" }}" alt="Brew Image" />
+        {% endfor %}
+    </div>
+
     <div class="product-description-divider">
         <hr  class="product-description-divider-line"/>
-        <img class="product-description-divider-img" src="{{ 'divider.png' | asset_url }}" alt="Divider" />
     </div>
-</div>
-<div class="product-description-details-images-wrapper">
-    {% assign coffee_prep_methods_raw = product.metafields.custom.coffee_prep_methods | strip %}
-    {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
-    {% for brew_img in coffee_prep_methods %}
-        <img class="product-description-img" src="{{ brew_img  | strip | remove: '"' | append: '.png' | asset_url | replace: "files/", "" }}" alt="Brew Image" />
-    {% endfor %}
-</div>
 
-<div class="product-description-divider">
-    <hr  class="product-description-divider-line"/>
-</div>
+    <div class="product-details-wrapper" dir="rtl">
+        <div class="product-details-item-wrapper">
+            <div class="product-details-item-title">דרגת קלייה</div>
+            <div class="product-details-item">{{ coffee_roast_level }}</div>
+        </div>
+        <div class="product-details-item-wrapper">
+            <div class="product-details-item-title">טעמים</div>
+            <div class="product-details-item">{{ coffee_tastes | join: ", "}}</div>
+        </div>
+        <div class="product-details-item-wrapper">
+            <div class="product-details-item-title">קטגוריה</div>
+            <div class="product-details-item">{{ coffee_type }}</div>
+        </div>
+        <div class="product-details-item-wrapper">
+            <div class="product-details-item-title">שיטת עיבוד</div>
+            <div class="product-details-item">{{ coffee_process }}</div>
+        </div>
+        <div class="product-details-item-wrapper">
+            <div class="product-details-item-title">גובה גידול</div>
+            <div class="product-details-item">{{ coffee_altitude }}</div>
+        </div>
+    </div>
 
-<div class="product-details-wrapper" dir="rtl">
-    <div class="product-details-item-wrapper">
-        <div class="product-details-item-title">דרגת קלייה</div>
-        <div class="product-details-item">{{ coffee_roast_level }}</div>
+    <div class="product-description-divider">
+        <hr  class="product-description-divider-line"/>
     </div>
-    <div class="product-details-item-wrapper">
-        <div class="product-details-item-title">טעמים</div>
-        <div class="product-details-item">{{ coffee_tastes | join: ", "}}</div>
-    </div>
-    <div class="product-details-item-wrapper">
-        <div class="product-details-item-title">קטגוריה</div>
-        <div class="product-details-item">{{ coffee_type }}</div>
-    </div>
-    <div class="product-details-item-wrapper">
-        <div class="product-details-item-title">שיטת עיבוד</div>
-        <div class="product-details-item">{{ coffee_process }}</div>
-    </div>
-    <div class="product-details-item-wrapper">
-        <div class="product-details-item-title">גובה גידול</div>
-        <div class="product-details-item">{{ coffee_altitude }}</div>
-    </div>
-</div>
 
-<div class="product-description-divider">
-    <hr  class="product-description-divider-line"/>
-</div>
+    <div class="product-location-img-wrapper">
+        <img class="product-location-img" src="{{ coffee_origin_image.value  | img_url: 'master'  }}" alt="Product Location Image" />
+    </div>
 
-<div class="product-location-img-wrapper">
-    <img class="product-location-img" src="{{ coffee_origin_image.value  | img_url: 'master'  }}" alt="Product Location Image" />
 </div>
 
 <div class="product-details-vendor-details-wrapper">

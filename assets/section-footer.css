@@ -55,7 +55,7 @@
   width: 100%;
 }
 
-@media screen and (max-width: 749px) {
+
   .footer-social-icons {
     display: flex;
     align-items: center;
@@ -98,13 +98,25 @@
     padding-right: 0;
     row-gap: 1.5rem;
   }
-  .contact-us-wrapper {
+  .contact-us-wrapper, .contact-us-contracts, .contact-us-details {
     display: flex;
     flex-direction: column;
     align-items: end;
     justify-content: center;
     gap: 2px;
   }
+
+  @media screen and (min-width: 769px) {
+    .contact-us-contracts, .contact-us-details {
+      flex-direction: row;
+      gap: 88px;
+    }
+
+    .contact-us-contracts { margin-bottom: 24px; }
+    .contact-us {cursor: pointer;}
+  }
+
+
   .contact-us {
     font-family: 'Noto Sans', sans-serif;
     font-size: 16px;
@@ -138,7 +150,7 @@
     opacity: 1;
     transform: inherit;
   }
-}
+
 
 .footer__localization:empty + .footer__column--info {
   align-items: center;
