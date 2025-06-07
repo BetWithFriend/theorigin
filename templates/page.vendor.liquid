@@ -9,20 +9,23 @@
 
 {% if selected_vendor %}
   {% render 'breadcrumbs' %}
-    <div class="vendor-page-main-wrapper">
-        <img class="vendor-page-logo" src="{{ selected_vendor.vendor_logo | img_url: 'medium' }}" />
-        <div class="vendor-page-title-wrapper" dir="rtl">
-            <div class="vendor-page-vendor-name">הקמה: <span style="color:#1C201D">{{ selected_vendor.vendor_year_establishment }}</span></div>
-            <div class="vendor-page-vendor-location">מיקום: <span style="color:#1C201D">{{ selected_vendor.vendor_location }}</span></div>
+
+<div class="vendor-page-main-wrapper">
+
+  <video id="vendorVideo" controls class="vendor-page-vendor-video" poster="{{ selected_vendor.vendor_video_poster | file_url }}">
+      <source src="{{ selected_vendor.vendor_video | file_url }}" type="video/mp4">
+  </video>
+
+  <div class="vendor-page-content-wrapper">
+
+        <div class="vendor-page-logo-wrapper">
+          <img class="vendor-page-logo" src="{{ selected_vendor.vendor_logo | img_url: 'medium' }}" />
+          <div class="vendor-page-title-wrapper" dir="rtl">
+              <div class="vendor-page-vendor-name">הקמה: <span style="color:#1C201D">{{ selected_vendor.vendor_year_establishment }}</span></div>
+              <div class="vendor-page-vendor-location">מיקום: <span style="color:#1C201D">{{ selected_vendor.vendor_location }}</span></div>
+          </div>
         </div>
-        <video 
-          id="vendorVideo"
-          controls 
-          class="vendor-page-vendor-video"
-          poster="{{ selected_vendor.vendor_video_poster | file_url }}"
-        >
-            <source src="{{ selected_vendor.vendor_video | file_url }}" type="video/mp4">
-        </video>
+
         <div class="vendor-page-description-wrapper" id="vendor-page-descriptionn-wrapper">
             <div class="vendor-page-description-title">הסיפור שלנו</div>
             <div class="vendor-page-description" dir="rtl">
@@ -42,14 +45,22 @@
                       {%- endfor -%}
                     </div>
                   {%- endif -%}
-                </div> 
-                <div id="read-more" class="read-more">המשך לקרוא</div>
             </div>
-            {% assign collection = collections['blooms-collection'].products | json %}
-            {% assign product_taste = collection.products %} 
-            {% render 'taste-filter', tastes: product_taste %} 
-            {% section 'featured-collection'  %}
-    </div>
+            <div id="read-more" class="read-more">המשך לקרוא</div>
+        </div>
+
+    </div> 
+</div>
+
+<div id="shopify-section-featured-collection">
+      {% assign collection = collections['blooms-collection'].products | json %}
+      {% assign product_taste = collection.products %} 
+      {% render 'taste-filter', tastes: product_taste %} 
+      {% section 'featured-collection'  %}
+  </div>
+
+
+
 {% else %}
   <p>Vendor not found.</p>
 {% endif %}
@@ -69,57 +80,75 @@
 </script>
 
 <style>
- .vendor-page-main-wrapper{
+  /* --- BASE & MOBILE STYLES --- */
+
+ .vendor-page-main-wrapper,
+ .vendor-page-main-wrapper * {
+    /* Apply box-sizing to this component and all its children */
+    box-sizing: border-box;
+ }
+
+ .vendor-page-main-wrapper {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
     flex-direction: column;
+    width: 100%;
+    max-width: 100%; /* Prevent expanding beyond its container */
     gap: 16px;
  }
 
+ .vendor-page-content-wrapper {
+    /* This allows us to re-order its children on mobile */
+    display: contents;
+ }
+
+ /* --- NEW ORDERING LOGIC --- */
+ /* Using negative order values to place controlled items first.
+    Any new, un-styled elements will default to order: 0 and appear last. */
+
+ .vendor-page-logo-wrapper {
+    order: -3; /* First */
+    width: 100%;
+    text-align: center;
+  }
+
+ .vendor-page-vendor-video {
+    order: -2; /* Second */
+    width: 100%;
+    height: auto;
+ }
+
+ .vendor-page-description-wrapper {
+    order: -1; /* Third */
+    width: 100%;
+ }
+ /* --- END NEW ORDERING LOGIC --- */
+
+
  .vendor-page-logo {
     width: 30%;
+    max-width: 130px;
  }
 
  .vendor-page-title-wrapper {
     display: flex;
-    align-items: center;
     justify-content: center;
-    width: 100%;
-    gap: 16px
+    gap: 16px;
+    padding-top: 8px;
  }
 
- .vendor-page-vendor-name {
-    font-family: 'Noto Sans', sans-serif;
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 16px;
-    text-align: right;
-    color: #555555;
- }
-
+ .vendor-page-vendor-name,
  .vendor-page-vendor-location {
     font-family: 'Noto Sans', sans-serif;
     font-weight: 300;
     font-size: 14px;
-    line-height: 16px;
-    text-align: right;
     color: #555555;
  }
 
- .vendor-page-vendor-video {
-    width: 100%;
-    padding: 24px 0;
- }
-
  .vendor-page-description-wrapper {
-    width: 100%;
-    max-height: calc(20px * 15 + 20px); /* 8 full lines of text */
+    max-height: calc(20px * 15 + 20px);
     background-color: #E6E3DE;
     padding: 16px 24px;
     overflow: hidden;
-    transition: max-height 0.3s ease-in-out;
     position: relative;
  }
 
@@ -131,7 +160,6 @@
     font-family: 'Noto Sans', sans-serif;
     font-weight: 700;
     font-size: 20px;
-    line-height: 20px;
     color: #555555;
     text-align: right;
 }
@@ -149,26 +177,73 @@
     position: absolute;
     bottom: 0;
     right: 24px;
-    background: linear-gradient(to top, #E6E3DE 80%, transparent); /* subtle fade */
+    left: 24px;
+    width: auto;
+    background: linear-gradient(to top, #E6E3DE 80%, transparent);
     padding: 20px 0;
-    width: 100%;
     text-align: right;
     font-family: 'Noto Sans', sans-serif;
-    font-weight: 400;
     font-size: 16px;
-    line-height: 16px;
     cursor: pointer;
     color: #1C201D;
-    transition: opacity 0.2s ease-in-out;
     z-index: 1;
     text-decoration: underline;
-    }
+}
 
-    .vendor-page-description-wrapper.expanded .read-more {
+.vendor-page-description-wrapper.expanded .read-more {
     position: static;
     background: none;
     padding-top: 16px;
     width: 100%;
 }
 
+/* --- DESKTOP STYLES --- */
+@media screen and (min-width: 992px) {
+  .vendor-page-main-wrapper {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    direction: ltr;
+    gap: 0;
+    margin-bottom: 24px;
+  }
+
+  .vendor-page-vendor-video {
+    order: initial; /* Reset order for desktop */
+    width: 58%;
+    align-self: stretch;
+  }
+  
+  .vendor-page-vendor-video video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+  }
+
+  .vendor-page-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    order: initial; /* Reset order for desktop */
+    width: 40%;
+    gap: 24px;
+    direction: rtl;
+  }
+
+  .vendor-page-logo-wrapper,
+  .vendor-page-description-wrapper {
+    order: initial; /* Reset order for desktop */
+    width: 100%;
+  }
+
+  .vendor-page-logo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: right;
+  }
+  
+  .vendor-page-title-wrapper {
+      justify-content: flex-end;
+  }
+}
 </style>

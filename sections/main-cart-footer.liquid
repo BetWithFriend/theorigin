@@ -59,9 +59,23 @@
                   {%- endif -%}
                 </div>
 
+              {%- assign vendors_list = '' -%}
+
+              {%- for item in cart.items -%}
+                {%- unless vendors_list contains item.vendor -%}
+                  {%- assign vendors_list = vendors_list | append: item.vendor | append: ',' -%}
+                {%- endunless -%}
+              {%- endfor -%}
+
+              {%- assign vendor_array = vendors_list | split: ',' | uniq -%}
+              {%- assign vendor_count = vendor_array | size-%} 
+
+
                 <div class="totals">
                   <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-                  <p class="totals__total-value" dir="ltr">{{ cart.total_price | money_with_currency }}</p>
+                  {%- assign vendor_fee_total = vendor_count | times: 3500 -%}
+                  {%- assign adjusted_total = cart.total_price | plus: vendor_fee_total -%}
+                  <p class="totals__total-value" dir="ltr">{{ adjusted_total | money_with_currency }}</p>
                 </div>
 
                 <small class="tax-note caption-large rte">

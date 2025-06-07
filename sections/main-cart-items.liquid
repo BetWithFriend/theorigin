@@ -52,7 +52,7 @@
       <div class="cart__items" id="main-cart-items">
         <div class="js-contents">
           {%- if cart != empty -%}
-            {%- comment -%} Group items by vendor {%- endcomment -%}
+            <script> console.log('boom', {{cart.items | json}} )</script>
             {%- assign vendors = "" -%}
             {%- for item in cart.items -%}
               {%- unless vendors contains item.vendor -%}
@@ -73,7 +73,7 @@
                 
                 {%- if vendor_has_items -%}
                   <div class="cart-item-wrapper"> 
-                    <h3>{{ vendor }}</h3> 
+                    <div class="cart-item-vendor">{{ vendor }}</div> 
                     {%- for item in cart.items -%}
                       {%- if item.vendor == vendor -%}
                         <div class="cart-item" id="CartItem-{{ item.index | plus: 1 }}">
@@ -438,6 +438,12 @@
                         </div>  
                       {%- endif -%}
                     {%- endfor -%}  
+                       <div class="cart-total-delivery-wrapper">
+                        <div class="cart-total-delivery">
+                          {{ 'sections.cart.cart_delivery' | t }}
+                        </div>
+                        <div class="cart-total-delivery-sum">35 ₪</div>
+                    </div>
                   </div> 
                 {%- endif -%}
               {%- endfor -%}
@@ -446,12 +452,7 @@
         </div>
       </div>
       
-      <div class="cart-total-delivery-wrapper">
-        <div class="cart-total-delivery">
-          {{ 'sections.cart.cart_delivery' | t }}
-        </div>
-        <div class="cart-total-delivery-sum">35 ₪</div>
-      </div>
+
       
       <p class="visually-hidden" id="cart-live-region-text" aria-live="polite" role="status"></p>
       <p
