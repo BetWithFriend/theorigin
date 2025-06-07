@@ -24,7 +24,7 @@
   data-id="{{ section.id }}"
 >
   <div class="page-width">
-    <div class="cart__footer isolate section-{{ section.id }}-padding cart-footer-wrapper">
+    <div class="cart__footer isolate section-{{ section.id }}-padding cart-footer-wrapper  main-cart-footer">
       {%- if settings.show_cart_note -%}
         <cart-note class="cart__note field">
           <label for="Cart-note">{{ 'sections.cart.note' | t }}</label>
@@ -69,7 +69,6 @@
 
               {%- assign vendor_array = vendors_list | split: ',' | uniq -%}
               {%- assign vendor_count = vendor_array | size-%} 
-
 
                 <div class="totals">
                   <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
