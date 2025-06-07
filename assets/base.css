@@ -3821,5 +3821,6 @@ details-disclosure > details {
 @media screen and (min-width: 1440px) {
   #MainContent {
     margin: 0 auto;
+    width: 1200px;
   }
 }

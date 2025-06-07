@@ -50,4 +50,16 @@
     grid-template-columns: repeat(2, 1fr);
     grid-column-gap: 2rem;
   }
+
+
+}
+
+@media screen and (min-width: 768px) {
+    .contact-us-form-wrapper {
+        max-width: 990px;
+        margin: 0 auto;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
 }

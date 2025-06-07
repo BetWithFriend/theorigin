@@ -70,6 +70,11 @@
     flex-direction: column;
     width: 163px;
     height: 184px;
+    cursor: pointer;
+}
+
+.vendors-collection-vendor-logo-wrapper:hover {
+    background-color: #f3f0eb;
 }
 
 .vendors-collection-vendor-logo-wrapper {
@@ -105,4 +110,15 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+}
+
+@media screen and (min-width: 769px) {
+    .vendors-collection-vendor-logo-wrapper {
+        width: 100%;
+    }
+    
+    .vendors-collection-vendor-item {
+        width: auto;
+        flex: 1 1 0;
+    }
 }
