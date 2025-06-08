@@ -52,7 +52,6 @@
       <div class="cart__items" id="main-cart-items">
         <div class="js-contents">
           {%- if cart != empty -%}
-            <script> console.log('boom', {{cart.items | json}} )</script>
             {%- assign vendors = "" -%}
             {%- for item in cart.items -%}
               {%- unless vendors contains item.vendor -%}
@@ -73,7 +72,8 @@
                 
                 {%- if vendor_has_items -%}
                   <div class="cart-item-wrapper"> 
-                    <div class="cart-item-vendor">{{ vendor }}</div> 
+                    <script>console.log('boom', {{ item.metafields | json }})</script>
+                    <div class="cart-item-vendor">{{ vendor |  upcase }}</div> 
                     {%- for item in cart.items -%}
                       {%- if item.vendor == vendor -%}
                         <div class="cart-item" id="CartItem-{{ item.index | plus: 1 }}">
@@ -115,7 +115,7 @@
                                 {%- assign property_first_char = property.first | slice: 0 -%}
                                 {%- if property.last != blank and property_first_char != '_' -%}
                                   {%- if first_property_printed -%}
-                                  / 
+                                  <div class="product-option">/</div> 
                                   {%- endif -%}
                                   <div class="product-option">
                                     {{ property.last }}
@@ -345,8 +345,8 @@
                               </strong>
                             </div>
                           {%- else -%}
-                            <div class="product-option" dir="ltr">
-                              {{ item.original_price | money }}
+                            <div class="product-option cart-price-item-option" dir="ltr">
+                             {{ item.original_price | times: item.quantity | money }}
                             </div>
                           {%- endif -%}
                           

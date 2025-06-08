@@ -278,16 +278,23 @@ class CartItems extends HTMLElement {
           updatedCartFooter.classList.toggle('is-empty', parsedState.item_count === 0);
         }
 
-        // Handle focus and messaging
-        const updatedValue = parsedState.items[line - 1] ? parsedState.items[line - 1].quantity : undefined;
+        // Handle focus and messaging - FIXED SECTION
         let message = '';
 
-        if (parsedState.item_count !== undefined && quantityElement && updatedValue !== parseInt(quantityElement.value)) {
-          if (typeof updatedValue === 'undefined' || updatedValue === 0) {
-            message = window.cartStrings.error;
-          } else {
-            message = window.cartStrings.quantityError.replace('[quantity]', updatedValue);
+        // Only try to access the item if it still exists and we're not removing it
+        if (quantity > 0 && parsedState.items && parsedState.items[line - 1]) {
+          const updatedValue = parsedState.items[line - 1].quantity;
+
+          if (quantityElement && updatedValue !== parseInt(quantityElement.value)) {
+            if (typeof updatedValue === 'undefined' || updatedValue === 0) {
+              message = window.cartStrings.error;
+            } else {
+              message = window.cartStrings.quantityError.replace('[quantity]', updatedValue);
+            }
           }
+        } else if (quantity === 0) {
+          // Item was removed successfully - no error message needed
+          message = '';
         }
 
         this.updateLiveRegions(line, message);
