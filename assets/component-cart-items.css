@@ -183,14 +183,15 @@ cart-items .title-wrapper-with-link {
   align-items: end;
   /* flex-direction: column; */
   justify-content: center;
+  white-space: nowrap;
   /* font-size: 1.4rem;
   word-break: break-word;
   line-height: calc(1 + 0.5 / var(--font-body-scale)); */
 }
 
-.product-option.cart-price-item-option {
+/* .product-option.cart-price-item-option {
   margin-right: 26px;
-}
+} */
 
 .cart-item cart-remove-button {
   display: flex;
