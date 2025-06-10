@@ -66,8 +66,6 @@
           class="product-variant-id"
         >
 
-          <!-- ADD YOUR CUSTOM DATA -->
-           <script>console.log('buy-buttons >>', '{{ product_weight }}')</script>
           <input
           type="hidden"
           name="properties[Weight]"
@@ -81,6 +79,19 @@
           id="properties_grind"
           value="{{ product_grind }}"
         >
+        <div class="product-variants-wrapper">
+                  {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
+                  
+                  {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
+                  {% render 'variant-dropdown' , grind_size: grind_size_array %}
+                  
+                  {% assign weights_array = vendor.allowed_weights %}
+                  {% render 'dropdown-weights' , weights: weights_array %}
+        {% render 'quantity-counter', product: product, field_id: 'quantity' %}        
+                 </div>
+
+        
+          
 
         {%- if gift_card_recipient_feature_active -%}
           {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}

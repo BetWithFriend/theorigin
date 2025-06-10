@@ -213,32 +213,16 @@
                     price_class: 'price--large'
                   -%}
                 </div>
-                <div class="product-variants-wrapper">
-                {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
-
-
-                {% comment %} {% assign weights = product.metafields.custom.weight %} {% endcomment %}
-                 {% comment %} {% assign grind_size = product.metafields.custom.origin_grind_size %} {% endcomment %}
-
+                {% comment %} <div class="product-variants-wrapper">
+                  {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
+                  
+                  {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
+                  {% render 'variant-dropdown' , grind_size: grind_size_array %}
+                  
+                  {% assign weights_array = vendor.allowed_weights %}
+                  {% render 'dropdown-weights' , weights: weights_array %}
                 
-                {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
-                {% render 'variant-dropdown' , grind_size: grind_size_array %}
-                
-                {% assign weights_array = vendor.allowed_weights %}
-                {% render 'dropdown-weights' , weights: weights_array %}
-                
-                {% assign num_to_order = 1 %}
-                {% comment %} {% render 'quantity-counter' , num_to_order: num_to_order %} {% endcomment %}
-                        <!-- Add quantity input -->
-                {% comment %} <div class="product-form__input product-form__quantity"> {% endcomment %}
-                  {% render 'quantity-counter', product: product, field_id: 'quantity' %}
-                {% comment %} </div> {% endcomment %}
-
-
-                {% comment %} {% assign quantity = product.metafields.custom.product_quantity %} {% endcomment %}
-                {% comment %} {% assign quantity_array = vendor.quantity %}
-                {% render 'dropdown-quantity' , quantity: quantity_array %} {% endcomment %}
-              </div>
+                 </div> {% endcomment %}
                
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
@@ -590,16 +574,15 @@
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
               {%- when 'buy_buttons' -%}
-                <script>console.log("main-product >>", {{ product_quantity }})</script>
                 {%- render 'buy-buttons',
                   block: block,
                   product: product,
                   product_form_id: product_form_id,
                   section_id: section.id,
                   show_pickup_availability: true,
-                  product_weight: weights_array.value[0].value,
-                  product_grind: grind_size_array[0],
-                  product_quantity: product_quantity
+                  product_weight: weights_array,
+                  product_grind: grind_size_array,
+                  vendor: vendor
                 -%}
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}

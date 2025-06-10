@@ -81,7 +81,7 @@
           </header-menu>
         </li>
         {%- else -%}
-          {%- if link.url != "/" -%}
+          {% comment %} {%- if link.url != "/" -%} {% endcomment %}
             <li>
             <a
               id="HeaderMenu-{{ link.handle }}"
@@ -100,7 +100,7 @@
               </span>
             </a>
           </li>
-          {%- endif -%}
+          {% comment %} {%- endif -%} {% endcomment %}
         {%- endif -%}
     {%- endfor -%}
   </ul>
