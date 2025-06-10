@@ -56,6 +56,10 @@ cart-drawer.is-empty .drawer__header {
   display: none;
 }
 
+cart-drawer.is-empty .cart-page-title-divider {
+  display: none;
+}
+
 cart-drawer:not(.is-empty) .cart-drawer__warnings,
 cart-drawer:not(.is-empty) .cart-drawer__collection {
   display: none;

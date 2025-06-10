@@ -303,7 +303,7 @@ class CartItems extends HTMLElement {
         if (parsedState.item_count === 0) {
           // Cart is empty - focus on continue shopping button
           if (cartDrawerWrapper) {
-            trapFocus(cartDrawerWrapper.querySelector('.drawer__inner-empty'), cartDrawerWrapper.querySelector('a'));
+            trapFocus(cartDrawerWrapper.querySelector('.drawer__inner-empty'), cartDrawerWrapper.querySelector('button'));
           } else {
             const continueShoppingButton = document.querySelector('.cart__warnings .button');
             if (continueShoppingButton) continueShoppingButton.focus();

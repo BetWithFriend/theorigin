@@ -117,7 +117,7 @@ cart-items .title-wrapper-with-link {
   line-height: 25px;
   font-weight: 700;
   color: #1C201D;
-  /* margin-bottom: 0.5rem; */
+  margin-bottom: 16px;
 }
 
 .cart-total-delivery-wrapper {
@@ -126,7 +126,7 @@ cart-items .title-wrapper-with-link {
   align-items: center;
   width: 100%;
   text-align: right;
-  padding: 16px;
+  padding: 16px 0;
 }
 
 .cart-total-delivery {

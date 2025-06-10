@@ -33,6 +33,10 @@ cart-items.is-empty .title-wrapper-with-link,
   display: block;
 }
 
+.cart-empty-img {
+  width: 40px
+}
+
 .cart__warnings {
   display: none;
   text-align: center;
@@ -40,7 +44,26 @@ cart-items.is-empty .title-wrapper-with-link,
 }
 
 .cart__empty-text {
-  margin: 4.5rem 0 2rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 16px;
+  line-height: 25px;
+  font-weight: 700;
+  margin-top: 16px;
+}
+
+.empty-cart-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: noto-sans, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #E3E0DA;
+  background-color: #1C201D;
+  border-radius: 15px;
+  margin: 16px auto;
+  height: 60px;
+  width: 305px;
 }
 
 .cart__contents>*+* {

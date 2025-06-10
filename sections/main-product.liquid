@@ -228,7 +228,11 @@
                 {% render 'dropdown-weights' , weights: weights_array %}
                 
                 {% assign num_to_order = 1 %}
-                {% render 'quantity-counter' , num_to_order: num_to_order %}
+                {% comment %} {% render 'quantity-counter' , num_to_order: num_to_order %} {% endcomment %}
+                        <!-- Add quantity input -->
+                {% comment %} <div class="product-form__input product-form__quantity"> {% endcomment %}
+                  {% render 'quantity-counter', product: product, field_id: 'quantity' %}
+                {% comment %} </div> {% endcomment %}
 
 
                 {% comment %} {% assign quantity = product.metafields.custom.product_quantity %} {% endcomment %}
@@ -586,7 +590,7 @@
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
               {%- when 'buy_buttons' -%}
-                <script>console.log("main-product >>", {{ weights_array.value[0].value }})</script>
+                <script>console.log("main-product >>", {{ product_quantity }})</script>
                 {%- render 'buy-buttons',
                   block: block,
                   product: product,
@@ -595,7 +599,7 @@
                   show_pickup_availability: true,
                   product_weight: weights_array.value[0].value,
                   product_grind: grind_size_array[0],
-                  product_quantity: 1
+                  product_quantity: product_quantity
                 -%}
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
