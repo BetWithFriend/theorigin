@@ -61,6 +61,7 @@
       align-items: center;
       justify-content: center;
       gap: 24px;
+      margin-bottom: 24px;
     }
 
     #product-dropdowns-form-wrapper {
@@ -213,8 +214,9 @@
                     price_class: 'price--large'
                   -%}
                 </div>
-                {% comment %} <div class="product-variants-wrapper">
                 {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
+                {% comment %} <div class="product-variants-wrapper">
+                
 
                 {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
                 {% render 'variant-dropdown' , grind_size: grind_size_array %}

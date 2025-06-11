@@ -70,8 +70,8 @@
         </div>
         <div class="dropdown-item">
           <label class="dropdown-icons">
-            <input class="dropdown-icons-input"  type="checkbox" name="Moka" value="Moka">
-            <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Moka.png' | asset_url }}" alt="Espresso Icon" /> 
+            <input class="dropdown-icons-input"  type="checkbox" name="MokaPot" value="MokaPot">
+            <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Moka.png' | asset_url }}" alt="MokaPot Icon" /> 
             <span>מקינטה</span>
           </label>
         </div>
@@ -84,8 +84,8 @@
         </div>
         <div class="dropdown-item">
           <label class="dropdown-icons">
-            <input class="dropdown-icons-input"  type="checkbox" name="Chemex" value="Chemex">
-            <img class="dropdown-icon-img " src="{{  'dropdown-brew-Chemex.png' | asset_url }}" alt="Moka Icon" />
+            <input class="dropdown-icons-input"  type="checkbox" name="Aeropress" value="Aeropress">
+            <img class="dropdown-icon-img " src="{{  'dropdown-brew-Chemex.png' | asset_url }}" alt="Aeropress Icon" />
             <span>חליטה</span>
           </label>
         </div>
@@ -249,31 +249,49 @@
 </style>
 
 <script>
-  function toggleDropdown(menuType) {
-    // Close the opened menu when selection second menu
-    const menuTaste = document.getElementById('dropdownMenu-taste')
-    const menuPrep = document.getElementById('dropdownMenu-prep')
-    if (menuType === 'taste') { 
-      menuPrep.style.display = 'none'
-    } else {
-      menuTaste.style.display = 'none'
-    }
-    const menu = document.getElementById('dropdownMenu-' + menuType);
-    menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-    menu.style.flexDirection = menu.style.display === 'flex' ? 'column' : 'flex';
-    menu.style.alignItems = menu.style.display === 'flex' ? 'center' : 'flex';
-    menu.style.justifyContent = menu.style.display === 'flex' ? 'end' : 'flex';
-    menu.style.gpa = menu.style.display === '8px' ? 'end' : '8px';
-    menu.style.margin = menu.style.display === '0px 10px' ? 'end' : '0px 10px';
-    menu.style.paddingTop = menu.style.display === 'flex' ? '16px' : '0px';
+// Function to update the URL with selected filters
+function updateUrlWithFilters() {
+  const tasteChecked = Array.from(document.querySelectorAll('#dropdownMenu-taste .dropdown-icons-input:checked'))
+    .map(checkbox => checkbox.value);
+  const prepChecked = Array.from(document.querySelectorAll('#dropdownMenu-prep .dropdown-icons-input:checked'))
+    .map(checkbox => checkbox.value);
+
+  const params = new URLSearchParams(window.location.search);
+  const page = params.get('page') || 1;
+
+  if (tasteChecked.length > 0) {
+    params.set('taste', tasteChecked.join(','));
+  } else {
+    params.delete('taste');
   }
 
-  function filterByTag() {
-    // Gather checked checkboxes from both dropdowns
-    const tasteChecked = Array.from(document.querySelectorAll('#dropdownMenu-taste .dropdown-icons-input:checked'))
-      .map(checkbox => checkbox.value);
-    const prepChecked = Array.from(document.querySelectorAll('#dropdownMenu-prep .dropdown-icons-input:checked'))
-      .map(checkbox => checkbox.value);
+  if (prepChecked.length > 0) {
+    params.set('prep', prepChecked.join(','));
+  } else {
+    params.delete('prep');
+  }
+
+  if (page > 1) {
+    params.set('page', page);
+  } else {
+    params.delete('page');
+  }
+
+  // Update the URL without reloading the page, only changing the history state
+  // window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
+
+  // Instead of replacing state, we will just update the pagination links
+  // The actual URL update will happen when the user clicks a pagination link
+  updatePaginationLinks(params.toString());
+}
+
+// Modify filterByTag to call updateUrlWithFilters
+function filterByTag() {
+  // Gather checked checkboxes from both dropdowns
+  const tasteChecked = Array.from(document.querySelectorAll('#dropdownMenu-taste .dropdown-icons-input:checked'))
+    .map(checkbox => checkbox.value);
+  const prepChecked = Array.from(document.querySelectorAll('#dropdownMenu-prep .dropdown-icons-input:checked'))
+    .map(checkbox => checkbox.value);
 
   document.querySelectorAll('.grid__item').forEach(card => {
     const prepMethods = card.dataset.prepMethods;
@@ -291,68 +309,154 @@
     // AND logic between taste and prep
     const show = tasteMatch && prepMatch;
     card.style.display = show ? 'block' : 'none';
-
-    // Close the menu after selecting
-    const menuTaste = document.getElementById('dropdownMenu-taste');
-    const menuPrep = document.getElementById('dropdownMenu-prep');
-    menuPrep.style.display = 'none';
-    menuTaste.style.display = 'none';
   });
+
+  // Close the menu after selecting
+  const menuTaste = document.getElementById('dropdownMenu-taste');
+  const menuPrep = document.getElementById('dropdownMenu-prep');
+  menuPrep.style.display = 'none';
+  menuTaste.style.display = 'none';
+
   updateDropdownButtonText('taste');
   updateDropdownButtonText('prep');
+
+  // Call the function to update the URL parameters
+  updateUrlWithFilters();
 }
 
-// document.querySelectorAll('.dropdown-icons-input').forEach(input => {
-//   input.addEventListener('change', () => {
-//     updateDropdownButtonText('taste');
-//     updateDropdownButtonText('prep');
-//   });
-// });
+// Existing functions: toggleDropdown, updateDropdownButtonText, filterByTag, updateUrlWithFilters
+// ... (keep these exactly as in the previous successful response) ...
+
+// Function to update pagination links with current filter parameters
+function updatePaginationLinks(filterParamsString) {
+  // Parse the filterParamsString into a URLSearchParams object for the current active filters
+  const activeFilterParams = new URLSearchParams(filterParamsString);
+
+  document.querySelectorAll('.pagination__item').forEach(link => {
+    const originalHref = link.getAttribute('href');
+    if (!originalHref) return; // Skip if no href
+
+    const originalUrl = new URL(originalHref, window.location.origin);
+    const linkSpecificParams = new URLSearchParams(originalUrl.search); // Params from this specific pagination link
+
+    // 1. Get the page number that THIS pagination link is *supposed* to go to.
+    // This is the most crucial part.
+    let targetPage = linkSpecificParams.get('page');
+
+    // If the original link for page 1 doesn't have a 'page' param, treat it as 1.
+    if (!targetPage && originalUrl.pathname === window.location.pathname) {
+        // This check ensures we're on the same base collection path
+        // and if there's no page param, it's implicitly page 1.
+        targetPage = '1';
+    }
+
+
+    // 2. Clear all existing filter parameters from this link's specific params
+    linkSpecificParams.delete('taste');
+    linkSpecificParams.delete('prep');
+    // Also remove any existing 'page' parameter, we'll re-add it carefully
+    linkSpecificParams.delete('page');
+
+
+    // 3. Add the *currently active filters* to this link's specific parameters
+    activeFilterParams.forEach((value, key) => {
+      linkSpecificParams.set(key, value);
+    });
+
+
+    // 4. Re-add the *correct page number for THIS link* to its parameters.
+    // Only add 'page' if it's not page 1 AND we need it to differentiate.
+    // If targetPage is '1' and there are no active filters, we want a clean URL.
+    const hasActiveFilters = activeFilterParams.get('taste') || activeFilterParams.get('prep');
+
+    if (targetPage && targetPage !== '1') {
+        linkSpecificParams.set('page', targetPage);
+    } else if (targetPage === '1' && hasActiveFilters) {
+        // If it's page 1, but filters are active, we must keep 'page=1' in the URL
+        // to ensure the filters persist when navigating back to the first page.
+        linkSpecificParams.set('page', '1');
+    }
+    // If targetPage is '1' and no active filters, linkParams will naturally not have 'page', which is desired.
+
+
+    // 5. Construct the final href for this link
+    originalUrl.search = linkSpecificParams.toString();
+    link.setAttribute('href', originalUrl.pathname + originalUrl.search + (originalUrl.hash || ''));
+  });
+}
+
+// ... (Rest of your script: DOMContentLoaded, toggleDropdown, etc. remain unchanged from previous good version)
+
+// Initialize filters and update pagination links on page load
+document.addEventListener('DOMContentLoaded', () => {
+  // Parse URL parameters on page load to apply filters
+  const params = new URLSearchParams(window.location.search);
+  const tasteParam = params.get('taste');
+  const prepParam = params.get('prep');
+
+  if (tasteParam) {
+    const tasteValues = tasteParam.split(',');
+    tasteValues.forEach(value => {
+      const checkbox = document.querySelector(`#dropdownMenu-taste .dropdown-icons-input[value="${value}"]`);
+      if (checkbox) checkbox.checked = true;
+    });
+  }
+
+  if (prepParam) {
+    const prepValues = prepParam.split(',');
+    prepValues.forEach(value => {
+      const checkbox = document.querySelector(`#dropdownMenu-prep .dropdown-icons-input[value="${value}"]`);
+      if (checkbox) checkbox.checked = true;
+    });
+  }
+
+  // After setting checkboxes, apply the filters and update button text
+  filterByTag(); // This will also call updateUrlWithFilters
+});
+
+// Existing toggleDropdown and updateDropdownButtonText functions remain the same
+function toggleDropdown(menuType) {
+  const menuTaste = document.getElementById('dropdownMenu-taste')
+  const menuPrep = document.getElementById('dropdownMenu-prep')
+  if (menuType === 'taste') {
+    menuPrep.style.display = 'none'
+  } else {
+    menuTaste.style.display = 'none'
+  }
+  const menu = document.getElementById('dropdownMenu-' + menuType);
+  menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+  menu.style.flexDirection = menu.style.display === 'flex' ? 'column' : 'flex';
+  menu.style.alignItems = menu.style.display === 'flex' ? 'center' : 'flex';
+  menu.style.justifyContent = menu.style.display === 'flex' ? 'end' : 'flex';
+  menu.style.gpa = menu.style.display === '8px' ? 'end' : '8px';
+  menu.style.margin = menu.style.display === '0px 10px' ? 'end' : '0px 10px';
+  menu.style.paddingTop = menu.style.display === 'flex' ? '16px' : '0px';
+}
 
 function updateDropdownButtonText(type) {
   const selectedCheckboxes = document.querySelectorAll(`#dropdownMenu-${type} .dropdown-icons-input:checked`);
   const button = document.querySelector(`.dropdown-menu-btn[data-type="${type}"]`);
-  
+
   if (selectedCheckboxes.length > 0) {
     button.textContent = 'בחר';
   } else {
     button.textContent = `הצג הכל`;
   }
-}
 
-function updateDropdownButtonText(type) {
-  const selectedCheckboxes = document.querySelectorAll(`#dropdownMenu-${type} .dropdown-icons-input:checked`);
-  const button = document.querySelector(`.dropdown-menu-btn[data-type="${type}"]`);
-  
-  if (selectedCheckboxes.length > 0) {
-    button.textContent = 'בחר';
-  } else {
-    button.textContent = `הצג הכל`;
-  }
-
-  // Now update the small icons/colors on the main button
   const selectedIconsContainer = document.getElementById(`selected-icons-${type}`);
-  selectedIconsContainer.innerHTML = ''; // Clear previous
-  const selectIconsParent = document.getElementById(`dropdown-button-${type}`);
+  selectedIconsContainer.innerHTML = '';
 
   selectedCheckboxes.forEach((checkbox, index) => {
     if (index >= 3) return;
-    {% comment %} if (index >= 2) {
-      selectIconsParent.style.width = '40%';
-      return; // Max 3 icons
-    }
-    selectIconsParent.style.width = '30%'; {% endcomment %}
 
     const label = checkbox.closest('label');
     if (type === 'taste') {
-      // Clone the color-circle
       const colorCircle = label.querySelector('.color-circle');
       if (colorCircle) {
         const clone = colorCircle.cloneNode(true);
         selectedIconsContainer.appendChild(clone);
       }
     } else if (type === 'prep') {
-      // Clone the icon img
       const iconImg = label.querySelector('.dropdown-icon-img');
       if (iconImg) {
         const clone = iconImg.cloneNode(true);
