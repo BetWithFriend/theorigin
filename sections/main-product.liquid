@@ -214,13 +214,13 @@
                   -%}
                 </div>
                 {% comment %} <div class="product-variants-wrapper">
-                  {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
-                  
-                  {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
-                  {% render 'variant-dropdown' , grind_size: grind_size_array %}
-                  
-                  {% assign weights_array = vendor.allowed_weights %}
-                  {% render 'dropdown-weights' , weights: weights_array %}
+                {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
+
+                {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
+                {% render 'variant-dropdown' , grind_size: grind_size_array %}
+                
+                {% assign weights_array = vendor.allowed_weights %}
+                {% render 'dropdown-weights' , weights: weights_array %}
                 
                  </div> {% endcomment %}
                
@@ -574,6 +574,7 @@
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
               {%- when 'buy_buttons' -%}
+                <script>console.log("main-product >>", {{ weights_array.value[0].value }})</script>
                 {%- render 'buy-buttons',
                   block: block,
                   product: product,
