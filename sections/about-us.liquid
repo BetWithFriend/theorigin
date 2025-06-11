@@ -1,4 +1,11 @@
 {{ 'about-us.css' | asset_url | stylesheet_tag }}
+
+<script>
+    analytics.trackScreenView('About Us', {
+        page_load_time: performance.now()
+    });
+</script>
+
 <div class="about-us-wrapper">
     <div class="about-us-title">מי אנחנו?</div>
     <div class="about-us-image">

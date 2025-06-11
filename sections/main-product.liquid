@@ -850,6 +850,8 @@
 
 {% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description %}
 
+<script>console.log('boom', {{ vendor | json }})</script>
+
 {%  render 'product-description' | 
     product_description: product.description,
     brew_images: product.metafields.custom.product_brew_image,

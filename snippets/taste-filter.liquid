@@ -261,7 +261,7 @@ function updateUrlWithFilters() {
 
   if (tasteChecked.length > 0) {
     params.set('taste', tasteChecked.join(','));
-  } else {
+    } else {
     params.delete('taste');
   }
 
@@ -286,12 +286,12 @@ function updateUrlWithFilters() {
 }
 
 // Modify filterByTag to call updateUrlWithFilters
-function filterByTag() {
-  // Gather checked checkboxes from both dropdowns
-  const tasteChecked = Array.from(document.querySelectorAll('#dropdownMenu-taste .dropdown-icons-input:checked'))
-    .map(checkbox => checkbox.value);
-  const prepChecked = Array.from(document.querySelectorAll('#dropdownMenu-prep .dropdown-icons-input:checked'))
-    .map(checkbox => checkbox.value);
+  function filterByTag() {
+    // Gather checked checkboxes from both dropdowns
+    const tasteChecked = Array.from(document.querySelectorAll('#dropdownMenu-taste .dropdown-icons-input:checked'))
+      .map(checkbox => checkbox.value);
+    const prepChecked = Array.from(document.querySelectorAll('#dropdownMenu-prep .dropdown-icons-input:checked'))
+      .map(checkbox => checkbox.value);
 
   document.querySelectorAll('.grid__item').forEach(card => {
     const prepMethods = card.dataset.prepMethods;
@@ -311,11 +311,11 @@ function filterByTag() {
     card.style.display = show ? 'block' : 'none';
   });
 
-  // Close the menu after selecting
-  const menuTaste = document.getElementById('dropdownMenu-taste');
-  const menuPrep = document.getElementById('dropdownMenu-prep');
-  menuPrep.style.display = 'none';
-  menuTaste.style.display = 'none';
+    // Close the menu after selecting
+    const menuTaste = document.getElementById('dropdownMenu-taste');
+    const menuPrep = document.getElementById('dropdownMenu-prep');
+    menuPrep.style.display = 'none';
+    menuTaste.style.display = 'none';
 
   updateDropdownButtonText('taste');
   updateDropdownButtonText('prep');
@@ -436,7 +436,7 @@ function toggleDropdown(menuType) {
 function updateDropdownButtonText(type) {
   const selectedCheckboxes = document.querySelectorAll(`#dropdownMenu-${type} .dropdown-icons-input:checked`);
   const button = document.querySelector(`.dropdown-menu-btn[data-type="${type}"]`);
-
+  
   if (selectedCheckboxes.length > 0) {
     button.textContent = 'בחר';
   } else {

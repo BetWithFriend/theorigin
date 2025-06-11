@@ -14,6 +14,12 @@
   }
 {%- endstyle -%}
 
+<script>
+    analytics.trackScreenView('Contact Form', {
+        page_load_time: performance.now()
+    });
+</script>
+
 <div class="color-{{ section.settings.color_scheme }} gradient contact-us-form-wrapper">
   <div class="contact page-width page-width--narrow section-{{ section.id }}-padding">
     <h2 class="title title-wrapper--no-top-margin inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">

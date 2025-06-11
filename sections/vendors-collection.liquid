@@ -1,5 +1,11 @@
 {{ 'vendors-collection.css' | asset_url | stylesheet_tag }}
 
+<script>
+    analytics.trackScreenView('Vendors List', {
+        page_load_time: performance.now()
+    });
+</script>
+
 <div class="vendors-collection-wrapper">
     <div class="vendors-collection-title-wrapper" dir="rtl">
         <div class="vendors-collection-title-main">הקפה שלנו</div>
