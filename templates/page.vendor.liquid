@@ -10,6 +10,13 @@
 {% if selected_vendor %}
   {% render 'breadcrumbs' %}
 
+  <script>
+    analytics.track('Roaster Page', {
+        page_load_time: performance.now(),
+        'Roaster Name': '{{ selected_vendor.vendor_name }}'
+    });
+</script>
+
 <div class="vendor-page-main-wrapper">
 
   <video id="vendorVideo" controls class="vendor-page-vendor-video" poster="{{ selected_vendor.vendor_video_poster | file_url }}">

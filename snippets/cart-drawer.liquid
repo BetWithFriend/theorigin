@@ -9,6 +9,7 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
+{{ 'cart-shipping.js' | asset_url | script_tag }}</script>
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
 <style>
@@ -540,7 +541,10 @@
           <div class="totals" role="status">
             <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
              {%- assign vendor_fee_total = vendor_count | times: 3500 -%}
+
               {%- assign adjusted_total = cart.total_price | plus: vendor_fee_total -%}
+
+                <script>console.log('boom', {{ cart | json }})</script>
             <p class="totals__total-value">{{ adjusted_total | money_with_currency }}</p>
           </div>
 
@@ -608,3 +612,13 @@
     </div>
   </div>
 </cart-drawer>
+
+<script>
+  const checkoutButton = document.getElementById('CartDrawer-Checkout');
+  checkoutButton.addEventListener('click', function(event) {
+    analytics.trackClick('Cart Checkout', {
+        'Total': {{ cart.total_price }},
+    });
+  });
+
+</script>

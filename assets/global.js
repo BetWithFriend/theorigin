@@ -578,6 +578,9 @@ class HeaderDrawer extends MenuDrawer {
     window.addEventListener('resize', this.onResize);
     trapFocus(this.mainDetailsToggle, summaryElement);
     document.body.classList.add(`overflow-hidden-${this.dataset.breakpoint}`);
+    analytics.trackClick('Menu', {
+      'Action': 'Open',
+    });
   }
 
   closeMenuDrawer(event, elementToFocus) {
@@ -585,6 +588,9 @@ class HeaderDrawer extends MenuDrawer {
     super.closeMenuDrawer(event, elementToFocus);
     this.header.classList.remove('menu-open');
     window.removeEventListener('resize', this.onResize);
+    analytics.trackClick('Menu', {
+      'Action': 'Close',
+    });
   }
 
   onResize = () => {

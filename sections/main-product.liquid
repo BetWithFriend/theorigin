@@ -1,4 +1,90 @@
 <style>
+  .product-info-top-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: -70px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .product-info-right-side {
+    padding-right: 24px;
+    padding-top: 24px;
+    flex: 1;
+    flex-basis: 45%;
+  }
+
+  .product-info-left-side {
+    width: 100%;
+    height: 343px;
+    flex: 1;
+    flex-basis: 55%;
+  }
+
+  .price .price-item {
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .grid__item {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+  }
+
+  .selection-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    gap: 4px;
+    font-family: 'Noto Sans', sans-serif;
+    flex-direction: row-reverse;
+    line-height: 30px;
+    font-size: 16px;
+    
+    position: absolute;
+    top: 180px;
+  }
+
+  .selection-text {
+    font-size: 16px;
+    color: #333;
+  }
+
+  .selection-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .product-main-price-wrapper {
+    position: absolute;
+    top: 200px;
+  }
+
+  .product__media-wrapper {
+    margin-top: -30px;
+    max-width: 250px;
+  }
+
+  .product.grid {
+    position: relative;
+    z-index:2;
+  }
+
+  .product-extra-details-container {
+    display: none;
+  }
+
+  .page-width-product-page {
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+  }
+
   @media screen and (min-width: 769px) {
     #main-product-container {
       display: grid;
@@ -11,7 +97,8 @@
       grid-column-start: 1;
       grid-row-start: 1;
       margin-bottom: -10px;
-      border-radius: 16px 16px 0 0;
+      max-width: 530px;
+      /*border-radius: 16px 16px 0 0;*/
     }
 
     #product-description-wrapper {
@@ -36,11 +123,15 @@
 
     .product-details-vendor-details-wrapper {
       margin: 0;
-      grid-column-start: 1;
-      grid-row-start: 2;
-      border-radius: 0 0 16px 16px;
+      grid-column-start: 2;
+      grid-row-start: 3;
+      /*border-radius: 0 0 16px 16px;*/
       margin-bottom: 24px;
       padding-bottom: 24px;
+    }
+
+    #MainProduct-{{ section.id }} {
+      padding-bottom: 0;
     }
 
     .product-collection-wrapper {
@@ -68,7 +159,67 @@
       max-width: 100%;
       width: 100%;
       padding: 0;
-      padding-top: 24px;
+      /*padding-top: 24px;*/
+      margin-top: 110px;
+    }
+
+    #product-dropdowns-form-wrapper form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .selection-wrapper {
+      top: 210px;
+    }
+
+    .product-main-price-wrapper {
+      top: 240px;
+    }
+
+    .product-extra-details-container {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      background-color: #F4F3F0;
+      padding: 24px;
+    }
+
+    .product-extra-details-container-inner {
+      width: 80%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      flex-direction: row;
+      gap: 24px;
+    }
+
+    .product-extra-detail-item {
+      flex: 1; /* flex-1 */
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      height: 100%;
+      font-size: 16px;
+    }
+
+    .product-extra-detail-item p{
+      margin: 0;
+      line-height: normal;
+    }
+
+    /* handle sticky behaviour */
+    .is-sticky {
+        position: fixed;
+        top: 20px; /* Pinned 20px from the top */
+    }
+    
+    .is-at-bottom {
+        position: absolute;
     }
   }
 
@@ -79,6 +230,8 @@
     }
   }
 </style>
+
+{% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
 
 <div id="main-product-container">
 <product-info
@@ -156,27 +309,57 @@
   {%- endif -%}
 
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
-  <div class="page-width">
-    <div class="product-title">{{ product.title }}</div>
-    <div class="product-source-wrapper">
-      {% for pSource in product.metafields.custom.coffee_source.value %}
-        <div class="product-source">{{ pSource|  append: ' ' }}</div>
-      {% endfor %}
-    </div>
-    <div class="product-main-price-wrapper">
-      {% render 'price' %}
-    </div>
-     <div class="background-stripe"> </div>
-    <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
-      <div class="grid__item product__media-wrapper">
-        {% render 'product-media-gallery', variant_images: variant_images %}
+  <div class="page-width-product-page">
+    <div class="product-info-top-wrapper">
+      <div class="product-info-right-side">
+        <div class="product-vendor-title">{{ vendor.vendor_short_name | upcase }}</div>
+        <div class="product-title">{{ product.title }}</div>
+        <div class="product-source-wrapper">
+          {% for pSource in product.metafields.custom.coffee_source.value %}
+            <div class="product-source">{{ pSource|  append: ' ' }}</div>
+          {% endfor %}
+        </div>
+        <div class="selection-wrapper">        
+
+        <!-- Conditional Color -->
+        {% case product.metafields.custom.coffee_taste %}
+          {% when 'Fruity' %}
+          <span>פירותי</span>
+            <span class="selection-color" style="background-color: #FFDF70;" aria-label="Yellow Indicator"></span>
+          {% when 'Chocolate' %}
+          <span>שוקולדי</span>
+            <span class="selection-color" style="background-color: #8B4513;" aria-label="Brown Indicator"></span>
+          {% when 'Sweet-Chocolate' %}
+          <span>מתוק שוקולדי</span>
+            <span class="selection-color" style="background-color: #C4823E;" aria-label="Orange Indicator"></span>
+          {% when 'Sweet' %}
+          <span>מתוק מאוזן</span>
+            <span class="selection-color" style="background-color: #D60540;" aria-label="Red Indicator"></span>
+          {% when 'Fruity-Sweet' %}
+          <span>פירותי מתוק</span>
+            <span class="selection-color" style="background-color: #FF974A;" aria-label="Orange Indicator"></span>
+        {% endcase %}
+
+        </div>
+        <div class="product-main-price-wrapper">{% render 'price' %}</div>
       </div>
+      <div class="product-info-left-side">
+        <div class="grid__item product__media-wrapper">
+          {% render 'product-media-gallery', variant_images: variant_images %}
+        </div>
+      </div>
+    </div>
+    <div class="background-stripe"> </div>
+    <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
+
 
       {% comment %} Render the taste scale {% endcomment %}
+       <!--
       {% if product.tags.size > 0 %}
       {% assign product_taste = product.metafields.custom.coffee_taste %}
       {% render 'taste-scale', taste: product_taste %}
       {% endif %}
+    -->
 
    <div id="product-dropdowns-form-wrapper" class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section dir="rtl"
@@ -214,7 +397,7 @@
                     price_class: 'price--large'
                   -%}
                 </div>
-                {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
+                
                 {% comment %} <div class="product-variants-wrapper">
                 
 
@@ -838,6 +1021,27 @@
       {{ product | structured_data }}
     </script>
   </div>
+
+  <div class="product-extra-details-container">
+    <div class="product-extra-details-container-inner">
+      <div class="product-extra-detail-item">
+        <img src="{{ 'icon-available.png' | asset_url }}" width="49" height="49">
+        <p>תמיד זמינים</p>
+      </div>
+      <div class="product-extra-detail-item">
+        <img src="{{ 'icon-delivery.png' | asset_url }}" width="49" height="49">
+        <p>משלוח מהיר</p>
+      </div>
+      <div class="product-extra-detail-item">
+        <img src="{{ 'icon-fresh.png' | asset_url }}" width="49" height="49">
+        <p>תמיד קפה טרי</p>
+      </div>
+      <div class="product-extra-detail-item">
+        <img src="{{ 'icon-small-biz.png' | asset_url }}" width="49" height="49">
+        <p>עסקים קטנים</p>
+      </div>
+    </div>
+  </div>
 </product-info>
 
 {% assign coffee_details = product.metafields.custom.product_info.value %}
@@ -850,7 +1054,70 @@
 
 {% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description %}
 
-<script>console.log('boom', {{ vendor | json }})</script>
+<script>
+    analytics.trackScreenView('Product Page', {
+        page_load_time: performance.now(),
+        'Product ID': '{{ product.id }}',
+        'Product Name': '{{ product.title }}',
+        'Vendor Name': '{{ vendor.vendor_name.value }}'
+    });
+
+    // handle sticky right side
+    document.addEventListener('DOMContentLoaded', function() {
+
+      if (window.innerWidth < 769) {
+          return;
+      }
+
+      const body = document.body;
+      const html = document.documentElement;
+      const totalHeight = Math.max(body.scrollHeight, body.offsetHeight,
+        html.clientHeight, html.scrollHeight, html.offsetHeight);
+
+
+      const stickyCard = document.querySelectorAll('.product-container')[0];
+      const layoutContainer = document.getElementById('MainContent');
+      const cardWidth = stickyCard.getBoundingClientRect().width;
+      const cardHeight = stickyCard.getBoundingClientRect().height;
+      
+      const TOP_OFFSET = 20;
+      const BOTTOM_OFFSET = 300;
+
+      // absolute position when not sticking
+      const topPosition = 1200;
+
+      function handleScroll() {        
+          const containerRect = layoutContainer.getBoundingClientRect();
+          const cardHeight = containerRect.height;
+          const stickPoint = containerRect.top;
+
+          console.log('>>top:', stickyCard.getBoundingClientRect().top);
+          
+          if (stickPoint > TOP_OFFSET) {
+              stickyCard.classList.remove('is-sticky', 'is-at-bottom');
+              stickyCard.style.top = '0px';
+              stickyCard.style.width = `${cardWidth}px`;
+          } 
+          else if (containerRect.bottom < 800) {
+              stickyCard.classList.remove('is-sticky');
+              stickyCard.classList.add('is-at-bottom');
+              stickyCard.style.width = `${cardWidth}px`;
+              stickyCard.style.top = `${topPosition}px`;
+          }
+          else {
+              stickyCard.classList.remove('is-at-bottom');
+              stickyCard.classList.add('is-sticky');
+              stickyCard.style.top = `${TOP_OFFSET}px`;
+              stickyCard.style.width = `${cardWidth}px`;
+          }
+      }
+
+      if (window.innerWidth >= 768) {
+        window.addEventListener('scroll', handleScroll);
+      }
+    });
+
+</script>
 
 {%  render 'product-description' | 
     product_description: product.description,
