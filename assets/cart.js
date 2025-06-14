@@ -281,15 +281,18 @@ class CartItems extends HTMLElement {
         // Handle focus and messaging - FIXED SECTION
         let message = '';
 
-        // Only try to access the item if it still exists and we're not removing it
-        if (quantity > 0 && parsedState.items && parsedState.items[line - 1]) {
-          const updatedValue = parsedState.items[line - 1].quantity;
+        if (quantity > 0 && parsedState.items && variantId) {
+          const updatedItem = parsedState.items.find(item => item.variant_id == variantId);
 
-          if (quantityElement && updatedValue !== parseInt(quantityElement.value)) {
-            if (typeof updatedValue === 'undefined' || updatedValue === 0) {
-              message = window.cartStrings.error;
-            } else {
-              message = window.cartStrings.quantityError.replace('[quantity]', updatedValue);
+          if (updatedItem) {
+            const updatedValue = updatedItem.quantity;
+
+            if (quantityElement && updatedValue !== parseInt(quantityElement.value)) {
+              if (typeof updatedValue === 'undefined' || updatedValue === 0) {
+                message = window.cartStrings.error;
+              } else {
+                message = window.cartStrings.quantityError.replace('[quantity]', updatedValue);
+              }
             }
           }
         } else if (quantity === 0) {

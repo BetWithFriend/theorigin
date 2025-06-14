@@ -9,7 +9,7 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
-{{ 'cart-shipping.js' | asset_url | script_tag }}</script>
+{% comment %} {{ 'cart-shipping.js' | asset_url | script_tag }}</script> {% endcomment %}
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
 <style>
@@ -510,7 +510,7 @@
                             {%- assign cart_item_shipping = coffeeorg_shipping -%}
                           {%- endif -%}
 
-                          <script>console.log('boom', {{vendor | json}} {{cart_item_shipping | json}})</script>
+                          <script>console.log('boom', {{cart.items | json}} )</script>
 
                         <div class="cart-total-delivery-sum">{{ cart_item_shipping }} ₪</div>
                     </div>
@@ -568,8 +568,6 @@
 
           <div class="totals" role="status">
             <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-             {% comment %} {%- assign vendor_fee_total = vendor_count | times: 3500 -%} {% endcomment %}
-            <script>console.log('boom', {{shipping_price}})</script>
             {%- assign shipping_price_cents = shipping_price | times: 100 -%}
 
               {%- assign adjusted_total = cart.total_price | plus: shipping_price_cents -%}
