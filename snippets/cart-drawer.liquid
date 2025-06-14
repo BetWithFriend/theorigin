@@ -94,11 +94,28 @@
           <div id="CartDrawer-CartItems" class="drawer__contents js-contents">
           {%- if cart != empty -%}
             {%- assign vendors = "" -%}
-            {%- for item in cart.items -%}
-              {%- unless vendors contains item.vendor -%}
-                {%- assign vendors = vendors | append: item.vendor | append: "," -%}
-              {%- endunless -%}
-            {%- endfor -%}
+            {%- assign shipping_price = 0 -%}
+    {% assign canopy_shipping = 35 %}
+    {% assign blooms_shipping = 40 %}
+    {% assign youneedcoffee_shipping = 55 %}
+    {% assign coffeeorg_shipping = 42 %}
+{%- for item in cart.items -%}
+  {%- unless vendors contains item.vendor -%}
+    {%- assign vendors = vendors | append: item.vendor | append: "," -%}
+    
+    {%- comment -%} Add shipping cost for each unique vendor {%- endcomment -%}
+    {%- if item.vendor == 'canopy' -%}
+      {%- assign shipping_price = shipping_price | plus: canopy_shipping -%}
+    {%- elsif item.vendor == 'blooms' -%}
+      {%- assign shipping_price = shipping_price | plus: blooms_shipping -%}
+    {%- elsif item.vendor == 'youneedcoffee' -%}
+      {%- assign shipping_price = shipping_price | plus: youneedcoffee_shipping -%}
+    {%- elsif item.vendor == 'coffeeorg' -%}
+      {%- assign shipping_price = shipping_price | plus: coffeeorg_shipping -%}
+    {%- endif -%}
+    
+  {%- endunless -%}
+{%- endfor -%}
             {%- assign vendor_array = vendors | split: "," | uniq | sort -%}
             {%- assign vendor_count = vendor_array | size-%} 
 
@@ -114,7 +131,6 @@
                 
                 {%- if vendor_has_items -%}
                   <div class="cart-item-wrapper"> 
-                    <script>console.log('boom', {{ item.metafields | json }})</script>
                     <div class="cart-item-vendor">{{ vendor |  upcase }}</div> 
                     {%- for item in cart.items -%}
                       {%- if item.vendor == vendor -%}
@@ -484,7 +500,19 @@
                         <div class="cart-total-delivery">
                           {{ 'sections.cart.cart_delivery' | t }}
                         </div>
-                        <div class="cart-total-delivery-sum">35 ₪</div>
+                          {%- assign cart_item_shipping = canopy_shipping -%}
+
+                          {%- if vendor == 'blooms' -%}
+                            {%- assign cart_item_shipping = blooms_shipping -%}
+                          {%- elsif vendor == 'youneedcoffee' -%}
+                            {%- assign cart_item_shipping = youneedcoffee_shipping -%}
+                          {%- elsif vendor == 'coffeeorg' -%}
+                            {%- assign cart_item_shipping = coffeeorg_shipping -%}
+                          {%- endif -%}
+
+                          <script>console.log('boom', {{vendor | json}} {{cart_item_shipping | json}})</script>
+
+                        <div class="cart-total-delivery-sum">{{ cart_item_shipping }} ₪</div>
                     </div>
                   </div> 
                 {%- endif -%}
@@ -540,11 +568,12 @@
 
           <div class="totals" role="status">
             <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-             {%- assign vendor_fee_total = vendor_count | times: 3500 -%}
+             {% comment %} {%- assign vendor_fee_total = vendor_count | times: 3500 -%} {% endcomment %}
+            <script>console.log('boom', {{shipping_price}})</script>
+            {%- assign shipping_price_cents = shipping_price | times: 100 -%}
 
-              {%- assign adjusted_total = cart.total_price | plus: vendor_fee_total -%}
+              {%- assign adjusted_total = cart.total_price | plus: shipping_price_cents -%}
 
-                <script>console.log('boom', {{ cart | json }})</script>
             <p class="totals__total-value">{{ adjusted_total | money_with_currency }}</p>
           </div>
 

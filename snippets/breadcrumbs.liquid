@@ -8,6 +8,20 @@
 
   {% if product %}
     &nbsp;/&nbsp;
+   {% assign page_vendor = product.vendor %}
+    {% if page_vendor == 'canopy' %}
+      {% assign collectionName = 'canopy-collection' %}
+      {% elsif page_vendor == 'blooms' %}
+      {% assign collectionName = 'blooms-collection' %}
+      {% elsif page_vendor == 'youneedcoffee' %}
+      {% assign collectionName = 'you-need-coffee-collection' %}
+      {% elsif page_vendor == 'coffeeorg' %}
+      {% assign collectionName = 'coffee-organization-collection' %}
+    {% endif %}
+        <a class="vendor-link" href="/collections/{{ collectionName }}">{{ product.vendor | upcase }}</a>
+      
+  &nbsp;/&nbsp;
+
     <span>{{ product.title }}</span>
   {% elsif article %}
     &nbsp;/&nbsp;
@@ -24,4 +38,9 @@
     .breadcrumbs {
         padding: 16px;
     }
+   .vendor-link {
+        color: inherit; /* Uses the same color as parent element */
+        text-decoration: underline; /* Removes underline */
+    }
+    
 </style>
