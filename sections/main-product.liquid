@@ -232,9 +232,8 @@
 </style>
 
 {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
-
+      {% render 'breadcrumbs' %}
 <div id="main-product-container">
-  {% render 'breadcrumbs' %}
 <product-info
   id="MainProduct-{{ section.id }}"
   class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }} product-container"

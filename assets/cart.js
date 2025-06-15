@@ -281,8 +281,9 @@ class CartItems extends HTMLElement {
         // Handle focus and messaging - FIXED SECTION
         let message = '';
 
+        // Only try to access the item if it still exists and we're not removing it
         if (quantity > 0 && parsedState.items && variantId) {
-          const updatedItem = parsedState.items.find(item => item.variant_id == variantId);
+          const updatedItem = parsedState.items.find(item => item.variant_id.toString() === variantId.toString());
 
           if (updatedItem) {
             const updatedValue = updatedItem.quantity;
