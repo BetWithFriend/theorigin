@@ -103,34 +103,45 @@ class CartItems extends HTMLElement {
   }
 
   onCartUpdate() {
-    const sectionId = this.tagName === 'CART-DRAWER-ITEMS' ? 'cart-drawer' : 'main-cart-items';
-    const selectorsToUpdate = this.tagName === 'CART-DRAWER-ITEMS'
-      ? ['cart-drawer-items', '.cart-drawer__footer', '#CartDrawer-LineItemStatus', '#CartDrawer-LiveRegionText']
-      : ['cart-items', '.cart-total-delivery-wrapper', '#shopping-cart-line-item-status', '#cart-live-region-text', '#main-cart-footer', '#cart-icon-bubble'];
+    // First get the accurate cart data
+    fetch('/cart.js')
+      .then((response) => response.json())
+      .then((cart) => {
+        // Update empty state classes
+        this.classList.toggle('is-empty', cart.item_count === 0);
+        const cartDrawerWrapper = document.querySelector('cart-drawer');
+        if (cartDrawerWrapper) cartDrawerWrapper.classList.toggle('is-empty', cart.item_count === 0);
 
-    fetch(`${routes.cart_url}?section_id=${sectionId}`)
-      .then((response) => response.text())
-      .then((responseText) => {
-        const html = new DOMParser().parseFromString(responseText, 'text/html');
+        // Then fetch the updated HTML sections
+        const sectionId = this.tagName === 'CART-DRAWER-ITEMS' ? 'cart-drawer' : 'main-cart-items';
 
-        selectorsToUpdate.forEach(selector => {
-          const targetElement = document.querySelector(selector);
-          const sourceElement = html.querySelector(selector);
+        fetch(`${routes.cart_url}?section_id=${sectionId}`)
+          .then((response) => response.text())
+          .then((responseText) => {
+            const html = new DOMParser().parseFromString(responseText, 'text/html');
+            const selectorsToUpdate = this.tagName === 'CART-DRAWER-ITEMS'
+              ? ['cart-drawer-items', '.cart-drawer__footer', '#CartDrawer-LineItemStatus', '#CartDrawer-LiveRegionText']
+              : ['cart-items', '.cart-total-delivery-wrapper', '#shopping-cart-line-item-status', '#cart-live-region-text', '#main-cart-footer', '#cart-icon-bubble'];
 
-          if (targetElement && sourceElement) {
-            if (selector === 'cart-items' || selector === 'cart-drawer-items') {
-              const newElement = html.querySelector(selector);
-              if (newElement) {
-                targetElement.replaceWith(newElement);
+            selectorsToUpdate.forEach(selector => {
+              const targetElement = document.querySelector(selector);
+              const sourceElement = html.querySelector(selector);
+
+              if (targetElement && sourceElement) {
+                if (selector === 'cart-items' || selector === 'cart-drawer-items') {
+                  targetElement.replaceWith(sourceElement);
+                } else {
+                  targetElement.replaceWith(sourceElement);
+                }
               }
-            } else {
-              targetElement.replaceWith(sourceElement);
-            }
-          }
-        });
+            });
+          })
+          .catch((e) => {
+            console.error('Section update failed:', e);
+          });
       })
       .catch((e) => {
-        console.error(e);
+        console.error('Cart data fetch failed:', e);
       });
   }
 
@@ -189,150 +200,171 @@ class CartItems extends HTMLElement {
     return sections;
   }
 
+  // Replace your updateQuantity method with this version that handles section name detection:
+
   updateQuantity(line, quantity, name, variantId) {
     this.enableLoading(line);
 
-    const sectionsToRequest = this.getSectionsToRender().map((section) => section.section);
-
-    const body = JSON.stringify({
-      line,
-      quantity,
-      sections: sectionsToRequest,
-      sections_url: window.location.pathname,
-    });
-
-    fetch(`${routes.cart_change_url}`, { ...fetchConfig(), ...{ body } })
-      .then((response) => {
-        return response.text();
+    // Use Shopify's standard cart API first
+    fetch('/cart/change.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        line: line,
+        quantity: quantity
       })
-      .then((state) => {
-        const parsedState = JSON.parse(state);
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((cart) => {
+        // Cart object now has accurate server-calculated values
         const quantityElement =
           document.getElementById(`Quantity-${line}`) || document.getElementById(`Drawer-quantity-${line}`);
 
-        if (parsedState.errors) {
-          if (quantityElement) {
-            quantityElement.value = quantityElement.getAttribute('value');
-          }
-          this.updateLiveRegions(line, parsedState.errors);
-          return;
-        }
-
         // Update cart-items element class
-        this.classList.toggle('is-empty', parsedState.item_count === 0);
+        this.classList.toggle('is-empty', cart.item_count === 0);
         const cartDrawerWrapper = document.querySelector('cart-drawer');
-        if (cartDrawerWrapper) cartDrawerWrapper.classList.toggle('is-empty', parsedState.item_count === 0);
+        if (cartDrawerWrapper) cartDrawerWrapper.classList.toggle('is-empty', cart.item_count === 0);
 
-        const mainCartItemsSectionData = parsedState.sections[this.dataset.id];
-        if (mainCartItemsSectionData) {
-          const currentJsContents = this.querySelector('.js-contents');
-          if (currentJsContents) {
-            // Create temporary container to parse HTML
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = mainCartItemsSectionData;
-            const newJsContents = tempDiv.querySelector('.js-contents');
+        // Try to get the correct section name from the current element
+        const currentSection = this.closest('[id*="shopify-section"]');
+        let sectionId = 'main-cart-items'; // default fallback
 
-            if (newJsContents) {
-              currentJsContents.innerHTML = newJsContents.innerHTML;
-            }
+        if (currentSection) {
+          // Extract section name from shopify-section-[name] format
+          const match = currentSection.id.match(/shopify-section-(.+)/);
+          if (match) {
+            sectionId = match[1];
           }
         }
 
-        // Update other sections
-        this.getSectionsToRender()
-          .filter(section => section.id !== 'main-cart-items')
-          .forEach((section) => {
-            const sectionData = parsedState.sections[section.section];
-            if (!sectionData) return;
+        // Alternative: use dataset if available
+        if (this.dataset.id) {
+          sectionId = this.dataset.id;
+        }
 
-            if (section.id === 'cart-total-delivery-wrapper') {
-              // Handle cart delivery wrapper specifically
-              const deliveryWrapper = document.querySelector('.cart-total-delivery-wrapper');
-              if (deliveryWrapper && parsedState.item_count > 0) {
-                // Only show delivery if there are items
-                deliveryWrapper.style.display = '';
-              } else if (deliveryWrapper && parsedState.item_count === 0) {
-                // Hide delivery wrapper when cart is empty
-                deliveryWrapper.style.display = 'none';
+        // Try multiple section names until one works
+        const possibleSectionNames = [
+          sectionId,
+          'main-cart-items',
+          'cart-template',
+          'cart',
+          'template--cart'
+        ];
+
+        const tryNextSection = (index = 0) => {
+          if (index >= possibleSectionNames.length) {
+            console.error('No valid section found, refreshing page...');
+            window.location.reload();
+            return;
+          }
+
+          const currentSectionName = possibleSectionNames[index];
+
+          fetch(`${routes.cart_url}?section_id=${currentSectionName}`)
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`Section ${currentSectionName} not found`);
               }
-            } else {
-              const container = document.getElementById(section.id);
-              if (!container) return;
+              return response.text();
+            })
+            .then((responseText) => {
+              const html = new DOMParser().parseFromString(responseText, 'text/html');
 
-              const elementToReplace = section.selector ? container.querySelector(section.selector) : container;
-              if (elementToReplace) {
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = sectionData;
-                const newContent = section.selector ? tempDiv.querySelector(section.selector) : tempDiv.firstElementChild;
+              // Update the main cart items
+              const currentJsContents = this.querySelector('.js-contents');
+              const newJsContents = html.querySelector('.js-contents');
+              if (currentJsContents && newJsContents) {
+                currentJsContents.innerHTML = newJsContents.innerHTML;
+              }
 
-                if (newContent) {
-                  elementToReplace.innerHTML = newContent.innerHTML;
+              // Update cart icon bubble (this one usually works)
+              fetch(`${routes.cart_url}?section_id=cart-icon-bubble`)
+                .then(res => res.text())
+                .then(iconHtml => {
+                  const iconParser = new DOMParser().parseFromString(iconHtml, 'text/html');
+                  const cartIcon = document.getElementById('cart-icon-bubble');
+                  const newCartIcon = iconParser.getElementById('cart-icon-bubble');
+                  if (cartIcon && newCartIcon) {
+                    cartIcon.replaceWith(newCartIcon);
+                  }
+                })
+                .catch(e => console.log('Cart icon update failed:', e));
+
+              // Handle focus and messaging
+              let message = '';
+
+              if (quantity > 0 && cart.items && variantId) {
+                const updatedItem = cart.items.find(item => item.variant_id.toString() === variantId.toString());
+
+                if (updatedItem) {
+                  const updatedValue = updatedItem.quantity;
+                  if (quantityElement && updatedValue !== parseInt(quantityElement.value)) {
+                    if (typeof updatedValue === 'undefined' || updatedValue === 0) {
+                      message = window.cartStrings.error;
+                    } else {
+                      message = window.cartStrings.quantityError.replace('[quantity]', updatedValue);
+                    }
+                  }
                 }
               }
-            }
-          });
 
-        // Update cart footer
-        const updatedCartFooter = document.getElementById('main-cart-footer');
-        if (updatedCartFooter) {
-          updatedCartFooter.classList.toggle('is-empty', parsedState.item_count === 0);
-        }
+              this.updateLiveRegions(line, message);
 
-        // Handle focus and messaging - FIXED SECTION
-        let message = '';
-
-        // Only try to access the item if it still exists and we're not removing it
-        if (quantity > 0 && parsedState.items && variantId) {
-          const updatedItem = parsedState.items.find(item => item.variant_id.toString() === variantId.toString());
-
-          if (updatedItem) {
-            const updatedValue = updatedItem.quantity;
-
-            if (quantityElement && updatedValue !== parseInt(quantityElement.value)) {
-              if (typeof updatedValue === 'undefined' || updatedValue === 0) {
-                message = window.cartStrings.error;
+              // Handle focus management
+              if (cart.item_count === 0) {
+                if (cartDrawerWrapper) {
+                  trapFocus(cartDrawerWrapper.querySelector('.drawer__inner-empty'), cartDrawerWrapper.querySelector('button'));
+                } else {
+                  const continueShoppingButton = document.querySelector('.cart__warnings .button');
+                  if (continueShoppingButton) continueShoppingButton.focus();
+                }
               } else {
-                message = window.cartStrings.quantityError.replace('[quantity]', updatedValue);
+                const newLineItem = document.getElementById(`CartItem-${line}`);
+                if (newLineItem && newLineItem.querySelector(`[name="${name}"]`)) {
+                  if (cartDrawerWrapper) {
+                    trapFocus(cartDrawerWrapper, newLineItem.querySelector(`[name="${name}"]`));
+                  } else {
+                    newLineItem.querySelector(`[name="${name}"]`).focus();
+                  }
+                } else if (document.querySelector('.cart-item') && cartDrawerWrapper) {
+                  trapFocus(cartDrawerWrapper, document.querySelector('.cart-item__name'));
+                }
               }
-            }
-          }
-        } else if (quantity === 0) {
-          // Item was removed successfully - no error message needed
-          message = '';
-        }
 
-        this.updateLiveRegions(line, message);
+              // Store the working section name for future use
+              if (!this.dataset.workingSectionId) {
+                this.dataset.workingSectionId = currentSectionName;
+              }
 
-        // Handle focus management
-        if (parsedState.item_count === 0) {
-          // Cart is empty - focus on continue shopping button
-          if (cartDrawerWrapper) {
-            trapFocus(cartDrawerWrapper.querySelector('.drawer__inner-empty'), cartDrawerWrapper.querySelector('button'));
-          } else {
-            const continueShoppingButton = document.querySelector('.cart__warnings .button');
-            if (continueShoppingButton) continueShoppingButton.focus();
-          }
-        } else {
-          // Cart still has items
-          const newLineItem = document.getElementById(`CartItem-${line}`);
-          if (newLineItem && newLineItem.querySelector(`[name="${name}"]`)) {
-            if (cartDrawerWrapper) {
-              trapFocus(cartDrawerWrapper, newLineItem.querySelector(`[name="${name}"]`));
-            } else {
-              newLineItem.querySelector(`[name="${name}"]`).focus();
-            }
-          } else if (document.querySelector('.cart-item') && cartDrawerWrapper) {
-            trapFocus(cartDrawerWrapper, document.querySelector('.cart-item__name'));
-          }
-        }
+              // Publish cart update with accurate cart data
+              publish(PUB_SUB_EVENTS.cartUpdate, { source: 'cart-items', cartData: cart, variantId: variantId });
+            })
+            .catch((e) => {
+              console.log(`Section ${currentSectionName} failed:`, e.message);
+              tryNextSection(index + 1);
+            });
+        };
 
-        publish(PUB_SUB_EVENTS.cartUpdate, { source: 'cart-items', cartData: parsedState, variantId: variantId });
+        tryNextSection();
       })
       .catch((e) => {
         console.error("Cart update failed:", e);
         this.querySelectorAll('.loading__spinner').forEach((overlay) => overlay.classList.add('hidden'));
         const errors = document.getElementById('cart-errors') || document.getElementById('CartDrawer-CartErrors');
         if (errors) errors.textContent = window.cartStrings.error;
+
+        // Reset quantity input on error
+        const quantityElement = document.getElementById(`Quantity-${line}`) || document.getElementById(`Drawer-quantity-${line}`);
+        if (quantityElement) {
+          quantityElement.value = quantityElement.getAttribute('value');
+        }
       })
       .finally(() => {
         this.disableLoading(line);
