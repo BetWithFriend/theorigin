@@ -5,7 +5,9 @@ class CartRemoveButton extends HTMLElement {
     this.addEventListener('click', (event) => {
       event.preventDefault();
       const cartItems = this.closest('cart-items') || this.closest('cart-drawer-items');
-      cartItems.updateQuantity(this.dataset.index, 0);
+      // CONVERT 0-BASED data-index TO 1-BASED LINE NUMBER
+      const lineIndex = parseInt(this.dataset.index, 10) + 1;
+      cartItems.updateQuantity(lineIndex, 0); // Pass the 1-based index and quantity 0 to remove
     });
   }
 }
@@ -60,7 +62,9 @@ class CartItems extends HTMLElement {
   validateQuantity(event) {
     const input = event.target;
     const inputValue = parseInt(input.value);
-    const index = input.dataset.index;
+    // When validating from an input, the data-index might be 0-based,
+    // so we need to convert it to 1-based for updateQuantity.
+    const index = parseInt(input.dataset.index, 10) + 1;
     const minQuantity = parseInt(input.dataset.min) || 0;
     const maxQuantity = parseInt(input.max) || Infinity;
     const step = parseInt(input.step) || 1;
@@ -103,45 +107,34 @@ class CartItems extends HTMLElement {
   }
 
   onCartUpdate() {
-    // First get the accurate cart data
-    fetch('/cart.js')
-      .then((response) => response.json())
-      .then((cart) => {
-        // Update empty state classes
-        this.classList.toggle('is-empty', cart.item_count === 0);
-        const cartDrawerWrapper = document.querySelector('cart-drawer');
-        if (cartDrawerWrapper) cartDrawerWrapper.classList.toggle('is-empty', cart.item_count === 0);
+    const sectionId = this.tagName === 'CART-DRAWER-ITEMS' ? 'cart-drawer' : 'main-cart-items';
+    const selectorsToUpdate = this.tagName === 'CART-DRAWER-ITEMS'
+      ? ['cart-drawer-items', '.cart-drawer__footer', '#CartDrawer-LineItemStatus', '#CartDrawer-LiveRegionText']
+      : ['cart-items', '.cart-total-delivery-wrapper', '#shopping-cart-line-item-status', '#cart-live-region-text', '#main-cart-footer', '#cart-icon-bubble'];
 
-        // Then fetch the updated HTML sections
-        const sectionId = this.tagName === 'CART-DRAWER-ITEMS' ? 'cart-drawer' : 'main-cart-items';
+    fetch(`${routes.cart_url}?section_id=${sectionId}`)
+      .then((response) => response.text())
+      .then((responseText) => {
+        const html = new DOMParser().parseFromString(responseText, 'text/html');
 
-        fetch(`${routes.cart_url}?section_id=${sectionId}`)
-          .then((response) => response.text())
-          .then((responseText) => {
-            const html = new DOMParser().parseFromString(responseText, 'text/html');
-            const selectorsToUpdate = this.tagName === 'CART-DRAWER-ITEMS'
-              ? ['cart-drawer-items', '.cart-drawer__footer', '#CartDrawer-LineItemStatus', '#CartDrawer-LiveRegionText']
-              : ['cart-items', '.cart-total-delivery-wrapper', '#shopping-cart-line-item-status', '#cart-live-region-text', '#main-cart-footer', '#cart-icon-bubble'];
+        selectorsToUpdate.forEach(selector => {
+          const targetElement = document.querySelector(selector);
+          const sourceElement = html.querySelector(selector);
 
-            selectorsToUpdate.forEach(selector => {
-              const targetElement = document.querySelector(selector);
-              const sourceElement = html.querySelector(selector);
-
-              if (targetElement && sourceElement) {
-                if (selector === 'cart-items' || selector === 'cart-drawer-items') {
-                  targetElement.replaceWith(sourceElement);
-                } else {
-                  targetElement.replaceWith(sourceElement);
-                }
+          if (targetElement && sourceElement) {
+            if (selector === 'cart-items' || selector === 'cart-drawer-items') {
+              const newElement = html.querySelector(selector);
+              if (newElement) {
+                targetElement.replaceWith(newElement);
               }
-            });
-          })
-          .catch((e) => {
-            console.error('Section update failed:', e);
-          });
+            } else {
+              targetElement.replaceWith(sourceElement);
+            }
+          }
+        });
       })
       .catch((e) => {
-        console.error('Cart data fetch failed:', e);
+        console.error(e);
       });
   }
 
@@ -200,178 +193,326 @@ class CartItems extends HTMLElement {
     return sections;
   }
 
-  // Replace your updateQuantity method with this version that handles section name detection:
-
   updateQuantity(line, quantity, name, variantId) {
-    this.enableLoading(line);
+    // Ensure line is a valid number
+    const lineNumber = parseInt(line, 10);
+    const quantityNumber = parseInt(quantity, 10);
+    console.log('boom', lineNumber, quantityNumber)
 
-    // Use Shopify's standard cart API first
-    fetch('/cart/change.js', {
-      method: 'POST',
+    if (isNaN(lineNumber) || isNaN(quantityNumber)) {
+      console.error('Invalid line or quantity:', { line, quantity });
+      return;
+    }
+
+    this.enableLoading(lineNumber);
+
+    const sectionsToRequest = this.getSectionsToRender().map((section) => section.section);
+
+    // Convert 1-based line number to 0-based for the server
+    const serverLineNumber = lineNumber - 1;
+
+    const body = JSON.stringify({
+      line: serverLineNumber, // Send 0-based index to server
+      quantity: quantityNumber,
+      sections: sectionsToRequest,
+      sections_url: window.location.pathname,
+    });
+
+    // console.log('Sending cart update:', body);
+
+    fetch(`${routes.cart_change_url}`, {
+      ...fetchConfig(),
+      ...{ body },
       headers: {
         'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        line: line,
-        quantity: quantity
-      })
+        'Accept': 'application/json',
+        ...fetchConfig().headers
+      }
     })
       .then((response) => {
+        console.log('Cart update response status:', response.status);
+
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.json();
+        return response.text();
       })
-      .then((cart) => {
-        // Cart object now has accurate server-calculated values
+      .then((state) => {
+        // console.log('Cart update response:', state);
+
+        let parsedState;
+
+        try {
+          parsedState = JSON.parse(state);
+        } catch (parseError) {
+          console.error('Failed to parse cart response:', parseError);
+          console.error('Raw response:', state);
+          throw new Error('Invalid JSON response from cart update');
+        }
+
+        // console.log('Parsed cart state:', parsedState);
+
         const quantityElement =
-          document.getElementById(`Quantity-${line}`) || document.getElementById(`Drawer-quantity-${line}`);
+          document.getElementById(`Quantity-${lineNumber}`) || document.getElementById(`Drawer-quantity-${lineNumber}`);
 
-        // Update cart-items element class
-        this.classList.toggle('is-empty', cart.item_count === 0);
+        // Handle errors first
+        if (parsedState.errors) {
+          console.error('Cart update errors:', parsedState.errors);
+
+          if (quantityElement) {
+            quantityElement.value = quantityElement.getAttribute('value');
+          }
+
+          // Handle different error formats
+          let errorMessage = '';
+          if (typeof parsedState.errors === 'string') {
+            errorMessage = parsedState.errors;
+          } else if (typeof parsedState.errors === 'object') {
+            errorMessage = Object.values(parsedState.errors).join(', ');
+          }
+
+          this.updateLiveRegions(lineNumber, errorMessage);
+          return;
+        }
+
+        // Validate response structure
+        if (typeof parsedState.item_count === 'undefined' || !parsedState.sections) {
+          console.error('Unexpected cart response structure:', parsedState);
+          throw new Error('Invalid cart response structure');
+        }
+
+        // Update cart empty state
+        this.classList.toggle('is-empty', parsedState.item_count === 0);
         const cartDrawerWrapper = document.querySelector('cart-drawer');
-        if (cartDrawerWrapper) cartDrawerWrapper.classList.toggle('is-empty', cart.item_count === 0);
-
-        // Try to get the correct section name from the current element
-        const currentSection = this.closest('[id*="shopify-section"]');
-        let sectionId = 'main-cart-items'; // default fallback
-
-        if (currentSection) {
-          // Extract section name from shopify-section-[name] format
-          const match = currentSection.id.match(/shopify-section-(.+)/);
-          if (match) {
-            sectionId = match[1];
-          }
+        if (cartDrawerWrapper) {
+          cartDrawerWrapper.classList.toggle('is-empty', parsedState.item_count === 0);
         }
 
-        // Alternative: use dataset if available
-        if (this.dataset.id) {
-          sectionId = this.dataset.id;
+        // Update main cart items section
+        const mainCartItemsSectionData = parsedState.sections[this.dataset.id];
+        if (mainCartItemsSectionData) {
+          this.updateMainCartSection(mainCartItemsSectionData);
         }
 
-        // Try multiple section names until one works
-        const possibleSectionNames = [
-          sectionId,
-          'main-cart-items',
-          'cart-template',
-          'cart',
-          'template--cart'
-        ];
+        // Update other sections
+        this.updateOtherSections(parsedState);
 
-        const tryNextSection = (index = 0) => {
-          if (index >= possibleSectionNames.length) {
-            console.error('No valid section found, refreshing page...');
-            window.location.reload();
-            return;
-          }
+        // Update cart footer
+        const updatedCartFooter = document.getElementById('main-cart-footer');
+        if (updatedCartFooter) {
+          updatedCartFooter.classList.toggle('is-empty', parsedState.item_count === 0);
+        }
 
-          const currentSectionName = possibleSectionNames[index];
+        // Handle messaging and focus
+        this.handlePostUpdateActions(parsedState, lineNumber, quantityNumber, name, variantId, quantityElement);
 
-          fetch(`${routes.cart_url}?section_id=${currentSectionName}`)
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error(`Section ${currentSectionName} not found`);
-              }
-              return response.text();
-            })
-            .then((responseText) => {
-              const html = new DOMParser().parseFromString(responseText, 'text/html');
-
-              // Update the main cart items
-              const currentJsContents = this.querySelector('.js-contents');
-              const newJsContents = html.querySelector('.js-contents');
-              if (currentJsContents && newJsContents) {
-                currentJsContents.innerHTML = newJsContents.innerHTML;
-              }
-
-              // Update cart icon bubble (this one usually works)
-              fetch(`${routes.cart_url}?section_id=cart-icon-bubble`)
-                .then(res => res.text())
-                .then(iconHtml => {
-                  const iconParser = new DOMParser().parseFromString(iconHtml, 'text/html');
-                  const cartIcon = document.getElementById('cart-icon-bubble');
-                  const newCartIcon = iconParser.getElementById('cart-icon-bubble');
-                  if (cartIcon && newCartIcon) {
-                    cartIcon.replaceWith(newCartIcon);
-                  }
-                })
-                .catch(e => console.log('Cart icon update failed:', e));
-
-              // Handle focus and messaging
-              let message = '';
-
-              if (quantity > 0 && cart.items && variantId) {
-                const updatedItem = cart.items.find(item => item.variant_id.toString() === variantId.toString());
-
-                if (updatedItem) {
-                  const updatedValue = updatedItem.quantity;
-                  if (quantityElement && updatedValue !== parseInt(quantityElement.value)) {
-                    if (typeof updatedValue === 'undefined' || updatedValue === 0) {
-                      message = window.cartStrings.error;
-                    } else {
-                      message = window.cartStrings.quantityError.replace('[quantity]', updatedValue);
-                    }
-                  }
-                }
-              }
-
-              this.updateLiveRegions(line, message);
-
-              // Handle focus management
-              if (cart.item_count === 0) {
-                if (cartDrawerWrapper) {
-                  trapFocus(cartDrawerWrapper.querySelector('.drawer__inner-empty'), cartDrawerWrapper.querySelector('button'));
-                } else {
-                  const continueShoppingButton = document.querySelector('.cart__warnings .button');
-                  if (continueShoppingButton) continueShoppingButton.focus();
-                }
-              } else {
-                const newLineItem = document.getElementById(`CartItem-${line}`);
-                if (newLineItem && newLineItem.querySelector(`[name="${name}"]`)) {
-                  if (cartDrawerWrapper) {
-                    trapFocus(cartDrawerWrapper, newLineItem.querySelector(`[name="${name}"]`));
-                  } else {
-                    newLineItem.querySelector(`[name="${name}"]`).focus();
-                  }
-                } else if (document.querySelector('.cart-item') && cartDrawerWrapper) {
-                  trapFocus(cartDrawerWrapper, document.querySelector('.cart-item__name'));
-                }
-              }
-
-              // Store the working section name for future use
-              if (!this.dataset.workingSectionId) {
-                this.dataset.workingSectionId = currentSectionName;
-              }
-
-              // Publish cart update with accurate cart data
-              publish(PUB_SUB_EVENTS.cartUpdate, { source: 'cart-items', cartData: cart, variantId: variantId });
-            })
-            .catch((e) => {
-              console.log(`Section ${currentSectionName} failed:`, e.message);
-              tryNextSection(index + 1);
-            });
-        };
-
-        tryNextSection();
+        // Publish cart update event
+        publish(PUB_SUB_EVENTS.cartUpdate, {
+          source: 'cart-items',
+          cartData: parsedState,
+          variantId: variantId
+        });
       })
-      .catch((e) => {
-        console.error("Cart update failed:", e);
-        this.querySelectorAll('.loading__spinner').forEach((overlay) => overlay.classList.add('hidden'));
-        const errors = document.getElementById('cart-errors') || document.getElementById('CartDrawer-CartErrors');
-        if (errors) errors.textContent = window.cartStrings.error;
+      .catch((error) => {
+        console.error("Cart update failed:", error);
 
-        // Reset quantity input on error
-        const quantityElement = document.getElementById(`Quantity-${line}`) || document.getElementById(`Drawer-quantity-${line}`);
+        // Hide loading spinners
+        this.querySelectorAll('.loading__spinner').forEach((overlay) =>
+          overlay.classList.add('hidden')
+        );
+
+        // Reset quantity input to previous value
+        const quantityElement =
+          document.getElementById(`Quantity-${lineNumber}`) || document.getElementById(`Drawer-quantity-${lineNumber}`);
         if (quantityElement) {
-          quantityElement.value = quantityElement.getAttribute('value');
+          const originalValue = quantityElement.getAttribute('value');
+          if (originalValue) {
+            quantityElement.value = originalValue;
+          }
         }
+
+        // Show error message
+        const errors = document.getElementById('cart-errors') || document.getElementById('CartDrawer-CartErrors');
+        if (errors) {
+          errors.textContent = window.cartStrings?.error || 'שגיאה בעדכון העגלה';
+        }
+
+        // Update live regions with error
+        this.updateLiveRegions(lineNumber, window.cartStrings?.error || 'שגיאה בעדכון העגלה');
       })
       .finally(() => {
-        this.disableLoading(line);
+        this.disableLoading(lineNumber);
       });
   }
 
+  // Helper method for focus management
+  handleFocusManagement(parsedState, line, name, cartDrawerWrapper) {
+    if (parsedState.item_count === 0) {
+      // Cart is empty - focus on continue shopping button
+      if (cartDrawerWrapper) {
+        const drawerInnerEmpty = cartDrawerWrapper.querySelector('.drawer__inner-empty');
+        const emptyButton = cartDrawerWrapper.querySelector('button');
+        if (drawerInnerEmpty && emptyButton && typeof trapFocus === 'function') {
+          trapFocus(drawerInnerEmpty, emptyButton);
+        }
+      } else {
+        const continueShoppingButton = document.querySelector('.cart__warnings .button');
+        if (continueShoppingButton) {
+          continueShoppingButton.focus();
+        }
+      }
+    } else {
+      // Cart still has items
+      const newLineItem = document.getElementById(`CartItem-${line}`);
+      const targetElement = newLineItem?.querySelector(`[name="${name}"]`);
+
+      if (targetElement) {
+        if (cartDrawerWrapper && typeof trapFocus === 'function') {
+          trapFocus(cartDrawerWrapper, targetElement);
+        } else {
+          targetElement.focus();
+        }
+      } else if (cartDrawerWrapper && typeof trapFocus === 'function') {
+        const firstCartItem = document.querySelector('.cart-item__name');
+        if (firstCartItem) {
+          trapFocus(cartDrawerWrapper, firstCartItem);
+        }
+      }
+    }
+  }
+
+  // Helper method to update main cart section
+  updateMainCartSection(sectionData) {
+    const currentJsContents = this.querySelector('.js-contents');
+    if (!currentJsContents) return;
+
+    try {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = sectionData;
+      const newJsContents = tempDiv.querySelector('.js-contents');
+
+      if (newJsContents) {
+        currentJsContents.innerHTML = newJsContents.innerHTML;
+      }
+    } catch (htmlError) {
+      console.error('Error updating cart contents:', htmlError);
+    }
+  }
+
+  // Helper method to update other sections
+  updateOtherSections(parsedState) {
+    this.getSectionsToRender()
+      .filter(section => section.id !== 'main-cart-items')
+      .forEach((section) => {
+        try {
+          const sectionData = parsedState.sections[section.section];
+          if (!sectionData) return;
+
+          if (section.id === 'cart-total-delivery-wrapper') {
+            const deliveryWrapper = document.querySelector('.cart-total-delivery-wrapper');
+            if (deliveryWrapper) {
+              deliveryWrapper.style.display = parsedState.item_count > 0 ? '' : 'none';
+            }
+          } else {
+            const container = document.getElementById(section.id);
+            if (!container) return;
+
+            const elementToReplace = section.selector ? container.querySelector(section.selector) : container;
+            if (elementToReplace) {
+              const tempDiv = document.createElement('div');
+              tempDiv.innerHTML = sectionData;
+              const newContent = section.selector ? tempDiv.querySelector(section.selector) : tempDiv.firstElementChild;
+
+              if (newContent) {
+                elementToReplace.innerHTML = newContent.innerHTML;
+              }
+            }
+          }
+        } catch (sectionError) {
+          console.error(`Error updating section ${section.id}:`, sectionError);
+        }
+      });
+  }
+  // Helper method for post-update actions
+  handlePostUpdateActions(parsedState, line, quantity, name, variantId, quantityElement) {
+    let message = '';
+
+    // Only check for quantity mismatch if we're not removing the item
+    if (quantity > 0 && parsedState.items && variantId) {
+      const updatedItem = parsedState.items.find(item =>
+        item.variant_id && item.variant_id.toString() === variantId.toString()
+      );
+
+      if (updatedItem && quantityElement) {
+        const updatedValue = updatedItem.quantity;
+        const requestedQuantity = parseInt(quantity);
+
+        // Check if the quantity was adjusted due to inventory limits
+        if (updatedValue !== requestedQuantity) {
+          if (typeof updatedValue === 'undefined' || updatedValue === 0) {
+            message = window.cartStrings?.error || 'שגיאה בעדכון הכמות';
+          } else {
+            message = (window.cartStrings?.quantityError || 'הכמות עודכנה ל-[quantity]')
+              .replace('[quantity]', updatedValue);
+
+            // Update the input to reflect the actual quantity
+            quantityElement.value = updatedValue;
+            quantityElement.setAttribute('value', updatedValue);
+          }
+        }
+      }
+    }
+
+    this.updateLiveRegions(line, message);
+
+    // Handle focus management
+    this.handleFocusAfterUpdate(parsedState, line, name);
+  }
+
+  handleFocusAfterUpdate(parsedState, line, name) {
+    const cartDrawerWrapper = document.querySelector('cart-drawer');
+
+    if (parsedState.item_count === 0) {
+      // Cart is empty
+      if (cartDrawerWrapper) {
+        const drawerInnerEmpty = cartDrawerWrapper.querySelector('.drawer__inner-empty');
+        const emptyButton = cartDrawerWrapper.querySelector('button');
+        if (drawerInnerEmpty && emptyButton && typeof trapFocus === 'function') {
+          trapFocus(drawerInnerEmpty, emptyButton);
+        }
+      } else {
+        const continueShoppingButton = document.querySelector('.cart__warnings .button');
+        if (continueShoppingButton) {
+          continueShoppingButton.focus();
+        }
+      }
+    } else {
+      // Cart still has items - focus on the updated item or first available item
+      const newLineItem = document.getElementById(`CartItem-${line}`) || document.getElementById(`CartDrawer-Item-${line}`);
+      const targetElement = newLineItem?.querySelector(`[name="${name}"]`);
+
+      if (targetElement) {
+        if (cartDrawerWrapper && typeof trapFocus === 'function') {
+          trapFocus(cartDrawerWrapper, targetElement);
+        } else {
+          targetElement.focus();
+        }
+      } else {
+        // Fallback: focus on first cart item
+        const firstCartItem = document.querySelector('.cart-item__name');
+        if (firstCartItem) {
+          if (cartDrawerWrapper && typeof trapFocus === 'function') {
+            trapFocus(cartDrawerWrapper, firstCartItem);
+          } else {
+            firstCartItem.focus();
+          }
+        }
+      }
+    }
+  }
   updateLiveRegions(line, message) {
+    // Note: The line here is a 1-based index, but the IDs in the HTML might be 0-based.
+    // If your HTML IDs are 0-based, you might need to adjust them here or ensure consistency.
     const lineItemError =
       document.getElementById(`Line-item-error-${line}`) || document.getElementById(`CartDrawer-LineItemError-${line}`);
     if (lineItemError) lineItemError.querySelector('.cart-item__error-text').textContent = message;
@@ -395,6 +536,7 @@ class CartItems extends HTMLElement {
     const mainCartItems = document.getElementById('main-cart-items') || document.getElementById('CartDrawer-CartItems');
     mainCartItems.classList.add('cart__items--disabled');
 
+    // Make sure the selector for loading spinners also considers potential 0-based IDs
     const cartItemElements = this.querySelectorAll(`#CartItem-${line} .loading__spinner`);
     const cartDrawerItemElements = this.querySelectorAll(`#CartDrawer-Item-${line} .loading__spinner`);
 
@@ -408,6 +550,7 @@ class CartItems extends HTMLElement {
     const mainCartItems = document.getElementById('main-cart-items') || document.getElementById('CartDrawer-CartItems');
     mainCartItems.classList.remove('cart__items--disabled');
 
+    // Make sure the selector for loading spinners also considers potential 0-based IDs
     const cartItemElements = this.querySelectorAll(`#CartItem-${line} .loading__spinner`);
     const cartDrawerItemElements = this.querySelectorAll(`#CartDrawer-Item-${line} .loading__spinner`);
 

@@ -2,46 +2,51 @@
 <div class="blends-filter-wrapper">
     <div class="blends-filter-item-wrpper">
         <div class="blends-filter-item">
-            <div class="blends-filter-icon-wrapper" onclick="goToCollections('blends')">
-                <img class="blends-filter-icon" src="{{ 'blend-filter-mix.png' | asset_url }}" alt="Filter Icon" />
-            </div>
-            <div class="blend-filter-text">תערובות</div>
-        </div>
-        <div class="blends-filter-item">
             <div class="blends-filter-icon-wrapper" onclick="goToCollections('single-origin')">
-                <img class="blends-filter-icon" src="{{ 'blend-filter-single-origin.png' | asset_url }}" alt="Filter Icon" />
+                <img class="blends-filter-icon" src="{{ 'blend-filter-single-origin.png' | asset_url }}" alt="Filter Icon" style="width: 42px; height: 38px;" />
             </div>
             <div class="blend-filter-text">חד זני</div>
         </div>
+
         <div class="blends-filter-item">
-            <div class="blends-filter-icon-wrapper" onclick="goToCollections('special-coffee')">
-                <img class="blends-filter-icon" src="{{ 'blend-filter-special.png' | asset_url }}" alt="Filter Icon" />
+            <div class="blends-filter-icon-wrapper" onclick="goToCollections('blends')">
+                <img class="blends-filter-icon" src="{{ 'blend-filter-mix.png' | asset_url }}" alt="Filter Icon" style="width: 52px; height: 60px;" />
             </div>
-            <div class="blend-filter-text">מיוחדים</div>
+            <div class="blend-filter-text">תערובות</div>
         </div>
+
         <div class="blends-filter-item">
             <div class="blends-filter-icon-wrapper" onclick="goToCollections('light-roast')">
-                <img class="blends-filter-icon" src="{{ 'blend-filter-light-roast.png' | asset_url }}" alt="Filter Icon" />
+                <img class="blends-filter-icon" src="{{ 'blend-filter-light-roast.png' | asset_url }}" alt="Filter Icon" style="width: 39px; height: 52px;" />
             </div>
             <div class="blend-filter-text">קליה בהירה</div>
         </div>
+
         <div class="blends-filter-item">
-            <div class="blends-filter-icon-wrapper" onclick="goToCollections('dark-roast')">
-                <img class="blends-filter-icon" src="{{ 'blend-filter-dark-roast.png' | asset_url }}" alt="Filter Icon" />
+            <div class="blends-filter-icon-wrapper" onclick="goToCollections('special-coffee')">
+                <img class="blends-filter-icon" src="{{ 'blend-filter-special.png' | asset_url }}" alt="Filter Icon" style="width: 38px; height: 51px;" />
             </div>
-            <div class="blend-filter-text">קליה כהה</div>
+            <div class="blend-filter-text">מיוחדים</div>
         </div>
+
         <div class="blends-filter-item">
             <div class="blends-filter-icon-wrapper" onclick="goToCollections('medium-roast')">
-                <img class="blends-filter-icon" src="{{ 'blend-filter-medium-roast.png' | asset_url }}" alt="Filter Icon" />
+                <img class="blends-filter-icon" src="{{ 'blend-filter-medium-roast.png' | asset_url }}" alt="Filter Icon" style="width: 47px; height: 52px;" />
             </div>
             <div class="blend-filter-text">קליה בינונית</div>
+        </div>
+
+        <div class="blends-filter-item">
+            <div class="blends-filter-icon-wrapper" onclick="goToCollections('dark-roast')">
+                <img class="blends-filter-icon" src="{{ 'blend-filter-dark-roast.png' | asset_url }}" alt="Filter Icon" style="width: 52px; height: 52px;" />
+            </div>
+            <div class="blend-filter-text">קליה כהה</div>
         </div>
     </div>
 </div>
 
 <script>
-        function goToCollections(collectionName) {
+    function goToCollections(collectionName) {
         window.location.href = "{{ section.settings.collection.url }}/collections/" + collectionName;
     }
 </script>

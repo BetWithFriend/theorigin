@@ -63,9 +63,9 @@
           <div class="contact-us-wrapper">
               <div class="contact-us-contracts">
                 <div class="contact-us" onclick="goToPage('pages/privacy')">מדיניות הפרטיות</div>
-                <div class="contact-us" onclick="goToPage('regulation')">תקנון האתר</div>
-                <div class="contact-us" onclick="goToPage('accessability')">נגישות</div>
-                <div class="contact-us" onclick="goToPage('delivery')">מדינות משלוחים והחזרות</div>
+                <div class="contact-us" onclick="goToPage('pages/site-terms')">תקנון האתר</div>
+                <div class="contact-us" onclick="goToPage('pages/accessibility-terms')">נגישות</div>
+                <div class="contact-us" onclick="goToPage('pages/delivery-terms')">מדינות משלוחים והחזרות</div>
               </div>
               <div class="contact-us-details">
                 <div class="contact-us-phone">054-5631523</div>
@@ -372,7 +372,7 @@
 
 <script>
 function goToPage(url_postfix) {
-        window.location.href = "{{ section.settings.url }}" +  url_postfix;
+        window.location.href = "/" +  url_postfix;
         // /policies/privacy-policy
     }
 </script>
