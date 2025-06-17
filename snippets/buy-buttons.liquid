@@ -70,14 +70,14 @@
           type="hidden"
           name="properties[Weight]"
           id="properties_weight"
-          value="{{ product_weight }}"
+         value="{{ product_weight | default: '250 ג׳' }}"
         >
 
         <input
           type="hidden"
           name="properties[Grind]"
           id="properties_grind"
-          value="{{ product_grind }}"
+          value="{{ product_grind | default: 'פולים' }}"
         >
         <div class="product-variants-wrapper">
                   {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
