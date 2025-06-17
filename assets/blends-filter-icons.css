@@ -73,9 +73,8 @@
         /* width: 130px;
         height: 190px; */
         cursor: pointer;
-                flex: 1; /* Allow items to grow and fill the space */
+        flex: 1; /* Allow items to grow and fill the space */
         max-width: 160px; /* But don't let them get too wide */
-
     }
 
     /* .blends-filter-icon-wrapper img {

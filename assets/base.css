@@ -1173,8 +1173,10 @@ summary::-webkit-details-marker {
   }
 
   .grid--1-col-tablet-down .grid__item {
-    width: 100%;
-    max-width: 95%;
+    /* width: 100%; */
+    /* max-width: 95%; */
+    max-width: 33%;
+    min-width: 25%;
     margin: 0 auto;
     background-color: #F5F4F2;
     border-radius: 8px;

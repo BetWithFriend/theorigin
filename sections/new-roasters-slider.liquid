@@ -11,6 +11,7 @@
                 <div class="new-roastes-slider-roaster-id">
                     <div class="new-roastes-slider-roaster-id-content">מיקום: {{vendor.vendor_location}}</div>
                     <div class="new-roastes-slider-roaster-id-content">הקמה: {{vendor.vendor_year_establishment}}</div>
+                    <div class="new-roastes-slider-roaster-id-content hp-vendor-link" onclick="goToVendorPageHP('{{ vendor.vendor_name.value }}')">לבית הקליה</div>
                 </div>
             </div>
             <div class="new-roastes-slider-roaster-video-wrapper">
@@ -105,6 +106,10 @@
     
     // Keep the original function for backwards compatibility
     window.slideVendor = slideVendor;
+
+    function goToVendorPageHP(vendorName) {
+        window.location.href = "{{ section.settings.collection.url }}/pages/vendor-" + vendorName.replaceAll(' ', '-');
+    }
 
 </script>
 

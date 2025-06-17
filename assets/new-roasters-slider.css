@@ -84,6 +84,7 @@
 .new-roastes-slider-roaster-id-content {
     white-space: nowrap;
     font-size: 14px; /* Adjusted for fit */
+    margin-bottom: 5px;
 }
 
 .new-roastes-slider-roaster-video-wrapper {
@@ -108,7 +109,7 @@
     padding: 8px 16px; /* Adjusted mobile padding */
     height: 225px;
     max-height: calc(25px * 9); /* Max 9 lines for mobile */
-    overflow-y: auto; /* Scroll if text overflows on mobile */
+    overflow-y: hidden; /* Scroll if text overflows on mobile */
     margin-bottom: 16px; /* Reduced mobile bottom margin */
     width: 100%; /* Ensure it takes full width for text alignment */
 }
@@ -159,6 +160,12 @@
     font-size: 16px;
     line-height: 25px;
     text-align: right;
+}
+
+.hp-vendor-link {
+    text-decoration: underline;
+    margin-bottom: 0px;
+    cursor: pointer;
 }
 
 @media screen and (min-width: 768px) {
@@ -268,7 +275,7 @@
         height: auto;
         max-height: none;
         width: 100%;
-        overflow-y: auto;
+        overflow-y: hidden;
         line-height: 1.7;
     }
     .rich-text__paragraph {

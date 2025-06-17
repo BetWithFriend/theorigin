@@ -6,7 +6,7 @@
     </div>
     {% comment %} <hr class="discover-roaster-divider-line" /> {% endcomment %}
 <!-- <img class="discover-roaster-img {{ img_class }}" src="{{ com_image | asset_url }}" alt="discover image" /> -->
-    <div onclick="goToPage('{{ btn_url }}')" class="discover-roaster-btn">{{ btn_text }}</div>
+    <div onclick="goToPageRoasters('{{ btn_url }}')" class="discover-roaster-btn">{{ btn_text }}</div>
 </div>
 
 <style>
@@ -108,7 +108,7 @@
 </style>
 
 <script>
-    function goToPage(url_postfix) {
+    function goToPageRoasters(url_postfix) {
         window.location.href = "{{ section.settings.collection.url }}" + url_postfix;
     }
 </script>
