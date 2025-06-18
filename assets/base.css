@@ -109,7 +109,8 @@
   text-align: right;
 }
 
-.product-source, .product-vendor-title {
+.product-source,
+.product-vendor-title {
   /* width: 100%; */
   text-align: right;
   font-family: 'Noto Sans', sans-serif;
@@ -3801,9 +3802,16 @@ details-disclosure>details {
   .quantity {
     border-radius: 10px;
     min-height: 38px;
-    width: 123px;
+    /* width: 123px; */
+    width: 40px;
     border: 1px solid #1C201D;
 
+  }
+
+  .quantity-cart-label {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 14px;
+    margin-left: 5px;
   }
 
   .quantity:after {}

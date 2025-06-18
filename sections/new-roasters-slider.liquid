@@ -78,9 +78,11 @@
     }
     
     function slideVendor(direction) {
-      if (direction === 'left') {
+      const slideWidth = document.querySelector('.new-roasters-slider-wrapper').offsetWidth; // Get the width of the slider wrapper
+
+      if (direction === 'right') {
         currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-      } else if (direction === 'right') {
+      } else if (direction === 'left') {
         currentIndex = (currentIndex + 1) % slides.length;
       }
       

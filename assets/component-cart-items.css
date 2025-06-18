@@ -196,7 +196,7 @@ cart-items .title-wrapper-with-link {
 .cart-item cart-remove-button {
   display: flex;
   margin-left: 1rem;
-  display: none;
+  /* display: none; */
 }
 
 @media screen and (min-width: 750px) and (max-width: 989px) {
