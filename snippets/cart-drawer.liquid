@@ -159,8 +159,6 @@
                             <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
                 
                             <dl class="cart-item-options-wrapper">
-                              <script>console.log('boom', {{ item.options_with_values | json }})</script>
-                              <script>console.log('Properties:', {{ item.properties | json }})</script>
                               {%- unless item.product.has_only_default_variant -%}
                                 {%- for option in item.options_with_values -%}
                                   <div class="product-option">
@@ -170,16 +168,19 @@
                                 {%- endfor -%}
                               {%- endunless -%}
                               
-                              {%- if item.properties.size > 0 -%}
-                                {%- for property in item.properties -%}
-                                  {%- if property.last != blank -%}
-                                    <div class="product-option">
-                                      <dt>{{ property.first }}:</dt>
-                                      <dd>{{ property.last }}</dd>
-                                    </div>
+                              {%- assign first_property_printed = false -%}
+                              {%- for property in item.properties -%}
+                                {%- assign property_first_char = property.first | slice: 0 -%}
+                                {%- if property.last != blank and property_first_char != '_' -%}
+                                  {%- if first_property_printed -%}
+                                  <div class="product-option">/</div> 
                                   {%- endif -%}
-                                {%- endfor -%}
-                              {%- endif -%}
+                                  <div class="product-option">
+                                    {{ property.last }}
+                                  </div>
+                                  {%- assign first_property_printed = true -%}
+                                {%- endif -%}
+                              {%- endfor -%} 
                             </dl>
 
                             {%- liquid
