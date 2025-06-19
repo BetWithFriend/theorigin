@@ -55,9 +55,15 @@
           <div class="footer-bottom-social-wrapper">
             <div class="footer-follow-us">עקבו אחרינו</div>
             <div class="footer-social-icons">
-              <img class="footer-social-image"  src={{ 'footer-YouTube.png' |  asset_url }} alt="Footer youtube"/>
-              <img class="footer-social-image"  src={{ 'footer-Instagram.png' |  asset_url }} alt="Footer instegram"/>
-              <img class="footer-social-image"  src={{ 'footer-Twitter.png' |  asset_url }} alt="Footer twitter"/>
+              <a href="https://www.facebook.com/profile.php?id=61574783031369" target="_blank" rel="noopener">
+                <img class="footer-social-image" src="{{ 'icon-facebook.png' | asset_url }}" alt="Footer youtube"/>
+              </a>
+              <a href="https://www.instagram.com/the_origin_coffee/" target="_blank" rel="noopener">
+                <img class="footer-social-image" src="{{ 'icon-instagram.png' | asset_url }}" alt="Footer instagram"/>
+              </a>
+              <!--<a href="{{ settings.social_twitter_link | default: '#' }}" target="_blank" rel="noopener">
+                <img class="footer-social-image" src="{{ 'footer-Twitter.png' | asset_url }}" alt="Footer twitter"/>
+              </a>-->
             </div>
           </div>
           <div class="contact-us-wrapper">
