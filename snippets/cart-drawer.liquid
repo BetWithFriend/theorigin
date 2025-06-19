@@ -95,27 +95,27 @@
           {%- if cart != empty -%}
             {%- assign vendors = "" -%}
             {%- assign shipping_price = 0 -%}
-    {% assign canopy_shipping = 35 %}
-    {% assign blooms_shipping = 40 %}
-    {% assign youneedcoffee_shipping = 55 %}
-    {% assign coffeeorg_shipping = 42 %}
-{%- for item in cart.items -%}
-  {%- unless vendors contains item.vendor -%}
-    {%- assign vendors = vendors | append: item.vendor | append: "," -%}
-    
-    {%- comment -%} Add shipping cost for each unique vendor {%- endcomment -%}
-    {%- if item.vendor == 'canopy' -%}
-      {%- assign shipping_price = shipping_price | plus: canopy_shipping -%}
-    {%- elsif item.vendor == 'blooms' -%}
-      {%- assign shipping_price = shipping_price | plus: blooms_shipping -%}
-    {%- elsif item.vendor == 'youneedcoffee' -%}
-      {%- assign shipping_price = shipping_price | plus: youneedcoffee_shipping -%}
-    {%- elsif item.vendor == 'coffeeorg' -%}
-      {%- assign shipping_price = shipping_price | plus: coffeeorg_shipping -%}
-    {%- endif -%}
-    
-  {%- endunless -%}
-{%- endfor -%}
+            {% assign canopy_shipping = 35 %}
+            {% assign blooms_shipping = 40 %}
+            {% assign youneedcoffee_shipping = 55 %}
+            {% assign coffeeorg_shipping = 42 %}
+              {%- for item in cart.items -%}
+                {%- unless vendors contains item.vendor -%}
+                  {%- assign vendors = vendors | append: item.vendor | append: "," -%}
+                  
+                  {%- comment -%} Add shipping cost for each unique vendor {%- endcomment -%}
+                  {%- if item.vendor == 'canopy' -%}
+                    {%- assign shipping_price = shipping_price | plus: canopy_shipping -%}
+                  {%- elsif item.vendor == 'blooms' -%}
+                    {%- assign shipping_price = shipping_price | plus: blooms_shipping -%}
+                  {%- elsif item.vendor == 'youneedcoffee' -%}
+                    {%- assign shipping_price = shipping_price | plus: youneedcoffee_shipping -%}
+                  {%- elsif item.vendor == 'coffeeorg' -%}
+                    {%- assign shipping_price = shipping_price | plus: coffeeorg_shipping -%}
+                  {%- endif -%}
+                  
+                {%- endunless -%}
+              {%- endfor -%}
             {%- assign vendor_array = vendors | split: "," | uniq | sort -%}
             {%- assign vendor_count = vendor_array | size-%} 
 
@@ -210,18 +210,18 @@
                                       {{- 'icon-info.svg' | inline_asset_content -}}
                                     </button>
                                   {%- endif -%}
-                                  <label class="quantity-cart-label" for="Quantity-{{ item.index | plus: 1 }}">
-                                        כמות: 
-                                    </label>
+                                  {% comment %} <label class="quantity-cart-label" for="Quantity-{{ item.index | plus: 1 }}">
+                                    כמות:
+                                  </label> {% endcomment %}
                                   <quantity-input class="quantity cart-quantity">
-                                    {% comment %} <button class="quantity__button disable" disabled name="minus" type="button">
+                                    <button class="quantity__button" name="minus" type="button">
                                       <span class="visually-hidden">
                                         {{- 'products.product.quantity.decrease' | t: product: item.product.title | escape -}}
                                       </span>
                                       <span class="svg-wrapper">
                                         {{- 'icon-minus.svg' | inline_asset_content -}}
                                       </span>
-                                    </button> {% endcomment %}
+                                    </button>
  
                                     <input
                                       class="quantity__input"
@@ -240,14 +240,14 @@
                                       id="Quantity-{{ item.index | plus: 1 }}"
                                       data-index="{{ item.index | plus: 1 }}"
                                     >
-                                    {% comment %} <button class="quantity__button disable" disabled name="plus" type="button">
+                                    <button class="quantity__button" name="plus" type="button">
                                       <span class="visually-hidden">
                                         {{- 'products.product.quantity.increase' | t: product: item.product.title | escape -}}
                                       </span>
                                       <span class="svg-wrapper">
                                         {{- 'icon-plus.svg' | inline_asset_content -}}
                                       </span>
-                                    </button> {% endcomment %}
+                                    </button>
                                   </quantity-input>
                                 </div>
                                 
@@ -518,7 +518,7 @@
                         <div class="cart-total-delivery-sum">{{ cart_item_shipping }} ₪</div>
                     </div>
                   </div> 
-                {%- endif -%}
+                 {%- endif -%}
               {%- endfor -%}
             </div>
           {%- endif -%}
@@ -645,11 +645,61 @@
 </cart-drawer>
 
 <script>
+function getOrderedQuantitiesByIndex() {
+  const inputs = Array.from(document.querySelectorAll('.quantity__input'));
+  return inputs
+    .filter(input => input.dataset.index)
+    .sort((a, b) => Number(a.dataset.index) - Number(b.dataset.index));
+}
+
   const checkoutButton = document.getElementById('CartDrawer-Checkout');
   checkoutButton.addEventListener('click', function(event) {
     analytics.trackClick('Cart Checkout', {
         'Total': {{ cart.total_price }},
     });
+  });
+
+  document.getElementById('CartDrawer-Form').addEventListener('submit', function(event) {
+        debugger;
+    // Replace currentTarget with an array of quantity inputs in the correct order
+    // Duplicate the form element, update the quantity inputs order, and submit the duplicate
+    event.preventDefault();
+    const form = event.currentTarget;
+    const orderedInputs = getOrderedQuantitiesByIndex();
+
+    // Clone the form
+    const clonedForm = form.cloneNode(false); // shallow clone, no children
+
+    // Append ordered quantity inputs and all other form elements
+    // First, append all non-quantity__input elements
+    Array.from(form.elements).forEach(el => {
+      if (!el.classList.contains('quantity__input')) {
+      clonedForm.appendChild(el.cloneNode(true));
+      }
+    });
+    // Then, append ordered quantity__input elements
+    orderedInputs.forEach(input => {
+      clonedForm.appendChild(input.cloneNode(true));
+    });
+
+    // Create a temporary container to submit the cloned form
+    const tempDiv = document.createElement('div');
+    tempDiv.style.display = 'none';
+    document.body.appendChild(tempDiv);
+    tempDiv.appendChild(clonedForm);
+
+    // Submit the cloned form
+    clonedForm.action = '/checkout';
+
+    clonedForm.submit();
+
+    // Clean up
+    setTimeout(() => {
+      document.body.removeChild(tempDiv);
+    }, 1000);
+
+
+
   });
 
 </script>

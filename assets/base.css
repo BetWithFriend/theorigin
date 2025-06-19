@@ -3802,8 +3802,8 @@ details-disclosure>details {
   .quantity {
     border-radius: 10px;
     min-height: 38px;
-    /* width: 123px; */
-    width: 40px;
+    width: 123px;
+    /* width: 40px; */
     border: 1px solid #1C201D;
 
   }
