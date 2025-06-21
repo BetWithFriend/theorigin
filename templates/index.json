@@ -82,7 +82,7 @@
     "featured_collection_ErHj6f": {
       "type": "featured-collection",
       "settings": {
-        "title": "המומלצים של מאי",
+        "title": "המומלצים של החודש",
         "heading_size": "h2",
         "description": "",
         "show_description": true,
@@ -110,7 +110,7 @@
     "featured_collection_qNARrT": {
       "type": "featured-collection",
       "settings": {
-        "title": "המיוחדים של מאי",
+        "title": "המיוחדים של החודש",
         "heading_size": "h2",
         "description": "",
         "show_description": true,
