@@ -22,16 +22,20 @@
     text-align: right;
     width: 100%;
     padding: 0 24px;
-    margin-bottom: 16px; /* Added some space below title */
+    margin-bottom: 16px;
+    /* Added some space below title */
 }
 
 /* Styles for the outer slider track (scrolling container for cards) */
-.new-rosters-slider-content-wrapper {
+.new-roasters-slider-content-wrapper {
     margin-bottom: 16px;
-    padding: 16px 0; /* Vertical padding */
+    padding: 16px 0;
+    /* Vertical padding */
     display: flex;
-    align-items: flex-start; /* Align cards to the top */
-    gap: 16px; /* Gap between cards in the slider */
+    align-items: flex-start;
+    /* Align cards to the top */
+    gap: 16px;
+    /* Gap between cards in the slider */
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -39,38 +43,59 @@
     /* Ensure it has a mechanism to show one card prominently if needed,
        possibly via JS or more advanced CSS scroll-snap properties.
        For this solution, we focus on the card's internal layout. */
+    transition: opacity 0.5s ease-in-out;
+    /* Smooth transition for fade effects */
+}
+
+/* Container for the slider slides */
+.new-roasters-slider-container {
+    position: relative;
+    /* Container for absolutely positioned slides */
+    min-height: 400px;
+    /* Ensure container has height for slides */
+    width: 100%;
 }
 
 /* Styles for individual vendor cards */
 .new-roasters-slider-content-wrapper {
     background-color: #E6E3DE;
-    width: 100%; /* Default for mobile, will be overridden for desktop slider item */
+    width: 100%;
+    /* Default for mobile, will be overridden for desktop slider item */
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     gap: 16px;
-    padding: 16px; /* Padding for mobile card content */
+    padding: 16px;
+    /* Padding for mobile card content */
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    /* Smooth transition for fade and slide effects */
+    position: relative;
+    /* Back to relative positioning */
 }
 
 .new-roastes-slider-top {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center; /* Centered for mobile */
+    justify-content: center;
+    /* Centered for mobile */
     gap: 48px;
-    padding: 16px 0; /* Adjusted mobile padding slightly */
+    padding: 16px 0;
+    /* Adjusted mobile padding slightly */
 }
 
 .new-roastes-slider-roaster-logo-wrapper {
-    height: 124px; /* Mobile logo wrapper height */
+    height: 124px;
+    /* Mobile logo wrapper height */
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .new-roastes-slider-roaster-logo {
-    width: 124px; /* Mobile logo size */
+    width: 124px;
+    /* Mobile logo size */
 }
 
 .new-roastes-slider-roaster-id {
@@ -83,20 +108,27 @@
 
 .new-roastes-slider-roaster-id-content {
     white-space: nowrap;
-    font-size: 14px; /* Adjusted for fit */
+    font-size: 14px;
+    /* Adjusted for fit */
     margin-bottom: 5px;
 }
 
 .new-roastes-slider-roaster-video-wrapper {
-    width: 100%; /* Allow wrapper to manage video width on mobile */
-    display: flex;      /* Added to center the fixed-width video on mobile */
-    justify-content: center; /* Added to center the fixed-width video on mobile */
+    width: 100%;
+    /* Allow wrapper to manage video width on mobile */
+    display: flex;
+    /* Added to center the fixed-width video on mobile */
+    justify-content: center;
+    /* Added to center the fixed-width video on mobile */
 }
 
 .new-roastes-slider-roaster-video {
-    width: 326px; /* Fixed width for video/poster on mobile */
-    max-width: 100%; /* Ensure it doesn't overflow its container */
-    height: auto; /* Maintain aspect ratio */
+    width: 326px;
+    /* Fixed width for video/poster on mobile */
+    max-width: 100%;
+    /* Ensure it doesn't overflow its container */
+    height: auto;
+    /* Maintain aspect ratio */
     border-radius: 8px;
 }
 
@@ -106,21 +138,30 @@
     font-size: 16px;
     line-height: 25px;
     text-align: right;
-    padding: 8px 16px; /* Adjusted mobile padding */
+    padding: 6px 16px;
+    /* Adjusted mobile padding */
     height: 225px;
-    max-height: calc(25px * 9); /* Max 9 lines for mobile */
-    overflow-y: hidden; /* Scroll if text overflows on mobile */
-    margin-bottom: 16px; /* Reduced mobile bottom margin */
-    width: 100%; /* Ensure it takes full width for text alignment */
+    max-height: calc(25px * 9);
+    /* Max 9 lines for mobile */
+    overflow-y: hidden;
+    /* Scroll if text overflows on mobile */
+    margin-bottom: 16px;
+    /* Reduced mobile bottom margin */
+    width: 100%;
+    /* Ensure it takes full width for text alignment */
 }
 
 .new-roasters-slider-action-wrapper {
     position: absolute;
-    bottom: -35px; /* Position below the card for mobile */
+    bottom: -35px;
+    /* Position below the card for mobile */
     left: 50%;
-    transform: translateX(-50%); /* Center it */
-    width: auto; /* Auto width based on content */
-    max-width: 280px; /* Max width to prevent it from being too wide on small mobiles */
+    transform: translateX(-50%);
+    /* Center it */
+    width: auto;
+    /* Auto width based on content */
+    max-width: 280px;
+    /* Max width to prevent it from being too wide on small mobiles */
     height: 72px;
     border-radius: 86px;
     padding: 16px 24px;
@@ -130,7 +171,8 @@
     align-items: center;
     justify-content: center;
     gap: 40px;
-    z-index: 10; /* Ensure it's above other content if overlapping occurs */
+    z-index: 10;
+    /* Ensure it's above other content if overlapping occurs */
 }
 
 .new-roasters-slider-bullets-wrapper {
@@ -178,27 +220,31 @@
         padding: 0;
         font-size: 24px;
         line-height: 32px;
-        text-align: right; /* Or center: text-align: center; */
+        text-align: right;
+        /* Or center: text-align: center; */
         margin-bottom: 24px;
     }
 
-    .new-rosters-slider-content-wrapper { /* Outer slider track with 'e' */
+    .new-roasters-slider-content-wrapper {
+        /* Outer slider track with 'e' */
         gap: 24px;
         /* padding: 24px 0; */
         padding: 0;
         margin: 0;
     }
 
-    div.new-roasters-slider-content-wrapper { /* Inner card with 'a' */
+    div.new-roasters-slider-content-wrapper {
+        /* Inner card with 'a' */
         display: grid;
         /* For RTL: First column is on the right, second on the left.
            To have text on right (wider) and video on left (narrower):
            Column 1 (text content): 3fr
            Column 2 (video): 2fr */
-        grid-template-columns: 2fr 2fr; 
-        grid-template-rows: auto 1fr; /* Row 1 for top-right (logo/ID), Row 2 for description */
+        grid-template-columns: 2fr 2fr;
+        grid-template-rows: auto 1fr;
+        /* Row 1 for top-right (logo/ID), Row 2 for description */
         gap: 28px;
-        
+
         /* flex: 0 0 calc(85% - 24px); */
         /* max-width: 900px; */
         margin: 0 auto;
@@ -212,14 +258,18 @@
     /* Top section (logo and ID) */
     .new-roastes-slider-top {
         /* This section will be on the RIGHT (Column 1) in RTL */
-        grid-column: 1 / 2; 
-        grid-row: 1 / 2;    
-        
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+
         display: flex;
-        flex-direction: row; /* FIX: Changed to 'row' for side-by-side layout */
-        align-items: center; /* Vertically align logo and ID box if they have different heights */
-        justify-content: flex-start; /* In RTL, flex-start is right. Logo will be rightmost. */
-        gap: 20px; /* Space between logo and ID box */
+        flex-direction: row;
+        /* FIX: Changed to 'row' for side-by-side layout */
+        align-items: center;
+        /* Vertically align logo and ID box if they have different heights */
+        justify-content: flex-start;
+        /* In RTL, flex-start is right. Logo will be rightmost. */
+        gap: 20px;
+        /* Space between logo and ID box */
         padding: 0;
         width: 100%;
     }
@@ -229,20 +279,24 @@
         /* Add flex-shrink: 0 if logo should not shrink */
         flex-shrink: 0;
     }
+
     .new-roastes-slider-roaster-logo {
         width: auto;
         max-width: 130px;
         max-height: 70px;
-        display: block; /* Ensure image behaves predictably */
+        display: block;
+        /* Ensure image behaves predictably */
     }
 
     .new-roastes-slider-roaster-id {
-        width: auto; /* Let it take space based on content and gap */
+        width: auto;
+        /* Let it take space based on content and gap */
         max-width: 220px;
         padding: 12px 18px;
         text-align: right;
         /* Add flex-shrink: 0 if ID box should not shrink, or let it take available space */
     }
+
     .new-roastes-slider-roaster-id-content {
         font-size: 15px;
     }
@@ -250,15 +304,17 @@
     /* Video/Image wrapper */
     .new-roastes-slider-roaster-video-wrapper {
         /* This section will be on the LEFT (Column 2) in RTL */
-        grid-column: 2 / 3; 
-        grid-row: 1 / 3;    /* Span both rows */
-        
+        grid-column: 2 / 3;
+        grid-row: 1 / 3;
+        /* Span both rows */
+
         width: 100%;
         height: 100%;
         display: flex;
         overflow: hidden;
         border-radius: 8px;
     }
+
     .new-roastes-slider-roaster-video {
         width: 100%;
         height: 100%;
@@ -268,9 +324,10 @@
     /* Description text */
     .new-roastes-slider-roaster-description {
         /* This section will be on the RIGHT (Column 1), below the .new-roastes-slider-top */
-        grid-column: 1 / 2; 
-        grid-row: 2 / 3;    
-        
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+        /* Span both rows */
+
         padding: 0;
         height: auto;
         max-height: none;
@@ -278,6 +335,7 @@
         overflow-y: hidden;
         line-height: 1.7;
     }
+
     .rich-text__paragraph {
         font-size: 16px;
         line-height: 1.7;
@@ -292,4 +350,56 @@
         margin-top: -36px;
         width: auto;
     }
+}
+
+/* Slider viewport - contains the track and handles overflow */
+.new-roasters-slider-viewport {
+    position: relative;
+    width: 100%;
+    height: 700px;
+    /* Fixed height for consistent layout */
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+/* Slider track - contains all slides */
+.new-roasters-slider-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Individual slide */
+.new-roasters-slider-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #E6E3DE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    transition: transform 0.5s ease-in-out, opacity 0.3s ease-in-out;
+    opacity: 0;
+    /* Removed default transform - let JavaScript handle positioning */
+}
+
+/* Active slide */
+.new-roasters-slider-slide.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Slide coming from left */
+.new-roasters-slider-slide.slide-left {
+    transform: translateX(-100%);
+}
+
+/* Slide coming from right */
+.new-roasters-slider-slide.slide-right {
+    transform: translateX(100%);
 }

@@ -1,7 +1,7 @@
 {{ 'new-roasters-slider.css' | asset_url | stylesheet_tag }}
 <div class="new-roasters-slider-wrapper">
     <div class="new-roasters-slider-title" dir="rtl">בתי קלייה חדשים</div>
-    <div class="new-rosters-slider-content-wrapper" dir="rtl">
+    <div class="new-roasters-slider-content-wrapper" dir="rtl">
      {% for vendor in shop.metaobjects.vendor_definitions.values %}
         <div class="new-roasters-slider-content-wrapper" dir="rtl">
             <div class="new-roastes-slider-top">
@@ -9,9 +9,9 @@
                     <img class="new-roastes-slider-roaster-logo" src="{{ vendor.vendor_logo | img_url: 'small' }}" alt="">
                 </div>
                 <div class="new-roastes-slider-roaster-id">
-                    <div class="new-roastes-slider-roaster-id-content">מיקום: {{vendor.vendor_location}}</div>
-                    <div class="new-roastes-slider-roaster-id-content">הקמה: {{vendor.vendor_year_establishment}}</div>
-                    <div class="new-roastes-slider-roaster-id-content hp-vendor-link" onclick="goToVendorPageHP('{{ vendor.vendor_name.value }}')">לבית הקליה</div>
+                    <div class="new-roasters-slider-roaster-id-content">מיקום: {{vendor.vendor_location}}</div>
+                    <div class="new-roasters-slider-roaster-id-content">הקמה: {{vendor.vendor_year_establishment}}</div>
+                    <div class="new-roasters-slider-roaster-id-content hp-vendor-link" onclick="goToVendorPageHP('{{ vendor.vendor_name.value }}')">לבית הקליה</div>
                 </div>
             </div>
             <div class="new-roastes-slider-roaster-video-wrapper">
@@ -52,8 +52,9 @@
 
 <script>
   let currentIndex = 0;
-    const slides = document.querySelectorAll('.new-rosters-slider-content-wrapper > .new-roasters-slider-content-wrapper');
+    const slides = document.querySelectorAll('.new-roasters-slider-content-wrapper > .new-roasters-slider-content-wrapper');
     const bullets = document.querySelectorAll('.new-roasters-slider-bullet');
+    let isTransitioning = false; // Prevent rapid clicking during transitions
     
     // Set initial state
     updateSlides();
@@ -78,22 +79,81 @@
     }
     
     function slideVendor(direction) {
+      if (isTransitioning) return; // Prevent rapid clicking
+      
+      isTransitioning = true;
+      
       if (direction === 'right') {
+        // Going backwards - decrease index
         currentIndex = (currentIndex - 1 + slides.length) % slides.length;
       } else if (direction === 'left') {
+        // Going forwards - increase index
         currentIndex = (currentIndex + 1) % slides.length;
       }
       
-      updateSlides();
+      updateSlides(direction);
       updateBullets();
+      
+      // Reset transition flag after animation completes
+      setTimeout(() => {
+        isTransitioning = false;
+      }, 600);
     }
     
-    function updateSlides() {
-      slides.forEach((slide, index) => {
-        // Hide all slides
-        {% comment %} slide.style.display = index === currentIndex ? 'flex' : 'none'; {% endcomment %}
-         slide.style.display = index === currentIndex ? 'grid' : 'none';
-      });
+    function updateSlides(direction) {
+      const currentSlide = slides[currentIndex];
+      
+      // Set up initial positions based on direction
+      if (direction === 'left') {
+        // Slide coming from right
+        currentSlide.style.transform = 'translateX(100%)';
+        currentSlide.style.opacity = '1';
+        currentSlide.style.display = 'grid';
+        
+        // Hide other slides immediately
+        slides.forEach((slide, index) => {
+          if (index !== currentIndex) {
+            slide.style.transform = 'translateX(-100%)';
+            slide.style.opacity = '0';
+            slide.style.display = 'none';
+          }
+        });
+        
+        // Animate current slide in from right
+        setTimeout(() => {
+          currentSlide.style.transition = 'transform 0.5s ease-in-out';
+          currentSlide.style.transform = 'translateX(0)';
+        }, 10);
+        
+      } else if (direction === 'right') {
+        // Slide coming from left
+        currentSlide.style.transform = 'translateX(-100%)';
+        currentSlide.style.opacity = '1';
+        currentSlide.style.display = 'grid';
+        
+        // Hide other slides immediately
+        slides.forEach((slide, index) => {
+          if (index !== currentIndex) {
+            slide.style.transform = 'translateX(100%)';
+            slide.style.opacity = '0';
+            slide.style.display = 'none';
+          }
+        });
+        
+        // Animate current slide in from left
+        setTimeout(() => {
+          currentSlide.style.transition = 'transform 0.5s ease-in-out';
+          currentSlide.style.transform = 'translateX(0)';
+        }, 10);
+        
+      } else {
+        // Initial load - no animation
+        slides.forEach((slide, index) => {
+          slide.style.display = index === currentIndex ? 'grid' : 'none';
+          slide.style.transform = 'translateX(0)';
+          slide.style.opacity = index === currentIndex ? '1' : '0';
+        });
+      }
     }
     
     function updateBullets() {
