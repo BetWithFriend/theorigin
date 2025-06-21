@@ -644,6 +644,17 @@
 </cart-drawer>
 
 <script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+  // Use event delegation on the document or a stable parent container
+  document.addEventListener('submit', function(event) {
+    if (event.target.id === 'CartDrawer-Form') {
+      event.preventDefault();
+      // Your existing logic here
+      handleFormSubmission(event.target);
+    }
+  });
+});
 function getOrderedQuantitiesByIndex() {
   const inputs = Array.from(document.querySelectorAll('.quantity__input'));
   return inputs
@@ -658,13 +669,9 @@ function getOrderedQuantitiesByIndex() {
     });
   });
 
-  document.getElementById('CartDrawer-Form').addEventListener('submit', function(event) {
-    // Replace currentTarget with an array of quantity inputs in the correct order
-    // Duplicate the form element, update the quantity inputs order, and submit the duplicate
-    event.preventDefault();
-    const form = event.currentTarget;
-    const orderedInputs = getOrderedQuantitiesByIndex();
-
+  function handleFormSubmission(form) {
+  const orderedInputs = getOrderedQuantitiesByIndex();
+  
     // Clone the form
     const clonedForm = form.cloneNode(false); // shallow clone, no children
 
@@ -696,8 +703,7 @@ function getOrderedQuantitiesByIndex() {
       document.body.removeChild(tempDiv);
     }, 1000);
 
-    // debugger;
-
-  });
+    console.log('BOOM:', orderedInputs.map(input => input.value));
+}
 
 </script>
