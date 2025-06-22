@@ -204,10 +204,10 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
     padding: 0 5rem;
   }
 
-  .header.page-width,
+  /* .header.page-width,
   .utility-bar__grid.page-width {
     padding: 24px;
-  }
+  } */
 
   .page-width--narrow {
     padding: 0 9rem;

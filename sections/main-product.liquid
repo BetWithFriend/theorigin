@@ -79,6 +79,10 @@
     display: none;
   }
 
+  .product-extra-details-shipping {
+    display: none;
+  }
+
   .page-width-product-page {
     position: relative;
     margin: 0 auto;
@@ -184,6 +188,22 @@
       width: 100%;
       background-color: #F4F3F0;
       padding: 24px;
+    }
+
+    .product-extra-details-shipping {
+      display: block;
+      background-color: #F4F3F0;
+      padding-top: 16px;
+    }
+
+    .product-extra-details-shipping p {
+      margin:0;
+      padding: 0;
+      text-align: center;
+      background: var(--gradient-background);
+      border-radius: 16px;
+      margin: 0 30px;
+      padding: 8px;
     }
 
     .product-extra-details-container-inner {
@@ -1022,6 +1042,12 @@
     </script>
   </div>
 
+  {%- if vendor.min_order_for_free_shipping > 0 -%}
+  <div class="product-extra-details-shipping">
+    <p>משלוחים חינם בהזמנה מעל {{ vendor.min_order_for_free_shipping }} ש״ח</p>
+  </div>
+  {%- endif -%}
+
   <div class="product-extra-details-container">
     <div class="product-extra-details-container-inner">
       <div class="product-extra-detail-item">
@@ -1052,7 +1078,7 @@
 {% assign coffee_process = product.metafields.custom.coffee_process.value %}
 {% assign coffee_type = product.metafields.custom.coffee_type.value %}
 
-{% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description %}
+{% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description, shipping_fee: vendor.vendor_shipping, free_shipping: vendor.min_order_for_free_shipping %}
 
 <script>
     analytics.trackScreenView('Product Page', {

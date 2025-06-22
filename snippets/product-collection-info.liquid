@@ -1,17 +1,18 @@
 
 <!-- snippets/product-collection-info.liquid -->
- <div class="product-collection-wrapper">
+{%- if free_shipping.value > 0 -%}
+<div class="product-vendor-shipping-info">
+    <p>משלוח חינם מעל {{ free_shipping.value }} ש״ח</p>
+</div> 
+{%- endif -%}
+<div class="product-collection-wrapper">
     <div>
         <img src="{{ vendor_logo.value | img_url: 'small' }}" alt="{{ product.featured_image.alt | escape }}">
     </div>
-
-
-        <div class="collection-text">
-            {{ vendor_description.value }}
-        </div> 
-      
+    <div class="collection-text">
+        {{ vendor_description.value }}
+    </div>
  </div>
-
 
  <style>
     .product-collection-wrapper {
@@ -33,5 +34,25 @@
         line-height: 22px;
         color: #1C201D;
         text-align: right;
+    }
+
+    .product-vendor-shipping-info {
+        text-align: center;
+        background-color: #e3e0da;
+        padding: 20px;
+        padding-top: 0px;
+    }
+
+    .product-vendor-shipping-info p {
+        margin: 0;
+        padding: 0;
+        background-color: #DAD7D1;
+        border-radius: 20px;
+    }
+
+    @media (min-width: 769px) {
+        .product-vendor-shipping-info {
+            display:none;
+        }
     }
  </style>
