@@ -1,5 +1,5 @@
 {% comment %}
-  Renders cart drawer
+  Renders cart drawer with free shipping per vendor logic
 
   Usage:
   {% render 'cart-drawer' %}
@@ -15,6 +15,15 @@
 <style>
   .drawer {
     visibility: hidden;
+  }
+  .free-shipping-notice {
+    color: #1C201D;
+    font-weight: 500;
+    font-size: 12px;
+  }
+  .shipping-crossed-out {
+    text-decoration: line-through;
+    color: #999;
   }
 </style>
 
@@ -99,38 +108,76 @@
             {% assign blooms_shipping = 40 %}
             {% assign youneedcoffee_shipping = 55 %}
             {% assign coffeeorg_shipping = 42 %}
+            
+            {%- comment -%} Free shipping thresholds in cents {%- endcomment -%}
+            {% assign canopy_free_shipping_threshold = 19500 %}
+            {% assign blooms_free_shipping_threshold = 22000 %}
+            {% comment %} {% assign youneedcoffee_free_shipping_threshold = 25000 %} {% endcomment %}
+            {% assign coffeeorg_free_shipping_threshold = 25000 %}
+            
+            {%- comment -%} Calculate vendor totals {%- endcomment -%}
+            {%- assign vendor_totals = blank -%}
+            
               {%- for item in cart.items -%}
                 {%- unless vendors contains item.vendor -%}
                   {%- assign vendors = vendors | append: item.vendor | append: "," -%}
-                  
-                  {%- comment -%} Add shipping cost for each unique vendor {%- endcomment -%}
-                  {%- if item.vendor == 'canopy' -%}
-                    {%- assign shipping_price = shipping_price | plus: canopy_shipping -%}
-                  {%- elsif item.vendor == 'blooms' -%}
-                    {%- assign shipping_price = shipping_price | plus: blooms_shipping -%}
-                  {%- elsif item.vendor == 'youneedcoffee' -%}
-                    {%- assign shipping_price = shipping_price | plus: youneedcoffee_shipping -%}
-                  {%- elsif item.vendor == 'coffeeorg' -%}
-                    {%- assign shipping_price = shipping_price | plus: coffeeorg_shipping -%}
-                  {%- endif -%}
-                  
                 {%- endunless -%}
               {%- endfor -%}
+              
             {%- assign vendor_array = vendors | split: "," | uniq | sort -%}
             {%- assign vendor_count = vendor_array | size-%} 
 
             <div class="cart-items-wrapper">
               {%- for vendor in vendor_array -%}
                 {%- assign vendor_has_items = false -%}
+                {%- assign vendor_total = 0 -%}
+                
+                {%- comment -%} Calculate total for this vendor {%- endcomment -%}
                 {%- for item in cart.items -%}
                   {%- if item.vendor == vendor -%}
                     {%- assign vendor_has_items = true -%}
-                    {%- break -%}
+                    {%- assign vendor_total = vendor_total | plus: item.final_line_price -%}
                   {%- endif -%}
                 {%- endfor -%}
                 
+                {%- comment -%} Determine if vendor qualifies for free shipping {%- endcomment -%}
+                {%- assign vendor_qualifies_free_shipping = false -%}
+                {%- assign vendor_shipping_cost = 0 -%}
+                {%- assign vendor_free_threshold = 0 -%}
+                
+                {%- if vendor == 'canopy' -%}
+                  {%- assign vendor_shipping_cost = canopy_shipping -%}
+                  {%- assign vendor_free_threshold = canopy_free_shipping_threshold -%}
+                  {%- if vendor_total >= canopy_free_shipping_threshold -%}
+                    {%- assign vendor_qualifies_free_shipping = true -%}
+                  {%- endif -%}
+                {%- elsif vendor == 'blooms' -%}
+                  {%- assign vendor_shipping_cost = blooms_shipping -%}
+                  {%- assign vendor_free_threshold = blooms_free_shipping_threshold -%}
+                  {%- if vendor_total >= blooms_free_shipping_threshold -%}
+                    {%- assign vendor_qualifies_free_shipping = true -%}
+                  {%- endif -%}
+                {%- elsif vendor == 'youneedcoffee' -%}
+                  {%- assign vendor_shipping_cost = youneedcoffee_shipping -%}
+                  {%- assign vendor_free_threshold = youneedcoffee_free_shipping_threshold -%}
+                  {%- if vendor_total >= youneedcoffee_free_shipping_threshold -%}
+                    {%- assign vendor_qualifies_free_shipping = true -%}
+                  {%- endif -%}
+                {%- elsif vendor == 'coffeeorg' -%}
+                  {%- assign vendor_shipping_cost = coffeeorg_shipping -%}
+                  {%- assign vendor_free_threshold = coffeeorg_free_shipping_threshold -%}
+                  {%- if vendor_total >= coffeeorg_free_shipping_threshold -%}
+                    {%- assign vendor_qualifies_free_shipping = true -%}
+                  {%- endif -%}
+                {%- endif -%}
+                
+                {%- comment -%} Add to total shipping if not free {%- endcomment -%}
+                {%- unless vendor_qualifies_free_shipping -%}
+                  {%- assign shipping_price = shipping_price | plus: vendor_shipping_cost -%}
+                {%- endunless -%}
+                
                 {%- if vendor_has_items -%}
-                  <div class="cart-item-wrapper"> 
+                  <div class="cart-item-wrapper" data-vendor="{{ vendor }}"> 
                     <div class="cart-item-vendor">{{ vendor |  upcase }}</div> 
                     {%- for item in cart.items -%}
                       {%- if item.vendor == vendor -%}
@@ -214,7 +261,8 @@
                                     כמות:
                                   </label> {% endcomment %}
                                   <quantity-input class="quantity cart-quantity">
-                                    <button class="quantity__button" name="minus" type="button">
+                                    <button class="quantity__button" name="minus" type="button" 
+                                            data-vendor="{{ item.vendor }}" data-item-price="{{ item.final_price }}">
                                       <span class="visually-hidden">
                                         {{- 'products.product.quantity.decrease' | t: product: item.product.title | escape -}}
                                       </span>
@@ -226,6 +274,8 @@
                                     <input
                                       class="quantity__input"
                                       data-quantity-variant-id="{{ item.variant.id }}"
+                                      data-vendor="{{ item.vendor }}"
+                                      data-item-price="{{ item.final_price }}"
                                       type="number"
                                       name="updates[]"
                                       value="{{ item.quantity }}"
@@ -240,7 +290,8 @@
                                       id="Quantity-{{ item.index | plus: 1 }}"
                                       data-index="{{ item.index | plus: 1 }}"
                                     >
-                                    <button class="quantity__button" name="plus" type="button">
+                                    <button class="quantity__button" name="plus" type="button"
+                                            data-vendor="{{ item.vendor }}" data-item-price="{{ item.final_price }}">
                                       <span class="visually-hidden">
                                         {{- 'products.product.quantity.increase' | t: product: item.product.title | escape -}}
                                       </span>
@@ -503,19 +554,19 @@
                         <div class="cart-total-delivery">
                           {{ 'sections.cart.cart_delivery' | t }}
                         </div>
-                          {%- assign cart_item_shipping = canopy_shipping -%}
-
-                          {%- if vendor == 'blooms' -%}
-                            {%- assign cart_item_shipping = blooms_shipping -%}
-                          {%- elsif vendor == 'youneedcoffee' -%}
-                            {%- assign cart_item_shipping = youneedcoffee_shipping -%}
-                          {%- elsif vendor == 'coffeeorg' -%}
-                            {%- assign cart_item_shipping = coffeeorg_shipping -%}
+                        
+                        <div class="cart-total-delivery-sum" data-vendor-shipping="{{ vendor }}">
+                          {%- if vendor_qualifies_free_shipping -%}
+                            <span class="shipping-crossed-out">{{ vendor_shipping_cost }} ₪</span>
+                            <div class="free-shipping-notice">{{ 'sections.cart.free_shipping' | t | default: 'משלוח חינם!' }}</div>
+                          {%- else -%}
+                            {{ vendor_shipping_cost }} ₪
+                            <div class="free-shipping-notice">
+                              {%- assign remaining_for_free = vendor_free_threshold | minus: vendor_total -%}
+                              הוסף עוד {{ remaining_for_free | money }} למשלוח חינם
+                            </div>
                           {%- endif -%}
-
-                          <script>console.log('boom', {{cart.items | json}} )</script>
-
-                        <div class="cart-total-delivery-sum">{{ cart_item_shipping }} ₪</div>
+                        </div>
                     </div>
                   </div> 
                  {%- endif -%}
