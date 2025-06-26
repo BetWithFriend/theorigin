@@ -6,7 +6,7 @@
   <div class="dropdown-weight-menu" aria-labelledby="weightDropdown">
     {% for weight in weights.value %}      
     <div class="dropdown-item-weight" onclick="filterByweight('{{ weight }}'); selectWeight('{{ weight }}')">
-      <div class="dropdown-weight-icons" dir="ltr">
+      <div class="dropdown-weight-icons" dir="rtl">
         <!--<span>{{ weight.value | remove: '.0' }} {{ weight.unit }} </span> -->
         <span>{{ weight.value | remove: '.0' }} ג</span>
       </div>
@@ -45,9 +45,9 @@
     box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     z-index: 2;
   }
-  .dropdown-weight:hover .dropdown-weight-menu {
+  /* .dropdown-weight:hover .dropdown-weight-menu {
     display: block;
-  }
+  } */
   .dropdown-item-weight {
     padding: 10px;
     cursor: pointer;
