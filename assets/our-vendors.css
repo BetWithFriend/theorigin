@@ -62,7 +62,11 @@
 }
 
 .our-vendor-logo-img {
-    width: 60%;
+  max-width: 60%;
+  max-height: 80%;
+  width: auto;
+  height: auto;
+    object-fit: contain;
 }
 
 .product-description-divider {
@@ -101,7 +105,7 @@
     text-align: center; 
 }
 
-@media screen and (min-width: 990px) {
+@media screen and (min-width: 769px) {
     .our-vendors-logo-wrapper {
         gap: 24px;
         display: flex;

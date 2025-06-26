@@ -77,13 +77,15 @@ cart-drawer:not(.is-empty) .cart-drawer__collection {
 .drawer__header {
   position: relative;
   padding: 1.5rem 0;
+  padding-bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .drawer__heading {
-  margin: 0 0 1rem;
+  /* margin: 0 0 1rem; */
+  margin: 0;
 }
 
 .drawer__close {
@@ -210,6 +212,7 @@ cart-drawer-items {
   align-items: start;
   justify-content: space-around;
   gap: 12px;
+  padding: 0px 16px 0px 16px;
   /* display: grid;
   grid-template: repeat(2, auto) / repeat(4, 1fr);
   gap: 1rem;

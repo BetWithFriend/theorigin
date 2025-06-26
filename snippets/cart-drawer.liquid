@@ -20,11 +20,11 @@
     font-family: 'Noto Sans', sans-serif;
     color: #1C201D;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 14px;
     /* line-height: 25px; */
     text-align: center;
     background-color: #C4C0BC;
-    border-radius: 12px;
+    border-radius: 0px 0px 8px 8px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -707,7 +707,8 @@
           >
             {{ 'sections.cart.checkout' | t }}
           </button>
-          <button type="button" onclick="this.closest('cart-drawer').close()" class="button button--primary button--full-width cart-btn-checkout" aria-label="{{ 'accessibility.close' | t }}">{{ 'general.continue_shopping' | t }}</button>
+        <!--<button type="button" onclick="this.closest('cart-drawer').close()" class="button button--primary button--full-width cart-btn-checkout" aria-label="{{ 'accessibility.close' | t }}">{{ 'general.continue_shopping' | t }}</button>-->
+          <!-- <div class="cart_continue_shopping_link" onclick="this.closest('cart-drawer').close()">המשך בקנייה</div> -->
           </div>
         </div>
       </div>

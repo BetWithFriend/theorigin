@@ -179,6 +179,12 @@
   box-sizing: border-box;
 }
 
+.cart_continue_shopping_link {
+  text-decoration: underline;
+  color: black;
+  cursor: pointer;
+}
+
 .cart-img-item {
   background-color: #E6E3DE;
 }
