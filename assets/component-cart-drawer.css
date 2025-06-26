@@ -207,7 +207,7 @@ cart-drawer-items {
 
 .cart-drawer .cart-item {
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: space-around;
   gap: 12px;
   /* display: grid;

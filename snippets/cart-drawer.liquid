@@ -17,14 +17,28 @@
     visibility: hidden;
   }
   .free-shipping-notice {
+    font-family: 'Noto Sans', sans-serif;
     color: #1C201D;
-    font-weight: 500;
-    font-size: 12px;
+    font-weight: 400;
+    font-size: 16px;
+    /* line-height: 25px; */
+    text-align: center;
+    background-color: #C4C0BC;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
   }
   .shipping-crossed-out {
     text-decoration: line-through;
     color: #999;
   }
+  .cart-icon-delivery {
+    width: 20px;
+    margin-left: 10px;
+  }
+
 </style>
 
 <cart-drawer class="drawer{% if cart == empty %} is-empty{% endif %}">
@@ -159,10 +173,8 @@
                   {%- endif -%}
                 {%- elsif vendor == 'youneedcoffee' -%}
                   {%- assign vendor_shipping_cost = youneedcoffee_shipping -%}
-                  {%- assign vendor_free_threshold = youneedcoffee_free_shipping_threshold -%}
-                  {%- if vendor_total >= youneedcoffee_free_shipping_threshold -%}
-                    {%- assign vendor_qualifies_free_shipping = true -%}
-                  {%- endif -%}
+                  {%- assign vendor_free_threshold = 0 -%}
+                  {%- assign vendor_qualifies_free_shipping = false -%}
                 {%- elsif vendor == 'coffeeorg' -%}
                   {%- assign vendor_shipping_cost = coffeeorg_shipping -%}
                   {%- assign vendor_free_threshold = coffeeorg_free_shipping_threshold -%}
@@ -556,18 +568,27 @@
                         </div>
                         
                         <div class="cart-total-delivery-sum" data-vendor-shipping="{{ vendor }}">
-                          {%- if vendor_qualifies_free_shipping -%}
+                          {%- if vendor == 'youneedcoffee' -%}
+                            {{ vendor_shipping_cost }} ₪
+                          {%- elsif vendor_qualifies_free_shipping -%}
                             <span class="shipping-crossed-out">{{ vendor_shipping_cost }} ₪</span>
-                            <div class="free-shipping-notice">{{ 'sections.cart.free_shipping' | t | default: 'משלוח חינם!' }}</div>
                           {%- else -%}
                             {{ vendor_shipping_cost }} ₪
-                            <div class="free-shipping-notice">
-                              {%- assign remaining_for_free = vendor_free_threshold | minus: vendor_total -%}
-                              הוסף עוד {{ remaining_for_free | money }} למשלוח חינם
-                            </div>
                           {%- endif -%}
                         </div>
                     </div>
+                         {%- if vendor == 'youneedcoffee' -%}
+                            <div></div>
+                          {%- elsif vendor_qualifies_free_shipping -%}
+                            <div class="free-shipping-notice">{{ 'sections.cart.free_shipping' | t | default: 'משלוח חינם!' }}</div>
+                          {%- else -%}
+                            <div class="free-shipping-notice">
+                              {%- assign remaining_for_free = vendor_free_threshold | minus: vendor_total -%}
+                               <img class="cart-icon-delivery " src="{{  'cart_icon_delivery.png' | asset_url }}" alt="free shipping Icon" />
+                              {% assign formatted_amount = remaining_for_free | money %}
+                              {{ 'sections.cart.free_shipping_text' | t: amount: formatted_amount }}
+                            </div>
+                          {%- endif -%}
                   </div> 
                  {%- endif -%}
               {%- endfor -%}

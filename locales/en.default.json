@@ -310,6 +310,7 @@
       "taxes_at_checkout_shipping_at_checkout_without_policy": "Taxes, discounts and shipping calculated at checkout",
       "cart_delivery": "Delivery",
       "free_shipping": "Free shipping",
+      "free_sheeping_text": "Free shipping on orders over {{ amount }}",
       "headings": {
         "product": "Product",
         "price": "Price",
