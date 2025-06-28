@@ -3,5 +3,12 @@
 }
 
 .related-products__heading {
-  margin: 0 0 3rem;
+  /* margin: 0 0 3rem; */
+}
+
+.product-recommendations-component {
+  padding-right: 24px;
+  display: block;
+  position: relative;
+  margin-bottom: 24px;
 }

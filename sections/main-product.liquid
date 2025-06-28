@@ -1107,7 +1107,7 @@
       const cardHeight = stickyCard.getBoundingClientRect().height;
       
       const TOP_OFFSET = 20;
-      const BOTTOM_OFFSET = 300;
+      const BOTTOM_OFFSET = 1000;
 
       // absolute position when not sticking
       const topPosition = 1200;
@@ -1124,7 +1124,7 @@
               stickyCard.style.top = '0px';
               stickyCard.style.width = `${cardWidth}px`;
           } 
-          else if (containerRect.bottom < 800) {
+          else if (containerRect.bottom < 1200) {
               stickyCard.classList.remove('is-sticky');
               stickyCard.classList.add('is-at-bottom');
               stickyCard.style.width = `${cardWidth}px`;

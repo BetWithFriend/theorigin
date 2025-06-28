@@ -24,8 +24,6 @@
   <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
-<script src="{{ 'featured-collection-slider.js' | asset_url }}" defer="defer"></script>
-
 {%- style -%}
   /* .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
@@ -97,8 +95,6 @@
     </div>
 
     <slider-component class="slider-mobile-gutter{% if section.settings.full_width %} slider-component-full-width{% endif %}{% if show_mobile_slider == false %} page-width{% endif %}{% if show_desktop_slider == false and section.settings.full_width == false %} page-width-desktop{% endif %}{% if show_desktop_slider %} slider-component-desktop{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-      {% comment %} <img onclick="recoSlide(this, 'right')" class="rec-arrow right" src="{{ 'rec-arrow-right.png' |  asset_url}}" alt="recommended right arrow"/>
-      <img onclick="recoSlide(this, 'left')" class="rec-arrow left" src="{{ 'rec-arrow-left.png' |  asset_url}}" alt="recommended left arrow"/> {% endcomment %}
       <ul
         id="Slider-{{ section.id }}"
         data-id="{{ section.id }}"

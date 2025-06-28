@@ -115,11 +115,10 @@
     },
     "related-products": {
       "type": "related-products",
-      "disabled": true,
       "settings": {
-        "heading": "קפה בטעמים דומים",
+        "heading": "למה לא לנסות עוד טעמים?",
         "heading_size": "h2",
-        "products_to_show": 5,
+        "products_to_show": 7,
         "columns_desktop": 4,
         "color_scheme": "scheme-1",
         "image_ratio": "square",
@@ -127,7 +126,7 @@
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": false,
-        "columns_mobile": "2",
+        "columns_mobile": "1",
         "padding_top": 36,
         "padding_bottom": 28
       }
