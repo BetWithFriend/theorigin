@@ -39,13 +39,14 @@
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    overflow-y: hidden;
+    overflow-y: visible;
     /* Ensure it has a mechanism to show one card prominently if needed,
        possibly via JS or more advanced CSS scroll-snap properties.
        For this solution, we focus on the card's internal layout. */
+    position: relative;
+    min-height: 670px;
 }
 
-/* Styles for individual vendor cards */
 .new-roasters-slider-content-wrapper {
     background-color: #E6E3DE;
     width: 100%;
@@ -57,6 +58,13 @@
     gap: 16px;
     padding: 16px;
     /* Padding for mobile card content */
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
 }
 
 .new-roastes-slider-top {
@@ -125,11 +133,12 @@
     text-align: right;
     padding: 8px 16px;
     /* Adjusted mobile padding */
-    height: 225px;
-    max-height: calc(25px * 9);
-    /* Max 9 lines for mobile */
-    overflow-y: hidden;
-    /* Scroll if text overflows on mobile */
+    height: auto;
+    min-height: 225px;
+    max-height: none;
+    /* Remove max height restriction */
+    overflow-y: visible;
+    /* Allow content to be fully visible */
     margin-bottom: 16px;
     /* Reduced mobile bottom margin */
     width: 100%;
@@ -216,6 +225,8 @@
         /* padding: 24px 0; */
         padding: 0;
         margin: 0;
+        position: relative;
+        min-height: 500px;
     }
 
     div.new-roasters-slider-content-wrapper {
@@ -238,6 +249,13 @@
         padding-bottom: 64px;
         background-color: #E6E3DE;
         border-radius: 12px;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
     }
 
     /* Top section (logo and ID) */
@@ -314,9 +332,10 @@
 
         padding: 0;
         height: auto;
+        min-height: 200px;
         max-height: none;
         width: 100%;
-        overflow-y: hidden;
+        overflow-y: visible;
         line-height: 1.7;
     }
 
