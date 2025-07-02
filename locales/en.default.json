@@ -192,6 +192,16 @@
       "label": "Media gallery"
     },
     "facets": {
+      "Fruity": "Fruity",
+      "Fruity-Sweet": "Fruity-Sweet",
+      "Sweet": "Sweet",
+      "Sweet-Chocolate": "Sweet-Chocolate",
+      "Chocolate": "Chocolate",
+      "Filter": "Filter",
+      "Black": "Black",
+      "MokaPot": "MokaPot",
+      "Espresso": "Espresso",
+      "Aeropress": "Aeropress",
       "filter_and_operator_subtitle": "Match all",
       "apply": "Apply",
       "clear": "Clear",

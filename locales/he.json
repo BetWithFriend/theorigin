@@ -3827,6 +3827,22 @@
       "step_error": "אתה יכול להוסיף פריט זה רק במרווחים של {{ step }}"
     }
   },
+  "products": {
+    "product": {
+      "facets": {
+        "Fruity": "פירותי",
+        "Fruity-Sweet": "פירותי מתוק",
+        "Sweet": "מתוק מאוזן",
+        "Sweet-Chocolate": "מתוק שוקולדי",
+        "Chocolate": "שוקולדי",
+        "Filter": "פילטר",
+        "Black": "קפה שחור",
+        "MokaPot": "מקינטה",
+        "Espresso": "אספרסט",
+        "Aeropress": "חליטה"
+      }
+    }
+  },
   "general": {
     "password_page": {
       "login_form_heading": "היכנס לחנות באמצעות סיסמה:",
