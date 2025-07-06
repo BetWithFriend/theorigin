@@ -19,7 +19,7 @@
         "show_vendor": false,
         "show_rating": false,
         "enable_filtering": true,
-        "filter_type": "vertical",
+        "filter_type": "horizontal",
         "enable_sorting": true,
         "article_show_date": true,
         "article_show_author": false,

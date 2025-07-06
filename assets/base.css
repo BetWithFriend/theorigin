@@ -543,7 +543,7 @@ table:not([class]) th {
 
 @media screen and (max-width: 749px) {
   .small-hide {
-    /* display: none !important; */
+    display: none !important;
   }
 }
 
@@ -714,8 +714,7 @@ details>* {
 
 .underlined-link,
 .customer a {
-  /* color: rgba(var(--color-link), var(--alpha-link)); */
-  color: #767676;
+  color: rgba(var(--color-link), var(--alpha-link));
 }
 
 .inline-richtext a,
@@ -772,7 +771,7 @@ summary {
 summary .icon-caret {
   position: absolute;
   height: 0.6rem;
-  left: 1.5rem;
+  right: 1.5rem;
   top: calc(50% - 0.2rem);
 }
 

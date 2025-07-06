@@ -650,6 +650,7 @@
             <p class="totals__total-value">{{ adjusted_total | money_with_currency }}</p>
           </div>
 
+          <!-- 
           <small class="tax-note caption-large rte">
             {%- if cart.duties_included and cart.taxes_included -%}
               {%- if shop.shipping_policy.body == blank -%}
@@ -690,8 +691,10 @@
             {%- endif -%}
           </small>
         </div>
+        --></div>
 
         <!-- CTAs -->
+        <br/>
 
         <div class="cart__ctas" {{ block.shopify_attributes }}>
           <div class="cart-notification__links">
@@ -743,7 +746,7 @@ function getOrderedQuantitiesByIndex() {
   });
 
   function handleFormSubmission(form) {
-  const orderedInputs = getOrderedQuantitiesByIndex();
+    const orderedInputs = getOrderedQuantitiesByIndex();
   
     // Clone the form
     const clonedForm = form.cloneNode(false); // shallow clone, no children
@@ -775,8 +778,6 @@ function getOrderedQuantitiesByIndex() {
     setTimeout(() => {
       document.body.removeChild(tempDiv);
     }, 1000);
-
-    console.log('BOOM:', orderedInputs.map(input => input.value));
 }
 
 </script>

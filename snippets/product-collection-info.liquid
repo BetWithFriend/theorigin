@@ -2,7 +2,7 @@
 <!-- snippets/product-collection-info.liquid -->
 {%- if free_shipping.value > 0 -%}
 <div class="product-vendor-shipping-info">
-    <p>משלוח חינם מעל {{ free_shipping.value }} ש״ח</p>
+    <p><b>משלוח חינם</b> מעל {{ free_shipping.value }} ש״ח בבית הקלייה {{ vendor_name }}</p>
 </div> 
 {%- endif -%}
 <div class="product-collection-wrapper">
@@ -48,6 +48,7 @@
         padding: 0;
         background-color: #DAD7D1;
         border-radius: 20px;
+        padding: 4px;
     }
 
     @media (min-width: 769px) {
