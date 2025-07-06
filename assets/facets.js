@@ -174,6 +174,9 @@ class FacetFiltersForm extends HTMLElement {
         if (newElementToActivate && !isTextInput) newElementToActivate.focus();
       }
     }
+    // Ensure selected icons are always updated after render
+    FacetFiltersForm.prototype.updateDropdownButtonText.call(this, 'taste');
+    FacetFiltersForm.prototype.updateDropdownButtonText.call(this, 'prep');
   }
 
   static renderActiveFacets(html) {
@@ -279,6 +282,52 @@ class FacetFiltersForm extends HTMLElement {
         }
       });
       this.onSubmitForm(forms.join('&'), event);
+    }
+    console.log('boom')
+    this.updateDropdownButtonText('taste');
+    this.updateDropdownButtonText('prep');
+  }
+
+  updateDropdownButtonText(type) {
+    // Map facet type to param name
+    let paramName = '';
+    if (type === 'taste') {
+      paramName = 'filter.p.m.custom.coffee_taste';
+    } else if (type === 'prep') {
+      paramName = 'filter.p.m.custom.coffee_prep_methods';
+    }
+    // Select checked checkboxes by param name in all facet forms
+    const selectedCheckboxes = document.querySelectorAll(
+      `input[type="checkbox"][name="${paramName}"]:checked, input[type="checkbox"][data-param-name="${paramName}"]:checked`
+    );
+    const button = document.querySelector(`.dropdown-menu-btn[data-type="${type}"]`);
+    if (button) {
+      if (selectedCheckboxes.length > 0) {
+        button.textContent = 'בחר';
+      } else {
+        button.textContent = `הצג הכל`;
+      }
+    }
+    const selectedIconsContainer = document.getElementById(`selected-icons-facets-${type}`);
+    if (selectedIconsContainer) {
+      selectedIconsContainer.innerHTML = '';
+      selectedCheckboxes.forEach((checkbox, index) => {
+        if (index >= 3) return;
+        const label = checkbox.closest('label');
+        if (type === 'taste') {
+          const colorCircle = label ? label.querySelector('.color-circle') : null;
+          if (colorCircle) {
+            const clone = colorCircle.cloneNode(true);
+            selectedIconsContainer.appendChild(clone);
+          }
+        } else if (type === 'prep') {
+          const iconImg = label ? label.querySelector('.dropdown-icon-facets-img') : null;
+          if (iconImg) {
+            const clone = iconImg.cloneNode(true);
+            selectedIconsContainer.appendChild(clone);
+          }
+        }
+      });
     }
   }
 
