@@ -21,6 +21,10 @@ if (!customElements.get('product-form')) {
         evt.preventDefault();
         if (this.submitButton.getAttribute('aria-disabled') === 'true') return;
 
+        analytics.trackClick('Add To Cart', {
+          'Source': 'Product Page',
+        });
+
         this.handleErrorMessage();
 
         this.submitButton.setAttribute('aria-disabled', true);

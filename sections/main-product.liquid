@@ -335,9 +335,17 @@
         <div class="product-vendor-title">{{ vendor.vendor_short_name | upcase }}</div>
         <div class="product-title">{{ product.title }}</div>
         <div class="product-source-wrapper">
-          {% for pSource in product.metafields.custom.coffee_source.value %}
-            <div class="product-source">{{ pSource|  append: ' ' }}</div>
+          <div class="product-source">
+          {% for pSource in product.metafields.custom.coffee_source.value limit:2 %}
+            {% if forloop.index > 1 %}
+              <span>,</span>
+            {% endif %}
+            {{ pSource }}
           {% endfor %}
+          {% if product.metafields.custom.coffee_source.value.size > 2 %}
+            +{{ product.metafields.custom.coffee_source.value.size | minus: 2 }}
+          {% endif %}
+          </div>
         </div>
         <div class="selection-wrapper">        
 
@@ -434,6 +442,7 @@
                     <span>{{ 'products.product.volume_pricing.note' | t }}</span>
                   </div>
                 {%- endif -%}
+                <!--
                 {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
                   <div class="product__tax caption rte">
                     {%- if cart.duties_included and cart.taxes_included -%}
@@ -448,6 +457,7 @@
                     {%- endif -%}
                   </div>
                 {%- endif -%}
+              -->
                 <div {{ block.shopify_attributes }}>
                   {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
                   {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
@@ -1078,7 +1088,7 @@
 {% assign coffee_process = product.metafields.custom.coffee_process.value %}
 {% assign coffee_type = product.metafields.custom.coffee_type.value %}
 
-{% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description, shipping_fee: vendor.vendor_shipping, free_shipping: vendor.min_order_for_free_shipping %}
+{% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description, shipping_fee: vendor.vendor_shipping, free_shipping: vendor.min_order_for_free_shipping, vendor_name: vendor.vendor_name.value %}
 
 <script>
     analytics.trackScreenView('Product Page', {
