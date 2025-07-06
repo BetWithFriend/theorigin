@@ -197,7 +197,6 @@ class CartItems extends HTMLElement {
     // Ensure line is a valid number
     const lineNumber = parseInt(line, 10);
     const quantityNumber = parseInt(quantity, 10);
-    console.log('boom', lineNumber, quantityNumber)
 
     if (isNaN(lineNumber) || isNaN(quantityNumber)) {
       console.error('Invalid line or quantity:', { line, quantity });

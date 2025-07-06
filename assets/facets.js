@@ -283,7 +283,6 @@ class FacetFiltersForm extends HTMLElement {
       });
       this.onSubmitForm(forms.join('&'), event);
     }
-    console.log('boom')
     this.updateDropdownButtonText('taste');
     this.updateDropdownButtonText('prep');
   }
