@@ -72,7 +72,6 @@
                 
                 {%- if vendor_has_items -%}
                   <div class="cart-item-wrapper"> 
-                    <script>console.log('boom', {{ item.metafields | json }})</script>
                     <div class="cart-item-vendor">{{ vendor |  upcase }}</div> 
                     {%- for item in cart.items -%}
                       {%- if item.vendor == vendor -%}

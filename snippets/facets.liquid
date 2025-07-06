@@ -140,7 +140,45 @@
                       <div>
                         <span class="facets__summary-label">
                           {{- filter.label | escape }}
-                          {%- if filter_type == 'vertical' -%}
+                          {%- if filter.param_name == 'filter.p.m.custom.coffee_taste' -%}
+                           <div class="selected-icons" id="selected-icons-facets-taste">
+                              {%- for value in filter.active_values limit:3 -%}
+                                {%- assign taste_color = '#FFDF70' -%}
+                                {%- if value.value == 'Fruity' -%}
+                                  {%- assign taste_color = '#FFDF70' -%}
+                                {%- elsif value.value == 'Fruity-Sweet' -%}
+                                  {%- assign taste_color = '#FF974A' -%}
+                                {%- elsif value.value == 'Sweet' -%}
+                                  {%- assign taste_color = '#D60540' -%}
+                                {%- elsif value.value == 'Sweet-Chocolate' -%}
+                                  {%- assign taste_color = '#C4823E' -%}
+                                {%- elsif value.value == 'Chocolate' -%}
+                                  {%- assign taste_color = '#8B4513' -%}
+                                {%- endif -%}
+                                <span class="color-circle" style="background-color: {{ taste_color }};"></span>
+                              {%- endfor -%}
+                           </div>
+                          {%- endif -%}
+                          {%- if filter.param_name == 'filter.p.m.custom.coffee_prep_methods' -%}
+                           <div class="selected-icons" id="selected-icons-facets-prep">
+                              {%- for value in filter.active_values limit:3 -%}
+                                {%- assign prep_icon = 'dropdown-brew-Filter.png' -%}
+                                {%- if value.value == 'Filter' -%}
+                                  {%- assign prep_icon = 'dropdown-brew-Filter.png' -%}
+                                {%- elsif value.value == 'Black' -%}
+                                  {%- assign prep_icon = 'dropdown-brew-Turkish.png' -%}
+                                {%- elsif value.value == 'MokaPot' -%}
+                                  {%- assign prep_icon = 'dropdown-brew-Moka.png' -%}
+                                {%- elsif value.value == 'Espresso' -%}
+                                  {%- assign prep_icon = 'dropdown-brew-Espresso-Machine.png' -%}
+                                {%- elsif value.value == 'Aeropress' -%}
+                                  {%- assign prep_icon = 'dropdown-brew-Chemex.png' -%}
+                                {%- endif -%}
+                                <img class="dropdown-icon-img" src="{{ prep_icon | asset_url }}" alt="{{ value.value }} Icon" />
+                              {%- endfor -%}
+                           </div>
+                           {%- endif -%}
+                           {% comment %} {%- if filter_type == 'vertical' -%}
                             <span class="facets__selected{% if filter.active_values.size == 0 %} hidden{% endif %}">
                               ({{ filter.active_values.size }})</span
                             >
@@ -150,13 +188,17 @@
                           <span class="facets__and-helptext">
                             {{ 'products.facets.filter_and_operator_subtitle' | t }}
                           </span>
-                        {%- endif -%}
-                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                        {%- endif -%} {% endcomment %}
+                        <span class="caret-wrapper" style="position: relative; display: inline-block; width: 24px;">
+                          <span style="position: absolute; left: 0; top: 50%; transform: translateY(-50%);">
+                            {{- 'icon-caret.svg' | inline_asset_content -}}
+                          </span>
+                        </span>
                       </div>
                     </summary>
                     <div
                       id="Facet-{{ forloop.index }}-{{ section.id }}"
-                      class="parent-display {% if filter_type == 'horizontal' %}facets__display{% else %}facets__display-vertical{% endif %}"
+                      class="parent-display {% if filter_type == 'horizontal' %}facets__display{% else %}facets__display-vertical{% endif %}{% if forloop.index == 1 and results.filters.size > 1 %} {% endif %}{% if forloop.index == 1 %} right-filter{% elsif forloop.index == 2 %} left-filter{% endif %}"
                     >
                       {%- if filter_type != 'vertical' -%}
                         <div class="facets__header">
@@ -206,7 +248,7 @@
 
                             {%- capture text_value -%}
                               <span class="facet-checkbox__text" aria-hidden="true">
-                                <span class="facet-checkbox__text-label">{{- value.label | escape }}</span> ({{- value.count -}})
+                                <span class="facet-checkbox__text-label">{{ 'products.product.facets.' | append: value.label | t }}</span>
                               </span>
                               <span class="visually-hidden">
                                 {{- value.label | escape }} (
@@ -262,14 +304,43 @@
                                         }}
                                       {%- endif -%}
                                     </div>
-                                  {%- else -%}
-                                    {{- 'square.svg' | inline_asset_content -}}
+                                  {% comment %} {%- else -%} {% endcomment %}
+                                    {% comment %} {{- 'square.svg' | inline_asset_content -}} {% endcomment %}
 
-                                    <div class="svg-wrapper">
+                                    {% comment %} <div class="svg-wrapper">
                                       {{- 'icon-checkmark.svg' | inline_asset_content -}}
-                                    </div>
+                                    </div> {% endcomment %}
                                   {%- endif -%}
-
+                                  {%- if filter.param_name == 'filter.p.m.custom.coffee_taste' -%}
+                                    {%- assign taste_color = '#FFDF70' -%}
+                                    {%- if value.value == 'Fruity' -%}
+                                      {%- assign taste_color = '#FFDF70' -%}
+                                    {%- elsif value.value == 'Fruity-Sweet' -%}
+                                      {%- assign taste_color = '#FF974A' -%}
+                                    {%- elsif value.value == 'Sweet' -%}
+                                      {%- assign taste_color = '#D60540' -%}
+                                    {%- elsif value.value == 'Sweet-Chocolate' -%}
+                                      {%- assign taste_color = '#C4823E' -%}
+                                    {%- elsif value.value == 'Chocolate' -%}
+                                      {%- assign taste_color = '#8B4513' -%}
+                                    {%- endif -%}
+                                    <span class="color-circle" style="background-color: {{ taste_color }};"></span>
+                                  {%- endif -%}
+                                  {%- if filter.param_name == 'filter.p.m.custom.coffee_prep_methods' -%}
+                                    {%- assign prep_icon = 'dropdown-brew-Filter.png' -%}
+                                    {%- if value.value == 'Filter' -%}
+                                      {%- assign prep_icon = 'dropdown-brew-Filter.png' -%}
+                                    {%- elsif value.value == 'Black' -%}
+                                      {%- assign prep_icon = 'dropdown-brew-Turkish.png' -%}
+                                    {%- elsif value.value == 'MokaPot' -%}
+                                      {%- assign prep_icon = 'dropdown-brew-Moka.png' -%}
+                                    {%- elsif value.value == 'Espresso' -%}
+                                      {%- assign prep_icon = 'dropdown-brew-Espresso-Machine.png' -%}
+                                    {%- elsif value.value == 'Aeropress' -%}
+                                      {%- assign prep_icon = 'dropdown-brew-Chemex.png' -%}
+                                    {%- endif -%}
+                                    <img class="dropdown-icon-facets-img" src="{{ prep_icon | asset_url }}" alt="{{ value.value }} Icon" />
+                                  {%- endif -%}
                                   {{ text_value }}
                                 </label>
                               {%- endif -%}
@@ -307,7 +378,11 @@
                     <summary class="facets__summary caption-large focus-offset">
                       <div>
                         <span>{{ filter.label | escape }}</span>
-                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                        <span class="caret-wrapper" style="position: relative; display: inline-block; width: 24px;">
+                          <span style="position: absolute; left: 0; top: 50%; transform: translateY(-50%);">
+                            {{- 'icon-caret.svg' | inline_asset_content -}}
+                          </span>
+                        </span>
                       </div>
                     </summary>
                     <div
@@ -333,6 +408,9 @@
                     </div>
                   </details>
               {% endcase %}
+              {% if forloop.index == 1 and results.filters.size > 1 %}
+                <div class="dropdown-divider" > </div>
+              {% endif %}
             {%- endfor -%}
           </div>
           {% comment %} Pills after filtes on filter type horizontal {% endcomment %}
@@ -575,7 +653,7 @@
 
                               {%- capture text_value -%}
                                 <span class="facet-checkbox__text" aria-hidden="true">
-                                  <span class="facet-checkbox__text-label">{{- value.label | escape }}</span> ({{- value.count -}})
+                                    <span class="facet-checkbox__text-label">{{ 'products.product.facets.' | append: value.label | t }}</span>
                                 </span>
                                 <span class="visually-hidden">
                                   {{- value.label | escape }} (
