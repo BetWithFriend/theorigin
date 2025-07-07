@@ -29,8 +29,8 @@
       
 
      <!-- {% assign selected_taste = request.params.selected_taste | default: 'all' %} -->
-      {% assign product_taste = collection.products %} 
-    {% render 'taste-filter', tastes: product_taste %}
+      {% comment %} {% assign product_taste = collection.products %} 
+    {% render 'taste-filter', tastes: product_taste %} {% endcomment %}
   
       
       {%- if section.settings.show_collection_description -%}

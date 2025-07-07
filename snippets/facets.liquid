@@ -248,7 +248,7 @@
 
                             {%- capture text_value -%}
                               <span class="facet-checkbox__text" aria-hidden="true">
-                                <span class="facet-checkbox__text-label">{{ 'products.product.facets.' | append: value.label | t }}</span>
+                                <span class="facet-checkbox__text-label">{{ 'products.facets.' | append: value.label | t }}</span>
                               </span>
                               <span class="visually-hidden">
                                 {{- value.label | escape }} (
@@ -653,7 +653,7 @@
 
                               {%- capture text_value -%}
                                 <span class="facet-checkbox__text" aria-hidden="true">
-                                    <span class="facet-checkbox__text-label">{{ 'products.product.facets.' | append: value.label | t }}</span>
+                                    <span class="facet-checkbox__text-label">{{ 'products.facets.' | append: value.label | t }}</span>
                                 </span>
                                 <span class="visually-hidden">
                                   {{- value.label | escape }} (

@@ -3828,19 +3828,22 @@
     }
   },
   "products": {
-    "product": {
-      "facets": {
-        "Fruity": "פירותי",
-        "Fruity-Sweet": "פירותי מתוק",
-        "Sweet": "מתוק מאוזן",
-        "Sweet-Chocolate": "מתוק שוקולדי",
-        "Chocolate": "שוקולדי",
-        "Filter": "פילטר",
-        "Black": "קפה שחור",
-        "MokaPot": "מקינטה",
-        "Espresso": "אספרסט",
-        "Aeropress": "חליטה"
-      }
+    "facets": {
+      "Fruity": "פירותי",
+      "Fruity-Sweet": "פירותי מתוק",
+      "Sweet": "מתוק מאוזן",
+      "Sweet-Chocolate": "מתוק שוקולדי",
+      "Chocolate": "שוקולדי",
+      "Filter": "פילטר",
+      "Black": "קפה שחור",
+      "MokaPot": "מקינטה",
+      "Espresso": "אספרסו",
+      "Aeropress": "חליטה",
+      "filters_selected": {
+        "one": "{{ count }} נבחר",
+        "other": "{{ count }} נבחרו"
+      },
+      "reset": "איפוס"
     }
   },
   "general": {
