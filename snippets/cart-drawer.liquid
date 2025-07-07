@@ -139,7 +139,8 @@
               {%- endfor -%}
               
             {%- assign vendor_array = vendors | split: "," | uniq | sort -%}
-            {%- assign vendor_count = vendor_array | size-%} 
+            {%- assign vendor_count = vendor_array | size-%}
+            {%- assign shipping_items_paid = 0 -%}
 
             <div class="cart-items-wrapper">
               {%- for vendor in vendor_array -%}
@@ -570,10 +571,12 @@
                         <div class="cart-total-delivery-sum" data-vendor-shipping="{{ vendor }}">
                           {%- if vendor == 'youneedcoffee' -%}
                             {{ vendor_shipping_cost }} ₪
+                            {%- assign shipping_items_paid = shipping_items_paid | plus: 1 -%}
                           {%- elsif vendor_qualifies_free_shipping -%}
                             <span class="shipping-crossed-out">{{ vendor_shipping_cost }} ₪</span>
                           {%- else -%}
                             {{ vendor_shipping_cost }} ₪
+                            {%- assign shipping_items_paid = shipping_items_paid | plus: 1 -%}
                           {%- endif -%}
                         </div>
                     </div>
@@ -642,12 +645,18 @@
           </div>
 
           <div class="totals" role="status">
-            <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
+            {% comment %} <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2> {% endcomment %}
             {%- assign shipping_price_cents = shipping_price | times: 100 -%}
 
               {%- assign adjusted_total = cart.total_price | plus: shipping_price_cents -%}
 
-            <p class="totals__total-value">{{ adjusted_total | money_with_currency }}</p>
+            <p class="totals__total-value totals-value-secondary"><span>עלות קפה:</span> <span class="totals-value-secondary-value">{{ cart.total_price | money_with_currency }}</span></p>
+            {%- if shipping_items_paid > 0 %}
+              <p class="totals__total-value totals-value-secondary"><span>סה״כ משלוח (x{{ shipping_items_paid }}):</span> <span class="totals-value-secondary-value">{{ shipping_price_cents | money_with_currency }}</span></p>
+            {%- else -%}
+              <p class="totals__total-value totals-value-secondary"><span>סה״כ משלוח:</span> <span class="totals-value-secondary-value">0</span></p>
+            {%- endif -%}
+            <p class="totals__total-value totals-value-primary"><span>סה״כ:</span> <span class="totals-value-secondary-value">{{ adjusted_total | money_with_currency }}</span></p>
           </div>
 
           <!-- 
