@@ -726,7 +726,7 @@ details>* {
 .underlined-link:hover,
 .customer a:hover,
 .inline-richtext a:hover {
-  color: rgb(var(--color-link));
+  /* color: rgb(var(--color-link)); */
   text-decoration-thickness: 0.2rem;
 }
 
