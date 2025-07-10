@@ -137,13 +137,48 @@
                   {%- assign vendors = vendors | append: item.vendor | append: "," -%}
                 {%- endunless -%}
               {%- endfor -%}
+
+              {% comment %}
+                code for getting vendor info from product metafields
+              {% endcomment %}
+
+              {%- assign vendor_keys = '' -%}
+              {%- assign vendor_names = '' -%}
+              {%- assign vendor_logos = '' -%}
+              {%- for item in cart.items -%}
+                {%- assign vendor_key = item.vendor -%}
+                {%- assign full_vendor_name = item.product.metafields.vendor_info.coffee_vendor.value.vendor_name.value -%}
+                {%- assign logo_vendor = item.product.metafields.vendor_info.coffee_vendor.value.vendor_logo | image_url  -%}
+                {%- unless vendor_keys contains vendor_key -%}
+                  {%- assign vendor_keys = vendor_keys | append: vendor_key | append: '||' -%}
+                  {%- assign vendor_names = vendor_names | append: full_vendor_name | append: '||' -%}
+                  {%- assign vendor_logos = vendor_logos | append: logo_vendor | append: '||' -%}
+                {%- endunless -%}
+              {%- endfor -%}
+              
+              {%- assign vendor_keys_array = vendor_keys | split: '||' -%}
+              {%- assign vendor_names_array = vendor_names | split: '||' -%}
+              {%- assign vendor_logos_array = vendor_logos | split: '||' -%}
+              
               
             {%- assign vendor_array = vendors | split: "," | uniq | sort -%}
             {%- assign vendor_count = vendor_array | size-%}
             {%- assign shipping_items_paid = 0 -%}
 
             <div class="cart-items-wrapper">
-              {%- for vendor in vendor_array -%}
+              {%- for vendor in vendor_array -%}            
+
+                {% comment %} Find the extra vendor data {% endcomment %}
+
+                {%- for i in (0..vendor_keys_array.size) -%}
+                  {%- assign vendor_key = vendor_keys_array[i] -%}
+                  {%- if vendor_key == vendor -%}
+                    {%- assign vendor_name = vendor_names_array[i] -%}
+                    {%- assign current_vendor_logo = vendor_logos_array[i] -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {% comment %} End Extra data {% endcomment %}
+
                 {%- assign vendor_has_items = false -%}
                 {%- assign vendor_total = 0 -%}
                 
@@ -191,7 +226,12 @@
                 
                 {%- if vendor_has_items -%}
                   <div class="cart-item-wrapper" data-vendor="{{ vendor }}"> 
-                    <div class="cart-item-vendor">{{ vendor |  upcase }}</div> 
+                    <div class="cart-item-vendor-container">
+                      <div class="cart-item-logo">
+                        <img class="cart-item-logo-img" src="{{ current_vendor_logo |  image_url: 'small' }}" alt="{{ vendor_name }}"  width="42"/>
+                      </div>
+                      <div class="cart-item-vendor">{{ vendor_name |  upcase }}</div>
+                    </div>
                     {%- for item in cart.items -%}
                       {%- if item.vendor == vendor -%}
                         <div class="cart-item" id="CartItem-{{ item.index | plus: 1 }}">

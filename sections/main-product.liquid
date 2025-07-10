@@ -1087,6 +1087,7 @@
 {% assign coffee_altitude = product.metafields.custom.altitude.value %}
 {% assign coffee_process = product.metafields.custom.coffee_process.value %}
 {% assign coffee_type = product.metafields.custom.coffee_type.value %}
+{% assign coffee_blend_ratio = product.metafields.custom.coffee_blend_ratio.value %}
 
 {% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description, shipping_fee: vendor.vendor_shipping, free_shipping: vendor.min_order_for_free_shipping, vendor_name: vendor.vendor_name.value %}
 
@@ -1165,8 +1166,9 @@
     coffee_altitude: coffee_altitude,
     coffee_process: coffee_process,
     coffee_type: coffee_type,
-    vendor_logo: vendor.vendor_logo
-    vendor_story: vendor.vendor_details.value
+    vendor_logo: vendor.vendor_logo,
+    vendor_story: vendor.vendor_details.value,
+    coffee_blend_ratio: coffee_blend_ratio
     %}
 </div>
 
