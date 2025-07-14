@@ -1645,3 +1645,10 @@ input.mobile-facets__checkbox {
     left: 17%;
   }
 }
+
+.facets-wrapper--sticky {
+  position: sticky;
+  top: 20px;
+  /* Adjust as needed for your header */
+  z-index: 10;
+}
