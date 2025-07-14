@@ -542,15 +542,17 @@
                 this.networkIndicator = document.getElementById('networkIndicator');
                 this.videoSource = document.getElementById('videoSource');
                 
-                // Demo video URLs and static images - replace with your actual files
+                // hd and compressed are the same, but can be changed
                 this.videos = {
                     desktop: {
                         image: 'https://cdn.shopify.com/s/files/1/0701/9151/3657/files/origin-intro-video-still.jpg?v=1749475745',
-                        hd: 'https://cdn.shopify.com/videos/c/o/v/28527e0bffb846a797c920d2d0b0f280.mp4'
+                        hd: 'https://cdn.shopify.com/videos/c/o/v/28527e0bffb846a797c920d2d0b0f280.mp4',
+                        compressed: 'https://cdn.shopify.com/videos/c/o/v/28527e0bffb846a797c920d2d0b0f280.mp4'
                     },
                     mobile: {
                         image: 'https://cdn.shopify.com/s/files/1/0701/9151/3657/files/origin-intro-video-still.jpg?v=1749475745',
-                        hd: 'https://cdn.shopify.com/videos/c/o/v/28527e0bffb846a797c920d2d0b0f280.mp4'
+                        hd: 'https://cdn.shopify.com/videos/c/o/v/28527e0bffb846a797c920d2d0b0f280.mp4',
+                        compressed: 'https://cdn.shopify.com/videos/c/o/v/28527e0bffb846a797c920d2d0b0f280.mp4'
                     }
                 };
                 
@@ -918,9 +920,9 @@
                     }, 2000);
                     
                     // Upgrade to HD if network allows
-                    if (this.networkSpeed === 'fast' || this.networkSpeed === 'medium') {
-                        setTimeout(() => this.upgradeToHD(), 2000);
-                    }
+                    // if (this.networkSpeed === 'fast' || this.networkSpeed === 'medium') {
+                    //     setTimeout(() => this.upgradeToHD(), 2000);
+                    // }
                     
                 } catch (error) {
                     console.error('Device video switch failed:', error);
