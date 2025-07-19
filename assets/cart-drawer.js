@@ -91,10 +91,13 @@ class CartDrawer extends HTMLElement {
       sectionElement.innerHTML = this.getSectionInnerHTML(parsedState.sections[section.id], section.selector);
     });
 
-    setTimeout(() => {
-      this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
-      this.open();
-    });
+    document.getElementById('itemAddedOverlay').style.display = 'block';
+    document.body.classList.add('item-added-no-scroll');
+
+    // setTimeout(() => {
+    //   this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
+    //   this.open();
+    // });
   }
 
   getSectionInnerHTML(html, selector = '.shopify-section') {

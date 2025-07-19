@@ -94,6 +94,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr; /* Two equal columns */
       gap: 1rem; /* Spacing between grid items */
+      /* position: relative; */
     }
 
     .product-container {
@@ -254,17 +255,18 @@
 {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
       {% render 'breadcrumbs' %}
 <div id="main-product-container">
-<product-info
-  id="MainProduct-{{ section.id }}"
-  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }} product-container"
-  data-section="{{ section.id }}"
-  data-product-id="{{ product.id }}"
-  data-update-url="true"
-  data-url="{{ product.url }}"
-  {% if section.settings.image_zoom == 'hover' %}
-    data-zoom-on-hover
-  {% endif %}
->
+  {% render 'item-added-to-cart' %}
+  <product-info
+    id="MainProduct-{{ section.id }}"
+    class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }} product-container"
+    data-section="{{ section.id }}"
+    data-product-id="{{ product.id }}"
+    data-update-url="true"
+    data-url="{{ product.url }}"
+    {% if section.settings.image_zoom == 'hover' %}
+      data-zoom-on-hover
+    {% endif %}
+  >
   {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
   {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
   {{ 'component-price.css' | asset_url | stylesheet_tag }}
@@ -1078,7 +1080,7 @@
       </div>
     </div>
   </div>
-</product-info>
+ </product-info>
 
 {% assign coffee_details = product.metafields.custom.product_info.value %}
 {% assign coffee_origin_image = product.metafields.custom.coffee_origin_image.value %}

@@ -1,0 +1,48 @@
+<!-- snippets/item-added-to-cart.liquid -->
+<link rel="stylesheet" href="{{ 'item-added-to-cart.css' | asset_url }}">
+<div class="item-added-overlay" id="itemAddedOverlay">
+  <div class="item-added-main-wrapper">
+    <div class="item-added-top-wrapper">
+        <img class="item-added-icon" src="{{ 'item-added-approve.png' |  asset_url }}" alt=""/>
+        <div class="item-added-main-title">מוצר התווסף לסל</div>
+        <hr  class="item-added-divider-line"/>
+        <div class="item-added-main-title">לתשומת ליבך</div>
+        <div class="item-added-text">
+             כל בית קלייה שולח את המוצרים באופן עצמאי, ולכן דמי המשלוח מחושבים לפי כל אחד מהם.
+</div>
+    
+    </div>
+    <div class="item-added-bottom-wrapper">
+        <button class="item-added-btn-buy" onClick="openCartDrawer()">לעגלת הקניות</button>
+        <button class="item-added-btn-continue">המשך בקנייה</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Show overlay and prevent scroll
+//   document.body.classList.add('item-added-no-scroll');
+  // Hide overlay and restore scroll on continue
+  document.querySelector('.item-added-btn-continue').addEventListener('click', function() {
+    document.getElementById('itemAddedOverlay').style.display = 'none';
+    document.body.classList.remove('item-added-no-scroll');
+  });
+
+  // Hide overlay when clicking outside the main wrapper
+  document.getElementById('itemAddedOverlay').addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.style.display = 'none';
+      document.body.classList.remove('item-added-no-scroll');
+    }
+  });
+
+  function openCartDrawer() {
+    document.getElementById('itemAddedOverlay').style.display = 'none';
+    document.body.classList.remove('item-added-no-scroll');
+    // Open the cart drawer
+    const cartDrawer = document.querySelector('cart-drawer');
+    if (cartDrawer) {
+      cartDrawer.open();
+    }
+  }
+</script>

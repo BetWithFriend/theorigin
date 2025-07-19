@@ -1,0 +1,118 @@
+/* Overlay for item added to cart */
+.item-added-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+body.item-added-no-scroll {
+    overflow: hidden !important;
+}
+
+.item-added-main-wrapper {
+    position: relative;
+    z-index: 1001;
+    border-radius: 8px;
+    border: 1px solid #E3E0DA;
+}
+
+.item-added-main-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #FFFFFF;
+    z-index: 4;
+
+}
+
+.item-added-top-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    gap: 16px;
+    width: 100%;
+}
+
+.item-added-icon {
+    width: 60px;
+    margin-bottom: 16px;
+}
+
+.item-added-main-title {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 20px;
+    line-height: 20px;
+    font-weight: 700;
+    color: #1C201D;
+    text-align: center;
+}
+
+.item-added-text {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 16px;
+    line-height: 25px;
+    font-weight: 400;
+    color: #1C201D;
+    text-align: center;
+}
+
+.item-added-text-bold {
+    font-weight: 700;
+}
+
+.item-added-divider-line {
+    width: 70%;
+    border: 1px solid rgba(28, 32, 29, 0.25);
+    position: relative;
+    margin: 0;
+}
+
+.item-added-bottom-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 0 32px 32px
+}
+
+.item-added-btn-buy {
+    background-color: #333634;
+    color: #E3E0DA;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 20px;
+    line-height: 20px;
+    font-weight: 400;
+    letter-spacing: 0;
+    width: 305px;
+    height: 56px;
+    border-radius: 15px;
+}
+
+.item-added-btn-continue {
+    background-color: #ffffff;
+    color: #1C201D;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 20px;
+    line-height: 20px;
+    font-weight: 400;
+    letter-spacing: 0;
+    width: 305px;
+    height: 56px;
+    border: 1px solid #E3E0DA;
+    border-radius: 15px;
+}
