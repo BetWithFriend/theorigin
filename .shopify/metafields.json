@@ -300,6 +300,16 @@
         "name": "boolean",
         "category": "TRUE_FALSE"
       }
+    },
+    {
+      "key": "coffee_blend_ratio",
+      "namespace": "custom",
+      "name": "Coffee Blend Ratio",
+      "description": "",
+      "type": {
+        "name": "single_line_text_field",
+        "category": "TEXT"
+      }
     }
   ],
   "variant": [

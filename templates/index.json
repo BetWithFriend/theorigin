@@ -69,6 +69,15 @@
     },
     "our_vendors": {
       "type": "our-vendors",
+      "disabled": true,
+      "settings": {}
+    },
+    "credibility_icons": {
+      "type": "credibility-icons",
+      "settings": {}
+    },
+    "credibility_text": {
+      "type": "credibility-text",
       "settings": {}
     },
     "blends_filter_icons": {
@@ -77,12 +86,13 @@
     },
     "discover_the_roaster": {
       "type": "discover-the-roaster",
+      "disabled": true,
       "settings": {}
     },
     "featured_collection_ErHj6f": {
       "type": "featured-collection",
       "settings": {
-        "title": "המומלצים של החודש",
+        "title": "הכי נמכר החודש",
         "heading_size": "h2",
         "description": "",
         "show_description": true,
@@ -109,6 +119,7 @@
     },
     "featured_collection_qNARrT": {
       "type": "featured-collection",
+      "disabled": true,
       "settings": {
         "title": "המיוחדים של החודש",
         "heading_size": "h2",
@@ -187,12 +198,14 @@
     "image_banner",
     "custom_liquid_aWGKXY",
     "our_vendors",
+    "credibility_icons",
+    "new_roasters_slider",
+    "credibility_text",
     "blends_filter_icons",
     "featured_collection_ErHj6f",
     "discover_the_roaster",
     "featured_collection_qNARrT",
     "find_your_coffee",
-    "new_roasters_slider",
     "main_page_footer_info",
     "featured_collection"
   ]

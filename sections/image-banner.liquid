@@ -33,7 +33,7 @@
         .video-banner {
             position: relative;
             width: 100vw;
-            height: 80vh;
+            height: 50vh;
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -166,7 +166,7 @@
             margin-bottom: 1rem;
             /*text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);*/
             /* animation: fadeInUp 1s ease 0.5s both; */
-            transform: translateY(-80px);
+            transform: none;
         }
 
         .banner-subtitle {
@@ -176,7 +176,7 @@
             /*text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);*/
             /* animation: fadeInUp 1s ease 0.7s both; */
             color: white;
-            transform: translateY(-80px);
+            transform: none;
         }
 
         .main-cta-button {
@@ -197,7 +197,7 @@
             border: 1px solid white;
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(4px);
-            transform: translateY(-80px);
+            transform: none;
         }
 
         .main-cta-button:hover {
@@ -252,6 +252,7 @@
 
         /* Scroll indicator */
         .scroll-indicator {
+            display: none;
             position: absolute;
             bottom: 60px; /* use 30px if not announcement bar used */
             left: 50%;

@@ -1,0 +1,33 @@
+.credibility-text-description-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    height: 62px;
+}
+
+.credibility-text-description-divider-line {
+    width: 60%;
+    border: 1px solid #9F9F9F;
+    position: relative;
+    margin: 32px;
+}
+
+.credibility-text-description-divider-img {
+    position: absolute;
+    /* background-color: #FBFCFE; Matches background to "cut" the line */
+    padding: 0 10px;
+    /* Ensures space around the image */
+    height: 52px;
+}
+
+.credibility-text {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 400;
+    color: #1C201D;
+    text-align: center;
+    padding: 0 16px;
+}
