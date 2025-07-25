@@ -51,6 +51,12 @@ class CartDrawer extends HTMLElement {
     analytics.track('Cart', {
       'Action': 'Open',
     });
+
+    // Hide the chat widget when the cart drawer is opened
+    const chatWidget = document.querySelector('.origin-bot-origin-chat-widget');
+    if (chatWidget) {
+      chatWidget.style.display = 'none';
+    }
   }
 
   close() {
@@ -61,6 +67,12 @@ class CartDrawer extends HTMLElement {
     analytics.track('Cart', {
       'Action': 'Close',
     });
+
+    
+    const chatWidget = document.querySelector('.origin-bot-origin-chat-widget');
+    if (chatWidget) {
+      chatWidget.style.display = 'flex';
+    }
   }
 
   setSummaryAccessibility(cartDrawerNote) {
