@@ -80,6 +80,10 @@
       "type": "credibility-text",
       "settings": {}
     },
+    "main_recommendations": {
+      "type": "main-recommendations",
+      "settings": {}
+    },
     "blends_filter_icons": {
       "type": "blends-filter-icons",
       "settings": {}
@@ -202,6 +206,7 @@
     "new_roasters_slider",
     "credibility_text",
     "blends_filter_icons",
+    "main_recommendations",
     "featured_collection_ErHj6f",
     "discover_the_roaster",
     "featured_collection_qNARrT",
