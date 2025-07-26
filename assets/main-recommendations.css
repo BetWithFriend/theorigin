@@ -35,11 +35,12 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 12px;
+    /* gap: 12px; */
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
     border-radius: 16px;
     border: 1px solid #1C201D40;
+    overflow: hidden;
 }
 
 .testimonial-slide.active {
@@ -49,7 +50,7 @@
 
 .main-recom-img-wrapper {
     margin-bottom: 8px;
-    height: 40%;
+    /* height: 40%; */
 }
 
 .main-recom-img {
@@ -67,7 +68,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 6px;
+    /* gap: 6px; */
     width: 100%;
     height: 60%;
     padding: 0 24px;
