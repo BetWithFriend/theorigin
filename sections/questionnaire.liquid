@@ -1,0 +1,183 @@
+{{ 'questionnaire.css' | asset_url | stylesheet_tag }}
+
+<div class="questionnaire-wrapper">
+    <div class="questionnaire-title">איך אתם מכינים את הקפה</div>
+    <div class="questionnaire-icons-wrapper active">
+        <div class="questionnaire-selection-wrapper"> 
+            <img class="questionnaire-img-icon" src="{{ 'questionnaire_Espresso_Machine.png' |  asset_url }}" alt="Espresso icon"/>
+            <div class="questionnaire-text">מכונת אספרסו</div>
+        </div>
+        <div class="questionnaire-selection-wrapper">
+            <img class="questionnaire-img-icon" src="{{ 'questionnaire_Moka_Pot.png' |  asset_url }}" alt="Moka pot icon"/>
+            <div class="questionnaire-text">מקינטה</div>
+        </div>
+        <div class="questionnaire-selection-wrapper">
+            <img class="questionnaire-img-icon" src="{{ 'questionnaire_Turkish_Cezve.png' |  asset_url }}" alt="Turkish icon"/>
+            <div class="questionnaire-text">קפה טורקי</div>
+        </div>
+        <div class="questionnaire-selection-wrapper">
+            <img class="questionnaire-img-icon" src="{{ 'questionnaire_v60.png' |  asset_url }}" alt="V60 icon"/>
+            <div class="questionnaire-text">מזיגה ידנית</div>
+        </div>
+        <div class="questionnaire-selection-wrapper">
+            <img class="questionnaire-img-icon" src="{{ 'questionnaire_Auto_Machine.png' |  asset_url }}" alt="Espresso Auto icon"/>
+            <div class="questionnaire-text">מכונה אוטומטית</div>
+        </div>
+        <div class="questionnaire-selection-wrapper">
+            <img class="questionnaire-img-icon" src="{{ 'questionnaire_Aeropress.png' |  asset_url }}" alt="Aeropress icon"/>
+            <div class="questionnaire-text">אירופרס</div>
+        </div>
+        <button class="questionnaire-select-btn" disabled>המשך עם שיטה אחת</button>
+    </div>
+    <div class="questionnaire-icons-wrapper ">
+            <div class="questionnaire-selection-wrapper"> 
+                <img class="questionnaire-img-icon" src="{{ 'questionnaire_light.png' |  asset_url }}" alt="light roast icon"/>
+                <div class="questionnaire-text">בהירה</div>
+                <div class="questionnaire-expl-text">טעמים פירותיים וקלילים</div>
+            </div>
+            <div class="questionnaire-selection-wrapper">
+                <img class="questionnaire-img-icon" src="{{ 'questionnaire_medium.png' |  asset_url }}" alt="medium roast icon"/>
+                <div class="questionnaire-text">בינונית</div>
+                <div class="questionnaire-expl-text">טעמים מתוקים יותר ומאוזנים</div>
+            </div>
+            <div class="questionnaire-selection-wrapper">
+                <img class="questionnaire-img-icon" src="{{ 'questionnaire_dark.png' |  asset_url }}" alt="dark roast icon"/>
+                <div class="questionnaire-text">כהה</div>
+                <div class="questionnaire-expl-text">טעמים שוקולדיים וקצת מרירים</div>
+            </div>
+            <div class="questionnaire-selection-wrapper">
+                <img class="questionnaire-img-icon" src="{{ 'questionnaire_dont_know.png' |  asset_url }}" alt="dont know icon"/>
+                <div class="questionnaire-text">לא יודע</div>
+                <div class="questionnaire-expl-text">מוכן לגלות מה מתאים לי</div>
+            </div>
+            <div class="questionnaire-selection-wrapper"></div>
+            <div class="questionnaire-selection-wrapper"></div>
+            <button class="questionnaire-select-btn">המשך עם שיטה אחת</button>
+    </div>
+    <div class="questionnaire-icons-wrapper ">
+        <div class="questionnaire-selection-wrapper"> 
+            <img class="questionnaire-img-icon" src="{{ 'questionnaire_Dark_2.png' |  asset_url }}" alt="dark coffee icon"/>
+            <div class="questionnaire-text">חזק ומר</div>
+            <div class="questionnaire-expl-text">טעם חזק</div>
+        </div>
+        <div class="questionnaire-selection-wrapper">
+            <img class="questionnaire-img-icon" src="{{ 'questionnaire_soft.png' |  asset_url }}" alt="soft coffee icon"/>
+            <div class="questionnaire-text">חלק ומתקתק</div>
+            <div class="questionnaire-expl-text">טעם רך עם מתיקות טבעית</div>
+        </div>
+        <div class="questionnaire-selection-wrapper">
+            <img class="questionnaire-img-icon" src="{{ 'questionnaire_special.png' |  asset_url }}" alt="Turkish icon"/>
+            <div class="questionnaire-text">מורכב ומעניין</div>
+            <div class="questionnaire-expl-text">פירות, שוקולד ותבלינים</div>
+        </div>
+        <div class="questionnaire-selection-wrapper">
+            <img class="questionnaire-img-icon" src="{{ 'questionnaire_milk.png' |  asset_url }}" alt="V60 icon"/>
+            <div class="questionnaire-text">עם חלב</div>
+            <div class="questionnaire-expl-text">קפוצ׳ינו, לאטה או הפוך</div>
+        </div>
+        <div class="questionnaire-selection-wrapper">
+            <img class="questionnaire-img-icon" src="{{ 'questionnaire_dont_know_2.png' |  asset_url }}" alt="dont know icon"/>
+            <div class="questionnaire-text">עדיין לא בטוח</div>
+            <div class="questionnaire-expl-text">פתוח לגלות מה מתאים לי</div>
+        </div>
+        <div class="questionnaire-selection-wrapper"></div>
+        <button class="questionnaire-select-btn">המשך עם שיטה אחת</button>
+    </div>
+    
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.add('questionnaire-wrapper-open');
+  });
+
+   // Function 1: Enable/disable the select button based on selections
+function updateSelectButton() {
+  // Get the current active questionnaire step
+  const activeWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
+  
+  if (!activeWrapper) return;
+  
+  // Get all selected items in the current active step
+  const selectedItems = activeWrapper.querySelectorAll('.questionnaire-selection-wrapper.selected');
+  
+  // Get the button in the current active step
+  const selectBtn = activeWrapper.querySelector('.questionnaire-select-btn');
+  
+  if (selectBtn) {
+    // Enable button if one or more items are selected, disable otherwise
+    if (selectedItems.length > 0) {
+      selectBtn.disabled = false;
+      selectBtn.classList.remove('disabled');
+    } else {
+      selectBtn.disabled = true;
+      selectBtn.classList.add('disabled');
+    }
+  }
+}
+
+// Function 2: Navigate to next questionnaire step
+function goToNextStep() {
+  // Get the current active wrapper
+  const currentActiveWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
+  
+  if (!currentActiveWrapper) return;
+  
+  // Remove active class from current wrapper
+  currentActiveWrapper.classList.remove('active');
+  
+  // Find the next questionnaire-icons-wrapper
+  const nextWrapper = currentActiveWrapper.nextElementSibling;
+  
+  // Add active class to next wrapper if it exists and is a questionnaire-icons-wrapper
+  if (nextWrapper && nextWrapper.classList.contains('questionnaire-icons-wrapper')) {
+    nextWrapper.classList.add('active');
+    
+    // Update button state for the new active step
+    updateSelectButton();
+
+    // Disable the btn again for evert iteration
+    const selectBtn = nextWrapper.querySelector('.questionnaire-select-btn');
+    debugger
+    if (selectBtn) {
+      selectBtn.disabled = true;
+      selectBtn.classList.add('disabled');
+    }
+  }
+}
+
+// Initialize the questionnaire functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Add click event listeners to all selection wrappers
+  const selectionWrappers = document.querySelectorAll('.questionnaire-selection-wrapper');
+  
+  selectionWrappers.forEach(wrapper => {
+    wrapper.addEventListener('click', function() {
+      // Only allow selection if this wrapper is in the active step
+      const parentWrapper = this.closest('.questionnaire-icons-wrapper');
+      if (!parentWrapper.classList.contains('active')) return;
+      
+      // Toggle selected class
+      this.classList.toggle('selected');
+      
+      // Update button state
+      updateSelectButton();
+    });
+  });
+  
+  // Add click event listeners to all select buttons
+  const selectButtons = document.querySelectorAll('.questionnaire-select-btn');
+  
+  selectButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // Only proceed if button is not disabled
+      if (!this.disabled) {
+        goToNextStep();
+      }
+    });
+  });
+  
+  // Initial button state update
+  updateSelectButton();
+});
+</script>
