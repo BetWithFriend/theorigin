@@ -27,7 +27,7 @@
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Aeropress.png' |  asset_url }}" alt="Aeropress icon"/>
             <div class="questionnaire-text">אירופרס</div>
         </div>
-        <button class="questionnaire-select-btn" disabled>המשך עם שיטה אחת</button>
+        <button class="questionnaire-select-btn" disabled>המשך עם 1 שיטה</button>
     </div>
     <div class="questionnaire-icons-wrapper ">
             <div class="questionnaire-selection-wrapper"> 
@@ -52,7 +52,7 @@
             </div>
             <div class="questionnaire-selection-wrapper"></div>
             <div class="questionnaire-selection-wrapper"></div>
-            <button class="questionnaire-select-btn">המשך עם שיטה אחת</button>
+            <button class="questionnaire-select-btn">המשך עם 1 שיטה</button>
     </div>
     <div class="questionnaire-icons-wrapper ">
         <div class="questionnaire-selection-wrapper"> 
@@ -81,9 +81,9 @@
             <div class="questionnaire-expl-text">פתוח לגלות מה מתאים לי</div>
         </div>
         <div class="questionnaire-selection-wrapper"></div>
-        <button class="questionnaire-select-btn">המשך עם שיטה אחת</button>
+        <button class="questionnaire-select-btn">המשך עם 1 שיטה</button>
     </div>
-    <div class="questionnaire-icons-wrapper ">
+    <div class="questionnaire-icons-wrapper">
         <div class="questionnaire-loader-wrapper">
             <img class="questionnaire-loader-img" src="{{ 'questionnaire_loader.png'  |  asset_url}}" alt=""/>
             <div class="questionnaire-loader-text">מתאימים את פולי הקפה בדיוק בשבילך</div>
@@ -121,11 +121,13 @@ function updateSelectButton() {
   if (selectBtn) {
     // Enable button if one or more items are selected, disable otherwise
     if (selectedItems.length > 0) {
-      selectBtn.disabled = false;
-      selectBtn.classList.remove('disabled');
+        selectBtn.disabled = false;
+        selectBtn.classList.remove('disabled');
+        selectBtn.textContent = `המשך עם ${selectedItems.length} ${selectedItems.length > 1 ? 'שיטות' : 'שיטה'}`;
     } else {
       selectBtn.disabled = true;
       selectBtn.classList.add('disabled');
+      selectBtn.textContent = 'המשך עם 1 שיטה';
     }
   }
 }
@@ -161,22 +163,24 @@ function goToNextStep() {
   // Show loader for 3 seconds if it is active on page load
     const loaderWrapper = document.querySelector('.questionnaire-icons-wrapper.active .questionnaire-loader-wrapper');
     if (loaderWrapper) {
-    setTimeout(function() {
-        const loaderIconsWrapper = loaderWrapper.closest('.questionnaire-icons-wrapper');
-        if (loaderIconsWrapper) {
-            loaderIconsWrapper.classList.remove('active');
-            const mainWrapper = document.querySelector('.questionnaire-wrapper');
-            // Hide main element
-            if (mainWrapper) {
-                mainWrapper.classList.add('hidden');
+        const questionnaireTitle = document.querySelector('.questionnaire-title');
+        questionnaireTitle.classList.add('hidden');
+        setTimeout(function() {
+            const loaderIconsWrapper = loaderWrapper.closest('.questionnaire-icons-wrapper');
+            if (loaderIconsWrapper) {
+                loaderIconsWrapper.classList.remove('active');
+                const mainWrapper = document.querySelector('.questionnaire-wrapper');
+                // Hide main element
+                if (mainWrapper) {
+                    mainWrapper.classList.add('hidden');
+                }
+                // Show the "lets be friends" section
+                const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
+                if (friendsWrapper) {
+                    friendsWrapper.classList.add('active');
+                }
             }
-            // Show the "lets be friends" section
-            const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
-            if (friendsWrapper) {
-                friendsWrapper.classList.add('active');
-            }
-        }
-    }, 3000);
+        }, 3000);
     }
 }
 
