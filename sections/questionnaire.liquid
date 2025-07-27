@@ -83,7 +83,21 @@
         <div class="questionnaire-selection-wrapper"></div>
         <button class="questionnaire-select-btn">המשך עם שיטה אחת</button>
     </div>
-    
+    <div class="questionnaire-icons-wrapper ">
+        <div class="questionnaire-loader-wrapper">
+            <img class="questionnaire-loader-img" src="{{ 'questionnaire_loader.png'  |  asset_url}}" alt=""/>
+            <div class="questionnaire-loader-text">מתאימים את פולי הקפה בדיוק בשבילך</div>
+        </div>
+    </div>
+</div>
+<div class="lets-be-friends-wrapper">
+    <img class="lets-be-friends-img" src="{{ 'lets_be_friends.png' | asset_url }}" alt="Lets be friends"/>
+    <div class="lets-be-friends-title">בואו נהיה חברים</div>
+    <div class="lets-be-friends-text">השאירו מייל כדי לשמוע על קפה חדש, בתי קלייה. מעניינים, צורות הכנה ועוד.
+בלי ספאם. מבטיחים.</div>
+    <input type="email" class="lets-be-friends-input" placeholder="הכנס מייל"/>
+    <button onclick="sendForm()" class="questionnaire-select-btn form-submit">שלח</button>
+    <div onclick="sendForm()" class="questionnaire-select-skip">דלג</div>
 </div>
 
 <script>
@@ -138,12 +152,32 @@ function goToNextStep() {
 
     // Disable the btn again for evert iteration
     const selectBtn = nextWrapper.querySelector('.questionnaire-select-btn');
-    debugger
     if (selectBtn) {
       selectBtn.disabled = true;
       selectBtn.classList.add('disabled');
     }
   }
+
+  // Show loader for 3 seconds if it is active on page load
+    const loaderWrapper = document.querySelector('.questionnaire-icons-wrapper.active .questionnaire-loader-wrapper');
+    if (loaderWrapper) {
+    setTimeout(function() {
+        const loaderIconsWrapper = loaderWrapper.closest('.questionnaire-icons-wrapper');
+        if (loaderIconsWrapper) {
+            loaderIconsWrapper.classList.remove('active');
+            const mainWrapper = document.querySelector('.questionnaire-wrapper');
+            // Hide main element
+            if (mainWrapper) {
+                mainWrapper.classList.add('hidden');
+            }
+            // Show the "lets be friends" section
+            const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
+            if (friendsWrapper) {
+                friendsWrapper.classList.add('active');
+            }
+        }
+    }, 3000);
+    }
 }
 
 // Initialize the questionnaire functionality
@@ -157,8 +191,10 @@ document.addEventListener('DOMContentLoaded', function() {
       const parentWrapper = this.closest('.questionnaire-icons-wrapper');
       if (!parentWrapper.classList.contains('active')) return;
       
-      // Toggle selected class
+    // Only toggle selected if this wrapper is not empty
+    if (this.innerHTML.trim() !== '') {
       this.classList.toggle('selected');
+    }
       
       // Update button state
       updateSelectButton();
@@ -180,4 +216,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initial button state update
   updateSelectButton();
 });
+
+function sendForm () {
+    const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
+        if (friendsWrapper) {
+            friendsWrapper.classList.remove('active');
+            document.body.classList.remove('questionnaire-wrapper-open');
+        }
+}
 </script>
