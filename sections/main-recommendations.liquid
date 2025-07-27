@@ -62,15 +62,15 @@
             if (window.innerWidth > 769) {
                 testimonial_slides.forEach(slide => slide.classList.add('active'));
             } 
-            // else {
-            //     testimonial_slides.forEach((slide, idx) => {
-            //         if (idx === testimonial_currentSlide) {
-            //             slide.classList.add('active');
-            //         } else {
-            //             slide.classList.remove('active');
-            //         }
-            //     });
-            // }
+            else {
+                testimonial_slides.forEach((slide, idx) => {
+                    if (idx === testimonial_currentSlide) {
+                        slide.classList.add('active');
+                    } else {
+                        slide.classList.remove('active');
+                    }
+                });
+            }
         }
 
         window.addEventListener('resize', updateSlidesForScreenWidth);
