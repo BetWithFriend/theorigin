@@ -195,8 +195,8 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
 }
 
 .utility-bar__grid.page-width {
-  padding-left: 3rem;
-  padding-right: 3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 @media screen and (min-width: 750px) {
