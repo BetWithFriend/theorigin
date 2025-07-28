@@ -16,7 +16,7 @@
     font-size: 19px;
     line-height: 20px;
     text-align: center;
-    color: #1C201D;
+    color: #636270;
     /* margin-top: 8px; */
     margin-bottom: 16px;
 }
@@ -34,7 +34,7 @@
 }
 
 .testimonials-container {
-    /* position: relative; */
+    position: relative;
     width: 100%;
     height: 100%;
     /* height: 300px; */
@@ -47,27 +47,30 @@
 
 .testimonial-slide {
     height: 100%;
-    display: none;
+    display: flex;
+    position: absolute;
+    width: 100%;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     opacity: 0;
     transform: translateX(100%);
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    /* transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; */
     border-radius: 16px;
     border: 1px solid #1C201D40;
     overflow: hidden;
     padding: 16px 0;
     background-color: #FAFCFE;
+    pointer-events: none;
 }
 
 .testimonial-slide.active {
-    display: flex;
     opacity: 1;
     transform: translateX(0);
+    pointer-events: auto;
 }
 
-.testimonial-slide.slide-left {
+/* .testimonial-slide.slide-left {
     opacity: 0;
     transform: translateX(-100%);
     transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
@@ -77,17 +80,7 @@
     opacity: 0;
     transform: translateX(100%);
     transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-}
-
-.testimonial-slide.slide-right-enter {
-    opacity: 0;
-    transform: translateX(100%);
-}
-
-.testimonial-slide.slide-left-enter {
-    opacity: 0;
-    transform: translateX(-100%);
-}
+} */
 
 .main-recom-img-wrapper {
     margin-bottom: 8px;
@@ -188,7 +181,7 @@
     border-radius: 50%;
     background-color: #ccc;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    /* transition: background-color 0.3s ease, transform 0.2s ease; */
 }
 
 .main-recom-bullet:hover {
@@ -233,6 +226,10 @@
 
     .testimonial-slide {
         width: 30%;
+        position: relative;
+        opacity: 1;
+        transform: translateX(0);
+        pointer-events: auto;
     }
 
     .main-recom-wrapper-container {
@@ -247,7 +244,7 @@
     }
 
     .main-recom-title {
-        font-size: 36px;
-        line-height: 36px;
+        font-size: 20px;
+        line-height: 20px;
     }
 }
