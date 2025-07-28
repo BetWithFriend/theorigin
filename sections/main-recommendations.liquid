@@ -1,0 +1,116 @@
+{{ 'main-recommendations.css' | asset_url | stylesheet_tag }}
+
+<div class="main-recom-wrapper-container">
+    <div class="main-recom-title">מה אומרים חובבי הקפה שלנו</div>
+    <div class="main-recom-wrapper">
+        <div class="testimonials-container">
+            <!-- Testimonial 1 -->
+            <div class="testimonial-slide ">
+                <div class="main-recom-img-wrapper">
+                    <img class="main-recom-img" src="{{ 'testimonial_img_1.png' |  asset_url }}" alt="user recommendation image"/>
+                </div>
+                <div class="main-recom-text-wrapper">
+                    <div class="main-recom-text">"רמה גבוהה, שירות מעולה והקפה לא פחות ממעולה – לגמרי אחזור להזמין. ☕"</div>
+                    <div class="main-recom-name">לוטן ג.</div>
+                    <div class="main-recom-location">תל אביב</div>
+                </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="testimonial-slide active">
+                <div class="main-recom-img-wrapper">
+                    <img class="main-recom-img" src="{{ 'testimonial_img_2.png' |  asset_url }}" alt="user recommendation image"/>
+                </div>
+                <div class="main-recom-text-wrapper">
+                    <div class="main-recom-text">"אתר נוח, הזמנה פשוטה ושירות מעולה – חוויית קנייה ממש טובה."</div>
+                    <div class="main-recom-name">סלבה מ.</div>
+                    <div class="main-recom-location">רחובות</div>
+                </div>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="testimonial-slide">
+                <div class="main-recom-img-wrapper">
+                    <img class="main-recom-img" src="{{ 'testimonial_img_3.png' |  asset_url }}" alt="user recommendation image"/>
+                </div>
+                <div class="main-recom-text-wrapper">
+                    <div class="main-recom-text">"הזמנה קלה, משלוח מהיר ושירות מצוין – בהחלט אזמין שוב!"</div>
+                    <div class="main-recom-name">עידו ג.</div>
+                    <div class="main-recom-location">חיפה</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-recom-bullet-wrapper">
+            <div class="main-recom-bullet active" data-slide="0"> </div>
+            <div class="main-recom-bullet" data-slide="1"> </div>
+            <div class="main-recom-bullet" data-slide="2"> </div>
+        </div>
+
+        <img class="main-recom-right-arrow" src="{{ 'main-recom-right-arrow.png' |  asset_url }}" onclick="prevSlide()" />
+        <img class="main-recom-left-arrow" src="{{ 'main-recom-left-arrow.png' |  asset_url }}" onclick="nextSlide()" />
+    </div>
+    </div>
+
+    <script>
+        let testimonial_currentSlide = 0;
+        const testimonial_slides = document.querySelectorAll('.testimonial-slide');
+        const testimonial_bullets = document.querySelectorAll('.main-recom-bullet');
+        const testimonial_totalSlides = testimonial_slides.length;
+
+        // Add active class to all slides if screen width > 769px
+        function updateSlidesForScreenWidth() {
+            if (window.innerWidth > 769) {
+                testimonial_slides.forEach(slide => slide.classList.add('active'));
+            } 
+            else {
+                testimonial_slides.forEach((slide, idx) => {
+                    if (idx === testimonial_currentSlide) {
+                        slide.classList.add('active');
+                    } else {
+                        slide.classList.remove('active');
+                    }
+                });
+            }
+        }
+
+        window.addEventListener('resize', updateSlidesForScreenWidth);
+        window.addEventListener('DOMContentLoaded', updateSlidesForScreenWidth);
+
+        function showSlide(index) {
+            // Hide all slides
+            testimonial_slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+            // Remove active class from all bullets
+            testimonial_bullets.forEach(bullet => {
+                bullet.classList.remove('active');
+            });
+            // Show current slide and activate bullet
+            testimonial_slides[index].classList.add('active');
+            testimonial_bullets[index].classList.add('active');
+            testimonial_currentSlide = index;
+            // Update for screen width
+            updateSlidesForScreenWidth();
+        }
+
+        function nextSlide() {
+            const next = (testimonial_currentSlide + 1) % testimonial_totalSlides;
+            showSlide(next);
+        }
+
+        function prevSlide() {
+            const prev = (testimonial_currentSlide - 1 + testimonial_totalSlides) % testimonial_totalSlides;
+            showSlide(prev);
+        }
+
+        // Add click event listeners to bullets
+        testimonial_bullets.forEach((bullet, index) => {
+            bullet.addEventListener('click', () => {
+                showSlide(index);
+            });
+        });
+
+        // Optional: Auto-slide every 5 seconds
+        // setInterval(nextSlide, 5000);
+    </script>
