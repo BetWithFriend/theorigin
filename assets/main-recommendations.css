@@ -5,9 +5,9 @@
     flex-direction: column;
     position: relative;
     padding: 16px 60px;
-    margin: 24px 0;
     background-color: #F0F2F3;
     height: 485px;
+    margin-top: 36px;
 }
 
 .main-recom-title {
@@ -17,14 +17,13 @@
     line-height: 20px;
     text-align: center;
     color: #1C201D;
-    margin-bottom: 16px;
-    margin-top: 8px;
+    /* margin-top: 8px; */
     margin-bottom: 16px;
 }
 
 .main-recom-wrapper {
     /* background-color: #F4F3F0; */
-    height: 400px;
+    height: 385px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -52,9 +51,9 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    /* gap: 12px; */
     opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+    transform: translateX(100%);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
     border-radius: 16px;
     border: 1px solid #1C201D40;
     overflow: hidden;
@@ -65,6 +64,19 @@
 .testimonial-slide.active {
     display: flex;
     opacity: 1;
+    transform: translateX(0);
+}
+
+.testimonial-slide.slide-left {
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.testimonial-slide.slide-right {
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
 .main-recom-img-wrapper {
@@ -73,8 +85,8 @@
 }
 
 .main-recom-img {
-    width: 150px;
-    height: 150px;
+    width: 158px;
+    height: 158px;
     object-fit: cover;
     border-radius: 8px;
 }
@@ -83,12 +95,13 @@
     text-align: center;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: end;
     flex-direction: column;
     /* gap: 6px; */
     width: 100%;
     height: 60%;
     padding: 0 24px;
+    margin-top: 36px;
     /* max-width: 400px; */
 }
 
@@ -135,10 +148,10 @@
     right: 16px;
 }
 
-.main-recom-right-arrow:hover,
+/* .main-recom-right-arrow:hover,
 .main-recom-left-arrow:hover {
     background-color: rgba(255, 255, 255, 1);
-}
+} */
 
 /* .main-recom-right-arrow {
     right: 24px;
@@ -215,9 +228,16 @@
     .main-recom-wrapper-container {
         padding: unset;
         border-radius: 16px;
+        margin-bottom: 36px;
+        margin-top: 0
     }
 
     .main-recom-wrapper {
         width: 100%;
+    }
+
+    .main-recom-title {
+        font-size: 36px;
+        line-height: 36px;
     }
 }
