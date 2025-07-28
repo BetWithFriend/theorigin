@@ -423,6 +423,22 @@
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
-    <!--<script src="https://chat.theorigin.co.il/app/embed.js" defer="defer"></script>-->
+    <script src="https://cdn.shopify.com/s/files/1/0701/9151/3657/files/origin-ai.js?v=1753652053" defer="defer"></script>
+    <script>
+      // Listen for Origin AI Chat events
+
+      document.addEventListener('originChatOpened', (event) => {
+        analytics.trackClick('AI Chatbot', {
+          'Action': 'Open',
+        });
+      });
+
+      // Listen for chat closing
+      document.addEventListener('originChatClosed', (event) => {
+        analytics.trackClick('AI Chatbot', {
+          'Action': 'Close',
+        });
+      });
+    </script>
   </body>
 </html>

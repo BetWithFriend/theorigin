@@ -10,7 +10,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 200px;
+    width: auto;
 }
 
 .credibility-icons-img {
@@ -49,6 +49,10 @@
     .credibility-icons-wrapper {
         gap: 70px;
         /* justify-content: space-around; */
+    }
+
+    .credibility-icons-item {
+        width: 210px;
     }
 
 }
