@@ -284,6 +284,7 @@
     .main-recom-wrapper {
         width: 100%;
         height: 354px;
+        border-radius: 8px;
     }
 
     .main-recom-title {
@@ -293,5 +294,15 @@
 
     .main-recom-bullet-wrapper {
         display: none;
+    }
+
+    .testimonial-slide.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .main-recom-img-wrapper {
+        padding: 0 0 16px 0;
     }
 }

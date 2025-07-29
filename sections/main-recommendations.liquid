@@ -42,9 +42,9 @@
         </div>
 
         <div class="main-recom-bullet-wrapper">
-            <div class="main-recom-bullet active" data-slide="0"> </div>
-            <div class="main-recom-bullet" data-slide="1"> </div>
-            <div class="main-recom-bullet" data-slide="2"> </div>
+            <div class="main-recom-bullet active" data-slide="0" onclick="showSlide(0, 'bullets')"> </div>
+            <div class="main-recom-bullet" data-slide="1" onclick="showSlide(1, 'bullets')"> </div>
+            <div class="main-recom-bullet" data-slide="2" onclick="showSlide(2, 'bullets')"> </div>
         </div>
 
         <img class="main-recom-right-arrow" src="{{ 'main-recom-right-arrow.png' |  asset_url }}" onclick="prevSlide()" />
@@ -89,6 +89,13 @@
     function showSlide(index, direction = 'none') {
         const currentSlide = testimonial_slides[testimonial_currentSlide];
         const nextSlide = testimonial_slides[index];
+        if (direction === 'bullets') {
+            if (testimonial_currentSlide > index) {
+                direction = 'left'; // Previous slide
+            } else {
+                direction = 'right'; // Next slide
+            }
+        }
         
         if (window.innerWidth <= 768 && direction !== 'none') {
             // Set exit direction for current slide
