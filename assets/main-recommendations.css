@@ -4,8 +4,6 @@
     justify-content: center;
     flex-direction: column;
     position: relative;
-    padding: 16px 60px;
-    background-color: #F0F2F3;
     height: 485px;
     margin-top: 36px;
 }
@@ -15,34 +13,39 @@
     font-weight: 700;
     font-size: 19px;
     line-height: 20px;
-    text-align: center;
+    text-align: right;
     color: #636270;
-    /* margin-top: 8px; */
     margin-bottom: 16px;
+    width: 100%;
+    margin-right: 8px;
 }
 
 .main-recom-wrapper {
-    /* background-color: #F4F3F0; */
     height: 385px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    /* padding: 0 24px; */
     overflow: hidden;
-    width: 90%;
+    width: 100%;
+    background-color: #E3E0DA;
+    position: relative;
 }
 
 .testimonials-container {
     position: relative;
     width: 100%;
     height: 100%;
-    /* height: 300px; */
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #F0F2F3;
-    /* background-color: #FAFCFE; */
+    /* Enable touch-action for better mobile performance */
+    touch-action: pan-y pinch-zoom;
+    /* Prevent text selection during swipe */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .testimonial-slide {
@@ -51,17 +54,20 @@
     position: absolute;
     width: 100%;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
     flex-direction: column;
     opacity: 0;
     transform: translateX(100%);
-    /* transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; */
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
     border-radius: 16px;
-    border: 1px solid #1C201D40;
     overflow: hidden;
-    padding: 16px 0;
-    background-color: #FAFCFE;
     pointer-events: none;
+    /* Prevent image dragging during swipe */
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
 }
 
 .testimonial-slide.active {
@@ -70,28 +76,45 @@
     pointer-events: auto;
 }
 
-/* .testimonial-slide.slide-left {
-    opacity: 0;
+/* Slide animation classes for directional transitions */
+.testimonial-slide.slide-out-left {
     transform: translateX(-100%);
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    opacity: 0;
 }
 
-.testimonial-slide.slide-right {
-    opacity: 0;
+.testimonial-slide.slide-out-right {
     transform: translateX(100%);
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-} */
+    opacity: 0;
+}
+
+.testimonial-slide.slide-in-left {
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: auto;
+}
+
+.testimonial-slide.slide-in-right {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+}
 
 .main-recom-img-wrapper {
-    margin-bottom: 8px;
-    /* height: 40%; */
+    padding: 24px 0 16px 0;
 }
 
 .main-recom-img {
-    width: 158px;
-    height: 158px;
+    width: 120px;
+    height: 120px;
     object-fit: cover;
     border-radius: 8px;
+    /* Prevent image dragging */
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    pointer-events: none;
 }
 
 .main-recom-text-wrapper {
@@ -100,12 +123,8 @@
     align-items: center;
     justify-content: end;
     flex-direction: column;
-    /* gap: 6px; */
     width: 100%;
-    height: 60%;
-    padding: 0 24px;
-    margin-top: 36px;
-    /* max-width: 400px; */
+    padding: 0 32px;
 }
 
 .main-recom-text {
@@ -119,7 +138,7 @@
 
 .main-recom-name {
     font-weight: 700;
-    margin-top: 12px;
+    margin-top: 24px;
     font-family: 'Noto Sans', sans-serif;
     font-size: 16px;
     color: #000000;
@@ -129,9 +148,8 @@
     font-family: 'Noto Sans', sans-serif;
     font-size: 14px;
     color: #666;
-    margin-top: 4px;
+    margin-top: 8px;
 }
-
 
 .main-recom-left-arrow {
     width: 44px;
@@ -140,6 +158,8 @@
     top: 50%;
     cursor: pointer;
     left: 16px;
+    display: none;
+    z-index: 10;
 }
 
 .main-recom-right-arrow {
@@ -149,20 +169,9 @@
     top: 50%;
     cursor: pointer;
     right: 16px;
+    display: none;
+    z-index: 10;
 }
-
-/* .main-recom-right-arrow:hover,
-.main-recom-left-arrow:hover {
-    background-color: rgba(255, 255, 255, 1);
-} */
-
-/* .main-recom-right-arrow {
-    right: 24px;
-}
-
-.main-recom-left-arrow {
-    left: 24px;
-} */
 
 .main-recom-bullet-wrapper {
     display: flex;
@@ -170,10 +179,10 @@
     justify-content: center;
     flex-direction: row;
     gap: 12px;
-    margin-top: 20px;
-    display: none;
+    position: absolute;
+    bottom: 24px;
+    z-index: 10;
 }
-
 
 .main-recom-bullet {
     width: 12px;
@@ -181,7 +190,7 @@
     border-radius: 50%;
     background-color: #ccc;
     cursor: pointer;
-    /* transition: background-color 0.3s ease, transform 0.2s ease; */
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .main-recom-bullet:hover {
@@ -213,10 +222,41 @@
     transform: translate(-50%, -50%);
 }
 
+/* Mobile-specific improvements for swipe */
+@media screen and (max-width: 768px) {
+    .testimonials-container {
+        /* Better touch handling on mobile */
+        touch-action: pan-y;
+        cursor: grab;
+    }
+
+    .testimonials-container:active {
+        cursor: grabbing;
+    }
+
+    /* Slightly faster transitions on mobile for better responsiveness */
+    .testimonial-slide {
+        transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+    }
+
+    /* Ensure directional slide classes also have proper transitions on mobile */
+    .testimonial-slide.slide-out-left,
+    .testimonial-slide.slide-out-right,
+    .testimonial-slide.slide-in-left,
+    .testimonial-slide.slide-in-right {
+        transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+    }
+}
 
 @media screen and (min-width: 769px) {
     .testimonials-container {
         gap: 20px;
+        /* Re-enable text selection on desktop */
+        -webkit-user-select: auto;
+        -moz-user-select: auto;
+        -ms-user-select: auto;
+        user-select: auto;
+        cursor: default;
     }
 
     .main-recom-left-arrow,
@@ -230,21 +270,28 @@
         opacity: 1;
         transform: translateX(0);
         pointer-events: auto;
+        transition: none;
+        /* Remove transitions on desktop */
     }
 
     .main-recom-wrapper-container {
         padding: unset;
         border-radius: 16px;
         margin-bottom: 36px;
-        margin-top: 0
+        margin-top: 0;
     }
 
     .main-recom-wrapper {
         width: 100%;
+        height: 354px;
     }
 
     .main-recom-title {
-        font-size: 20px;
+        font-size: 24px;
         line-height: 20px;
+    }
+
+    .main-recom-bullet-wrapper {
+        display: none;
     }
 }
