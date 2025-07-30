@@ -80,6 +80,10 @@
       "type": "credibility-text",
       "settings": {}
     },
+    "main_recommendations": {
+      "type": "main-recommendations",
+      "settings": {}
+    },
     "blends_filter_icons": {
       "type": "blends-filter-icons",
       "settings": {}
@@ -203,6 +207,7 @@
     "credibility_text",
     "blends_filter_icons",
     "featured_collection_ErHj6f",
+    "main_recommendations",
     "discover_the_roaster",
     "featured_collection_qNARrT",
     "find_your_coffee",
