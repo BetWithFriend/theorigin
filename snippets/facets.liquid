@@ -178,6 +178,10 @@
                               {%- endfor -%}
                            </div>
                            {%- endif -%}
+                            
+                          {% comment %} PREVENT THE NEW FILTER TO BE PRESENTERD {% endcomment %}
+
+
                            {% comment %} {%- if filter_type == 'vertical' -%}
                             <span class="facets__selected{% if filter.active_values.size == 0 %} hidden{% endif %}">
                               ({{ filter.active_values.size }})</span

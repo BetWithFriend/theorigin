@@ -1,51 +1,51 @@
 {{ 'questionnaire.css' | asset_url | stylesheet_tag }}
 
-<div class="questionnaire-wrapper">
+<div class="questionnaire-wrapper" id="questionnaireWrapperDesktop">
     <div class="questionnaire-title">איך אתם מכינים את הקפה</div>
-    <div class="questionnaire-icons-wrapper ">
-        <div class="questionnaire-selection-wrapper"> 
+    <div class="questionnaire-icons-wrapper">
+        <div class="questionnaire-selection-wrapper"  data-filter-value="Espresso, MokaPot"> 
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Espresso_Machine.png' |  asset_url }}" alt="Espresso icon"/>
             <div class="questionnaire-text">מכונת אספרסו</div>
         </div>
-        <div class="questionnaire-selection-wrapper">
+        <div class="questionnaire-selection-wrapper"  data-filter-value="MokaPot">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Moka_Pot.png' |  asset_url }}" alt="Moka pot icon"/>
             <div class="questionnaire-text">מקינטה</div>
         </div>
-        <div class="questionnaire-selection-wrapper">
+        <div class="questionnaire-selection-wrapper"  data-filter-value="Black">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Turkish_Cezve.png' |  asset_url }}" alt="Turkish icon"/>
             <div class="questionnaire-text">קפה טורקי</div>
         </div>
-        <div class="questionnaire-selection-wrapper">
+        <div class="questionnaire-selection-wrapper"  data-filter-value="V60">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_v60.png' |  asset_url }}" alt="V60 icon"/>
             <div class="questionnaire-text">מזיגה ידנית</div>
         </div>
-        <div class="questionnaire-selection-wrapper">
+        <div class="questionnaire-selection-wrapper"  data-filter-value="Espresso">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Auto_Machine.png' |  asset_url }}" alt="Espresso Auto icon"/>
             <div class="questionnaire-text">מכונה אוטומטית</div>
         </div>
-        <div class="questionnaire-selection-wrapper">
+        <div class="questionnaire-selection-wrapper" data-filter-value="Aeropress">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Aeropress.png' |  asset_url }}" alt="Aeropress icon"/>
             <div class="questionnaire-text">אירופרס</div>
         </div>
         <button class="questionnaire-select-btn" disabled>המשך עם 1 שיטה</button>
     </div>
     <div class="questionnaire-icons-wrapper ">
-            <div class="questionnaire-selection-wrapper"> 
+            <div class="questionnaire-selection-wrapper" data-filter-value="Fruity"> 
                 <img class="questionnaire-img-icon" src="{{ 'questionnaire_light.png' |  asset_url }}" alt="light roast icon"/>
                 <div class="questionnaire-text">בהירה</div>
                 <div class="questionnaire-expl-text">טעמים פירותיים וקלילים</div>
             </div>
-            <div class="questionnaire-selection-wrapper">
+            <div class="questionnaire-selection-wrapper" data-filter-value="Fruity-Sweet">
                 <img class="questionnaire-img-icon" src="{{ 'questionnaire_medium.png' |  asset_url }}" alt="medium roast icon"/>
                 <div class="questionnaire-text">בינונית</div>
                 <div class="questionnaire-expl-text">טעמים מתוקים יותר ומאוזנים</div>
             </div>
-            <div class="questionnaire-selection-wrapper">
+            <div class="questionnaire-selection-wrapper" data-filter-value="Sweet-Chocolate">
                 <img class="questionnaire-img-icon" src="{{ 'questionnaire_dark.png' |  asset_url }}" alt="dark roast icon"/>
                 <div class="questionnaire-text">כהה</div>
                 <div class="questionnaire-expl-text">טעמים שוקולדיים וקצת מרירים</div>
             </div>
-            <div class="questionnaire-selection-wrapper">
+            <div class="questionnaire-selection-wrapper" data-filter-value="">
                 <img class="questionnaire-img-icon" src="{{ 'questionnaire_dont_know.png' |  asset_url }}" alt="dont know icon"/>
                 <div class="questionnaire-text">לא יודע</div>
                 <div class="questionnaire-expl-text">מוכן לגלות מה מתאים לי</div>
@@ -55,27 +55,27 @@
             <button class="questionnaire-select-btn">המשך עם 1 שיטה</button>
     </div>
     <div class="questionnaire-icons-wrapper ">
-        <div class="questionnaire-selection-wrapper"> 
+        <div class="questionnaire-selection-wrapper" data-filter-value=""> 
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Dark_2.png' |  asset_url }}" alt="dark coffee icon"/>
             <div class="questionnaire-text">חזק ומר</div>
             <div class="questionnaire-expl-text">טעם חזק</div>
         </div>
-        <div class="questionnaire-selection-wrapper">
+        <div class="questionnaire-selection-wrapper" data-filter-value="">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_soft.png' |  asset_url }}" alt="soft coffee icon"/>
             <div class="questionnaire-text">חלק ומתקתק</div>
             <div class="questionnaire-expl-text">טעם רך עם מתיקות טבעית</div>
         </div>
-        <div class="questionnaire-selection-wrapper">
+        <div class="questionnaire-selection-wrapper" data-filter-value="">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_special.png' |  asset_url }}" alt="Turkish icon"/>
             <div class="questionnaire-text">מורכב ומעניין</div>
             <div class="questionnaire-expl-text">פירות, שוקולד ותבלינים</div>
         </div>
-        <div class="questionnaire-selection-wrapper">
+        <div class="questionnaire-selection-wrapper" data-filter-value="">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_milk.png' |  asset_url }}" alt="V60 icon"/>
             <div class="questionnaire-text">עם חלב</div>
             <div class="questionnaire-expl-text">קפוצ׳ינו, לאטה או הפוך</div>
         </div>
-        <div class="questionnaire-selection-wrapper">
+        <div class="questionnaire-selection-wrapper" data-filter-value="">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_dont_know_2.png' |  asset_url }}" alt="dont know icon"/>
             <div class="questionnaire-text">עדיין לא בטוח</div>
             <div class="questionnaire-expl-text">פתוח לגלות מה מתאים לי</div>
@@ -90,7 +90,7 @@
         </div>
     </div>
 </div>
-<div class="lets-be-friends-wrapper active">
+<div class="lets-be-friends-wrapper">
     <img class="lets-be-friends-img" src="{{ 'lets_be_friends.png' | asset_url }}" alt="Lets be friends"/>
     <div class="lets-be-friends-title">בואו נהיה חברים</div>
     <div class="lets-be-friends-text">השאירו מייל כדי לשמוע על קפה חדש, בתי קלייה. מעניינים, צורות הכנה ועוד.
@@ -120,9 +120,9 @@
                       required
                     >
                     <label class="field__label" for="NewsletterForm--{{ section.id }}">
-                      {{ 'newsletter.label' | t }}
+                        הכנס מייל
                     </label>
-                    <button
+                    {% comment %} <button
                       type="submit"
                       class="newsletter-form__button field__button"
                       name="commit"
@@ -132,7 +132,7 @@
                       <span class="svg-wrapper">
                         {{- 'icon-arrow.svg' | inline_asset_content -}}
                       </span>
-                    </button>
+                    </button> {% endcomment %}
                   </div>
                   {%- if form.errors -%}
                     <small class="newsletter-form__message form__message" id="ContactFooter-error">
@@ -160,15 +160,230 @@
               {%- endform -%}
     {% comment %} <input type="email" class="lets-be-friends-input" placeholder="הכנס מייל"/> {% endcomment %}
     <button onclick="sendForm()" class="questionnaire-select-btn form-submit">שלח</button>
-    <div onclick="sendForm()" class="questionnaire-select-skip">דלג</div>
+    <div onclick="closeForm()" class="questionnaire-select-skip">דלג</div>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    document.body.classList.add('questionnaire-wrapper-open');
-  });
+ // Enhanced questionnaire functionality with facet integration
 
-   // Function 1: Enable/disable the select button based on selections
+// Function to apply filters based on questionnaire step
+function applyQuestionnaireFilters() {
+  const activeWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
+  if (!activeWrapper) return;
+  
+  const selectedItems = activeWrapper.querySelectorAll('.questionnaire-selection-wrapper.selected');
+  if (selectedItems.length === 0) return;
+  
+  // Determine which step we're on and apply appropriate filters
+  const stepIndex = Array.from(document.querySelectorAll('.questionnaire-icons-wrapper')).indexOf(activeWrapper);
+  switch(stepIndex) {
+    case 0: // First step - Coffee preparation methods
+      applyPrepMethodFilters(selectedItems);
+      break;
+    case 1: // Second step - Taste preferences (if you have this filter)
+      applyTasteFilters(selectedItems);
+      break;
+    case 2: // Third step - Roast levels (if you have this filter)
+      applyRoastLevelFilters(selectedItems);
+      break;
+    default:
+      console.log('No filters to apply for this step');
+  }
+}
+
+// Apply preparation method filters (first step)
+function applyPrepMethodFilters(selectedItems) {
+  const paramName = 'filter.p.m.custom.coffee_prep_methods';
+  
+// Get selected filter values
+  const selectedValues = [];
+  selectedItems.forEach(item => {
+    const filterValue = item.getAttribute('data-filter-value');
+    if (filterValue) {
+      // Handle comma-separated values
+      const values = filterValue.split(',').map(v => v.trim());
+      selectedValues.push(...values);
+    }
+  });
+  
+  if (selectedValues.length === 0) return;
+  
+  // Find and update checkboxes
+  const allCheckboxes = document.querySelectorAll(`input[name="${paramName}"]`);
+  allCheckboxes.forEach(checkbox => {
+    checkbox.checked = selectedValues.includes(checkbox.value);
+  });
+  
+  // Trigger form submission
+  triggerFacetFormSubmission(paramName);
+  
+  console.log(`Applied prep method filters: ${selectedValues.join(', ')}`);
+}
+
+// Apply roast level filters (second step) - if you have this facet
+function applyRoastLevelFilters(selectedItems) {
+  // Example for roast level filter - adjust parameter name as needed
+  const paramName = 'filter.p.m.custom.roast_level'; // Adjust this to your actual parameter
+  
+   // Get selected filter values
+  const selectedValues = [];
+  selectedItems.forEach(item => {
+    const filterValue = item.getAttribute('data-filter-value');
+    if (filterValue) {
+      selectedValues.push(filterValue);
+    }
+  });
+  
+  if (selectedValues.length === 0) return;
+  
+  // Find and update checkboxes (if this facet exists)
+  const allCheckboxes = document.querySelectorAll(`input[name="${paramName}"]`);
+  if (allCheckboxes.length > 0) {
+    allCheckboxes.forEach(checkbox => {
+      checkbox.checked = selectedValues.includes(checkbox.value);
+    });
+    
+    triggerFacetFormSubmission(paramName);
+    console.log(`Applied roast level filters: ${selectedValues.join(', ')}`);
+  }
+}
+
+// Apply taste filters (third step) - if you have this facet
+function applyTasteFilters(selectedItems) {
+  const paramName = 'filter.p.m.custom.coffee_taste'; // Adjust this to your actual parameter
+  
+  const selectedValues = [];
+  // selectedItems.forEach(item => {
+  //   const text = item.querySelector('.questionnaire-text')?.textContent.trim();
+    
+  //   // Map Hebrew text to filter values
+  //   let filterValue = '';
+  //   switch(text) {
+  //     case 'חזק ומר':
+  //       filterValue = 'Strong';
+  //       break;
+  //     case 'חלק ומתקתק':
+  //       filterValue = 'Sweet';
+  //       break;
+  //     case 'מורכב ומעניין':
+  //       filterValue = 'Complex';
+  //       break;
+  //     case 'עם חלב':
+  //       filterValue = 'Milk';
+  //       break;
+  //     case 'עדיין לא בטוח':
+  //       // Don't apply specific taste filter
+  //       return;
+  //   }
+    
+  //   if (filterValue) {
+  //     selectedValues.push(filterValue);
+  //   }
+  // });
+
+  selectedItems.forEach(item => {
+    const filterValue = item.getAttribute('data-filter-value');
+    if (filterValue) {
+      selectedValues.push(filterValue);
+    }
+  });
+  
+  if (selectedValues.length === 0) return;
+  
+  // Find and update checkboxes (if this facet exists)
+  const allCheckboxes = document.querySelectorAll(`input[name="${paramName}"]`);
+  if (allCheckboxes.length > 0) {
+    allCheckboxes.forEach(checkbox => {
+      checkbox.checked = selectedValues.includes(checkbox.value);
+    });
+    
+    triggerFacetFormSubmission(paramName);
+    console.log(`Applied taste filters: ${selectedValues.join(', ')}`);
+  }
+}
+
+// Helper function to trigger facet form submission
+function triggerFacetFormSubmission(paramName) {
+  const facetForm = document.querySelector('facet-filters-form');
+  if (!facetForm) {
+    console.error('Facet filters form not found');
+    return;
+  }
+  
+  // Get the first checked checkbox for this parameter
+  const firstCheckedCheckbox = document.querySelector(`input[name="${paramName}"]:checked`);
+  
+  if (firstCheckedCheckbox) {
+    // Create the search params using the existing method
+    const searchParams = facetForm.createSearchParams(firstCheckedCheckbox.form);
+    
+    // Create a synthetic event for the onSubmitForm method
+    const syntheticEvent = {
+      target: firstCheckedCheckbox,
+      preventDefault: () => {}
+    };
+    
+    // Call the existing submit handler directly
+    facetForm.onSubmitForm(searchParams, syntheticEvent);
+  }
+}
+
+// Enhanced goToNextStep function
+function goToNextStep() {
+  // Apply filters before moving to next step
+  applyQuestionnaireFilters();
+  
+  // Get the current active wrapper
+  const currentActiveWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
+  
+  if (!currentActiveWrapper) return;
+  
+  // Remove active class from current wrapper
+  currentActiveWrapper.classList.remove('active');
+  
+  // Find the next questionnaire-icons-wrapper
+  const nextWrapper = currentActiveWrapper.nextElementSibling;
+  
+  // Add active class to next wrapper if it exists and is a questionnaire-icons-wrapper
+  if (nextWrapper && nextWrapper.classList.contains('questionnaire-icons-wrapper')) {
+    nextWrapper.classList.add('active');
+    
+    // Update button state for the new active step
+    updateSelectButton();
+
+    // Disable the btn again for every iteration
+    const selectBtn = nextWrapper.querySelector('.questionnaire-select-btn');
+    if (selectBtn) {
+      selectBtn.disabled = true;
+      selectBtn.classList.add('disabled');
+    }
+  }
+
+  // Show loader for 3 seconds if it is active on page load
+  const loaderWrapper = document.querySelector('.questionnaire-icons-wrapper.active .questionnaire-loader-wrapper');
+  if (loaderWrapper) {
+    const questionnaireTitle = document.querySelector('.questionnaire-title');
+    questionnaireTitle.classList.add('hidden');
+    setTimeout(function() {
+      const loaderIconsWrapper = loaderWrapper.closest('.questionnaire-icons-wrapper');
+      if (loaderIconsWrapper) {
+        loaderIconsWrapper.classList.remove('active');
+        const mainWrapper = document.querySelector('.questionnaire-wrapper');
+        // Hide main element
+        if (mainWrapper) {
+          mainWrapper.classList.add('hidden');
+        }
+        // Show the "lets be friends" section
+        const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
+        if (friendsWrapper) {
+          friendsWrapper.classList.add('active');
+        }
+      }
+    }, 3000);
+  }
+}
+
+// Keep your existing functions unchanged
 function updateSelectButton() {
   // Get the current active questionnaire step
   const activeWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
@@ -195,60 +410,32 @@ function updateSelectButton() {
   }
 }
 
-// Function 2: Navigate to next questionnaire step
-function goToNextStep() {
-  // Get the current active wrapper
-  const currentActiveWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
-  
-  if (!currentActiveWrapper) return;
-  
-  // Remove active class from current wrapper
-  currentActiveWrapper.classList.remove('active');
-  
-  // Find the next questionnaire-icons-wrapper
-  const nextWrapper = currentActiveWrapper.nextElementSibling;
-  
-  // Add active class to next wrapper if it exists and is a questionnaire-icons-wrapper
-  if (nextWrapper && nextWrapper.classList.contains('questionnaire-icons-wrapper')) {
-    nextWrapper.classList.add('active');
-    
-    // Update button state for the new active step
-    updateSelectButton();
-
-    // Disable the btn again for evert iteration
-    const selectBtn = nextWrapper.querySelector('.questionnaire-select-btn');
-    if (selectBtn) {
-      selectBtn.disabled = true;
-      selectBtn.classList.add('disabled');
-    }
+function closeForm() {
+  const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
+  const questionnaireWrapper = document.querySelector('.questionnaire-wrapper');
+  if (friendsWrapper) {
+    friendsWrapper.classList.remove('active');
+    document.body.classList.remove('questionnaire-wrapper-open');
+    questionnaireWrapper.classList.add('hidden');
   }
+}
 
-  // Show loader for 3 seconds if it is active on page load
-    const loaderWrapper = document.querySelector('.questionnaire-icons-wrapper.active .questionnaire-loader-wrapper');
-    if (loaderWrapper) {
-        const questionnaireTitle = document.querySelector('.questionnaire-title');
-        questionnaireTitle.classList.add('hidden');
-        setTimeout(function() {
-            const loaderIconsWrapper = loaderWrapper.closest('.questionnaire-icons-wrapper');
-            if (loaderIconsWrapper) {
-                loaderIconsWrapper.classList.remove('active');
-                const mainWrapper = document.querySelector('.questionnaire-wrapper');
-                // Hide main element
-                if (mainWrapper) {
-                    mainWrapper.classList.add('hidden');
-                }
-                // Show the "lets be friends" section
-                const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
-                if (friendsWrapper) {
-                    friendsWrapper.classList.add('active');
-                }
-            }
-        }, 3000);
-    }
+function sendForm() {
+  const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
+  const questionnaireWrapper = document.querySelector('.questionnaire-wrapper');
+  if (friendsWrapper) {
+    friendsWrapper.classList.remove('active');
+    document.body.classList.remove('questionnaire-wrapper-open');
+    questionnaireWrapper.classList.add('hidden');
+  }
+  // Submit the form
+  document.getElementById('ContactFooter').submit();
 }
 
 // Initialize the questionnaire functionality
 document.addEventListener('DOMContentLoaded', function() {
+  // document.body.classList.add('questionnaire-wrapper-open');
+  
   // Add click event listeners to all selection wrappers
   const selectionWrappers = document.querySelectorAll('.questionnaire-selection-wrapper');
   
@@ -258,10 +445,10 @@ document.addEventListener('DOMContentLoaded', function() {
       const parentWrapper = this.closest('.questionnaire-icons-wrapper');
       if (!parentWrapper.classList.contains('active')) return;
       
-    // Only toggle selected if this wrapper is not empty
-    if (this.innerHTML.trim() !== '') {
-      this.classList.toggle('selected');
-    }
+      // Only toggle selected if this wrapper is not empty
+      if (this.innerHTML.trim() !== '') {
+        this.classList.toggle('selected');
+      }
       
       // Update button state
       updateSelectButton();
@@ -283,12 +470,4 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initial button state update
   updateSelectButton();
 });
-
-function sendForm () {
-    const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
-        if (friendsWrapper) {
-            friendsWrapper.classList.remove('active');
-            document.body.classList.remove('questionnaire-wrapper-open');
-        }
-}
 </script>
