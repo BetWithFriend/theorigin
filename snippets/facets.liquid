@@ -125,6 +125,9 @@
 
               {% case filter.type %}
                 {% when 'boolean', 'list' %}
+                {%- if filter.param_name == 'filter.p.m.custom.coffee_tastes' or filter.param_name == 'filter.p.m.custom.coffee_roast_level' -%}
+                  {% continue %}
+                {%- endif -%}
                   <details
                     id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
                     class="{% if filter_type == 'horizontal' %}disclosure-has-popup facets__disclosure{% else %} facets__disclosure-vertical{% endif %} js-filter"
