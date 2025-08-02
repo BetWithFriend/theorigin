@@ -2,8 +2,8 @@
 
 <div class="questionnaire-wrapper" id="questionnaireWrapperDesktop">
     <div class="questionnaire-title">איך אתם מכינים את הקפה</div>
-    <div class="questionnaire-icons-wrapper">
-        <div class="questionnaire-selection-wrapper"  data-filter-value="Espresso, MokaPot"> 
+    <div class="questionnaire-icons-wrapper active">
+        <div class="questionnaire-selection-wrapper"  data-filter-value="Espresso"> 
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Espresso_Machine.png' |  asset_url }}" alt="Espresso icon"/>
             <div class="questionnaire-text">מכונת אספרסו</div>
         </div>
@@ -30,17 +30,17 @@
         <button class="questionnaire-select-btn" disabled>המשך עם 1 שיטה</button>
     </div>
     <div class="questionnaire-icons-wrapper ">
-            <div class="questionnaire-selection-wrapper" data-filter-value="Fruity"> 
+            <div class="questionnaire-selection-wrapper" data-filter-value="בהירה, בהירה-בינונית"> 
                 <img class="questionnaire-img-icon" src="{{ 'questionnaire_light.png' |  asset_url }}" alt="light roast icon"/>
                 <div class="questionnaire-text">בהירה</div>
                 <div class="questionnaire-expl-text">טעמים פירותיים וקלילים</div>
             </div>
-            <div class="questionnaire-selection-wrapper" data-filter-value="Fruity-Sweet">
+            <div class="questionnaire-selection-wrapper" data-filter-value="בהירה-בינונית, בינונית, בינונית-כהה">
                 <img class="questionnaire-img-icon" src="{{ 'questionnaire_medium.png' |  asset_url }}" alt="medium roast icon"/>
                 <div class="questionnaire-text">בינונית</div>
                 <div class="questionnaire-expl-text">טעמים מתוקים יותר ומאוזנים</div>
             </div>
-            <div class="questionnaire-selection-wrapper" data-filter-value="Sweet-Chocolate">
+            <div class="questionnaire-selection-wrapper" data-filter-value="בינונית-כהה, כהה">
                 <img class="questionnaire-img-icon" src="{{ 'questionnaire_dark.png' |  asset_url }}" alt="dark roast icon"/>
                 <div class="questionnaire-text">כהה</div>
                 <div class="questionnaire-expl-text">טעמים שוקולדיים וקצת מרירים</div>
@@ -181,10 +181,10 @@ function applyQuestionnaireFilters() {
       applyPrepMethodFilters(selectedItems);
       break;
     case 1: // Second step - Taste preferences (if you have this filter)
-      applyTasteFilters(selectedItems);
+      applyRoastLevelFilters(selectedItems);
       break;
     case 2: // Third step - Roast levels (if you have this filter)
-      applyRoastLevelFilters(selectedItems);
+      applyTasteFilters(selectedItems);
       break;
     default:
       console.log('No filters to apply for this step');
@@ -195,7 +195,7 @@ function applyQuestionnaireFilters() {
 function applyPrepMethodFilters(selectedItems) {
   const paramName = 'filter.p.m.custom.coffee_prep_methods';
   
-// Get selected filter values
+ // Get selected filter values
   const selectedValues = [];
   selectedItems.forEach(item => {
     const filterValue = item.getAttribute('data-filter-value');
@@ -223,14 +223,16 @@ function applyPrepMethodFilters(selectedItems) {
 // Apply roast level filters (second step) - if you have this facet
 function applyRoastLevelFilters(selectedItems) {
   // Example for roast level filter - adjust parameter name as needed
-  const paramName = 'filter.p.m.custom.roast_level'; // Adjust this to your actual parameter
+  const paramName = 'filter.p.m.custom.coffee_roast_level'; // Adjust this to your actual parameter
   
-   // Get selected filter values
+ // Get selected filter values
   const selectedValues = [];
   selectedItems.forEach(item => {
     const filterValue = item.getAttribute('data-filter-value');
     if (filterValue) {
-      selectedValues.push(filterValue);
+      // Handle comma-separated values
+      const values = filterValue.split(',').map(v => v.trim());
+      selectedValues.push(...values);
     }
   });
   
@@ -250,41 +252,18 @@ function applyRoastLevelFilters(selectedItems) {
 
 // Apply taste filters (third step) - if you have this facet
 function applyTasteFilters(selectedItems) {
-  const paramName = 'filter.p.m.custom.coffee_taste'; // Adjust this to your actual parameter
-  
-  const selectedValues = [];
-  // selectedItems.forEach(item => {
-  //   const text = item.querySelector('.questionnaire-text')?.textContent.trim();
-    
-  //   // Map Hebrew text to filter values
-  //   let filterValue = '';
-  //   switch(text) {
-  //     case 'חזק ומר':
-  //       filterValue = 'Strong';
-  //       break;
-  //     case 'חלק ומתקתק':
-  //       filterValue = 'Sweet';
-  //       break;
-  //     case 'מורכב ומעניין':
-  //       filterValue = 'Complex';
-  //       break;
-  //     case 'עם חלב':
-  //       filterValue = 'Milk';
-  //       break;
-  //     case 'עדיין לא בטוח':
-  //       // Don't apply specific taste filter
-  //       return;
-  //   }
-    
-  //   if (filterValue) {
-  //     selectedValues.push(filterValue);
-  //   }
-  // });
+  const paramName = 'filter.p.m.custom.coffee_tastes'; // Adjust this to your actual parameter
 
+
+  
+ // Get selected filter values
+  const selectedValues = [];
   selectedItems.forEach(item => {
     const filterValue = item.getAttribute('data-filter-value');
     if (filterValue) {
-      selectedValues.push(filterValue);
+      // Handle comma-separated values
+      const values = filterValue.split(',').map(v => v.trim());
+      selectedValues.push(...values);
     }
   });
   
@@ -434,7 +413,7 @@ function sendForm() {
 
 // Initialize the questionnaire functionality
 document.addEventListener('DOMContentLoaded', function() {
-  // document.body.classList.add('questionnaire-wrapper-open');
+  document.body.classList.add('questionnaire-wrapper-open');
   
   // Add click event listeners to all selection wrappers
   const selectionWrappers = document.querySelectorAll('.questionnaire-selection-wrapper');
@@ -444,7 +423,17 @@ document.addEventListener('DOMContentLoaded', function() {
       // Only allow selection if this wrapper is in the active step
       const parentWrapper = this.closest('.questionnaire-icons-wrapper');
       if (!parentWrapper.classList.contains('active')) return;
-      
+
+      // 
+      const filterValue = wrapper.getAttribute('data-filter-value');
+      // Remove selection from all other wrappers in the same step
+      if (!filterValue || filterValue.trim() === '') {
+      // Remove 'selected' class from all wrappers in the current step
+      parentWrapper.querySelectorAll('.questionnaire-selection-wrapper.selected').forEach(el => {
+        el.classList.remove('selected');
+      });
+      }
+     
       // Only toggle selected if this wrapper is not empty
       if (this.innerHTML.trim() !== '') {
         this.classList.toggle('selected');

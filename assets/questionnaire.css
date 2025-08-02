@@ -10,7 +10,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    display: none;
+    /* display: none; */
 }
 
 .questionnaire-wrapper.hidden {
@@ -30,7 +30,7 @@ body.questionnaire-wrapper-open {
     color: #1C201D;
     width: 100%;
     text-align: center;
-    padding: 60px 0 16px 0;
+    padding: 60px 0 32px 0;
 }
 
 .questionnaire-title.hidden {

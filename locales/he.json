@@ -3839,6 +3839,8 @@
       "MokaPot": "מקינטה",
       "Espresso": "אספרסו",
       "Aeropress": "חליטה",
+      "light": "בהירה",
+      "medium-light": "בהירה-בינונית",
       "filters_selected": {
         "one": "{{ count }} נבחר",
         "other": "{{ count }} נבחרו"
