@@ -351,7 +351,42 @@
 
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
       {{ 'accessibility.skip_to_text' | t }}
-    </a>
+    </a> 
+  <!--<div class="whatsapp-wrapper">
+      <div class="whatsapp-tooltip">
+          <button class="tooltip-close" aria-label="Close tooltip" onclick="closeTooltip()">×</button>
+          <div class="whatsapp-tooltip-text">מתלבטים? יש לכם שאלות? הצוות שלנו כאן כדי לעזור</div>
+          <div class="tooltip-arrow">&nbsp;</div>
+        </div>
+        
+      <a href="https://wa.me/972545631523" target="_blank">
+        <img class="whatsapp-icon" src="{{ 'WhatsApp.png' |  asset_url }}" alt="WhatsApp" />
+      </a>
+    </div>-->
+
+    <script>
+      // Check if tooltip was previously closed
+      if (localStorage.getItem('whatsappTooltipClosed') === 'true') {
+        const whatsappWrapper = document.querySelector('.whatsapp-tooltip');
+        if (whatsappWrapper) {
+          whatsappWrapper.classList.add('hidden');
+        }
+      }
+      function closeTooltip() {
+        localStorage.setItem('whatsappTooltipClosed', 'true');
+        const whatsappWrapper = document.querySelector('.whatsapp-tooltip');
+        if (whatsappWrapper) {
+          whatsappWrapper.classList.add('hidden');
+        }
+      };
+      setTimeout(() => {
+        const whatsappWrapper = document.querySelector('.whatsapp-tooltip');
+        if (whatsappWrapper) {
+          whatsappWrapper.classList.add('hidden');
+        }
+      }, 10000); // Show after 5 seconds
+
+    </script>
 
     {%- if settings.cart_type == 'drawer' -%}
       {%- render 'cart-drawer' -%}
@@ -423,22 +458,22 @@
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
-    <script src="https://cdn.shopify.com/s/files/1/0701/9151/3657/files/origin-ai.js?v=1753652053" defer="defer"></script>
+    {% comment %} <script src="https://cdn.shopify.com/s/files/1/0701/9151/3657/files/origin-ai.js?v=1753652053" defer="defer"></script> {% endcomment %}
     <script>
       // Listen for Origin AI Chat events
 
-      document.addEventListener('originChatOpened', (event) => {
-        analytics.trackClick('AI Chatbot', {
-          'Action': 'Open',
-        });
-      });
+      // document.addEventListener('originChatOpened', (event) => {
+      //   analytics.trackClick('AI Chatbot', {
+      //     'Action': 'Open',
+      //   });
+      // });
 
       // Listen for chat closing
-      document.addEventListener('originChatClosed', (event) => {
-        analytics.trackClick('AI Chatbot', {
-          'Action': 'Close',
-        });
-      });
+      // document.addEventListener('originChatClosed', (event) => {
+      //   analytics.trackClick('AI Chatbot', {
+      //     'Action': 'Close',
+      //   });
+      // });
     </script>
   </body>
 </html>
