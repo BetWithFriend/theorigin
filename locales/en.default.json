@@ -195,7 +195,6 @@
       "Fruity": "Fruity",
       "Fruity-Sweet": "Fruity-Sweet",
       "Sweet": "Sweet",
-      // "Sweet-Chocolate": "Sweet-Chocolate",
       "Sweet-Chocolate": "Sweet-Choco",
       "Chocolate": "Chocolate",
       "Filter": "Filter",
@@ -546,6 +545,24 @@
       "max_characters": "{{ max_chars }} characters max",
       "send_on": "YYYY-MM-DD",
       "send_on_label": "Send on (optional)"
+    }
+  },
+  "shopify": {
+    "checkout": {
+      "order_summary": {
+        "discount_discovery": {
+          "merchandise_quantity_label": {
+            "one": "{{ count }} item",
+            "other": "{{ count }} items"
+          }
+        }
+      },
+      "shipping": {
+        "split_shipping_merchandise_quantity_label_standard": "{{ quantity }} items",
+        "split_shipping_merchandise_quantity_label_additional": "+{{ quantity }} more",
+        "split_shipping_merchandise_quantity_label_inline_primary": "Quantity: {{ quantity }}",
+        "split_shipping_merchandise_quantity_label_inline": "{{ merchandise_title }} x {{ quantity }}"
+      }
     }
   }
 }
