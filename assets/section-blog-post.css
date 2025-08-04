@@ -1,5 +1,13 @@
+.article-template {
+  padding: 16px;
+}
+
 .article-template > *:first-child:not(.article-template__hero-container) {
   margin-top: 5rem;
+}
+
+.article-template li p {
+  display: inline;
 }
 
 @media screen and (min-width: 750px) {
