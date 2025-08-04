@@ -10,13 +10,13 @@
     &nbsp;/&nbsp;
    {% assign page_vendor = product.vendor %}
     {% if page_vendor == 'canopy' %}
-      {% assign collectionName = 'בית-קלייה-קאנופי' %}
+      {% assign collectionName = 'canopy-collection' %}
       {% elsif page_vendor == 'blooms' %}
-      {% assign collectionName = 'בית-הקלייה-בלומס' %}
+      {% assign collectionName = 'blooms-collection' %}
       {% elsif page_vendor == 'youneedcoffee' %}
-      {% assign collectionName = 'בית-הקלייה-you-need-coffee' %}
+      {% assign collectionName = 'you-need-coffee-collection' %}
       {% elsif page_vendor == 'coffeeorg' %}
-      {% assign collectionName = 'בית-קלייה-קופי-אורגניזיישן' %}
+      {% assign collectionName = 'coffee-organization-collection' %}
     {% endif %}
         <a class="vendor-link" href="/collections/{{ collectionName }}">{{ product.vendor | upcase }}</a>
       
