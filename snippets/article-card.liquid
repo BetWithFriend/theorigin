@@ -116,7 +116,7 @@
         <div class="card__information">
           <h3 class="card__heading{% if show_excerpt %} h2{% endif %}">
             <a href="{{ article.url }}" class="full-unstyled-link">
-              {{ article.title | truncate: 50 | escape }}
+              {{ article.title | escape }}
             </a>
           </h3>
           <div class="article-card__info caption-with-letter-spacing h5">
