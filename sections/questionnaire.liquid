@@ -178,13 +178,13 @@ function applyQuestionnaireFilters() {
   const stepIndex = Array.from(document.querySelectorAll('.questionnaire-icons-wrapper')).indexOf(activeWrapper);
   switch(stepIndex) {
     case 0: // First step - Coffee preparation methods
-      applyPrepMethodFilters(selectedItems);
+      applyFilters(selectedItems, 'filter.p.m.custom.coffee_prep_methods');
       break;
     case 1: // Second step - Taste preferences (if you have this filter)
-      applyRoastLevelFilters(selectedItems);
+      applyFilters(selectedItems, 'filter.p.m.custom.coffee_roast_level');
       break;
     case 2: // Third step - Roast levels (if you have this filter)
-      applyTasteFilters(selectedItems);
+      applyFilters(selectedItems, 'filter.p.m.custom.coffee_tastes');
       break;
     default:
       console.log('No filters to apply for this step');
@@ -192,8 +192,7 @@ function applyQuestionnaireFilters() {
 }
 
 // Apply preparation method filters (first step)
-function applyPrepMethodFilters(selectedItems) {
-  const paramName = 'filter.p.m.custom.coffee_prep_methods';
+function applyFilters(selectedItems, filterName) {
   
  // Get selected filter values
   const selectedValues = [];
@@ -209,76 +208,15 @@ function applyPrepMethodFilters(selectedItems) {
   if (selectedValues.length === 0) return;
   
   // Find and update checkboxes
-  const allCheckboxes = document.querySelectorAll(`input[name="${paramName}"]`);
+  const allCheckboxes = document.querySelectorAll(`input[name="${filterName}"]`);
   allCheckboxes.forEach(checkbox => {
     checkbox.checked = selectedValues.includes(checkbox.value);
   });
   
   // Trigger form submission
-  triggerFacetFormSubmission(paramName);
+  triggerFacetFormSubmission(filterName);
   
   console.log(`Applied prep method filters: ${selectedValues.join(', ')}`);
-}
-
-// Apply roast level filters (second step) - if you have this facet
-function applyRoastLevelFilters(selectedItems) {
-  // Example for roast level filter - adjust parameter name as needed
-  const paramName = 'filter.p.m.custom.coffee_roast_level'; // Adjust this to your actual parameter
-  
- // Get selected filter values
-  const selectedValues = [];
-  selectedItems.forEach(item => {
-    const filterValue = item.getAttribute('data-filter-value');
-    if (filterValue) {
-      // Handle comma-separated values
-      const values = filterValue.split(',').map(v => v.trim());
-      selectedValues.push(...values);
-    }
-  });
-  
-  if (selectedValues.length === 0) return;
-  
-  // Find and update checkboxes (if this facet exists)
-  const allCheckboxes = document.querySelectorAll(`input[name="${paramName}"]`);
-  if (allCheckboxes.length > 0) {
-    allCheckboxes.forEach(checkbox => {
-      checkbox.checked = selectedValues.includes(checkbox.value);
-    });
-    
-    triggerFacetFormSubmission(paramName);
-    console.log(`Applied roast level filters: ${selectedValues.join(', ')}`);
-  }
-}
-
-// Apply taste filters (third step) - if you have this facet
-function applyTasteFilters(selectedItems) {
-  const paramName = 'filter.p.m.custom.coffee_tastes'; // Adjust this to your actual parameter
-
-
-  
- // Get selected filter values
-  const selectedValues = [];
-  selectedItems.forEach(item => {
-    const filterValue = item.getAttribute('data-filter-value');
-    if (filterValue) {
-      // Handle comma-separated values
-      const values = filterValue.split(',').map(v => v.trim());
-      selectedValues.push(...values);
-    }
-  });
-  
-  if (selectedValues.length === 0) return;
-  
-  // Find and update checkboxes (if this facet exists)
-  const allCheckboxes = document.querySelectorAll(`input[name="${paramName}"]`);
-  if (allCheckboxes.length > 0) {
-    allCheckboxes.forEach(checkbox => {
-      checkbox.checked = selectedValues.includes(checkbox.value);
-    });
-    
-    triggerFacetFormSubmission(paramName);
-    console.log(`Applied taste filters: ${selectedValues.join(', ')}`);
-  }
 }
 
 // Helper function to trigger facet form submission
@@ -428,15 +366,22 @@ document.addEventListener('DOMContentLoaded', function() {
       const filterValue = wrapper.getAttribute('data-filter-value');
       // Remove selection from all other wrappers in the same step
       if (!filterValue || filterValue.trim() === '') {
-      // Remove 'selected' class from all wrappers in the current step
-      parentWrapper.querySelectorAll('.questionnaire-selection-wrapper.selected').forEach(el => {
-        el.classList.remove('selected');
-      });
+        if (this.classList.contains('selected')) {
+          this.classList.remove('selected');
+        } else {
+        // Remove 'selected' class from all wrappers in the current step
+          parentWrapper.querySelectorAll('.questionnaire-selection-wrapper.selected').forEach(el => {
+            el.classList.remove('selected');
+          });
+          this.classList.add('selected');
+        } 
       }
      
       // Only toggle selected if this wrapper is not empty
       if (this.innerHTML.trim() !== '') {
-        this.classList.toggle('selected');
+        
+          this.classList.toggle('selected');
+        
       }
       
       // Update button state
