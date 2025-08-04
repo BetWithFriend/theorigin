@@ -55,26 +55,26 @@
             <button class="questionnaire-select-btn">המשך עם 1 שיטה</button>
     </div>
     <div class="questionnaire-icons-wrapper ">
-        <div class="questionnaire-selection-wrapper" data-filter-value=""> 
+        <div class="questionnaire-selection-wrapper" data-filter-value="floral"> 
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Dark_2.png' |  asset_url }}" alt="dark coffee icon"/>
-            <div class="questionnaire-text">חזק ומר</div>
-            <div class="questionnaire-expl-text">טעם חזק</div>
+            <div class="questionnaire-text">פרחוני ופירותי</div>
+            <div class="questionnaire-expl-text">קליל, מזכיר פירות הדר, תה מיוחד</div>
         </div>
-        <div class="questionnaire-selection-wrapper" data-filter-value="">
+        <div class="questionnaire-selection-wrapper" data-filter-value="balanced">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_soft.png' |  asset_url }}" alt="soft coffee icon"/>
-            <div class="questionnaire-text">חלק ומתקתק</div>
-            <div class="questionnaire-expl-text">טעם רך עם מתיקות טבעית</div>
+            <div class="questionnaire-text">מתקתק ומאוזן</div>
+            <div class="questionnaire-expl-text">מתיקות טבעית, מזכיר קרמל, טופי</div>
         </div>
-        <div class="questionnaire-selection-wrapper" data-filter-value="">
+        <div class="questionnaire-selection-wrapper" data-filter-value="rich">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_special.png' |  asset_url }}" alt="Turkish icon"/>
-            <div class="questionnaire-text">מורכב ומעניין</div>
-            <div class="questionnaire-expl-text">פירות, שוקולד ותבלינים</div>
+            <div class="questionnaire-text">שוקולדי ועשיר</div>
+            <div class="questionnaire-expl-text">טעם עמוק, מזכיר שוקולד מריר, אגוז</div>
         </div>
-        <div class="questionnaire-selection-wrapper" data-filter-value="">
+        {% comment %} <div class="questionnaire-selection-wrapper" data-filter-value="">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_milk.png' |  asset_url }}" alt="V60 icon"/>
             <div class="questionnaire-text">עם חלב</div>
             <div class="questionnaire-expl-text">קפוצ׳ינו, לאטה או הפוך</div>
-        </div>
+        </div> {% endcomment %}
         <div class="questionnaire-selection-wrapper" data-filter-value="">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_dont_know_2.png' |  asset_url }}" alt="dont know icon"/>
             <div class="questionnaire-text">עדיין לא בטוח</div>
@@ -167,7 +167,7 @@
  // Enhanced questionnaire functionality with facet integration
 
 // Function to apply filters based on questionnaire step
-function applyQuestionnaireFilters() {
+function applyQuestionnaireFilters(currentFilters) {
   const activeWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
   if (!activeWrapper) return;
   
@@ -176,6 +176,13 @@ function applyQuestionnaireFilters() {
   
   // Determine which step we're on and apply appropriate filters
   const stepIndex = Array.from(document.querySelectorAll('.questionnaire-icons-wrapper')).indexOf(activeWrapper);
+  // If third step get all the current filters
+    if (stepIndex === 2) {
+      debugger
+      // Map the previous filters to the current taste
+      console.log('boom Applying filters for step 3', currentFilters);
+    }
+
   switch(stepIndex) {
     case 0: // First step - Coffee preparation methods
       applyFilters(selectedItems, 'filter.p.m.custom.coffee_prep_methods');
@@ -247,8 +254,10 @@ function triggerFacetFormSubmission(paramName) {
 
 // Enhanced goToNextStep function
 function goToNextStep() {
+  // Get the current applied filters
+  const currentFilters = getCurrentAppliedFilters();
   // Apply filters before moving to next step
-  applyQuestionnaireFilters();
+  applyQuestionnaireFilters(currentFilters);
   
   // Get the current active wrapper
   const currentActiveWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
@@ -274,6 +283,24 @@ function goToNextStep() {
       selectBtn.disabled = true;
       selectBtn.classList.add('disabled');
     }
+  }
+
+  // Get all currently applied filters from the URL
+  function getCurrentAppliedFilters() {
+    const filters = {};
+    const urlParams = new URLSearchParams(window.location.search);
+    for (const [key, value] of urlParams.entries()) {
+      // Shopify filter params are usually arrays, handle comma-separated values
+      if (!filters[key]) {
+        filters[key] = [];
+      }
+      value.split(',').forEach(v => {
+        if (v.trim() !== '') {
+          filters[key].push(v.trim());
+        }
+      });
+    }
+    return filters;
   }
 
   // Show loader for 3 seconds if it is active on page load
@@ -316,9 +343,12 @@ function updateSelectButton() {
   if (selectBtn) {
     // Enable button if one or more items are selected, disable otherwise
     if (selectedItems.length > 0) {
+        const hasEmptyFilterValue = Array.from(selectedItems).some(item => item.getAttribute('data-filter-value') === "");
         selectBtn.disabled = false;
         selectBtn.classList.remove('disabled');
-        selectBtn.textContent = `המשך עם ${selectedItems.length} ${selectedItems.length > 1 ? 'שיטות' : 'שיטה'}`;
+        selectBtn.textContent = !hasEmptyFilterValue ? 
+              `המשך עם ${selectedItems.length} ${selectedItems.length > 1 ? 'שיטות' : 'שיטה'}` : 
+              `המשך`;
     } else {
       selectBtn.disabled = true;
       selectBtn.classList.add('disabled');
@@ -352,6 +382,17 @@ function sendForm() {
 // Initialize the questionnaire functionality
 document.addEventListener('DOMContentLoaded', function() {
   document.body.classList.add('questionnaire-wrapper-open');
+
+  import('/assets/questionnaire_data.json')
+    .then(response => response.json ? response.json() : response)
+    .then(data => {
+      window.questionnaireData = data;
+      // You can now use questionnaireData in your script
+      console.log('BOOM Loaded questionnaire data:', data);
+    })
+    .catch(error => {
+      console.error('Failed to load questionnaire_data.json:', error);
+    });
   
   // Add click event listeners to all selection wrappers
   const selectionWrappers = document.querySelectorAll('.questionnaire-selection-wrapper');
@@ -375,14 +416,12 @@ document.addEventListener('DOMContentLoaded', function() {
           });
           this.classList.add('selected');
         } 
-      }
-     
-      // Only toggle selected if this wrapper is not empty
-      if (this.innerHTML.trim() !== '') {
-        
+      } else {
+        if (parentWrapper.querySelector('.questionnaire-selection-wrapper[data-filter-value=""].selected')) {
+          parentWrapper.querySelector('.questionnaire-selection-wrapper[data-filter-value=""].selected').classList.remove('selected');
+        }   
           this.classList.toggle('selected');
-        
-      }
+        }
       
       // Update button state
       updateSelectButton();
