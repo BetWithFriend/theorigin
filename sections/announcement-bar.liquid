@@ -41,7 +41,7 @@
             >
           {%- endif -%}
           <p class="announcement-bar__message h5">
-            <span>{{ section.blocks.first.settings.text }}</span>
+            <span class="announcement-bar-text">{{ section.blocks.first.settings.text }}</span>
             {%- if section.blocks.first.settings.link != blank -%}
               {{- 'icon-arrow.svg' | inline_asset_content -}}
             {%- endif -%}
@@ -135,6 +135,7 @@
           .announcement-bar-slider .slider__slide[aria-hidden='true'] {
             visibility: hidden;
           }
+
         </style>
       {%- endif -%}
     {%- endif -%}
@@ -163,6 +164,11 @@
     </div>
   </div>
 </div>
+<style>
+  .announcement-bar-text {
+     font-size: 11px;
+  }
+</style>
 
 {% schema %}
 {

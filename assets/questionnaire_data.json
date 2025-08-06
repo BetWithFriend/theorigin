@@ -1,0 +1,212 @@
+[
+  {
+    "prepMethod": "Espresso",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Fruity & Floral",
+    "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+  },
+  {
+    "prepMethod": "Espresso",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Sweet & Caramelly",
+    "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+  },
+  {
+    "prepMethod": "Espresso",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  },
+  {
+    "prepMethod": "Espresso",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Fruity & Floral",
+    "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+  },
+  {
+    "prepMethod": "Espresso",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Sweet & Caramelly",
+    "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+  },
+  {
+    "prepMethod": "Espresso",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  },
+  {
+    "prepMethod": "Espresso",
+    "roastLevel": "כהה",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  },
+  {
+    "prepMethod": "Filter",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Fruity & Floral",
+    "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+  },
+  {
+    "prepMethod": "Filter",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Sweet & Caramelly",
+    "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+  },
+  {
+    "prepMethod": "Filter",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  },
+  {
+    "prepMethod": "Filter",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Fruity & Floral",
+    "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+  },
+  {
+    "prepMethod": "Filter",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Sweet & Caramelly",
+    "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+  },
+  {
+    "prepMethod": "Filter",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  },
+  {
+    "prepMethod": "Filter",
+    "roastLevel": "כהה",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  },
+  {
+    "prepMethod": "Aeropress",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Fruity & Floral",
+    "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+  },
+  {
+    "prepMethod": "Aeropress",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Sweet & Caramelly",
+    "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+  },
+  {
+    "prepMethod": "Aeropress",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  },
+  {
+    "prepMethod": "Aeropress",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Fruity & Floral",
+    "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+  },
+  {
+    "prepMethod": "Aeropress",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Sweet & Caramelly",
+    "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+  },
+  {
+    "prepMethod": "Aeropress",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  },
+  {
+    "prepMethod": "Aeropress",
+    "roastLevel": "כהה",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  },
+  {
+    "prepMethod": "MokaPot",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Fruity & Floral",
+    "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+  },
+  {
+    "prepMethod": "MokaPot",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Sweet & Caramelly",
+    "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+  },
+  {
+    "prepMethod": "MokaPot",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  },
+  {
+    "prepMethod": "MokaPot",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Fruity & Floral",
+    "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+  },
+  {
+    "prepMethod": "MokaPot",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Sweet & Caramelly",
+    "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+  },
+  {
+    "prepMethod": "MokaPot",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  },
+  {
+    "prepMethod": "MokaPot",
+    "roastLevel": "כהה",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  },
+  {
+    "prepMethod": "Black",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Fruity & Floral",
+    "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+  },
+  {
+    "prepMethod": "Black",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Sweet & Caramelly",
+    "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+  },
+  {
+    "prepMethod": "Black",
+    "roastLevel": "בהירה",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  },
+  {
+    "prepMethod": "Black",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Fruity & Floral",
+    "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+  },
+  {
+    "prepMethod": "Black",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Sweet & Caramelly",
+    "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+  },
+  {
+    "prepMethod": "Black",
+    "roastLevel": "בינונית",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  },
+  {
+    "prepMethod": "Black",
+    "roastLevel": "כהה",
+    "tasteProfile": "Rich & Chocolaty",
+    "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+  }
+]
