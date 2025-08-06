@@ -55,17 +55,17 @@
             <button class="questionnaire-select-btn">המשך עם 1 שיטה</button>
     </div>
     <div class="questionnaire-icons-wrapper ">
-        <div class="questionnaire-selection-wrapper" data-filter-value="floral"> 
+        <div class="questionnaire-selection-wrapper" data-filter-value="Fruity & Floral"> 
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Dark_2.png' |  asset_url }}" alt="dark coffee icon"/>
             <div class="questionnaire-text">פרחוני ופירותי</div>
             <div class="questionnaire-expl-text">קליל, מזכיר פירות הדר, תה מיוחד</div>
         </div>
-        <div class="questionnaire-selection-wrapper" data-filter-value="balanced">
+        <div class="questionnaire-selection-wrapper" data-filter-value="Sweet & Caramelly">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_soft.png' |  asset_url }}" alt="soft coffee icon"/>
             <div class="questionnaire-text">מתקתק ומאוזן</div>
             <div class="questionnaire-expl-text">מתיקות טבעית, מזכיר קרמל, טופי</div>
         </div>
-        <div class="questionnaire-selection-wrapper" data-filter-value="rich">
+        <div class="questionnaire-selection-wrapper" data-filter-value="Rich & Chocolaty">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_special.png' |  asset_url }}" alt="Turkish icon"/>
             <div class="questionnaire-text">שוקולדי ועשיר</div>
             <div class="questionnaire-expl-text">טעם עמוק, מזכיר שוקולד מריר, אגוז</div>
@@ -177,10 +177,41 @@ function applyQuestionnaireFilters(currentFilters) {
   // Determine which step we're on and apply appropriate filters
   const stepIndex = Array.from(document.querySelectorAll('.questionnaire-icons-wrapper')).indexOf(activeWrapper);
   // If third step get all the current filters
+    let selectedTastes = [];
     if (stepIndex === 2) {
-      debugger
+      const selectedValues = [];
+      selectedItems.forEach(item => {
+        const filterValue = item.getAttribute('data-filter-value');
+        if (filterValue) {
+          // Handle comma-separated values
+          const values = filterValue.split(',').map(v => v.trim());
+        selectedValues.push(...values);
+    }
+  });
       // Map the previous filters to the current taste
-      console.log('boom Applying filters for step 3', currentFilters);
+      // Get selected prep method, roast level, and taste profile from currentFilters
+      const prepMethods = currentFilters['filter.p.m.custom.coffee_prep_methods'] || [];
+      const roastLevels = currentFilters['filter.p.m.custom.coffee_roast_level'] || [];
+      // const tasteProfiles = currentFilters['filter.p.m.custom.coffee_tastes'] || [];
+      // For each combination, get the relevant tastes from questionnaire_data.json
+      const allPrepMethods = getAllQuestionnaireOptions('prepMethod');
+      const allRoastLevels = getAllQuestionnaireOptions('roastLevel');
+      const allTasteProfiles = getAllQuestionnaireOptions('tasteProfile');
+
+      const prepList = prepMethods.length ? prepMethods : allPrepMethods;
+      const roastList = roastLevels.length ? roastLevels : allRoastLevels;
+      const tasteList = (typeof selectedValues !== 'undefined' && selectedValues.length) ? selectedValues : allTasteProfiles;
+
+      prepList.forEach(prep => {
+        roastList.forEach(roast => {
+          tasteList.forEach(taste => {
+            selectedTastes.push(...getTastesFromQuestionnaireData(prep, roast, taste));
+          });
+        });
+      });
+      selectedTastes = [...new Set(selectedTastes)];
+      console.log('Selected "Tastes in Profile" for filtering:', selectedTastes);
+      // Use selectedTastes as needed (e.g., filter products, check checkboxes, etc.)
     }
 
   switch(stepIndex) {
@@ -191,7 +222,7 @@ function applyQuestionnaireFilters(currentFilters) {
       applyFilters(selectedItems, 'filter.p.m.custom.coffee_roast_level');
       break;
     case 2: // Third step - Roast levels (if you have this filter)
-      applyFilters(selectedItems, 'filter.p.m.custom.coffee_tastes');
+      applyFilters(selectedTastes, 'filter.p.m.custom.coffee_tastes');
       break;
     default:
       console.log('No filters to apply for this step');
@@ -200,17 +231,20 @@ function applyQuestionnaireFilters(currentFilters) {
 
 // Apply preparation method filters (first step)
 function applyFilters(selectedItems, filterName) {
-  
  // Get selected filter values
-  const selectedValues = [];
-  selectedItems.forEach(item => {
-    const filterValue = item.getAttribute('data-filter-value');
-    if (filterValue) {
-      // Handle comma-separated values
-      const values = filterValue.split(',').map(v => v.trim());
-      selectedValues.push(...values);
-    }
-  });
+  let selectedValues = [];
+  if (filterName !== 'filter.p.m.custom.coffee_tastes') {
+    selectedItems.forEach(item => {
+      const filterValue = item.getAttribute('data-filter-value')
+      if (filterValue) {
+        // Handle comma-separated values
+        const values = filterValue.split(',').map(v => v.trim());
+        selectedValues.push(...values);
+      }
+    });
+  } else {
+    selectedValues = selectedItems
+  }
   
   if (selectedValues.length === 0) return;
   
@@ -250,6 +284,22 @@ function triggerFacetFormSubmission(paramName) {
     // Call the existing submit handler directly
     facetForm.onSubmitForm(searchParams, syntheticEvent);
   }
+}
+
+// Helper: Get tastes from questionnaire_data.json based on user selection
+function getTastesFromQuestionnaireData(prepMethod, roastLevel, tasteProfile) {
+  if (!window.questionnaireData) return [];
+  const match = window.questionnaireData.find(
+    row => row.prepMethod === prepMethod && row.roastLevel === roastLevel && row.tasteProfile === tasteProfile
+  );
+  if (!match) return [];
+  return match.tastes.split(',').map(t => t.trim());
+}
+
+// Helper: Get all unique values for a key from questionnaireData
+function getAllQuestionnaireOptions(key) {
+  if (!window.questionnaireData) return [];
+  return [...new Set(window.questionnaireData.map(row => row[key]))];
 }
 
 // Enhanced goToNextStep function
@@ -379,20 +429,37 @@ function sendForm() {
   document.getElementById('ContactFooter').submit();
 }
 
+// Helper to load questionnaire data only once
+function loadQuestionnaireData() {
+  if (window.questionnaireDataPromise) return window.questionnaireDataPromise;
+  window.questionnaireDataPromise = fetch('/assets/questionnaire_data.json')
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
+    .then(data => {
+      window.questionnaireData = data;
+      return data;
+    })
+    .catch(error => {
+      console.error('Failed to load questionnaire_data.json:', error);
+      window.questionnaireData = [];
+      return [];
+    });
+  return window.questionnaireDataPromise;
+}
+
+
+
 // Initialize the questionnaire functionality
 document.addEventListener('DOMContentLoaded', function() {
   document.body.classList.add('questionnaire-wrapper-open');
 
-  import('/assets/questionnaire_data.json')
-    .then(response => response.json ? response.json() : response)
-    .then(data => {
-      window.questionnaireData = data;
-      // You can now use questionnaireData in your script
-      console.log('BOOM Loaded questionnaire data:', data);
-    })
-    .catch(error => {
-      console.error('Failed to load questionnaire_data.json:', error);
-    });
+  // Usage example:
+loadQuestionnaireData().then(data => {
+  // data is available here
+  window.questionnaireData = data;
+});
   
   // Add click event listeners to all selection wrappers
   const selectionWrappers = document.querySelectorAll('.questionnaire-selection-wrapper');
