@@ -1,8 +1,12 @@
 {{ 'questionnaire.css' | asset_url | stylesheet_tag }}
 
 <div class="questionnaire-wrapper" id="questionnaireWrapperDesktop">
-    <div class="questionnaire-title">איך אתם מכינים את הקפה</div>
     <div class="questionnaire-icons-wrapper active">
+      <div class="questionnaire-title-wrapper">
+          <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="closeForm()"/>
+          <div class="questionnaire-title">איך אתם מכינים את הקפה</div>
+      </div>
+      
         <div class="questionnaire-selection-wrapper"  data-filter-value="Espresso"> 
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Espresso_Machine.png' |  asset_url }}" alt="Espresso icon"/>
             <div class="questionnaire-text">מכונת אספרסו</div>
@@ -27,9 +31,13 @@
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Aeropress.png' |  asset_url }}" alt="Aeropress icon"/>
             <div class="questionnaire-text">אירופרס</div>
         </div>
-        <button class="questionnaire-select-btn" disabled>המשך עם 1 שיטה</button>
+        <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_prep_methods', 1)" disabled>המשך עם 1 שיטה</button>
     </div>
     <div class="questionnaire-icons-wrapper ">
+          <div class="questionnaire-title-wrapper">
+              <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/>
+              <div class="questionnaire-title">רמת קלייה - בהיר או כהה?</div>
+          </div>
             <div class="questionnaire-selection-wrapper" data-filter-value="בהירה, בהירה-בינונית"> 
                 <img class="questionnaire-img-icon" src="{{ 'questionnaire_light.png' |  asset_url }}" alt="light roast icon"/>
                 <div class="questionnaire-text">בהירה</div>
@@ -52,9 +60,13 @@
             </div>
             <div class="questionnaire-selection-wrapper"></div>
             <div class="questionnaire-selection-wrapper"></div>
-            <button class="questionnaire-select-btn">המשך עם 1 שיטה</button>
+            <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_roast_level', 2)">המשך עם 1 שיטה</button>
     </div>
     <div class="questionnaire-icons-wrapper ">
+      <div class="questionnaire-title-wrapper">
+          <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon"  onclick="goToPreviousStep()"/>
+          <div class="questionnaire-title">איזה טעם אתה מחפש בקפה?</div>
+      </div>
         <div class="questionnaire-selection-wrapper" data-filter-value="Fruity & Floral"> 
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Dark_2.png' |  asset_url }}" alt="dark coffee icon"/>
             <div class="questionnaire-text">פרחוני ופירותי</div>
@@ -81,7 +93,7 @@
             <div class="questionnaire-expl-text">פתוח לגלות מה מתאים לי</div>
         </div>
         <div class="questionnaire-selection-wrapper"></div>
-        <button class="questionnaire-select-btn">המשך עם 1 שיטה</button>
+        <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_tastes', 3)">המשך עם 1 שיטה</button>
     </div>
     <div class="questionnaire-icons-wrapper">
         <div class="questionnaire-loader-wrapper">
@@ -164,153 +176,110 @@
 </div>
 
 <script>
-    // Enhanced questionnaire functionality with facet integration
 
-    // Function to apply filters based on questionnaire step
-    function applyQuestionnaireFilters(currentFilters) {
-      const activeWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
-      if (!activeWrapper) return;
-      
-      const selectedItems = activeWrapper.querySelectorAll('.questionnaire-selection-wrapper.selected');
-      if (selectedItems.length === 0) return;
-      
-      // Determine which step we're on and apply appropriate filters
-      const stepIndex = Array.from(document.querySelectorAll('.questionnaire-icons-wrapper')).indexOf(activeWrapper);
-      // If third step get all the current filters
-        let selectedTastes = [];
-        if (stepIndex === 2) {
-          const selectedValues = [];
-          selectedItems.forEach(item => {
-            const filterValue = item.getAttribute('data-filter-value');
-            if (filterValue) {
-              // Handle comma-separated values
-              const values = filterValue.split(',').map(v => v.trim());
-            selectedValues.push(...values);
-        }
-      });
-          // Map the previous filters to the current taste
-          // Get selected prep method, roast level, and taste profile from currentFilters
-          const prepMethods = currentFilters['filter.p.m.custom.coffee_prep_methods'] || [];
-          const roastLevels = currentFilters['filter.p.m.custom.coffee_roast_level'] || [];
-          // const tasteProfiles = currentFilters['filter.p.m.custom.coffee_tastes'] || [];
-          // For each combination, get the relevant tastes from questionnaire_data.json
-          const allPrepMethods = getAllQuestionnaireOptions('prepMethod');
-          const allRoastLevels = getAllQuestionnaireOptions('roastLevel');
-          const allTasteProfiles = getAllQuestionnaireOptions('tasteProfile');
+  function getSuitTasteProfile(selectedFilters) {
 
-          const prepList = prepMethods.length ? prepMethods : allPrepMethods;
-          const roastList = roastLevels.length ? roastLevels : allRoastLevels;
-          const tasteList = (typeof selectedValues !== 'undefined' && selectedValues.length) ? selectedValues : allTasteProfiles;
+    if (!window.questionnaireData) return [];
 
-          prepList.forEach(prep => {
-            roastList.forEach(roast => {
-              tasteList.forEach(taste => {
-                selectedTastes.push(...getTastesFromQuestionnaireData(prep, roast, taste));
+    // Get all possible values if filter is empty or not selected
+    const allPrepMethods = [...new Set(window.questionnaireData.map(row => row.prepMethod))];
+    const allRoastLevels = [...new Set(window.questionnaireData.map(row => row.roastLevel))];
+
+    const prepMethods = (selectedFilters['filter.p.m.custom.coffee_prep_methods'] && selectedFilters['filter.p.m.custom.coffee_prep_methods'].length)
+      ? selectedFilters['filter.p.m.custom.coffee_prep_methods']
+      : allPrepMethods;
+
+    const roastLevels = (selectedFilters['filter.p.m.custom.coffee_roast_level'] && selectedFilters['filter.p.m.custom.coffee_roast_level'].length)
+      ? selectedFilters['filter.p.m.custom.coffee_roast_level']
+      : allRoastLevels;
+
+    // Find all matching tasteProfiles
+    const tasteProfiles = window.questionnaireData
+      .filter(row =>
+        prepMethods.includes(row.prepMethod) &&
+        roastLevels.includes(row.roastLevel)
+      )
+      .map(row => row.tastes);
+
+    // Return unique taste profiles
+    return [...new Set(tasteProfiles)];
+  }
+
+  function getFilters(filterName, stepIndex) {
+    // Get all selected items in the current active step
+    const activeWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
+    if (!activeWrapper) return;
+
+    const selectedItems = activeWrapper.querySelectorAll('.questionnaire-selection-wrapper.selected');
+    if (selectedItems.length === 0) return;
+
+    // Get selected filter values
+    let selectedValues = [];
+    selectedItems.forEach(item => {
+      const filterValue = item.getAttribute('data-filter-value');
+      if (filterValue) {
+        // Handle comma-separated values
+        const values = filterValue.split(',').map(v => v.trim());
+        selectedValues.push(...values);
+      }
+    });
+
+    window.appliedFilters[filterName] = [];    
+    if (selectedValues.length === 0) {
+       goToNextStep(stepIndex);
+    } else {   
+        selectedValues.forEach(value => {
+        // if (!window.appliedFilters[filterName])
+
+          if (filterName === 'filter.p.m.custom.coffee_tastes') {
+            const coffeeTastes = getSuitTasteProfile(value);
+            coffeeTastes.forEach(tastes => {
+              tastesArray = tastes.split(',').map(t => t.trim()); 
+              tastesArray.forEach(taste => {
+                if (!window.appliedFilters[filterName].includes(taste)) {
+                  window.appliedFilters[filterName].push(taste);
+                }
               });
             });
-          });
-          selectedTastes = [...new Set(selectedTastes)];
-          console.log('Selected "Tastes in Profile" for filtering:', selectedTastes);
-          // Use selectedTastes as needed (e.g., filter products, check checkboxes, etc.)
-        }
-
-      switch(stepIndex) {
-        case 0: // First step - Coffee preparation methods
-          applyFilters(selectedItems, 'filter.p.m.custom.coffee_prep_methods');
-          break;
-        case 1: // Second step - Taste preferences (if you have this filter)
-          applyFilters(selectedItems, 'filter.p.m.custom.coffee_roast_level');
-          break;
-        case 2: // Third step - Roast levels (if you have this filter)
-          applyFilters(selectedTastes, 'filter.p.m.custom.coffee_tastes');
-          break;
-        default:
-          console.log('No filters to apply for this step');
-      }
-    }
-
-    // Apply preparation method filters (first step)
-    function applyFilters(selectedItems, filterName) {
-    // Get selected filter values
-      let selectedValues = [];
-      if (filterName !== 'filter.p.m.custom.coffee_tastes') {
-        selectedItems.forEach(item => {
-          const filterValue = item.getAttribute('data-filter-value')
-          if (filterValue) {
-            // Handle comma-separated values
-            const values = filterValue.split(',').map(v => v.trim());
-            selectedValues.push(...values);
+          } else {
+              window.appliedFilters[filterName].push(value);
           }
-        });
-      } else {
-        selectedValues = selectedItems
-      }
-      
-      if (selectedValues.length === 0) return;
-      
-      // Find and update checkboxes
-      const allCheckboxes = document.querySelectorAll(`input[name="${filterName}"]`);
-      allCheckboxes.forEach(checkbox => {
-        checkbox.checked = selectedValues.includes(checkbox.value);
-        console.log(`boom ${checkbox.value} checked: ${checkbox.checked}`);
+          
       });
-      
-      // Trigger form submission
-      triggerFacetFormSubmission(filterName);
-      
-      console.log(`Applied prep method filters: ${selectedValues.join(', ')}`);
-    }
-
-  // Helper function to trigger facet form submission
-  function triggerFacetFormSubmission(paramName) {
-    const facetForm = document.querySelector('facet-filters-form');
-    if (!facetForm) {
-      console.error('Facet filters form not found');
-      return;
-    }
-    
-    // Get the first checked checkbox for this parameter
-    const firstCheckedCheckbox = document.querySelector(`input[name="${paramName}"]:checked`);
-    
-    if (firstCheckedCheckbox) {
-      // Create the search params using the existing method
-      const searchParams = facetForm.createSearchParams(firstCheckedCheckbox.form);
-      
-      // Create a synthetic event for the onSubmitForm method
-      const syntheticEvent = {
-        target: firstCheckedCheckbox,
-        preventDefault: () => {}
-      };
-      
-      // Call the existing submit handler directly
-      facetForm.onSubmitForm(searchParams, syntheticEvent);
+      goToNextStep(stepIndex);
     }
   }
 
-  // Helper: Get tastes from questionnaire_data.json based on user selection
-  function getTastesFromQuestionnaireData(prepMethod, roastLevel, tasteProfile) {
-    if (!window.questionnaireData) return [];
-    const match = window.questionnaireData.find(
-      row => row.prepMethod === prepMethod && row.roastLevel === roastLevel && row.tasteProfile === tasteProfile
-    );
-    if (!match) return [];
-    return match.tastes.split(',').map(t => t.trim());
-  }
-
-  // Helper: Get all unique values for a key from questionnaireData
-  function getAllQuestionnaireOptions(key) {
-    if (!window.questionnaireData) return [];
-    return [...new Set(window.questionnaireData.map(row => row[key]))];
-  }
-
-  // Enhanced goToNextStep function
-  function goToNextStep() {
-    // Get the current applied filters
-    const currentFilters = getCurrentAppliedFilters();
-    // Apply filters before moving to next step
-    applyQuestionnaireFilters(currentFilters);
-    
+  function goToPreviousStep() {
     // Get the current active wrapper
+    const currentActiveWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
+    
+    if (!currentActiveWrapper) return;
+    
+    // Remove active class from current wrapper
+    currentActiveWrapper.classList.remove('active');
+    
+    // Find the previous questionnaire-icons-wrapper
+    const previousWrapper = currentActiveWrapper.previousElementSibling;
+    
+    // Add active class to previous wrapper if it exists and is a questionnaire-icons-wrapper
+    if (previousWrapper && previousWrapper.classList.contains('questionnaire-icons-wrapper')) {
+      previousWrapper.classList.add('active');
+
+      // Update button state for the new active step
+      updateSelectButton();
+
+      // Disable the btn again for every iteration
+      const selectBtn = previousWrapper.querySelector('.questionnaire-select-btn');
+      // if (selectBtn) {
+      //   selectBtn.disabled = true;
+      //   selectBtn.classList.add('disabled');
+      // }
+    }
+  }
+
+  function goToNextStep(stepIndex) {
+    //   // Get the current active wrapper
     const currentActiveWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
     
     if (!currentActiveWrapper) return;
@@ -324,8 +293,8 @@
     // Add active class to next wrapper if it exists and is a questionnaire-icons-wrapper
     if (nextWrapper && nextWrapper.classList.contains('questionnaire-icons-wrapper')) {
       nextWrapper.classList.add('active');
-      
-      // Update button state for the new active step
+
+       // Update button state for the new active step
       updateSelectButton();
 
       // Disable the btn again for every iteration
@@ -336,49 +305,51 @@
       }
     }
 
-    // Get all currently applied filters from the URL
-    function getCurrentAppliedFilters() {
-      const filters = {};
-      const urlParams = new URLSearchParams(window.location.search);
-      for (const [key, value] of urlParams.entries()) {
-        // Shopify filter params are usually arrays, handle comma-separated values
-        if (!filters[key]) {
-          filters[key] = [];
-        }
-        value.split(',').forEach(v => {
-          if (v.trim() !== '') {
-            filters[key].push(v.trim());
+    if (stepIndex === 3) {
+       //   // Show loader for 3 seconds if it is active on page load
+      const loaderWrapper = document.querySelector('.questionnaire-icons-wrapper.active .questionnaire-loader-wrapper');
+      if (loaderWrapper) {
+        const questionnaireTitle = document.querySelector('.questionnaire-title');
+        questionnaireTitle.classList.add('hidden');
+        setTimeout(function() {
+          const loaderIconsWrapper = loaderWrapper.closest('.questionnaire-icons-wrapper');
+          if (loaderIconsWrapper) {
+            loaderIconsWrapper.classList.remove('active');
+            const mainWrapper = document.querySelector('.questionnaire-wrapper');
+            // Hide main element
+            if (mainWrapper) {
+              mainWrapper.classList.add('hidden');
+            }
+            // Show the "lets be friends" section
+            const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
+            if (friendsWrapper) {
+              friendsWrapper.classList.add('active');
+            }
           }
-        });
+        }, 3000);
       }
-      return filters;
-    }
-
-    // Show loader for 3 seconds if it is active on page load
-    const loaderWrapper = document.querySelector('.questionnaire-icons-wrapper.active .questionnaire-loader-wrapper');
-    if (loaderWrapper) {
-      const questionnaireTitle = document.querySelector('.questionnaire-title');
-      questionnaireTitle.classList.add('hidden');
-      setTimeout(function() {
-        const loaderIconsWrapper = loaderWrapper.closest('.questionnaire-icons-wrapper');
-        if (loaderIconsWrapper) {
-          loaderIconsWrapper.classList.remove('active');
-          const mainWrapper = document.querySelector('.questionnaire-wrapper');
-          // Hide main element
-          if (mainWrapper) {
-            mainWrapper.classList.add('hidden');
-          }
-          // Show the "lets be friends" section
-          const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
-          if (friendsWrapper) {
-            friendsWrapper.classList.add('active');
-          }
-        }
-      }, 3000);
+      const newQueryParams = arrayToQueryString(window.appliedFilters)
+      if (window.FacetFiltersForm && typeof FacetFiltersForm.renderPage === 'function') {
+         FacetFiltersForm.renderPage(newQueryParams, null, true);
+      }
     }
   }
 
-  // Keep your existing functions unchanged
+  function arrayToQueryString(filterData) {
+    const params = new URLSearchParams();
+    
+    for (const key in filterData) {
+      if (filterData.hasOwnProperty(key) && Array.isArray(filterData[key])) {
+        const values = filterData[key];
+        values.forEach(value => {
+          params.append(key, value);
+        });
+      }
+  }
+  
+    return params.toString();
+}
+  // // Keep your existing functions unchanged
   function updateSelectButton() {
     // Get the current active questionnaire step
     const activeWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
@@ -430,7 +401,7 @@
     document.getElementById('ContactFooter').submit();
   }
 
-  // Helper to load questionnaire data only once
+  // // Helper to load questionnaire data only once
   function loadQuestionnaireData() {
     if (window.questionnaireDataPromise) return window.questionnaireDataPromise;
     window.questionnaireDataPromise = fetch('/assets/questionnaire_data.json')
@@ -455,6 +426,9 @@
   // Initialize the questionnaire functionality
   document.addEventListener('DOMContentLoaded', function() {
     document.body.classList.add('questionnaire-wrapper-open');
+    
+    //Object that will hold the filters data
+    window.appliedFilters = [];
 
     // Usage example:
     loadQuestionnaireData().then(data => {
@@ -497,18 +471,18 @@
     });
     
     // Add click event listeners to all select buttons
-    const selectButtons = document.querySelectorAll('.questionnaire-select-btn');
+    // const selectButtons = document.querySelectorAll('.questionnaire-select-btn');
     
-    selectButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        // Only proceed if button is not disabled
-        if (!this.disabled) {
-          goToNextStep();
-        }
-      });
-    });
+    // selectButtons.forEach(button => {
+    //   button.addEventListener('click', function() {
+    //     // Only proceed if button is not disabled
+    //     if (!this.disabled) {
+    //       goToNextStep();
+    //     }
+    //   });
+    // });
     
     // Initial button state update
-    updateSelectButton();
+    // updateSelectButton();
   });
 </script>

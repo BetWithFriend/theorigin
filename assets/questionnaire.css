@@ -30,7 +30,7 @@ body.questionnaire-wrapper-open {
     color: #1C201D;
     width: 100%;
     text-align: center;
-    padding: 60px 0 32px 0;
+    /* padding: 60px 0 32px 0; */
 }
 
 .questionnaire-title.hidden {
@@ -231,4 +231,17 @@ body.questionnaire-wrapper-open {
     line-height: 16px;
     font-weight: 400;
     text-decoration: underline;
+}
+
+.questionnaire-title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 60px 0 32px 0;
+}
+
+.questionnaire-back-icon {
+    width: 8px;
+    height: 14px;
 }
