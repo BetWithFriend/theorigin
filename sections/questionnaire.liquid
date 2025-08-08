@@ -1,6 +1,6 @@
 {{ 'questionnaire.css' | asset_url | stylesheet_tag }}
 
-<div class="questionnaire-wrapper" id="questionnaireWrapperDesktop">
+<div class="questionnaire-wrapper hidden" id="questionnaireWrapperDesktop">
     <div class="questionnaire-icons-wrapper active">
       <div class="questionnaire-title-wrapper">
           <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="closeForm()"/>
@@ -379,6 +379,17 @@
     }
   }
 
+  function openForm() {
+    const questionnaireWrapper = document.querySelector('.questionnaire-wrapper');
+    document.body.classList.add('questionnaire-wrapper-open');
+    questionnaireWrapper.classList.remove('hidden');
+    // Show all questionnaire-icons-wrapper elements
+    // const firstWrapper = document.querySelector('.questionnaire-icons-wrapper');
+    // if (firstWrapper) {
+    //   firstWrapper.classList.remove('hidden');
+    // }
+  }
+
   function closeForm() {
     const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
     const questionnaireWrapper = document.querySelector('.questionnaire-wrapper');
@@ -425,64 +436,53 @@
 
   // Initialize the questionnaire functionality
   document.addEventListener('DOMContentLoaded', function() {
-    document.body.classList.add('questionnaire-wrapper-open');
-    
-    //Object that will hold the filters data
-    window.appliedFilters = [];
+    console.log('boom');
+    if (window.location.search.includes('from=main-cta')) {
+      openForm();
+       document.body.classList.add('questionnaire-wrapper-open');
+      //Object that will hold the filters data
+      window.appliedFilters = [];
 
-    // Usage example:
-    loadQuestionnaireData().then(data => {
-      // data is available here
-      window.questionnaireData = data;
-    });
-    
-    // Add click event listeners to all selection wrappers
-    const selectionWrappers = document.querySelectorAll('.questionnaire-selection-wrapper');
-    
-    selectionWrappers.forEach(wrapper => {
-      wrapper.addEventListener('click', function() {
-        // Only allow selection if this wrapper is in the active step
-        const parentWrapper = this.closest('.questionnaire-icons-wrapper');
-        if (!parentWrapper.classList.contains('active')) return;
-
-        // 
-        const filterValue = wrapper.getAttribute('data-filter-value');
-        // Remove selection from all other wrappers in the same step
-        if (!filterValue || filterValue.trim() === '') {
-          if (this.classList.contains('selected')) {
-            this.classList.remove('selected');
-          } else {
-          // Remove 'selected' class from all wrappers in the current step
-            parentWrapper.querySelectorAll('.questionnaire-selection-wrapper.selected').forEach(el => {
-              el.classList.remove('selected');
-            });
-            this.classList.add('selected');
-          } 
-        } else {
-          if (parentWrapper.querySelector('.questionnaire-selection-wrapper[data-filter-value=""].selected')) {
-            parentWrapper.querySelector('.questionnaire-selection-wrapper[data-filter-value=""].selected').classList.remove('selected');
-          }   
-            this.classList.toggle('selected');
-          }
-        
-        // Update button state
-        updateSelectButton();
+      // Usage example:
+      loadQuestionnaireData().then(data => {
+        // data is available here
+        window.questionnaireData = data;
       });
+      
+      // Add click event listeners to all selection wrappers
+      const selectionWrappers = document.querySelectorAll('.questionnaire-selection-wrapper');
+      
+      selectionWrappers.forEach(wrapper => {
+        wrapper.addEventListener('click', function() {
+          // Only allow selection if this wrapper is in the active step
+          const parentWrapper = this.closest('.questionnaire-icons-wrapper');
+          if (!parentWrapper.classList.contains('active')) return;
+
+          // 
+          const filterValue = wrapper.getAttribute('data-filter-value');
+          // Remove selection from all other wrappers in the same step
+          if (!filterValue || filterValue.trim() === '') {
+            if (this.classList.contains('selected')) {
+              this.classList.remove('selected');
+            } else {
+            // Remove 'selected' class from all wrappers in the current step
+              parentWrapper.querySelectorAll('.questionnaire-selection-wrapper.selected').forEach(el => {
+                el.classList.remove('selected');
+              });
+              this.classList.add('selected');
+            } 
+          } else {
+            if (parentWrapper.querySelector('.questionnaire-selection-wrapper[data-filter-value=""].selected')) {
+              parentWrapper.querySelector('.questionnaire-selection-wrapper[data-filter-value=""].selected').classList.remove('selected');
+            }   
+              this.classList.toggle('selected');
+            }
+          
+          // Update button state
+          updateSelectButton();
+        });
+      });
+      }
     });
     
-    // Add click event listeners to all select buttons
-    // const selectButtons = document.querySelectorAll('.questionnaire-select-btn');
-    
-    // selectButtons.forEach(button => {
-    //   button.addEventListener('click', function() {
-    //     // Only proceed if button is not disabled
-    //     if (!this.disabled) {
-    //       goToNextStep();
-    //     }
-    //   });
-    // });
-    
-    // Initial button state update
-    // updateSelectButton();
-  });
 </script>
