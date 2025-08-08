@@ -185,19 +185,20 @@
     const allPrepMethods = [...new Set(window.questionnaireData.map(row => row.prepMethod))];
     const allRoastLevels = [...new Set(window.questionnaireData.map(row => row.roastLevel))];
 
-    const prepMethods = (selectedFilters['filter.p.m.custom.coffee_prep_methods'] && selectedFilters['filter.p.m.custom.coffee_prep_methods'].length)
-      ? selectedFilters['filter.p.m.custom.coffee_prep_methods']
+    const prepMethods = (window.appliedFilters['filter.p.m.custom.coffee_prep_methods'] && window.appliedFilters['filter.p.m.custom.coffee_prep_methods'].length)
+      ? window.appliedFilters['filter.p.m.custom.coffee_prep_methods']
       : allPrepMethods;
 
-    const roastLevels = (selectedFilters['filter.p.m.custom.coffee_roast_level'] && selectedFilters['filter.p.m.custom.coffee_roast_level'].length)
-      ? selectedFilters['filter.p.m.custom.coffee_roast_level']
+    const roastLevels = (window.appliedFilters['filter.p.m.custom.coffee_roast_level'] && window.appliedFilters['filter.p.m.custom.coffee_roast_level'].length)
+      ? window.appliedFilters['filter.p.m.custom.coffee_roast_level']
       : allRoastLevels;
 
     // Find all matching tasteProfiles
     const tasteProfiles = window.questionnaireData
       .filter(row =>
         prepMethods.includes(row.prepMethod) &&
-        roastLevels.includes(row.roastLevel)
+        roastLevels.includes(row.roastLevel) &&
+        (selectedFilters === '' || row.tasteProfile === selectedFilters)
       )
       .map(row => row.tastes);
 
@@ -248,6 +249,7 @@
       });
       goToNextStep(stepIndex);
     }
+    console.log('boom:', window.appliedFilters);
   }
 
   function goToPreviousStep() {
@@ -453,6 +455,8 @@
       const selectionWrappers = document.querySelectorAll('.questionnaire-selection-wrapper');
       
       selectionWrappers.forEach(wrapper => {
+        // Prevent click event for empty wrappers
+        if (wrapper.innerHTML.trim() === '') return;
         wrapper.addEventListener('click', function() {
           // Only allow selection if this wrapper is in the active step
           const parentWrapper = this.closest('.questionnaire-icons-wrapper');
