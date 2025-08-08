@@ -63,6 +63,11 @@ body.questionnaire-wrapper-open {
     justify-content: start;
 }
 
+.questionnaire-selection-wrapper.disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
 .questionnaire-selection-wrapper:empty {
     border: none;
     display: flex;

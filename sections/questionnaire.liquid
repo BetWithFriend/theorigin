@@ -249,6 +249,8 @@
       });
       goToNextStep(stepIndex);
     }
+    // Update disabled state for taste options
+    updateTasteOptionsDisabledState();
     console.log('boom:', window.appliedFilters);
   }
 
@@ -271,12 +273,8 @@
       // Update button state for the new active step
       updateSelectButton();
 
-      // Disable the btn again for every iteration
-      const selectBtn = previousWrapper.querySelector('.questionnaire-select-btn');
-      // if (selectBtn) {
-      //   selectBtn.disabled = true;
-      //   selectBtn.classList.add('disabled');
-      // }
+      // Update disabled state for taste options
+      updateTasteOptionsDisabledState();
     }
   }
 
@@ -295,16 +293,15 @@
     // Add active class to next wrapper if it exists and is a questionnaire-icons-wrapper
     if (nextWrapper && nextWrapper.classList.contains('questionnaire-icons-wrapper')) {
       nextWrapper.classList.add('active');
-
-       // Update button state for the new active step
       updateSelectButton();
-
       // Disable the btn again for every iteration
       const selectBtn = nextWrapper.querySelector('.questionnaire-select-btn');
       if (selectBtn) {
         selectBtn.disabled = true;
         selectBtn.classList.add('disabled');
       }
+      // Update disabled state for taste options
+      updateTasteOptionsDisabledState();
     }
 
     if (stepIndex === 3) {
@@ -434,7 +431,23 @@
     return window.questionnaireDataPromise;
   }
 
+  // Add this function to handle disabling taste options if 'כהה' is selected
+  function updateTasteOptionsDisabledState() {
+    // Check if 'כהה' is in the roast level filter
+    const roastLevels = window.appliedFilters && window.appliedFilters['filter.p.m.custom.coffee_roast_level'];
+    const isDarkSelected = Array.isArray(roastLevels) && roastLevels.includes('כהה');
 
+    // Select the relevant taste option wrappers (update selector if needed)
+    const tasteWrappers = document.querySelectorAll('.questionnaire-icons-wrapper.active .questionnaire-selection-wrapper[data-filter-value="Fruity & Floral"], .questionnaire-icons-wrapper.active .questionnaire-selection-wrapper[data-filter-value="Sweet & Caramelly"]');
+
+    tasteWrappers.forEach(wrapper => {
+      if (isDarkSelected) {
+        wrapper.classList.add('disabled');
+      } else {
+        wrapper.classList.remove('disabled');
+      }
+    });
+  }
 
   // Initialize the questionnaire functionality
   document.addEventListener('DOMContentLoaded', function() {
@@ -457,7 +470,13 @@
       selectionWrappers.forEach(wrapper => {
         // Prevent click event for empty wrappers
         if (wrapper.innerHTML.trim() === '') return;
-        wrapper.addEventListener('click', function() {
+        wrapper.addEventListener('click', function(e) {
+          // Prevent click if disabled
+          if (this.classList.contains('disabled')) {
+            e.stopPropagation();
+            e.preventDefault();
+            return;
+          }
           // Only allow selection if this wrapper is in the active step
           const parentWrapper = this.closest('.questionnaire-icons-wrapper');
           if (!parentWrapper.classList.contains('active')) return;
