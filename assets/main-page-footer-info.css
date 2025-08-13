@@ -80,6 +80,10 @@
     color: #FBFCFE;
 }
 
+h2.main-footer-info-shop-title {
+    margin: 0;
+}
+
 .main-footer-info-shop-description {
     font-family: 'Noto Sans', sans-serif;
     font-weight: 400;

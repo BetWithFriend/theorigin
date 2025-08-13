@@ -11,11 +11,19 @@
   {% render 'breadcrumbs' %}
 
   <script>
-    analytics.track('Roaster Page', {
-        page_load_time: performance.now(),
+    analytics.trackScreenView('Roaster Page', {
         'Roaster Name': '{{ selected_vendor.vendor_name }}'
     });
 </script>
+
+<style>
+  h1.vendor-name-title {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0;
+    margin-top: 16px;
+  }
+</style>
 
 <div class="vendor-page-main-wrapper">
 
@@ -27,6 +35,20 @@
 
         <div class="vendor-page-logo-wrapper">
           <img class="vendor-page-logo" src="{{ selected_vendor.vendor_logo | img_url: 'medium' }}" />
+          <h1 class="vendor-name-title">
+            {% case selected_vendor.vendor_name %}
+              {% when 'Canopy' %}
+                 בית קלייה קאנופי - Canopy
+              {% when 'Blooms' %}
+                בית קלייה בלומס - Blooms
+              {% when 'Coffee Org' %}
+                בית קלייה קופי אורג - Coffee Organization
+              {% when 'You Need Coffee' %}
+                בית קלייה יו ניד קופי - You Need Coffee
+              {% else %}
+                קלייה לא ידועה
+            {% endcase %}
+          </h1>
           <div class="vendor-page-title-wrapper" dir="rtl">
               <div class="vendor-page-vendor-name">הקמה: <span style="color:#1C201D">{{ selected_vendor.vendor_year_establishment }}</span></div>
               <div class="vendor-page-vendor-location">מיקום: <span style="color:#1C201D">{{ selected_vendor.vendor_location }}</span></div>

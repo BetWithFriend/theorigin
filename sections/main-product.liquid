@@ -333,7 +333,7 @@
     <div class="product-info-top-wrapper">
       <div class="product-info-right-side">
         <div class="product-vendor-title">{{ vendor.vendor_short_name | upcase }}</div>
-        <div class="product-title">{{ product.title }}</div>
+        <h1 class="product-title">{{ product.title }}</h1>
         <div class="product-source-wrapper">
           <div class="product-source">
           {% for pSource in product.metafields.custom.coffee_source.value limit:2 %}
@@ -1062,7 +1062,7 @@
     <div class="product-extra-details-container-inner">
       <div class="product-extra-detail-item">
         <img src="{{ 'icon-available.png' | asset_url }}" width="49" height="49">
-        <p>תמיד זמינים</p>
+        <p>זמינים לעזור</p>
       </div>
       <div class="product-extra-detail-item">
         <img src="{{ 'icon-delivery.png' | asset_url }}" width="49" height="49">
@@ -1074,7 +1074,7 @@
       </div>
       <div class="product-extra-detail-item">
         <img src="{{ 'icon-small-biz.png' | asset_url }}" width="49" height="49">
-        <p>עסקים קטנים</p>
+        <p>עסקים כחול-לבן</p>
       </div>
     </div>
   </div>
@@ -1168,7 +1168,8 @@
     coffee_type: coffee_type,
     vendor_logo: vendor.vendor_logo,
     vendor_story: vendor.vendor_details.value,
-    coffee_blend_ratio: coffee_blend_ratio
+    coffee_blend_ratio: coffee_blend_ratio,
+    vendor_name: vendor.vendor_name.value,
     %}
 </div>
 
