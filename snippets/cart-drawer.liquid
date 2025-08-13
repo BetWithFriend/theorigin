@@ -122,10 +122,12 @@
             {% assign blooms_shipping = 39 %}
             {% assign youneedcoffee_shipping = 39 %}
             {% assign coffeeorg_shipping = 39 %}
+            {% assign coffeeculture_shipping = 39 %}
             
             {%- comment -%} Free shipping thresholds in cents {%- endcomment -%}
             {% assign canopy_free_shipping_threshold = 19500 %}
             {% assign blooms_free_shipping_threshold = 22000 %}
+             {% assign coffeeculture_free_shipping_threshold = 30000 %}
             {% comment %} {% assign youneedcoffee_free_shipping_threshold = 25000 %} {% endcomment %}
             {% assign coffeeorg_free_shipping_threshold = 25000 %}
             
@@ -215,6 +217,12 @@
                   {%- assign vendor_shipping_cost = coffeeorg_shipping -%}
                   {%- assign vendor_free_threshold = coffeeorg_free_shipping_threshold -%}
                   {%- if vendor_total >= coffeeorg_free_shipping_threshold -%}
+                    {%- assign vendor_qualifies_free_shipping = true -%}
+                  {%- endif -%}
+                   {%- elsif vendor == 'coffeeculture' -%}
+                  {%- assign vendor_shipping_cost = coffeeculture_shipping -%}
+                  {%- assign vendor_free_threshold = coffeeculture_free_shipping_threshold -%}
+                  {%- if vendor_total >= coffeeculture_free_shipping_threshold -%}
                     {%- assign vendor_qualifies_free_shipping = true -%}
                   {%- endif -%}
                 {%- endif -%}
