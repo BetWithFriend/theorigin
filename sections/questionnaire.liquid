@@ -272,9 +272,15 @@
               mainWrapper.classList.add('hidden');
             }
             // Show the "lets be friends" section
-            const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
-            if (friendsWrapper) {
-              friendsWrapper.classList.add('active');
+            // Get the local storage item to prevent showing the form again
+            const mailSubscriptionPage = localStorage.getItem('mailSubscriptionPage');
+            if (mailSubscriptionPage !== 'true') {
+             const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
+              if (friendsWrapper) {
+                friendsWrapper.classList.add('active');
+                //save localStorage item to prevent showing the form again
+                localStorage.setItem('mailSubscriptionPage', 'true');
+              }
             }
           }
         }, 3000);
