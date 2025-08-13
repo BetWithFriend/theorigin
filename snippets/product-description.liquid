@@ -32,8 +32,8 @@
             <div class="product-details-item">{{ coffee_blend_ratio }}</div>
         </div>    
         <div class="product-details-item-wrapper">
-            <div class="product-details-item-title">גובה גידול</div>
-            <div class="product-details-item">{{ coffee_altitude }}</div>
+            <div class="product-details-item-title">דרגת קלייה</div>
+            <div class="product-details-item">{{ coffee_roast_level }}</div>
         </div>
         <div class="product-details-item-wrapper">
             <div class="product-details-item-title">טעמים</div>
@@ -64,9 +64,20 @@
 </div>
 
 <div class="product-details-vendor-details-wrapper">
-    <div class="product-details-vendor-details-title">
-        בית הקליה
-    </div>
+    <h2 class="product-details-vendor-details-title">
+        {% case vendor_name %}
+            {% when 'Canopy' %}
+                בית קלייה קאנופי - Canopy
+            {% when 'Blooms' %}
+            בית קלייה בלומס - Blooms
+            {% when 'Coffee Org' %}
+            בית קלייה קופי אורג - Coffee Organization
+            {% when 'You Need Coffee' %}
+            בית קלייה יו ניד קופי - You Need Coffee
+            {% else %}
+            קלייה לא ידועה
+        {% endcase %}
+    </h2>
     <div class="product-details-vendor-image-wrapper">
         <img src="{{ vendor_logo.value | img_url: 'small' }}" alt="{{ product.featured_image.alt | escape }}">
     </div>
