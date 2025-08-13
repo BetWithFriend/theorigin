@@ -238,7 +238,7 @@ body.questionnaire-wrapper-open {
     line-height: 25px;
     font-weight: 400;
     color: #1C201D;
-    margin-bottom: 32px;
+    /* margin-bottom: 32px; */
 }
 
 .questionnaire-select-btn.form-submit {

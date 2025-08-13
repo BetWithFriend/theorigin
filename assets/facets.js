@@ -87,6 +87,7 @@ class FacetFiltersForm extends HTMLElement {
       .getElementById('ProductGridContainer').innerHTML;
 
     document
+    g
       .getElementById('ProductGridContainer')
       .querySelectorAll('.scroll-trigger')
       .forEach((element) => {
@@ -94,10 +95,10 @@ class FacetFiltersForm extends HTMLElement {
       });
   }
 
-  static renderProductCount(html, event) {
-    const count = event && event.limit ? 5 : new DOMParser().parseFromString(html, 'text/html').getElementById('ProductCount').innerHTML;
+  static renderProductCount(html) {
+    const count = new DOMParser().parseFromString(html, 'text/html').getElementById('ProductCount').innerHTML;
     const container = document.getElementById('ProductCount');
-    console.log('boom', count);
+
     const containerDesktop = document.getElementById('ProductCountDesktop');
     container.innerHTML = count;
     container.classList.remove('loading');
