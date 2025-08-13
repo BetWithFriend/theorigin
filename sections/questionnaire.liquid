@@ -154,6 +154,12 @@
   }
 
   function getFilters(filterName, stepIndex) {
+
+     analytics.trackClick('Filter select', {
+          'Filter': filterName,
+          step: stepIndex
+      });
+
     // Get all selected items in the current active step
     const activeWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
     if (!activeWrapper) return;
@@ -341,6 +347,8 @@
   }
 
   function closeForm(skip = false) {
+
+    analytics.trackClick('Close Filter');
     // Add localStorage item to prevent showing the form again if skip is true
     const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
     const questionnaireWrapper = document.querySelector('.questionnaire-wrapper');
@@ -410,6 +418,10 @@
   document.body.classList.add('questionnaire-wrapper-open');
 
   function subscribeUser(email) {
+
+       analytics.trackClick('user subscribe', {
+          'email': email
+      });
     if (!email) return;
     const url = 'https://elghwmw2jd3c5ve65agcrezqru0lrwtc.lambda-url.us-east-1.on.aws/';
     const data = { email };
