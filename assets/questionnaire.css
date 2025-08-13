@@ -22,6 +22,21 @@ body.questionnaire-wrapper-open {
     height: 100vh;
 }
 
+#MainContent.questionnaire-wrapper-open {
+    margin: 0;
+}
+
+.questionnaire-skip {
+    color: #1C201D;
+    font-family: noto-sans, sans-serif;
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: 400;
+    text-decoration: underline;
+    margin-top: 16px;
+    cursor: pointer;
+}
+
 .questionnaire-title {
     font-family: noto-sans, sans-serif;
     font-size: 20px;
@@ -137,6 +152,7 @@ body.questionnaire-wrapper-open {
     top: 40%;
     gap: 24px;
     padding: 0 32px;
+    width: 100%;
     ;
 }
 
@@ -243,10 +259,81 @@ body.questionnaire-wrapper-open {
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 60px 0 32px 0;
+    /* padding: 60px 0 32px 0; */
+    margin-bottom: 32px;
 }
 
 .questionnaire-back-icon {
     width: 8px;
     height: 14px;
+}
+
+.questionnaire-btn-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+}
+
+@media screen and (min-width: 990px) {
+    .header-wrapper.questionnaire-wrapper-open {
+        z-index: 10001;
+    }
+
+    .questionnaire-wrapper {
+        position: relative;
+        height: calc(100vh - 220px);
+    }
+
+    .lets-be-friends-wrapper {
+        height: calc(100vh - 220px);
+        position: relative;
+    }
+
+    .questionnaire-title {
+        font-weight: 700;
+        font-size: 36px;
+        line-height: 36px;
+    }
+
+    .questionnaire-title-wrapper {
+        margin-bottom: 14px;
+    }
+
+    .questionnaire-selection-wrapper {
+        width: 202px;
+        height: 148px;
+        cursor: pointer;
+    }
+
+    .questionnaire-icons-wrapper {
+        width: 630px;
+        padding: unset;
+        /* height: 68vh; */
+    }
+
+    .questionnaire-select-btn {
+        width: 440px;
+    }
+
+    #MainContent.questionnaire-wrapper-open {
+        max-width: unset;
+        margin: unset;
+        width: 100%;
+    }
+
+    .questionnaire-selection-wrapper:empty {
+        display: none;
+    }
+
+    .questionnaire-loader-wrapper {
+        height: 80vh;
+        position: unset;
+    }
+
+    .lets-be-friends-input {
+        width: 440px;
+        margin-bottom: 0;
+    }
 }

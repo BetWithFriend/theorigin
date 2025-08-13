@@ -11,7 +11,11 @@
   "sections": {
     "questionnaire": {
       "type": "questionnaire",
-      "settings": {}
+      "settings": {
+        "display": "flex",
+        "align-items": "center",
+        "justify-content": "center"
+      }
     },
     "banner": {
       "type": "main-collection-banner",

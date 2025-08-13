@@ -19,9 +19,9 @@
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Turkish_Cezve.png' |  asset_url }}" alt="Turkish icon"/>
             <div class="questionnaire-text">קפה טורקי</div>
         </div>
-        <div class="questionnaire-selection-wrapper"  data-filter-value="V60">
+        <div class="questionnaire-selection-wrapper"  data-filter-value="Filter">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_v60.png' |  asset_url }}" alt="V60 icon"/>
-            <div class="questionnaire-text">מזיגה ידנית</div>
+            <div class="questionnaire-text">פילטר</div>
         </div>
         <div class="questionnaire-selection-wrapper"  data-filter-value="Espresso">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Auto_Machine.png' |  asset_url }}" alt="Espresso Auto icon"/>
@@ -31,7 +31,10 @@
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Aeropress.png' |  asset_url }}" alt="Aeropress icon"/>
             <div class="questionnaire-text">אירופרס</div>
         </div>
-        <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_prep_methods', 1)" disabled>המשך עם 1 שיטה</button>
+        <div class="questionnaire-btn-wrapper">
+          <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_prep_methods', 1)" disabled>בחרו אפשרות</button>
+          <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div>
+        </div>
     </div>
     <div class="questionnaire-icons-wrapper ">
           <div class="questionnaire-title-wrapper">
@@ -60,7 +63,10 @@
             </div>
             <div class="questionnaire-selection-wrapper"></div>
             <div class="questionnaire-selection-wrapper"></div>
-            <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_roast_level', 2)">המשך עם 1 שיטה</button>
+            <div class="questionnaire-btn-wrapper">
+              <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_roast_level', 2)">בחרו אפשרות</button>
+              <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div>
+            </div>
     </div>
     <div class="questionnaire-icons-wrapper ">
       <div class="questionnaire-title-wrapper">
@@ -93,90 +99,31 @@
             <div class="questionnaire-expl-text">פתוח לגלות מה מתאים לי</div>
         </div>
         <div class="questionnaire-selection-wrapper"></div>
-        <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_tastes', 3)">המשך עם 1 שיטה</button>
-    </div>
-    <div class="questionnaire-icons-wrapper">
+        <div class="questionnaire-selection-wrapper"></div>
+        <div class="questionnaire-btn-wrapper">
+          <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_tastes', 3)">בחרו אפשרות</button>
+          <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div>
+        </div>
+       </div>
+    <div class="questionnaire-icons-wrapper ">
         <div class="questionnaire-loader-wrapper">
             <img class="questionnaire-loader-img" src="{{ 'questionnaire_loader.png'  |  asset_url}}" alt=""/>
             <div class="questionnaire-loader-text">מתאימים את פולי הקפה בדיוק בשבילך</div>
         </div>
+      </div>
     </div>
-</div>
-<div class="lets-be-friends-wrapper">
-    <img class="lets-be-friends-img" src="{{ 'lets_be_friends.png' | asset_url }}" alt="Lets be friends"/>
-    <div class="lets-be-friends-title">בואו נהיה חברים</div>
-    <div class="lets-be-friends-text">השאירו מייל כדי לשמוע על קפה חדש, בתי קלייה. מעניינים, צורות הכנה ועוד.
-בלי ספאם. מבטיחים.</div>
- {%- form 'customer', id: 'ContactFooter', class: 'footer__newsletter newsletter-form' -%}
-                <input type="hidden" name="contact[tags]" value="newsletter">
-                <div class="newsletter-form__field-wrapper">
-                  <div class="field">
-                    <input
-                      id="NewsletterForm--{{ section.id }}"
-                      type="email"
-                      name="contact[email]"
-                      class="field__input"
-                      value="{{ form.email }}"
-                      aria-required="true"
-                      autocorrect="off"
-                      autocapitalize="off"
-                      autocomplete="email"
-                      {% if form.errors %}
-                        autofocus
-                        aria-invalid="true"
-                        aria-describedby="ContactFooter-error"
-                      {% elsif form.posted_successfully? %}
-                        aria-describedby="ContactFooter-success"
-                      {% endif %}
-                      placeholder="הכנס מייל"
-                      required
-                    >
-                    <label class="field__label" for="NewsletterForm--{{ section.id }}">
-                        הכנס מייל
-                    </label>
-                    {% comment %} <button
-                      type="submit"
-                      class="newsletter-form__button field__button"
-                      name="commit"
-                      id="Subscribe"
-                      aria-label="{{ 'newsletter.button_label' | t }}"
-                    >
-                      <span class="svg-wrapper">
-                        {{- 'icon-arrow.svg' | inline_asset_content -}}
-                      </span>
-                    </button> {% endcomment %}
-                  </div>
-                  {%- if form.errors -%}
-                    <small class="newsletter-form__message form__message" id="ContactFooter-error">
-                      <span class="svg-wrapper">
-                        {{- 'icon-error.svg' | inline_asset_content -}}
-                      </span>
-                      {{- form.errors.translated_fields.email | capitalize }}
-                      {{ form.errors.messages.email -}}
-                    </small>
-                  {%- endif -%}
-                </div>
-                {%- if form.posted_successfully? -%}
-                  <h3
-                    class="newsletter-form__message newsletter-form__message--success form__message"
-                    id="ContactFooter-success"
-                    tabindex="-1"
-                    autofocus
-                  >
-                    <span class="svg-wrapper">
-                      {{- 'icon-success.svg' | inline_asset_content -}}
-                    </span>
-                    {{- 'newsletter.success' | t }}
-                  </h3>
-                {%- endif -%}
-              {%- endform -%}
-    {% comment %} <input type="email" class="lets-be-friends-input" placeholder="הכנס מייל"/> {% endcomment %}
-    <button onclick="sendForm()" class="questionnaire-select-btn form-submit">שלח</button>
-    <div onclick="closeForm()" class="questionnaire-select-skip">דלג</div>
-</div>
+            <div class="lets-be-friends-wrapper ">
+                <img class="lets-be-friends-img" src="{{ 'lets_be_friends.png' | asset_url }}" alt="Lets be friends"/>
+                <div class="lets-be-friends-title">בואו נהיה חברים</div>
+                <div class="lets-be-friends-text">השאירו מייל כדי לשמוע על קפה חדש, בתי קלייה. מעניינים, צורות הכנה ועוד.
+            בלי ספאם. מבטיחים.</div>
+              <input type="email" class="lets-be-friends-input" placeholder="הכנס מייל" id="newsletterEmail" required>
+              <button onclick="subscribeUser(document.getElementById('newsletterEmail').value)" class="questionnaire-select-btn form-submit">שלח</button>
+              <div onclick="closeForm(true)" class="questionnaire-select-skip">דלג</div>
+            </div>
+            
 
-<script>
-
+<script>  
   function getSuitTasteProfile(selectedFilters) {
 
     if (!window.questionnaireData) return [];
@@ -245,7 +192,6 @@
           } else {
               window.appliedFilters[filterName].push(value);
           }
-          
       });
       goToNextStep(stepIndex);
     }
@@ -368,12 +314,14 @@
           selectBtn.disabled = false;
           selectBtn.classList.remove('disabled');
           selectBtn.textContent = !hasEmptyFilterValue ? 
-                `המשך עם ${selectedItems.length} ${selectedItems.length > 1 ? 'שיטות' : 'שיטה'}` : 
+                selectedItems.length &&
+                 selectedItems.length === 1 ? 'המשך עם שיטה אחת' 
+                 : `המשך עם ${selectedItems.length} שיטות` :
                 `המשך`;
       } else {
         selectBtn.disabled = true;
         selectBtn.classList.add('disabled');
-        selectBtn.textContent = 'המשך עם 1 שיטה';
+        selectBtn.textContent = 'בחרו אפשרות';
       }
     }
   }
@@ -381,6 +329,9 @@
   function openForm() {
     const questionnaireWrapper = document.querySelector('.questionnaire-wrapper');
     document.body.classList.add('questionnaire-wrapper-open');
+    const headerWrapper = document.querySelector('.header-wrapper');
+    headerWrapper.classList.add('questionnaire-wrapper-open');
+    document.getElementById('MainContent').classList.add('questionnaire-wrapper-open');
     questionnaireWrapper.classList.remove('hidden');
     // Show all questionnaire-icons-wrapper elements
     // const firstWrapper = document.querySelector('.questionnaire-icons-wrapper');
@@ -389,12 +340,14 @@
     // }
   }
 
-  function closeForm() {
+  function closeForm(skip = false) {
+    // Add localStorage item to prevent showing the form again if skip is true
     const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
     const questionnaireWrapper = document.querySelector('.questionnaire-wrapper');
     if (friendsWrapper) {
       friendsWrapper.classList.remove('active');
       document.body.classList.remove('questionnaire-wrapper-open');
+      document.getElementById('MainContent').classList.remove('questionnaire-wrapper-open');
       questionnaireWrapper.classList.add('hidden');
     }
   }
@@ -405,10 +358,12 @@
     if (friendsWrapper) {
       friendsWrapper.classList.remove('active');
       document.body.classList.remove('questionnaire-wrapper-open');
+      document.getElementById('MainContent').classList.remove('questionnaire-wrapper-open');
       questionnaireWrapper.classList.add('hidden');
     }
     // Submit the form
-    document.getElementById('ContactFooter').submit();
+    const currrentUrl = window.location.href;
+    document.getElementById('ContactQuestionnaire').submit()
   }
 
   // // Helper to load questionnaire data only once
@@ -435,7 +390,10 @@
   function updateTasteOptionsDisabledState() {
     // Check if 'כהה' is in the roast level filter
     const roastLevels = window.appliedFilters && window.appliedFilters['filter.p.m.custom.coffee_roast_level'];
-    const isDarkSelected = Array.isArray(roastLevels) && roastLevels.includes('כהה');
+    const isDarkSelected = Array.isArray(roastLevels) 
+                              && roastLevels.includes('כהה')
+                              && !roastLevels.includes('בהירה')
+                              && !roastLevels.includes('בינונית');;
 
     // Select the relevant taste option wrappers (update selector if needed)
     const tasteWrappers = document.querySelectorAll('.questionnaire-icons-wrapper.active .questionnaire-selection-wrapper[data-filter-value="Fruity & Floral"], .questionnaire-icons-wrapper.active .questionnaire-selection-wrapper[data-filter-value="Sweet & Caramelly"]');
@@ -449,20 +407,46 @@
     });
   }
 
+  document.body.classList.add('questionnaire-wrapper-open');
+
+  function subscribeUser(email) {
+    if (!email) return;
+    const url = 'https://elghwmw2jd3c5ve65agcrezqru0lrwtc.lambda-url.us-east-1.on.aws/';
+    const data = { email };
+  
+    console.log('boom', data) 
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+
+    // .then(response => response.json())
+    .then(data => {
+      closeForm();
+      // Add localStorage item to prevent showing the form again
+    })
+    .catch(error => {
+      console.error('Error subscribing:', error);
+    });
+  }
+
   // Initialize the questionnaire functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    console.log('boom');
-    if (window.location.search.includes('from=main-cta')) {
+  if (window.location.search.includes('from=main-cta')) {
       openForm();
-       document.body.classList.add('questionnaire-wrapper-open');
+      document.addEventListener('DOMContentLoaded', function() {
+      
+      //  document.body.classList.add('questionnaire-wrapper-open');
       //Object that will hold the filters data
       window.appliedFilters = [];
 
       // Usage example:
-      loadQuestionnaireData().then(data => {
-        // data is available here
-        window.questionnaireData = data;
-      });
+      // loadQuestionnaireData().then(data => {
+      //   // data is available here
+      //   window.questionnaireData = data;
+      // });
       
       // Add click event listeners to all selection wrappers
       const selectionWrappers = document.querySelectorAll('.questionnaire-selection-wrapper');
@@ -505,7 +489,279 @@
           updateSelectButton();
         });
       });
-      }
-    });
+
+        // Prevent tranditional form submission
+        // const form = document.getElementById('ContactQuestionnaire');
+      //  if (form && !document.getElementById('ContactFooter-success')) {
+      //     form.addEventListener('submit', function(e) {
+      //       e.preventDefault(); // Prevent default form submission
+            
+      //       const formData = new FormData(form);
+            
+      //       // Submit via fetch to avoid URL change
+      //       fetch(form.action || window.location.pathname, {
+      //         method: 'POST',
+      //         body: formData,
+      //         headers: {
+      //           'Accept': 'text/html,application/xhtml+xml',
+      //         }
+      //       })
+      //       .then(response => response.text())
+      //       .then(html => {
+      //         // Parse the response to check for success
+      //         const parser = new DOMParser();
+      //         const doc = parser.parseFromString(html, 'text/html');
+      //         const successElement = doc.getElementById('ContactFooter-success');
+              
+      //         if (successElement) {
+      //           // Success - show message and close form
+      //           const messageWrapper = form.querySelector('.newsletter-form__field-wrapper');
+      //           messageWrapper.innerHTML = successElement.outerHTML;
+                
+      //           // Call closeForm after a brief delay
+      //           setTimeout(() => {
+      //             if (typeof closeForm === 'function') {
+      //               closeForm();
+      //             }
+      //           }, 100);
+      //         } else {
+      //           // Check for errors
+      //           const errorElement = doc.getElementById('ContactFooter-error');
+      //           if (errorElement) {
+      //             const existingError = form.querySelector('#ContactFooter-error');
+      //             if (existingError) {
+      //               existingError.remove();
+      //             }
+      //             const messageWrapper = form.querySelector('.newsletter-form__field-wrapper');
+      //             messageWrapper.appendChild(errorElement.cloneNode(true));
+      //           }
+      //         }
+      //       })
+      //       .catch(error => {
+      //         console.error('Form submission error:', error);
+      //         // Fallback to normal form submission if AJAX fails
+      //         form.submit();
+      //       });
+      //     });
+      //   }
+      
+
+        window.questionnaireData = [
+          {
+            "prepMethod": "Espresso",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Fruity & Floral",
+            "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+          },
+          {
+            "prepMethod": "Espresso",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Sweet & Caramelly",
+            "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+          },
+          {
+            "prepMethod": "Espresso",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          },
+          {
+            "prepMethod": "Espresso",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Fruity & Floral",
+            "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+          },
+          {
+            "prepMethod": "Espresso",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Sweet & Caramelly",
+            "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+          },
+          {
+            "prepMethod": "Espresso",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          },
+          {
+            "prepMethod": "Espresso",
+            "roastLevel": "כהה",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          },
+          {
+            "prepMethod": "Filter",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Fruity & Floral",
+            "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+          },
+          {
+            "prepMethod": "Filter",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Sweet & Caramelly",
+            "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+          },
+          {
+            "prepMethod": "Filter",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          },
+          {
+            "prepMethod": "Filter",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Fruity & Floral",
+            "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+          },
+          {
+            "prepMethod": "Filter",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Sweet & Caramelly",
+            "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+          },
+          {
+            "prepMethod": "Filter",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          },
+          {
+            "prepMethod": "Filter",
+            "roastLevel": "כהה",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          },
+          {
+            "prepMethod": "Aeropress",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Fruity & Floral",
+            "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+          },
+          {
+            "prepMethod": "Aeropress",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Sweet & Caramelly",
+            "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+          },
+          {
+            "prepMethod": "Aeropress",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          },
+          {
+            "prepMethod": "Aeropress",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Fruity & Floral",
+            "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+          },
+          {
+            "prepMethod": "Aeropress",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Sweet & Caramelly",
+            "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+          },
+          {
+            "prepMethod": "Aeropress",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          },
+          {
+            "prepMethod": "Aeropress",
+            "roastLevel": "כהה",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          },
+          {
+            "prepMethod": "MokaPot",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Fruity & Floral",
+            "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+          },
+          {
+            "prepMethod": "MokaPot",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Sweet & Caramelly",
+            "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+          },
+          {
+            "prepMethod": "MokaPot",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          },
+          {
+            "prepMethod": "MokaPot",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Fruity & Floral",
+            "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+          },
+          {
+            "prepMethod": "MokaPot",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Sweet & Caramelly",
+            "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+          },
+          {
+            "prepMethod": "MokaPot",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          },
+          {
+            "prepMethod": "MokaPot",
+            "roastLevel": "כהה",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          },
+          {
+            "prepMethod": "Black",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Fruity & Floral",
+            "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+          },
+          {
+            "prepMethod": "Black",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Sweet & Caramelly",
+            "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+          },
+          {
+            "prepMethod": "Black",
+            "roastLevel": "בהירה",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          },
+          {
+            "prepMethod": "Black",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Fruity & Floral",
+            "tastes": "פירותי, פירות הדר, פרחוני, פירות יער, פירות אדומים, פירות טרופיים, תפוח ירוק, אננס, לימון"
+          },
+          {
+            "prepMethod": "Black",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Sweet & Caramelly",
+            "tastes": "קרמל, שוקולד חלב, דבש, מייפל, סוכר חום, אגוזים מתוקים, וניל, מולסה"
+          },
+          {
+            "prepMethod": "Black",
+            "roastLevel": "בינונית",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          },
+          {
+            "prepMethod": "Black",
+            "roastLevel": "כהה",
+            "tasteProfile": "Rich & Chocolaty",
+            "tastes": "שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא"
+          }
+        ];
+    })
+  } else {
+      document.body.classList.remove('questionnaire-wrapper-open');
+      document.getElementById('MainContent').classList.remove('questionnaire-wrapper-open');
+  };
     
 </script>

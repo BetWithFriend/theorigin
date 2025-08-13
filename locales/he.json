@@ -3851,7 +3851,7 @@
     "collection_template": {
       "empty": "לא נמצאו מוצרים",
       "title": "גְבִיָה",
-      "use_fewer_filters_html": "השתמש בפחות מסננים או <a class=\"&lt;span class='notranslate'&gt;{{ class }}&lt;/span&gt;\" href=\"&lt;span%20class='notranslate'&gt;{{%20link%20}}&lt;/span&gt;\">הסר את כולם</a>"
+      "use_fewer_filters_html": "השתמש בפחות מסננים או  <a class=\"{{ class }}\" href=\"{{ link }}\">הסר את כולם</a>"
     },
     "video": {
       "load_video": "טען סרטון: {{ description }}"
