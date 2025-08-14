@@ -260,9 +260,11 @@
               {% endif %}
             </ul>
 
-            {% comment %} {%- if paginate.pages > 1 -%}
+          {% unless content_for_query_string contains 'from_quiz=true' or content_for_query_string contains 'from_quiz%3Dtrue' %}
+            {%- if paginate.pages > 1 -%}
               {% render 'pagination', paginate: paginate, anchor: '' %}
-            {%- endif -%} {% endcomment %}
+            {%- endif -%}
+          {%- endunless -%}
           </div>
         {%- endif -%}
       </div>
