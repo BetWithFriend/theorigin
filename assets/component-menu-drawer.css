@@ -37,6 +37,16 @@ menu-drawer>details[open]>summary::before {
   background-color: rgb(var(--color-background));
   overflow-x: hidden;
   filter: drop-shadow(var(--drawer-shadow-horizontal-offset) var(--drawer-shadow-vertical-offset) var(--drawer-shadow-blur-radius) rgba(var(--color-shadow), var(--drawer-shadow-opacity)));
+<<<<<<< Updated upstream
+=======
+
+  /* Explicit 3D transform for Safari */
+  -webkit-transform: translate3d(100%, 0, 0);
+  transform: translate3d(100%, 0, 0);
+  transition: -webkit-transform 0.2s ease;
+  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, -webkit-transform 0.2s ease;
+>>>>>>> Stashed changes
 }
 
 .js .menu-drawer {
@@ -47,6 +57,8 @@ menu-drawer>details[open]>summary::before {
 .js details[open]>.menu-drawer,
 .js details[open]>.menu-drawer__submenu {
   transition: transform var(--duration-default) ease, visibility var(--duration-default) ease;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 
 .js details[open].menu-opening>.menu-drawer,
