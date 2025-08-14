@@ -281,12 +281,16 @@
                 //save localStorage item to prevent showing the form again
                 localStorage.setItem('mailSubscriptionPage', 'true');
               }
+            } else {
+              document.body.classList.remove('questionnaire-wrapper-open');
+              document.getElementById('MainContent').classList.remove('questionnaire-wrapper-open');
             }
           }
         }, 3000);
       }
-      const newQueryParams = arrayToQueryString(window.appliedFilters)
+      let newQueryParams = arrayToQueryString(window.appliedFilters)
       if (window.FacetFiltersForm && typeof FacetFiltersForm.renderPage === 'function') {
+        newQueryParams = `${newQueryParams}&from_quiz=true`;
          FacetFiltersForm.renderPage(newQueryParams, null, true);
       }
     }
@@ -353,17 +357,17 @@
   }
 
   function closeForm(skip = false) {
-
     analytics.trackClick('Close Filter');
     // Add localStorage item to prevent showing the form again if skip is true
     const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
     const questionnaireWrapper = document.querySelector('.questionnaire-wrapper');
     if (friendsWrapper) {
       friendsWrapper.classList.remove('active');
-      document.body.classList.remove('questionnaire-wrapper-open');
-      document.getElementById('MainContent').classList.remove('questionnaire-wrapper-open');
-      questionnaireWrapper.classList.add('hidden');
+    document.body.classList.remove('questionnaire-wrapper-open');
+    document.getElementById('MainContent').classList.remove('questionnaire-wrapper-open');
+    questionnaireWrapper.classList.add('hidden');
     }
+   
   }
 
   function sendForm() {
@@ -432,7 +436,6 @@
     const url = 'https://elghwmw2jd3c5ve65agcrezqru0lrwtc.lambda-url.us-east-1.on.aws/';
     const data = { email };
   
-    console.log('boom', data) 
     fetch(url, {
       method: 'POST',
       headers: {

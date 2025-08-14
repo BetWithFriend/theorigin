@@ -11,11 +11,7 @@
   "sections": {
     "questionnaire": {
       "type": "questionnaire",
-      "settings": {
-        "display": "flex",
-        "align-items": "center",
-        "justify-content": "center"
-      }
+      "settings": {}
     },
     "banner": {
       "type": "main-collection-banner",
