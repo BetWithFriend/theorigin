@@ -103,10 +103,23 @@
       {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
         <aside
           aria-labelledby="verticalTitle"
-          class="facets-wrapper facets-wrapper--sticky{% unless section.settings.enable_filtering %} facets-wrapper--no-filters{% endunless %}{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
+          class="facets-wrapper facets-wrapper--sticky
+          {% unless section.settings.enable_filtering %}
+               facets-wrapper--no-filters
+          {% endunless %}
+          {% if section.settings.filter_type != 'vertical' %}
+             page-width
+          {% endif %}
+          {% if content_for_query_string contains 'from_quiz=true' or content_for_query_string contains 'from_quiz%3Dtrue' %}
+             hide-filters
+          {% endif %}"
           id="main-collection-filters"
           data-id="{{ section.id }}"
         >
+
+        {% comment %} if coming from questionnaire - hide filters {% endcomment %}
+
+        {% comment %}  {% endcomment %}
           {% render 'facets',
             results: collection,
             enable_filtering: section.settings.enable_filtering,
@@ -114,6 +127,7 @@
             filter_type: section.settings.filter_type,
             paginate: paginate
           %}
+        {% comment %} {% endunless %} {% endcomment %}
         </aside>
       {%- endif -%}
 

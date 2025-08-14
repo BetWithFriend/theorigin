@@ -1,4 +1,9 @@
 {{ 'questionnaire.css' | asset_url | stylesheet_tag }}
+<script>
+    analytics.trackScreenView('Questionnaire', {
+        page_load_time: performance.now()
+    });
+</script>
 
 <div class="questionnaire-wrapper hidden" id="questionnaireWrapperDesktop">
     <div class="questionnaire-icons-wrapper active">
@@ -32,7 +37,7 @@
             <div class="questionnaire-text">אירופרס</div>
         </div>
         <div class="questionnaire-btn-wrapper">
-          <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_prep_methods', 1)" disabled>בחרו אפשרות</button>
+          <button class="questionnaire-select-btn" onclick="getFilters('PrepFilter', 1)" disabled>בחרו אפשרות</button>
           <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div>
         </div>
     </div>
@@ -64,7 +69,7 @@
             <div class="questionnaire-selection-wrapper"></div>
             <div class="questionnaire-selection-wrapper"></div>
             <div class="questionnaire-btn-wrapper">
-              <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_roast_level', 2)">בחרו אפשרות</button>
+              <button class="questionnaire-select-btn" onclick="getFilters('roastFilter', 2)">בחרו אפשרות</button>
               <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div>
             </div>
     </div>
@@ -101,7 +106,7 @@
         <div class="questionnaire-selection-wrapper"></div>
         <div class="questionnaire-selection-wrapper"></div>
         <div class="questionnaire-btn-wrapper">
-          <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_tastes', 3)">בחרו אפשרות</button>
+          <button class="questionnaire-select-btn" onclick="getFilters('tasteFilter', 3)">בחרו אפשרות</button>
           <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div>
         </div>
        </div>
@@ -115,7 +120,7 @@
             <div class="lets-be-friends-wrapper ">
                 <img class="lets-be-friends-img" src="{{ 'lets_be_friends.png' | asset_url }}" alt="Lets be friends"/>
                 <div class="lets-be-friends-title">בואו נהיה חברים</div>
-                <div class="lets-be-friends-text">השאירו מייל כדי לשמוע על קפה חדש, בתי קלייה. מעניינים, צורות הכנה ועוד.
+                <div class="lets-be-friends-text">השאירו מייל כדי לשמוע על קפה חדש, בתי קלייה מעניינים, צורות הכנה ועוד.
             בלי ספאם. מבטיחים.</div>
               <input type="email" class="lets-be-friends-input" placeholder="הכנס מייל" id="newsletterEmail" required>
               <button onclick="subscribeUser(document.getElementById('newsletterEmail').value)" class="questionnaire-select-btn form-submit">שלח</button>
@@ -203,7 +208,6 @@
     }
     // Update disabled state for taste options
     updateTasteOptionsDisabledState();
-    console.log('boom:', window.appliedFilters);
   }
 
   function goToPreviousStep() {
@@ -280,6 +284,9 @@
                 friendsWrapper.classList.add('active');
                 //save localStorage item to prevent showing the form again
                 localStorage.setItem('mailSubscriptionPage', 'true');
+                    analytics.trackScreenView('Subscription', {
+                    page_load_time: performance.now()
+                });
               }
             } else {
               document.body.classList.remove('questionnaire-wrapper-open');
@@ -291,7 +298,9 @@
       let newQueryParams = arrayToQueryString(window.appliedFilters)
       if (window.FacetFiltersForm && typeof FacetFiltersForm.renderPage === 'function') {
         newQueryParams = `${newQueryParams}&from_quiz=true`;
-         FacetFiltersForm.renderPage(newQueryParams, null, true);
+        const facetsPage = document.querySelector('.facets-wrapper--sticky');
+        facetsPage.classList.add('hide-filters');
+        FacetFiltersForm.renderPage(newQueryParams, null, true);
       }
     }
   }
@@ -357,7 +366,7 @@
   }
 
   function closeForm(skip = false) {
-    analytics.trackClick('Close Filter');
+    analytics.trackClick('Close Quiz');
     // Add localStorage item to prevent showing the form again if skip is true
     const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
     const questionnaireWrapper = document.querySelector('.questionnaire-wrapper');
@@ -367,7 +376,10 @@
     document.getElementById('MainContent').classList.remove('questionnaire-wrapper-open');
     questionnaireWrapper.classList.add('hidden');
     }
-   
+
+    if (skip) {
+       analytics.trackClick('User skipped subscription');
+    }
   }
 
   function sendForm() {
@@ -429,30 +441,39 @@
 
   function subscribeUser(email) {
 
-       analytics.trackClick('user subscribe', {
-          'email': email
-      });
-    if (!email) return;
-    const url = 'https://elghwmw2jd3c5ve65agcrezqru0lrwtc.lambda-url.us-east-1.on.aws/';
-    const data = { email };
-  
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-
-    // .then(response => response.json())
-    .then(data => {
-      closeForm();
-      // Add localStorage item to prevent showing the form again
-    })
-    .catch(error => {
-      console.error('Error subscribing:', error);
+    analytics.trackClick('user subscribe', {
+      'email': email
     });
+    if (isValidEmail(email)) {
+      const url = 'https://elghwmw2jd3c5ve65agcrezqru0lrwtc.lambda-url.us-east-1.on.aws/';
+      const data = { email };
+    
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+
+      // .then(response => response.json())
+      .then(data => {
+        closeForm();
+        // Add localStorage item to prevent showing the form again
+      })
+      .catch(error => {
+        console.error('Error subscribing:', error);
+      });  
+    } else {
+      closeForm();
+    }
   }
+
+    // Email validation helper function
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
 
   // Initialize the questionnaire functionality
   if (window.location.search.includes('from=main-cta')) {
