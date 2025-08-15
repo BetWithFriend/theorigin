@@ -11,7 +11,9 @@ class FacetFiltersForm extends HTMLElement {
     facetForm.addEventListener('input', this.debouncedOnSubmit.bind(this));
 
     const facetWrapper = this.querySelector('#FacetsWrapperDesktop');
+    // const questionnaireWrapper = this.querySelector('#questionnaireWrapperDesktop');
     if (facetWrapper) facetWrapper.addEventListener('keyup', onKeyUpEscape);
+    // if (questionnaireWrapper) questionnaireWrapper.addEventListener('keyup', onKeyUpEscape);
   }
 
   static setListeners() {
@@ -95,6 +97,7 @@ class FacetFiltersForm extends HTMLElement {
   static renderProductCount(html) {
     const count = new DOMParser().parseFromString(html, 'text/html').getElementById('ProductCount').innerHTML;
     const container = document.getElementById('ProductCount');
+
     const containerDesktop = document.getElementById('ProductCountDesktop');
     container.innerHTML = count;
     container.classList.remove('loading');
