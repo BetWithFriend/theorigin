@@ -1,6 +1,6 @@
 {{ 'questionnaire.css' | asset_url | stylesheet_tag }}
 <script>
-    analytics.trackScreenView('Questionnaire', {
+    analytics.trackScreenView('Quiz', {
         page_load_time: performance.now()
     });
 </script>
@@ -159,12 +159,6 @@
   }
 
   function getFilters(filterName, stepIndex) {
-
-     analytics.trackClick('Filter select', {
-          'Filter': filterName,
-          step: stepIndex
-      });
-
     // Get all selected items in the current active step
     const activeWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
     if (!activeWrapper) return;
@@ -181,6 +175,12 @@
         const values = filterValue.split(',').map(v => v.trim());
         selectedValues.push(...values);
       }
+    });
+
+    analytics.trackClick('Filter select', {
+        'Filter': filterName,
+        step: stepIndex,
+        filters: selectedValues
     });
 
     window.appliedFilters[filterName] = [];    
@@ -293,8 +293,11 @@
               document.getElementById('MainContent').classList.remove('questionnaire-wrapper-open');
             }
           }
-        }, 3000);
+        }, 2000);
       }
+
+      enableScrollWithEvents();
+
       let newQueryParams = arrayToQueryString(window.appliedFilters)
       if (window.FacetFiltersForm && typeof FacetFiltersForm.renderPage === 'function') {
         newQueryParams = `${newQueryParams}&from_quiz=true`;
@@ -351,7 +354,26 @@
     }
   }
 
+  let scrollHandler = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    };
+
+  function disableScrollWithEvents() {
+      window.addEventListener('wheel', scrollHandler, { passive: false });
+      window.addEventListener('touchmove', scrollHandler, { passive: false });
+  }
+
+  function enableScrollWithEvents() {
+      if (scrollHandler) {
+          window.removeEventListener('wheel', scrollHandler);
+          window.removeEventListener('touchmove', scrollHandler);
+      }
+  }
+
   function openForm() {
+    disableScrollWithEvents();
     const questionnaireWrapper = document.querySelector('.questionnaire-wrapper');
     document.body.classList.add('questionnaire-wrapper-open');
     const headerWrapper = document.querySelector('.header-wrapper');
@@ -366,8 +388,12 @@
   }
 
   function closeForm(skip = false) {
-    analytics.trackClick('Close Quiz');
-    // Add localStorage item to prevent showing the form again if skip is true
+    enableScrollWithEvents();
+
+    analytics.trackClick('Close Quiz', {
+      'Skip Email': skip
+    });
+
     const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
     const questionnaireWrapper = document.querySelector('.questionnaire-wrapper');
     if (friendsWrapper) {
@@ -375,10 +401,6 @@
     document.body.classList.remove('questionnaire-wrapper-open');
     document.getElementById('MainContent').classList.remove('questionnaire-wrapper-open');
     questionnaireWrapper.classList.add('hidden');
-    }
-
-    if (skip) {
-       analytics.trackClick('User skipped subscription');
     }
   }
 
@@ -441,9 +463,10 @@
 
   function subscribeUser(email) {
 
-    analytics.trackClick('user subscribe', {
+    analytics.trackClick('Quiz Email Subscribe', {
       'email': email
     });
+
     if (isValidEmail(email)) {
       const url = 'https://elghwmw2jd3c5ve65agcrezqru0lrwtc.lambda-url.us-east-1.on.aws/';
       const data = { email };
