@@ -417,6 +417,8 @@
     analytics.trackClick('Close Quiz', {
       'Skip Email': skip
     });
+    // Remove all query params to prevent questionnaire from being applied
+    window.location.href = window.location.pathname;
 
     const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
     const questionnaireWrapper = document.querySelector('.questionnaire-wrapper');
