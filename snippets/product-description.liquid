@@ -5,7 +5,7 @@
                 {{ product_description  }}
             </div>
         </div>
-        <div id="read-more" class="read-more">קראו עוד</div>
+        {% comment %} <div id="read-more" class="read-more">קראו עוד</div> {% endcomment %}
     </div>
 
     <div class="product-description-details-wrapper">
@@ -14,18 +14,7 @@
             <img class="product-description-divider-img" src="{{ 'divider.png' | asset_url }}" alt="Divider" />
         </div>
     </div>
-    <div class="product-description-details-images-wrapper">
-        {% assign coffee_prep_methods_raw = product.metafields.custom.coffee_prep_methods | strip %}
-        {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
-        {% for brew_img in coffee_prep_methods %}
-            <img class="product-description-img" src="{{ brew_img  | strip | remove: '"' | append: '.png' | asset_url | replace: "files/", "" }}" alt="Brew Image" />
-        {% endfor %}
-    </div>
-
-    <div class="product-description-divider">
-        <hr  class="product-description-divider-line"/>
-    </div>
-
+    
     <div class="product-details-wrapper" dir="rtl">
         <div class="product-details-item-wrapper">
             <div class="product-details-item-title">הרכב</div>
@@ -52,6 +41,20 @@
             <div class="product-details-item">{{ coffee_altitude }}</div>
         </div>
     </div>
+
+    <div class="product-description-divider">
+        <hr  class="product-description-divider-line"/>
+    </div>
+
+    <div class="product-description-details-images-wrapper">
+        {% assign coffee_prep_methods_raw = product.metafields.custom.coffee_prep_methods | strip %}
+        {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
+        {% for brew_img in coffee_prep_methods %}
+            <img class="product-description-img" src="{{ brew_img  | strip | remove: '"' | append: '.png' | asset_url | replace: "files/", "" }}" alt="Brew Image" />
+        {% endfor %}
+    </div>
+
+
 
     <div class="product-description-divider">
         <hr  class="product-description-divider-line"/>

@@ -268,7 +268,24 @@ body.questionnaire-wrapper-open {
 .questionnaire-back-icon {
     width: 8px;
     height: 14px;
+    transform: rotate(180deg);
 }
+
+.questionnaire-back-icon-wrapper {
+    width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.questionnaire-close-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
 
 .questionnaire-btn-wrapper {
     display: flex;

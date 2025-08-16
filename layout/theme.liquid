@@ -307,7 +307,12 @@
       mixpanel.init("74ec42c3ea7e8196cd6cbd7aefeafaf5", {
         persistence: "localStorage",
         ignore_dnt: true,
-        stop_utm_persistence: true
+        stop_utm_persistence: true,
+        record_sessions_percent: 50,
+        record_idle_timeout_ms: 1800000,
+        record_block_selector: '',
+        record_mask_text_selector: '',
+        record_heatmap_data: true
       });
     </script>
 

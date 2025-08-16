@@ -8,8 +8,16 @@
 <div class="questionnaire-wrapper hidden" id="questionnaireWrapperDesktop">
     <div class="questionnaire-icons-wrapper active">
       <div class="questionnaire-title-wrapper">
-          <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="closeForm()"/>
+          <div class="questionnaire-close-icon" onclick="closeForm()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
           <div class="questionnaire-title">איך אתם מכינים את הקפה</div>
+          {% comment %} <div class="questionnaire-back-icon-wrapper">
+            <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="closeForm()"/>
+          </div> {% endcomment %}
       </div>
       
         <div class="questionnaire-selection-wrapper"  data-filter-value="Espresso"> 
@@ -38,13 +46,21 @@
         </div>
         <div class="questionnaire-btn-wrapper">
           <button class="questionnaire-select-btn" onclick="getFilters('PrepFilter', 1)" disabled>בחרו אפשרות</button>
-          <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div>
+          {% comment %} <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div> {% endcomment %}
         </div>
     </div>
     <div class="questionnaire-icons-wrapper ">
           <div class="questionnaire-title-wrapper">
+            <div class="questionnaire-close-icon" onclick="closeForm()">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="questionnaire-title">בחרו דרגת קלייה מועדפת</div>
+            <div class="questionnaire-back-icon-wrapper">
               <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/>
-              <div class="questionnaire-title">רמת קלייה - בהיר או כהה?</div>
+            </div>
           </div>
             <div class="questionnaire-selection-wrapper" data-filter-value="בהירה, בהירה-בינונית"> 
                 <img class="questionnaire-img-icon" src="{{ 'questionnaire_light.png' |  asset_url }}" alt="light roast icon"/>
@@ -70,13 +86,21 @@
             <div class="questionnaire-selection-wrapper"></div>
             <div class="questionnaire-btn-wrapper">
               <button class="questionnaire-select-btn" onclick="getFilters('roastFilter', 2)">בחרו אפשרות</button>
-              <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div>
+              {% comment %} <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div> {% endcomment %}
             </div>
     </div>
     <div class="questionnaire-icons-wrapper ">
       <div class="questionnaire-title-wrapper">
-          <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon"  onclick="goToPreviousStep()"/>
-          <div class="questionnaire-title">איזה טעם אתה מחפש בקפה?</div>
+        <div class="questionnaire-close-icon" onclick="closeForm()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+            <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="questionnaire-title">בחרו טעמים מועדפים</div>
+        <div class="questionnaire-back-icon-wrapper">
+          <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/>
+        </div>
       </div>
         <div class="questionnaire-selection-wrapper" data-filter-value="Fruity & Floral"> 
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_Dark_2.png' |  asset_url }}" alt="dark coffee icon"/>
@@ -107,7 +131,7 @@
         <div class="questionnaire-selection-wrapper"></div>
         <div class="questionnaire-btn-wrapper">
           <button class="questionnaire-select-btn" onclick="getFilters('tasteFilter', 3)">בחרו אפשרות</button>
-          <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div>
+          {% comment %} <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div> {% endcomment %}
         </div>
        </div>
     <div class="questionnaire-icons-wrapper ">
@@ -124,7 +148,7 @@
             בלי ספאם. מבטיחים.</div>
               <input type="email" class="lets-be-friends-input" placeholder="הכנס מייל" id="newsletterEmail" required>
               <button onclick="subscribeUser(document.getElementById('newsletterEmail').value)" class="questionnaire-select-btn form-submit">שלח</button>
-              <div onclick="closeForm(true)" class="questionnaire-select-skip">דלג</div>
+              <div onclick="closeForm(true)" class="questionnaire-select-skip">בפעם אחרת</div>
             </div>
             
 
