@@ -15,9 +15,9 @@
             </svg>
           </div>
           <div class="questionnaire-title">איך אתם מכינים את הקפה</div>
-          {% comment %} <div class="questionnaire-back-icon-wrapper">
-            <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="closeForm()"/>
-          </div> {% endcomment %}
+          <div class="questionnaire-back-icon-wrapper">
+            {% comment %} <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="closeForm()"/> {% endcomment %}
+          </div> 
       </div>
       
         <div class="questionnaire-selection-wrapper"  data-filter-value="Espresso"> 
@@ -46,10 +46,14 @@
         </div>
         <div class="questionnaire-btn-wrapper">
           <button class="questionnaire-select-btn" onclick="getFilters('PrepFilter', 1)" disabled>בחרו אפשרות</button>
-          <button class="questionnaire-skip-btn disabled" disabled > 
+          <button class="questionnaire-skip-btn disabled"  disabled onclick="goToPreviousStep(0)">
              <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" />
           </button>
-          {% comment %} <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div> {% endcomment %}
+        </div>
+        <div class="questionnaire-progress-bar-wrapper">
+          <div class="questionnaire-progress-bar filled">&nbsp;</div>
+          <div class="questionnaire-progress-bar">&nbsp;</div>
+          <div class="questionnaire-progress-bar">&nbsp;</div>
         </div>
     </div>
     <div class="questionnaire-icons-wrapper ">
@@ -62,7 +66,7 @@
             </div>
             <div class="questionnaire-title">בחרו דרגת קלייה מועדפת</div>
             <div class="questionnaire-back-icon-wrapper">
-              <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/>
+              {% comment %} <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/> {% endcomment %}
             </div>
           </div>
             <div class="questionnaire-selection-wrapper" data-filter-value="בהירה, בהירה-בינונית"> 
@@ -89,10 +93,15 @@
             <div class="questionnaire-selection-wrapper"></div>
             <div class="questionnaire-btn-wrapper">
               <button class="questionnaire-select-btn" onclick="getFilters('roastFilter', 2)">בחרו אפשרות</button>
-              <button class="questionnaire-skip-btn " > 
-                <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/>
+              <button class="questionnaire-skip-btn" onclick="goToPreviousStep(2)"> 
+                <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon"/>
               </button>              
             </div>
+          <div class="questionnaire-progress-bar-wrapper">
+            <div class="questionnaire-progress-bar filled">&nbsp;</div>
+            <div class="questionnaire-progress-bar filled">&nbsp;</div>
+            <div class="questionnaire-progress-bar">&nbsp;</div>
+          </div>
     </div>
     <div class="questionnaire-icons-wrapper ">
       <div class="questionnaire-title-wrapper">
@@ -104,7 +113,7 @@
         </div>
         <div class="questionnaire-title">בחרו טעמים מועדפים</div>
         <div class="questionnaire-back-icon-wrapper">
-          <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/>
+          {% comment %} <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/> {% endcomment %}
         </div>
       </div>
         <div class="questionnaire-selection-wrapper" data-filter-value="Fruity & Floral"> 
@@ -136,10 +145,15 @@
         <div class="questionnaire-selection-wrapper"></div>
         <div class="questionnaire-btn-wrapper">
           <button class="questionnaire-select-btn" onclick="getFilters('tasteFilter', 3)">בחרו אפשרות</button>
-          <button class="questionnaire-skip-btn " > 
-            <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/>
+          <button class="questionnaire-skip-btn" onclick="goToPreviousStep(3)"> 
+            <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon"/>
           </button>  
         </div>
+          <div class="questionnaire-progress-bar-wrapper">
+            <div class="questionnaire-progress-bar filled">&nbsp;</div>
+            <div class="questionnaire-progress-bar filled">&nbsp;</div>
+            <div class="questionnaire-progress-bar filled">&nbsp;</div>
+          </div>
        </div>
     <div class="questionnaire-icons-wrapper ">
         <div class="questionnaire-loader-wrapper">
@@ -148,19 +162,14 @@
         </div>
       </div>
     </div>
-            <div class="lets-be-friends-wrapper ">
-                <img class="lets-be-friends-img" src="{{ 'lets_be_friends.png' | asset_url }}" alt="Lets be friends"/>
-                <div class="lets-be-friends-title">בואו נהיה חברים</div>
-                <div class="lets-be-friends-text">השאירו מייל כדי לשמוע על קפה חדש, בתי קלייה מעניינים, צורות הכנה ועוד.
-            בלי ספאם. מבטיחים.</div>
-              <input type="email" class="lets-be-friends-input" placeholder="הכנס מייל" id="newsletterEmail" required>
-              <button onclick="subscribeUser(document.getElementById('newsletterEmail').value)" class="questionnaire-select-btn form-submit">שלח</button>
-              <div onclick="closeForm(true)" class="questionnaire-select-skip">בפעם אחרת</div>
-      <div class="questionnaire-progress-bar-wrapper">
-        <div class="questionnaire-progress-bar"> jjj</div>
-        <div class="questionnaire-progress-bar"> </div>
-        <div class="questionnaire-progress-bar"> </div>
-      </div>
+    <div class="lets-be-friends-wrapper ">
+        <img class="lets-be-friends-img" src="{{ 'lets_be_friends.png' | asset_url }}" alt="Lets be friends"/>
+        <div class="lets-be-friends-title">בואו נהיה חברים</div>
+        <div class="lets-be-friends-text">השאירו מייל כדי לשמוע על קפה חדש, בתי קלייה מעניינים, צורות הכנה ועוד.
+    בלי ספאם. מבטיחים.</div>
+      <input type="email" class="lets-be-friends-input" placeholder="הכנס מייל" id="newsletterEmail" required>
+      <button onclick="subscribeUser(document.getElementById('newsletterEmail').value)" class="questionnaire-select-btn form-submit">שלח</button>
+      <div onclick="closeForm(true)" class="questionnaire-select-skip">בפעם אחרת</div>
 </div>
             
 
@@ -246,7 +255,13 @@
     updateTasteOptionsDisabledState();
   }
 
-  function goToPreviousStep() {
+  function goToPreviousStep(step = null) {
+
+    if (step == 0) {
+      window.location = "https://www.theorigin.co.il";
+      return;
+    }
+
     // Get the current active wrapper
     const currentActiveWrapper = document.querySelector('.questionnaire-icons-wrapper.active');
     
@@ -268,6 +283,10 @@
       // Update disabled state for taste options
       updateTasteOptionsDisabledState();
     }
+
+    analytics.trackClick('Quiz Step Back', {
+      step: step
+    });
   }
 
   function goToNextStep(stepIndex) {
@@ -288,7 +307,9 @@
       updateSelectButton();
       // Disable the btn again for every iteration
       const selectBtn = nextWrapper.querySelector('.questionnaire-select-btn');
-      if (selectBtn) {
+      const hasActive = !!nextWrapper.querySelector('.questionnaire-selection-wrapper.selected');
+
+      if (selectBtn && !hasActive) {
         selectBtn.disabled = true;
         selectBtn.classList.add('disabled');
       }
@@ -430,7 +451,10 @@
       'Skip Email': skip
     });
     // Remove all query params to prevent questionnaire from being applied
-    window.location.href = window.location.pathname;
+    if (!skip) {
+      window.location.href = window.location.pathname;
+    }
+    
 
     const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
     const questionnaireWrapper = document.querySelector('.questionnaire-wrapper');
@@ -479,7 +503,7 @@
   // Add this function to handle disabling taste options if 'כהה' is selected
   function updateTasteOptionsDisabledState() {
     // Check if 'כהה' is in the roast level filter
-    const roastLevels = window.appliedFilters && window.appliedFilters['filter.p.m.custom.coffee_roast_level'];
+    const roastLevels = window.appliedFilters && window.appliedFilters.roastFilter;
     const isDarkSelected = Array.isArray(roastLevels) 
                               && roastLevels.includes('כהה')
                               && !roastLevels.includes('בהירה')
@@ -519,7 +543,7 @@
 
       // .then(response => response.json())
       .then(data => {
-        closeForm();
+        closeForm(true);
         // Add localStorage item to prevent showing the form again
       })
       .catch(error => {
