@@ -46,6 +46,9 @@
         </div>
         <div class="questionnaire-btn-wrapper">
           <button class="questionnaire-select-btn" onclick="getFilters('PrepFilter', 1)" disabled>בחרו אפשרות</button>
+          <button class="questionnaire-skip-btn disabled" disabled > 
+             <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" />
+          </button>
           {% comment %} <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div> {% endcomment %}
         </div>
     </div>
@@ -86,7 +89,9 @@
             <div class="questionnaire-selection-wrapper"></div>
             <div class="questionnaire-btn-wrapper">
               <button class="questionnaire-select-btn" onclick="getFilters('roastFilter', 2)">בחרו אפשרות</button>
-              {% comment %} <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div> {% endcomment %}
+              <button class="questionnaire-skip-btn " > 
+                <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/>
+              </button>              
             </div>
     </div>
     <div class="questionnaire-icons-wrapper ">
@@ -131,7 +136,9 @@
         <div class="questionnaire-selection-wrapper"></div>
         <div class="questionnaire-btn-wrapper">
           <button class="questionnaire-select-btn" onclick="getFilters('tasteFilter', 3)">בחרו אפשרות</button>
-          {% comment %} <div class="questionnaire-skip" onclick="closeForm()">דלג על השאלון</div> {% endcomment %}
+          <button class="questionnaire-skip-btn " > 
+            <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/>
+          </button>  
         </div>
        </div>
     <div class="questionnaire-icons-wrapper ">
@@ -149,7 +156,12 @@
               <input type="email" class="lets-be-friends-input" placeholder="הכנס מייל" id="newsletterEmail" required>
               <button onclick="subscribeUser(document.getElementById('newsletterEmail').value)" class="questionnaire-select-btn form-submit">שלח</button>
               <div onclick="closeForm(true)" class="questionnaire-select-skip">בפעם אחרת</div>
-            </div>
+      <div class="questionnaire-progress-bar-wrapper">
+        <div class="questionnaire-progress-bar"> jjj</div>
+        <div class="questionnaire-progress-bar"> </div>
+        <div class="questionnaire-progress-bar"> </div>
+      </div>
+</div>
             
 
 <script>  
