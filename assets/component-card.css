@@ -461,6 +461,7 @@
 
 .card--standard > .card__content {
   padding: 0;
+  height: 100%;
 }
 
 .card--standard > .card__content .card__information {
@@ -468,7 +469,7 @@
   align-items: start;
   justify-content: center;
   flex-direction: column;
-  gap: 40px;
+  gap: 20px;
   /* padding-left: 0;
   padding-right: 0; */
 }
@@ -655,6 +656,7 @@
 .card--standard > .card__content {
   /* padding: 0 24px; */
   width: 40%;
+  height: 100%;
   /* padding-right: 32px; */
 }
 }

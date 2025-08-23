@@ -176,9 +176,10 @@
             {% assign coffee_tastes = card_product.metafields.custom.coffee_taste %} 
             {% assign coffee_prep_methods_raw = card_product.metafields.custom.coffee_prep_methods | strip %}
             {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
-            {% render 'product-taste-icon-color', tastes: coffee_tastes, prep_methods: coffee_prep_methods  %}
+            {% assign coffee_taste_list = card_product.metafields.custom.coffee_tastes.value %}
+            {% render 'product-taste-icon-color', tastes: coffee_tastes, prep_methods: coffee_prep_methods, coffee_tastes_list: coffee_taste_list  %}
           </div>
-          <div class="card-information">
+          <div class="card-information" style="display:none;">
             <!-- {%- if show_vendor -%}
               <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
               <div class="caption-with-letter-spacing light">{{ card_product.vendor }}</div>

@@ -46,7 +46,7 @@
         </div>
         <div class="questionnaire-btn-wrapper">
           <button class="questionnaire-select-btn" onclick="getFilters('PrepFilter', 1)" disabled>בחרו אפשרות</button>
-          <button class="questionnaire-skip-btn disabled"  disabled onclick="goToPreviousStep(0)">
+          <button class="questionnaire-skip-btn" onclick="goToPreviousStep(0)">
              <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" />
           </button>
         </div>
@@ -257,8 +257,8 @@
 
   function goToPreviousStep(step = null) {
 
-    if (step == 0) {
-      window.location = "https://www.theorigin.co.il";
+    if (step === 0) {
+      window.history.back();
       return;
     }
 
@@ -361,6 +361,9 @@
         const facetsPage = document.querySelector('.facets-wrapper--sticky');
         facetsPage.classList.add('hide-filters');
         FacetFiltersForm.renderPage(newQueryParams, null, true);
+        
+        const event = new CustomEvent('collectionPageUpdated');
+        window.dispatchEvent(event);
       }
     }
   }

@@ -15,11 +15,73 @@
     });
 </script>
 
+  <script>
+    console.log('>>', '{{ collection.handle | escape }}');
+
+    function updateCollectionTitle() {
+      var titleElem = document.querySelector('.vendors-collection-title-main');
+      var collectionName = '{{ collection.handle | escape }}';
+
+      if (titleElem) {
+        if (window.location.search.includes('from_quiz=true')) {
+          titleElem.textContent = 'מומלץ בשבילך';
+          return;
+        }
+
+        {% comment %} switch (collectionName) {
+          case 'חנות-קפה':
+            titleElem.textContent = 'הקפה שלנו';
+            break;
+          case 'קפה-חד-זני':
+            titleElem.textContent = 'קפה חד זני';
+            break;
+          case 'תערובות-קפה':
+            titleElem.textContent = 'תערובות קפה';
+            break;
+          case 'פולי-קפה-מיוחדים':
+            titleElem.textContent = 'קפה מיוחד';
+            break;
+          case 'פולי-קפה-קלייה-בהירה':
+            titleElem.textContent = 'קלייה בהירה';
+            break;
+          case 'פולי-קפה-קלייה-בינונית':
+            titleElem.textContent = 'קלייה בינונית';
+            break;
+          case 'פולי-קפה-קלייה-כהה':
+            titleElem.textContent = 'קלייה כהה';
+            break;
+          default:
+            titleElem.textContent = 'הקפה שלנו';
+        } {% endcomment %}
+      }
+    }
+
+    {% comment %} document.addEventListener('DOMContentLoaded', updateCollectionTitle); {% endcomment %}
+
+    window.addEventListener('collectionPageUpdated', updateCollectionTitle);
+  </script>
+
 <div class="collection-hero{% if section.settings.show_collection_image and collection.image %} collection-hero--with-image{% endif %} color-{{ section.settings.color_scheme }} gradient">
   <div class="collection-hero__inner page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
     <div class="collection-hero__text-wrapper">
       <div class="vendors-collection-title-wrapper" dir="rtl">
-        <div class="vendors-collection-title-main">הקפה שלנו</div>
+        <h1 class="vendors-collection-title-main">
+          {%- case collection.handle -%}
+            {%- when 'חנות-קפה' -%}הקפה שלנו
+            {%- when 'קפה-חד-זני' -%}קפה חד זני
+            {%- when 'תערובות-קפה' -%}תערובות קפה
+            {%- when 'פולי-קפה-מיוחדים' -%}קפה מיוחד
+            {%- when 'פולי-קפה-קלייה-בהירה' -%}קלייה בהירה
+            {%- when 'פולי-קפה-קלייה-בינונית' -%}קלייה בינונית
+            {%- when 'פולי-קפה-קלייה-כהה' -%}קלייה כהה
+            {%- when 'canopy-collection' -%}הקפה של קאנופי
+            {%- when 'blooms-collection' -%}הקפה של בלומס
+            {%- when 'coffee-culture-collection' -%}הקפה של קופי קולצ׳ור
+            {%- when 'coffee-organization-collection' -%}הקפה של Coffee Org
+            {%- when 'you-need-coffee-collection' -%}הקפה של You Need Coffee
+            {%- else -%}הקפה שלנו
+          {%- endcase -%}
+        </h1>
         <div class="vendors-collection-title-submain">קלייה טרייה, כחול-לבן</div>
     </div>
       <!-- <h1 class="collection-hero__title">
@@ -33,10 +95,11 @@
     {% render 'taste-filter', tastes: product_taste %} {% endcomment %}
   
       
-      {%- if section.settings.show_collection_description -%}
+      {% comment %} {%- if section.settings.show_collection_description -%}
         <div class="collection-hero__description rte">{{ collection.description }}</div>
-      {%- endif -%}
+      {%- endif -%} {% endcomment %}
     </div>
+
 
     {%- if section.settings.show_collection_image and collection.image -%}
       <div class="collection-hero__image-container media gradient">

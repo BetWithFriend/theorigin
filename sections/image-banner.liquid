@@ -30,6 +30,10 @@
 {%- endstyle -%}
 
 {%- style -%}
+        html {
+          scroll-behavior: smooth;
+        }
+
         .video-banner {
             position: relative;
             width: 100vw;
@@ -410,7 +414,10 @@
             <h2 class="banner-subtitle">
               חנות קפה המאגדת בתי קלייה מובחרים כחול-לבן עם משלוח עד הבית
             </h2>
-            <a href="/collections/חנות-קפה?from=main-cta" role="link" class="main-cta-button">התאימו לי קפה</a>
+            
+            <a href="/collections/חנות-קפה?from=main-cta" role="link" class="main-cta-button" id="mainCtaBtn">התאימו לי קפה</a>
+            <br/>
+            <a href="/collections/חנות-קפה" role="link" class="main-cta-button secondary" id="shopCtaBtn">לחנות הקפה</a>
             <!--<br/>
             <a href="/collections/חנות-קפה" role="link" class="main-cta-button secondary">תראו לי הכל</a>-->
         </div>
@@ -547,7 +554,24 @@
   </div>
 </div> {% endcomment %}
 
+
     <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var mainCta = document.getElementById('mainCtaBtn');
+          var shopCta = document.getElementById('shopCtaBtn');
+          if (mainCta) {
+            mainCta.addEventListener('click', function() {
+              analytics.track('Main CTA', { type: 'quiz' });
+            });
+          }
+          if (shopCta) {
+            shopCta.addEventListener('click', function() {
+              analytics.track('Main CTA', { type: 'shop' });
+            });
+          }
+        });
+
         class ProgressiveVideoLoader {
             constructor() {
                 this.video = document.getElementById('bannerVideo');

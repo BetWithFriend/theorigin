@@ -26,7 +26,7 @@
 {% endif %}
 </div>
     <!-- Conditional Icons -->
-     <div class="selection-icons">
+     {% comment %} <div class="selection-icons">
     {% if prep_methods.size > 0 %}
       {% for method in prep_methods %}
         {% assign updated_method = method | strip | remove: '"' %}
@@ -46,6 +46,12 @@
   
   {% endfor %}
 {% endif %}
+</div> {% endcomment %}
+<div class="product-tastes-list">
+  {% comment %} {{ coffee_tastes_list | join: ' | ' }} {% endcomment %}
+  {% for taste in coffee_tastes_list %}      
+    <div class="single-coffee-taste">{{ taste }}</div>
+  {% endfor %}
 </div>
 
 <style>
@@ -91,7 +97,7 @@
     align-items: start;
     justify-content: start;
     flex-direction: column;
-    gap: 16px;
+    gap: 4px;
     white-space: nowrap;
     width: 100%;
 }
@@ -100,5 +106,20 @@
   width: 24px; /* Ensure icons are a consistent size */
   height: 24px;
   /* margin: 0 5px;  */
+}
+
+.product-tastes-list {
+  text-wrap: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.product-tastes-list .single-coffee-taste {
+  background-color: #E3E0DA;
+  padding: 4px 8px;
+  border-radius: 16px;
+  margin: 2px;
+  font-size: 14px;
 }
 </style>
