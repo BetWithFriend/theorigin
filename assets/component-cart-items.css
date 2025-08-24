@@ -81,7 +81,8 @@ cart-items .title-wrapper-with-link {
 }
 
 .cart-item__details>*+* {
-  margin-top: 0.6rem;
+  /* margin-top: 0.6rem; */
+  margin-top: 4px;
 }
 
 .cart-item__media {
@@ -102,9 +103,10 @@ cart-items .title-wrapper-with-link {
 .cart-item__name {
   font-family: 'Noto Sans', sans-serif;
   font-size: 14px;
-  line-height: 25px;
-  font-weight: 700;
+  line-height: 14px;
+  font-weight: 500;
   color: #1C201D;
+  text-align: right;
   text-decoration: none;
   display: block;
 }
@@ -121,15 +123,15 @@ cart-items .title-wrapper-with-link {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 16px;
 }
 
 .cart-item-wrapper {
-  border: 1px solid #CDCDCD;
-  border-radius: 8px;
+  /* border: 1px solid #CDCDCD; */
+  /* border-radius: 8px; */
   /* padding: 16px; */
   width: 100%;
-  background-color: rgba(227, 224, 218, 0.25);
+  /* background-color: rgba(227, 224, 218, 0.25); */
 }
 
 .cart-item-vendor {
@@ -199,7 +201,7 @@ cart-items .title-wrapper-with-link {
 .product-option {
   font-family: 'Noto Sans', sans-serif;
   font-size: 14px;
-  line-height: 25px;
+  line-height: 14px;
   font-weight: 400;
   color: #1C201D;
   display: flex;
