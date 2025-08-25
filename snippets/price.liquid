@@ -88,9 +88,15 @@
           <span class="price-item price-item--regular" dir="rtl">
            {{ money_price }}
           </span>
+         {%  if price < 15000 %}
           <span class="price-item price-item--regular {{ class_added }}">
           / 250 גר׳
            </span>
+          {% else %}
+            <span dir="rtl">
+              / {{ product.metafields.custom.set_number_of_items }} יח׳
+               </span>
+          {%  endif %}
         {%- endif -%}
       </div>
       <div class="price__sale">

@@ -281,7 +281,7 @@ body.questionnaire-wrapper-open {
 .questionnaire-back-icon {
     width: 20px;
     height: 20px;
-    transform: rotate(180deg);
+    /* transform: rotate(180deg); */
 }
 
 .questionnaire-back-icon-wrapper {

@@ -79,6 +79,8 @@
           id="properties_grind"
           value="{{ product_grind | default: 'פולים' }}"
         >
+        
+        {%  if product.price < 15000 %}
         <div class="product-variants-wrapper">
                   {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
                   
@@ -89,6 +91,7 @@
                   {% render 'dropdown-weights' , weights: weights_array %}
         {% render 'quantity-counter', product: product, field_id: 'quantity' %}        
                  </div>
+        {%  endif %}
 
         
           
