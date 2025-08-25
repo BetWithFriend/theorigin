@@ -102,8 +102,8 @@ cart-items .title-wrapper-with-link {
 
 .cart-item__name {
   font-family: 'Noto Sans', sans-serif;
-  font-size: 14px;
-  line-height: 14px;
+  font-size: 16px;
+  line-height: 16px;
   font-weight: 500;
   color: #1C201D;
   text-align: right;
@@ -123,7 +123,8 @@ cart-items .title-wrapper-with-link {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
+  margin-top: 100px;
 }
 
 .cart-item-wrapper {
@@ -200,8 +201,8 @@ cart-items .title-wrapper-with-link {
 
 .product-option {
   font-family: 'Noto Sans', sans-serif;
-  font-size: 14px;
-  line-height: 14px;
+  font-size: 16px;
+  line-height: 16px;
   font-weight: 400;
   color: #1C201D;
   display: flex;

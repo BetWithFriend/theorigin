@@ -212,7 +212,7 @@ cart-drawer-items {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 16px;
+  padding: 0 16px;
   /* display: grid;
   grid-template: repeat(2, auto) / repeat(4, 1fr);
   gap: 1rem;
@@ -228,7 +228,7 @@ cart-drawer-items {
 }
 
 .cart-drawer .cart-item__image {
-  max-width: 100%;
+  /* max-width: 100%; */
 }
 
 .cart-drawer .cart-items thead {

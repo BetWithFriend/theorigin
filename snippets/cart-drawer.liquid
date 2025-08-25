@@ -21,15 +21,35 @@
     color: #1C201D;
     font-weight: 400;
     font-size: 14px;
-    /* line-height: 25px; */
+    line-height: 25px;
     text-align: center;
-    background-color: #C4C0BC;
-    border-radius: 0px 0px 8px 8px;
+    /* background-color: #C4C0BC; */
+    /* border-radius: 0px 0px 8px 8px; */
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2px;
+    margin-bottom: 25px;
   }
+
+  /* .free-shipping-notice.free {
+    position: fixed;
+    width: 95%;
+    background-color: #F5F4F2;
+    z-index: 9999;
+  } */
+/* 
+  .free-shipping-notice-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    position: fixed;
+    width: 95%;
+    background-color: #F5F4F2;
+    z-index: 9999;
+  } */
   .shipping-crossed-out {
     text-decoration: line-through;
     color: #999;
@@ -126,19 +146,44 @@
               {%- assign cart_total_price = cart_total_price | plus: item.final_line_price -%}
               {%- assign shipping_items_paid = shipping_items_paid | plus: 1 -%}
           {%- endfor -%}
+
+          {%- assign progress_percentage = cart_total_price | times: 100 | divided_by: free_shipping_threshhold -%}
+
           {%- if cart_total_price >= free_shipping_threshhold -%}
               {%- assign qualifies_free_shipping = true -%}
+              {%- if progress_percentage > 100 -%}
+                {%- assign progress_percentage = 100 -%}
+              {%- endif -%}
           {%- endif -%}
-                  {%- if qualifies_free_shipping -%}
-                    <div class="free-shipping-notice">{{ 'sections.cart.free_shipping' | t | default: 'משלוח חינם!' }}</div>
+                {%- if qualifies_free_shipping -%}
+                <div class="free-shipping-notice-wrapper">
+                  <div class="free-shipping-cart-icon-wrapper">
+                    <img class="free-shipping-cart-icon" src="{{ 'shipping-cart-icon.png' |  asset_url }}" alt="cart icon"/>
+                    <span class="cart-badge">{{ cart.item_count }}</span>
+                  </div>
+                    <div class="free-shipping-notice free">{{ 'sections.cart.free_shipping' | t | default: 'משלוח חינם!' }}</div>
+                    {% comment %} <div class="shipping-progress-bar-free">&nbsp;</div> {% endcomment %}
+                    <div class="shipping-progress-bar" style="--progress: {{ progress_percentage }}%;">
+                        <img class="shipping-progress-bar-track" src="{{ 'free-shipping-track.png' |  asset_url }}" alt="delivery icon"/>
+                    </div>
+                </div>
                   {%- else -%}
+                  <div class="free-shipping-notice-wrapper">
+                    <div class="free-shipping-cart-icon-wrapper">
+                      <img class="free-shipping-cart-icon" src="{{ 'shipping-cart-icon.png' |  asset_url }}" alt="cart icon"/>
+                      <span class="cart-badge">{{ cart.item_count }}</span>
+                    </div>
                     <div class="free-shipping-notice">
                       {%- assign remaining_for_free = free_shipping_threshhold | minus: cart_total_price -%}
-                        <img class="cart-icon-delivery " src="{{  'cart_icon_delivery.png' | asset_url }}" alt="free shipping Icon" />
                       {% assign formatted_amount = remaining_for_free | money %}
                       {{ 'sections.cart.free_shipping_text' | t: amount: formatted_amount }}
                     </div>
-                  {%- endif -%} 
+                     
+                     <div class="shipping-progress-bar" style="--progress: {{ progress_percentage }}%;">
+                        <img class="shipping-progress-bar-track" src="{{ 'free-shipping-track.png' |  asset_url }}" alt="delivery icon"/>
+                     </div>
+                  </div>
+                {%- endif -%} 
             {%- assign vendors = "" -%}
             {% comment %} {%- assign shipping_price = 0 -%}
             {% assign canopy_shipping = 39 %}
@@ -870,25 +915,24 @@
             {%- endif -%}
           </div>
 
-          <div class="totals" role="status">
-            
-            
-              
+          <div class="totals collapse" role="status">
               {%- if qualifies_free_shipping %}
                 {% assign shipping_price = 0 %}
               {%- endif -%}
 
               {%- assign shipping_price_cents = shipping_price | times: 100 -%}
               {%- assign adjusted_total = cart.total_price | plus: shipping_price_cents -%}
-
             <p class="totals__total-value totals-value-secondary"><span>עלות קפה:</span> <span class="totals-value-secondary-value">{{ cart.total_price | money_with_currency }}</span></p>
-            {% comment %} {%- unless qualifies_free_shipping %}
-              <p class="totals__total-value totals-value-secondary"><span>סה״כ משלוח:</span> <span class="totals-value-secondary-value">{{ shipping_price_cents | money_with_currency }}</span></p>
-            {%- else -%} {% endcomment %}
-              <p class="totals__total-value totals-value-secondary"><span>סה״כ משלוח:</span> <span class="totals-value-secondary-value">{{ shipping_price_cents | money_with_currency }}</span></p>
-            {% comment %} {%- endunless -%} {% endcomment %}
-            <p class="totals__total-value totals-value-primary"><span>סה״כ:</span> <span class="totals-value-secondary-value">{{ adjusted_total | money_with_currency }}</span></p>
+            <p class="totals__total-value totals-value-secondary"><span>סה״כ משלוח:</span> <span class="totals-value-secondary-value">{{ shipping_price_cents | money_with_currency }}</span></p>
           </div>
+            <p class="totals__total-value totals-value-primary">
+              <span>
+                <img id="toggleTotal" onclick="toggleTotals()"  class="toggle-total" src="{{ 'total-price-arrow.png' | asset_url }}" alt="collapse total"/>
+                <span>סה״כ:</span>
+              </span>
+              <span class="totals-value-secondary-value">{{ adjusted_total | money_with_currency }}</span>
+            </p>
+          
 
           <!-- 
           <small class="tax-note caption-large rte">
@@ -948,7 +992,7 @@
               disabled
             {% endif %}
           >
-            {{ 'sections.cart.checkout' | t }}
+            {{ 'sections.cart.checkout' | t }} ({{ cart.item_count }})
           </button>
         <!--<button type="button" onclick="this.closest('cart-drawer').close()" class="button button--primary button--full-width cart-btn-checkout" aria-label="{{ 'accessibility.close' | t }}">{{ 'general.continue_shopping' | t }}</button>-->
           <!-- <div class="cart_continue_shopping_link" onclick="this.closest('cart-drawer').close()">המשך בקנייה</div> -->
@@ -961,29 +1005,30 @@
 
 <script>
 
-  document.addEventListener('DOMContentLoaded', function() {
-  // Use event delegation on the document or a stable parent container
-  document.addEventListener('submit', function(event) {
-    if (event.target.id === 'CartDrawer-Form') {
-      event.preventDefault();
-      // Your existing logic here
-      handleFormSubmission(event.target);
-    }
-  });
-});
-function getOrderedQuantitiesByIndex() {
-  const inputs = Array.from(document.querySelectorAll('.quantity__input'));
-  return inputs
-    .filter(input => input.dataset.index)
-    .sort((a, b) => Number(a.dataset.index) - Number(b.dataset.index));
-}
-
-  const checkoutButton = document.getElementById('CartDrawer-Checkout');
-  checkoutButton.addEventListener('click', function(event) {
-    analytics.trackClick('Cart Checkout', {
-        'Total': {{ cart.total_price }},
+    document.addEventListener('DOMContentLoaded', function() {
+      // Use event delegation on the document or a stable parent container
+      document.addEventListener('submit', function(event) {
+        if (event.target.id === 'CartDrawer-Form') {
+          event.preventDefault();
+          // Your existing logic here
+          handleFormSubmission(event.target);
+        }
+      });
     });
-  });
+
+    function getOrderedQuantitiesByIndex() {
+      const inputs = Array.from(document.querySelectorAll('.quantity__input'));
+      return inputs
+        .filter(input => input.dataset.index)
+        .sort((a, b) => Number(a.dataset.index) - Number(b.dataset.index));
+    }
+
+    const checkoutButton = document.getElementById('CartDrawer-Checkout');
+    checkoutButton.addEventListener('click', function(event) {
+      analytics.trackClick('Cart Checkout', {
+          'Total': {{ cart.total_price }},
+      });
+    });
 
   function handleFormSubmission(form) {
     const orderedInputs = getOrderedQuantitiesByIndex();
@@ -1018,6 +1063,19 @@ function getOrderedQuantitiesByIndex() {
     setTimeout(() => {
       document.body.removeChild(tempDiv);
     }, 1000);
-}
+  }
+
+  function toggleTotals() {
+    const totalsElement = document.querySelector('.totals');
+    const arrowIcon = document.getElementById('toggleTotal');
+
+    if (totalsElement.classList.contains('collapse')) {
+      totalsElement.classList.remove('collapse');
+      arrowIcon.style.transform = 'rotate(180deg)';
+    } else {
+      totalsElement.classList.add('collapse');
+      arrowIcon.style.transform = 'rotate(0deg)';
+    }
+  }
 
 </script>
