@@ -1,6 +1,7 @@
 .new-roasters-slider-wrapper {
     position: relative;
     margin-bottom: 120px;
+    margin-top: 24px;
 }
 
 .new-roasters-slider-wrapper::after {

@@ -61,6 +61,8 @@
     window.addEventListener('collectionPageUpdated', updateCollectionTitle);
   </script>
 
+<!-- {{  collection.handle }} -->
+
 <div class="collection-hero{% if section.settings.show_collection_image and collection.image %} collection-hero--with-image{% endif %} color-{{ section.settings.color_scheme }} gradient">
   <div class="collection-hero__inner page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
     <div class="collection-hero__text-wrapper">
@@ -79,6 +81,7 @@
             {%- when 'coffee-culture-collection' -%}הקפה של קופי קולצ׳ור
             {%- when 'coffee-organization-collection' -%}הקפה של Coffee Org
             {%- when 'you-need-coffee-collection' -%}הקפה של You Need Coffee
+            {%- when 'באנדלים-של-קפה-מכל-בית-קלייה' -%}הסטים שלנו
             {%- else -%}הקפה שלנו
           {%- endcase -%}
         </h1>
