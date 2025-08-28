@@ -32,12 +32,13 @@
     margin-bottom: 25px;
   }
 
-  /* .free-shipping-notice.free {
-    position: fixed;
+  .free-shipping-notice.free {
+    font-weight: 700;
+    /* position: fixed;
     width: 95%;
     background-color: #F5F4F2;
-    z-index: 9999;
-  } */
+    z-index: 9999; */
+  }
 /* 
   .free-shipping-notice-wrapper {
     display: flex;
@@ -57,6 +58,13 @@
   .cart-icon-delivery {
     width: 20px;
     margin-left: 10px;
+  }
+
+  .cart-items-details-wrapper {
+    display: flex;
+    /* align-items: center; */
+    justify-content: space-between;
+    width: 100%;
   }
 
 </style>
@@ -325,7 +333,7 @@
                               </div>
                             {% endif %}
                           </div>
-
+                        <div class="cart-items-details-wrapper">
                           <div class="cart-item__details">
                             {%- if settings.show_vendor -%}
                               <p class="caption-with-letter-spacing">{{ item.product.vendor }}</p>
@@ -365,7 +373,7 @@
                                 {{ item.original_price | times: item.quantity | money }}
                               </div> {% endcomment %}
                             </dl>
-                          {% else %}
+                           {% else %}
                             <dl class="cart-item-options-wrapper">
                               <div class="product-option">
                                     סט מוכן מראש
@@ -755,6 +763,7 @@
                               {{ item.original_price | times: item.quantity | money }}
                               </div>
                             {%- endif -%}
+                          </div>
                         </div>
                           
                           <div class="cart-item__totals right medium-hide large-up-hide">
@@ -911,7 +920,7 @@
         <!-- Start blocks -->
         <!-- Subtotals -->
 
-        <div class="cart-drawer__footer" {{ block.shopify_attributes }}>
+        <div class="cart-drawer__footer"  onclick="toggleTotals()" {{ block.shopify_attributes }}>
           <div>
             {%- if cart.cart_level_discount_applications.size > 0 -%}
               <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
@@ -938,7 +947,7 @@
           </div>
             <p class="totals__total-value totals-value-primary">
               <span>
-                <img id="toggleTotal" onclick="toggleTotals()"  class="toggle-total" src="{{ 'total-price-arrow.png' | asset_url }}" alt="collapse total"/>
+                <img id="toggleTotal"  class="toggle-total" src="{{ 'total-price-arrow.png' | asset_url }}" alt="collapse total"/>
                 <span>סה״כ:</span>
               </span>
               <span class="totals-value-secondary-value">{{ adjusted_total | money_with_currency }}</span>
@@ -989,7 +998,7 @@
         --></div>
 
         <!-- CTAs -->
-        <br/>
+        {% comment %} <br/> {% endcomment %}
 
         <div class="cart__ctas" {{ block.shopify_attributes }}>
           <div class="cart-notification__links">
@@ -1003,7 +1012,7 @@
               disabled
             {% endif %}
           >
-            {{ 'sections.cart.checkout' | t }} ({{ cart.item_count }})
+            {{ 'sections.cart.checkout' | t }}
           </button>
         <!--<button type="button" onclick="this.closest('cart-drawer').close()" class="button button--primary button--full-width cart-btn-checkout" aria-label="{{ 'accessibility.close' | t }}">{{ 'general.continue_shopping' | t }}</button>-->
           <!-- <div class="cart_continue_shopping_link" onclick="this.closest('cart-drawer').close()">המשך בקנייה</div> -->
@@ -1015,6 +1024,8 @@
 </cart-drawer>
 
 <script>
+
+  
 
     document.addEventListener('DOMContentLoaded', function() {
       // Use event delegation on the document or a stable parent container

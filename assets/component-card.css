@@ -658,10 +658,12 @@
   height: 36px;
   position: absolute;
   right: calc(var(--progress) - 36px);
+  /* left: calc(100% - var(--progress)); */
   top: -12px;
   transform: translateY(-50%);
+  /* transform: translateX(50%) translateY(-50%); */
   z-index: 1;
-  transition: left 0.3s ease-in-out;
+  transition: right 1s ease-in-out;
 }
 
 .shipping-progress-bar {
@@ -684,6 +686,7 @@
   width: var(--progress);
   background-color: #AD7B7E;
   border-radius: 24px;
+  transition: width 1s ease-in-out;
 }
 
 .shipping-progress-bar-free {
@@ -702,16 +705,17 @@
   padding: 2px;
   flex-direction: column;
   position: fixed;
-  width: 95%;
+  width: 100%;
   background-color: #F5F4F2;
   z-index: 9999;
-  gap: 4px;
+  padding-bottom: 12px;
+  /* gap: 4px; */
 }
 
 .free-shipping-cart-icon {
   width: 32px;
   height: 32px;
-  margin-bottom: 8px;
+  /* margin-bottom: 8px; */
 }
 
 .free-shipping-cart-icon-wrapper {

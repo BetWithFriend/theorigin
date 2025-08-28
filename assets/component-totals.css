@@ -71,7 +71,7 @@
   font-weight: 700;
   color: #1C201D;
   text-align: right;
-
+  cursor: pointer;
   width: 100%;
   display: flex;
   justify-content: space-between;
