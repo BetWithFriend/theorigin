@@ -402,4 +402,8 @@ body.questionnaire-wrapper-open {
     .questionnaire-icons-wrapper {
         padding: unset;
     }
+
+    .utility-bar__grid.page-width {
+        padding: 0 8px;
+    }
 }

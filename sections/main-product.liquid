@@ -79,9 +79,11 @@
     display: none;
   }
 
+
   .product-extra-details-shipping {
     display: none;
   }
+
 
   .page-width-product-page {
     position: relative;
@@ -1052,11 +1054,11 @@
     </script>
   </div>
 
-  {%- if vendor.min_order_for_free_shipping > 0 -%}
+  {% comment %} {%- if vendor.min_order_for_free_shipping > 0 -%} {% endcomment %}
   <div class="product-extra-details-shipping">
-    <p>משלוחים חינם בהזמנה מעל {{ vendor.min_order_for_free_shipping }} ש״ח</p>
+    <p>משלוח חינם בהזמנה מעל 399 ש״ח</p>
   </div>
-  {%- endif -%}
+  {% comment %} {%- endif -%} {% endcomment %}
 
   <div class="product-extra-details-container">
     <div class="product-extra-details-container-inner">
