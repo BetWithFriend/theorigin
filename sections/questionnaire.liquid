@@ -86,8 +86,8 @@
             </div>
             <div class="questionnaire-selection-wrapper" data-filter-value="">
                 <img class="questionnaire-img-icon" src="{{ 'questionnaire_dont_know.png' |  asset_url }}" alt="dont know icon"/>
-                <div class="questionnaire-text">לא יודע</div>
-                <div class="questionnaire-expl-text">מוכן לגלות מה מתאים לי</div>
+                <div class="questionnaire-text">לא יודעים</div>
+                <div class="questionnaire-expl-text">התאימו בשבילי</div>
             </div>
             <div class="questionnaire-selection-wrapper"></div>
             <div class="questionnaire-selection-wrapper"></div>
@@ -138,8 +138,8 @@
         </div> {% endcomment %}
         <div class="questionnaire-selection-wrapper" data-filter-value="">
             <img class="questionnaire-img-icon" src="{{ 'questionnaire_dont_know_2.png' |  asset_url }}" alt="dont know icon"/>
-            <div class="questionnaire-text">עדיין לא בטוח</div>
-            <div class="questionnaire-expl-text">פתוח לגלות מה מתאים לי</div>
+            <div class="questionnaire-text">עדיין לא בטוחים</div>
+            <div class="questionnaire-expl-text">פתוחים להצעות</div>
         </div>
         <div class="questionnaire-selection-wrapper"></div>
         <div class="questionnaire-selection-wrapper"></div>
@@ -167,8 +167,8 @@
         <div class="lets-be-friends-title">בואו נהיה חברים</div>
         <div class="lets-be-friends-text">השאירו מייל כדי לשמוע על קפה חדש, בתי קלייה מעניינים, צורות הכנה ועוד.
     בלי ספאם. מבטיחים.</div>
-      <input type="email" class="lets-be-friends-input" placeholder="הכנס מייל" id="newsletterEmail" required>
-      <button onclick="subscribeUser(document.getElementById('newsletterEmail').value)" class="questionnaire-select-btn form-submit">שלח</button>
+      <input type="email" class="lets-be-friends-input" placeholder="הכניסו מייל" id="newsletterEmail" required>
+      <button onclick="subscribeUser(document.getElementById('newsletterEmail').value)" class="questionnaire-select-btn form-submit">הרשמו</button>
       <div onclick="closeForm(true)" class="questionnaire-select-skip">בפעם אחרת</div>
 </div>
             
@@ -403,9 +403,9 @@
           selectBtn.classList.remove('disabled');
           selectBtn.textContent = !hasEmptyFilterValue ? 
                 selectedItems.length &&
-                 selectedItems.length === 1 ? 'המשך עם שיטה אחת' 
-                 : `המשך עם ${selectedItems.length} שיטות` :
-                `המשך`;
+                 selectedItems.length === 1 ? 'המשיכו עם שיטה אחת' 
+                 : `המשיכו עם ${selectedItems.length} שיטות` :
+                `המשיכו`;
       } else {
         selectBtn.disabled = true;
         selectBtn.classList.add('disabled');

@@ -3976,3 +3976,9 @@ details-disclosure>details {
     width: unset;
   }
 }
+
+@media screen and (max-width: 360px) {
+  .utility-bar__grid.page-width {
+    padding: 0 8px;
+  }
+}
