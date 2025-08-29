@@ -308,7 +308,7 @@ body.questionnaire-wrapper-open {
     gap: 16px;
     padding-right: 8px;
     padding-left: 8px;
-        /* flex-direction: column; */
+    /* flex-direction: column; */
 }
 
 .facets-wrapper--sticky.hide-filters {
@@ -395,5 +395,11 @@ body.questionnaire-wrapper-open {
     .lets-be-friends-input {
         width: 440px;
         margin-bottom: 0;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .questionnaire-icons-wrapper {
+        padding: unset;
     }
 }

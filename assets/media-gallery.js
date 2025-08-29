@@ -130,18 +130,19 @@ document.addEventListener('DOMContentLoaded', () => {
         slide.classList.toggle('is-active', i === index);
       });
     };
+    if (prevButton && nextButton) {
+      prevButton.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        updateSlides(currentIndex);
+      });
 
-    prevButton.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      nextButton.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        updateSlides(currentIndex);
+      });
+
+      // Initialize the first slide as active
       updateSlides(currentIndex);
-    });
-
-    nextButton.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % slides.length;
-      updateSlides(currentIndex);
-    });
-
-    // Initialize the first slide as active
-    updateSlides(currentIndex);
+    }
   });
 });
