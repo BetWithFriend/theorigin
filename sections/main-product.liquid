@@ -91,6 +91,10 @@
     width: 100%;
   }
 
+  .product-container {
+    background-color: #F4F3F0;
+  }
+
   @media screen and (min-width: 769px) {
     #main-product-container {
       display: grid;
@@ -332,10 +336,11 @@
 
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
   <div class="page-width-product-page">
+    <h1 class="product-title">{{ product.title }}</h1>
     <div class="product-info-top-wrapper">
       <div class="product-info-right-side">
-        <div class="product-vendor-title">{{ vendor.vendor_short_name | upcase }}</div>
-        <h1 class="product-title">{{ product.title }}</h1>
+        {% comment %} <div class="product-vendor-title">{{ vendor.vendor_short_name | upcase }}</div> {% endcomment %}
+        {% comment %} <h1 class="product-title">{{ product.title }}</h1> {% endcomment %}
         <div class="product-source-wrapper">
           <div class="product-source">
           {% for pSource in product.metafields.custom.coffee_source.value limit:2 %}

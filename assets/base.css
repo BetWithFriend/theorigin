@@ -85,16 +85,17 @@
 
 .product-title {
   /* flex-direction: column; */
-  /* display: flex; */
-  /* align-items: center; */
-  /* justify-content: center; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   /* margin-bottom: unset; */
   font-weight: 700;
-  font-size: 20px;
-  /* line-height: 50px; */
+  font-size: 24px;
+  line-height: 24px;
   /* color: #1c201d; */
-  color: #FBFCFE;
-  text-align: right;
+  /* color: #FBFCFE; */
+  color: #474747;
+  text-align: center;
   letter-spacing: 2px;
   line-height: normal;
   margin-bottom: 8px;
@@ -154,6 +155,7 @@
   background-color: #AD7B7E;
   z-index: 0;
   transform: translateY(-50%);
+  display: none;
 }
 
 .card-vendor-logo {
