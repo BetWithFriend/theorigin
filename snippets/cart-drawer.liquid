@@ -148,7 +148,7 @@
           {%- assign free_shipping_threshhold = 39900 -%}
           {%- assign qualifies_free_shipping = false -%}
           {%- assign cart_total_price = 0 -%}
-          {%- assign shipping_price = 49 -%}
+          {%- assign shipping_price = 39 -%}
           {%- assign shipping_items_paid = 0 -%}
           {%- for item in cart.items -%}
               {%- assign cart_total_price = cart_total_price | plus: item.final_line_price -%}
