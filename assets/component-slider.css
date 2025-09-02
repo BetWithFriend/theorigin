@@ -397,3 +397,29 @@ slider-component.slider-component-full-width {
 .slider-button--prev:not([disabled]):hover .icon {
   transform: rotate(90deg) scale(1.1);
 }
+
+.product-tastes-list {
+  display: flex;
+  flex-wrap: wrap;
+  /* margin-top: 8px; */
+  /* margin-bottom: 16px; */
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.single-coffee-taste-main-product {
+  /* background-color: #E3E0DA; */
+  /* padding: 4px 8px; */
+  /* border-radius: 16px; */
+  margin: 2px;
+  font-size: 16px;
+}
+
+.product-roast-level {
+  background-color: #E3E0DA;
+  padding: 4px 8px;
+  border-radius: 16px;
+  margin: 2px;
+  font-size: 16px;
+}

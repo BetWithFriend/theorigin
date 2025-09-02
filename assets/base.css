@@ -148,14 +148,14 @@
 /* @media (max-width: 768px) { */
 .background-stripe {
   position: absolute;
-  top: 90px;
+  top: 300px;
   left: 0;
   right: 0;
-  height: 160px;
+  height: 155px;
   background-color: #AD7B7E;
   z-index: 0;
   transform: translateY(-50%);
-  display: none;
+  /* display: none; */
 }
 
 .card-vendor-logo {

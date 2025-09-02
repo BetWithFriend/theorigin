@@ -1,12 +1,13 @@
 <style>
   .product-info-top-wrapper {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: -70px;
-    position: relative;
+    /* flex-direction: row; */
+    justify-content: center;
+    align-items: center;
+    /* margin-bottom: -70px; */
+    /* position: relative; */
     z-index: 1;
+    width: 100%;
   }
 
   .product-info-right-side {
@@ -43,7 +44,6 @@
     flex-direction: row-reverse;
     line-height: 30px;
     font-size: 16px;
-    
     position: absolute;
     top: 180px;
   }
@@ -61,13 +61,19 @@
   }
 
   .product-main-price-wrapper {
-    position: absolute;
-    top: 200px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Sans', sans-serif;
+    line-height: 25px;
+    font-size: 16px;
+    color: #1C201D;
   }
 
   .product__media-wrapper {
-    margin-top: -30px;
-    max-width: 250px;
+    /* margin-top: -30px;
+    max-width: 250px; */
   }
 
   .product.grid {
@@ -337,11 +343,21 @@
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
   <div class="page-width-product-page">
     <h1 class="product-title">{{ product.title }}</h1>
+
+        <div class="product-tastes-list">
+          {% for taste in product.metafields.custom.coffee_tastes.value %}      
+            <div class="single-coffee-taste-main-product">{{ taste }}{% unless forloop.last %} | {% endunless %}</div>
+          {% endfor %}
+        </div>
+        <div class="product-tastes-list">
+          <div class="product-roast-level">{{ product.metafields.custom.coffee_roast_level }}</div>
+        </div>
+         <div class="product-main-price-wrapper">{% render 'price' %}</div>
     <div class="product-info-top-wrapper">
-      <div class="product-info-right-side">
+      {% comment %} <div class="product-info-right-side"> {% endcomment %}
         {% comment %} <div class="product-vendor-title">{{ vendor.vendor_short_name | upcase }}</div> {% endcomment %}
         {% comment %} <h1 class="product-title">{{ product.title }}</h1> {% endcomment %}
-        <div class="product-source-wrapper">
+        {% comment %} <div class="product-source-wrapper">
           <div class="product-source">
           {% for pSource in product.metafields.custom.coffee_source.value limit:2 %}
             {% if forloop.index > 1 %}
@@ -353,8 +369,8 @@
             +{{ product.metafields.custom.coffee_source.value.size | minus: 2 }}
           {% endif %}
           </div>
-        </div>
-        <div class="selection-wrapper">        
+        </div> {% endcomment %}
+        {% comment %} <div class="selection-wrapper">        
 
         <!-- Conditional Color -->
         {% case product.metafields.custom.coffee_taste %}
@@ -375,14 +391,14 @@
             <span class="selection-color" style="background-color: #FF974A;" aria-label="Orange Indicator"></span>
         {% endcase %}
 
-        </div>
-        <div class="product-main-price-wrapper">{% render 'price' %}</div>
-      </div>
-      <div class="product-info-left-side">
+        </div> {% endcomment %}
+        {% comment %} <div class="product-main-price-wrapper">{% render 'price' %}</div> {% endcomment %}
+      {% comment %} </div> {% endcomment %}
+      {% comment %} <div class="product-info-left-side"> {% endcomment %}
         <div class="grid__item product__media-wrapper">
           {% render 'product-media-gallery', variant_images: variant_images %}
         </div>
-      </div>
+      {% comment %} </div> {% endcomment %}
     </div>
     <div class="background-stripe"> </div>
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
