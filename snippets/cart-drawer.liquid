@@ -935,15 +935,17 @@
             {%- endif -%}
           </div>
 
-          <div class="totals collapse" role="status">
+          <div class="totals" role="status">
               {%- if qualifies_free_shipping %}
                 {% assign shipping_price = 0 %}
               {%- endif -%}
 
               {%- assign shipping_price_cents = shipping_price | times: 100 -%}
               {%- assign adjusted_total = cart.total_price | plus: shipping_price_cents -%}
-            <p class="totals__total-value totals-value-secondary"><span>עלות קפה:</span> <span class="totals-value-secondary-value">{{ cart.total_price | money_with_currency }}</span></p>
-            <p class="totals__total-value totals-value-secondary"><span>סה״כ משלוח:</span> <span class="totals-value-secondary-value">{{ shipping_price_cents | money_with_currency }}</span></p>
+            <p class="totals__total-value totals-value-secondary"><span>סכום ביניים:</span> <span class="totals-value-secondary-value">{{ cart.total_price | money_with_currency }}</span></p>
+            <p class="totals__total-value totals-value-secondary"><span>משלוח:</span> <span class="totals-value-secondary-value">{{ shipping_price_cents | money_with_currency }}</span></p>
+            <p class="totals__total-value totals-value-third"><span style="width:100%;">משלוח תוך 1-7 ימי עסקים. חינם מעל 399 ש״ח.</span></p>
+
           </div>
             <p class="totals__total-value totals-value-primary">
               <span>
