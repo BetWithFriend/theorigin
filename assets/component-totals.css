@@ -85,6 +85,15 @@
   padding: 5px 0 5px 0;
 }
 
+.totals-value-third {
+  /* color: #C4C0BC; */
+  font-size: 14px;
+  font-weight: 400;
+  padding: 5px 0 5px 0;
+  width: 100%;
+  display: block;
+}
+
 .totals-value-primary {
   margin-top: 8px;
 }
