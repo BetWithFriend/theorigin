@@ -81,16 +81,54 @@
         >
         
         {%  if product.price < 15000 %}
-        <div class="product-variants-wrapper">
-                  {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
-                  
-                  {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
-                  {% render 'variant-dropdown' , grind_size: grind_size_array %}
-                  
-                  {% assign weights_array = vendor.allowed_weights %}
-                  {% render 'dropdown-weights' , weights: weights_array %}
-        {% render 'quantity-counter', product: product, field_id: 'quantity' %}        
-                 </div>
+          <div class="product-variants-wrapper">
+              {% comment %} {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
+              
+              {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
+              {% render 'variant-dropdown' , grind_size: grind_size_array %}
+              
+              {% assign weights_array = vendor.allowed_weights %}
+              {% render 'dropdown-weights' , weights: weights_array %} {% endcomment %}
+              {% render 'quantity-counter', product: product, field_id: 'quantity' %}        
+
+              <div class="product-form__buttons">
+              {%- liquid
+                assign check_against_inventory = true
+                if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
+                  assign check_against_inventory = false
+                endif
+                if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
+                  assign quantity_rule_soldout = true
+                endif
+              -%}
+              <button
+                id="ProductSubmitButton-{{ section_id }}"
+                type="submit"
+                name="add"
+                class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
+                {% if product.selected_or_first_available_variant.available == false
+                  or quantity_rule_soldout
+                  or product.selected_or_first_available_variant == null
+                %}
+                  disabled
+                {% endif %}
+              >
+                <span>
+                  {%- if product.selected_or_first_available_variant == null -%}
+                    {{ 'products.product.unavailable' | t }}
+                  {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+                    {{ 'products.product.sold_out' | t }}
+                  {%- else -%}
+                    {{ 'products.product.add_to_cart' | t }}
+                  {%- endif -%}
+                </span>
+                {%- render 'loading-spinner' -%}
+              </button>
+              {%- if show_dynamic_checkout -%}
+                {{ form | payment_button }}
+              {%- endif -%}
+            </div>
+          </div>
         {%  endif %}
 
         
@@ -100,7 +138,7 @@
           {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
         {%- endif -%}
 
-        <div class="product-form__buttons">
+        {% comment %} <div class="product-form__buttons">
           {%- liquid
             assign check_against_inventory = true
             if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
@@ -136,7 +174,7 @@
           {%- if show_dynamic_checkout -%}
             {{ form | payment_button }}
           {%- endif -%}
-        </div>
+        </div> {% endcomment %}
       {%- endform -%}
     </product-form>
   {%- else -%}

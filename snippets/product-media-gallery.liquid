@@ -119,14 +119,14 @@ ul.product__media-list {
     <a class="skip-to-content-link button visually-hidden quick-add-hidden" href="#ProductInfo-{{ section.id }}">
       {{ 'accessibility.skip_to_product_info' | t }}
     </a>
-    <ul
+    <div
       id="Slider-Gallery-{{ section.id }}"
       class="product__media-list contains-media grid grid--peek list-unstyled slider slider--mobile slider--single"
       role="list"
     >
       {%- if product.selected_or_first_available_variant.featured_media != null -%}
         {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
-        <li
+        <div
           id="Slide-{{ section.id }}-{{ featured_media.id }}"
           class="product__media-item grid__item slider__slide is-active{% if single_media_visible %} product__media-item--single{% endif %}{% if featured_media.media_type != 'image' %} product__media-item--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
           data-media-id="{{ section.id }}-{{ featured_media.id }}"
@@ -146,7 +146,7 @@ ul.product__media-list {
             constrain_to_viewport: section.settings.constrain_to_viewport,
             lazy_load: false
           %}
-        </li>
+        </div>
       {%- endif -%}
       {%- for media in product.media -%}
         {% if media_position >= limit
@@ -158,7 +158,7 @@ ul.product__media-list {
         {% endif %}
 
         {%- unless media.id == product.selected_or_first_available_variant.featured_media.id -%}
-          <li
+          <div
             id="Slide-{{ section.id }}-{{ media.id }}"
             class="product__media-item grid__item slider__slide{% if single_media_visible %} product__media-item--single{% endif %}{% if product.selected_or_first_available_variant.featured_media == nil and forloop.index == 1 %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
             data-media-id="{{ section.id }}-{{ media.id }}"
@@ -184,10 +184,10 @@ ul.product__media-list {
               constrain_to_viewport: section.settings.constrain_to_viewport,
               lazy_load: lazy_load
             %}
-          </li>
+          </div>
         {%- endunless -%}
       {%- endfor -%}
-    </ul>
+    </div>
     <div class="slider-buttons quick-add-hidden{% if hide_mobile_slider %} small-hide{% endif %}">
       <button
         type="button"

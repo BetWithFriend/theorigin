@@ -1,7 +1,18 @@
 <div id="product-description-wrapper" >
     <div class="product-description-wrapper-main">
         <div class="product-description-wrapper" id="product-description" dir="rtl">
-            <div class="product-description-text">
+            <div class="product-description-more-details-title">
+                פרטים נוספים
+            </div>
+            <div class="product-description-more-details">
+                {{ product_description  }}
+            </div>
+        </div>
+        <div class="product-description-wrapper" id="product-description" dir="rtl">
+            <div class="product-description-more-details-title">
+                בית הקלייה
+            </div>
+            <div class="product-description-more-details">
                 {{ product_description  }}
             </div>
         </div>
@@ -232,10 +243,15 @@
     .product-description-wrapper {
         background-color: #FBFCFE;
         overflow: hidden;
+        height: 75px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
         {% comment %} max-height: calc(28px * 13); /* 8 full lines of text */ {% endcomment %}
-        padding: 40px 24px; /* Padding stays intact */
-        transition: max-height 0.3s ease-in-out;
-        position: relative;
+        /* padding: 40px 24px;  */
+        /* transition: max-height 0.3s ease-in-out;
+        position: relative; */
     }
 
     .product-description-wrapper.expanded {
@@ -262,6 +278,23 @@
         color: #1C201D;
         margin-top: 16px;
         text-decoration: underline;
+    }
+
+    .product-description-more-details-title {
+        font-family: 'Noto Sans', sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 25px;
+        color: #1C201D;
+    }
+    .product-description-more-details {
+        font-family: 'Noto Sans', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        color: #636270;
+        margin-top: 8px;
+        display: none;
     }
 </style>
 

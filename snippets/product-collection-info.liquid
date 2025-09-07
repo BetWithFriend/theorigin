@@ -1,10 +1,10 @@
 
 <!-- snippets/product-collection-info.liquid -->
-{%- if free_shipping.value > 0 -%}
+{% comment %} {%- if free_shipping.value > 0 -%}
 <div class="product-vendor-shipping-info">
     <p>משלוח חינם בהזמנה מעל 399 ש״ח</p>
 </div>
-{%- endif -%}
+{%- endif -%} {% endcomment %}
 <div class="product-collection-wrapper">
     <div>
         <img src="{{ vendor_logo.value | img_url: 'small' }}" alt="{{ product.featured_image.alt | escape }}">
@@ -18,7 +18,8 @@
     .product-collection-wrapper {
         height: 105px;
         width: 100%;
-        background-color: #DAD7D1;
+        /* background-color: #DAD7D1; */
+        background-color: #FAFCFE;
         display: flex;
         align-items: center;
         justify-content: center;

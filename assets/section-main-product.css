@@ -190,8 +190,8 @@ product-info {
 }
 
 .product-form__submit {
-  width: 342px;
-  height: 59px;
+  /* width: 342px; */
+  height: 56px;
   padding: 16px 48px;
   border-radius: 15px;
   font-family: 'Noto Sans', sans-serif;
