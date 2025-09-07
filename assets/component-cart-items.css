@@ -124,7 +124,7 @@ cart-items .title-wrapper-with-link {
   justify-content: center;
   flex-direction: column;
   gap: 8px;
-  margin-top: 110px;
+  /* margin-top: 110px; */
 }
 
 .cart-item-wrapper {
