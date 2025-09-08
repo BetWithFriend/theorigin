@@ -121,34 +121,6 @@
         "padding_bottom": 36
       }
     },
-    "featured_collection_bundles": {
-      "type": "featured-collection",
-      "settings": {
-        "title": "מארזים נבחרים שהרכבנו בשבילכם",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": true,
-        "description_style": "body",
-        "collection": "באנדלים-של-קפה-מכל-בית-קלייה",
-        "products_to_show": 10,
-        "columns_desktop": 4,
-        "full_width": true,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": true,
-        "color_scheme": "scheme-1",
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": false,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "1",
-        "swipe_on_mobile": true,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
     "featured_collection_qNARrT": {
       "type": "featured-collection",
       "disabled": true,
@@ -235,7 +207,6 @@
     "new_roasters_slider",
     "credibility_text",
     "blends_filter_icons",
-    "featured_collection_bundles",
     "main_recommendations",
     "discover_the_roaster",
     "featured_collection_qNARrT",
