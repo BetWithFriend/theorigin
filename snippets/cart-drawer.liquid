@@ -163,7 +163,7 @@
                 {%- assign progress_percentage = 100 -%}
               {%- endif -%}
           {%- endif -%}
-                {%- if qualifies_free_shipping -%}
+                {% comment %} {%- if qualifies_free_shipping -%}
                 <div class="free-shipping-notice-wrapper">
                   <div class="free-shipping-cart-icon-wrapper">
                     <img class="free-shipping-cart-icon" src="{{ 'shipping-cart-icon.png' |  asset_url }}" alt="cart icon"/>
@@ -191,7 +191,7 @@
                         <img class="shipping-progress-bar-track" src="{{ 'free-shipping-track.png' |  asset_url }}" alt="delivery icon"/>
                      </div>
                   </div>
-                {%- endif -%} 
+                {%- endif -%}  {% endcomment %}
             {%- assign vendors = "" -%}
             {% comment %} {%- assign shipping_price = 0 -%}
             {% assign canopy_shipping = 39 %}
@@ -944,7 +944,7 @@
               {%- assign adjusted_total = cart.total_price | plus: shipping_price_cents -%}
             <p class="totals__total-value totals-value-secondary"><span>סכום ביניים:</span> <span class="totals-value-secondary-value">{{ cart.total_price | money_with_currency }}</span></p>
             <p class="totals__total-value totals-value-secondary"><span>משלוח:</span> <span class="totals-value-secondary-value">{{ shipping_price_cents | money_with_currency }}</span></p>
-            <p class="totals__total-value totals-value-third"><span style="width:100%;">משלוח תוך 1-7 ימי עסקים. חינם מעל 399 ש״ח.</span></p>
+            {% comment %} <p class="totals__total-value totals-value-third"><span style="width:100%;">משלוח תוך 1-7 ימי עסקים. חינם מעל 399 ש״ח.</span></p> {% endcomment %}
 
           </div>
             <p class="totals__total-value totals-value-primary">

@@ -1,10 +1,10 @@
 
 <!-- snippets/product-collection-info.liquid -->
-{% comment %} {%- if free_shipping.value > 0 -%}
-<div class="product-vendor-shipping-info">
+{%- if free_shipping.value > 0 -%}
+{% comment %} <div class="product-vendor-shipping-info">
     <p>משלוח חינם בהזמנה מעל 399 ש״ח</p>
-</div>
-{%- endif -%} {% endcomment %}
+</div> {% endcomment %}
+{%- endif -%}
 <div class="product-collection-wrapper">
     <div>
         <img src="{{ vendor_logo.value | img_url: 'small' }}" alt="{{ product.featured_image.alt | escape }}">

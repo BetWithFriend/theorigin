@@ -26,7 +26,7 @@
   assign price_min = product.price_min
   assign price_max = product.price_max
   assign available = target.available | default: false
-  assign money_price = price | money
+  assign money_price = price | divided_by: 2  | money
   assign money_price_min = price_min | money
   assign money_price_max = price_max | money
   if settings.currency_code_enabled
@@ -88,8 +88,9 @@
           <span class="price-item price-item--regular" dir="rtl">
            {{ money_price }}
           </span>
-         {%  if price < 15000 %}
+         {%  if price < 20000 %}
           <span class="price-item price-item--regular {{ class_added }}">
+            {% comment %} TODO - CHANGE HERE {% endcomment %}
           / 250 גר׳
            </span>
           {% else %}

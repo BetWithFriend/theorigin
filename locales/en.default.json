@@ -51,7 +51,7 @@
     "cart": {
       "view": "לרכישה",
       "view_empty_cart": "לרכישה",
-      "item_added": "העגלה שלך"
+      "item_added": "סל הקניות"
     },
     "share": {
       "close": "Close share",
@@ -300,7 +300,7 @@
       }
     },
     "cart": {
-      "title": "העגלה שלך",
+      "title": "סל קניות",
       "caption": "Cart items",
       "remove_title": "Remove {{ title }}",
       "estimated_total": "Estimated total",
