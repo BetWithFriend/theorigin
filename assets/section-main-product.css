@@ -19,6 +19,10 @@ product-info {
   padding-left: 0;
 }
 
+.product-actions {
+  background-color: #E3E0DA;
+}
+
 @media screen and (min-width: 750px) {
   .product__column-sticky {
     display: block;
