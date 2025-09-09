@@ -101,6 +101,23 @@
     background-color: #F4F3F0;
   }
 
+  .product-short-description-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background-color: #FAFCFE;
+  }
+
+  .product-short-description {
+    font-family: 'Noto Sans', sans-serif;
+    line-height: 25px;
+    font-size: 16px;
+    color: #1C201D;
+    font-weight: 400;
+    text-align: center;
+  }
+
   @media screen and (min-width: 769px) {
     #main-product-container {
       display: grid;
@@ -413,7 +430,13 @@
       {% assign coffee_type = product.metafields.custom.coffee_type.value %}
       {% assign coffee_blend_ratio = product.metafields.custom.coffee_blend_ratio.value %}
 
-      {% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description, shipping_fee: vendor.vendor_shipping, free_shipping: vendor.min_order_for_free_shipping, vendor_name: vendor.vendor_name.value %}
+      <div class="product-short-description-wrapper">
+        <div class="product-short-description">
+          {{ product.metafields.custom.short_description }}
+        </div>
+      </div>
+
+      {% comment %} {% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description, shipping_fee: vendor.vendor_shipping, free_shipping: vendor.min_order_for_free_shipping, vendor_name: vendor.vendor_name.value %} {% endcomment %}
     
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %} product-actions">
         <div id="product-dropdowns-form-wrapper" class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
@@ -1115,8 +1138,7 @@
 {% assign coffee_type = product.metafields.custom.coffee_type.value %}
 {% assign coffee_blend_ratio = product.metafields.custom.coffee_blend_ratio.value %}
 
-{% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description, shipping_fee: vendor.vendor_shipping, free_shipping: vendor.min_order_for_free_shipping, vendor_name: vendor.vendor_name.value %} {% endcomment %}
-
+{% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description, shipping_fee: vendor.vendor_shipping, free_shipping: vendor.min_order_for_free_shipping, vendor_name: vendor.vendor_name.value %} {% endcomment %}</div>
 <script>
     analytics.trackScreenView('Product Page', {
         page_load_time: performance.now(),
@@ -1135,7 +1157,7 @@
       const body = document.body;
       const html = document.documentElement;
       const totalHeight = Math.max(body.scrollHeight, body.offsetHeight,
-        html.clientHeight, html.scrollHeight, html.offsetHeight);
+      html.clientHeight, html.scrollHeight, html.offsetHeight);
 
 
       const stickyCard = document.querySelectorAll('.product-container')[0];

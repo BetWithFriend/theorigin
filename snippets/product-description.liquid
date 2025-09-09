@@ -72,52 +72,52 @@
                     בית הקלייה
                 </div>
                 <div class="product-description-more-details">
-                    <div class="product-details-vendor-details-wrapper">
-                        <h2 class="product-details-vendor-details-title">
-                            {% case vendor_name %}
-                                {% when 'Canopy' %}
-                                    בית קלייה קאנופי - Canopy
-                                {% when 'Blooms' %}
-                                בית קלייה בלומס - Blooms
-                                {% when 'Coffee Org' %}
-                                בית קלייה קופי אורג - Coffee Organization
-                                {% when 'You Need Coffee' %}
-                                בית קלייה יו ניד קופי - You Need Coffee
-                                {% when 'Coffee Culture' %}
-                                בית קלייה קופי קולצ׳ר- Coffee Culture
-                                {% else %}
-                                קלייה לא ידועה
-                            {% endcase %}
-                        </h2>
-                        <div class="product-details-vendor-image-wrapper">
-                            <img src="{{ vendor_logo.value | img_url: 'small' }}" alt="{{ product.featured_image.alt | escape }}">
-                        </div>
-                        <div class="product-details-vendor-story-wrapper" dir="rtl" id="product-details-vendor-story-wrapper">
-                            <div class="product-details-vendor-story">
-                                {%- if vendor_story != blank -%}
-                                    <div class="rich-text">
-                                    {%- for block in vendor_story.children -%}
-                                        {%- case block.type -%}
-                                        {%- when 'paragraph' -%}
-                                            <p class="rich-text__paragraph">
-                                            {%- for child in block.children -%}
-                                                {%- if child.type == 'text' -%}
-                                                {{- child.value | newline_to_br -}}
-                                                {%- endif -%}
-                                            {%- endfor -%}
-                                            </p>
-                                        {%- endcase -%}
-                                    {%- endfor -%}
-                                    </div>
-                                {%- endif -%}
+                        <div class="product-details-vendor-details-wrapper">
+                            <h2 class="product-details-vendor-details-title">
+                                {% case vendor_name %}
+                                    {% when 'Canopy' %}
+                                        בית קלייה קאנופי - Canopy
+                                    {% when 'Blooms' %}
+                                    בית קלייה בלומס - Blooms
+                                    {% when 'Coffee Org' %}
+                                    בית קלייה קופי אורג - Coffee Organization
+                                    {% when 'You Need Coffee' %}
+                                    בית קלייה יו ניד קופי - You Need Coffee
+                                    {% when 'Coffee Culture' %}
+                                    בית קלייה קופי קולצ׳ר- Coffee Culture
+                                    {% else %}
+                                    קלייה לא ידועה
+                                {% endcase %}
+                            </h2>
+                            <div class="product-details-vendor-image-wrapper">
+                                <img src="{{ vendor_logo.value | img_url: 'small' }}" alt="{{ product.featured_image.alt | escape }}">
                             </div>
-                        </div>
+                            <div class="product-details-vendor-story-wrapper" dir="rtl" id="product-details-vendor-story-wrapper">
+                                <div class="product-details-vendor-story">
+                                    {%- if vendor_story != blank -%}
+                                        <div class="rich-text">
+                                        {%- for block in vendor_story.children -%}
+                                            {%- case block.type -%}
+                                            {%- when 'paragraph' -%}
+                                                <p class="rich-text__paragraph">
+                                                {%- for child in block.children -%}
+                                                    {%- if child.type == 'text' -%}
+                                                    {{- child.value | newline_to_br -}}
+                                                    {%- endif -%}
+                                                {%- endfor -%}
+                                                </p>
+                                            {%- endcase -%}
+                                        {%- endfor -%}
+                                        </div>
+                                    {%- endif -%}
+                                </div>
+                            </div>
+                    </div>
                 </div>
-            </div>
         {% comment %} <div id="read-more" class="read-more">קראו עוד</div> {% endcomment %}
-    </div>
+            </div>
 
-</div>
+    </div>
     {% comment %} <div dir="rtl" id="read-more-vendor-story" class="read-more-vendor-story">המשך לקרוא</div>     {% endcomment %}
 </div>
 
@@ -164,7 +164,7 @@
         display: flex;
         align-items: start;
         justify-content: center;
-        padding: 40px 24px 16px 24px;
+        /* padding: 40px 24px 16px 24px; */
         width: 100%;
         /*background-color: #E6E3DE;*/
         flex-direction: column;
@@ -350,16 +350,16 @@
     //     }
     // });
 
-    document.getElementById('read-more-vendor-story').addEventListener('click', function() {
-        const vendor_description = document.getElementById('product-details-vendor-story-wrapper');
-        if (vendor_description.classList.contains('expanded')) {
-            vendor_description.classList.remove('expanded');
-            this.textContent = 'המשך לקרוא...';
-        } else {
-            vendor_description.classList.add('expanded');
-            this.textContent = 'סגור';
-        }
-    });
+    // document.getElementById('read-more-vendor-story').addEventListener('click', function() {
+    //     const vendor_description = document.getElementById('product-details-vendor-story-wrapper');
+    //     if (vendor_description.classList.contains('expanded')) {
+    //         vendor_description.classList.remove('expanded');
+    //         this.textContent = 'המשך לקרוא...';
+    //     } else {
+    //         vendor_description.classList.add('expanded');
+    //         this.textContent = 'סגור';
+    //     }
+    // });
 
     function showMoreDetails(section) {
         let wrapper, title, details, arrow, detailsDescription, detailsWrapper, lastDetails;

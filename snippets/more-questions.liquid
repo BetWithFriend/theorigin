@@ -1,0 +1,47 @@
+{{ 'more-questions.css' | asset_url | stylesheet_tag }}
+
+<div class="more-questions-wrapper" dir="rtl">
+    <div class="more-questions-title">שאלות נפוצות</div>
+    <div class="more-questions-question" onclick="toggleAnswer()">אפשר להתייעץ איתכם?</div>
+    <div class="more-questions-answer">
+        אתם יותר ממוזמנים לפנות אלינו במייל או בטלפון 054-5631523 ונשמח לעזור לכם לבחור את המוצרים שיתאימו לכם ולענות על כל שאלה שתהיה. אנחנו מבטיחים לא למכור לכם מוצרים שאתם לא אוהבים ולספר לכם הכל בשקיפות ובכנות מוחלטת
+        </br>
+        <div style="display: flex; margin-top: 8px; align-items: center; gap: 8px;">
+            <img class="more-question-whatsapp" src="{{ 'WhatsApp.png' |  asset_url }}" alt="whatsapp icon"/>
+        דברו איתנו WhatsApp</div>
+    </div>
+    <div class="more-questions-question" onclick="toggleAnswer()">האם הרכישה מאובטחת?</div>
+    <div class="more-questions-answer">בהחלט. האתר שלנו משתמש בפרוטוקול אבטחה מתקדם (SSL) כך שכל פרטי התשלום מוצפנים ומוגנים. אנחנו לא שומרים פרטי אשראי במערכת, והתשלום מתבצע דרך ספקי סליקה מאובטחים ומורשים בלבד.</div>
+    <div class="more-questions-question" onclick="toggleAnswer()">איך החבילה מגיעה אלי?</div>
+    <div class="more-questions-answer">אנחנו אורזים את פולי הקפה בקפידה כדי לשמור על הטריות והאיכות, ושולחים אליך ישירות עם חברת משלוחים עד הבית או לנקודת איסוף לבחירתך. לאחר ההזמנה תקבל מספר מעקב כדי שתוכל לדעת בכל רגע איפה החבילה שלך.</div>
+    <div class="more-questions-question" onclick="toggleAnswer()">כמה עולה משלוח?</div>
+    <div class="more-questions-answer">עלות המשלוח היא 39 ₪ למשלוח עד הבית או לנקודת איסוף. בקנייה מעל 249 ₪ המשלוח עלינו</div>
+    <div class="more-questions-question" onclick="toggleAnswer()">מה קורה אם אני לא מרוצה?</div>
+    <div class="more-questions-answer">חשוב לנו שתהיו מרוצים מהקפה ומהשירות. אם מסיבה כלשהי החוויה לא הייתה לשביעות רצונכם – צרו איתנו קשר, ואנו נדאג למצוא את הפתרון הטוב ביותר: החלפה, זיכוי או החזר, בהתאם למקרה.</div>
+</div>
+
+<div class="go-to-page-top-wrapper" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">
+    <img class="go-to-page-top-arrow" src="{{ 'go-to-page-top.png' |  asset_url }}" alt="go to page top"/>
+    <div class="go-to-page-top-text">חזרה למעלה</div>
+</div>
+
+<script>
+    function toggleAnswer(clickedQuestion) {
+        const questions = document.querySelectorAll('.more-questions-question');
+        const answers = document.querySelectorAll('.more-questions-answer');
+        questions.forEach((question, idx) => {
+            if (question === clickedQuestion) {
+                answers[idx].style.display = answers[idx].style.display === 'block' ? 'none' : 'block';
+            } else {
+                answers[idx].style.display = 'none';
+            }
+        });
+    }
+
+    // Attach event listeners
+    document.querySelectorAll('.more-questions-question').forEach((question) => {
+        question.onclick = function() {
+            toggleAnswer(this);
+        };
+    });
+</script>
