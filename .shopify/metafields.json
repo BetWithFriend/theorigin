@@ -320,6 +320,16 @@
         "name": "number_integer",
         "category": "NUMBER"
       }
+    },
+    {
+      "key": "short_description",
+      "namespace": "custom",
+      "name": "Short description",
+      "description": "",
+      "type": {
+        "name": "multi_line_text_field",
+        "category": "TEXT"
+      }
     }
   ],
   "variant": [

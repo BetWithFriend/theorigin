@@ -410,6 +410,37 @@
       {{ content_for_layout }}
     </main>
 
+    <div class="why-us-wrapper" >
+      <div class="why-us-title" dir="rtl">למה אנחנו?</div>
+      <div class="why-us-item">
+        <img class="why-us-img" src="{{ 'why-us-fresh-coffee.png' |  asset_url }}" alt="Why Us" />
+        <div class="why-us-text">קפה טרי מבתי קלייה מקומיים</div>
+      </div>
+      <div class="why-us-item">
+        <img class="why-us-img" src="{{ 'why-us-whatsapp.png' |  asset_url }}" alt="Why Us" />
+        <div class="why-us-text">שירות אישי בוואטסאפ</div>
+      </div>
+      <div class="why-us-item">
+        <img class="why-us-img" src="{{ 'why-us-delivery.png' |  asset_url }}" alt="Why Us" />
+        <div class="why-us-text">משלוח מהיר עד הבית</div>
+      </div>
+      <div class="why-us-item">
+        <img class="why-us-img" src="{{ 'why-us-coffee.png' |  asset_url }}" alt="Why Us" />
+        <div class="why-us-text">מבחר הקפה הגדול בארץ</div>
+      </div>
+    </div>
+
+    {% render 'more-questions' %}
+    <hr class="product-divider"/>
+
+    <div class="contact-us-whatsapp-wrapper" dir="rtl">
+      <a href="https://wa.me/972545631523?text=%D7%94%D7%99%D7%99%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%94%D7%AA%D7%99%D7%99%D7%A2%D7%A5%20%D7%9C%D7%92%D7%91%D7%99%20%D7%A7%D7%A4%D7%94" target="_blank" id="whatsapp-link">
+        <img class="contact-us-whatsapp-img" src="{{ 'WhatsApp.png' |  asset_url }}"/>
+      </a>
+      <div lass="contact-us-whatsapp-text">שאלות נוספות?</div>
+      <div lass="contact-us-whatsapp-text">דברו איתנו ב - WhatsApp</div>
+    </div>
+
     {% sections 'footer-group' %}
 
     <ul hidden>

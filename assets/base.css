@@ -85,16 +85,17 @@
 
 .product-title {
   /* flex-direction: column; */
-  /* display: flex; */
-  /* align-items: center; */
-  /* justify-content: center; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   /* margin-bottom: unset; */
   font-weight: 700;
-  font-size: 20px;
-  /* line-height: 50px; */
+  font-size: 24px;
+  line-height: 24px;
   /* color: #1c201d; */
-  color: #FBFCFE;
-  text-align: right;
+  /* color: #FBFCFE; */
+  color: #474747;
+  text-align: center;
   letter-spacing: 2px;
   line-height: normal;
   margin-bottom: 8px;
@@ -135,7 +136,7 @@
   /* line-height: 24px; */
   /* font-weight: 700; */
   color: #1C201D;
-  margin-top: 10px;
+  margin-top: 24px;
   /* margin-top: 8px; */
 }
 
@@ -147,13 +148,14 @@
 /* @media (max-width: 768px) { */
 .background-stripe {
   position: absolute;
-  top: 90px;
+  top: 300px;
   left: 0;
   right: 0;
-  height: 160px;
+  height: 155px;
   background-color: #AD7B7E;
   z-index: 0;
   transform: translateY(-50%);
+  /* display: none; */
 }
 
 .card-vendor-logo {
@@ -174,11 +176,11 @@
     height: 252px;
   } */
 .full-unstyled-link {
-  font-family: 'Noto Sans', sans-serif;
+  /* font-family: 'Noto Sans', sans-serif;
   font-size: 18px;
   line-height: 22px;
   font-weight: 700;
-  color: #1C201D;
+  color: #1C201D; */
 }
 
 /* } */
@@ -3962,6 +3964,93 @@ details-disclosure>details {
   margin-left: 20px;
 }
 
+.why-us-wrapper {
+  background-color: #F4F3F0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  height: 435px;
+  /* padding: 32px; */
+}
+
+.why-us-title {
+  margin-top: 56px;
+  margin-bottom: 32px;
+  font-family: noto-sans, sans-serif;
+  font-size: 24px;
+  line-height: 24px;
+  font-weight: 700;
+  color: #1C201D;
+  width: 100%;
+  text-align: center;
+}
+
+.why-us-item {
+  width: 147px;
+  height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 12px;
+  text-align: center;
+  padding: 4px;
+}
+
+.why-us-img {
+  /* width: 48px; */
+  height: 50px;
+  /* margin-bottom: 8px; */
+}
+
+.why-us-text {
+  font-family: noto-sans, sans-serif;
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 400;
+  color: #1C201D;
+  margin-top: 16px;
+}
+
+.product-divider {
+  width: 85%;
+  /* padding: 0 24px; */
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #F5F4F2; */
+  border: 0.5px solid #CDCDCD;
+  background-color: #CDCDCD;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 30px;
+}
+
+.contact-us-whatsapp-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  flex-direction: column;
+  margin-bottom: 48px;
+  cursor: pointer;
+}
+
+.contact-us-whatsapp-text {
+  font-family: noto-sans, sans-serif;
+  font-size: 16px;
+  line-height: 25px;
+  font-weight: 400;
+  color: #1C201D;
+  margin: 0;
+}
+
+.contact-us-whatsapp-img {
+  width: 32px;
+  height: 32px;
+}
+
 @media (min-width: 480px) {
   .tooltip-arrow {
     right: 60px;
@@ -3980,5 +4069,12 @@ details-disclosure>details {
 @media screen and (max-width: 360px) {
   .utility-bar__grid.page-width {
     padding: 0 8px;
+  }
+}
+
+@media screen and (min-width: 990px) {
+
+  .why-us-wrapper {
+    height: 235px;
   }
 }
