@@ -232,3 +232,12 @@
   font-size: 14px;
   font-weight: 700;
 }
+
+.cart_payment_types_icons {
+  margin-top:12px;
+}
+
+.cart_payment_types_icons img {
+  height: 24px;
+  vertical-align: middle;
+}

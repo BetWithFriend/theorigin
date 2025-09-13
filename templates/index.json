@@ -123,9 +123,8 @@
     },
     "featured_collection_qNARrT": {
       "type": "featured-collection",
-      "disabled": true,
       "settings": {
-        "title": "המיוחדים של החודש",
+        "title": "חדשים באתר",
         "heading_size": "h2",
         "description": "",
         "show_description": true,
@@ -204,12 +203,12 @@
     "our_vendors",
     "credibility_icons",
     "featured_collection_ErHj6f",
+    "featured_collection_qNARrT",
     "new_roasters_slider",
     "credibility_text",
     "blends_filter_icons",
     "main_recommendations",
     "discover_the_roaster",
-    "featured_collection_qNARrT",
     "find_your_coffee",
     "main_page_footer_info",
     "featured_collection"
