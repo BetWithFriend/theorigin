@@ -981,7 +981,7 @@ a.product__text {
   }
 
   .product__modal-opener {
-    width: 100%;
+    width: 90%;
   }
 
   .thumbnail-slider {
@@ -1524,4 +1524,8 @@ a.product__text {
   .recipient-form>input[type='checkbox']:checked+label .icon-checkmark {
     border: none;
   }
+}
+
+.breadcrumbs {
+  padding: 0;
 }

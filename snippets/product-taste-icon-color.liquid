@@ -49,7 +49,7 @@
 </div> {% endcomment %}
 <div class="product-tastes-list">
   {% comment %} {{ coffee_tastes_list | join: ' | ' }} {% endcomment %}
-  {% for taste in coffee_tastes_list %}      
+  {% for taste in coffee_tastes_list limit:3 %}      
     <div class="single-coffee-taste">{{ taste }}</div>
   {% endfor %}
 </div>

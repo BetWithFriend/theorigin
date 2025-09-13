@@ -376,24 +376,29 @@
             arrow = wrapper.querySelector('.side-arrow-more-details');
             title = wrapper.querySelector('.product-description-more-details-title');
             details = wrapper.querySelector('.product-description-more-details');
-            detailsDescription = wrapper.querySelector('.product-description-details-wrapper');
-            detailsWrapper = wrapper.querySelector('.product-details-wrapper');
-            lastDetails = document.querySelector('.product-description-divider-wrapper');
+            // detailsDescription = wrapper.querySelector('.product-description-details-wrapper');
+            // detailsWrapper = wrapper.querySelector('.product-details-wrapper');
+            // lastDetails = document.querySelector('.product-description-divider-wrapper');
         }
 
         if (wrapper.classList.contains('expanded')) {
             wrapper.classList.remove('expanded');
             arrow.classList.remove('rotated');
             details.style.display = 'none';
-            detailsDescription.style.display = 'none';
-            detailsWrapper.style.display = 'none';
-            lastDetails.style.display = 'none';
+            if (section === 'details') {
+                detailsDescription.style.display = 'none';
+                detailsWrapper.style.display = 'none';
+                lastDetails.style.display = 'none';
+            }   
         } else {
             wrapper.classList.add('expanded');
             details.style.display = 'block';
-            detailsDescription.style.display = 'flex';
-            detailsWrapper.style.display = 'flex';
-            lastDetails.style.display = 'block';
+            
+            if (section === 'details') {
+                detailsDescription.style.display = 'flex';
+                detailsWrapper.style.display = 'flex';
+                lastDetails.style.display = 'block';
+            }
             arrow.classList.add('rotated');
         }
     }
