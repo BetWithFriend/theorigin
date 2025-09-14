@@ -100,6 +100,7 @@
   line-height: normal;
   margin-bottom: 8px;
   margin-top: 0;
+  padding: 0 8px;
 }
 
 .product-source-wrapper {
@@ -176,11 +177,11 @@
     height: 252px;
   } */
 .full-unstyled-link {
-  /* font-family: 'Noto Sans', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-size: 18px;
   line-height: 22px;
   font-weight: 700;
-  color: #1C201D; */
+  color: #1C201D;
 }
 
 /* } */

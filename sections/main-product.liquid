@@ -368,6 +368,7 @@
           {% endfor %}
         </div>
         <div class="product-tastes-list">
+          <div class="product-roast-level with-weight">250 ג׳</div>
           <div class="product-roast-level">{{ product.metafields.custom.coffee_roast_level }}</div>
           <div class="product-roast-level">{{ product.metafields.custom.coffee_process }}</div>
         </div>
@@ -438,7 +439,7 @@
 
       {% comment %} {% render 'product-collection-info' | vendor_logo: vendor.vendor_logo, vendor_description: vendor.vendor_description, shipping_fee: vendor.vendor_shipping, free_shipping: vendor.min_order_for_free_shipping, vendor_name: vendor.vendor_name.value %} {% endcomment %}
     
-    <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %} product-actions">
+    <div class="product-actions product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %} ">
         <div id="product-dropdowns-form-wrapper" class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
               <section dir="rtl"
                 id="ProductInfo-{{ section.id }}"

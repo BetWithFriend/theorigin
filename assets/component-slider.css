@@ -113,6 +113,7 @@ slider-component.slider-component-full-width {
     width: 287px;
     height: 315px;
     padding: 25px 32px 0 0;
+    overflow: hidden;
   }
 
   .slider.slider--tablet.contains-content-container .slider__slide {
@@ -418,8 +419,13 @@ slider-component.slider-component-full-width {
 
 .product-roast-level {
   background-color: #E3E0DA;
-  padding: 4px 8px;
-  border-radius: 16px;
+  padding: 2px 16px;
+  border-radius: 30px;
   margin: 2px;
   font-size: 16px;
+}
+
+.product-roast-level.with-weight {
+  background-color: #AD7B7E;
+  color: #FBFCFE;
 }

@@ -246,12 +246,14 @@
     .product-description-wrapper {
         background-color: #FBFCFE;
         overflow: hidden;
-        height: 75px;
+        max-height: 75px; /* Use max-height instead of height */
         display: flex;
-        align-items: center;
+        align-items: start;
         justify-content: start;
         padding: 24px;
         cursor: pointer;
+        transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; /* Add transition */
+        flex-direction: column; /* This is already here, but good to have */
         {% comment %} max-height: calc(28px * 13); /* 8 full lines of text */ {% endcomment %}
         /* padding: 40px 24px;  */
         /* transition: max-height 0.3s ease-in-out;
@@ -267,11 +269,8 @@
 
     .product-description-wrapper.expanded {
         /* max-height: 1800px;  */
-        display: flex;
-        align-items: start;
-        justify-content: center;
-        flex-direction: column;
-        height: auto;
+        max-height: 1800px; /* A large value to accommodate all content */
+        padding-bottom: 24px;
     }
 
     .product-description-divider-wrapper {
@@ -334,72 +333,94 @@
         line-height: 22px;
         color: #636270;
         margin-top: 8px;
-        display: none;
+        opacity: 0; /* Start with opacity 0 */
+        transition: opacity 0.5s ease-in-out; /* Add transition for opacity */
     }
+    .product-description-wrapper.expanded .product-description-more-details {
+    opacity: 1; /* Fade in when expanded */
+}
+
+.product-description-divider-wrapper,
+.product-description-details-wrapper,
+.product-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 0;
+}
+
+.product-description-wrapper.expanded .product-description-divider-wrapper,
+.product-description-wrapper.expanded .product-description-details-wrapper,
+.product-description-wrapper.expanded .product-details-wrapper {
+    max-height: 1800px; /* Adjust as needed */
+    opacity: 1;
+}
+
+.side-arrow-more-details.rotated {
+    transform: rotate(-90deg); /* Change to 90deg for better visual */
+}
 </style>
 
 <script>
-    // document.getElementById('read-more').addEventListener('click', function() {
-    //     const description = document.getElementById('product-description');
-    //     if (description.classList.contains('expanded')) {
-    //         description.classList.remove('expanded');
-    //         this.textContent = 'קראו עוד';
-    //     } else {
-    //         description.classList.add('expanded');
-    //         this.textContent = 'סגור';
-    //     }
-    // });
 
-    // document.getElementById('read-more-vendor-story').addEventListener('click', function() {
-    //     const vendor_description = document.getElementById('product-details-vendor-story-wrapper');
-    //     if (vendor_description.classList.contains('expanded')) {
-    //         vendor_description.classList.remove('expanded');
-    //         this.textContent = 'המשך לקרוא...';
-    //     } else {
-    //         vendor_description.classList.add('expanded');
-    //         this.textContent = 'סגור';
-    //     }
-    // });
 
-    function showMoreDetails(section) {
-        let wrapper, title, details, arrow, detailsDescription, detailsWrapper, lastDetails;
-        if (section === 'details') {
-            wrapper = document.querySelectorAll('.product-description-wrapper')[0];
-            arrow = wrapper.querySelector('.side-arrow-more-details');
-            title = wrapper.querySelector('.product-description-more-details-title');
-            details = wrapper.querySelector('.product-description-more-details');
-            detailsDescription = wrapper.querySelector('.product-description-details-wrapper');
-            detailsWrapper = wrapper.querySelector('.product-details-wrapper');
-            lastDetails = document.querySelector('.product-description-divider-wrapper');
-        } else if (section === 'roast') {
-            wrapper = document.querySelectorAll('.product-description-wrapper')[1];
-            arrow = wrapper.querySelector('.side-arrow-more-details');
-            title = wrapper.querySelector('.product-description-more-details-title');
-            details = wrapper.querySelector('.product-description-more-details');
-            // detailsDescription = wrapper.querySelector('.product-description-details-wrapper');
-            // detailsWrapper = wrapper.querySelector('.product-details-wrapper');
-            // lastDetails = document.querySelector('.product-description-divider-wrapper');
-        }
-
-        if (wrapper.classList.contains('expanded')) {
-            wrapper.classList.remove('expanded');
-            arrow.classList.remove('rotated');
-            details.style.display = 'none';
-            if (section === 'details') {
-                detailsDescription.style.display = 'none';
-                detailsWrapper.style.display = 'none';
-                lastDetails.style.display = 'none';
-            }   
-        } else {
-            wrapper.classList.add('expanded');
-            details.style.display = 'block';
-            
-            if (section === 'details') {
-                detailsDescription.style.display = 'flex';
-                detailsWrapper.style.display = 'flex';
-                lastDetails.style.display = 'block';
-            }
-            arrow.classList.add('rotated');
-        }
+function showMoreDetails(section) {
+    let wrapper;
+    if (section === 'details') {
+        wrapper = document.querySelectorAll('.product-description-wrapper')[0];
+    } else if (section === 'roast') {
+        wrapper = document.querySelectorAll('.product-description-wrapper')[1];
     }
+    
+    // Toggle the 'expanded' class on the wrapper
+    wrapper.classList.toggle('expanded');
+    
+    // Toggle the 'rotated' class on the arrow
+    const arrow = wrapper.querySelector('.side-arrow-more-details');
+    arrow.classList.toggle('rotated');
+}
+    // function showMoreDetails(section) {
+    //     let wrapper, title, details, arrow, detailsDescription, detailsWrapper, lastDetails;
+    //     if (section === 'details') {
+    //         wrapper = document.querySelectorAll('.product-description-wrapper')[0];
+    //         arrow = wrapper.querySelector('.side-arrow-more-details');
+    //         title = wrapper.querySelector('.product-description-more-details-title');
+    //         details = wrapper.querySelector('.product-description-more-details');
+    //         detailsDescription = wrapper.querySelector('.product-description-details-wrapper');
+    //         detailsWrapper = wrapper.querySelector('.product-details-wrapper');
+    //         lastDetails = document.querySelector('.product-description-divider-wrapper');
+    //     } else if (section === 'roast') {
+    //         wrapper = document.querySelectorAll('.product-description-wrapper')[1];
+    //         arrow = wrapper.querySelector('.side-arrow-more-details');
+    //         title = wrapper.querySelector('.product-description-more-details-title');
+    //         details = wrapper.querySelector('.product-description-more-details');
+    //         // detailsDescription = wrapper.querySelector('.product-description-details-wrapper');
+    //         // detailsWrapper = wrapper.querySelector('.product-details-wrapper');
+    //         // lastDetails = document.querySelector('.product-description-divider-wrapper');
+    //     }
+
+    //     if (wrapper.classList.contains('expanded')) {
+    //         wrapper.classList.remove('expanded');
+    //         arrow.classList.remove('rotated');
+    //         details.style.display = 'none';
+    //         if (section === 'details') {
+    //             detailsDescription.style.display = 'none';
+    //             detailsWrapper.style.display = 'none';
+    //             lastDetails.style.display = 'none';
+    //         }   
+    //     } else {
+    //         wrapper.classList.add('expanded');
+    //         details.style.display = 'block';
+            
+    //         if (section === 'details') {
+    //             detailsDescription.style.display = 'flex';
+    //             detailsWrapper.style.display = 'flex';
+    //             lastDetails.style.display = 'block';
+    //         }
+    //         arrow.classList.add('rotated');
+    //     }
+    // }
 </script>
