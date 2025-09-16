@@ -44,7 +44,7 @@
     flex-direction: row-reverse;
     line-height: 30px;
     font-size: 16px;
-    position: absolute;
+    /* position: absolute; */
     top: 180px;
   }
 
@@ -368,9 +368,9 @@
           {% endfor %}
         </div>
         <div class="product-tastes-list">
+          <div class="product-roast-level">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
+          <div class="product-roast-level">עיבוד {{ product.metafields.custom.coffee_process }}</div>
           <div class="product-roast-level with-weight">250 ג׳</div>
-          <div class="product-roast-level">{{ product.metafields.custom.coffee_roast_level }}</div>
-          <div class="product-roast-level">{{ product.metafields.custom.coffee_process }}</div>
         </div>
          <div class="product-main-price-wrapper">{% render 'price' %}</div>
     <div class="product-info-top-wrapper">
