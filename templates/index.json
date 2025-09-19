@@ -69,11 +69,15 @@
     },
     "our_vendors": {
       "type": "our-vendors",
-      "disabled": true,
+      "settings": {}
+    },
+    "why_us": {
+      "type": "why-us",
       "settings": {}
     },
     "credibility_icons": {
       "type": "credibility-icons",
+      "disabled": true,
       "settings": {}
     },
     "credibility_text": {
@@ -201,15 +205,16 @@
     "image_banner",
     "custom_liquid_aWGKXY",
     "our_vendors",
+    "why_us",
     "credibility_icons",
     "featured_collection_ErHj6f",
+    "blends_filter_icons",
+    "credibility_text",
     "featured_collection_qNARrT",
     "new_roasters_slider",
-    "credibility_text",
-    "blends_filter_icons",
+    "find_your_coffee",
     "main_recommendations",
     "discover_the_roaster",
-    "find_your_coffee",
     "main_page_footer_info",
     "featured_collection"
   ]

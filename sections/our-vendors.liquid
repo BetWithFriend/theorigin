@@ -1,78 +1,83 @@
 {{ 'our-vendors.css' | asset_url | stylesheet_tag }}
 <div class="our-vendors-wrapper">
-    <div class="our-vendors-title">
-        בתי הקלייה שלנו
-    </div>
-    <div class="our-vendors-logo-wrapper" dir="rtl">
-        {% comment %} <div onclick="goToVendorPage('sybaris')"  class="our-vendor-logo">
-            <img class="our-vendor-logo-img" src="{{ 'logo_sybaris.png' | asset_url }}" alt="Vendor Logo" />
-        </div> {% endcomment %}
-        <div class="our-vendor-container">
-            <div onclick="goToVendorPage('blooms')"  class="our-vendor-logo">
-                <img class="our-vendor-logo-img" src="{{ 'logo_blooms.png' | asset_url }}" alt="Vendor Logo" />
-            </div>
-            <div class="vendors-collection-vendor-description-wrapper">
-                <div class="vendors-collection-vendor-name">Blooms</div>
-            </div>
+    <div class="our-vendors-logo-wrapper">
+        <div class="our-vendors-scroll-track" id="scrollTrack">
+            {% comment %} Create multiple sets for seamless infinite scroll {% endcomment %}
+            {% for i in (1..3) %}
+                {% for vendor in shop.metaobjects.vendor_definitions.values %}
+                    <div class="our-vendor-container">
+                        <div onclick="goToVendorPage('{{ vendor.vendor_name.value }}')"  class="our-vendor-logo">
+                            <img class="our-vendor-logo-img" src="{{ vendor.vendor_logo | img_url: 'small' }}"  alt="Vendor Logo" >
+                        </div>
+                        <!--<div class="vendors-collection-vendor-description-wrapper">
+                            <div class="vendors-collection-vendor-name">{{ vendor.vendor_name }}</div>
+                        </div>-->
+                    </div>
+                {%endfor%}
+            {% endfor %}
         </div>
-
-        <div class="our-vendor-container">
-            <div onclick="goToVendorPage('coffee-org')"  class="our-vendor-logo">
-                <img class="our-vendor-logo-img" src="{{ 'coffee_org_logo.png' | asset_url }}" alt="Vendor Logo" />
-            </div>
-            <div class="vendors-collection-vendor-description-wrapper">
-                <div class="vendors-collection-vendor-name">Coffee Org</div>
-            </div>
-        </div>
-
-        <div class="our-vendor-container">
-            <div onclick="goToVendorPage('canopy')"  class="our-vendor-logo">
-                <img class="our-vendor-logo-img" src="{{ 'logo_canopy.png' | asset_url }}" alt="Vendor Logo" />
-            </div>
-            <div class="vendors-collection-vendor-description-wrapper">
-                <div class="vendors-collection-vendor-name">Canopy</div>
-            </div>
-        </div>
-
-        <div class="our-vendor-container">
-            <div onclick="goToVendorPage('you-need-coffee')"  class="our-vendor-logo">
-                <img class="our-vendor-logo-img" src="{{ 'logo_youneedcoffee.png' | asset_url }}" alt="Vendor Logo" />
-            </div>
-            <div class="vendors-collection-vendor-description-wrapper">
-                <div class="vendors-collection-vendor-name">You Need Coffee</div>
-            </div>
-        </div>
-
-        <div class="our-vendor-container">
-            <div onclick="goToVendorPage('coffee-culture')"  class="our-vendor-logo">
-                <img class="our-vendor-logo-img" src="{{ 'logo_coffee-culture.png' | asset_url }}" alt="Vendor Logo" />
-            </div>
-            <div class="vendors-collection-vendor-description-wrapper">
-                <div class="vendors-collection-vendor-name">Coffee Culture</div>
-            </div>
-        </div>
-        
-
     </div>
 </div>
-<div class="product-description-divider">
-        <hr  class="product-description-divider-line"/>
-        <img class="product-description-divider-img" src="{{ 'our-vendors-divider-img.png' | asset_url }}" alt="Divider" />
-</div>
-<div class="our-vendors-mantra-wrapper">
-    <div class="our-vendors-mantra-text" dir="rtl">
-אנחנו אוהבים לטעום קפה חדש, לגלות טעמים מיוחדים ולייצר חוויות חדשות.<br/> צאו איתנו למסע לגלות את בתי הקלייה הטובים בישראל – חלקם כבר כאן וניתן להזמין מהם בקלות קפה מיוחד ואיכותי עד הבית.
-</div>
-</div>
-
-<div class="product-description-divider">
-        <hr  class="product-description-divider-line"/>
-        {% comment %} <img class="product-description-divider-img" src="{{ 'our-vendors-divider-img.png' | asset_url }}" alt="Divider" /> {% endcomment %}
-</div>
-
 
 <script>
     function goToVendorPage(vendorName) {
         window.location.href = "{{ section.settings.collection.url }}/pages/vendor-" + vendorName.replaceAll(' ', '-');
     }
+
+    // Enhanced infinite scroll with JavaScript fallback
+    document.addEventListener('DOMContentLoaded', function() {
+        const scrollTrack = document.getElementById('scrollTrack');
+        if (!scrollTrack) return;
+
+        let isHovered = false;
+        let animationSpeed = 1; // pixels per frame
+        let currentPosition = 0;
+        let trackWidth = 0;
+        let containerWidth = 0;
+
+        function calculateDimensions() {
+            trackWidth = scrollTrack.scrollWidth;
+            containerWidth = scrollTrack.parentElement.offsetWidth;
+            // Start with 3 items (420px) already visible on screen
+            currentPosition = containerWidth - 420;
+        }
+
+        function startJSAnimation() {
+            // Only use JS animation as fallback if CSS animation fails
+            if (!window.CSS || !CSS.supports('animation', 'scrollRightToLeft 45s linear infinite')) {
+                scrollTrack.style.animation = 'none';
+                calculateDimensions();
+                animateScroll();
+            }
+        }
+
+        function animateScroll() {
+            if (!isHovered) {
+                currentPosition -= animationSpeed;
+                
+                // Reset position when we've scrolled through one complete set
+                if (currentPosition <= -(trackWidth / 3)) {
+                    currentPosition = containerWidth - 420;
+                }
+                
+                scrollTrack.style.transform = `translateX(${currentPosition}px)`;
+            }
+            requestAnimationFrame(animateScroll);
+        }
+
+        // Hover pause functionality
+        scrollTrack.addEventListener('mouseenter', function() {
+            isHovered = true;
+        });
+
+        scrollTrack.addEventListener('mouseleave', function() {
+            isHovered = false;
+        });
+
+        // Initialize
+        startJSAnimation();
+        
+        // Recalculate on window resize
+        window.addEventListener('resize', calculateDimensions);
+    });
 </script>

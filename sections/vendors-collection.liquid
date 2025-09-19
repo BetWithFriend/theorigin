@@ -8,11 +8,10 @@
 
 <div class="vendors-collection-wrapper">
     <div class="vendors-collection-title-wrapper" dir="rtl">
-        <div class="vendors-collection-title-main">הקפה שלנו</div>
-        <div class="vendors-collection-title-submain">קלייה טרייה, כחול-לבן</div>
+        <div class="vendors-collection-title-main">בתי הקלייה</div>
+        <div class="vendors-collection-title-submain">קלייה טרייה ומקומית</div>
     </div>
     <div class="vendors-collection-content-wrapper">
-        <div class="vendors-collection-content-title">בתי הקלייה שלנו</div>
         <div class="vendors-collection-items-wrapper">
             {% for vendor in shop.metaobjects.vendor_definitions.values %}
                 <div onclick="goToVendorPage('{{ vendor.vendor_name.value }}')" class="vendors-collection-vendor-item">

@@ -35,8 +35,10 @@
 .vendors-collection-title-main {
   font-family: 'Noto Sans', sans-serif;
   font-weight: 700;
-  font-size: 48px;
-  line-height: 48px;
+  /* font-size: 48px;
+  line-height: 48px; */
+  font-size: 38px;
+  line-height: 42px;
   text-align: center;
   color: #333634;
   width: 100%;

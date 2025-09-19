@@ -3,24 +3,28 @@
     <div class="discover_roaster-title-wrap">
         <div class="discover-roaster-title">{{ title  }}</div>
         <div class="discover-roaster-subtitle" dir="rtl">{{ description }}</div>
+        <div onclick="goToPageRoasters('{{ btn_url }}')" class="discover-roaster-btn">{{ btn_text }}</div>
     </div>
-    {% comment %} <hr class="discover-roaster-divider-line" /> {% endcomment %}
-<!-- <img class="discover-roaster-img {{ img_class }}" src="{{ com_image | asset_url }}" alt="discover image" /> -->
-    <div onclick="goToPageRoasters('{{ btn_url }}')" class="discover-roaster-btn">{{ btn_text }}</div>
+    
 </div>
 
 <style>
 .discover-roaster-wrapper {
     display: flex;
     flex-direction: column;
+    margin: 0 auto;
     gap: 16px;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
-    margin: 36px 16px;
-    padding: 48px 32px;
+    /* margin: 36px 16px;
+    padding: 48px 32px; */
     /* width: 90%; */
+    padding: 32px 16px;
+    height: 423px;
+    width: 358px;
     background-color: #333634;
     border-radius: 16px;
+    background-image: url('{{ 'quiz-section-bg.png' | asset_url }}');
 }
 
 .discover_roaster-title-wrap {
@@ -29,6 +33,8 @@
     gap: 16px;
     justify-content: center;
     align-items: center;
+    margin-top: 32px;
+    margin-bottom: 24px;
 }
 
 .discover-roaster-title {
@@ -36,7 +42,7 @@
     font-size: 36px;
     line-height: 50px;
     font-weight: 700;
-    color: #B5888B;
+    color: #fff;
     text-align: center;
     margin-bottom: -8px;
 }
@@ -46,7 +52,7 @@
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;
-    color: #FBFCFE;
+    color: #A9A9A9;
     text-align: center;
 }
 
@@ -66,43 +72,53 @@
 }
 
 .discover-roaster-btn {
-    width: 171px;
+    width: 205px;
     height: 59px;
     font-family: 'Noto Sans', sans-serif;
     font-size: 20px;
     line-height: 27px;
     font-weight: 400;
-    color: #FBFCFE;
-    background-color: #B5888B;
+    color: #1C201D;
+    background-color: #fff;
     border: none;
     border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    margin-top: 16px;
 }
 
 @media screen and (min-width: 768px) {
     .discover-roaster-wrapper {
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
         align-items: center;
         width: 100%;
+        height: 328px;
         margin: 0;
         padding: 32px;
+        background-image: url('{{ 'quiz-section-bg-desktop.png' | asset_url }}');
+        background-position: right center;
+        background-repeat: no-repeat;
+        background-size: cover;
     }
 
     .discover_roaster-title-wrap {
         align-items: flex-start;
-        margin-right: 120px;
+        margin-right: 550px;
     }
 
     .discover-roaster-title {
         text-align: right;
     }
 
+    .discover-roaster-subtitle {
+        text-align: right;
+    }
+
     .discover-roaster-btn {
-        margin-left: 120px;
+        /* margin-left: 120px; */
     }
 }
 </style>
