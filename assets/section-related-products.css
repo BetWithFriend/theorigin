@@ -12,3 +12,9 @@
   position: relative;
   margin-bottom: 24px;
 }
+
+@media screen and (min-width: 750px) {
+  .product-recommendations-component {
+    padding-right: 0;
+  }
+}

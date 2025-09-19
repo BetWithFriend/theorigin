@@ -114,7 +114,8 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: start;
+  justify-content: center;
+  margin-bottom: 8px;
 }
 
 .product-tastes-list .single-coffee-taste {
@@ -123,5 +124,12 @@
   border-radius: 16px;
   margin: 2px;
   font-size: 14px;
+}
+
+@media screen and (min-width: 749px) {
+  .product-tastes-list {
+    justify-content: center;
+    /* margin-right: 24px; */
+  }
 }
 </style>

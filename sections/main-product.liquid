@@ -118,7 +118,7 @@
     text-align: center;
   }
 
-  @media screen and (min-width: 769px) {
+  @media screen and (min-width: 750px) {
     #main-product-container {
       display: grid;
       grid-template-columns: 1fr 1fr; /* Two equal columns */
@@ -131,6 +131,7 @@
       grid-row-start: 1;
       margin-bottom: -10px;
       max-width: 530px;
+      position: static;
       /*border-radius: 16px 16px 0 0;*/
     }
 
@@ -193,7 +194,7 @@
       width: 100%;
       padding: 0;
       /*padding-top: 24px;*/
-      margin-top: 110px;
+      /* margin-top: 110px; */
       background-color: #E3E0DA;
     }
 
@@ -213,7 +214,8 @@
     }
 
     .product-extra-details-container {
-      display: flex;
+      display: none;
+      /* display: flex; */
       justify-content: center;
       width: 100%;
       background-color: #F4F3F0;
@@ -269,7 +271,13 @@
     }
     
     .is-at-bottom {
-        position: absolute;
+        /* position: absolute; */
+    }
+    .main-product-container-wrapper {
+      display: flex;
+      align-items: start;
+      justify-content: center;
+      gap: 10px;
     }
   }
 
@@ -283,144 +291,145 @@
 
 {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
       {% render 'breadcrumbs' %}
-<div id="main-product-container">
-<product-info
-  id="MainProduct-{{ section.id }}"
-  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }} product-container"
-  data-section="{{ section.id }}"
-  data-product-id="{{ product.id }}"
-  data-update-url="true"
-  data-url="{{ product.url }}"
-  {% if section.settings.image_zoom == 'hover' %}
-    data-zoom-on-hover
-  {% endif %}
->
-  {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
-  {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
-  {{ 'component-price.css' | asset_url | stylesheet_tag }}
-  {{ 'component-slider.css' | asset_url | stylesheet_tag }}
-  {{ 'component-rating.css' | asset_url | stylesheet_tag }}
-  {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+      <div class="main-product-container-wrapper">
+  <div id="main-product-container">
+    <product-info
+      id="MainProduct-{{ section.id }}"
+      class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }} product-container"
+      data-section="{{ section.id }}"
+      data-product-id="{{ product.id }}"
+      data-update-url="true"
+      data-url="{{ product.url }}"
+      {% if section.settings.image_zoom == 'hover' %}
+        data-zoom-on-hover
+      {% endif %}
+    >
+      {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+      {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
+      {{ 'component-price.css' | asset_url | stylesheet_tag }}
+      {{ 'component-slider.css' | asset_url | stylesheet_tag }}
+      {{ 'component-rating.css' | asset_url | stylesheet_tag }}
+      {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
 
-  {% unless product.has_only_default_variant %}
-    {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
-    {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
-    {{ 'component-swatch.css' | asset_url | stylesheet_tag }}
-  {% endunless %}
-  {%- if product.quantity_price_breaks_configured? -%}
-    {{ 'component-volume-pricing.css' | asset_url | stylesheet_tag }}
-  {%- endif -%}
+      {% unless product.has_only_default_variant %}
+        {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
+        {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
+        {{ 'component-swatch.css' | asset_url | stylesheet_tag }}
+      {% endunless %}
+      {%- if product.quantity_price_breaks_configured? -%}
+        {{ 'component-volume-pricing.css' | asset_url | stylesheet_tag }}
+      {%- endif -%}
 
-  {%- style -%}
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-      
-    }
-
-    @media screen and (min-width: 750px) {
-      .section-{{ section.id }}-padding {
-        padding-top: {{ section.settings.padding_top }}px;
-      
+      {%- style -%}
+        .section-{{ section.id }}-padding {
+          padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+          
       }
-    }
-  {%- endstyle -%}
 
-  <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
-  {%- if product.quantity_price_breaks_configured? -%}
-    <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
-  {%- endif -%}
+      @media screen and (min-width: 750px) {
+        .section-{{ section.id }}-padding {
+          padding-top: {{ section.settings.padding_top }}px;
+        
+        }
+      }
+    {%- endstyle -%}
 
-  {% if section.settings.image_zoom == 'hover' %}
-    <script id="EnableZoomOnHover-main" src="{{ 'magnify.js' | asset_url }}" defer="defer"></script>
-  {% endif %}
-  {%- if request.design_mode -%}
-    <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
-  {%- endif -%}
+    <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+    {%- if product.quantity_price_breaks_configured? -%}
+      <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
+      <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
 
-  {%- assign first_3d_model = product.media | where: 'media_type', 'model' | first -%}
-  {%- if first_3d_model -%}
-    {{ 'component-product-model.css' | asset_url | stylesheet_tag }}
-    <link
-      id="ModelViewerStyle"
-      rel="stylesheet"
-      href="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.css"
-      media="print"
-      onload="this.media='all'"
-    >
-    <link
-      id="ModelViewerOverride"
-      rel="stylesheet"
-      href="{{ 'component-model-viewer-ui.css' | asset_url }}"
-      media="print"
-      onload="this.media='all'"
-    >
-  {%- endif -%}
+    {% if section.settings.image_zoom == 'hover' %}
+      <script id="EnableZoomOnHover-main" src="{{ 'magnify.js' | asset_url }}" defer="defer"></script>
+    {% endif %}
+    {%- if request.design_mode -%}
+      <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
 
-  {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
-  <div class="page-width-product-page">
-    <h1 class="product-title">{{ product.title }}</h1>
+    {%- assign first_3d_model = product.media | where: 'media_type', 'model' | first -%}
+    {%- if first_3d_model -%}
+      {{ 'component-product-model.css' | asset_url | stylesheet_tag }}
+      <link
+        id="ModelViewerStyle"
+        rel="stylesheet"
+        href="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.css"
+        media="print"
+        onload="this.media='all'"
+      >
+      <link
+        id="ModelViewerOverride"
+        rel="stylesheet"
+        href="{{ 'component-model-viewer-ui.css' | asset_url }}"
+        media="print"
+        onload="this.media='all'"
+      >
+    {%- endif -%}
 
-        <div class="product-tastes-list">
-          {% for taste in product.metafields.custom.coffee_tastes.value %}      
-            <div class="single-coffee-taste-main-product">{{ taste }}{% unless forloop.last %} | {% endunless %}</div>
-          {% endfor %}
-        </div>
-        <div class="product-tastes-list">
-          <div class="product-roast-level">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
-          <div class="product-roast-level">עיבוד {{ product.metafields.custom.coffee_process }}</div>
-          <div class="product-roast-level with-weight">250 ג׳</div>
-        </div>
-         <div class="product-main-price-wrapper">{% render 'price' %}</div>
-    <div class="product-info-top-wrapper">
-      {% comment %} <div class="product-info-right-side"> {% endcomment %}
-        {% comment %} <div class="product-vendor-title">{{ vendor.vendor_short_name | upcase }}</div> {% endcomment %}
-        {% comment %} <h1 class="product-title">{{ product.title }}</h1> {% endcomment %}
-        {% comment %} <div class="product-source-wrapper">
-          <div class="product-source">
-          {% for pSource in product.metafields.custom.coffee_source.value limit:2 %}
-            {% if forloop.index > 1 %}
-              <span>,</span>
-            {% endif %}
-            {{ pSource }}
-          {% endfor %}
-          {% if product.metafields.custom.coffee_source.value.size > 2 %}
-            +{{ product.metafields.custom.coffee_source.value.size | minus: 2 }}
-          {% endif %}
+    {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
+    <div class="page-width-product-page">
+      <h1 class="product-title">{{ product.title }}</h1>
+
+          <div class="product-tastes-list">
+            {% for taste in product.metafields.custom.coffee_tastes.value %}      
+              <div class="single-coffee-taste-main-product">{{ taste }}{% unless forloop.last %} | {% endunless %}</div>
+            {% endfor %}
           </div>
-        </div> {% endcomment %}
-        {% comment %} <div class="selection-wrapper">        
+          <div class="product-tastes-list">
+            <div class="product-roast-level">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
+            <div class="product-roast-level">עיבוד {{ product.metafields.custom.coffee_process }}</div>
+            <div class="product-roast-level with-weight">250 ג׳</div>
+          </div>
+          {% comment %} <div class="product-main-price-wrapper">{% render 'price' %}</div> {% endcomment %}
+      <div class="product-info-top-wrapper">
+        {% comment %} <div class="product-info-right-side"> {% endcomment %}
+          {% comment %} <div class="product-vendor-title">{{ vendor.vendor_short_name | upcase }}</div> {% endcomment %}
+          {% comment %} <h1 class="product-title">{{ product.title }}</h1> {% endcomment %}
+          {% comment %} <div class="product-source-wrapper">
+            <div class="product-source">
+            {% for pSource in product.metafields.custom.coffee_source.value limit:2 %}
+              {% if forloop.index > 1 %}
+                <span>,</span>
+              {% endif %}
+              {{ pSource }}
+            {% endfor %}
+            {% if product.metafields.custom.coffee_source.value.size > 2 %}
+              +{{ product.metafields.custom.coffee_source.value.size | minus: 2 }}
+            {% endif %}
+            </div>
+          </div> {% endcomment %}
+          {% comment %} <div class="selection-wrapper">        
 
-        <!-- Conditional Color -->
-        {% case product.metafields.custom.coffee_taste %}
-          {% when 'Fruity' %}
-          <span>פירותי</span>
-            <span class="selection-color" style="background-color: #FFDF70;" aria-label="Yellow Indicator"></span>
-          {% when 'Chocolate' %}
-          <span>שוקולדי</span>
-            <span class="selection-color" style="background-color: #8B4513;" aria-label="Brown Indicator"></span>
-          {% when 'Sweet-Chocolate' %}
-          <span>מתוק שוקולדי</span>
-            <span class="selection-color" style="background-color: #C4823E;" aria-label="Orange Indicator"></span>
-          {% when 'Sweet' %}
-          <span>מתוק מאוזן</span>
-            <span class="selection-color" style="background-color: #D60540;" aria-label="Red Indicator"></span>
-          {% when 'Fruity-Sweet' %}
-          <span>פירותי מתוק</span>
-            <span class="selection-color" style="background-color: #FF974A;" aria-label="Orange Indicator"></span>
-        {% endcase %}
+          <!-- Conditional Color -->
+          {% case product.metafields.custom.coffee_taste %}
+            {% when 'Fruity' %}
+            <span>פירותי</span>
+              <span class="selection-color" style="background-color: #FFDF70;" aria-label="Yellow Indicator"></span>
+            {% when 'Chocolate' %}
+            <span>שוקולדי</span>
+              <span class="selection-color" style="background-color: #8B4513;" aria-label="Brown Indicator"></span>
+            {% when 'Sweet-Chocolate' %}
+            <span>מתוק שוקולדי</span>
+              <span class="selection-color" style="background-color: #C4823E;" aria-label="Orange Indicator"></span>
+            {% when 'Sweet' %}
+            <span>מתוק מאוזן</span>
+              <span class="selection-color" style="background-color: #D60540;" aria-label="Red Indicator"></span>
+            {% when 'Fruity-Sweet' %}
+            <span>פירותי מתוק</span>
+              <span class="selection-color" style="background-color: #FF974A;" aria-label="Orange Indicator"></span>
+          {% endcase %}
 
-        </div> {% endcomment %}
-        {% comment %} <div class="product-main-price-wrapper">{% render 'price' %}</div> {% endcomment %}
-      {% comment %} </div> {% endcomment %}
-      {% comment %} <div class="product-info-left-side"> {% endcomment %}
-        <div class="grid__item product__media-wrapper">
-          {% render 'product-media-gallery', variant_images: variant_images %}
-        </div>
-      {% comment %} </div> {% endcomment %}
-    </div>
-    <div class="background-stripe"> </div>
+          </div> {% endcomment %}
+          {% comment %} <div class="product-main-price-wrapper">{% render 'price' %}</div> {% endcomment %}
+        {% comment %} </div> {% endcomment %}
+        {% comment %} <div class="product-info-left-side"> {% endcomment %}
+          <div class="grid__item product__media-wrapper">
+            {% render 'product-media-gallery', variant_images: variant_images %}
+          </div>
+        {% comment %} </div> {% endcomment %}
+      </div>
+      <div class="background-stripe"> </div>
 
       {% assign coffee_details = product.metafields.custom.product_info.value %}
       {% assign coffee_origin_image = product.metafields.custom.coffee_origin_image.value %}
@@ -1102,11 +1111,15 @@
           </script>
         </div>
 
-  {% comment %} {%- if vendor.min_order_for_free_shipping > 0 -%} {% endcomment %}
-  {% comment %} <div class="product-extra-details-shipping">
-    <p>משלוח חינם בהזמנה מעל 399 ש״ח</p>
-  </div> {% endcomment %}
-  {% comment %} {%- endif -%} {% endcomment %}
+    {% comment %} {%- if vendor.min_order_for_free_shipping > 0 -%} {% endcomment %}
+    {% comment %} <div class="product-extra-details-shipping">
+      <p>משלוח חינם בהזמנה מעל 399 ש״ח</p>
+    </div> {% endcomment %}
+    {% comment %} {%- endif -%} {% endcomment %}
+    <div class="why-us-product-page-wrapper">
+      {% render 'why-us' %}
+    </div>
+  
 
   <div class="product-extra-details-container">
     <div class="product-extra-details-container-inner">
@@ -1180,27 +1193,27 @@
           console.log('>>top:', stickyCard.getBoundingClientRect().top);
           
           if (stickPoint > TOP_OFFSET) {
-              stickyCard.classList.remove('is-sticky', 'is-at-bottom');
-              stickyCard.style.top = '0px';
-              stickyCard.style.width = `${cardWidth}px`;
+              // stickyCard.classList.remove('is-sticky', 'is-at-bottom');
+              // stickyCard.style.top = '0px';
+              // stickyCard.style.width = `${cardWidth}px`;
           } 
           else if (containerRect.bottom < 1200) {
-              stickyCard.classList.remove('is-sticky');
-              stickyCard.classList.add('is-at-bottom');
-              stickyCard.style.width = `${cardWidth}px`;
-              stickyCard.style.top = `${topPosition}px`;
+              // stickyCard.classList.remove('is-sticky');
+              // stickyCard.classList.add('is-at-bottom');
+              // stickyCard.style.width = `${cardWidth}px`;
+              // stickyCard.style.top = `${topPosition}px`;
           }
           else {
-              stickyCard.classList.remove('is-at-bottom');
-              stickyCard.classList.add('is-sticky');
-              stickyCard.style.top = `${TOP_OFFSET}px`;
-              stickyCard.style.width = `${cardWidth}px`;
+              // stickyCard.classList.remove('is-at-bottom');
+              // stickyCard.classList.add('is-sticky');
+              // stickyCard.style.top = `${TOP_OFFSET}px`;
+              // stickyCard.style.width = `${cardWidth}px`;
           }
       }
 
-      if (window.innerWidth >= 768) {
-        window.addEventListener('scroll', handleScroll);
-      }
+      // if (window.innerWidth >= 768) {
+      //   window.addEventListener('scroll', handleScroll);
+      // }
     });
 
 </script>

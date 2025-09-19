@@ -57,6 +57,7 @@
     margin-bottom: 32px;
     cursor: pointer;
     flex-direction: column;
+    gap: 8px;
 }
 
 .go-to-page-top-arrow {
@@ -71,4 +72,10 @@
     font-weight: 400;
     color: #1C201D;
     text-decoration: underline;
+}
+
+@media screen and (min-width: 750px) {
+    .more-questions-wrapper {
+        padding: 32px 48px;
+    }
 }

@@ -409,25 +409,8 @@
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1" dir="rtl">
       {{ content_for_layout }}
     </main>
-
-    <div class="why-us-wrapper" >
-      <div class="why-us-title" dir="rtl">למה אנחנו?</div>
-      <div class="why-us-item">
-        <img class="why-us-img" src="{{ 'why-us-fresh-coffee.png' |  asset_url }}" alt="Why Us" />
-        <div class="why-us-text">קפה טרי מבתי קלייה מקומיים</div>
-      </div>
-      <div class="why-us-item">
-        <img class="why-us-img" src="{{ 'why-us-delivery.png' |  asset_url }}" alt="Why Us" />
-        <div class="why-us-text">משלוח מהיר עד הבית</div>
-      </div>
-      <div class="why-us-item">
-        <img class="why-us-img" src="{{ 'why-us-whatsapp.png' |  asset_url }}" alt="Why Us" />
-        <div class="why-us-text">שירות אישי בוואטסאפ</div>
-      </div>
-      <div class="why-us-item">
-        <img class="why-us-img" src="{{ 'why-us-coffee.png' |  asset_url }}" alt="Why Us" />
-        <div class="why-us-text">מבחר הקפה הגדול בארץ</div>
-      </div>
+    <div class="why-us-section">
+      {% render 'why-us' %}
     </div>
 
     {% render 'more-questions' %}
