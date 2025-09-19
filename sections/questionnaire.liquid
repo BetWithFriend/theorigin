@@ -1,9 +1,4 @@
 {{ 'questionnaire.css' | asset_url | stylesheet_tag }}
-<script>
-    analytics.trackScreenView('Quiz', {
-        page_load_time: performance.now()
-    });
-</script>
 
 <div class="questionnaire-wrapper hidden" id="questionnaireWrapperDesktop">
     <div class="questionnaire-icons-wrapper active">
@@ -565,6 +560,11 @@
 
   // Initialize the questionnaire functionality
   if (window.location.search.includes('from=main-cta')) {
+
+      analytics.trackScreenView('Quiz', {
+          page_load_time: performance.now()
+      });
+
       openForm();
       document.addEventListener('DOMContentLoaded', function() {
       

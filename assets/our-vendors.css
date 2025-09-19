@@ -35,25 +35,41 @@
 }
 
 .our-vendors-logo-wrapper {
-    padding: 16px 24px;
+    /* padding: 16px 24px; */
+    margin-top: 16px;
+    margin-bottom: 16px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.our-vendors-scroll-track {
     display: flex;
     align-items: center;
-    /* justify-content: center; */
-    gap: 16px;
-    overflow-x: auto;
-    width: 100%;
-    scrollbar-width: none;
-    /* Firefox */
-    -ms-overflow-style: none;
-    /* IE and Edge */
-    /* flex-direction: row-reverse; */
+    /* gap: 16px; */
+    gap: 0px;
+    animation: scrollRightToLeft 45s linear infinite;
+    width: max-content;
+}
+
+.our-vendors-scroll-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scrollRightToLeft {
+    0% {
+        transform: translateX(calc(100% - 420px));
+    }
+    100% {
+        transform: translateX(-33.333%);
+    }
 }
 
 .our-vendor-logo {
     width: 140px;
     height: 100px;
-    background-color: #F5F4F2;
-    border-radius: 16px;
+    /* background-color: #F5F4F2; */
+    /* border-radius: 16px; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -137,58 +153,15 @@
 }
 
 @media screen and (min-width: 769px) {
-    .our-vendors-logo-wrapper {
+    .our-vendors-scroll-track {
         gap: 24px;
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    /* 2-5 items: single row, equal width, 150px height */
-    .our-vendors-logo-wrapper:has(.our-vendor-container:nth-child(2):not(:nth-child(6))) .our-vendor-container,
-    .our-vendors-logo-wrapper:has(.our-vendor-container:nth-child(3):not(:nth-child(6))) .our-vendor-container,
-    .our-vendors-logo-wrapper:has(.our-vendor-container:nth-child(4):not(:nth-child(6))) .our-vendor-container,
-    .our-vendors-logo-wrapper:has(.our-vendor-container:nth-child(5):not(:nth-child(6))) .our-vendor-container {
-        flex: 1;
-        height: 165px;
-        max-width: 320px;
-    }
-
-    /* 6 items: 2 rows of 3 each */
-    .our-vendors-logo-wrapper:has(.our-vendor-container:nth-child(6):not(:nth-child(7))) {
-        flex-direction: row;
-    }
-
-    .our-vendors-logo-wrapper:has(.our-vendor-container:nth-child(6):not(:nth-child(7))) .our-vendor-container {
-        flex: 1 1 calc(33.333% - 7px);
-        height: 165px;
-        max-width: 320px;
-    }
-
-    /* 7-8 items: 2 rows, evenly distributed */
-    .our-vendors-logo-wrapper:has(.our-vendor-container:nth-child(7):not(:nth-child(9))) .our-vendor-container {
-        flex: 1 1 calc(25% - 8px);
-        height: 165px;
-        max-width: 320px;
-    }
-
-    /* 9-10 items: 2 rows, evenly distributed */
-    .our-vendors-logo-wrapper:has(.our-vendor-container:nth-child(9):not(:nth-child(11))) .our-vendor-container {
-        flex: 1 1 calc(20% - 8px);
-        height: 165px;
-        max-width: 320px;
-    }
-
-    .our-vendors-logo-wrapper:has(.our-vendor-container:nth-child(10):not(:nth-child(11))) .our-vendor-container {
-        flex: 1 1 calc(20% - 8px);
-        height: 165px;
-        max-width: 320px;
     }
 
     .our-vendor-logo {
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        width: 100%;
+        width: 140px;
         height: 150px;
     }
 
