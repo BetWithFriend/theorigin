@@ -130,12 +130,17 @@
         "padding_top": 36,
         "padding_bottom": 28
       }
+    },
+    "main_product_footer": {
+      "type": "main-product-footer",
+      "settings": {}
     }
   },
   "order": [
     "custom_liquid_XJU7LR",
     "main",
     "custom_liquid_MyJnRy",
-    "related-products"
+    "related-products",
+    "main_product_footer"
   ]
 }
