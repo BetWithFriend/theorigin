@@ -405,9 +405,9 @@ slider-component.slider-component-full-width {
   flex-wrap: wrap;
   /* margin-top: 8px; */
   /* margin-bottom: 16px; */
-  width: 100%;
+  /* width: 100%;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
 }
 
 .single-coffee-taste-main-product {

@@ -20,7 +20,7 @@ product-info {
 }
 
 .product-actions {
-  background-color: #1C201D;
+  background-color: #E3E0DA;
   position: fixed !important;
   bottom: 0;
   z-index: 11 !important;
@@ -212,7 +212,8 @@ product-info {
   font-size: 18px;
   letter-spacing: normal;
   color: #E3E0DA;
-  border: 1px solid #FBFCFE;
+  border: 1px solid #4A141F;
+  background-color: #8B2B3C;
   /* margin-bottom: 1rem; */
 }
 

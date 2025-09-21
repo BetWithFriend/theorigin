@@ -1296,6 +1296,11 @@ summary::-webkit-details-marker {
   background-color: transparent;
 }
 
+.media>*:not(.zoom):not(.deferred-media__poster-button).article-template__hero-image {
+  position: absolute;
+  max-width: none;
+}
+
 .media>*:not(.zoom):not(.deferred-media__poster-button),
 .media model-viewer {
   display: block;
