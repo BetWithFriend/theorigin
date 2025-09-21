@@ -144,6 +144,10 @@
   padding: 0;
 }
 
+.product-main-price-wrapper .price-details-link {
+  display: none;
+}
+
 /* @media (max-width: 768px) { */
 .background-stripe {
   position: absolute;
