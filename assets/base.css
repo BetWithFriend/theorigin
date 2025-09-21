@@ -3985,7 +3985,7 @@ details-disclosure>details {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  padding: 8px;
+  /* padding: 8px; */
   /* height: 435px; */
   /* padding: 32px; */
 }
