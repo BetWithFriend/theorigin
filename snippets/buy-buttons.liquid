@@ -119,9 +119,10 @@
                     {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
                     {{ 'products.product.sold_out' | t }}
                     {%- else -%}
-                    {{ 'products.product.add_to_cart' | t }} &bull;
+                    {{ 'products.product.add_to_cart' | t }}
                   {%- endif -%}
                 </span>
+                <span>&bull;</span>
                 <span>{{ product.price | divided_by: 2 | money_without_trailing_zeros }}</span>
                 {%- render 'loading-spinner' -%}
               </button>

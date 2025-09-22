@@ -403,6 +403,7 @@ slider-component.slider-component-full-width {
 .product-tastes-list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   /* margin-top: 8px; */
   /* margin-bottom: 16px; */
   /* width: 100%;

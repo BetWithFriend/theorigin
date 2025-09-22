@@ -196,6 +196,10 @@
       /*padding-top: 24px;*/
       /* margin-top: 110px; */
       background-color: #E3E0DA;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     #product-dropdowns-form-wrapper form {
@@ -1161,6 +1165,11 @@
         'Vendor Name': '{{ vendor.vendor_name.value }}'
     });
 
+    const whatsappWrapper = document.querySelector('.whatsapp-wrapper');
+      if (whatsappWrapper) {
+        whatsappWrapper.classList.add('hide');
+      }
+
     // handle sticky right side
     document.addEventListener('DOMContentLoaded', function() {
 
@@ -1234,6 +1243,8 @@
     vendor_name: vendor.vendor_name.value,
     %}
 </div>
+
+
 
 
 {% schema %}

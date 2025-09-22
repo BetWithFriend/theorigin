@@ -3890,6 +3890,10 @@ details-disclosure>details {
   /* z-index: 9999; */
 }
 
+.whatsapp-wrapper.hide {
+  display: none;
+}
+
 .whatsapp-icon {
   width: 48px;
   height: 48px;
