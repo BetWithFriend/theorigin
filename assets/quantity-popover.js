@@ -12,6 +12,10 @@ if (!customElements.get('quantity-popover')) {
         this.closeButton = this.querySelector('.button-close');
         this.eventMouseEnterHappened = false;
 
+        // NEW: Find the minus and plus buttons within this component
+        this.quantityInput = this.querySelector('.quantity__input');
+        this.minusButton = this.querySelector('.quantity__button[name="minus"]');
+
         if (this.closeButton) {
           this.closeButton.addEventListener('click', this.closePopover.bind(this));
         }
@@ -32,6 +36,21 @@ if (!customElements.get('quantity-popover')) {
         if (this.infoButtonDesktop && this.mqlTablet.matches) {
           this.infoButtonDesktop.addEventListener('mouseenter', this.togglePopover.bind(this));
           this.infoButtonDesktop.addEventListener('mouseleave', this.closePopover.bind(this));
+        }
+
+        // NEW: Add event listener for the minus button
+        if (this.minusButton) {
+          this.minusButton.addEventListener('click', this.handleMinusClick.bind(this));
+        }
+      }
+
+      // NEW: Method to handle the minus button click
+      handleMinusClick(event) {
+        const currentValue = parseInt(this.quantityInput.value, 10);
+        if (currentValue === 2) {
+          event.preventDefault(); // Stop the default behavior
+          this.quantityInput.value = 0; // Set the value to 0
+          this.quantityInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger a change event
         }
       }
 
