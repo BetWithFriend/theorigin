@@ -1,131 +1,226 @@
 {% comment %}
-  Quantity Counter Snippet
-  Usage: {% render 'quantity-counter', product: product, field_id: 'quantity' %}
+Quantity Counter Snippet
+Usage: {% render 'quantity-counter', product: product, field_id: 'quantity' %}
 {% endcomment %}
 
 <div class="quantity-counter" data-quantity-counter>
-    <button 
-      type="button" 
-      class="quantity-counter__button quantity-counter__decrease" 
-      data-quantity-decrease 
-      aria-label="Decrease quantity">
-      &minus;
-    </button>
-  
-    <span class="quantity-counter__value" data-quantity-value>1</span>
-    
-    <input 
-      type="hidden" 
-      name="{{ field_id | default: 'quantity' }}" 
-      value="1" 
-      data-quantity-input 
-      min="1" 
-      max="{{ product.quantity_price_breaks_configured | default: 10 }}"
-    >
-  
-    <button 
-      type="button" 
-      class="quantity-counter__button quantity-counter__increase" 
-      data-quantity-increase 
-      aria-label="Increase quantity">
-      &plus;
-    </button>
+<button
+type="button"
+class="quantity-counter__button quantity-counter__decrease"
+data-quantity-decrease
+aria-label="Decrease quantity">
+&minus;
+</button>
+
+<span class="quantity-counter__value" data-quantity-value>2</span>
+
+<input
+type="hidden"
+name="{{ field_id | default: 'quantity' }}"
+value="2"
+data-quantity-input
+min="1"
+max="{{ product.quantity_price_breaks_configured | default: 10 }}"
+>
+
+<button
+type="button"
+class="quantity-counter__button quantity-counter__increase"
+data-quantity-increase
+aria-label="Increase quantity">
+&plus;
+</button>
+</div>
+
+  <!-- Toast Message -->
+  <div class="quantity-toast" data-quantity-toast>
+    <div class="quantity-toast__content">
+      {% comment %} <span class="quantity-toast__icon">⚠️</span> {% endcomment %}
+      <span class="quantity-toast__message">לא ניתן להזמין פחות מ-2 חבילות על מנת לשמור על טריות המשלוח ועלות נמוכה</span>
+      <button class="quantity-toast__close" type="button" aria-label="סגור" style="background:none;border:none;cursor:pointer;font-size:18px;line-height:1;padding:0 0 0 8px;color:#fff;">&times;</button>
+    </div>
   </div>
-  
-  <style>
-    .quantity-counter {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: space-between;
-      font-family: 'Noto Sans', sans-serif;
-      font-size: 16px;
-      line-height: 22px;
-      font-weight: 700;
-      padding: 8px 16px;
-      /* background-color: #E3E0DA; */
-      border: 1px solid #33363480;
-      border-radius: 16px;
-      /* width: 100px; */
-      height: 56px;
-      background-color: #FAFCFE;
-    }
-  
-    .quantity-counter__button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      font-size: 20px;
-      line-height: 1;
-      color: #303030;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 24px;
-      height: 24px;
-      transition: opacity 0.2s ease;
-    }
-  
-    .quantity-counter__button:hover {
-      opacity: 0.7;
-    }
-  
-    .quantity-counter__button:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
-  
-    .quantity-counter__value {
-      min-width: 24px;
-      text-align: center;
-    }
-  </style>
-  
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const quantityCounters = document.querySelectorAll('[data-quantity-counter]');
-      
-      quantityCounters.forEach(counter => {
-        const decreaseBtn = counter.querySelector('[data-quantity-decrease]');
-        const increaseBtn = counter.querySelector('[data-quantity-increase]');
-        const valueDisplay = counter.querySelector('[data-quantity-value]');
-        const input = counter.querySelector('[data-quantity-input]');
-        
-        const min = parseInt(input.getAttribute('min') || 1);
-        const max = parseInt(input.getAttribute('max') || 10);
-        
-        // Update display and form values
-        function updateValue(newValue) {
-          // Ensure value is within bounds
-          newValue = Math.max(min, Math.min(max, newValue));
-          
-          // Update displayed value
-          valueDisplay.textContent = newValue;
-          
-          // Update hidden input
-          input.value = newValue;
-          
-          // Dispatch change event for any listeners (like cart forms)
-          const event = new Event('change', { bubbles: true });
-          input.dispatchEvent(event);
-          
-          // Update button states
-          decreaseBtn.disabled = newValue <= min;
-          increaseBtn.disabled = newValue >= max;
-        }
-        
-        // Initialize
-        updateValue(parseInt(input.value));
-        
-        // Set up event listeners
-        decreaseBtn.addEventListener('click', () => {
-          updateValue(parseInt(valueDisplay.textContent) - 1);
+      var toast = document.querySelector('[data-quantity-toast]');
+      var closeBtn = toast.querySelector('.quantity-toast__close');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+          toast.classList.remove('show');
         });
-        
-        increaseBtn.addEventListener('click', () => {
-          updateValue(parseInt(valueDisplay.textContent) + 1);
-        });
-      });
+      }
     });
   </script>
+
+<style>
+  .quantity-counter {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 700;
+    padding: 8px 16px;
+    /* background-color: #E3E0DA; */
+    border: 1px solid #33363480;
+    border-radius: 16px;
+    /* width: 100px; */
+    height: 56px;
+    background-color: #FAFCFE;
+  }
+
+  .quantity-counter__button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 20px;
+    line-height: 1;
+    color: #303030;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    transition: opacity 0.2s ease;
+  }
+
+  .quantity-counter__button:hover {
+    opacity: 0.7;
+  }
+
+  .quantity-counter__button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .quantity-counter__value {
+    min-width: 24px;
+    text-align: center;
+  }
+
+  /* Toast Styles */
+  .quantity-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    transform: translateX(400px);
+    transition: transform 0.3s ease-in-out;
+    display: none;
+  }
+
+  .quantity-toast.show {
+    transform: translateX(0);
+    display: block;
+  }
+
+  .quantity-toast__content {
+    background-color: #000000;
+    color: white;
+    padding: 8px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 25px;
+  }
+
+  .quantity-toast__icon {
+    font-size: 16px;
+  }
+
+  .quantity-toast__message {
+  flex: 1;
+  }
+
+/* Alternative toast positioning for mobile */
+@media (max-width: 768px) {
+  .quantity-toast {
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    transform: translateY(-100px);
+  }
+  .quantity-toast.show {
+    transform: translateY(0);
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+const quantityCounters = document.querySelectorAll('[data-quantity-counter]');
+
+// Toast functionality
+function showToast(message = "לא ניתן להזמין פחות מ-2 חבילות על מנת לשמור על טריות המשלוח ועלות נמוכה") {
+  const toast = document.querySelector('[data-quantity-toast]');
+  const messageElement = toast.querySelector('.quantity-toast__message');
+
+  messageElement.textContent = message;
+  toast.classList.add('show');
+
+  // Hide after 3 seconds
+  setTimeout(() => {
+  toast.classList.remove('show');
+  }, 3000);
+  }
+
+  quantityCounters.forEach(counter => {
+  const decreaseBtn = counter.querySelector('[data-quantity-decrease]');
+  const increaseBtn = counter.querySelector('[data-quantity-increase]');
+  const valueDisplay = counter.querySelector('[data-quantity-value]');
+  const input = counter.querySelector('[data-quantity-input]');
+
+  const min = parseInt(input.getAttribute('min') || 1);
+  const max = parseInt(input.getAttribute('max') || 10);
+  const effectiveMin = 2; // Our custom minimum quantity
+
+// Update display and form values
+function updateValue(newValue) {
+// Ensure value is within bounds
+newValue = Math.max(min, Math.min(max, newValue));
+
+// Update displayed value
+valueDisplay.textContent = newValue;
+
+// Update hidden input
+input.value = newValue;
+
+// Dispatch change event for any listeners (like cart forms)
+const event = new Event('change', { bubbles: true });
+input.dispatchEvent(event);
+
+// Update button states - decrease button is never disabled but we handle the logic in click handler
+increaseBtn.disabled = newValue >= max;
+}
+
+// Initialize
+updateValue(parseInt(input.value));
+
+// Set up event listeners
+decreaseBtn.addEventListener('click', () => {
+const currentValue = parseInt(valueDisplay.textContent);
+const newValue = currentValue - 1;
+
+// If trying to go below our effective minimum, show toast and prevent
+if (newValue < effectiveMin) {
+showToast("לא ניתן להזמין פחות מ-2 חבילות על מנת לשמור על טריות המשלוח ועלות נמוכה");
+return;
+}
+
+updateValue(newValue);
+});
+
+increaseBtn.addEventListener('click', () => {
+updateValue(parseInt(valueDisplay.textContent) + 1);
+});
+});
+});
+</script>

@@ -70,7 +70,7 @@
           type="hidden"
           name="properties[Weight]"
           id="properties_weight"
-         value="{{ product_weight | default: '500 ג׳' }}"
+         value="{{ product_weight | default: '250 ג׳' }}"
         >
 
         <input
@@ -123,7 +123,9 @@
                   {%- endif -%}
                 </span>
                 <span>&bull;</span>
-                <span>{{ product.price | divided_by: 2 | money_without_trailing_zeros }}</span>
+                <span id="product-total-price">
+                    {{ product.price | divided_by: 100 }} {{ cart.currency.symbol }}
+                </span>
                 {%- render 'loading-spinner' -%}
               </button>
               {%- if show_dynamic_checkout -%}
@@ -239,4 +241,25 @@
     document.getElementById('properties_grind').value = grind;
     document.getElementById('variantDropdown').childNodes[0].nodeValue = grind;
   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+  const pricePerUnit = {{ product.price | json }};
+  const totalPriceEl = document.getElementById('product-total-price');
+  const quantityInput = document.querySelector('[data-quantity-input]');
+
+  function updateTotalPrice() {
+    const qty = parseInt(quantityInput.value) || 1;
+    const total = (pricePerUnit / 2 ) * qty;
+    // Format as money (simple, for ₪, adjust as needed)
+    // Remove trailing zeros from the formatted price
+    let formatted = (total / 100).toLocaleString('he-IL', { style: 'currency', currency: 'ILS' });
+    formatted = formatted.replace(/(\.00)(?=\D|$)/, '');
+    totalPriceEl.textContent = formatted;
+  }
+
+  if (quantityInput && totalPriceEl) {
+    quantityInput.addEventListener('change', updateTotalPrice);
+    updateTotalPrice();
+  }
+});
 </script>
