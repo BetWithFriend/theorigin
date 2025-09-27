@@ -86,18 +86,21 @@ Usage: {% render 'quantity-counter', product: product, field_id: 'quantity' %}
   /* Toast Styles */
   .quantity-toast {
     position: fixed;
-    bottom: 70px;
+    /* bottom: 120px; */
+    /* right: 40px; */
+    /* transform: translateX(-50%); */
     padding: 12px;
-    /* right: 20px; */
-    z-index: 1000;
-    /* transform: translateX(400px); */
-    transition: transform 0.3s ease-in-out;
+    z-index: 10002;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
     display: none;
+    max-width: 90%;
+    width: auto;
   }
 
   .quantity-toast.show {
-    transform: translateX(0);
+    /* transform: translateX(-50%) translateY(0); */
     display: block;
+    opacity: 1;
   }
 
   .quantity-toast__content {
@@ -123,25 +126,28 @@ Usage: {% render 'quantity-counter', product: product, field_id: 'quantity' %}
   flex: 1;
   }
 
-/* Alternative toast positioning for mobile */
+/* Mobile positioning */
 @media (max-width: 749px) {
   .quantity-toast {
-    /* bottom: 20px; */
-    /* left: 20px; */
-    /* right: 20px; */
-    /* transform: translateY(-100px); */
+    bottom: 100px;
+    left: 20px;
+    right: 20px;
+    transform: translateX(0);
+    max-width: none;
   }
   .quantity-toast.show {
-    transform: translateY(0);
+    transform: translateX(0) translateY(0);
   }
 }
 
+/* Desktop positioning - handled by JavaScript */
 @media (min-width: 750px) {
   .quantity-toast {
-    /* bottom: 120px; */
-    right: 40px;
+    position: absolute;
+    z-index: 10002;
+    max-width: 500px;
+    width: auto;
   }
- 
 }
 </style>
 
@@ -155,13 +161,46 @@ function showToast(message = "לא ניתן להזמין פחות מ-2 חביל�
   const messageElement = toast.querySelector('.quantity-toast__message');
 
   messageElement.textContent = message;
+  
+  // Position toast based on screen size
+  if (window.innerWidth >= 750) {
+    // Desktop: position above product-dropdowns-form-wrapper
+    const productDropdownsWrapper = document.querySelector('#product-dropdowns-form-wrapper');
+    if (productDropdownsWrapper) {
+      const rect = productDropdownsWrapper.getBoundingClientRect();
+      toast.style.position = 'fixed';
+      toast.style.top = (rect.top - 60) + 'px';
+      // toast.style.right = '40px';
+      // toast.style.transform = 'translateX(-50%)';
+      toast.style.bottom = 'auto';
+    }
+  } else {
+    // Mobile: use default positioning (already set in CSS)
+    toast.style.position = 'fixed';
+    toast.style.bottom = '100px';
+    toast.style.left = '20px';
+    toast.style.right = '20px';
+    toast.style.top = 'auto';
+    toast.style.transform = 'translateX(0)';
+  }
+  
   toast.classList.add('show');
 
-  // Hide after 3 seconds
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 5000);
+  // Hide after 5 seconds
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 10000);
+}
+
+// Handle window resize to reposition toast
+window.addEventListener('resize', () => {
+  const toast = document.querySelector('[data-quantity-toast]');
+  if (toast && toast.classList.contains('show')) {
+    // Reposition the toast when window is resized
+    const message = toast.querySelector('.quantity-toast__message').textContent;
+    showToast(message);
   }
+});
 
   quantityCounters.forEach(counter => {
   const decreaseBtn = counter.querySelector('[data-quantity-decrease]');

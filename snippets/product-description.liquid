@@ -387,14 +387,14 @@ function showMoreDetails(section) {
     arrow.classList.toggle('rotated');
 }
 
-    // Expand product descriptions immediately if on desktop
+    // Expand only the details section immediately if on desktop
     if (window.innerWidth > 749) {
-        document.querySelectorAll('.product-description-wrapper').forEach(wrapper => {
-            wrapper.classList.add('expanded');
-            const arrow = wrapper.querySelector('.side-arrow-more-details');
-            if (arrow) {
-                arrow.classList.add('rotated');
-            }
-        });
+        // Only expand the first wrapper (details section)
+        const detailsWrapper = document.querySelectorAll('.product-description-wrapper')[0];
+        detailsWrapper.classList.add('expanded');
+        const arrow = detailsWrapper.querySelector('.side-arrow-more-details');
+        if (arrow) {
+            arrow.classList.add('rotated');
+        }
     }
 </script>
