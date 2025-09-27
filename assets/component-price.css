@@ -4,11 +4,6 @@
   line-height: calc(1 + 0.5 / var(--font-body-scale));
   color: rgb(var(--color-foreground));
   padding: 16px 0 24px 0;
-
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
 }
 .price-product-wrapper {
   font-size: 16px;
@@ -128,13 +123,4 @@ color: #1C201D
   margin-top: 0.2rem;
   text-transform: uppercase;
   color: rgba(var(--color-foreground), 0.7);
-}
-
-.price-details-link {
-  padding-left: 24px;
-}
-
-.price-details-link a {
-  text-decoration: none;
-  color: #AD7B7E;
 }

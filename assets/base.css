@@ -146,10 +146,6 @@
   padding: 0;
 }
 
-.product-main-price-wrapper .price-details-link {
-  display: none;
-}
-
 /* @media (max-width: 768px) { */
 .background-stripe {
   position: absolute;
@@ -4102,7 +4098,7 @@ details-disclosure>details {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  /* padding: 8px; */
+  padding: 16px;
   /* height: 435px; */
   /* padding: 32px; */
 }
