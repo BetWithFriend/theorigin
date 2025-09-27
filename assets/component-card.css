@@ -444,7 +444,6 @@
 .card--standard>.card__content {
   padding: 0;
   height: 100%;
-  width: 40%;
 }
 
 .card--standard>.card__content .card__information {

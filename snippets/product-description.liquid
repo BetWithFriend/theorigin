@@ -372,6 +372,11 @@
 
 
 function showMoreDetails(section) {
+
+    analytics.trackClick('Product Show Details', {
+        'Section': section
+    });
+
     let wrapper;
     if (section === 'details') {
         wrapper = document.querySelectorAll('.product-description-wrapper')[0];

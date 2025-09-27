@@ -40,6 +40,10 @@
                 answers[idx].style.display = 'none';
             }
         });
+
+        analytics.trackClick('FAQ Product Page', {
+            'Question': clickedQuestion.innerText
+        });
     }
 
     // Attach event listeners
