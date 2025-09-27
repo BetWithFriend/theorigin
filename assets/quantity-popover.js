@@ -42,17 +42,63 @@ if (!customElements.get('quantity-popover')) {
         if (this.minusButton) {
           this.minusButton.addEventListener('click', this.handleMinusClick.bind(this));
         }
+
+        // Add event listeners for remove and close buttons using event delegation
+        document.addEventListener('click', (event) => {
+          if (event.target.classList.contains('minumum-items-remove')) {
+            this.removeItemFromCart(event);
+          }
+          if (event.target.classList.contains('minumum-items-close')) {
+            this.closeMinimumPopup(event);
+          }
+        });
       }
 
       // NEW: Method to handle the minus button click
-      handleMinusClick(event) {
+      handleMinusClick() {
         const currentValue = parseInt(this.quantityInput.value, 10);
         if (currentValue === 2) {
-          event.preventDefault(); // Stop the default behavior
-          this.quantityInput.value = 0; // Set the value to 0
-          this.quantityInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger a change event
+          // Find the minimum items wrapper for this specific cart item
+          const itemIndex = this.quantityInput.dataset.index;
+          const minumumItemsWrapper = document.querySelector(`.minumum-items-wrapper[data-item-index="${itemIndex}"]`);
+
+          if (minumumItemsWrapper) {
+            minumumItemsWrapper.classList.add('show');
+          }
         }
       }
+
+      removeItemFromCart(event) {
+        event.preventDefault(); // Stop the default behavior
+
+        // Find the quantity input for the specific item
+        const itemIndex = event.target.dataset.itemIndex;
+        const quantityInput = document.querySelector(`.quantity__input[data-index="${itemIndex}"]`);
+
+        if (quantityInput) {
+          quantityInput.value = 0; // Set the value to 0
+          // Trigger a change event to update the cart
+          quantityInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        // Hide the minimum items wrapper
+        const minumumItemsWrapper = document.querySelector(`.minumum-items-wrapper[data-item-index="${itemIndex}"]`);
+        if (minumumItemsWrapper) {
+          minumumItemsWrapper.classList.remove('show');
+        }
+      }
+
+      closeMinimumPopup(event) {
+        event.preventDefault(); // Stop the default behavior
+
+        // Find the minimum items wrapper for this specific cart item
+        const itemIndex = event.target.dataset.itemIndex;
+        const minumumItemsWrapper = document.querySelector(`.minumum-items-wrapper[data-item-index="${itemIndex}"]`);
+        if (minumumItemsWrapper) {
+          minumumItemsWrapper.classList.remove('show');
+        }
+      }
+
 
       togglePopover(event) {
         event.preventDefault();

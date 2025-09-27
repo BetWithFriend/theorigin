@@ -320,6 +320,40 @@ cart-remove-button .icon-remove {
   text-transform: uppercase;
 }
 
+.minumum-items-wrapper {
+  background-color: #E3E0DA;
+  border-radius: 16px;
+  width: 90%;
+  padding: 0 16px;
+  display: none;
+}
+
+.minumum-items-wrapper.show {
+  display: block;
+  margin: 0 auto;
+}
+
+
+.minumum-items-text {
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+  color: #1C201D;
+  padding: 16px 0;
+  text-align: center;
+}
+
+.minumum-items-link {
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+  color: #AD7B7E;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 @media screen and (max-width: 749px) {
 
   .cart-items,

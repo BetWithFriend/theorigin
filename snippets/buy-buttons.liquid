@@ -119,7 +119,7 @@
                     {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
                     {{ 'products.product.sold_out' | t }}
                     {%- else -%}
-                    {{ 'products.product.add_to_cart' | t }}
+                    {{ 'products.product.add_to_cart' | t }} (x<span id="product-quantity-display">1</span>)
                   {%- endif -%}
                 </span>
                 <span>&bull;</span>
@@ -255,7 +255,13 @@
     let formatted = (total / 100).toLocaleString('he-IL', { style: 'currency', currency: 'ILS' });
     formatted = formatted.replace(/(\.00)(?=\D|$)/, '');
     totalPriceEl.textContent = formatted;
+    const quantityDisplay = document.getElementById('product-quantity-display');
+    if (quantityDisplay) {
+      quantityDisplay.textContent = qty;
+    }
   }
+
+  
 
   if (quantityInput && totalPriceEl) {
     quantityInput.addEventListener('change', updateTotalPrice);
