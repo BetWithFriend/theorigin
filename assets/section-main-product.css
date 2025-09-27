@@ -333,6 +333,7 @@ a.product__text {
 
   .product-form__submit {
     width: 342px;
+    box-shadow: none;
   }
 }
 

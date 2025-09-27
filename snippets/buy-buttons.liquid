@@ -80,7 +80,15 @@
           value="{{ product_grind | default: 'פולים' }}"
         >
         
-        {%  if product.price < 15000 %}
+        <!-- Toast Message -->
+        <div class="quantity-toast" data-quantity-toast>
+          <div class="quantity-toast__content">
+            {% comment %} <span class="quantity-toast__icon">⚠️</span> {% endcomment %}
+            <span class="quantity-toast__message">לא ניתן להזמין פחות מ-2 חבילות על מנת לשמור על טריות המשלוח ועלות נמוכה</span>
+            <button class="quantity-toast__close" type="button" aria-label="סגור" style="background:none;border:none;cursor:pointer;font-size:18px;line-height:1;padding:0 0 0 8px;color:#fff;">&times;</button>
+          </div>
+        </div>
+        
           <div class="product-variants-wrapper">
               {% comment %} {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
               
@@ -119,7 +127,7 @@
                     {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
                     {{ 'products.product.sold_out' | t }}
                     {%- else -%}
-                    {{ 'products.product.add_to_cart' | t }} (x<span id="product-quantity-display">1</span>)
+                    {{ 'products.product.add_to_cart' | t }} (<span id="product-quantity-display">1</span>)
                   {%- endif -%}
                 </span>
                 <span>&bull;</span>
@@ -133,7 +141,7 @@
               {%- endif -%}
             </div>
           </div>
-        {%  endif %}
+        
 
         
           
@@ -261,7 +269,14 @@
     }
   }
 
-  
+  // Toast functionality
+  var toast = document.querySelector('[data-quantity-toast]');
+  var closeBtn = toast ? toast.querySelector('.quantity-toast__close') : null;
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function() {
+      toast.style.display = 'none';
+    });
+  }
 
   if (quantityInput && totalPriceEl) {
     quantityInput.addEventListener('change', updateTotalPrice);

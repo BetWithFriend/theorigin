@@ -330,7 +330,7 @@ cart-remove-button .icon-remove {
 
 .minumum-items-wrapper.show {
   display: block;
-  margin: 0 auto;
+  margin: 12px auto;
 }
 
 

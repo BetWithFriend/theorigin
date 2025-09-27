@@ -33,25 +33,6 @@ Usage: {% render 'quantity-counter', product: product, field_id: 'quantity' %}
 </div>
 
 
-  <!-- Toast Message -->
-  <div class="quantity-toast" data-quantity-toast>
-    <div class="quantity-toast__content">
-      {% comment %} <span class="quantity-toast__icon">⚠️</span> {% endcomment %}
-      <span class="quantity-toast__message">לא ניתן להזמין פחות מ-2 חבילות על מנת לשמור על טריות המשלוח ועלות נמוכה</span>
-      <button class="quantity-toast__close" type="button" aria-label="סגור" style="background:none;border:none;cursor:pointer;font-size:18px;line-height:1;padding:0 0 0 8px;color:#fff;">&times;</button>
-    </div>
-  </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var toast = document.querySelector('[data-quantity-toast]');
-      var closeBtn = toast.querySelector('.quantity-toast__close');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', function() {
-          toast.classList.remove('show');
-        });
-      }
-    });
-  </script>
 
 <style>
   .quantity-counter {
@@ -105,10 +86,11 @@ Usage: {% render 'quantity-counter', product: product, field_id: 'quantity' %}
   /* Toast Styles */
   .quantity-toast {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 70px;
+    padding: 12px;
+    /* right: 20px; */
     z-index: 1000;
-    transform: translateX(400px);
+    /* transform: translateX(400px); */
     transition: transform 0.3s ease-in-out;
     display: none;
   }
@@ -144,10 +126,10 @@ Usage: {% render 'quantity-counter', product: product, field_id: 'quantity' %}
 /* Alternative toast positioning for mobile */
 @media (max-width: 749px) {
   .quantity-toast {
-    bottom: 20px;
+    /* bottom: 20px; */
     /* left: 20px; */
-    right: 20px;
-    transform: translateY(-100px);
+    /* right: 20px; */
+    /* transform: translateY(-100px); */
   }
   .quantity-toast.show {
     transform: translateY(0);
@@ -156,7 +138,7 @@ Usage: {% render 'quantity-counter', product: product, field_id: 'quantity' %}
 
 @media (min-width: 750px) {
   .quantity-toast {
-    bottom: 120px;
+    /* bottom: 120px; */
     right: 40px;
   }
  
@@ -176,9 +158,9 @@ function showToast(message = "לא ניתן להזמין פחות מ-2 חביל�
   toast.classList.add('show');
 
   // Hide after 3 seconds
-  setTimeout(() => {
-  toast.classList.remove('show');
-  }, 3000);
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 5000);
   }
 
   quantityCounters.forEach(counter => {
