@@ -257,7 +257,7 @@
 
   function updateTotalPrice() {
     const qty = parseInt(quantityInput.value) || 1;
-    const total = (pricePerUnit / 2 ) * qty;
+    const total = pricePerUnit * qty;
     // Format as money (simple, for ₪, adjust as needed)
     // Remove trailing zeros from the formatted price
     let formatted = (total / 100).toLocaleString('he-IL', { style: 'currency', currency: 'ILS' });
