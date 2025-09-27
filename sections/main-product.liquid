@@ -375,12 +375,12 @@
     <div class="page-width-product-page">
       <h1 class="product-title">{{ product.title }}</h1>
 
-          <div class="product-tastes-list">
+          <div class="product-tastes-list {% if section.settings.product_tastes_center %}center{% endif %}">
             {% for taste in product.metafields.custom.coffee_tastes.value %}      
               <div class="single-coffee-taste-main-product">{{ taste }}{% unless forloop.last %} | {% endunless %}</div>
             {% endfor %}
           </div>
-          <div class="product-tastes-list">
+          <div class="product-tastes-list  {% if section.settings.product_tastes_center %}center{% endif %}">
             <div class="product-roast-level">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
             <div class="product-roast-level">עיבוד {{ product.metafields.custom.coffee_process }}</div>
             <div class="product-roast-level with-weight">250 ג׳</div>
@@ -2747,6 +2747,12 @@
       "id": "hide_variants",
       "default": false,
       "label": "t:sections.main-product.settings.hide_variants.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "product_tastes_center",
+      "default": false,
+      "label": "t:sections.main-product.settings.product_tastes_center.label"
     },
     {
       "type": "checkbox",

@@ -10,6 +10,7 @@ if (!customElements.get('quantity-popover')) {
         this.infoButtonMobile = this.querySelector('.quantity-popover__info-button--icon-with-label');
         this.popoverInfo = this.querySelector('.quantity-popover__info');
         this.closeButton = this.querySelector('.button-close');
+        this.cartItem = this.querySelector('.cart-item-wrapper');
         this.eventMouseEnterHappened = false;
 
         // NEW: Find the minus and plus buttons within this component
@@ -64,6 +65,13 @@ if (!customElements.get('quantity-popover')) {
 
           if (minumumItemsWrapper) {
             minumumItemsWrapper.classList.add('show');
+
+            // Scroll the wrapper into view to ensure it's visible
+            minumumItemsWrapper.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+              inline: 'nearest'
+            });
           }
         }
       }
@@ -75,10 +83,27 @@ if (!customElements.get('quantity-popover')) {
         const itemIndex = event.target.dataset.itemIndex;
         const quantityInput = document.querySelector(`.quantity__input[data-index="${itemIndex}"]`);
 
+        // Find the cart item wrapper for smooth transition
+        const cartItemWrapper = document.querySelector(`.cart-item-wrapper[data-vendor]`);
+        const cartItem = document.querySelector(`#CartItem-${itemIndex}`);
+
         if (quantityInput) {
           quantityInput.value = 0; // Set the value to 0
-          // Trigger a change event to update the cart
+
+          // Add transition effect before removing
+          // if (cartItem) {
+          //   cartItem.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+          //   cartItem.style.opacity = '0';
+          //   cartItem.style.transform = 'translateX(-20px)';
+
+          //   // Wait for transition to complete, then trigger change event
+          //   setTimeout(() => {
+          //     quantityInput.dispatchEvent(new Event('change', { bubbles: true }));
+          //   }, 300);
+          // } else {
+          // Fallback: trigger change event immediately
           quantityInput.dispatchEvent(new Event('change', { bubbles: true }));
+          // }
         }
 
         // Hide the minimum items wrapper

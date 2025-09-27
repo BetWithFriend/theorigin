@@ -1438,6 +1438,10 @@ a.product__text {
   .product-media-container .product__modal-opener:not(.product__modal-opener--image) {
     display: none;
   }
+
+  .product-media-container .product__modal-opener {
+    min-height: 400px;
+  }
 }
 
 /* Recipient form */

@@ -112,7 +112,7 @@ slider-component.slider-component-full-width {
   .slider.slider--tablet.contains-card--standard .slider__slide:not(.collection-list__item--no-media) {
     /* padding-bottom: var(--focus-outline-padding); */
     width: 287px;
-    height: 315px;
+    /* height: 380px; */
     padding: 25px 32px 0 0;
     overflow: hidden;
   }
