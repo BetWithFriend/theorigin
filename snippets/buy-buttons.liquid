@@ -81,13 +81,12 @@
         >
         
         <!-- Toast Message -->
-        <div class="quantity-toast" data-quantity-toast>
+        {% comment %} <div class="quantity-toast" data-quantity-toast>
           <div class="quantity-toast__content">
-            {% comment %} <span class="quantity-toast__icon">⚠️</span> {% endcomment %}
             <span class="quantity-toast__message">לא ניתן להזמין פחות מ-2 חבילות על מנת לשמור על טריות המשלוח ועלות נמוכה</span>
             <button class="quantity-toast__close" type="button" aria-label="סגור" style="background:none;border:none;cursor:pointer;font-size:18px;line-height:1;padding:0 0 0 8px;color:#fff;">&times;</button>
           </div>
-        </div>
+        </div> {% endcomment %}
         
           <div class="product-variants-wrapper">
               {% comment %} {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
@@ -121,7 +120,7 @@
                   disabled
                 {% endif %}
               >
-                <span>
+                <span class="add-to-cart-text">
                   {%- if product.selected_or_first_available_variant == null -%}
                     {{ 'products.product.unavailable' | t }}
                     {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}

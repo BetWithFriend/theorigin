@@ -10,12 +10,7 @@ if (!customElements.get('quantity-popover')) {
         this.infoButtonMobile = this.querySelector('.quantity-popover__info-button--icon-with-label');
         this.popoverInfo = this.querySelector('.quantity-popover__info');
         this.closeButton = this.querySelector('.button-close');
-        this.cartItem = this.querySelector('.cart-item-wrapper');
         this.eventMouseEnterHappened = false;
-
-        // NEW: Find the minus and plus buttons within this component
-        this.quantityInput = this.querySelector('.quantity__input');
-        this.minusButton = this.querySelector('.quantity__button[name="minus"]');
 
         if (this.closeButton) {
           this.closeButton.addEventListener('click', this.closePopover.bind(this));
@@ -38,92 +33,7 @@ if (!customElements.get('quantity-popover')) {
           this.infoButtonDesktop.addEventListener('mouseenter', this.togglePopover.bind(this));
           this.infoButtonDesktop.addEventListener('mouseleave', this.closePopover.bind(this));
         }
-
-        // NEW: Add event listener for the minus button
-        if (this.minusButton) {
-          this.minusButton.addEventListener('click', this.handleMinusClick.bind(this));
-        }
-
-        // Add event listeners for remove and close buttons using event delegation
-        document.addEventListener('click', (event) => {
-          if (event.target.classList.contains('minumum-items-remove')) {
-            this.removeItemFromCart(event);
-          }
-          if (event.target.classList.contains('minumum-items-close')) {
-            this.closeMinimumPopup(event);
-          }
-        });
       }
-
-      // NEW: Method to handle the minus button click
-      handleMinusClick() {
-        const currentValue = parseInt(this.quantityInput.value, 10);
-        if (currentValue === 2) {
-          // Find the minimum items wrapper for this specific cart item
-          const itemIndex = this.quantityInput.dataset.index;
-          const minumumItemsWrapper = document.querySelector(`.minumum-items-wrapper[data-item-index="${itemIndex}"]`);
-
-          if (minumumItemsWrapper) {
-            minumumItemsWrapper.classList.add('show');
-
-            // Scroll the wrapper into view to ensure it's visible
-            minumumItemsWrapper.scrollIntoView({
-              behavior: 'smooth',
-              block: 'center',
-              inline: 'nearest'
-            });
-          }
-        }
-      }
-
-      removeItemFromCart(event) {
-        event.preventDefault(); // Stop the default behavior
-
-        // Find the quantity input for the specific item
-        const itemIndex = event.target.dataset.itemIndex;
-        const quantityInput = document.querySelector(`.quantity__input[data-index="${itemIndex}"]`);
-
-        // Find the cart item wrapper for smooth transition
-        const cartItemWrapper = document.querySelector(`.cart-item-wrapper[data-vendor]`);
-        const cartItem = document.querySelector(`#CartItem-${itemIndex}`);
-
-        if (quantityInput) {
-          quantityInput.value = 0; // Set the value to 0
-
-          // Add transition effect before removing
-          // if (cartItem) {
-          //   cartItem.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-          //   cartItem.style.opacity = '0';
-          //   cartItem.style.transform = 'translateX(-20px)';
-
-          //   // Wait for transition to complete, then trigger change event
-          //   setTimeout(() => {
-          //     quantityInput.dispatchEvent(new Event('change', { bubbles: true }));
-          //   }, 300);
-          // } else {
-          // Fallback: trigger change event immediately
-          quantityInput.dispatchEvent(new Event('change', { bubbles: true }));
-          // }
-        }
-
-        // Hide the minimum items wrapper
-        const minumumItemsWrapper = document.querySelector(`.minumum-items-wrapper[data-item-index="${itemIndex}"]`);
-        if (minumumItemsWrapper) {
-          minumumItemsWrapper.classList.remove('show');
-        }
-      }
-
-      closeMinimumPopup(event) {
-        event.preventDefault(); // Stop the default behavior
-
-        // Find the minimum items wrapper for this specific cart item
-        const itemIndex = event.target.dataset.itemIndex;
-        const minumumItemsWrapper = document.querySelector(`.minumum-items-wrapper[data-item-index="${itemIndex}"]`);
-        if (minumumItemsWrapper) {
-          minumumItemsWrapper.classList.remove('show');
-        }
-      }
-
 
       togglePopover(event) {
         event.preventDefault();
