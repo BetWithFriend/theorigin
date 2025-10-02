@@ -186,6 +186,8 @@ function showToast(message = "לא ניתן להזמין פחות מ-2 חביל�
   
   toast.classList.add('show');
 
+
+
   // Hide after 5 seconds
   setTimeout(() => {
     toast.classList.remove('show');
@@ -236,20 +238,29 @@ updateValue(parseInt(input.value));
 
 // Set up event listeners
 decreaseBtn.addEventListener('click', () => {
-const currentValue = parseInt(valueDisplay.textContent);
-const newValue = currentValue - 1;
+  const currentValue = parseInt(valueDisplay.textContent);
+  const newValue = currentValue - 1;
 
-// If trying to go below our effective minimum, show toast and prevent
-if (newValue < effectiveMin) {
-showToast("לא ניתן להזמין פחות מ-2 חבילות על מנת לשמור על טריות המשלוח ועלות נמוכה");
-return;
-}
+  analytics.trackClick('PDP Quantity Decrease', {
+    'Quantity': newValue,
+    'Hit Minimum': newValue < effectiveMin
+  })
 
-updateValue(newValue);
+  // If trying to go below our effective minimum, show toast and prevent
+  if (newValue < effectiveMin) {
+    showToast("לא ניתן להזמין פחות מ-2 חבילות על מנת לשמור על טריות המשלוח ועלות נמוכה");
+    return;
+  }
+
+  updateValue(newValue);
 });
 
 increaseBtn.addEventListener('click', () => {
-updateValue(parseInt(valueDisplay.textContent) + 1);
+  const newValue = parseInt(valueDisplay.textContent) + 1;
+  analytics.trackClick('PDP Quantity Increase', {
+    'Quantity': newValue
+  })
+  updateValue(newValue);
 });
 });
 });

@@ -1,0 +1,128 @@
+{{ 'horizontal-bubbles.css' | asset_url | stylesheet_tag }}
+<div class="horizontal-bubbles-wrapper" id="horizontal-bubbles-wrapper">
+    <div class="horizontal-bubbles-container">
+
+        <div class="bubble-item filter-all" onclick="goToCollections('חנות-קפה')">
+            <div class="bubble-text">
+                <div class="bubble-title">הצג הכל</div>
+                <div class="bubble-subtitle">כל הפולים</div>
+            </div>
+        </div>    
+    
+        <div class="bubble-item filter-single-origin" onclick="goToCollections('קפה-חד-זני')">
+            <div class="bubble-text">
+                <div class="bubble-title">חד זני</div>
+                <div class="bubble-subtitle">טעם של אזור</div>
+            </div>
+        </div>
+
+        <div class="bubble-item filter-blends" onclick="goToCollections('תערובות-קפה')">
+            <div class="bubble-text">
+                <div class="bubble-title">תערובות</div>
+                <div class="bubble-subtitle">טעמים מיוחדים</div>
+            </div>
+        </div>
+
+        <div class="bubble-item filter-special-beans" onclick="goToCollections('פולי-קפה-מיוחדים')">
+            <div class="bubble-text">
+                <div class="bubble-title">מיוחדים</div>
+                <div class="bubble-subtitle">מפתיע ושונה</div>
+            </div>
+        </div>
+
+        <div class="bubble-item filter-light-roast" onclick="goToCollections('קפה-קלייה-בהירה')">
+            <div class="bubble-text">
+                <div class="bubble-title">קליה בהירה</div>
+                <div class="bubble-subtitle">קליל ופירותי</div>
+            </div>
+        </div>
+
+        <div class="bubble-item filter-medium-roast" onclick="goToCollections('פולי-קפה-קלייה-בינונית')">
+            <div class="bubble-text">
+                <div class="bubble-title">קליה בינונית</div>
+                <div class="bubble-subtitle">מתקתק ועשיר</div>
+            </div>
+        </div>
+
+        <div class="bubble-item filter-dark-roast" onclick="goToCollections('פולי-קפה-קלייה-כהה')">
+            <div class="bubble-text">
+                <div class="bubble-title">קליה כהה</div>
+                <div class="bubble-subtitle">שוקולדי ועמוק</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function goToCollections(collectionName) {
+        analytics.trackClick('Filter select', {
+            'Source': 'Catalogue',
+            'Filter Name': collectionName
+        });
+
+        window.location.href = "{{ section.settings.collection.url }}/collections/" + collectionName;
+    }
+
+    // Function to highlight active bubble and scroll into view
+    function highlightActiveBubble() {
+        // Get current URL path
+        const currentPath = window.location.pathname;
+        
+        // Extract collection name from URL
+        const collectionMatch = currentPath.match(/\/collections\/([^\/\?]+)/);
+        if (!collectionMatch) return;
+        
+        const currentCollection = collectionMatch[1];
+        
+        // Map collection names to filter classes
+        // Support both plain and url-encoded collection names
+        const collectionToFilter = {
+            'קפה-חד-זני': 'filter-single-origin',
+            'תערובות-קפה': 'filter-blends',
+            'פולי-קפה-מיוחדים': 'filter-special-beans',
+            'קפה-קלייה-בהירה': 'filter-light-roast',
+            'פולי-קפה-קלייה-בהירה': 'filter-light-roast',
+            'פולי-קפה-קלייה-בינונית': 'filter-medium-roast',
+            'פולי-קפה-קלייה-כהה': 'filter-dark-roast',
+            // url-encoded keys
+            '%D7%A7%D7%A4%D7%94-%D7%97%D7%93-%D7%96%D7%A0%D7%99': 'filter-single-origin',
+            '%D7%AA%D7%A2%D7%A8%D7%95%D7%91%D7%95%D7%AA-%D7%A7%D7%A4%D7%94': 'filter-blends',
+            '%D7%A4%D7%95%D7%9C%D7%99-%D7%A7%D7%A4%D7%94-%D7%9E%D7%99%D7%95%D7%97%D7%93%D7%99%D7%9D': 'filter-special-beans',
+            '%D7%A7%D7%A4%D7%94-%D7%A7%D7%9C%D7%99%D7%99%D7%94-%D7%91%D7%94%D7%99%D7%A8%D7%94': 'filter-light-roast',
+            '%D7%A4%D7%95%D7%9C%D7%99-%D7%A7%D7%A4%D7%94-%D7%A7%D7%9C%D7%99%D7%99%D7%94-%D7%91%D7%94%D7%99%D7%A8%D7%94': 'filter-light-roast',
+            '%D7%A4%D7%95%D7%9C%D7%99-%D7%A7%D7%A4%D7%94-%D7%A7%D7%9C%D7%99%D7%99%D7%94-%D7%91%D7%99%D7%A0%D7%95%D7%A0%D7%99%D7%AA': 'filter-medium-roast',
+            '%D7%A4%D7%95%D7%9C%D7%99-%D7%A7%D7%A4%D7%94-%D7%A7%D7%9C%D7%99%D7%99%D7%94-%D7%9B%D7%94%D7%94': 'filter-dark-roast'
+        };
+        
+        // Find the corresponding bubble
+        const filterClass = collectionToFilter[currentCollection] || 'filter-all';
+
+        const activeBubble = document.querySelector(`.bubble-item.${filterClass}`);
+        if (activeBubble) {
+            // Remove active class from all bubbles
+            document.querySelectorAll('.bubble-item').forEach(bubble => {
+                bubble.classList.remove('active');
+            });
+            
+            // Add active class to current bubble
+            activeBubble.classList.add('active');
+            
+            // Scroll the active bubble into view
+            activeBubble.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
+        }
+    }
+
+    // Run on page load
+    document.addEventListener('DOMContentLoaded', highlightActiveBubble);
+    
+    // Also run immediately in case DOM is already loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', highlightActiveBubble);
+    } else {
+        highlightActiveBubble();
+    }
+</script>
