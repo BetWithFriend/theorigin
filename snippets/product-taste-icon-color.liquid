@@ -47,8 +47,7 @@
   {% endfor %}
 {% endif %}
 </div> {% endcomment %}
-<div class="product-tastes-list">
-  {% comment %} {{ coffee_tastes_list | join: ' | ' }} {% endcomment %}
+<div class="product-tastes-list-icon">
   {% for taste in coffee_tastes_list %}      
     <div class="single-coffee-taste">{{ taste }}</div>
   {% endfor %}
@@ -109,21 +108,19 @@
   /* margin: 0 5px;  */
 }
 
-.product-tastes-list {
+.product-tastes-list-icon {
   text-wrap: auto;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: start;
-  /* justify-content: center; */
-  /* margin-bottom: 8px; */ */
 }
 
-.product-tastes-list.center {
+.product-tastes-list-icon.center {
   justify-content: center;
 }
 
-.product-tastes-list .single-coffee-taste {
+.product-tastes-list-icon .single-coffee-taste {
   background-color: #E3E0DA;
   padding: 4px 8px;
   border-radius: 16px;
@@ -132,7 +129,7 @@
 }
 
 @media screen and (min-width: 749px) {
-  .product-tastes-list {
+  .product-tastes-list-icon {
     justify-content: start;
     /* margin-right: 24px; */
   }

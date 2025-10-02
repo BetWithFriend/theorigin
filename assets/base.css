@@ -1310,6 +1310,10 @@ summary::-webkit-details-marker {
   max-width: 250px;
 }
 
+.article-card-wrapper .card__media .media>img {
+  max-width: 100%;
+}
+
 .media>img {
   object-fit: cover;
   object-position: center center;
