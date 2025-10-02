@@ -280,7 +280,7 @@
                               {%- assign first_property_printed = false -%}
                               {%- for property in item.properties -%}
                                 {%- assign property_first_char = property.first | slice: 0 -%}
-                                {%- if property.last != blank and property_first_char != '_' -%}
+                                {%- if property.first == 'Weight' and property.last != blank and property_first_char != '_' -%}
                                   {%- if first_property_printed -%}
                                   <div class="product-option">/</div> 
                                   {%- endif -%}
