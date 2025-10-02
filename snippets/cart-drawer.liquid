@@ -29,6 +29,7 @@
     align-items: center;
     justify-content: center;
     padding: 2px;
+    margin-bottom: 12px;
   }
   .shipping-crossed-out {
     text-decoration: line-through;
@@ -767,6 +768,14 @@
           >
             {{ 'sections.cart.checkout' | t }}
           </button>
+          <div class="cart_payment_types_icons">
+            <img src="{{ 'payment-visa.webp' | asset_url }}" alt="Visa" />
+            <img src="{{ 'payment-mastercard.webp' | asset_url }}" alt="MasterCard" />
+            <img src="{{ 'payment-max.webp' | asset_url }}" alt="Max" />
+            <img src="{{ 'payment-apple-pay.webp' | asset_url }}" alt="Apple Pay" />
+            <img src="{{ 'payment-google-pay.webp' | asset_url }}" alt="Google Pay" />
+            <img src="{{ 'payment-paypal.png' | asset_url }}" alt="Pay Pal" />
+          </div>
         <!--<button type="button" onclick="this.closest('cart-drawer').close()" class="button button--primary button--full-width cart-btn-checkout" aria-label="{{ 'accessibility.close' | t }}">{{ 'general.continue_shopping' | t }}</button>-->
           <!-- <div class="cart_continue_shopping_link" onclick="this.closest('cart-drawer').close()">המשך בקנייה</div> -->
           </div>
