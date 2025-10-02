@@ -194,7 +194,7 @@ cart-drawer {
 
 cart-drawer-items {
   overflow: auto;
-  /* flex: 1; */
+  flex: 1;
   overflow-x: hidden;
 }
 
@@ -211,9 +211,9 @@ cart-drawer-items {
 .cart-drawer .cart-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 6px;
-  padding: 0 8px;
+  padding: 0 16px;
   /* display: grid;
   grid-template: repeat(2, auto) / repeat(4, 1fr);
   gap: 1rem;
@@ -274,7 +274,7 @@ cart-drawer-items {
 }
 
 .cart-drawer .cart-item__details {
-  /* width: auto; */
+  width: 50%;
   grid-column: 2 / 4;
 }
 

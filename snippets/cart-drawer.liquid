@@ -238,7 +238,7 @@
                       <div class="cart-item-logo">
                         <img class="cart-item-logo-img" src="{{ current_vendor_logo |  image_url: 'small' }}" alt="{{ vendor_name }}"  width="42"/>
                       </div>
-                      {% comment %} <div class="cart-item-vendor">{{ vendor_name |  upcase }}</div> {% endcomment %}
+                      <div class="cart-item-vendor">{{ vendor_name |  upcase }}</div>
                     </div>
                     {%- for item in cart.items -%}
                       {%- if item.vendor == vendor -%}
@@ -260,9 +260,9 @@
                           </div>
 
                           <div class="cart-item__details">
-                            {%- if settings.show_vendor -%}
+                            {% comment %} {%- if settings.show_vendor -%}
                               <p class="caption-with-letter-spacing">{{ item.product.vendor }}</p>
-                            {%- endif -%}
+                            {%- endif -%} {% endcomment %}
 
                             <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
                 
