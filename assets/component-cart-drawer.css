@@ -196,6 +196,12 @@ cart-drawer-items {
   overflow: auto;
   flex: 1;
   overflow-x: hidden;
+  overflow-y: scroll;
+  /* or 'auto' */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
 }
 
 @media screen and (max-height: 650px) {

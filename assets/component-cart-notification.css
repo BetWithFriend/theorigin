@@ -241,3 +241,14 @@
   height: 24px;
   vertical-align: middle;
 }
+
+.cart-item-quantity-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  padding: 0 6px;
+}

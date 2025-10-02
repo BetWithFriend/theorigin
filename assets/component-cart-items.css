@@ -124,6 +124,9 @@ cart-items .title-wrapper-with-link {
   justify-content: center;
   flex-direction: column;
   gap: 1.5rem;
+  margin-bottom: 12px;
+  /* overflow: hidden; */
+  padding: 0 6px;
 
   /* gap: 8px; */
   /* margin-top: 110px; */
@@ -149,7 +152,7 @@ cart-items .title-wrapper-with-link {
 
 .cart-total-delivery-wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: 100%;
   text-align: right;
@@ -162,6 +165,7 @@ cart-items .title-wrapper-with-link {
   line-height: 16px;
   font-weight: 700;
   color: #1C201D;
+  width: 40%;
 }
 
 .cart-total-delivery-sum {
@@ -171,6 +175,7 @@ cart-items .title-wrapper-with-link {
   font-weight: 400;
   color: #1C201D;
   text-align: left;
+  width: 47%;
 }
 
 .cart-item__name:hover {

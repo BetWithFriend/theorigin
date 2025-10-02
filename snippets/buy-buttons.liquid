@@ -73,12 +73,12 @@
          value="{{ product_weight | default: '250 ג׳' }}"
         >
 
-        <input
+        {% comment %} <input
           type="hidden"
           name="properties[Grind]"
           id="properties_grind"
           value="{{ product_grind | default: 'פולים' }}"
-        >
+        > {% endcomment %}
         
         <!-- Toast Message -->
         {% comment %} <div class="quantity-toast" data-quantity-toast>
