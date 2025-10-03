@@ -19,7 +19,7 @@
   .free-shipping-notice {
     font-family: 'Noto Sans', sans-serif;
     color: #1C201D;
-    font-weight: 400;
+    font-weight: 700;
     font-size: 14px;
     /* line-height: 25px; */
     text-align: center;
@@ -32,8 +32,8 @@
     /* margin-bottom: 12px; */
   }
 
-  .free-shipping-notice-bold {
-    font-weight: 700;
+  .free-shipping-notice>div {
+    font-weight: 400;
   }
 
   .shipping-crossed-out {
@@ -755,45 +755,47 @@
                         </div>  
                       {%- endif -%}
                     {%- endfor -%}  
-
-
                         {% comment %} <div class="cart-total-delivery-wrapper">
                           <div class="cart-total-delivery">
                             {{ 'sections.cart.cart_delivery' | t }}
                           </div>
                           
-                           <div class="cart-total-delivery-sum" data-vendor-shipping="{{ vendor }}"> {% endcomment %}
+                           <div class="cart-total-delivery-sum" data-vendor-shipping="{{ vendor }}">
                             {%- if vendor == 'youneedcoffee' -%}
-                              {% comment %} {{ vendor_shipping_cost }} ₪ {% endcomment %}
+                              {{ vendor_shipping_cost }} ₪
                               {%- assign shipping_items_paid = shipping_items_paid | plus: 1 -%}
                             {%- elsif vendor_qualifies_free_shipping -%}
-                              {% comment %} <span class="shipping-crossed-out">{{ vendor_shipping_cost }} ₪</span>
-                              <span>0 ₪</span> {% endcomment %}
+                              <span class="shipping-crossed-out">{{ vendor_shipping_cost }} ₪</span>
+                              <span>0 ₪</span>
                             {%- else -%}
-                              {% comment %} {{ vendor_shipping_cost }} ₪ {% endcomment %}
+                              {{ vendor_shipping_cost }} ₪
                               {%- assign shipping_items_paid = shipping_items_paid | plus: 1 -%}
                             {%- endif -%}
-                          {% comment %} </div>
-                        </div>  {% endcomment %}
-
-
+                          </div>
+                        </div> {% endcomment %}
                          {%- if vendor == 'youneedcoffee' -%}
-                            <div></div>
+                          <div class="free-shipping-notice">
+                            <span>משלוח ₪39</span>
+                              <div>
+                              </div>
+                          </div>
+                            {%- assign shipping_items_paid = shipping_items_paid | plus: 1 -%}
                           {%- elsif vendor_qualifies_free_shipping -%}
                             <div class="free-shipping-notice">
                               <div>
-                                <span class="shipping-crossed-out">משלוח ₪39</span>
-                                <span>₪0</span>
+                                <span>משלוח </span><span class="shipping-crossed-out">₪39</span>
+                                <span>0</span>
                               </div>
-                              <span class="free-shipping-notice-bold">{{ 'sections.cart.free_shipping' | t | default: 'משלוח חינם!' }}</span>
+                              {{ 'sections.cart.free_shipping' | t | default: 'משלוח חינם!' }}
                             </div>
                           {%- else -%}
+                            {%- assign shipping_items_paid = shipping_items_paid | plus: 1 -%}
                             <div class="free-shipping-notice">
                               <span>משלוח ₪39</span>
                                 <div>
                                   {%- assign remaining_for_free = vendor_free_threshold | minus: vendor_total -%}
                                   <img class="cart-icon-delivery " src="{{  'cart_icon_delivery.png' | asset_url }}" alt="free shipping Icon" />
-                                  {% assign formatted_amount = remaining_for_free | money_without_trailing_zeros %}
+                                  {% assign formatted_amount = remaining_for_free | money %}
                                   {{ 'sections.cart.free_shipping_text' | t: amount: formatted_amount }}
                                 </div>
                             </div>
@@ -858,7 +860,7 @@
 
             <p class="totals__total-value totals-value-secondary"><span>עלות קפה:</span> <span class="totals-value-secondary-value">{{ cart.total_price | money_with_currency }}</span></p>
             {%- if shipping_items_paid > 0 %}
-              <p class="totals__total-value totals-value-secondary"><span>סה״כ משלוח ({% if shipping_items_paid == 1 %}מבית קלייה 1{% else %}מ-{{ shipping_items_paid }} בתי קלייה{% endif %}):</span> <span class="totals-value-secondary-value">{{ shipping_price_cents | money_with_currency }}</span></p>
+              <p class="totals__total-value totals-value-secondary"><span>סה״כ משלוח ({% if shipping_items_paid == 1 %}מבית קלייה אחד{% else %}מ-{{ shipping_items_paid }} בתי קלייה{% endif %}):</span> <span class="totals-value-secondary-value">{{ shipping_price_cents | money_with_currency }}</span></p>
             {%- else -%}
               <p class="totals__total-value totals-value-secondary"><span>סה״כ משלוח:</span> <span class="totals-value-secondary-value">0</span></p>
             {%- endif -%}
