@@ -407,6 +407,10 @@ a.product__text {
   width: 100%;
 }
 
+.add-to-cart-text {
+  white-space: nowrap;
+}
+
 .product--no-media .product__info-container>modal-opener {
   display: block;
   text-align: center;

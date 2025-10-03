@@ -12,12 +12,12 @@ Usage: {% render 'quantity-counter', product: product, field_id: 'quantity' %}
   &minus;
   </button>
 
-  <span class="quantity-counter__value" data-quantity-value>2</span>
+  <span class="quantity-counter__value" data-quantity-value>1</span>
 
   <input
     type="hidden"
     name="{{ field_id | default: 'quantity' }}"
-    value="2"
+    value="1"
     data-quantity-input
     min="1"
     max="{{ product.quantity_price_breaks_configured | default: 10 }}"
