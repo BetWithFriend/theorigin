@@ -3814,25 +3814,26 @@ details-disclosure>details {
   }
 }
 
-@media (min-device-pixel-ratio: 2),
-(min-resolution: 192dpi) {
-  .quantity {
-    border-radius: 8px;
-    min-height: 32px;
-    width: 75px;
-    /* width: 40px; */
-    border: 1px solid #1C201D;
+/* @media (min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) { */
+.quantity {
+  border-radius: 8px;
+  min-height: 32px;
+  width: 75px;
+  /* width: 40px; */
+  border: 1px solid #1C201D;
 
-  }
-
-  .quantity-cart-label {
-    font-family: 'Noto Sans', sans-serif;
-    font-size: 14px;
-    margin-left: 5px;
-  }
-
-  .quantity:after {}
 }
+
+.quantity-cart-label {
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+.quantity:after {}
+
+/* } */
 
 @media screen and (min-width: 768px) {
   .header__heading-logo {
