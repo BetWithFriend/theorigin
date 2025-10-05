@@ -107,12 +107,14 @@
             // Add active class to current bubble
             activeBubble.classList.add('active');
             
-            // Scroll the active bubble into view
-            activeBubble.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'center'
-            });
+            if (!window.location.search.includes('from=main-cta')) {
+                // Scroll the active bubble into view
+                activeBubble.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'center'
+                });
+            }
         }
     }
 
