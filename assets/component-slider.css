@@ -3,6 +3,7 @@ slider-component {
       calc((100vw - var(--page-width) + 10rem - var(--grid-desktop-horizontal-spacing)) / 2));
   position: relative;
   display: block;
+  overflow: hidden;
 }
 
 slider-component.slider-component-full-width {
@@ -45,11 +46,11 @@ slider-component.slider-component-full-width {
   }
 
   /* Fix to show some space at the end of our sliders in all browsers */
-  .slider--mobile:after {
+  /* .slider--mobile:after {
     content: '';
     width: 0;
     padding-left: 1.5rem;
-  }
+  } */
 
   .slider.slider--mobile .slider__slide {
     margin-bottom: 0;
@@ -111,8 +112,9 @@ slider-component.slider-component-full-width {
   .slider.slider--tablet.contains-card--standard .slider__slide:not(.collection-list__item--no-media) {
     /* padding-bottom: var(--focus-outline-padding); */
     width: 287px;
-    height: 315px;
+    /* height: 380px; */
     padding: 25px 32px 0 0;
+    overflow: hidden;
   }
 
   .slider.slider--tablet.contains-content-container .slider__slide {
@@ -396,4 +398,31 @@ slider-component.slider-component-full-width {
 
 .slider-button--prev:not([disabled]):hover .icon {
   transform: rotate(90deg) scale(1.1);
+}
+
+.product-tastes-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.single-coffee-taste-main-product {
+  /* background-color: #E3E0DA; */
+  /* padding: 4px 8px; */
+  /* border-radius: 16px; */
+  margin: 2px;
+  font-size: 16px;
+}
+
+.product-roast-level {
+  background-color: #E3E0DA;
+  padding: 2px 10px;
+  border-radius: 30px;
+  margin: 2px;
+  font-size: 16px;
+}
+
+.product-roast-level.with-weight {
+  background-color: #AD7B7E;
+  color: #FBFCFE;
 }

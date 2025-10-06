@@ -28,12 +28,22 @@
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
 
+  .product-count-main-store {
+    padding: 0 12px;
+  }
+
   @media screen and (min-width: 750px) {
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
+
+    .product-count-main-store {
+      padding: 0 60px;
+    }
   }
+
+
 {%- endstyle -%}
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
@@ -100,10 +110,10 @@
     <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
       {{ 'component-facets.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
-      {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+       {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
         <aside
           aria-labelledby="verticalTitle"
-          class="facets-wrapper facets-wrapper--sticky
+          class="facets-wrapper facets-wrapper--sticky hide-filters
           {% unless section.settings.enable_filtering %}
                facets-wrapper--no-filters
           {% endunless %}
@@ -117,9 +127,6 @@
           data-id="{{ section.id }}"
         >
 
-        {% comment %} if coming from questionnaire - hide filters {% endcomment %}
-
-        {% comment %}  {% endcomment %}
           {% render 'facets',
             results: collection,
             enable_filtering: section.settings.enable_filtering,
@@ -127,9 +134,13 @@
             filter_type: section.settings.filter_type,
             paginate: paginate
           %}
-        {% comment %} {% endunless %} {% endcomment %}
         </aside>
-      {%- endif -%}
+      {%- endif -%} 
+
+      <!-- new filters --> 
+      {% render 'new-filters' %}
+
+      {% comment %} <p class="product-count-main-store">מספר מוצרים: {{ collection.products_count }}</p> {% endcomment %}
 
       <div
         class="product-grid-container{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"

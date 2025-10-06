@@ -70,37 +70,87 @@
           type="hidden"
           name="properties[Weight]"
           id="properties_weight"
-         value="{{ product_weight | default: '500 ג׳' }}"
+         value="{{ product_weight | default: '250 ג׳' }}"
         >
 
-        <input
+        {% comment %} <input
           type="hidden"
           name="properties[Grind]"
           id="properties_grind"
           value="{{ product_grind | default: 'פולים' }}"
-        >
+        > {% endcomment %}
         
-        {%  if product.price < 15000 %}
-        <div class="product-variants-wrapper">
-                  {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
-                  
-                  {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
-                  {% render 'variant-dropdown' , grind_size: grind_size_array %}
-                  
-                  {% assign weights_array = vendor.allowed_weights %}
-                  {% render 'dropdown-weights' , weights: weights_array %}
-        {% render 'quantity-counter', product: product, field_id: 'quantity' %}        
-                 </div>
-        {%  endif %}
+        <!-- Toast Message -->
+        {% comment %} <div class="quantity-toast" data-quantity-toast>
+          <div class="quantity-toast__content">
+            <span class="quantity-toast__message">לא ניתן להזמין פחות מ-2 חבילות על מנת לשמור על טריות המשלוח ועלות נמוכה</span>
+            <button class="quantity-toast__close" type="button" aria-label="סגור" style="background:none;border:none;cursor:pointer;font-size:18px;line-height:1;padding:0 0 0 8px;color:#fff;">&times;</button>
+          </div>
+        </div> {% endcomment %}
+        
+          <div class="product-variants-wrapper">
+              {% comment %} {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
+              
+              {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
+              {% render 'variant-dropdown' , grind_size: grind_size_array %}
+              
+              {% assign weights_array = vendor.allowed_weights %}
+              {% render 'dropdown-weights' , weights: weights_array %} {% endcomment %}
+              {% render 'quantity-counter', product: product, field_id: 'quantity' %}        
 
-        
-          
+              <div class="product-form__buttons">
+              {%- liquid
+                assign check_against_inventory = true
+                if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
+                  assign check_against_inventory = false
+                endif
+                if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
+                  assign quantity_rule_soldout = true
+                endif
+              -%}
+              <button
+                id="ProductSubmitButton-{{ section_id }}"
+                type="submit"
+                name="add"
+                class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
+                {% if product.selected_or_first_available_variant.available == false
+                  or quantity_rule_soldout
+                  or product.selected_or_first_available_variant == null
+                %}
+                  disabled
+                {% endif %}
+              >
+                <span class="add-to-cart-text">
+                  {%- if product.selected_or_first_available_variant == null -%}
+                    {{ 'products.product.unavailable' | t }}
+                    {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+                    {{ 'products.product.sold_out' | t }}
+                    {%- else -%}
+                    {{ 'products.product.add_to_cart' | t }}
+                  {%- endif -%}
+                </span>
+                <span>&bull;</span>
+                <span id="product-total-price">
+                    {{ product.price | divided_by: 100 }} {{ cart.currency.symbol }}
+                </span>
+                {%- render 'loading-spinner' -%}
+              </button>
+              {%- if show_dynamic_checkout -%}
+                {{ form | payment_button }}
+              {%- endif -%}
+            </div>
+          </div>
+          {% if min_order_for_free_shipping %}
+            <div class="free-shipping-pdp-notice">
+              משלוח חינם מעל {{ min_order_for_free_shipping }} ש״ח בבית קלייה זה
+            </div>
+          {% endif %}
 
         {%- if gift_card_recipient_feature_active -%}
           {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
         {%- endif -%}
 
-        <div class="product-form__buttons">
+        {% comment %} <div class="product-form__buttons">
           {%- liquid
             assign check_against_inventory = true
             if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
@@ -136,7 +186,7 @@
           {%- if show_dynamic_checkout -%}
             {{ form | payment_button }}
           {%- endif -%}
-        </div>
+        </div> {% endcomment %}
       {%- endform -%}
     </product-form>
   {%- else -%}
@@ -199,4 +249,38 @@
     document.getElementById('properties_grind').value = grind;
     document.getElementById('variantDropdown').childNodes[0].nodeValue = grind;
   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+  const pricePerUnit = {{ product.price | json }};
+  const totalPriceEl = document.getElementById('product-total-price');
+  const quantityInput = document.querySelector('[data-quantity-input]');
+
+  function updateTotalPrice() {
+    const qty = parseInt(quantityInput.value) || 1;
+    const total = pricePerUnit * qty;
+    // Format as money (simple, for ₪, adjust as needed)
+    // Remove trailing zeros from the formatted price
+    let formatted = (total / 100).toLocaleString('he-IL', { style: 'currency', currency: 'ILS' });
+    formatted = formatted.replace(/(\.00)(?=\D|$)/, '');
+    totalPriceEl.textContent = formatted;
+    const quantityDisplay = document.getElementById('product-quantity-display');
+    if (quantityDisplay) {
+      quantityDisplay.textContent = qty;
+    }
+  }
+
+  // Toast functionality
+  var toast = document.querySelector('[data-quantity-toast]');
+  var closeBtn = toast ? toast.querySelector('.quantity-toast__close') : null;
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function() {
+      toast.style.display = 'none';
+    });
+  }
+
+  if (quantityInput && totalPriceEl) {
+    quantityInput.addEventListener('change', updateTotalPrice);
+    updateTotalPrice();
+  }
+});
 </script>

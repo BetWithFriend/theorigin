@@ -63,12 +63,16 @@ class CartDrawer extends HTMLElement {
     this.classList.remove('active');
     removeTrapFocus(this.activeElement);
     document.body.classList.remove('overflow-hidden');
+    // const quantityToast = document.querySelector('.minumum-items-wrapper');
+    // if (quantityToast) {
+    //   quantityToast.classList.remove('show');
+    // }
 
     analytics.track('Cart', {
       'Action': 'Close',
     });
 
-    
+
     const chatWidget = document.querySelector('.origin-bot-origin-chat-widget');
     if (chatWidget) {
       chatWidget.style.display = 'flex';

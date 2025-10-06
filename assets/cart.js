@@ -75,7 +75,7 @@ class CartItems extends HTMLElement {
     if (inputValue === 0) {
       this.updateQuantity(index, 0, document.activeElement.getAttribute('name'), input.dataset.quantityVariantId);
       input.setCustomValidity('');
-      input.reportValidity();
+      // input.reportValidity();
       return;
     }
 

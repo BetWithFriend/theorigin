@@ -96,7 +96,7 @@ cart-drawer:not(.is-empty) .cart-drawer__collection {
   box-shadow: 0 0 0 0.2rem rgba(var(--color-button), 0);
   position: absolute;
   top: 10px;
-  right: 6px;
+  right: 0;
   color: rgb(var(--color-foreground));
   background-color: transparent;
   border: none;
@@ -120,8 +120,7 @@ cart-drawer:not(.is-empty) .cart-drawer__collection {
 
 .drawer__footer {
   border-top: 0.1rem solid rgba(var(--color-foreground), 0.2);
-  /* padding: 1.5rem 0; */
-  padding: 8px 0 16px 0;
+  padding: 1.5rem 0;
 }
 
 cart-drawer-items.is-empty+.drawer__footer {
@@ -195,8 +194,14 @@ cart-drawer {
 
 cart-drawer-items {
   overflow: auto;
-  /* flex: 1; */
+  flex: 1;
   overflow-x: hidden;
+  overflow-y: scroll;
+  /* or 'auto' */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
 }
 
 @media screen and (max-height: 650px) {
@@ -211,10 +216,11 @@ cart-drawer-items {
 
 .cart-drawer .cart-item {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  align-items: start;
+  justify-content: start;
+  gap: 6px;
   padding: 0 16px;
+  margin-bottom: 24px;
   /* display: grid;
   grid-template: repeat(2, auto) / repeat(4, 1fr);
   gap: 1rem;
@@ -222,15 +228,19 @@ cart-drawer-items {
 }
 
 .cart-drawer .cart-item:last-child {
-  /* margin-bottom: 1rem; */
+  margin-bottom: 1rem;
 }
 
 .cart-drawer .cart-item__media {
   grid-row: 1 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25%;
 }
 
 .cart-drawer .cart-item__image {
-  /* max-width: 100%; */
+  max-width: 100%;
 }
 
 .cart-drawer .cart-items thead {
@@ -258,7 +268,7 @@ cart-drawer-items {
 }
 
 .cart-drawer .cart-item:last-child {
-  /* margin-bottom: 1.5rem; */
+  margin-bottom: 1.5rem;
 }
 
 .cart-drawer .cart-item .loading__spinner {
@@ -275,8 +285,13 @@ cart-drawer-items {
 }
 
 .cart-drawer .cart-item__details {
-  /* width: auto; */
-  grid-column: 2 / 4;
+  width: 45%;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  /* grid-column: 2 / 4; */
 }
 
 .cart-drawer .cart-item__totals {
@@ -403,7 +418,7 @@ cart-drawer-items::-webkit-scrollbar-track-piece {
 }
 
 .cart-drawer .cart-item__error {
-  margin-top: 0.8rem;
+  /* margin-top: 0.8rem; */
 }
 
 .cart-drawer .quantity-popover__info+.cart-item__error {

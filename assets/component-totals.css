@@ -42,12 +42,12 @@
 
 .totals .totals__total-value span {
   display: inline-block;
-  width: 180px;
+  /* width: 180px; */
 }
 
 @media all and (min-width: 769px) {
   .totals .totals__total-value span {
-    width: 220px;
+    width: 230px;
   }
 }
 
@@ -56,7 +56,7 @@
 }
 
 .totals>*+* {
-  margin-left: 2rem;
+  /* margin-left: 2rem; */
 }
 
 .totals__total {
@@ -83,6 +83,7 @@
   font-size: 16px;
   font-weight: 400;
   padding: 5px 0 5px 0;
+  white-space: nowrap;
 }
 
 .totals-value-third {
