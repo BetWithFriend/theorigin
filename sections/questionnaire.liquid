@@ -43,7 +43,7 @@
           <button class="questionnaire-skip-btn" onclick="goToPreviousStep(0)">
              <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" />
           </button>
-          <button class="questionnaire-select-btn" onclick="getFilters('PrepFilter', 1)" disabled>בחרו אפשרות</button>
+          <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_prep_methods', 1)" disabled>בחרו אפשרות</button>
         </div>
         <div class="questionnaire-progress-bar-wrapper">
           <div class="questionnaire-progress-bar filled">&nbsp;</div>
@@ -90,7 +90,7 @@
               <button class="questionnaire-skip-btn" onclick="goToPreviousStep(2)"> 
                 <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon"/>
               </button> 
-              <button class="questionnaire-select-btn" onclick="getFilters('roastFilter', 2)">בחרו אפשרות</button>       
+              <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_roast_level', 2)">בחרו אפשרות</button>       
             </div>
           <div class="questionnaire-progress-bar-wrapper">
             <div class="questionnaire-progress-bar filled">&nbsp;</div>
@@ -142,7 +142,7 @@
           <button class="questionnaire-skip-btn" onclick="goToPreviousStep(3)"> 
             <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon"/>
           </button>  
-          <button class="questionnaire-select-btn" onclick="getFilters('tasteFilter', 3)">בחרו אפשרות</button>
+          <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_tastes', 3)">בחרו אפשרות</button>
         </div>
           <div class="questionnaire-progress-bar-wrapper">
             <div class="questionnaire-progress-bar filled">&nbsp;</div>
@@ -501,7 +501,7 @@
   // Add this function to handle disabling taste options if 'כהה' is selected
   function updateTasteOptionsDisabledState() {
     // Check if 'כהה' is in the roast level filter
-    const roastLevels = window.appliedFilters && window.appliedFilters.roastFilter;
+    const roastLevels = window.appliedFilters && window.appliedFilters['filter.p.m.custom.coffee_roast_level'];
     const isDarkSelected = Array.isArray(roastLevels) 
                               && roastLevels.includes('כהה')
                               && !roastLevels.includes('בהירה')
