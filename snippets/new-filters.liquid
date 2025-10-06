@@ -1,5 +1,5 @@
 {{ 'horizontal-bubbles.css' | asset_url | stylesheet_tag }}
-{% comment %} <p class="product-count-main-store">מספר מוצרים: {{ collection.products_count }}</p> {% endcomment %}
+
 <div class="horizontal-bubbles-wrapper" id="horizontal-bubbles-wrapper">
     <div class="horizontal-bubbles-container">
 
@@ -13,39 +13,41 @@
         <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Chocolate')">
             <div class="bubble-text">
                 <div class="bubble-title">שוקולדי</div>
-                <div class="bubble-subtitle">טעם של אזור</div>
+                <div class="bubble-subtitle">מריר ואגוזי</div>
             </div>
         </div>
 
         <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Sweet-Chocolate')">
             <div class="bubble-text">
                 <div class="bubble-title">מתוק שוקולדי</div>
-                <div class="bubble-subtitle">טעמים מיוחדים</div>
+                <div class="bubble-subtitle">עמוק ועשיר</div>
             </div>
         </div>
 
         <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Sweet')">
             <div class="bubble-text">
                 <div class="bubble-title">מתוק מאוזן</div>
-                <div class="bubble-subtitle">קליל ופירותי</div>
+                <div class="bubble-subtitle">מאוזן וקרמלי</div>
             </div>
         </div>
 
         <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet')">
             <div class="bubble-text">
                 <div class="bubble-title">פירותי מתוק</div>
-                <div class="bubble-subtitle">מתקתק ועשיר</div>
+                <div class="bubble-subtitle">חמיצות קלה</div>
             </div>
         </div>
 
         <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity')">
             <div class="bubble-text">
                 <div class="bubble-title">פירותי</div>
-                <div class="bubble-subtitle">שוקולדי ועמוק</div>
+                <div class="bubble-subtitle">חמצמץ והדרי</div>
             </div>
         </div>
     </div>
 </div>
+<p class="product-count-main-store">מספר מוצרים: {{ collection.products_count }}</p>
+
 <script>
 
 function goToFilter(element, filterKey, filterValue) {
