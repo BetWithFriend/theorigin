@@ -31,7 +31,6 @@
     justify-content: center;
     text-align: center;
     border-radius: 8px;
-    background-color: #F5F4F2;
     padding: 20px 20px;
     min-width: 140px;
     max-width: 160px;
@@ -40,7 +39,8 @@
     transition: all 0.3s ease;
     flex-shrink: 0;
     position: relative;
-    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
+    background-color: transparent;
+    border: 2px solid #1C201D;
 }
 
 /* .bubble-item:hover {
@@ -48,9 +48,9 @@
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }*/
 
-.bubble-item.active {
+/* .bubble-item.active {
     filter: brightness(80%);
-}
+} */
 
 /* Bubble Text */
 .bubble-text {
@@ -121,7 +121,7 @@
 
 /* Active bubble state */
 .bubble-item.active {
-    background-color: #F4F3F0;
+    background-color: #f4f3f0;
     border: 2px solid #BEA499;
 }
 
