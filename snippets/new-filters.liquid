@@ -1,59 +1,101 @@
 {{ 'horizontal-bubbles.css' | asset_url | stylesheet_tag }}
+{% comment %} <p class="product-count-main-store">מספר מוצרים: {{ collection.products_count }}</p> {% endcomment %}
 <div class="horizontal-bubbles-wrapper" id="horizontal-bubbles-wrapper">
     <div class="horizontal-bubbles-container">
 
-        <div class="bubble-item filter-all" onclick="goToCollections('חנות-קפה')">
+        {% comment %} <div class="bubble-item filter-all" onclick="goToCollections('חנות-קפה')">
             <div class="bubble-text">
                 <div class="bubble-title">הצג הכל</div>
                 <div class="bubble-subtitle">כל הפולים</div>
             </div>
-        </div>    
-    
-        <div class="bubble-item filter-single-origin" onclick="goToCollections('קפה-חד-זני')">
+        </div>     {% endcomment %}
+
+        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Chocolate')">
             <div class="bubble-text">
-                <div class="bubble-title">חד זני</div>
+                <div class="bubble-title">שוקולדי</div>
                 <div class="bubble-subtitle">טעם של אזור</div>
             </div>
         </div>
 
-        <div class="bubble-item filter-blends" onclick="goToCollections('תערובות-קפה')">
+        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Sweet-Chocolate')">
             <div class="bubble-text">
-                <div class="bubble-title">תערובות</div>
+                <div class="bubble-title">מתוק שוקולדי</div>
                 <div class="bubble-subtitle">טעמים מיוחדים</div>
             </div>
         </div>
 
-        <div class="bubble-item filter-special-beans" onclick="goToCollections('פולי-קפה-מיוחדים')">
+        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Sweet')">
             <div class="bubble-text">
-                <div class="bubble-title">מיוחדים</div>
-                <div class="bubble-subtitle">מפתיע ושונה</div>
-            </div>
-        </div>
-
-        <div class="bubble-item filter-light-roast" onclick="goToCollections('קפה-קלייה-בהירה')">
-            <div class="bubble-text">
-                <div class="bubble-title">קליה בהירה</div>
+                <div class="bubble-title">מתוק מאוזן</div>
                 <div class="bubble-subtitle">קליל ופירותי</div>
             </div>
         </div>
 
-        <div class="bubble-item filter-medium-roast" onclick="goToCollections('פולי-קפה-קלייה-בינונית')">
+        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet')">
             <div class="bubble-text">
-                <div class="bubble-title">קליה בינונית</div>
+                <div class="bubble-title">פירותי מתוק</div>
                 <div class="bubble-subtitle">מתקתק ועשיר</div>
             </div>
         </div>
 
-        <div class="bubble-item filter-dark-roast" onclick="goToCollections('פולי-קפה-קלייה-כהה')">
+        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity')">
             <div class="bubble-text">
-                <div class="bubble-title">קליה כהה</div>
+                <div class="bubble-title">פירותי</div>
                 <div class="bubble-subtitle">שוקולדי ועמוק</div>
             </div>
         </div>
     </div>
 </div>
-
 <script>
+
+function goToFilter(element, filterKey, filterValue) {
+  if (window.FacetFiltersForm && typeof FacetFiltersForm.renderPage === 'function') {
+
+    analytics.trackClick('Filter select', {
+        'Source': 'Catalogue',
+        'Filter Name': filterValue
+    });
+     element.classList.toggle('active'); 
+
+    const params = new URLSearchParams(window.location.search);
+
+    let currentValues = params.getAll(filterKey);
+    
+    const index = currentValues.indexOf(filterValue);
+
+    if (index > -1) {
+      currentValues.splice(index, 1);
+    } else {
+      currentValues.push(filterValue);
+    }
+    params.delete(filterKey);
+
+    currentValues.forEach(value => {
+        // This adds the parameter multiple times: ?key=val1&key=val2
+        params.append(filterKey, value); 
+    });
+
+    // 5. Build the new full query string (excluding the leading '?')
+    const newQueryString = params.toString();
+
+    // 6. Render the page
+    // Shopify's FacetFiltersForm.renderPage is often designed to work with 
+    // a parameter string or form data that represents the new state.
+    // Since we've built the complete new query string, we need to ensure the 
+    // renderPage function accepts a query string format, which it typically does.
+    
+    // The format expected by renderPage is usually 'key=value&key=value'.
+    FacetFiltersForm.renderPage(newQueryString, null, true);
+
+    // 7. Dispatch the custom event
+    const event = new CustomEvent('collectionPageUpdated');
+    window.dispatchEvent(event);
+
+  } else {
+    console.log('filter failed: FacetFiltersForm not found or renderPage is not a function');
+  }
+}
+
     function goToCollections(collectionName) {
         analytics.trackClick('Filter select', {
             'Source': 'Catalogue',
@@ -107,24 +149,15 @@
             // Add active class to current bubble
             activeBubble.classList.add('active');
             
-            if (!window.location.search.includes('from=main-cta')) {
-                // Scroll the active bubble into view
-                activeBubble.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'nearest',
-                    inline: 'center'
-                });
-            }
+            // if (!window.location.search.includes('from=main-cta')) {
+            //     // Scroll the active bubble into view
+            //     activeBubble.scrollIntoView({
+            //         behavior: 'smooth',
+            //         block: 'nearest',
+            //         inline: 'center'
+            //     });
+            // }
         }
     }
 
-    // Run on page load
-    document.addEventListener('DOMContentLoaded', highlightActiveBubble);
-    
-    // Also run immediately in case DOM is already loaded
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', highlightActiveBubble);
-    } else {
-        highlightActiveBubble();
-    }
 </script>

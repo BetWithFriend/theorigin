@@ -355,6 +355,7 @@
         newQueryParams = `${newQueryParams}&from_quiz=true`;
         const facetsPage = document.querySelector('.facets-wrapper--sticky');
         facetsPage.classList.add('hide-filters');
+        debugger
         FacetFiltersForm.renderPage(newQueryParams, null, true);
         
         const event = new CustomEvent('collectionPageUpdated');

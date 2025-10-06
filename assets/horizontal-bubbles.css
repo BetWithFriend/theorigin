@@ -4,12 +4,15 @@
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
 }
 
 .horizontal-bubbles-wrapper::-webkit-scrollbar {
-    display: none; /* WebKit */
+    display: none;
+    /* WebKit */
 }
 
 .horizontal-bubbles-container {
@@ -29,7 +32,7 @@
     text-align: center;
     border-radius: 8px;
     background-color: #F5F4F2;
-    padding: 20px 24px;
+    padding: 20px 20px;
     min-width: 140px;
     max-width: 160px;
     height: 60px;
@@ -45,9 +48,9 @@
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }*/
 
-.bubble-item:active {
+.bubble-item.active {
     filter: brightness(80%);
-} 
+}
 
 /* Bubble Text */
 .bubble-text {
@@ -115,7 +118,8 @@
     background-color: transparent;
     border: 2px solid #1C201D;
 }
-    /* Active bubble state */
+
+/* Active bubble state */
 .bubble-item.active {
     background-color: #F4F3F0;
     border: 2px solid #BEA499;
@@ -126,34 +130,34 @@
     .horizontal-bubbles-wrapper {
         padding: 32px 0;
     }
-    
+
     .horizontal-bubbles-container {
         padding: 0 40px;
         gap: 20px;
     }
-    
+
     .bubble-item {
         min-width: 160px;
         max-width: 180px;
         height: 120px;
         padding: 24px 28px;
     }
-    
+
     .bubble-icon {
         height: 50px;
         margin-bottom: 12px;
     }
-    
+
     .bubble-icon img {
         max-width: 50px;
         max-height: 50px;
     }
-    
+
     .bubble-title {
         font-size: 16px;
         margin-bottom: 6px;
     }
-    
+
     .bubble-subtitle {
         font-size: 13px;
     }
@@ -168,29 +172,29 @@
         justify-content: center;
         padding: 0 60px;
     }
-    
+
     .bubble-item {
         min-width: 180px;
         max-width: 200px;
         height: 120px;
         padding: 28px 32px;
     }
-    
+
     .bubble-icon {
         height: 60px;
         margin-bottom: 16px;
     }
-    
+
     .bubble-icon img {
         max-width: 60px;
         max-height: 60px;
     }
-    
+
     .bubble-title {
         font-size: 18px;
         margin-bottom: 8px;
     }
-    
+
     .bubble-subtitle {
         font-size: 14px;
     }

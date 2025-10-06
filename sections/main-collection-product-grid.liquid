@@ -140,7 +140,7 @@
       <!-- new filters --> 
       {% render 'new-filters' %}
 
-      <p class="product-count-main-store">מספר מוצרים: {{ collection.products_count }}</p>
+      {% comment %} <p class="product-count-main-store">מספר מוצרים: {{ collection.products_count }}</p> {% endcomment %}
 
       <div
         class="product-grid-container{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
