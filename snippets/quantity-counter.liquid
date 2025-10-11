@@ -49,7 +49,7 @@ Usage: {% render 'quantity-counter', product: product, field_id: 'quantity' %}
     border: 1px solid #33363480;
     border-radius: 16px;
     /* width: 100px; */
-    height: 56px;
+    height: 46px;
     background-color: #FAFCFE;
   }
 
@@ -242,15 +242,14 @@ decreaseBtn.addEventListener('click', () => {
   const newValue = currentValue - 1;
 
   analytics.trackClick('PDP Quantity Decrease', {
-    'Quantity': newValue,
-    'Hit Minimum': newValue < effectiveMin
+    'Quantity': newValue
   })
 
   // If trying to go below our effective minimum, show toast and prevent
-  if (newValue < effectiveMin) {
-    showToast("לא ניתן להזמין פחות מ-2 חבילות על מנת לשמור על טריות המשלוח ועלות נמוכה");
-    return;
-  }
+  // if (newValue < effectiveMin) {
+  //   showToast("לא ניתן להזמין פחות מ-2 חבילות על מנת לשמור על טריות המשלוח ועלות נמוכה");
+  //   return;
+  // }
 
   updateValue(newValue);
 });

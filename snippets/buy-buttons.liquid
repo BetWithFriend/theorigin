@@ -129,10 +129,6 @@
                     {{ 'products.product.add_to_cart' | t }}
                   {%- endif -%}
                 </span>
-                <span>&bull;</span>
-                <span id="product-total-price">
-                    {{ product.price | divided_by: 100 }} {{ cart.currency.symbol }}
-                </span>
                 {%- render 'loading-spinner' -%}
               </button>
               {%- if show_dynamic_checkout -%}

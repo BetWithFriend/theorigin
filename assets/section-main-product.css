@@ -22,8 +22,9 @@ product-info {
 .product-actions {
   position: fixed !important;
   bottom: 0;
-  z-index: 11 !important;
+  z-index: 10 !important;
   width: 100%;
+  background-color: #E3E0DA;
 }
 
 @media screen and (min-width: 750px) {
@@ -202,7 +203,7 @@ product-info {
 
 .product-form__submit {
   /* width: 220px; */
-  height: 56px;
+  height: 40px;
   padding: unset;
   padding: 0 20px;
   border-radius: 15px;
@@ -409,6 +410,8 @@ a.product__text {
 
 .add-to-cart-text {
   white-space: nowrap;
+  font-weight: 700;
+  font-size: 20px;
 }
 
 .product--no-media .product__info-container>modal-opener {
