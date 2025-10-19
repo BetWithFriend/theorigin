@@ -39,6 +39,12 @@
   font-size: 18px;
 }
 
+.price .price-item .price-item-weight {
+  font-size: 16px;
+  font-weight: 400;
+  color: #878686;
+}
+
 .price_item_cart {
   display: none;
 }

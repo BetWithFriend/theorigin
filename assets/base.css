@@ -87,7 +87,7 @@
   /* flex-direction: column; */
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   /* margin-bottom: unset; */
   font-weight: 700;
   font-size: 24px;
@@ -95,12 +95,11 @@
   /* color: #1c201d; */
   /* color: #FBFCFE; */
   color: #474747;
-  text-align: center;
+  text-align: right;
   letter-spacing: 2px;
   line-height: normal;
-  margin-bottom: 8px;
-  margin-top: 0;
-  padding: 0 8px;
+  margin: 0 24px;
+  padding: 0;
 }
 
 .product-source-wrapper {
@@ -150,7 +149,7 @@
 /* @media (max-width: 768px) { */
 .background-stripe {
   position: absolute;
-  top: 300px;
+  top: 200px;
   left: 0;
   right: 0;
   height: 155px;

@@ -86,7 +86,7 @@
         {%- else -%}
           <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
           <span class="price-item price-item--regular" dir="rtl">
-           {{ money_price }}
+           {{ money_price }}<span class="price-item-weight"> / 250 גרם</span>
           </span>
          {%  if price < 20000 %}
           <span class="price-item price-item--regular {{ class_added }}">

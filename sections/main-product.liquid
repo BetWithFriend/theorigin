@@ -397,6 +397,12 @@
             {% render 'product-media-gallery', variant_images: variant_images %}
           </div>
         </div> {% endcomment %}
+        <div class="product-info-top-wrapper">
+          <div class="grid__item product__media-wrapper">
+            {% render 'product-media-gallery', variant_images: variant_images %}
+          </div>
+      </div>
+      <div class="background-stripe"> </div>
           <h1 class="product-title">{{ product.title }}</h1>
 
           <div class="product-tastes-list {% if section.settings.product_tastes_center %}center{% endif %}">
@@ -404,65 +410,20 @@
               <div class="single-coffee-taste-main-product">{{ taste }}{% unless forloop.last %} | {% endunless %}</div>
             {% endfor %}
           </div>
+          {% comment %} <div class="product-tastes-list {% if section.settings.product_tastes_center %}center{% endif %}">
+            <div class="single-coffee-taste-main-product">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
+          </div> {% endcomment %}
+
           <div class="product-tastes-list  {% if section.settings.product_tastes_center %}center{% endif %}">
             {% comment %} <div class="product-roast-level with-weight">250 ג׳</div>   {% endcomment %}
             {% comment %} <div class="product-roast-level">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
             <div class="product-roast-level">עיבוד {{ product.metafields.custom.coffee_process }}</div> {% endcomment %}
-            <div class="product-roast-level with-weight">
-              250 גרם / <span class="inline-price">{% render 'price' %}</span>
+            <div class="product-roast-level">
+              <span class="inline-price">{% render 'price' %}</span>
             </div>
             
           </div>
-          
-          {% comment %} <div class="product-main-price-wrapper">{% render 'price' %}</div> {% endcomment %}
-      <div class="product-info-top-wrapper">
-        {% comment %} <div class="product-info-right-side"> {% endcomment %}
-          {% comment %} <div class="product-vendor-title">{{ vendor.vendor_short_name | upcase }}</div> {% endcomment %}
-          {% comment %} <h1 class="product-title">{{ product.title }}</h1> {% endcomment %}
-          {% comment %} <div class="product-source-wrapper">
-            <div class="product-source">
-            {% for pSource in product.metafields.custom.coffee_source.value limit:2 %}
-              {% if forloop.index > 1 %}
-                <span>,</span>
-              {% endif %}
-              {{ pSource }}
-            {% endfor %}
-            {% if product.metafields.custom.coffee_source.value.size > 2 %}
-              +{{ product.metafields.custom.coffee_source.value.size | minus: 2 }}
-            {% endif %}
-            </div>
-          </div> {% endcomment %}
-          {% comment %} <div class="selection-wrapper">        
 
-          <!-- Conditional Color -->
-          {% case product.metafields.custom.coffee_taste %}
-            {% when 'Fruity' %}
-            <span>פירותי</span>
-              <span class="selection-color" style="background-color: #FFDF70;" aria-label="Yellow Indicator"></span>
-            {% when 'Chocolate' %}
-            <span>שוקולדי</span>
-              <span class="selection-color" style="background-color: #8B4513;" aria-label="Brown Indicator"></span>
-            {% when 'Sweet-Chocolate' %}
-            <span>מתוק שוקולדי</span>
-              <span class="selection-color" style="background-color: #C4823E;" aria-label="Orange Indicator"></span>
-            {% when 'Sweet' %}
-            <span>מתוק מאוזן</span>
-              <span class="selection-color" style="background-color: #D60540;" aria-label="Red Indicator"></span>
-            {% when 'Fruity-Sweet' %}
-            <span>פירותי מתוק</span>
-              <span class="selection-color" style="background-color: #FF974A;" aria-label="Orange Indicator"></span>
-          {% endcase %}
-
-          </div> {% endcomment %}
-          {% comment %} <div class="product-main-price-wrapper">{% render 'price' %}</div> {% endcomment %}
-        {% comment %} </div> {% endcomment %}
-        {% comment %} <div class="product-info-left-side"> {% endcomment %}
-          <div class="grid__item product__media-wrapper">
-            {% render 'product-media-gallery', variant_images: variant_images %}
-          </div>
-        {% comment %} </div> {% endcomment %}
-      </div>
-      <div class="background-stripe"> </div>
 
       {% assign coffee_details = product.metafields.custom.product_info.value %}
       {% assign coffee_origin_image = product.metafields.custom.coffee_origin_image.value %}
@@ -1201,6 +1162,65 @@
       if (whatsappWrapper) {
         whatsappWrapper.classList.add('hide');
       }
+
+    // Handle sticky footer for product-actions
+    /*
+    document.addEventListener('DOMContentLoaded', function() {
+
+
+      if (window.innerWidth >= 769) {
+          return;
+      }
+
+      const productActions = document.querySelector('.product-actions');
+      if (!productActions) return;
+
+      let productActionsOriginalPosition = null;
+      let isSticky = false;
+
+      function checkProductActionsVisibility() {
+        const rect = productActions.getBoundingClientRect();
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        
+        // Store original position on first check
+        if (productActionsOriginalPosition === null) {
+          productActionsOriginalPosition = rect.top + window.scrollY;
+        }
+
+        // Check if the element has scrolled past the viewport
+        const isScrolledPast = rect.bottom < 0;
+        
+        // Check if we've scrolled back to where the element should naturally be
+        const isBackInView = window.scrollY < productActionsOriginalPosition - viewportHeight - 20;
+
+        if (isScrolledPast && !isSticky) {
+          // Element has been scrolled up and out of view, make it sticky at bottom
+          productActions.classList.add('sticky-footer');
+          isSticky = true;
+        } else if (isBackInView && isSticky) {
+          // User has scrolled back up, return to normal flow
+          productActions.classList.remove('sticky-footer');
+          isSticky = false;
+        }
+      }
+
+      // Use requestAnimationFrame for better performance
+      let ticking = false;
+      function handleScroll() {
+        if (!ticking) {
+          window.requestAnimationFrame(function() {
+            checkProductActionsVisibility();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }
+
+      window.addEventListener('scroll', handleScroll);
+      // Check once on load
+      checkProductActionsVisibility();
+    });
+    */
 
     // handle sticky right side
     document.addEventListener('DOMContentLoaded', function() {

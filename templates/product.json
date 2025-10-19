@@ -117,7 +117,7 @@
     "related-products": {
       "type": "related-products",
       "settings": {
-        "heading": "טעמים דומים ומעניינים",
+        "heading": "עוד מבית הקלייה",
         "heading_size": "h2",
         "products_to_show": 7,
         "columns_desktop": 4,
