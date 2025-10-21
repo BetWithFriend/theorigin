@@ -122,6 +122,33 @@ slider-component.slider-component-full-width {
   }
 }
 
+@media screen and (max-width: 360px) {
+  .slider.slider--tablet.contains-card--standard .slider__slide:not(.collection-list__item--no-media) {
+    width: 220px;
+  }
+
+  .full-unstyled-link {
+    font-size: 16px;
+  }
+
+  .card--card,
+  .card--standard .card__inner {
+    width: 45%;
+  }
+
+  .discover-roaster-wrapper {
+    width: 310px;
+  }
+
+  .blends-filter-item {
+    width: 140px;
+  }
+
+  .main-footer-info-shop-btn {
+    width: 290px;
+  }
+}
+
 .slider--everywhere {
   position: relative;
   flex-wrap: inherit;

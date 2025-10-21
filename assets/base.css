@@ -4014,17 +4014,6 @@ details-disclosure>details {
   text-align: center;
 }
 
-.why-us-item {
-  width: 147px;
-  height: 110px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 12px;
-  text-align: center;
-  padding: 4px;
-}
-
 .why-us-img {
   /* width: 48px; */
   height: 50px;
@@ -4164,6 +4153,10 @@ details-disclosure>details {
 @media screen and (max-width: 360px) {
   .utility-bar__grid.page-width {
     padding: 0 8px;
+  }
+
+  .why-us-item {
+    margin: 2px;
   }
 }
 
