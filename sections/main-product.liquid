@@ -406,8 +406,13 @@
       <div class="background-stripe"> </div>
           <h1 class="product-title">{{ product.title }}</h1>
 
+          <div class="product-tastes-list  {% if section.settings.product_tastes_center %}center{% endif %}">
+            <div class="single-coffee-taste-main-product"><b>בית קלייה:</b> {{ vendor.vendor_name.value }}, {{ vendor.vendor_location.value }}</div>
+          </div>
+
           <div class="product-tastes-list {% if section.settings.product_tastes_center %}center{% endif %}">
-            {% for taste in product.metafields.custom.coffee_tastes.value %}      
+            <b>טעמים:</b>&nbsp;  
+          {% for taste in product.metafields.custom.coffee_tastes.value %}      
               <div class="single-coffee-taste-main-product">{{ taste }}{% unless forloop.last %} | {% endunless %}</div>
             {% endfor %}
           </div>
@@ -415,7 +420,7 @@
             <div class="single-coffee-taste-main-product">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
           </div> {% endcomment %}
 
-          <div class="product-tastes-list  {% if section.settings.product_tastes_center %}center{% endif %}">
+          <div class="product-tastes-list product-page-price-main  {% if section.settings.product_tastes_center %}center{% endif %}">
             {% comment %} <div class="product-roast-level with-weight">250 ג׳</div>   {% endcomment %}
             {% comment %} <div class="product-roast-level">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
             <div class="product-roast-level">עיבוד {{ product.metafields.custom.coffee_process }}</div> {% endcomment %}

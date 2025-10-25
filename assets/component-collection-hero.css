@@ -29,30 +29,30 @@
   justify-content: center;
   flex-direction: column;
   gap: 8px;
-  padding: 16px 32px;
+  padding: 16px 16px;
 }
 
 .vendors-collection-title-main {
   font-family: 'Noto Sans', sans-serif;
   font-weight: 700;
-  /* font-size: 48px;
-  line-height: 48px; */
-  font-size: 38px;
-  line-height: 42px;
-  text-align: center;
+  /* font-size: 48px; */
+  line-height: 36px;
+  font-size: 32px;
+  /* line-height: 42px; */
+  text-align: right;
   color: #333634;
   width: 100%;
   margin: 0;
 }
 
 .vendors-collection-title-submain {
-  background-color: #E6E3DE;
+  /* background-color: #E6E3DE; */
   font-family: 'Noto Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
-  line-height: 32px;
-  text-align: center;
-  border-radius: 70px;
+  line-height: 20px;
+  text-align: right;
+  /* border-radius: 70px; */
   color: #333634;
   width: 100%;
 }
