@@ -2380,14 +2380,9 @@
     },
     "collections": {
       "sorting": {
-        "manual": "מוּבלָט",
         "best_selling": "הכי נמכר",
-        "az": "בסדר אלפביתי, א.ז",
-        "za": "לפי האלפבית, ז\"א",
         "price_ascending": "מחיר, נמוך עד גבוה",
-        "price_descending": "מחיר, גבוה עד נמוך",
-        "date_ascending": "תאריך, ישן עד חדש",
-        "date_descending": "תאריך, חדש לישן"
+        "price_descending": "מחיר, גבוה עד נמוך"
       }
     },
     "errors": {

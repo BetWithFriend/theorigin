@@ -1,6 +1,6 @@
-.footer_main_page_top {
+/* .footer_main_page_top {
     width: 100%;
-}
+} */
 
 .main-footer-wrapper {
     display: flex;
@@ -128,10 +128,6 @@ h2.main-footer-info-shop-title {
         flex-direction: column;
         align-items: center;
         flex-basis: calc(50% - 24px);
-    }
-
-    .footer_main_page_top {
-        /* display: none; */
     }
 
     .main-footer-info-wrapper {

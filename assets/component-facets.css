@@ -201,7 +201,8 @@
 }
 
 .facet-filters__label {
-  display: block;
+  /* display: block; */
+  display: none;
   color: rgba(var(--color-foreground), 0.85);
   font-size: 1.4rem;
   margin: 0 2rem 0 0;
@@ -334,7 +335,8 @@
   /* align-self: flex-start; */
   /* grid-column: 1; */
   /* grid-row: 1; */
-  display: flex;
+  /* display: flex; */
+  display: none;
   /* flex-wrap: wrap; */
 }
 

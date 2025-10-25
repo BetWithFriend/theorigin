@@ -2,6 +2,13 @@
 
 <div class="horizontal-bubbles-wrapper" id="horizontal-bubbles-wrapper">
     <div class="horizontal-bubbles-container">
+              {% render 'facets',
+                    results: collection,
+                    enable_filtering: section.settings.enable_filtering,
+                    enable_sorting: section.settings.enable_sorting,
+                    filter_type: section.settings.filter_type,
+                    paginate: paginate
+            %}
 
         <div class="bubble-item" onclick="removeAllFilters()">
             <div class="bubble-text">
