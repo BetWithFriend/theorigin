@@ -8,39 +8,46 @@
                 <div class="bubble-title">הצג הכל</div>
                 <div class="bubble-subtitle">כל הפולים</div>
             </div>
-        </div>    
+        </div>
 
-        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Chocolate')">
+        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_type', 'חד זני')">
             <div class="bubble-text">
-                <div class="bubble-title">שוקולדי</div>
-                <div class="bubble-subtitle">מריר ואגוזי</div>
+                <div class="bubble-title">חד זני</div>
+                <div class="bubble-subtitle">זנים איזוריים</div>
             </div>
         </div>
 
-        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Sweet-Chocolate')">
+        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_type', 'בלנד')">
             <div class="bubble-text">
-                <div class="bubble-title">מתוק שוקולדי</div>
-                <div class="bubble-subtitle">עמוק ועשיר</div>
+                <div class="bubble-title">תערובות</div>
+                <div class="bubble-subtitle">תערובות הבית</div>
+            </div>
+        </div>
+
+        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Chocolate,Sweet-Chocolate')">
+            <div class="bubble-text">
+                <div class="bubble-title">שוקולדי - מתוק</div>
+                <div class="bubble-subtitle">מריר ואגוזי</div>
             </div>
         </div>
 
         <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Sweet')">
             <div class="bubble-text">
-                <div class="bubble-title">מתוק מאוזן</div>
+                <div class="bubble-title">מאוזן</div>
                 <div class="bubble-subtitle">מאוזן וקרמלי</div>
             </div>
         </div>
 
-        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet')">
+        {% comment %} <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet')">
             <div class="bubble-text">
                 <div class="bubble-title">פירותי מתוק</div>
                 <div class="bubble-subtitle">חמיצות קלה</div>
             </div>
-        </div>
+        </div> {% endcomment %}
 
-        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity')">
+        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet,Fruity')">
             <div class="bubble-text">
-                <div class="bubble-title">פירותי</div>
+                <div class="bubble-title">מתקתק ופירותי</div>
                 <div class="bubble-subtitle">חמצמץ והדרי</div>
             </div>
         </div>
@@ -97,15 +104,30 @@ function removeAllFilters() {
 
             const params = new URLSearchParams(window.location.search);
 
+            // Handle comma-separated values
+            const valuesToToggle = filterValue.split(',').map(v => v.trim());
             let currentValues = params.getAll(filterKey);
             
-            const index = currentValues.indexOf(filterValue);
-
-            if (index > -1) {
-            currentValues.splice(index, 1);
+            // Check if any of the values are already active
+            const hasAnyActive = valuesToToggle.some(value => currentValues.includes(value));
+            
+            if (hasAnyActive) {
+                // Remove all values that are being toggled
+                valuesToToggle.forEach(value => {
+                    const index = currentValues.indexOf(value);
+                    if (index > -1) {
+                        currentValues.splice(index, 1);
+                    }
+                });
             } else {
-            currentValues.push(filterValue);
+                // Add all values that are being toggled
+                valuesToToggle.forEach(value => {
+                    if (!currentValues.includes(value)) {
+                        currentValues.push(value);
+                    }
+                });
             }
+            
             params.delete(filterKey);
 
             currentValues.forEach(value => {
@@ -130,19 +152,28 @@ function removeAllFilters() {
     function highlightActiveFilters() {
         // 1. Get the current URL parameters
         const params = new URLSearchParams(window.location.search);
+        const allActiveValues = {}; // An object to store active values for all keys
         
-        // The filter key used by your bubbles
-        const filterKey = 'filter.p.m.custom.coffee_taste'; 
+        // The filter keys used by your bubbles
+        const filterKeys = ['filter.p.m.custom.coffee_taste', 'filter.p.m.custom.coffee_type']; 
         
-        // 2. Get all active values for the coffee taste filter
-        const activeValues = params.getAll(filterKey);
+        // 2. Get all active values for each filter key
+        filterKeys.forEach(filterKey => {
+            const activeValues = params.getAll(filterKey);
+            if (activeValues.length > 0) {
+                allActiveValues[filterKey] = activeValues;
+            }
+        });
         
         // Clear all existing active classes first
         document.querySelectorAll('.horizontal-bubbles-container .bubble-item').forEach(bubble => {
             bubble.classList.remove('active');
         });
 
-        if (activeValues.length === 0) {
+        // Check if any filters are active
+        const hasActiveFilters = Object.keys(allActiveValues).length > 0;
+        
+        if (!hasActiveFilters) {
             // If no filters are active, optionally highlight the 'Show All' bubble
             // const filterAllBubble = document.querySelector('.bubble-item.filter-all');
             // if (filterAllBubble) {
@@ -156,16 +187,27 @@ function removeAllFilters() {
             // Extract the filter value from the onclick attribute
             const onclickAttr = bubble.getAttribute('onclick');
             
-            // Use a regex to find the filterValue string in the goToFilter function call
+            // Use a regex to find the filterKey and filterValue in the goToFilter function call
             // Example: 'goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Chocolate')'
-            const match = onclickAttr.match(/,\s*'([^']+)'\)/);
+            const match = onclickAttr.match(/goToFilter\([^,]+,\s*'([^']+)',\s*'([^']+)'\)/);
 
-            if (match && match[1]) {
-                const bubbleFilterValue = match[1];
+            if (match && match[1] && match[2]) {
+                const bubbleFilterKey = match[1];
+                const bubbleFilterValue = match[2];
                 
-                // 4. Check if the bubble's value is in the list of active URL values
-                if (activeValues.includes(bubbleFilterValue)) {
-                    bubble.classList.add('active');
+                // Check if this filter key has active values
+                if (allActiveValues[bubbleFilterKey]) {
+                    const activeValues = allActiveValues[bubbleFilterKey];
+                    
+                    // Handle comma-separated values in the bubble
+                    const bubbleValues = bubbleFilterValue.split(',').map(v => v.trim());
+                    
+                    // Check if ALL bubble values are in the list of active URL values
+                    const allValuesActive = bubbleValues.every(value => activeValues.includes(value));
+                    
+                    if (allValuesActive && bubbleValues.length > 0) {
+                        bubble.classList.add('active');
+                    }
                 }
             }
         });
