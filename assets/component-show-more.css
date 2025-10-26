@@ -66,3 +66,110 @@
   border-radius: 4px;
   pointer-events: none;
 }
+
+/* Sort Dropdown Styles */
+.sort-dropdown-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  width: 40px;
+  height: 40px;
+}
+
+.sort-dropdown-button:hover {
+  border-color: #999;
+  background: #f9f9f9;
+}
+
+.sort-dropdown-button:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+.sort-dropdown-button[aria-expanded="true"] {
+  border-color: #007bff;
+}
+
+.sort-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sort-icon-image {
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+}
+
+.sort-dropdown-menu {
+  position: fixed;
+  background: #FAFCFE;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+  max-width: 170px;
+  padding: 16px 24px;
+}
+
+.sort-dropdown-menu.show {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.sort-option-value {
+  /* padding: 10px 12px; */
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 25px;
+  margin-bottom: 16px;
+  transition: background-color 0.2s ease;
+  color: #1C201D;
+  /* border-bottom: 1px solid #f0f0f0; */
+}
+
+.sort-option-value:last-child {
+  border-bottom: none;
+}
+
+.sort-option-value:hover {
+  background-color: #f5f5f5;
+}
+
+.sort-option-value.selected {
+  /* background-color: #e3f2fd;
+  color: #1976d2; */
+  font-weight: 700;
+}
+
+.vertical-line-border {
+  /* Set the height */
+  height: 25px;
+  width: 1px;
+  border-left: 1px solid #33363480;
+  /* margin: 0 10px; */
+  display: inline-block;
+  /* Allows it to sit next to other inline elements */
+}
+
+/* .sort-option-value.selected::after {
+  content: "✓";
+  float: right;
+  color: #1976d2;
+  font-weight: bold;
+} */

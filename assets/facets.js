@@ -414,3 +414,117 @@ class FacetRemove extends HTMLElement {
 }
 
 customElements.define('facet-remove', FacetRemove);
+
+class SortDropdown extends HTMLElement {
+  constructor() {
+    super();
+    this.init();
+  }
+
+  init() {
+    const button = this.querySelector('.sort-dropdown-button');
+    const menu = this.querySelector('.sort-dropdown-menu');
+    const options = this.querySelectorAll('.sort-option-value');
+    const hiddenInput = this.querySelector('#SortBy');
+
+    if (!button || !menu || !hiddenInput) return;
+
+    // Toggle dropdown on button click
+    button.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleDropdown();
+    });
+
+    // Handle option selection
+    options.forEach(option => {
+      option.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.selectOption(option);
+      });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!this.contains(e.target)) {
+        this.closeDropdown();
+      }
+    });
+
+    // Close dropdown on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.closeDropdown();
+      }
+    });
+  }
+
+  toggleDropdown() {
+    const button = this.querySelector('.sort-dropdown-button');
+    const menu = this.querySelector('.sort-dropdown-menu');
+
+    const isOpen = button.getAttribute('aria-expanded') === 'true';
+
+    console.log('Toggle dropdown - isOpen:', isOpen, 'menu:', menu);
+
+    if (isOpen) {
+      this.closeDropdown();
+    } else {
+      this.openDropdown();
+    }
+  }
+
+  openDropdown() {
+    const button = this.querySelector('.sort-dropdown-button');
+    const menu = this.querySelector('.sort-dropdown-menu');
+
+
+    // Calculate position for fixed positioning
+    const buttonRect = button.getBoundingClientRect();
+    menu.style.top = (buttonRect.bottom + window.scrollY) + 'px';
+    menu.style.right = '12px';
+    // menu.style.width = buttonRect.width + 'px';
+
+    button.setAttribute('aria-expanded', 'true');
+    menu.classList.add('show');
+  }
+
+  closeDropdown() {
+    const button = this.querySelector('.sort-dropdown-button');
+    const menu = this.querySelector('.sort-dropdown-menu');
+
+    button.setAttribute('aria-expanded', 'false');
+    menu.classList.remove('show');
+  }
+
+  selectOption(option) {
+    const value = option.getAttribute('data-value');
+    const hiddenInput = this.querySelector('#SortBy');
+    const options = this.querySelectorAll('.sort-option-value');
+
+    // Update hidden input value
+    hiddenInput.value = value;
+
+    // Update visual selection
+    options.forEach(opt => opt.classList.remove('selected'));
+    option.classList.add('selected');
+
+    // Close dropdown
+    this.closeDropdown();
+
+    // Trigger form submission to update results
+    this.submitForm();
+  }
+
+
+  submitForm() {
+    const facetForm = this.closest('facet-filters-form') || document.querySelector('facet-filters-form');
+    if (facetForm) {
+      // Create a synthetic event to trigger the form submission
+      const event = new Event('input', { bubbles: true });
+      const hiddenInput = this.querySelector('#SortBy');
+      hiddenInput.dispatchEvent(event);
+    }
+  }
+}
+
+customElements.define('sort-dropdown', SortDropdown);

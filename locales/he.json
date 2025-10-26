@@ -2288,8 +2288,8 @@
       "error": "הייתה בעיה בטעינת תוצאות החיפוש שלך. אנא רענן את הדף או נסה שוב מאוחר יותר.",
       "sorting": {
         "relevance": "רלוונטיות",
-        "price_ascending": "מחיר, נמוך עד גבוה",
-        "price_descending": "מחיר, גבוה עד נמוך"
+        "price_ascending": "מחיר (נמוך גבוה)",
+        "price_descending": "מחיר (גבוה נמוך)"
       }
     },
     "page_titles": {
@@ -2381,8 +2381,8 @@
     "collections": {
       "sorting": {
         "best_selling": "הכי נמכר",
-        "price_ascending": "מחיר, נמוך עד גבוה",
-        "price_descending": "מחיר, גבוה עד נמוך"
+        "price_ascending": "מחיר (נמוך גבוה)",
+        "price_descending": "מחיר (גבוה נמוך)"
       }
     },
     "errors": {

@@ -472,35 +472,31 @@
                 <h2 class="facet-filters__label caption-large text-body">
                   <label for="SortBy">{{ 'products.facets.sort_by_label' | t }}</label>
                 </h2>
-                <div class="select sort-select-wrapper">
+                <sort-dropdown class="select sort-select-wrapper">
                   {%- assign sort_by = results.sort_by | default: results.default_sort_by -%}
-                   <span class="sort-icon-wrapper">
-                    <img class="sort-icon-image" src="{{ 'sort-icon.png' | asset_url }}" alt="sort icon"/>
-                  </span>
-                  <select
-                    name="sort_by"
-                    class="facet-filters__sort select__select caption-large sort-options-catalog"
-                    id="SortBy"
-                    aria-describedby="a11y-refresh-page-message"
-                  >
+                  <button class="sort-dropdown-button" type="button" aria-expanded="false" aria-haspopup="true">
+                    <span class="sort-icon-wrapper">
+                      <img class="sort-icon-image" src="{{ 'sort-icon.png' | asset_url }}" alt="sort icon"/>
+                    </span>
+                  </button>
+                  <div class="sort-dropdown-menu" id="sortDropdownMenu">
                     {%- for option in results.sort_options -%}
                       {%  unless option.value == 'manual' 
                           or option.value == 'title-ascending' 
                           or  option.value == 'title-descending' 
                           or option.value == 'created-ascending' 
                           or option.value == 'created-descending' %}
-                        <option class="sort-option-value"
-                          value="{{ option.value | escape }}"
-                          {% if option.value == sort_by %}
-                            selected="selected"
-                          {% endif %}
+                        <div class="sort-option-value{% if option.value == sort_by %} selected{% endif %}"
+                          data-value="{{ option.value | escape }}"
                         >
                           {{ option.name | escape }}
-                        </option>
+                        </div>
                       {% endunless %}
                     {%- endfor -%}
-                  </select>
-                </div>
+                  </div>
+                  <input type="hidden" name="sort_by" id="SortBy" value="{{ sort_by }}">
+                </sort-dropdown>
+                  <div class="vertical-line-border">&nbsp;</div>
               </div>
             </div>
           {%- endif -%}
