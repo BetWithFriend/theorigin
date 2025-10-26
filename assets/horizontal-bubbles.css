@@ -33,7 +33,7 @@
     border-radius: 8px;
     padding: 20px 20px;
     min-width: 140px;
-    max-width: 160px;
+    max-width: 166px;
     height: 60px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -65,7 +65,7 @@
     font-family: 'Noto Sans', sans-serif;
     font-weight: 600;
     color: #1C201D;
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.2;
     margin-bottom: 4px;
     text-align: right;
@@ -140,7 +140,7 @@
     .bubble-item {
         min-width: 160px;
         max-width: 180px;
-        height: 120px;
+        height: 90px;
         padding: 24px 28px;
     }
 
@@ -177,7 +177,7 @@
     .bubble-item {
         min-width: 180px;
         max-width: 200px;
-        height: 120px;
+        height: 90px;
         padding: 28px 32px;
     }
 

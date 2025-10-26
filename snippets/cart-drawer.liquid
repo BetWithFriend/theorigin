@@ -135,6 +135,7 @@
             {% assign blooms_free_shipping_threshold = 22000 %}
              {% assign coffeeculture_free_shipping_threshold = 30000 %}
             {% assign coffeeorg_free_shipping_threshold = 25000 %}
+            {% assign ync_free_shipping_threshold = 45000 %}
             
             {%- comment -%} Calculate vendor totals {%- endcomment -%}
             {%- assign vendor_totals = blank -%}
@@ -216,8 +217,10 @@
                   {%- endif -%}
                 {%- elsif vendor == 'youneedcoffee' -%}
                   {%- assign vendor_shipping_cost = youneedcoffee_shipping -%}
-                  {%- assign vendor_free_threshold = 0 -%}
-                  {%- assign vendor_qualifies_free_shipping = false -%}
+                  {%- assign vendor_free_threshold = ync_free_shipping_threshold -%}
+                  {%- if vendor_total >= ync_free_shipping_threshold -%}
+                    {%- assign vendor_qualifies_free_shipping = true -%}
+                  {%- endif -%}
                 {%- elsif vendor == 'coffeeorg' -%}
                   {%- assign vendor_shipping_cost = coffeeorg_shipping -%}
                   {%- assign vendor_free_threshold = coffeeorg_free_shipping_threshold -%}
@@ -772,7 +775,7 @@
                             {%- endif -%}
                           </div>
                         </div> {% endcomment %}
-                         {%- if vendor == 'youneedcoffee' -%}
+                         {%- if vendor == 'temp_placeholder' -%}
                           <div class="free-shipping-notice">
                             <span>משלוח ₪39</span>
                               <div>
