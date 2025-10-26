@@ -8,3 +8,61 @@
 .button-show-less {
   margin-top: 1.5rem;
 }
+
+.sort-icon-image {
+  width: 24px;
+  height: 24px;
+}
+
+.sort-options-catalog {
+  /* display: none; */
+}
+
+.sort-select-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* .sort-select-wrapper .sort-options-catalog {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 1;
+} */
+
+.sort-select-wrapper .sort-options-catalog {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  /* opacity: 0; <--- This is commented out in your code, but is a good start */
+  /* Remove display: none from .sort-options-catalog */
+  cursor: pointer;
+  z-index: 1;
+
+  /* Add these styles to make it invisible but clickable */
+  opacity: 0;
+  /* Makes it completely transparent */
+  appearance: none;
+  /* Removes default browser styling on some systems */
+  -webkit-appearance: none;
+  /* For WebKit browsers like Chrome/Safari */
+  -moz-appearance: none;
+  /* For Firefox */
+}
+
+.sort-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  /* background-color: #E3E0DA; */
+  border-radius: 4px;
+  pointer-events: none;
+}

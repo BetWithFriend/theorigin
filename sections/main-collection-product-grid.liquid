@@ -127,13 +127,13 @@
           data-id="{{ section.id }}"
         >
 
-          {% render 'facets',
+          {% comment %} {% render 'facets',
             results: collection,
             enable_filtering: section.settings.enable_filtering,
             enable_sorting: section.settings.enable_sorting,
             filter_type: section.settings.filter_type,
             paginate: paginate
-          %}
+          %} {% endcomment %}
         </aside>
       {%- endif -%} 
 

@@ -312,7 +312,7 @@ body.questionnaire-wrapper-open {
 }
 
 .facets-wrapper--sticky.hide-filters {
-    display: none;
+    /* display: none; */
 }
 
 .questionnaire-progress-bar-wrapper {

@@ -472,28 +472,34 @@
                 <h2 class="facet-filters__label caption-large text-body">
                   <label for="SortBy">{{ 'products.facets.sort_by_label' | t }}</label>
                 </h2>
-                <div class="select">
+                <div class="select sort-select-wrapper">
                   {%- assign sort_by = results.sort_by | default: results.default_sort_by -%}
+                   <span class="sort-icon-wrapper">
+                    <img class="sort-icon-image" src="{{ 'sort-icon.png' | asset_url }}" alt="sort icon"/>
+                  </span>
                   <select
                     name="sort_by"
-                    class="facet-filters__sort select__select caption-large"
+                    class="facet-filters__sort select__select caption-large sort-options-catalog"
                     id="SortBy"
                     aria-describedby="a11y-refresh-page-message"
                   >
                     {%- for option in results.sort_options -%}
-                      <option
-                        value="{{ option.value | escape }}"
-                        {% if option.value == sort_by %}
-                          selected="selected"
-                        {% endif %}
-                      >
-                        {{ option.name | escape }}
-                      </option>
+                      {%  unless option.value == 'manual' 
+                          or option.value == 'title-ascending' 
+                          or  option.value == 'title-descending' 
+                          or option.value == 'created-ascending' 
+                          or option.value == 'created-descending' %}
+                        <option class="sort-option-value"
+                          value="{{ option.value | escape }}"
+                          {% if option.value == sort_by %}
+                            selected="selected"
+                          {% endif %}
+                        >
+                          {{ option.name | escape }}
+                        </option>
+                      {% endunless %}
                     {%- endfor -%}
                   </select>
-                  <span class="svg-wrapper">
-                    {{- 'icon-caret.svg' | inline_asset_content -}}
-                  </span>
                 </div>
               </div>
             </div>
