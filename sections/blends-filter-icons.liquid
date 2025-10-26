@@ -1,7 +1,7 @@
 {{ 'blends-filter-icons.css' | asset_url | stylesheet_tag }}
 <div class="blends-filter-wrapper" id="blends-filter-wrapper">
     <div class="blends-filter-item-wrpper">
-        <div class="blends-filter-item filter-single-origin" onclick="goToCollections('קפה-חד-זני')">
+        <div class="blends-filter-item filter-single-origin" onclick="goToCalatogWithFilter('filter.p.m.custom.coffee_type', 'חד+זני')">
             <div class="blends-filter-icon-wrapper">
                 <img class="blends-filter-icon" src="{{ 'blend-filter-single-origin.png' | asset_url }}" alt="פילטר חד זני" />
             </div>
@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <div class="blends-filter-item filter-blends" onclick="goToCollections('תערובות-קפה')">
+        <div class="blends-filter-item filter-blends" onclick="goToCalatogWithFilter('filter.p.m.custom.coffee_type', 'בלנד')">
             <div class="blends-filter-icon-wrapper">
                 <img class="blends-filter-icon" src="{{ 'blend-filter-mix.png' | asset_url }}" alt="פילטר בלנדים" />
             </div>
@@ -92,4 +92,9 @@
     function goToCollections(collectionName) {
         window.location.href = "{{ section.settings.collection.url }}/collections/" + collectionName;
     }
+
+    function goToCalatogWithFilter(filterName, collectionName) {
+        window.location.href = "{{ section.settings.collection.url }}/collections/חנות-קפה?" + filterName + '=' + collectionName;
+    }
+
 </script>

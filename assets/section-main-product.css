@@ -49,6 +49,16 @@ product-info {
   }
 }
 
+.breadcrumbs {
+  padding: 0;
+  margin-right: 24px;
+  background-color: #fbfcfe;
+}
+
+.breadcrumbs a {
+  color: #1c201d;
+}
+
 @media screen and (min-width: 750px) {
   .product__column-sticky {
     display: block;
@@ -58,7 +68,8 @@ product-info {
   }
 
   .breadcrumbs {
-    display: none;
+    /* display: none; */
+    background-color: transparent;
   }
 
   .product--thumbnail .thumbnail-list {
@@ -1599,8 +1610,3 @@ a.product__text {
   }
 }
 
-.breadcrumbs {
-  padding: 0;
-  margin-right: 24px;
-  background-color: #fbfcfe;
-}
