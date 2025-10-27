@@ -93,9 +93,9 @@
                           </div>
 
                           <div class="cart-item__details">
-                            {%- if settings.show_vendor -%}
+                            {% comment %} {%- if settings.show_vendor -%}
                               <p class="caption-with-letter-spacing">{{ item.product.vendor }}</p>
-                            {%- endif -%}
+                            {%- endif -%} {% endcomment %}
 
                             <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
                 
@@ -441,7 +441,7 @@
                         <div class="cart-total-delivery">
                           {{ 'sections.cart.cart_delivery' | t }}
                         </div>
-                        <div class="cart-total-delivery-sum">35 ₪</div>
+                        <div class="cart-total-delivery-sum">39 ₪</div>
                     </div>
                   </div> 
                 {%- endif -%}

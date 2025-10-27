@@ -72,7 +72,7 @@
 
                 <div class="totals">
                   <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-                  {%- assign vendor_fee_total = vendor_count | times: 3500 -%}
+                  {%- assign vendor_fee_total = vendor_count | times: 3900 -%}
                   {%- assign adjusted_total = cart.total_price | plus: vendor_fee_total -%}
                   <p class="totals__total-value" dir="ltr">{{ adjusted_total | money_with_currency }}</p>
                 </div>

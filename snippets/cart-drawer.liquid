@@ -194,7 +194,7 @@
                 {%- for item in cart.items -%}
                   {%- if item.vendor == vendor -%}
                     {%- assign vendor_has_items = true -%}
-                    {%- assign vendor_total = vendor_total | plus: item.final_line_price -%}
+                    {%- assign vendor_total = vendor_total | plus: item.line_price -%}
                   {%- endif -%}
                 {%- endfor -%}
                 
