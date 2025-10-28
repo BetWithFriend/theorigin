@@ -8,7 +8,6 @@
     /* position: relative; */
     z-index: 1;
     width: 100%;
-    /* background-color: #E3E0DA; */
   }
 
   .product-info-right-side {
@@ -26,9 +25,8 @@
   }
 
   .price .price-item {
-    color: #FBFCFE;
-    /* font-size: 24px !important;
-    font-weight: 700; */
+    font-size: 20px;
+    font-weight: 500;
   }
 
   .grid__item {
@@ -64,12 +62,12 @@
 
   .product-main-price-wrapper {
     width: 100%;
-    /* display: flex; */
+    display: flex;
     align-items: center;
-    justify-content: right;
+    justify-content: center;
     font-family: 'Noto Sans', sans-serif;
-    /* line-height: 25px; */
-    font-size: 20px;
+    line-height: 25px;
+    font-size: 16px;
     color: #1C201D;
   }
 
@@ -97,7 +95,6 @@
     position: relative;
     margin: 0 auto;
     width: 100%;
-    background-color: #FAFCFE;
   }
 
   .product-container {
@@ -118,19 +115,22 @@
     font-size: 16px;
     color: #1C201D;
     font-weight: 400;
-    text-align: right;
+    text-align: center;
   }
 
   .free-shipping-pdp-notice {
     width: 100%;
-    /* height: 40px; */
+    height: 40px;
+    background-color: white;
+    border: 1px solid #33363480;
     text-align: center;
     font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.25);
     margin-top: 8px;
-    padding: 12px;
   }
 
   @media screen and (min-width: 750px) {
@@ -346,13 +346,13 @@
 
       {%- style -%}
         .section-{{ section.id }}-padding {
-          /* padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px; */
+          padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
           
       }
 
       @media screen and (min-width: 750px) {
         .section-{{ section.id }}-padding {
-          /* padding-top: {{ section.settings.padding_top }}px; */
+          padding-top: {{ section.settings.padding_top }}px;
         
         }
       }
@@ -393,43 +393,67 @@
 
     {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
     <div class="page-width-product-page">
-        {% comment %} <div class="product-info-top-wrapper">
-          <div class="grid__item product__media-wrapper">
-            {% render 'product-media-gallery', variant_images: variant_images %}
-          </div>
-        </div> {% endcomment %}
-        <div class="product-info-top-wrapper">
-          <div class="grid__item product__media-wrapper">
-            {% render 'product-media-gallery', variant_images: variant_images %}
-          </div>
-      </div>
-      <div class="background-stripe"> </div>
-          <h1 class="product-title">{{ product.title }}</h1>
-
-          <div class="product-tastes-list  {% if section.settings.product_tastes_center %}center{% endif %}">
-            <div class="single-coffee-taste-main-product"><b>בית קלייה:</b> {{ vendor.vendor_name.value }}, {{ vendor.vendor_location.value }}</div>
-          </div>
+      <h1 class="product-title">{{ product.title }}</h1>
 
           <div class="product-tastes-list {% if section.settings.product_tastes_center %}center{% endif %}">
-            <b>טעמים:</b>&nbsp;  
-          {% for taste in product.metafields.custom.coffee_tastes.value %}      
+            {% for taste in product.metafields.custom.coffee_tastes.value %}      
               <div class="single-coffee-taste-main-product">{{ taste }}{% unless forloop.last %} | {% endunless %}</div>
             {% endfor %}
           </div>
-          {% comment %} <div class="product-tastes-list {% if section.settings.product_tastes_center %}center{% endif %}">
-            <div class="single-coffee-taste-main-product">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
-          </div> {% endcomment %}
-
-          <div class="product-tastes-list product-page-price-main  {% if section.settings.product_tastes_center %}center{% endif %}">
-            {% comment %} <div class="product-roast-level with-weight">250 ג׳</div>   {% endcomment %}
-            {% comment %} <div class="product-roast-level">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
-            <div class="product-roast-level">עיבוד {{ product.metafields.custom.coffee_process }}</div> {% endcomment %}
-            <div class="product-roast-level">
-              <span class="inline-price">{% render 'price' %}</span>
-            </div>
-            
+          <div class="product-tastes-list  {% if section.settings.product_tastes_center %}center{% endif %}">
+            <div class="product-roast-level">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
+            <div class="product-roast-level">עיבוד {{ product.metafields.custom.coffee_process }}</div>
+            <div class="product-roast-level with-weight">250 ג׳</div>
           </div>
+          {% comment %} <div class="product-main-price-wrapper">{% render 'price' %}</div> {% endcomment %}
+      <div class="product-info-top-wrapper">
+        {% comment %} <div class="product-info-right-side"> {% endcomment %}
+          {% comment %} <div class="product-vendor-title">{{ vendor.vendor_short_name | upcase }}</div> {% endcomment %}
+          {% comment %} <h1 class="product-title">{{ product.title }}</h1> {% endcomment %}
+          {% comment %} <div class="product-source-wrapper">
+            <div class="product-source">
+            {% for pSource in product.metafields.custom.coffee_source.value limit:2 %}
+              {% if forloop.index > 1 %}
+                <span>,</span>
+              {% endif %}
+              {{ pSource }}
+            {% endfor %}
+            {% if product.metafields.custom.coffee_source.value.size > 2 %}
+              +{{ product.metafields.custom.coffee_source.value.size | minus: 2 }}
+            {% endif %}
+            </div>
+          </div> {% endcomment %}
+          {% comment %} <div class="selection-wrapper">        
 
+          <!-- Conditional Color -->
+          {% case product.metafields.custom.coffee_taste %}
+            {% when 'Fruity' %}
+            <span>פירותי</span>
+              <span class="selection-color" style="background-color: #FFDF70;" aria-label="Yellow Indicator"></span>
+            {% when 'Chocolate' %}
+            <span>שוקולדי</span>
+              <span class="selection-color" style="background-color: #8B4513;" aria-label="Brown Indicator"></span>
+            {% when 'Sweet-Chocolate' %}
+            <span>מתוק שוקולדי</span>
+              <span class="selection-color" style="background-color: #C4823E;" aria-label="Orange Indicator"></span>
+            {% when 'Sweet' %}
+            <span>מתוק מאוזן</span>
+              <span class="selection-color" style="background-color: #D60540;" aria-label="Red Indicator"></span>
+            {% when 'Fruity-Sweet' %}
+            <span>פירותי מתוק</span>
+              <span class="selection-color" style="background-color: #FF974A;" aria-label="Orange Indicator"></span>
+          {% endcase %}
+
+          </div> {% endcomment %}
+          {% comment %} <div class="product-main-price-wrapper">{% render 'price' %}</div> {% endcomment %}
+        {% comment %} </div> {% endcomment %}
+        {% comment %} <div class="product-info-left-side"> {% endcomment %}
+          <div class="grid__item product__media-wrapper">
+            {% render 'product-media-gallery', variant_images: variant_images %}
+          </div>
+        {% comment %} </div> {% endcomment %}
+      </div>
+      <div class="background-stripe"> </div>
 
       {% assign coffee_details = product.metafields.custom.product_info.value %}
       {% assign coffee_origin_image = product.metafields.custom.coffee_origin_image.value %}
@@ -440,7 +464,6 @@
       {% assign coffee_type = product.metafields.custom.coffee_type.value %}
       {% assign coffee_blend_ratio = product.metafields.custom.coffee_blend_ratio.value %}
 
-      <div class="background-stripe"> </div>
       <div class="product-short-description-wrapper">
         <div class="product-short-description">
           {{ product.metafields.custom.short_description }}
@@ -1168,65 +1191,6 @@
       if (whatsappWrapper) {
         whatsappWrapper.classList.add('hide');
       }
-
-    // Handle sticky footer for product-actions
-    /*
-    document.addEventListener('DOMContentLoaded', function() {
-
-
-      if (window.innerWidth >= 769) {
-          return;
-      }
-
-      const productActions = document.querySelector('.product-actions');
-      if (!productActions) return;
-
-      let productActionsOriginalPosition = null;
-      let isSticky = false;
-
-      function checkProductActionsVisibility() {
-        const rect = productActions.getBoundingClientRect();
-        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-        
-        // Store original position on first check
-        if (productActionsOriginalPosition === null) {
-          productActionsOriginalPosition = rect.top + window.scrollY;
-        }
-
-        // Check if the element has scrolled past the viewport
-        const isScrolledPast = rect.bottom < 0;
-        
-        // Check if we've scrolled back to where the element should naturally be
-        const isBackInView = window.scrollY < productActionsOriginalPosition - viewportHeight - 20;
-
-        if (isScrolledPast && !isSticky) {
-          // Element has been scrolled up and out of view, make it sticky at bottom
-          productActions.classList.add('sticky-footer');
-          isSticky = true;
-        } else if (isBackInView && isSticky) {
-          // User has scrolled back up, return to normal flow
-          productActions.classList.remove('sticky-footer');
-          isSticky = false;
-        }
-      }
-
-      // Use requestAnimationFrame for better performance
-      let ticking = false;
-      function handleScroll() {
-        if (!ticking) {
-          window.requestAnimationFrame(function() {
-            checkProductActionsVisibility();
-            ticking = false;
-          });
-          ticking = true;
-        }
-      }
-
-      window.addEventListener('scroll', handleScroll);
-      // Check once on load
-      checkProductActionsVisibility();
-    });
-    */
 
     // handle sticky right side
     document.addEventListener('DOMContentLoaded', function() {
