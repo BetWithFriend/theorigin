@@ -28,22 +28,12 @@
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
 
-  .product-count-main-store {
-    padding: 0 12px;
-  }
-
   @media screen and (min-width: 750px) {
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
-
-    .product-count-main-store {
-      padding: 0 60px;
-    }
   }
-
-
 {%- endstyle -%}
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
@@ -110,23 +100,13 @@
     <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
       {{ 'component-facets.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
-       {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+      {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
         <aside
           aria-labelledby="verticalTitle"
-          class="facets-wrapper facets-wrapper--sticky hide-filters
-          {% unless section.settings.enable_filtering %}
-               facets-wrapper--no-filters
-          {% endunless %}
-          {% if section.settings.filter_type != 'vertical' %}
-             page-width
-          {% endif %}
-          {% if content_for_query_string contains 'from_quiz=true' or content_for_query_string contains 'from_quiz%3Dtrue' %}
-             hide-filters
-          {% endif %}"
+          class="facets-wrapper{% unless section.settings.enable_filtering %} facets-wrapper--no-filters{% endunless %}{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
           id="main-collection-filters"
           data-id="{{ section.id }}"
         >
-
           {% render 'facets',
             results: collection,
             enable_filtering: section.settings.enable_filtering,
@@ -135,12 +115,7 @@
             paginate: paginate
           %}
         </aside>
-      {%- endif -%} 
-
-      <!-- new filters --> 
-      {% render 'new-filters' %}
-
-      {% comment %} <p class="product-count-main-store">מספר מוצרים: {{ collection.products_count }}</p> {% endcomment %}
+      {%- endif -%}
 
       <div
         class="product-grid-container{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
@@ -173,123 +148,46 @@
               data-id="{{ section.id }}"
               class="
                 grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down
-                grid--3-col-desktop
+                grid--{{ section.settings.columns_desktop }}-col-desktop
                 {% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %}
               "
             >
               {% assign skip_card_product_styles = false %}
-              {% assign all_products = collection.products %}
-              {% assign max_products = 7 %}
-
-              {%- liquid
-                # theme-check-disable
-                capture content_for_query_string
-                  echo content_for_header
-                endcapture
-              -%}
-              
-              {% comment %} Check if randomization should be applied {% endcomment %}
-              {% if content_for_query_string contains 'from_quiz=true' or content_for_query_string contains 'from_quiz%3Dtrue' %}
-                {% comment %} Create a shuffled list of product indices {% endcomment %}
-                {% assign shuffled_indices = '' %}
-                {% assign product_count = all_products.size %}
-                
-                {% comment %} Generate random values and map them to product indices {% endcomment %}
-                {% for i in (1..product_count) %}
-                  {% assign random_value = 'now' | date: '%s%N' | plus: forloop.index | modulo: 1000000 %}
-                  {% assign shuffled_indices = shuffled_indices | append: random_value | append: ':' | append: forloop.index0 | append: ',' %}
-                {% endfor %}
-                
-                {% comment %} Sort the shuffled indices and take top 7 {% endcomment %}
-                {% assign sorted_indices = shuffled_indices | split: ',' | sort %}
-                {% assign top_indices = '' %}
-                {% for sorted_item in sorted_indices limit: max_products %}
-                  {% if sorted_item != '' %}
-                    {% assign index_parts = sorted_item | split: ':' %}
-                    {% if index_parts.size == 2 %}
-                      {% assign top_indices = top_indices | append: index_parts[1] | append: ',' %}
-                    {% endif %}
+              {%- for product in collection.products -%}
+                {% assign lazy_load = false %}
+                {%- if forloop.index > 2 -%}
+                  {%- assign lazy_load = true -%}
+                {%- endif -%}
+                <li
+                  class="grid__item {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                   data-prep-methods="{{ product.metafields.custom.coffee_taste }} {{ product.metafields.custom.coffee_prep_methods | escape }}"
+                  {% if settings.animations_reveal_on_scroll %}
+                    data-cascade
+                    style="--animation-order: {{ forloop.index }};"
                   {% endif %}
-                {% endfor %}
-                
-                {% comment %} Display products in shuffled order {% endcomment %}
-                {% assign top_indices_array = top_indices | split: ',' %}
-                {% for index_str in top_indices_array %}
-                  {% if index_str != '' %}
-                    {% assign product_index = index_str | plus: 0 %}
-                    {% assign product = all_products[product_index] %}
-                    {% if product %}
-                      {% assign lazy_load = false %}
-                      {%- if forloop.index > 2 -%}
-                        {%- assign lazy_load = true -%}
-                      {%- endif -%}
-                      <li
-                        class="grid__item grid-item-feed {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-                         data-prep-methods="{{ product.metafields.custom.coffee_taste }} {{ product.metafields.custom.coffee_prep_methods | escape }}"
-                        {% if settings.animations_reveal_on_scroll %}
-                          data-cascade
-                          style="--animation-order: {{ forloop.index }};"
-                        {% endif %}
-                      >
-                        {% render 'card-product',
-                          card_product: product,
-                          media_aspect_ratio: section.settings.image_ratio,
-                          image_shape: section.settings.image_shape,
-                          show_secondary_image: section.settings.show_secondary_image,
-                          show_vendor: section.settings.show_vendor,
-                          show_rating: section.settings.show_rating,
-                          lazy_load: lazy_load,
-                          skip_styles: skip_card_product_styles,
-                          quick_add: section.settings.quick_add,
-                          section_id: section.id
-                        %}
-                        <hr class="card-product-divider"/>
-                        {% render 'price', product: product %}
-                      </li>
-                      {%- assign skip_card_product_styles = true -%}
-                    {% endif %}
-                  {% endif %}
-                {% endfor %}
-              {% else %}
-                {% comment %} Display products in normal order {% endcomment %}
-                {%- for product in all_products -%}
-                  {% assign lazy_load = false %}
-                  {%- if forloop.index > 2 -%}
-                    {%- assign lazy_load = true -%}
-                  {%- endif -%}
-                  <li
-                    class="grid__item grid-item-feed {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-                     data-prep-methods="{{ product.metafields.custom.coffee_taste }} {{ product.metafields.custom.coffee_prep_methods | escape }}"
-                    {% if settings.animations_reveal_on_scroll %}
-                      data-cascade
-                      style="--animation-order: {{ forloop.index }};"
-                    {% endif %}
-                  >
-                    {% render 'card-product',
-                      card_product: product,
-                      media_aspect_ratio: section.settings.image_ratio,
-                      image_shape: section.settings.image_shape,
-                      show_secondary_image: section.settings.show_secondary_image,
-                      show_vendor: section.settings.show_vendor,
-                      show_rating: section.settings.show_rating,
-                      lazy_load: lazy_load,
-                      skip_styles: skip_card_product_styles,
-                      quick_add: section.settings.quick_add,
-                      section_id: section.id
-                    %}
-                    <hr class="card-product-divider"/>
-                    {% render 'price', product: product %}
-                  </li>
-                  {%- assign skip_card_product_styles = true -%}
-                {%- endfor -%}
-              {% endif %}
+                >
+                  {% render 'card-product',
+                    card_product: product,
+                    media_aspect_ratio: section.settings.image_ratio,
+                    image_shape: section.settings.image_shape,
+                    show_secondary_image: section.settings.show_secondary_image,
+                    show_vendor: section.settings.show_vendor,
+                    show_rating: section.settings.show_rating,
+                    lazy_load: lazy_load,
+                    skip_styles: skip_card_product_styles,
+                    quick_add: section.settings.quick_add,
+                    section_id: section.id
+                  %}
+                  <hr class="card-product-divider"/>
+                  {% render 'price', product: product %}
+                </li>
+                {%- assign skip_card_product_styles = true -%}
+              {%- endfor -%}
             </ul>
 
-          {% unless content_for_query_string contains 'from_quiz=true' or content_for_query_string contains 'from_quiz%3Dtrue' %}
             {%- if paginate.pages > 1 -%}
               {% render 'pagination', paginate: paginate, anchor: '' %}
             {%- endif -%}
-          {%- endunless -%}
           </div>
         {%- endif -%}
       </div>
