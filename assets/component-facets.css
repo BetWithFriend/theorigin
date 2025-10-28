@@ -175,6 +175,18 @@
     /* grid-template-columns: auto minmax(0, max-content);
     column-gap: 2rem; */
   }
+
+  .facets-container::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    z-index: 10;
+    pointer-events: none;
+  }
 }
 
 .facet-filters {
@@ -182,7 +194,7 @@
   display: flex;
   grid-column: 2;
   grid-row: 1;
-  padding-left: 2.5rem;
+  padding-left: 16px;
 }
 
 @media screen and (min-width: 990px) {
@@ -256,7 +268,7 @@
 }
 
 .facet-filters button {
-  margin-left: 2.5rem;
+  margin-left: 16px;
 }
 
 .facet-filters__sort {
