@@ -14,10 +14,6 @@
   height: 24px;
 }
 
-.sort-options-catalog {
-  /* display: none; */
-}
-
 .sort-select-wrapper {
   position: relative;
   display: inline-block;
@@ -88,14 +84,14 @@
   background: #f9f9f9;
 }
 
-.sort-dropdown-button:focus {
+/* .sort-dropdown-button:focus {
   outline: 2px solid #007bff;
   outline-offset: 2px;
-}
+} */
 
-.sort-dropdown-button[aria-expanded="true"] {
+/* .sort-dropdown-button[aria-expanded="true"] {
   border-color: #007bff;
-}
+} */
 
 .sort-icon-wrapper {
   display: flex;
@@ -113,7 +109,8 @@
 }
 
 .sort-dropdown-menu {
-  position: fixed;
+  position: absolute;
+  top: 45px;
   background: #FAFCFE;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -122,8 +119,9 @@
   max-height: 200px;
   overflow-y: auto;
   display: none;
-  max-width: 170px;
+  width: 170px;
   padding: 16px 24px;
+  overflow: hidden;
 }
 
 .sort-dropdown-menu.show {
@@ -173,3 +171,64 @@
   color: #1976d2;
   font-weight: bold;
 } */
+
+/* Hide text and show icon by default (mobile) */
+.sort-text-wrapper {
+  display: none;
+}
+
+.sort-by-text {
+  display: none;
+}
+
+/* Show text and hide icon on screens larger than 750px */
+@media screen and (min-width: 751px) {
+  .sort-icon-wrapper {
+    display: none;
+  }
+
+  .sort-text-wrapper {
+    display: flex;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sort-dropdown-button {
+    height: 41px;
+    min-width: 147px;
+    padding: 8px 24px;
+    border: 1px solid #33363480;
+    border-radius: 8px;
+  }
+
+  .sort-by-text-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 250px;
+    /* flex-direction: column; */
+  }
+
+  .sort-by-text {
+    display: block;
+    font-size: 16px;
+    line-height: 25px;
+    margin-left: 4px;
+  }
+
+  .sort-icon-image-large {
+    height: 8px;
+    width: 14px;
+    margin-right: 4px;
+    transition: transform 0.2s ease;
+  }
+
+  .sort-dropdown-button[aria-expanded="true"] .sort-icon-image-large {
+    transform: rotate(180deg);
+  }
+
+  .sort-dropdown-menu.show {
+    right: 72px;
+  }
+}

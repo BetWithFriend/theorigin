@@ -1,61 +1,63 @@
-{{ 'horizontal-bubbles.css' | asset_url | stylesheet_tag }}
+    {{ 'horizontal-bubbles.css' | asset_url | stylesheet_tag }}
+<div class="all-new-filters-wrapper">
+    {% render 'facets',
+        results: collection,
+        enable_filtering: section.settings.enable_filtering,
+        enable_sorting: section.settings.enable_sorting,
+        filter_type: section.settings.filter_type,
+        paginate: paginate
+    %}
+    <div class="horizontal-bubbles-wrapper" id="horizontal-bubbles-wrapper">
+        <div class="horizontal-bubbles-container">
 
-<div class="horizontal-bubbles-wrapper" id="horizontal-bubbles-wrapper">
-    <div class="horizontal-bubbles-container">
-              {% render 'facets',
-                    results: collection,
-                    enable_filtering: section.settings.enable_filtering,
-                    enable_sorting: section.settings.enable_sorting,
-                    filter_type: section.settings.filter_type,
-                    paginate: paginate
-            %}
 
-        <div class="bubble-item" onclick="removeAllFilters()">
-            <div class="bubble-text">
-                <div class="bubble-title">הצג הכל</div>
-                <div class="bubble-subtitle">כל הפולים</div>
+            <div class="bubble-item" onclick="removeAllFilters()">
+                <div class="bubble-text">
+                    <div class="bubble-title">הצג הכל</div>
+                    <div class="bubble-subtitle">כל הפולים</div>
+                </div>
             </div>
-        </div>
 
-        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Chocolate,Sweet-Chocolate')">
-            <div class="bubble-text">
-                <div class="bubble-title">שוקולדי ומתוק</div>
-                <div class="bubble-subtitle">טעמים עמוקים</div>
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Chocolate,Sweet-Chocolate')">
+                <div class="bubble-text">
+                    <div class="bubble-title">שוקולדי ומתוק</div>
+                    <div class="bubble-subtitle">טעמים עמוקים</div>
+                </div>
             </div>
-        </div>
 
-        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Sweet')">
-            <div class="bubble-text">
-                <div class="bubble-title">מאוזן</div>
-                <div class="bubble-subtitle">מתוק וקרמלי</div>
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Sweet')">
+                <div class="bubble-text">
+                    <div class="bubble-title">מאוזן</div>
+                    <div class="bubble-subtitle">מתוק וקרמלי</div>
+                </div>
             </div>
-        </div>
 
-        {% comment %} <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet')">
-            <div class="bubble-text">
-                <div class="bubble-title">פירותי מתוק</div>
-                <div class="bubble-subtitle">חמיצות קלה</div>
+            {% comment %} <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet')">
+                <div class="bubble-text">
+                    <div class="bubble-title">פירותי מתוק</div>
+                    <div class="bubble-subtitle">חמיצות קלה</div>
+                </div>
+            </div> {% endcomment %}
+
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet,Fruity')">
+                <div class="bubble-text">
+                    <div class="bubble-title">מתקתק ופירותי</div>
+                    <div class="bubble-subtitle">חמצמץ וקליל</div>
+                </div>
             </div>
-        </div> {% endcomment %}
 
-        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet,Fruity')">
-            <div class="bubble-text">
-                <div class="bubble-title">מתקתק ופירותי</div>
-                <div class="bubble-subtitle">חמצמץ וקליל</div>
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_type', 'חד זני')">
+                <div class="bubble-text">
+                    <div class="bubble-title">חד זני</div>
+                    <div class="bubble-subtitle">מקור יחיד</div>
+                </div>
             </div>
-        </div>
 
-        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_type', 'חד זני')">
-            <div class="bubble-text">
-                <div class="bubble-title">חד זני</div>
-                <div class="bubble-subtitle">מקור יחיד</div>
-            </div>
-        </div>
-
-        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_type', 'בלנד')">
-            <div class="bubble-text">
-                <div class="bubble-title">בלנדים</div>
-                <div class="bubble-subtitle">תערובות הבית</div>
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_type', 'בלנד')">
+                <div class="bubble-text">
+                    <div class="bubble-title">בלנדים</div>
+                    <div class="bubble-subtitle">תערובות הבית</div>
+                </div>
             </div>
         </div>
     </div>

@@ -480,8 +480,8 @@ class SortDropdown extends HTMLElement {
 
     // Calculate position for fixed positioning
     const buttonRect = button.getBoundingClientRect();
-    menu.style.top = (buttonRect.bottom + window.scrollY) + 'px';
-    menu.style.right = '12px';
+    // menu.style.top = (buttonRect.bottom + window.scrollY) + 'px';
+    // menu.style.right = '12px';
     // menu.style.width = buttonRect.width + 'px';
 
     button.setAttribute('aria-expanded', 'true');
