@@ -498,6 +498,8 @@
                     </button>
                   </div>
                   <div class="sort-dropdown-menu" id="sortDropdownMenu">
+                        <span class="sort-label-mobile">מיון לפי:</span>
+                        <hr class="sort-line-mobile" />
                     {%- for option in results.sort_options -%}
                       {%  unless option.value == 'manual' 
                           or option.value == 'title-ascending' 

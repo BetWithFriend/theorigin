@@ -129,7 +129,7 @@
 @media screen and (min-width: 768px) {
     .horizontal-bubbles-wrapper {
         padding: 0;
-        padding-bottom: 16px;
+        /* padding-bottom: 16px; */
     }
 
     .horizontal-bubbles-container {

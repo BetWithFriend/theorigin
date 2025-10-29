@@ -181,6 +181,22 @@
   display: none;
 }
 
+.sort-label-mobile {
+  display: block;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 25px;
+  /* margin-bottom: 16px; */
+  transition: background-color 0.2s ease;
+  color: #1C201D;
+}
+
+.sort-line-mobile {
+  height: 1px;
+  color: #33363480;
+  margin: 16px 0;
+}
+
 /* Show text and hide icon on screens larger than 750px */
 @media screen and (min-width: 751px) {
   .sort-icon-wrapper {
@@ -191,13 +207,14 @@
     display: flex;
     white-space: nowrap;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
+    width: 100%;
   }
 
   .sort-dropdown-button {
     height: 41px;
     min-width: 147px;
-    padding: 8px 24px;
+    padding: 8px 14px;
     border: 1px solid #33363480;
     border-radius: 8px;
   }
@@ -206,8 +223,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 231px;
+    width: 250px;
     /* flex-direction: column; */
+  }
+
+  .sort-label-mobile {
+    display: none;
+  }
+
+  .sort-line-mobile {
+    display: none;
   }
 
   .facet-filters button {
