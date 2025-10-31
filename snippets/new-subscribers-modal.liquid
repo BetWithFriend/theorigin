@@ -1,0 +1,238 @@
+<style>
+.one-time-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.one-time-modal {
+  background: #fff;
+  border-radius: 16px;
+  max-width: 400px;
+  width: 92vw;
+  box-shadow: 0 16px 48px rgba(0,0,0,.13);
+  padding: 0;
+  overflow: visible;
+  position: relative;
+}
+/* FLOATING IMAGE STYLES */
+.floating-img-wrapper {
+  width: 90%;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -48%);
+  z-index: 3;
+  height: auto;
+  pointer-events: none;
+}
+.floating-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: transparent;
+}
+.one-time-modal-content {
+  padding: 72px 22px 18px 22px; /* Enough top room for floating image */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.one-time-modal-title {
+  font-family: 'Assistant', sans-serif;
+  font-size: 29px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-align: center;
+  color: #1C201D;
+  width: 80%;
+  line-height: 120%;
+}
+.one-time-modal-desc {
+  font-family: 'Assistant', sans-serif;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  margin-bottom: 18px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.one-time-modal-discount-per {
+  font-family: 'Assistant', sans-serif;
+  font-size: 40px;
+  line-height: 50px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  text-align: center;
+}
+.one-time-modal-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+
+}
+.one-time-modal-form input[type="email"] {
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #e3e3e3;
+  border-radius: 6px;
+  outline: none;
+}
+.one-time-modal-form button {
+  background: #111;
+  color: #fff;
+  font-size: 1em;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.one-time-modal-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.one-time-modal-close {
+  margin: 0 auto;
+  font-family: 'Assistant', sans-serif;
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 400;
+  text-decoration: underline;
+}
+.one-time-modal-error {
+  color: #ba1a1a;
+  font-size: 0.97em;
+  margin-top: 5px;
+  text-align: center;
+}
+.one-time-modal-success {
+  color: #107c10;
+  margin-top: 14px;
+  font-size: 1em;
+  text-align: center;
+}
+
+#oneTimeModalEmail {
+  border: 1px solid #33363480;
+  border-radius: 60px;
+  font-size: 14px;
+  padding: 16px 32px;
+  height: 48px;
+  width: 100%;
+}
+#oneTimeModalSubmitBtn {
+  font-family: 'Assistant', sans-serif;
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 400;
+  background-color: #AD7B7E;
+  border-radius: 55px;
+  color:#FAFCFE;
+  height: 48px;
+  width: 100%;
+}
+</style>
+<div id="oneTimeModalOverlay" class="one-time-modal-overlay">
+  <div class="one-time-modal">
+    {% comment %} <button class="one-time-modal-close" aria-label="סגור" onclick="hideOneTimeModal()">&times;</button> {% endcomment %}
+    <div class="floating-img-wrapper">
+      <img src="{{ 'new-subscribers-coupon.png' | asset_url }}" alt="Lets be friends" class="floating-img" />
+    </div>
+    <div class="one-time-modal-content">
+      <div class="one-time-modal-title">קפה טוב מתחיל בהנחה טובה!</div>
+      <div class="one-time-modal-desc">
+        <span>מפנקים אתכם ב-12% הנחה! השאירו מייל וקבלו את הקוד</span>
+        <span class="one-time-modal-discount-per">12%</span>
+      </div>
+      <div class="one-time-modal-desc" dir="rtl">12% הנחה על הקנייה הראשונה מפולי קפה טריים מבתי הקלייה הטובים בישראל.</div>
+
+      <form id="oneTimeModalForm" class="one-time-modal-form" autocomplete="off" onsubmit="submitOneTimeModal(event)">
+        <input type="email" id="oneTimeModalEmail" name="email" placeholder="הכנסו את הכתובת ונתחיל לקלות את ההנחה" required>
+        <button id="oneTimeModalSubmitBtn" type="submit">שלחו לי את הקוד</button>
+        <div id="oneTimeModalError" class="one-time-modal-error" style="display:none;"></div>
+        <div id="oneTimeModalSuccess" class="one-time-modal-success" style="display:none;"></div>
+      </form>
+      <div class="one-time-modal-close" aria-label="skip" onclick="hideOneTimeModal()">דלגו</div>
+    </div>
+  </div>
+</div>
+<script>
+(function() {
+  var LS_KEY = 'oneTimeModalSeen_v2';
+  var modal = document.getElementById('oneTimeModalOverlay');
+  var FORM_ID = 'oneTimeModalForm';
+
+  function showModal() {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+  window.hideOneTimeModal = function() {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+    localStorage.setItem(LS_KEY, 'true');
+  };
+
+  // Show on load only if not seen
+  document.addEventListener('DOMContentLoaded', function() {
+    if (!localStorage.getItem(LS_KEY)) {
+      showModal();
+    }
+  });
+
+  window.submitOneTimeModal = function(event) {
+    event.preventDefault();
+    var email = document.getElementById('oneTimeModalEmail').value.trim();
+    var errorDiv = document.getElementById('oneTimeModalError');
+    var successDiv = document.getElementById('oneTimeModalSuccess');
+    errorDiv.style.display = 'none';
+    successDiv.style.display = 'none';
+
+    if (!isValidEmail(email)) {
+      errorDiv.textContent = 'אנא הזינו אימייל תקין';
+      errorDiv.style.display = 'block';
+      return;
+    }
+
+    document.getElementById('oneTimeModalSubmitBtn').disabled = true;
+
+    // Identical to questionnaire: POST to Lambda URL (replace as needed)
+    var url = 'https://elghwmw2jd3c5ve65agcrezqru0lrwtc.lambda-url.us-east-1.on.aws/';
+    var data = { email: email };
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(function() {
+      localStorage.setItem(LS_KEY, 'true');
+      successDiv.textContent = 'הרשמתך התקבלה!';
+      successDiv.style.display = 'block';
+      document.getElementById(FORM_ID).reset();
+      setTimeout(hideOneTimeModal, 1600);
+    })
+    .catch(function() {
+      errorDiv.textContent = 'אירעה שגיאה. בבקשה נסו שוב';
+      errorDiv.style.display = 'block';
+    })
+    .finally(function(){
+      document.getElementById('oneTimeModalSubmitBtn').disabled = false;
+    });
+  }
+
+  function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+})();
+</script>
