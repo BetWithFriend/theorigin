@@ -28,7 +28,7 @@ body.questionnaire-wrapper-open {
 
 .questionnaire-skip-btn {
     color: #1C201D;
-    font-family: noto-sans, sans-serif;
+    font-family: "Assistant", sans-serif;
     font-size: 16px;
     line-height: 16px;
     font-weight: 400;
@@ -51,7 +51,7 @@ body.questionnaire-wrapper-open {
 }
 
 .questionnaire-title {
-    font-family: noto-sans, sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-size: 20px;
     line-height: 20px;
     font-weight: 700;
@@ -116,8 +116,8 @@ body.questionnaire-wrapper-open {
 }
 
 .questionnaire-text {
-    font-family: noto-sans, sans-serif;
-    font-size: 16px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 18px;
     line-height: 17px;
     font-weight: 600;
     color: #1C201D;
@@ -125,9 +125,9 @@ body.questionnaire-wrapper-open {
 }
 
 .questionnaire-expl-text {
-    font-family: noto-sans, sans-serif;
-    font-size: 14px;
-    line-height: 25px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    line-height: 18px;
     font-weight: 400;
     color: #1C201D;
     /* margin-top: 8px; */
@@ -145,7 +145,7 @@ body.questionnaire-wrapper-open {
     margin-top: 20px;
     background-color: #AD7B7E;
     color: #FBFCFE;
-    font-family: noto-sans, sans-serif;
+    font-family: "Assistant", sans-serif;
     font-size: 18px;
     /* line-height: 18px; */
     font-weight: 400;
@@ -187,7 +187,7 @@ body.questionnaire-wrapper-open {
 }
 
 .questionnaire-loader-text {
-    font-family: noto-sans, sans-serif;
+    font-family: "Assistant", sans-serif;
     font-size: 20px;
     line-height: 30px;
     font-weight: 700;
@@ -220,7 +220,7 @@ body.questionnaire-wrapper-open {
 }
 
 .lets-be-friends-title {
-    font-family: noto-sans, sans-serif;
+    font-family: "Assistant", sans-serif;
     font-size: 36px;
     line-height: 36px;
     font-weight: 700;
@@ -232,7 +232,7 @@ body.questionnaire-wrapper-open {
 }
 
 .lets-be-friends-text {
-    font-family: noto-sans, sans-serif;
+    font-family: "Assistant", sans-serif;
     font-size: 16px;
     line-height: 25px;
     font-weight: 400;
@@ -248,7 +248,7 @@ body.questionnaire-wrapper-open {
     padding: 8px 16px;
     background-color: #FAFCFE;
     border: 1px solid #55555580;
-    font-family: noto-sans, sans-serif;
+    font-family: "Assistant", sans-serif;
     font-size: 16px;
     line-height: 25px;
     font-weight: 400;
@@ -262,7 +262,7 @@ body.questionnaire-wrapper-open {
 
 .questionnaire-select-skip {
     color: #1C201D;
-    font-family: noto-sans, sans-serif;
+    font-family: "Assistant", sans-serif;
     font-size: 16px;
     line-height: 16px;
     font-weight: 400;
@@ -312,7 +312,7 @@ body.questionnaire-wrapper-open {
 }
 
 .facets-wrapper--sticky.hide-filters {
-    display: none;
+    /* display: none; */
 }
 
 .questionnaire-progress-bar-wrapper {

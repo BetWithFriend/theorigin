@@ -11,7 +11,7 @@
 }
 
 .vendors-collection-title-main {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-weight: 700;
     font-size: 32px;
     line-height: 46px;
@@ -22,7 +22,7 @@
 
 .vendors-collection-title-submain {
     /* background-color: #E6E3DE; */
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-weight: 400;
     font-size: 16px;
     line-height: 20px;
@@ -45,7 +45,7 @@
 }
 
 .vendors-collection-content-title {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-weight: 700;
     font-size: 20px;
     line-height: 27px;
@@ -88,7 +88,7 @@
 }
 
 .vendors-collection-vendor-name {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-weight: 700;
     font-size: 14px;
     line-height: 20px;
@@ -97,7 +97,7 @@
 }
 
 .vendors-collection-vendor-location {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-weight: 400;
     font-size: 14px;
     line-height: 20px;

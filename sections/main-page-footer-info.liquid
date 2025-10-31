@@ -1,10 +1,10 @@
 {{ 'main-page-footer-info.css' | asset_url | stylesheet_tag }}
 <div class="main-footer-wrapper">
-    <picture style="line-height: 0;">
+    {% comment %} <picture style="line-height: 0;">
         <source media="(max-width: 768px)" srcset="{{ 'footer_main_page_top.png' | asset_url }}'">
         <source media="(min-width: 769px)" srcset="{{ 'footer_main_page_top_desktop.png' | asset_url }}">
         <img class="footer_main_page_top" src="{{ 'footer_main_page_top.png' | asset_url }}" alt="Footer Wave">
-    </picture>
+    </picture> {% endcomment %}
     <div class="main-footer-info-wrapper">
         <div class="main-footer-info-divider">
             <hr class="main-footer-info-divider-line"/>

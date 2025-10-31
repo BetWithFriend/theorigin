@@ -1,112 +1,123 @@
-<div id="product-description-wrapper" >
+<div id="product-description-main-wrapper" >
     <div class="product-description-wrapper-main">
-        <div class="product-description-wrapper" id="product-description" dir="rtl">
-            <div class="product-description-text">
+        <div class="product-description-wrapper expanded" id="product-description" dir="rtl" onclick="showMoreDetails('details')">
+            <div class="product-description-more-details-title">
+                <img class="side-arrow-more-details rotated" src="{{'side-arrow-more-details.png' |  asset_url}}" alt="more details icon"/>
+                פרטים נוספים
+            </div>
+            <div class="product-description-more-details">
                 {{ product_description  }}
             </div>
-        </div>
-        {% comment %} <div id="read-more" class="read-more">קראו עוד</div> {% endcomment %}
-    </div>
 
-    <div class="product-description-details-wrapper">
-        <div class="product-description-divider">
-            <hr  class="product-description-divider-line"/>
-            <img class="product-description-divider-img" src="{{ 'divider.png' | asset_url }}" alt="Divider" />
-        </div>
-    </div>
-    
-    <div class="product-details-wrapper" dir="rtl">
-        <div class="product-details-item-wrapper">
-            <div class="product-details-item-title">הרכב</div>
-            <div class="product-details-item">{{ coffee_blend_ratio }}</div>
-        </div>    
-        <div class="product-details-item-wrapper">
-            <div class="product-details-item-title">דרגת קלייה</div>
-            <div class="product-details-item">{{ coffee_roast_level }}</div>
-        </div>
-        <div class="product-details-item-wrapper">
-            <div class="product-details-item-title">טעמים</div>
-            <div class="product-details-item">{{ coffee_tastes | join: ", "}}</div>
-        </div>
-        <div class="product-details-item-wrapper">
-            <div class="product-details-item-title">קטגוריה</div>
-            <div class="product-details-item">{{ coffee_type }}</div>
-        </div>
-        <div class="product-details-item-wrapper">
-            <div class="product-details-item-title">שיטת עיבוד</div>
-            <div class="product-details-item">{{ coffee_process }}</div>
-        </div>
-        <div class="product-details-item-wrapper">
-            <div class="product-details-item-title">גובה גידול</div>
-            <div class="product-details-item">{{ coffee_altitude }}</div>
-        </div>
-    </div>
-
-    <div class="product-description-divider">
-        <hr  class="product-description-divider-line"/>
-    </div>
-
-    <div class="product-description-details-images-wrapper">
-        {% assign coffee_prep_methods_raw = product.metafields.custom.coffee_prep_methods | strip %}
-        {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
-        {% for brew_img in coffee_prep_methods %}
-            <img class="product-description-img" src="{{ brew_img  | strip | remove: '"' | append: '.png' | asset_url | replace: "files/", "" }}" alt="Brew Image" />
-        {% endfor %}
-    </div>
-
-
-
-    <div class="product-description-divider">
-        <hr  class="product-description-divider-line"/>
-    </div>
-
-    <div class="product-location-img-wrapper">
-        <img class="product-location-img" src="{{ coffee_origin_image.value  | img_url: 'master'  }}" alt="Product Location Image" />
-    </div>
-
-</div>
-
-<div class="product-details-vendor-details-wrapper">
-    <h2 class="product-details-vendor-details-title">
-        {% case vendor_name %}
-            {% when 'Canopy' %}
-                בית קלייה קאנופי - Canopy
-            {% when 'Blooms' %}
-            בית קלייה בלומס - Blooms
-            {% when 'Coffee Org' %}
-            בית קלייה קופי אורג - Coffee Organization
-            {% when 'You Need Coffee' %}
-            בית קלייה יו ניד קופי - You Need Coffee
-             {% when 'Coffee Culture' %}
-            בית קלייה קופי קולצ׳ר- Coffee Culture
-            {% else %}
-            קלייה לא ידועה
-        {% endcase %}
-    </h2>
-    <div class="product-details-vendor-image-wrapper">
-        <img src="{{ vendor_logo.value | img_url: 'small' }}" alt="{{ product.featured_image.alt | escape }}">
-    </div>
-    <div class="product-details-vendor-story-wrapper" dir="rtl" id="product-details-vendor-story-wrapper">
-        <div class="product-details-vendor-story">
-            {%- if vendor_story != blank -%}
-                <div class="rich-text">
-                  {%- for block in vendor_story.children -%}
-                    {%- case block.type -%}
-                      {%- when 'paragraph' -%}
-                        <p class="rich-text__paragraph">
-                          {%- for child in block.children -%}
-                            {%- if child.type == 'text' -%}
-                              {{- child.value | newline_to_br -}}
-                            {%- endif -%}
-                          {%- endfor -%}
-                        </p>
-                    {%- endcase -%}
-                  {%- endfor -%}
+            <div class="product-description-details-wrapper">
+                <div class="product-description-divider">
+                    <hr  class="product-description-divider-line"/>
+                    <img class="product-description-divider-img" src="{{ 'divider.png' | asset_url }}" alt="Divider" />
                 </div>
-              {%- endif -%}
+            </div>
+        
+            <div class="product-details-wrapper" dir="rtl">
+                <div class="product-details-item-wrapper">
+                    <div class="product-details-item-title">הרכב</div>
+                    <div class="product-details-item">{{ coffee_blend_ratio }}</div>
+                </div>    
+                <div class="product-details-item-wrapper">
+                    <div class="product-details-item-title">דרגת קלייה</div>
+                    <div class="product-details-item">{{ coffee_roast_level }}</div>
+                </div>
+                <div class="product-details-item-wrapper">
+                    <div class="product-details-item-title">טעמים</div>
+                    <div class="product-details-item">{{ coffee_tastes | join: ", "}}</div>
+                </div>
+                <div class="product-details-item-wrapper">
+                    <div class="product-details-item-title">קטגוריה</div>
+                    <div class="product-details-item">{{ coffee_type }}</div>
+                </div>
+                <div class="product-details-item-wrapper">
+                    <div class="product-details-item-title">שיטת עיבוד</div>
+                    <div class="product-details-item">{{ coffee_process }}</div>
+                </div>
+                <div class="product-details-item-wrapper">
+                    <div class="product-details-item-title">גובה גידול</div>
+                    <div class="product-details-item">{{ coffee_altitude }}</div>
+                </div>
+            </div>
+        
+            <div class="product-description-divider-wrapper">
+                <div class="product-description-divider">
+                    <hr class="product-description-divider-line"/>
+                </div>
+
+                <div class="product-description-details-images-wrapper">
+                    {% assign coffee_prep_methods_raw = product.metafields.custom.coffee_prep_methods | strip %}
+                    {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
+                    {% for brew_img in coffee_prep_methods %}
+                        <img class="product-description-img" src="{{ brew_img  | strip | remove: '"' | append: '.png' | asset_url | replace: "files/", "" }}" alt="Brew Image" />
+                    {% endfor %}
+                </div>
+
+                <div class="product-description-divider">
+                    <hr class="product-description-divider-line"/>
+                </div>
+
+                <div class="product-location-img-wrapper">
+                    <img class="product-location-img" src="{{ coffee_origin_image.value  | img_url: 'master'  }}" alt="Product Location Image" />
+                </div>
+            </div>
         </div>
+
+        <div class="product-description-wrapper" id="product-description" dir="rtl" onclick="showMoreDetails('roast')">
+            <div class="product-description-more-details-title">
+                <img class="side-arrow-more-details" src="{{'side-arrow-more-details.png' |  asset_url}}" alt="more details icon"/>
+                בית הקלייה
+            </div>
+            <div class="product-description-more-details">
+                    <div class="product-details-vendor-details-wrapper">
+                        <h2 class="product-details-vendor-details-title">
+                            {% case vendor_name %}
+                                {% when 'Canopy' %}
+                                    בית קלייה קאנופי - Canopy
+                                {% when 'Blooms' %}
+                                בית קלייה בלומס - Blooms
+                                {% when 'Coffee Org' %}
+                                בית קלייה קופי אורג - Coffee Organization
+                                {% when 'You Need Coffee' %}
+                                בית קלייה יו ניד קופי - You Need Coffee
+                                {% when 'Coffee Culture' %}
+                                בית קלייה קופי קולצ׳ר- Coffee Culture
+                                {% else %}
+                                קלייה לא ידועה
+                            {% endcase %}
+                        </h2>
+                        <div class="product-details-vendor-image-wrapper">
+                            <img src="{{ vendor_logo.value | img_url: 'small' }}" alt="{{ product.featured_image.alt | escape }}">
+                        </div>
+                        <div class="product-details-vendor-story-wrapper" dir="rtl" id="product-details-vendor-story-wrapper">
+                            <div class="product-details-vendor-story">
+                                {%- if vendor_story != blank -%}
+                                    <div class="rich-text">
+                                    {%- for block in vendor_story.children -%}
+                                        {%- case block.type -%}
+                                        {%- when 'paragraph' -%}
+                                            <p class="rich-text__paragraph">
+                                            {%- for child in block.children -%}
+                                                {%- if child.type == 'text' -%}
+                                                {{- child.value | newline_to_br -}}
+                                                {%- endif -%}
+                                            {%- endfor -%}
+                                            </p>
+                                        {%- endcase -%}
+                                    {%- endfor -%}
+                                    </div>
+                                {%- endif -%}
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-    <div dir="rtl" id="read-more-vendor-story" class="read-more-vendor-story">המשך לקרוא</div>    
+    {% comment %} <div dir="rtl" id="read-more-vendor-story" class="read-more-vendor-story">המשך לקרוא</div>     {% endcomment %}
 </div>
 
 
@@ -132,7 +143,7 @@
         color: #1C201D;
     }
     .product-details-vendor-story {
-        font-family: 'Noto Sans', sans-serif;
+        font-family: 'Assistant', sans-serif;
         font-weight: 400;
         font-size: 16px;
         line-height: 22px;  
@@ -142,7 +153,7 @@
         width: 110px;
     }
     .product-details-vendor-details-title {
-        font-family: 'Noto Sans', sans-serif;
+        font-family: 'Assistant', sans-serif;
         font-weight: 400;
         font-size: 16px;
         line-height: 22px;
@@ -152,7 +163,7 @@
         display: flex;
         align-items: start;
         justify-content: center;
-        padding: 40px 24px 16px 24px;
+        /* padding: 40px 24px 16px 24px; */
         width: 100%;
         /*background-color: #E6E3DE;*/
         flex-direction: column;
@@ -160,14 +171,16 @@
     }
     .product-location-img-wrapper {
         display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .product-location-img {
-        width: 100%;
+        width: 85%;
         box-sizing: border-box;
     }
     .product-details-item {
-         font-family: 'Noto Sans', sans-serif;
+         font-family: 'Assistant', sans-serif;
         font-weight: 400;
         font-size: 16px;
         line-height: 22px;
@@ -176,7 +189,7 @@
         text-align: right;
     }
     .product-details-item-title {
-        font-family: 'Noto Sans', sans-serif;
+        font-family: 'Assistant', sans-serif;
         font-weight: 400;
         font-size: 16px;
         line-height: 22px;
@@ -192,6 +205,7 @@
         padding: 0 24px;
         gap: 16px;
         flex-direction: column;
+        display: none;
     }
     .product-details-item-wrapper {
         display: flex;
@@ -205,6 +219,7 @@
         gap: 40px;
         align-items: center;
         justify-content: center;
+        width: 100%;
     }
     .product-description-img {
         height: 27px;
@@ -230,20 +245,52 @@
         height: 52px;
     }
     .product-description-wrapper {
-        background-color: #FBFCFE;
+        /* background-color: #FBFCFE; */
         overflow: hidden;
+        max-height: 75px; /* Use max-height instead of height */
+        display: flex;
+        align-items: start;
+        justify-content: start;
+        padding: 24px;
+        cursor: pointer;
+        transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; /* Add transition */
+        flex-direction: column; /* This is already here, but good to have */
         {% comment %} max-height: calc(28px * 13); /* 8 full lines of text */ {% endcomment %}
-        padding: 40px 24px; /* Padding stays intact */
-        transition: max-height 0.3s ease-in-out;
-        position: relative;
+        /* padding: 40px 24px;  */
+        /* transition: max-height 0.3s ease-in-out;
+        position: relative; */
+        border-bottom: 1px solid #C8C8C7;
+    }
+    #product-description-main-wrapper {
+        width: 100%;
+    }
+    .product-description-wrapper-main {
+        display: flex;
+        align-items: start  ;
+        justify-content: center;
+        flex-direction: column;
     }
 
     .product-description-wrapper.expanded {
-        max-height: 1800px; /* Large enough for full content */
+        /* max-height: 1800px;  */
+        max-height: 1800px; /* A large value to accommodate all content */
+        padding-bottom: 24px;
+    }
+
+    .product-description-divider-wrapper {
+        display: none;
+    }
+
+    .product-description-details-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        display: none;
     }
 
     .product-description-text {
-        font-family: 'Noto Sans', sans-serif;
+        font-family: 'Assistant', sans-serif;
         font-weight: 400;
         font-size: 20px;
         line-height: 28px;
@@ -254,7 +301,7 @@
         padding: 0 24px;
         text-align: right;
         display: block;
-        font-family: 'Noto Sans', sans-serif;
+        font-family: 'Assistant', sans-serif;
         font-weight: 400;
         font-size: 16px;
         line-height: 21px;
@@ -263,28 +310,96 @@
         margin-top: 16px;
         text-decoration: underline;
     }
+
+    .product-description-more-details-title {
+        font-family: 'Assistant', sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 25px;
+        color: #1C201D;
+    }
+
+    .side-arrow-more-details {
+        height: 14px;
+        width: 8px;
+        margin-left: 24px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .side-arrow-more-details.rotated {
+        transform: rotate(-90deg);
+        transition: transform 0.3s ease-in-out;
+    }
+    .product-description-more-details {
+        font-family: 'Assistant', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        color: #636270;
+        margin-top: 8px;
+        opacity: 0; /* Start with opacity 0 */
+        transition: opacity 0.5s ease-in-out; /* Add transition for opacity */
+    }
+    .product-description-wrapper.expanded .product-description-more-details {
+    opacity: 1; /* Fade in when expanded */
+}
+
+.product-description-divider-wrapper,
+.product-description-details-wrapper,
+.product-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 0;
+}
+
+.product-description-wrapper.expanded .product-description-divider-wrapper,
+.product-description-wrapper.expanded .product-description-details-wrapper,
+.product-description-wrapper.expanded .product-details-wrapper {
+    max-height: 1800px; /* Adjust as needed */
+    opacity: 1;
+}
+
+.side-arrow-more-details.rotated {
+    transform: rotate(-90deg); /* Change to 90deg for better visual */
+}
 </style>
 
 <script>
-    // document.getElementById('read-more').addEventListener('click', function() {
-    //     const description = document.getElementById('product-description');
-    //     if (description.classList.contains('expanded')) {
-    //         description.classList.remove('expanded');
-    //         this.textContent = 'קראו עוד';
-    //     } else {
-    //         description.classList.add('expanded');
-    //         this.textContent = 'סגור';
-    //     }
-    // });
 
-    document.getElementById('read-more-vendor-story').addEventListener('click', function() {
-        const vendor_description = document.getElementById('product-details-vendor-story-wrapper');
-        if (vendor_description.classList.contains('expanded')) {
-            vendor_description.classList.remove('expanded');
-            this.textContent = 'המשך לקרוא...';
-        } else {
-            vendor_description.classList.add('expanded');
-            this.textContent = 'סגור';
-        }
+
+function showMoreDetails(section) {
+
+    analytics.trackClick('Product Show Details', {
+        'Section': section
     });
+
+    let wrapper;
+    if (section === 'details') {
+        wrapper = document.querySelectorAll('.product-description-wrapper')[0];
+    } else if (section === 'roast') {
+        wrapper = document.querySelectorAll('.product-description-wrapper')[1];
+    }
+    
+    // Toggle the 'expanded' class on the wrapper
+    wrapper.classList.toggle('expanded');
+    
+    // Toggle the 'rotated' class on the arrow
+    const arrow = wrapper.querySelector('.side-arrow-more-details');
+    arrow.classList.toggle('rotated');
+}
+
+    // Expand only the details section immediately if on desktop
+    if (window.innerWidth > 749) {
+        // Only expand the first wrapper (details section)
+        const detailsWrapper = document.querySelectorAll('.product-description-wrapper')[0];
+        detailsWrapper.classList.add('expanded');
+        const arrow = detailsWrapper.querySelector('.side-arrow-more-details');
+        if (arrow) {
+            arrow.classList.add('rotated');
+        }
+    }
 </script>

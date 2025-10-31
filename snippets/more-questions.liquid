@@ -1,0 +1,57 @@
+{{ 'more-questions.css' | asset_url | stylesheet_tag }}
+
+<div class="more-questions-wrapper" dir="rtl">
+    <div class="more-questions-title">שאלות נפוצות</div>
+    <div class="more-questions-question" onclick="toggleAnswer()">אני מתלבט, אפשר להתייעץ?</div>
+    <div class="more-questions-answer">
+        בהחלט. אנחנו אוהבים ומבינים בקפה! תוכלו לדבר איתנו ישירות בווטסאפ או במייל ונשמח לעזור ולהכווין איזה קפה הכי מתאים לכם.
+        </br>
+        <div style="display: flex; margin-top: 8px; align-items: center; gap: 8px;">
+            <img class="more-question-whatsapp" src="{{ 'WhatsApp.png' |  asset_url }}" alt="whatsapp icon"/>
+        דברו איתנו WhatsApp</div>
+    </div>
+    <div class="more-questions-question" onclick="toggleAnswer()">איך משלמים והאם התשלום מאובטח?</div>
+    <div class="more-questions-answer">
+        אנחנו עובדים עם ספק הסליקה המוביל בישראל עם אבטחה המקסימלית ב-SSL. תוכלו לשלם בכרטיסי אשראי, אפל פיי וגוגל פיי.
+        </div>
+    <div class="more-questions-question" onclick="toggleAnswer()">מתי החבילה תגיע אליי?</div>
+    <div class="more-questions-answer">לשמירה על הטריות החבילות נשלחות ישירות מבתי הקלייה וזמן המשלוח הוא בין יום אחד לאזורים מרכזיים עד 7 ימי עסקים לאזורים מרוחקים יותר.</div>
+    <div class="more-questions-question" onclick="toggleAnswer()">כמה עולה משלוח?</div>
+    <div class="more-questions-answer">
+        משלוח מהיר עם שליח עד הבית עולה 39 ש״ח להזמנה מכל בית קלייה. לרוב בתי הקלייה ישנו משלוח חינם, והסכום רשום מתחת לכפתור ההוספה לסל ובעגלת הקניות.
+        </div>
+    <div class="more-questions-question" onclick="toggleAnswer()">למה לקנות אצלכם?</div>
+    <div class="more-questions-answer">אנחנו עובדים עם בתי הקלייה המובילים בישראל. כל בית קלייה עבר בדיקה, ואנחנו מוודאים שרמת השירות, איכות הקפה וטריות נשמרים ברמה הגבוהה ביותר.
+        כאשר אתם רוכשים מאיתנו אתם לא רק מקבלים את הקפה הטוב בישראל, אתם גם תומכים בעסקים קטנים ומקומיים.
+    </div>
+</div>
+
+<div class="go-to-page-top-wrapper" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">
+    <img class="go-to-page-top-arrow" src="{{ 'go-to-page-top.png' |  asset_url }}" alt="go to page top"/>
+    <div class="go-to-page-top-text">חזרה למעלה</div>
+</div>
+
+<script>
+    function toggleAnswer(clickedQuestion) {
+        const questions = document.querySelectorAll('.more-questions-question');
+        const answers = document.querySelectorAll('.more-questions-answer');
+        questions.forEach((question, idx) => {
+            if (question === clickedQuestion) {
+                answers[idx].style.display = answers[idx].style.display === 'block' ? 'none' : 'block';
+            } else {
+                answers[idx].style.display = 'none';
+            }
+        });
+
+        analytics.trackClick('FAQ Product Page', {
+            'Question': clickedQuestion.innerText
+        });
+    }
+
+    // Attach event listeners
+    document.querySelectorAll('.more-questions-question').forEach((question) => {
+        question.onclick = function() {
+            toggleAnswer(this);
+        };
+    });
+</script>

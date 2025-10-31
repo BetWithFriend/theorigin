@@ -16,8 +16,8 @@
 }
 
 .new-roasters-slider-title {
-    font-family: 'Noto Sans', sans-serif;
-    font-weight: 700;
+    font-family: 'Assistant', sans-serif;
+    font-weight: 600;
     font-size: 20px;
     line-height: 27px;
     text-align: right;
@@ -139,7 +139,7 @@
 }
 
 .new-roastes-slider-roaster-description {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-weight: 400;
     font-size: 16px;
     line-height: 25px;

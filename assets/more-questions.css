@@ -6,7 +6,7 @@
 }
 
 .more-questions-title {
-    font-family: noto-sans, sans-serif;
+    font-family: "Assistant", sans-serif;
     font-size: 20px;
     line-height: 20px;
     font-weight: 400;
@@ -18,7 +18,7 @@
 }
 
 .more-questions-question {
-    font-family: noto-sans, sans-serif;
+    font-family: "Assistant", sans-serif;
     font-size: 16px;
     line-height: 25px;
     font-weight: 400;
@@ -31,7 +31,7 @@
 }
 
 .more-questions-answer {
-    font-family: noto-sans, sans-serif;
+    font-family: "Assistant", sans-serif;
     font-size: 16px;
     line-height: 25px;
     font-weight: 400;
@@ -66,7 +66,7 @@
 }
 
 .go-to-page-top-text {
-    font-family: noto-sans, sans-serif;
+    font-family: "Assistant", sans-serif;
     font-size: 16px;
     line-height: 25px;
     font-weight: 400;

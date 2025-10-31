@@ -32,7 +32,7 @@
 
 .totals>h2 {
   /* font-size: calc(var(--font-heading-scale) * 1.6rem); */
-  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Assistant', sans-serif;
   font-size: 20px;
   line-height: 20px;
   font-weight: 700;
@@ -65,7 +65,7 @@
 
 .totals__total-value {
   /* font-size: 1.8rem; */
-  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Assistant', sans-serif;
   font-size: 20px;
   line-height: 20px;
   font-weight: 700;

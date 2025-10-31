@@ -73,6 +73,7 @@
     },
     "why_us": {
       "type": "why-us",
+      "disabled": true,
       "settings": {}
     },
     "credibility_icons": {

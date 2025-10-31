@@ -1,0 +1,241 @@
+    {{ 'horizontal-bubbles.css' | asset_url | stylesheet_tag }}
+<div class="all-new-filters-wrapper">
+    {% render 'facets',
+        results: collection,
+        enable_filtering: section.settings.enable_filtering,
+        enable_sorting: section.settings.enable_sorting,
+        filter_type: section.settings.filter_type,
+        paginate: paginate
+    %}
+    <div class="horizontal-bubbles-wrapper" id="horizontal-bubbles-wrapper">
+        <div class="horizontal-bubbles-container">
+
+
+            <!--<div class="bubble-item" onclick="removeAllFilters()">
+                <div class="bubble-text">
+                    <div class="bubble-title">הצג הכל</div>
+                    <div class="bubble-subtitle">כל הפולים</div>
+                </div>
+            </div>-->
+
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Chocolate,Sweet-Chocolate')">
+                <div class="bubble-text">
+                    <div class="bubble-title">שוקולדי ומתוק</div>
+                    <div class="bubble-subtitle">טעמים עמוקים</div>
+                </div>
+            </div>
+
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Sweet')">
+                <div class="bubble-text">
+                    <div class="bubble-title">מאוזן</div>
+                    <div class="bubble-subtitle">מתוק וקרמלי</div>
+                </div>
+            </div>
+
+            {% comment %} <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet')">
+                <div class="bubble-text">
+                    <div class="bubble-title">פירותי מתוק</div>
+                    <div class="bubble-subtitle">חמיצות קלה</div>
+                </div>
+            </div> {% endcomment %}
+
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet,Fruity')">
+                <div class="bubble-text">
+                    <div class="bubble-title">מתקתק ופירותי</div>
+                    <div class="bubble-subtitle">חמצמץ וקליל</div>
+                </div>
+            </div>
+
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_type', 'חד זני')">
+                <div class="bubble-text">
+                    <div class="bubble-title">חד זני</div>
+                    <div class="bubble-subtitle">מקור יחיד</div>
+                </div>
+            </div>
+
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_type', 'בלנד')">
+                <div class="bubble-text">
+                    <div class="bubble-title">בלנדים</div>
+                    <div class="bubble-subtitle">תערובות הבית</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% comment %} <p class="product-count-main-store">מספר מוצרים: {{ collection.products_count }}</p> {% endcomment %}
+
+<script>
+
+function removeAllFilters() {
+    const params = new URLSearchParams(window.location.search);
+    // Remove all filter-related params and reset pagination
+    const keysToDelete = [];
+    for (const key of params.keys()) {
+        if (key.startsWith('filter.')) {
+            keysToDelete.push(key);
+        }
+    }
+    keysToDelete.forEach((key) => params.delete(key));
+    params.delete('page');
+
+    const newQueryString = params.toString();
+
+    if (window.FacetFiltersForm && typeof FacetFiltersForm.renderPage === 'function') {
+        if (typeof analytics !== 'undefined' && analytics && typeof analytics.trackClick === 'function') {
+            analytics.trackClick('Filter select', {
+                'Source': 'Catalogue',
+                'Filter Name': 'Show All'
+            });
+        }
+        FacetFiltersForm.renderPage(newQueryString, null, true);
+        const event = new CustomEvent('collectionPageUpdated');
+        window.dispatchEvent(event);
+
+        // Remove all actice class
+        document.querySelectorAll('.bubble-item').forEach(bubble => {
+                bubble.classList.remove('active');
+        });
+    } else {
+        const url = newQueryString ? `${window.location.pathname}?${newQueryString}` : window.location.pathname;
+        window.location.href = url;
+    }
+}
+
+    function goToFilter(element, filterKey, filterValue) {
+        if (window.FacetFiltersForm && typeof FacetFiltersForm.renderPage === 'function') {
+
+            analytics.trackClick('Filter select', {
+                'Source': 'Catalogue',
+                'Filter Name': filterValue
+            });
+
+            element.classList.toggle('active'); 
+
+            const params = new URLSearchParams(window.location.search);
+
+            // Handle comma-separated values
+            const valuesToToggle = filterValue.split(',').map(v => v.trim());
+            let currentValues = params.getAll(filterKey);
+            
+            // Check if any of the values are already active
+            const hasAnyActive = valuesToToggle.some(value => currentValues.includes(value));
+            
+            if (hasAnyActive) {
+                // Remove all values that are being toggled
+                valuesToToggle.forEach(value => {
+                    const index = currentValues.indexOf(value);
+                    if (index > -1) {
+                        currentValues.splice(index, 1);
+                    }
+                });
+            } else {
+                // Add all values that are being toggled
+                valuesToToggle.forEach(value => {
+                    if (!currentValues.includes(value)) {
+                        currentValues.push(value);
+                    }
+                });
+            }
+            
+            params.delete(filterKey);
+
+            currentValues.forEach(value => {
+                // This adds the parameter multiple times: ?key=val1&key=val2
+                params.append(filterKey, value); 
+            });
+
+            const newQueryString = params.toString();
+            FacetFiltersForm.renderPage(newQueryString, null, true);
+
+            // 7. Dispatch the custom event
+            const event = new CustomEvent('collectionPageUpdated');
+            window.dispatchEvent(event);
+
+        } else {
+            console.log('filter failed: FacetFiltersForm not found or renderPage is not a function');
+        }
+    }
+
+    // ... (Place this code block inside your existing <script> tags) ...
+
+    function highlightActiveFilters() {
+        // 1. Get the current URL parameters
+        const params = new URLSearchParams(window.location.search);
+        const allActiveValues = {}; // An object to store active values for all keys
+        
+        // The filter keys used by your bubbles
+        const filterKeys = ['filter.p.m.custom.coffee_taste', 'filter.p.m.custom.coffee_type']; 
+        
+        // 2. Get all active values for each filter key
+        filterKeys.forEach(filterKey => {
+            const activeValues = params.getAll(filterKey);
+            if (activeValues.length > 0) {
+                allActiveValues[filterKey] = activeValues;
+            }
+        });
+        
+        // Clear all existing active classes first
+        document.querySelectorAll('.horizontal-bubbles-container .bubble-item').forEach(bubble => {
+            bubble.classList.remove('active');
+        });
+
+        // Check if any filters are active
+        const hasActiveFilters = Object.keys(allActiveValues).length > 0;
+        
+        if (!hasActiveFilters) {
+            // If no filters are active, optionally highlight the 'Show All' bubble
+            // const filterAllBubble = document.querySelector('.bubble-item.filter-all');
+            // if (filterAllBubble) {
+            //     filterAllBubble.classList.add('active');
+            // }
+            return; 
+        }
+
+        // 3. Loop through all bubble items and check if their value is in the active list
+        document.querySelectorAll('.horizontal-bubbles-container .bubble-item').forEach(bubble => {
+            // Extract the filter value from the onclick attribute
+            const onclickAttr = bubble.getAttribute('onclick');
+            
+            // Use a regex to find the filterKey and filterValue in the goToFilter function call
+            // Example: 'goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Chocolate')'
+            const match = onclickAttr.match(/goToFilter\([^,]+,\s*'([^']+)',\s*'([^']+)'\)/);
+
+            if (match && match[1] && match[2]) {
+                const bubbleFilterKey = match[1];
+                const bubbleFilterValue = match[2];
+                
+                // Check if this filter key has active values
+                if (allActiveValues[bubbleFilterKey]) {
+                    const activeValues = allActiveValues[bubbleFilterKey];
+                    
+                    // Handle comma-separated values in the bubble
+                    const bubbleValues = bubbleFilterValue.split(',').map(v => v.trim());
+                    
+                    // Check if ALL bubble values are in the list of active URL values
+                    const allValuesActive = bubbleValues.every(value => activeValues.includes(value));
+                    
+                    if (allValuesActive && bubbleValues.length > 0) {
+                        bubble.classList.add('active');
+                    }
+                }
+            }
+        });
+
+        // OPTIONAL: Scroll the first active bubble into view if desired
+        const firstActiveBubble = document.querySelector('.bubble-item.active');
+        if (firstActiveBubble) {
+            firstActiveBubble.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
+        }
+    }
+
+        document.addEventListener('DOMContentLoaded', highlightActiveFilters);
+        // Also run immediately if the script loads after DOMContentLoaded fires
+        if (document.readyState !== 'loading') {
+            highlightActiveFilters();
+        }
+
+</script>

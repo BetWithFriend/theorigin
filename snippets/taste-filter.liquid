@@ -114,7 +114,7 @@
 
   .dropdown-button {
     height: 60px;
-    font-family:  'Noto Sans', sans-serif;
+    font-family:  'Assistant', sans-serif;
     width: 100%;
     color: #767676;
     background-color: #ffffff;
@@ -224,7 +224,7 @@
   height: 40px;
   border-radius: 8px;
   padding: 16px 10px;
-  font-family:  'Noto Sans', sans-serif;
+  font-family:  'Assistant', sans-serif;
   font-size: 18px;
   color: #E3E0DA;
   display: flex;
@@ -445,7 +445,6 @@ function toggleDropdown(menuType) {
 function updateDropdownButtonText(type) {
   const selectedCheckboxes = document.querySelectorAll(`#dropdownMenu-${type} .dropdown-icons-input:checked`);
   const button = document.querySelector(`.dropdown-menu-btn[data-type="${type}"]`);
-  
   if (selectedCheckboxes.length > 0) {
     button.textContent = 'בחר';
   } else {
@@ -474,4 +473,6 @@ function updateDropdownButtonText(type) {
     }
   });
 }
+
+      document.addEventListener('DOMContentLoaded', updateDropdownButtonText)
 </script>

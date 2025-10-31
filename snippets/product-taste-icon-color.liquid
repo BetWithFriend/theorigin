@@ -1,5 +1,5 @@
 <!-- snippets/product-taste-icon-color.liquid -->
-<div class="selection-wrapper">
+<div class="selection-wrapper plp-taste-text-wrapper">
   <!-- Dynamic Text Section -->
   
  {% if tastes.size > 0 %}
@@ -7,20 +7,20 @@
     <!-- Conditional Color -->
     {% case taste %}
       {% when 'Fruity' %}
-      <span>פירותי</span>
-        <span class="selection-color" style="background-color: #FFDF70;" aria-label="Yellow Indicator"></span>
+      <span class="fruity">פירותי</span>
+        {% comment %} <span class="selection-color" style="background-color: #FFDF70;" aria-label="Yellow Indicator"></span> {% endcomment %}
       {% when 'Chocolate' %}
-      <span>שוקולדי</span>
-        <span class="selection-color" style="background-color: #8B4513;" aria-label="Brown Indicator"></span>
+      <span class="chocolate">שוקולדי</span>
+        {% comment %} <span class="selection-color" style="background-color: #8B4513;" aria-label="Brown Indicator"></span> {% endcomment %}
       {% when 'Sweet-Chocolate' %}
-      <span>מתוק שוקולדי</span>
-        <span class="selection-color" style="background-color: #C4823E;" aria-label="Orange Indicator"></span>
+      <span class="sweet-chocolate">מתוק שוקולדי</span>
+        {% comment %} <span class="selection-color" style="background-color: #C4823E;" aria-label="Orange Indicator"></span> {% endcomment %}
       {% when 'Sweet' %}
-      <span>מתוק מאוזן</span>
-        <span class="selection-color" style="background-color: #D60540;" aria-label="Red Indicator"></span>
+      <span class="sweet-balanced">מתוק מאוזן</span>
+        {% comment %} <span class="selection-color" style="background-color: #D60540;" aria-label="Red Indicator"></span> {% endcomment %}
       {% when 'Fruity-Sweet' %}
-      <span>פירותי מתוק</span>
-        <span class="selection-color" style="background-color: #FF974A;" aria-label="Orange Indicator"></span>
+      <span class="sweet-fruity">פירותי מתוק</span>
+        {% comment %} <span class="selection-color" style="background-color: #FF974A;" aria-label="Orange Indicator"></span> {% endcomment %}
     {% endcase %}
   {% endfor %}
 {% endif %}
@@ -59,7 +59,7 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Assistant', sans-serif;
   flex-direction: row-reverse;
   line-height: 30px;
   font-size: 14px;
@@ -130,6 +130,17 @@
   margin: 2px;
   font-size: 14px;
 }
+
+.plp-taste-text-wrapper span {
+  padding: 0px 16px;
+  border-radius: 16px;
+}
+
+.plp-taste-text-wrapper span.chocolate { background-color: rgb(162, 137, 114); color: #fff;}
+.plp-taste-text-wrapper span.sweet-chocolate { background-color: #c1a089;color: #fff;}
+.plp-taste-text-wrapper span.sweet-balanced {background-color: #dec2b5;}
+.plp-taste-text-wrapper span.sweet-fruity {background-color: #f3d5b8;}
+.plp-taste-text-wrapper span.fruity {background-color: #ebe4cc;}
 
 @media screen and (min-width: 749px) {
   .product-tastes-list-icon {

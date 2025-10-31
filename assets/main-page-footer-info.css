@@ -26,6 +26,7 @@
     justify-content: center;
     width: 100%;
     position: relative;
+    margin-top: 30px;
 }
 
 .main-footer-info-divider-line {
@@ -44,7 +45,7 @@
 }
 
 .main-footer-info-about-us {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-weight: 400;
     font-size: 20px;
     line-height: 30px;
@@ -71,8 +72,8 @@
 }
 
 .main-footer-info-shop-title {
-    font-family: 'Noto Sans', sans-serif;
-    font-weight: 700;
+    font-family: 'Assistant', sans-serif;
+    font-weight: 600;
     font-size: 20px;
     line-height: 27px;
     text-align: center;
@@ -85,7 +86,7 @@ h2.main-footer-info-shop-title {
 }
 
 .main-footer-info-shop-description {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-weight: 400;
     font-size: 16px;
     line-height: 21px;
@@ -102,7 +103,7 @@ h2.main-footer-info-shop-title {
     background-color: #FBFCFE;
     cursor: pointer;
     color: #333634;
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-weight: 400;
     font-size: 20px;
     line-height: 27px;

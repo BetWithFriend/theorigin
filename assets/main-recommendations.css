@@ -9,8 +9,8 @@
 }
 
 .main-recom-title {
-    font-family: 'Noto Sans', sans-serif;
-    font-weight: 700;
+    font-family: 'Assistant', sans-serif;
+    font-weight: 600;
     font-size: 19px;
     line-height: 20px;
     text-align: right;
@@ -128,7 +128,7 @@
 }
 
 .main-recom-text {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-weight: 400;
     font-size: 16px;
     line-height: 25px;
@@ -137,15 +137,15 @@
 }
 
 .main-recom-name {
-    font-weight: 700;
+    font-weight: 600;
     margin-top: 24px;
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-size: 16px;
     color: #000000;
 }
 
 .main-recom-location {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-size: 14px;
     color: #666;
     margin-top: 8px;

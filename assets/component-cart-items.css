@@ -106,8 +106,8 @@ cart-items .title-wrapper-with-link {
 }
 
 .cart-item__name {
-  font-family: 'Noto Sans', sans-serif;
-  font-size: 14px;
+  font-family: 'Assistant', sans-serif;
+  font-size: 16px;
   height: 36px;
   display: flex;
   align-items: center;
@@ -149,7 +149,7 @@ cart-items .title-wrapper-with-link {
 }
 
 .cart-item-vendor {
-  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Assistant', sans-serif;
   font-size: 16px;
   /* line-height: 25px; */
   font-weight: 700;
@@ -168,7 +168,7 @@ cart-items .title-wrapper-with-link {
 }
 
 .cart-total-delivery {
-  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Assistant', sans-serif;
   font-size: 16px;
   line-height: 16px;
   font-weight: 700;
@@ -177,7 +177,7 @@ cart-items .title-wrapper-with-link {
 }
 
 .cart-total-delivery-sum {
-  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Assistant', sans-serif;
   font-size: 16px;
   line-height: 16px;
   font-weight: 400;
@@ -215,7 +215,7 @@ cart-items .title-wrapper-with-link {
 }
 
 .product-option {
-  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Assistant', sans-serif;
   font-size: 14px;
   line-height: 25px;
   font-weight: 400;
@@ -351,7 +351,7 @@ cart-remove-button .icon-remove {
 
 
 .minumum-items-text {
-  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Assistant', sans-serif;
   font-size: 14px;
   line-height: 22px;
   font-weight: 400;
@@ -361,7 +361,7 @@ cart-remove-button .icon-remove {
 }
 
 .minumum-items-link {
-  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Assistant', sans-serif;
   font-size: 14px;
   line-height: 22px;
   font-weight: 400;
@@ -406,7 +406,7 @@ cart-remove-button .icon-remove {
   }
 
   .cart-item__details {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-size: 16px;
     line-height: 22px;
     font-weight: 500;
