@@ -201,7 +201,8 @@
       align-items: center;
       justify-content: center;
       gap: 24px;
-      margin-bottom: 24px;
+      margin-bottom: 18px;
+      padding: 0 16px;
     }
 
     #product-dropdowns-form-wrapper {
@@ -1120,7 +1121,7 @@
     </div> {% endcomment %}
     {% comment %} {%- endif -%} {% endcomment %}
     <div class="why-us-product-page-wrapper">
-      {% render 'why-us' %}
+      {% render 'why-us-vertical', vendor: vendor %}
     </div>
   
 

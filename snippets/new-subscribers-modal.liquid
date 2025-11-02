@@ -1,0 +1,326 @@
+<style>
+.one-time-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.one-time-modal {
+  background: #fff;
+  border-radius: 16px;
+  max-width: 400px;
+  width: 92vw;
+  box-shadow: 0 16px 48px rgba(0,0,0,.13);
+  padding: 0;
+  overflow: visible;
+  position: relative;
+}
+/* FLOATING IMAGE STYLES */
+.floating-img-wrapper {
+  width: 90%;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -48%);
+  z-index: 3;
+  height: auto;
+  pointer-events: none;
+}
+.floating-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: transparent;
+}
+.one-time-modal-content {
+  padding: 72px 22px 18px 22px; /* Enough top room for floating image */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.one-time-modal-title {
+  font-family: 'Assistant', sans-serif;
+  font-size: 29px;
+  font-weight: 700;
+  margin: 20px 0;
+  text-align: center;
+  color: #1C201D;
+  width: 80%;
+  line-height: 120%;
+}
+.one-time-modal-desc {
+  font-family: 'Assistant', sans-serif;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  margin-bottom: 18px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.one-time-modal-discount-per {
+  font-family: 'Assistant', sans-serif;
+  font-size: 40px;
+  line-height: 50px;
+  font-weight: 700;
+  /* margin-bottom: 18px; */
+  text-align: center;
+}
+.one-time-modal-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+
+}
+.one-time-modal-form button {
+  background: #111;
+  color: #fff;
+  font-size: 1em;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.one-time-modal-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.one-time-modal-close {
+  margin: 0 auto;
+  font-family: 'Assistant', sans-serif;
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 400;
+  text-decoration: underline;
+}
+.one-time-modal-error {
+  color: #ba1a1a;
+  font-size: 0.97em;
+  margin-top: 5px;
+  text-align: center;
+}
+.one-time-modal-success {
+  color: #107c10;
+  margin-top: 14px;
+  font-size: 1em;
+  text-align: center;
+}
+
+.one-time-modal-input{
+  border: 1px solid #33363480;
+  border-radius: 60px;
+  font-size: 14px;
+  padding: 16px 32px;
+  height: 48px;
+  /* border-radius: 40px; */
+  width: 100%;
+  text-align: right;
+}
+#oneTimeModalSubmitBtn {
+  font-family: 'Assistant', sans-serif;
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 400;
+  background-color: #AD7B7E;
+  border-radius: 55px;
+  color:#FAFCFE;
+  height: 48px;
+  width: 100%;
+}
+.one-time-modal-disclaimer {
+  font-family: 'Assistant', sans-serif;
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: 400;
+  text-align: center;
+}
+.one-time-modal-policy {
+  text-decoration: underline;
+}
+.one-time-modal-close-image {
+  width: 48px;
+  height: 48px;
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 10002;
+  background-color: transparent;
+  text-align: center;
+  cursor: pointer;
+}
+
+.success-title {
+  font-family: 'Assistant', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 24px;
+  text-align: center;
+  color: #1C201D;
+}
+
+.success-desc {
+  font-family: 'Assistant', sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+  color: #1C201D;
+}
+
+@media screen and (min-width: 750px) {
+  .one-time-modal-close-image {
+    top: 70px;
+    /* right: 150px; */
+    left: calc(50% + 250px);
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .one-time-modal {
+    margin-top: 70px;
+  }
+}
+</style>
+<div id="oneTimeModalOverlay" class="one-time-modal-overlay">
+  {% comment %} <button class="close-x-btn-top-page" aria-label="סגור חלון" onclick="hideOneTimeModal()"> {% endcomment %}
+    <img onclick="hideOneTimeModal()" src="{{ 'one-time-modal-close.png' |  asset_url}}" class="one-time-modal-close-image" alt="close new subscription modal"/>
+  {% comment %} </button> {% endcomment %}
+  <div class="one-time-modal">
+    <div class="floating-img-wrapper">
+      <img src="{{ 'new-subscribers-coupon.png' | asset_url }}" alt="Lets be friends" class="floating-img" />
+    </div>
+    <div class="one-time-modal-content" id="one-time-modal-content">
+      <div class="one-time-modal-title" dir="rtl">קפה טוב מתחיל בהנחה טובה!</div>
+      <div class="one-time-modal-desc">
+        <span>הזינו את כתובת האימייל וקבלו</span>
+        <span class="one-time-modal-discount-per" dir="rtl">12% הנחה</span>
+        <span>על הקניה הראשונה</span>
+      </div>
+      {% comment %} <div class="one-time-modal-desc" dir="rtl">הנחה על הקניה הראשונה</div> {% endcomment %}
+
+      <form id="oneTimeModalForm" class="one-time-modal-form" autocomplete="off" onsubmit="submitOneTimeModal(event)">
+        <input class="one-time-modal-input" type="name" id="oneTimeModalName" name="name" placeholder="שם" required>
+        <input class="one-time-modal-input" type="email" id="oneTimeModalEmail" name="email" placeholder="אימייל" required>
+        <button id="oneTimeModalSubmitBtn" type="submit">שלחו לי את ההנחה</button>
+        <div id="oneTimeModalError" class="one-time-modal-error" style="display:none;"></div>
+        <div id="oneTimeModalSuccess" class="one-time-modal-success" style="display:none;"></div>
+      </form>
+      <div class="one-time-modal-disclaimer" dir="rtl">בהרשמה אתם מסכימים
+        <span class="one-time-modal-policy" onclick="gotoPolicyPage()"> למדיניות הפרטיות</span>
+         שלנו ולקבלת דיוור. המידע נשמר רק במערכות שלנו ולא נמסר או נמכר לאף גוף שלישי.</div>
+      {% comment %} <div class="one-time-modal-close" aria-label="skip" onclick="hideOneTimeModal()">דלגו</div> {% endcomment %}
+    </div>
+  </div>
+</div>
+<script>
+(function() {
+  let LS_KEY = 'oneTimeModalSeen_v2';
+  let modal = document.getElementById('oneTimeModalOverlay');
+  let FORM_ID = 'oneTimeModalForm';
+
+  // Helper to check if current page is the privacy policy
+  function isPolicyPage() {
+    return window.location.pathname.indexOf('/policies/privacy-policy') !== -1;
+  }
+
+  // Remove the session block unless we're on the policy page (for freshness)
+  if (!isPolicyPage()) {
+    sessionStorage.removeItem('justVisitedPolicy');
+  }
+
+  function showModal() {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    analytics.trackScreenView('Email Modal', {
+      'Source': window.location.href
+    });
+  }
+
+  window.hideOneTimeModal = function() {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+    localStorage.setItem(LS_KEY, 'true');
+  };
+
+  // Close modal when clicking outside the modal content
+  modal.addEventListener('click', function(event) {
+    // Check if the click was on the overlay itself (not the modal or its children)
+    if (event.target === modal) {
+      hideOneTimeModal();
+    }
+  });
+
+  window.submitOneTimeModal = function(event) {
+    event.preventDefault();
+    var name = document.getElementById('oneTimeModalName').value.trim();
+    var email = document.getElementById('oneTimeModalEmail').value.trim();
+    var errorDiv = document.getElementById('oneTimeModalError');
+    var successDiv = document.getElementById('oneTimeModalSuccess');
+    errorDiv.style.display = 'none';
+    successDiv.style.display = 'none';
+
+    if (!isValidEmail(email)) {
+      errorDiv.textContent = 'אנא הזינו אימייל תקין';
+      errorDiv.style.display = 'block';
+      return;
+    }
+
+    analytics.trackClick('Email Modal Submit',{
+      'Source': window.location.href
+    });
+
+    document.getElementById('oneTimeModalSubmitBtn').disabled = true;
+    var url = 'https://elghwmw2jd3c5ve65agcrezqru0lrwtc.lambda-url.us-east-1.on.aws/';
+    var data = { email: email, name: name };
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(function() {
+      localStorage.setItem(LS_KEY, 'true');
+      document.getElementById('one-time-modal-content').innerHTML = '<div class="one-time-modal-success" dir="rtl"><p class="success-title" dir="rtl">איזה כיף לכם!</p><p class="success-desc">ההנחה מחכה לכם בתיבת הדוא״ל</p></div>';
+      setTimeout(hideOneTimeModal, 10000);
+    })
+    .catch(function() {
+      errorDiv.textContent = 'אירעה שגיאה. בבקשה נסו שוב';
+      errorDiv.style.display = 'block';
+    })
+    // .finally(function(){
+    //   document.getElementById('oneTimeModalSubmitBtn').disabled = false;
+    // });
+  }
+
+  function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  // When going to policy page, block modal for that session only on the policy page
+  window.gotoPolicyPage = function() {
+    sessionStorage.setItem('justVisitedPolicy', 'true');
+    window.location.href = "/policies/privacy-policy";
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      if (!localStorage.getItem(LS_KEY)) {
+        if (!(isPolicyPage() && sessionStorage.getItem('justVisitedPolicy'))) {
+          showModal();
+        }
+      }
+    }, 10000);
+  });
+
+})();
+</script>
