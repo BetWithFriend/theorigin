@@ -129,6 +129,7 @@
             {% assign youneedcoffee_shipping = 39 %}
             {% assign coffeeorg_shipping = 39 %}
             {% assign coffeeculture_shipping = 39 %}
+            {% assign elijahscoffee_shipping = 39 %}
             
             {%- comment -%} Free shipping thresholds in cents {%- endcomment -%}
             {% assign canopy_free_shipping_threshold = 22500 %}
@@ -136,6 +137,7 @@
              {% assign coffeeculture_free_shipping_threshold = 30000 %}
             {% assign coffeeorg_free_shipping_threshold = 25000 %}
             {% assign ync_free_shipping_threshold = 45000 %}
+            {% assign elijahscoffee_free_shipping_threshold = 17500 %}
             
             {%- comment -%} Calculate vendor totals {%- endcomment -%}
             {%- assign vendor_totals = blank -%}
@@ -231,6 +233,12 @@
                   {%- assign vendor_shipping_cost = coffeeculture_shipping -%}
                   {%- assign vendor_free_threshold = coffeeculture_free_shipping_threshold -%}
                   {%- if vendor_total >= coffeeculture_free_shipping_threshold -%}
+                    {%- assign vendor_qualifies_free_shipping = true -%}
+                    {%- endif -%}
+                     {%- elsif vendor == 'elijahscoffee' -%}
+                  {%- assign vendor_shipping_cost = elijahscoffee_shipping -%}
+                  {%- assign vendor_free_threshold = elijahscoffee_free_shipping_threshold -%}
+                  {%- if vendor_total >= elijahscoffee_free_shipping_threshold -%}
                     {%- assign vendor_qualifies_free_shipping = true -%}
                   {%- endif -%}
                 {%- endif -%}

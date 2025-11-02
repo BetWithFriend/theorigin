@@ -7,6 +7,7 @@
   {% endif %}
 
   {% if product %}
+  
     &nbsp;/&nbsp;
    {% assign page_vendor = product.vendor %}
     {% if page_vendor == 'canopy' %}
@@ -19,6 +20,8 @@
       {% assign collectionName = 'coffee-organization-collection' %}
       {% elsif page_vendor == 'coffeeculture' %}
       {% assign collectionName = 'coffee-culture-collection' %}
+      {% elsif page_vendor == 'elijahscoffee' %}
+      {% assign collectionName = 'elijahs-coffee-collection' %}
     {% endif %}
         <a class="vendor-link" href="/collections/{{ collectionName }}">{{ product.vendor | upcase }}</a>
       

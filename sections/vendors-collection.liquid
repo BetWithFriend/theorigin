@@ -14,7 +14,7 @@
     <div class="vendors-collection-content-wrapper">
         <div class="vendors-collection-items-wrapper">
             {% for vendor in shop.metaobjects.vendor_definitions.values %}
-                <div onclick="goToVendorPage('{{ vendor.vendor_name.value }}')" class="vendors-collection-vendor-item">
+                <div onclick="goToVendorPage(&quot;{{ vendor.vendor_name.value }}&quot;)" class="vendors-collection-vendor-item">
                     <div class="vendors-collection-vendor-logo-wrapper">
                         <img class="vendors-collection-vendor-logo" src="{{ vendor.vendor_logo | img_url: 'small' }}" >
                     </div>
