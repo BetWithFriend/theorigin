@@ -130,6 +130,7 @@
             {% assign coffeeorg_shipping = 39 %}
             {% assign coffeeculture_shipping = 39 %}
             {% assign elijahscoffee_shipping = 39 %}
+            {% assign event_shipping = 0 %}
             
             {%- comment -%} Free shipping thresholds in cents {%- endcomment -%}
             {% assign canopy_free_shipping_threshold = 22500 %}
@@ -138,6 +139,7 @@
             {% assign coffeeorg_free_shipping_threshold = 25000 %}
             {% assign ync_free_shipping_threshold = 45000 %}
             {% assign elijahscoffee_free_shipping_threshold = 17500 %}
+            {% assign event_free_shipping_threshold = 0 %}
             
             {%- comment -%} Calculate vendor totals {%- endcomment -%}
             {%- assign vendor_totals = blank -%}
@@ -191,55 +193,64 @@
 
                 {%- assign vendor_has_items = false -%}
                 {%- assign vendor_total = 0 -%}
+                {%- assign vendor_has_regular_items = false -%}
+                {%- assign regular_items_total = 0 -%}
                 
-                {%- comment -%} Calculate total for this vendor {%- endcomment -%}
+                {%- comment -%} Calculate total for this vendor, separating event and regular items {%- endcomment -%}
                 {%- for item in cart.items -%}
+                <script>console.log('boom', {{ item | json }})</script>
                   {%- if item.vendor == vendor -%}
                     {%- assign vendor_has_items = true -%}
                     {%- assign vendor_total = vendor_total | plus: item.line_price -%}
+                    {%- unless item.product.tags contains 'event' -%}
+                      {%- assign vendor_has_regular_items = true -%}
+                      {%- assign regular_items_total = regular_items_total | plus: item.line_price -%}
+                    {%- endunless -%}
                   {%- endif -%}
                 {%- endfor -%}
                 
-                {%- comment -%} Determine if vendor qualifies for free shipping {%- endcomment -%}
+                {%- comment -%} Determine if vendor qualifies for free shipping (based on regular items only) {%- endcomment -%}
                 {%- assign vendor_qualifies_free_shipping = false -%}
                 {%- assign vendor_shipping_cost = 0 -%}
                 {%- assign vendor_free_threshold = 0 -%}
                 
-                {%- if vendor == 'canopy' -%}
-                  {%- assign vendor_shipping_cost = canopy_shipping -%}
-                  {%- assign vendor_free_threshold = canopy_free_shipping_threshold -%}
-                  {%- if vendor_total >= canopy_free_shipping_threshold -%}
-                    {%- assign vendor_qualifies_free_shipping = true -%}
-                  {%- endif -%}
-                {%- elsif vendor == 'blooms' -%}
-                  {%- assign vendor_shipping_cost = blooms_shipping -%}
-                  {%- assign vendor_free_threshold = blooms_free_shipping_threshold -%}
-                  {%- if vendor_total >= blooms_free_shipping_threshold -%}
-                    {%- assign vendor_qualifies_free_shipping = true -%}
-                  {%- endif -%}
-                {%- elsif vendor == 'youneedcoffee' -%}
-                  {%- assign vendor_shipping_cost = youneedcoffee_shipping -%}
-                  {%- assign vendor_free_threshold = ync_free_shipping_threshold -%}
-                  {%- if vendor_total >= ync_free_shipping_threshold -%}
-                    {%- assign vendor_qualifies_free_shipping = true -%}
-                  {%- endif -%}
-                {%- elsif vendor == 'coffeeorg' -%}
-                  {%- assign vendor_shipping_cost = coffeeorg_shipping -%}
-                  {%- assign vendor_free_threshold = coffeeorg_free_shipping_threshold -%}
-                  {%- if vendor_total >= coffeeorg_free_shipping_threshold -%}
-                    {%- assign vendor_qualifies_free_shipping = true -%}
-                  {%- endif -%}
-                   {%- elsif vendor == 'coffeeculture' -%}
-                  {%- assign vendor_shipping_cost = coffeeculture_shipping -%}
-                  {%- assign vendor_free_threshold = coffeeculture_free_shipping_threshold -%}
-                  {%- if vendor_total >= coffeeculture_free_shipping_threshold -%}
-                    {%- assign vendor_qualifies_free_shipping = true -%}
+                {%- if vendor_has_regular_items -%}
+                  {%- if vendor == 'canopy' -%}
+                    {%- assign vendor_shipping_cost = canopy_shipping -%}
+                    {%- assign vendor_free_threshold = canopy_free_shipping_threshold -%}
+                    {%- if regular_items_total >= canopy_free_shipping_threshold -%}
+                      {%- assign vendor_qualifies_free_shipping = true -%}
                     {%- endif -%}
-                     {%- elsif vendor == 'elijahscoffee' -%}
-                  {%- assign vendor_shipping_cost = elijahscoffee_shipping -%}
-                  {%- assign vendor_free_threshold = elijahscoffee_free_shipping_threshold -%}
-                  {%- if vendor_total >= elijahscoffee_free_shipping_threshold -%}
-                    {%- assign vendor_qualifies_free_shipping = true -%}
+                  {%- elsif vendor == 'blooms' -%}
+                    {%- assign vendor_shipping_cost = blooms_shipping -%}
+                    {%- assign vendor_free_threshold = blooms_free_shipping_threshold -%}
+                    {%- if regular_items_total >= blooms_free_shipping_threshold -%}
+                      {%- assign vendor_qualifies_free_shipping = true -%}
+                    {%- endif -%}
+                  {%- elsif vendor == 'youneedcoffee' -%}
+                    {%- assign vendor_shipping_cost = youneedcoffee_shipping -%}
+                    {%- assign vendor_free_threshold = ync_free_shipping_threshold -%}
+                    {%- if regular_items_total >= ync_free_shipping_threshold -%}
+                      {%- assign vendor_qualifies_free_shipping = true -%}
+                    {%- endif -%}
+                  {%- elsif vendor == 'coffeeorg' -%}
+                    {%- assign vendor_shipping_cost = coffeeorg_shipping -%}
+                    {%- assign vendor_free_threshold = coffeeorg_free_shipping_threshold -%}
+                    {%- if regular_items_total >= coffeeorg_free_shipping_threshold -%}
+                      {%- assign vendor_qualifies_free_shipping = true -%}
+                    {%- endif -%}
+                  {%- elsif vendor == 'coffeeculture' -%}
+                    {%- assign vendor_shipping_cost = coffeeculture_shipping -%}
+                    {%- assign vendor_free_threshold = coffeeculture_free_shipping_threshold -%}
+                    {%- if regular_items_total >= coffeeculture_free_shipping_threshold -%}
+                      {%- assign vendor_qualifies_free_shipping = true -%}
+                    {%- endif -%}
+                  {%- elsif vendor == 'elijahscoffee' -%}
+                    {%- assign vendor_shipping_cost = elijahscoffee_shipping -%}
+                    {%- assign vendor_free_threshold = elijahscoffee_free_shipping_threshold -%}
+                    {%- if regular_items_total >= elijahscoffee_free_shipping_threshold -%}
+                      {%- assign vendor_qualifies_free_shipping = true -%}
+                    {%- endif -%}
                   {%- endif -%}
                 {%- endif -%}
                 
@@ -791,6 +802,7 @@
                           </div>
                             {%- assign shipping_items_paid = shipping_items_paid | plus: 1 -%}
                           {%- elsif vendor_qualifies_free_shipping -%}
+                            {%- if vendor_has_regular_items -%}
                             <div class="free-shipping-notice">
                               <div>
                                 <span>משלוח </span><span class="shipping-crossed-out">₪39</span>
@@ -798,17 +810,20 @@
                               </div>
                               {{ 'sections.cart.free_shipping' | t | default: 'משלוח חינם!' }}
                             </div>
+                            {%- endif -%}
                           {%- else -%}
                             {%- assign shipping_items_paid = shipping_items_paid | plus: 1 -%}
+                            {%- if vendor_has_regular_items -%}
                             <div class="free-shipping-notice">
                               <span>משלוח ₪39</span>
                                 <div>
-                                  {%- assign remaining_for_free = vendor_free_threshold | minus: vendor_total -%}
+                                  {%- assign remaining_for_free = vendor_free_threshold | minus: regular_items_total -%}
                                   <img class="cart-icon-delivery " src="{{  'cart_icon_delivery.png' | asset_url }}" alt="free shipping Icon" />
                                   {% assign formatted_amount = remaining_for_free | money %}
                                   {{ 'sections.cart.free_shipping_text' | t: amount: formatted_amount }}
                                 </div>
                             </div>
+                            {%- endif -%}
                           {%- endif -%}
                    </div> 
                  {%- endif -%}

@@ -8,7 +8,7 @@
             <div class="product-description-more-details">
                 {{ product_description  }}
             </div>
-
+        {% unless product.tags contains 'event' %}
             <div class="product-description-details-wrapper">
                 <div class="product-description-divider">
                     <hr  class="product-description-divider-line"/>
@@ -115,7 +115,7 @@
                 </div>
             </div>
         </div>
-
+    {% endunless %}
     </div>
     {% comment %} <div dir="rtl" id="read-more-vendor-story" class="read-more-vendor-story">המשך לקרוא</div>     {% endcomment %}
 </div>

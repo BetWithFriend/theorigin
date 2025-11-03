@@ -406,17 +406,18 @@
       </div>
       <div class="background-stripe"> </div>
           <h1 class="product-title">{{ product.title }}</h1>
-
-          <div class="product-tastes-list  {% if section.settings.product_tastes_center %}center{% endif %}">
-            <div class="single-coffee-taste-main-product"><b>בית קלייה:</b> {{ vendor.vendor_name.value }}, {{ vendor.vendor_location.value }}</div>
-          </div>
-
-          <div class="product-tastes-list {% if section.settings.product_tastes_center %}center{% endif %}">
-            <b>טעמים:</b>&nbsp;  
-          {% for taste in product.metafields.custom.coffee_tastes.value %}      
-              <div class="single-coffee-taste-main-product">{{ taste }}{% unless forloop.last %} | {% endunless %}</div>
-            {% endfor %}
-          </div>
+          {% unless product.tags contains 'event' %}
+            <div class="product-tastes-list  {% if section.settings.product_tastes_center %}center{% endif %}">
+              <div class="single-coffee-taste-main-product"><b>בית קלייה:</b> {{ vendor.vendor_name.value }}, {{ vendor.vendor_location.value }}</div>
+            </div>
+            
+            <div class="product-tastes-list {% if section.settings.product_tastes_center %}center{% endif %}">
+              <b>טעמים:</b>&nbsp;  
+            {% for taste in product.metafields.custom.coffee_tastes.value %}      
+                <div class="single-coffee-taste-main-product">{{ taste }}{% unless forloop.last %} | {% endunless %}</div>
+              {% endfor %}
+            </div>
+          {% endunless %}
           {% comment %} <div class="product-tastes-list {% if section.settings.product_tastes_center %}center{% endif %}">
             <div class="single-coffee-taste-main-product">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
           </div> {% endcomment %}
@@ -1120,9 +1121,11 @@
       <p>משלוח חינם בהזמנה מעל 399 ש״ח</p>
     </div> {% endcomment %}
     {% comment %} {%- endif -%} {% endcomment %}
-    <div class="why-us-product-page-wrapper">
-      {% render 'why-us-vertical', vendor: vendor %}
-    </div>
+    {% unless product.tags contains 'event' %}
+      <div class="why-us-product-page-wrapper">
+        {% render 'why-us-vertical', vendor: vendor %}
+      </div>
+    {% endunless %}
   
 
   <div class="product-extra-details-container">
