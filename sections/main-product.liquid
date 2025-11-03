@@ -304,6 +304,12 @@
       box-shadow: none;
       margin-top: 0;
     }
+
+    {%- if product.tags contains 'event' -%}
+      #main-product-container {
+        margin-bottom: 50px;
+      }
+    {%- endif -%}
   }
 
   @media screen and (min-width: 1050px) {

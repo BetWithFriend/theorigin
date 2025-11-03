@@ -150,7 +150,7 @@
           "show_description": false,
           "description_style": "body",
           "collection": "blooms-collection",
-          "products_to_show": 15,
+          "products_to_show": 25,
           "columns_desktop": 4,
           "full_width": true,
           "show_view_all": true,
