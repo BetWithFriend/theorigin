@@ -8,7 +8,6 @@
 
     <meta name="theme-color" content="">
     <link rel="canonical" href="{{ canonical_url }}">
-    {% render 'new-subscribers-modal' %}
 
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
@@ -409,7 +408,10 @@
       {%- render 'cart-drawer' -%}
     {%- endif -%}
 
+    {% render 'new-subscribers-modal' %}
+
     {% sections 'header-group' %}
+    
 
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1" dir="rtl">
       {{ content_for_layout }}

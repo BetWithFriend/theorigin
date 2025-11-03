@@ -330,6 +330,16 @@
         "name": "multi_line_text_field",
         "category": "TEXT"
       }
+    },
+    {
+      "key": "grind-size",
+      "namespace": "shopify",
+      "name": "Grind size",
+      "description": "Indicates the coarseness or fineness of coffee grounds, such as extra coarse or fine",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
     }
   ],
   "variant": [
