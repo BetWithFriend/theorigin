@@ -6,9 +6,9 @@
   <div class="dropdown-weight-menu" aria-labelledby="weightDropdown">
     {% for weight in weights.value %}      
     <div class="dropdown-item-weight" onclick="filterByweight('{{ weight }}'); selectWeight('{{ weight }}')">
-      <div class="dropdown-weight-icons" dir="rtl">
-        <!--<span>{{ weight.value | remove: '.0' }} {{ weight.unit }} </span> -->
-        <span>{{ weight.value | remove: '.0' }} גר׳</span>
+      <div class="dropdown-weight-icons">
+        <span>{{ weight }} </span>
+        {% comment %} <span>{{ weight.value | remove: '.0' }} {{ weight.unit }} </span> {% endcomment %}
       </div>
     </div>
     {% endfor %}

@@ -92,11 +92,11 @@
               {% comment %} {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
               
               {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
-              {% render 'variant-dropdown' , grind_size: grind_size_array %}
+              {% render 'variant-dropdown' , grind_size: grind_size_array %} {% endcomment %} 
               
               {% assign weights_array = vendor.allowed_weights %}
-              {% render 'dropdown-weights' , weights: weights_array %} {% endcomment %}
-              {% render 'quantity-counter', product: product, field_id: 'quantity' %}        
+              {% render 'dropdown-weights' , weights: weights_array %}
+              {% comment %} {% render 'quantity-counter', product: product, field_id: 'quantity' %}         {% endcomment %}
 
               <div class="product-form__buttons">
               {%- liquid
