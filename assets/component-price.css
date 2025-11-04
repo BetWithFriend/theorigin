@@ -109,6 +109,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   gap: 20px;
+  align-items: center;
 }
 
 .price--center {

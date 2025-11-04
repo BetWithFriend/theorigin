@@ -483,6 +483,10 @@ slider-component.slider-component-full-width {
 }
 
 .inline-price .price__regular {
+  display: none;
+}
+
+.inline-price .price__regular.show-regular-price {
   display: inline;
 }
 
