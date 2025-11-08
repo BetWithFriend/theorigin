@@ -76,6 +76,7 @@
 .article-card__excerpt {
   width: 100%;
   margin-top: 1.2rem;
+  display: none;
 }
 
 .article-card__link:not(:only-child) {
@@ -111,6 +112,10 @@
 
   .article-card__image--large .ratio::before {
     padding-bottom: 27.5rem;
+  }
+
+  .article-card__excerpt {
+    display: block;
   }
 }
 

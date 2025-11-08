@@ -106,8 +106,8 @@
       <div class="price__sale">
         {%- unless product.price_varies == false and product.compare_at_price_varies %}
           <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
-          <span>
-            <s class="price-item price-item--regular">
+          <span style="line-height: normal;">
+            <s class="price-item price-item--regular" style="font-weight: 500;">
               {% if settings.currency_code_enabled %}
                 {{ compare_at_price | money_with_currency }}
               {% else %}
@@ -119,6 +119,11 @@
         <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.sale_price' | t }}</span>
         <span class="price-item price-item--sale price-item--last">
           {{ money_price }}
+          {% unless product.tags contains 'event' %} 
+            {% unless product.tags contains 'no-weight' %}
+              <span class="price-item-weight"> / 250 גרם</span>
+            {% endunless %}
+           {% endunless %}
         </span>
       </div>
       <small class="unit-price caption{% if product.selected_or_first_available_variant.unit_price_measurement == nil %} hidden{% endif %}">

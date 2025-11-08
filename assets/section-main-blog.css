@@ -41,7 +41,7 @@
 
 @media screen and (max-width: 768px) {
   .blog-articles__article .article-card {
-    flex-direction: column;
+    flex-direction: row;
   }
 
   .blog-articles__article .card__inner {
