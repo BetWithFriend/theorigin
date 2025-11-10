@@ -446,6 +446,7 @@ slider-component.slider-component-full-width {
   margin: 2px;
   font-size: 16px;
   line-height: 24px;
+  font-weight: 700;
 }
 
 .product-roast-level {
@@ -495,8 +496,16 @@ slider-component.slider-component-full-width {
   color: #FBFCFE;
 }
 
+.main-product-description-details-desktop-wrapper {
+  display: none;
+}
+
 @media screen and (min-width: 750px) {
   .product-roast-level {
     font-size: 16px;
+  }
+
+  .main-product-description-details-desktop-wrapper {
+    display: block;
   }
 }

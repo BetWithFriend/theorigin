@@ -86,8 +86,9 @@ cart-items .title-wrapper-with-link {
 }
 
 .cart-item__details>*+* {
-  margin-top: 0.6rem;
+  /* margin-top: 0.6rem; */
   margin-top: 4px;
+  display: flex;
 }
 
 .cart-item__media {
@@ -324,7 +325,7 @@ cart-remove-button .icon-remove {
 }
 
 .product-option+.product-option {
-  margin-top: 0.4rem;
+  /* margin-top: 0.4rem; */
 }
 
 .product-option * {
