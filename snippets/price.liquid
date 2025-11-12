@@ -118,7 +118,7 @@
         <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.sale_price' | t }}</span>
         <span class="price-item price-item--sale price-item--last">
           {{ money_price }}
-          {% unless product.tags contains 'event' %} 
+          {% unless product.tags contains 'event' or product.tags contains 'sale'%} 
             {% unless product.tags contains 'no-weight' %}
               <span class="price-item-weight"> / 250 גרם</span>
             {% endunless %}
@@ -141,6 +141,7 @@
       </small>
     </div>
     {%- if show_badges -%}
+    {% unless product.tags contains 'sale' %}
       <span class="badge price__badge-sale color-{{ settings.sale_badge_color_scheme }}">
         {{ 'products.product.on_sale' | t }}
       </span>
@@ -148,6 +149,7 @@
       <span class="badge price__badge-sold-out color-{{ settings.sold_out_badge_color_scheme }}">
         {{ 'products.product.sold_out' | t }}
       </span>
+    {% endunless %}
     {%- endif -%}
   </div>
 {% endunless %}
