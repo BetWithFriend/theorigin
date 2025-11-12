@@ -1432,8 +1432,10 @@ a.product__text {
   justify-content: center;
 }
 
-.main-product-description-details-mobile-wrapper {
-  display: block;
+@media screen and (max-width: 749px) {
+  .main-product-description-details-mobile-wrapper {
+    display: block;
+  }
 }
 
 @media screen and (max-width: 749px) {

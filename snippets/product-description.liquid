@@ -1,6 +1,9 @@
     <div id="product-description-main-wrapper" >
 
-        <div class="product-description-wrapper-main">
+    <div class="product-description-wrapper-main">
+        {% comment %} <div class="main-product-description-details-desktop-wrapper">
+          {% render 'product-variants', product: product %}
+        </div> {% endcomment %}
                     <div class="product-description-wrapper expanded" id="product-description" dir="rtl" onclick="showMoreDetails('details')">
                         <div class="product-description-more-details-title">
                             <img class="side-arrow-more-details rotated" src="{{'side-arrow-more-details.png' |  asset_url}}" alt="more details icon"/>
