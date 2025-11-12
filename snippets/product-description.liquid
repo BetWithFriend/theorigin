@@ -1,126 +1,126 @@
-<div id="product-description-main-wrapper" >
-    <div class="product-description-wrapper-main">
-        <div class="product-description-wrapper expanded" id="product-description" dir="rtl" onclick="showMoreDetails('details')">
-            <div class="product-description-more-details-title">
-                <img class="side-arrow-more-details rotated" src="{{'side-arrow-more-details.png' |  asset_url}}" alt="more details icon"/>
-                פרטים נוספים
-            </div>
-            <div class="product-description-more-details">
-                {{ product_description  }}
-            </div>
-        {% unless product.tags contains 'event' %}
-            <div class="product-description-details-wrapper">
-                <div class="product-description-divider">
-                    <hr  class="product-description-divider-line"/>
-                    <img class="product-description-divider-img" src="{{ 'divider.png' | asset_url }}" alt="Divider" />
-                </div>
-            </div>
-        
-            <div class="product-details-wrapper" dir="rtl">
-                <div class="product-details-item-wrapper">
-                    <div class="product-details-item-title">הרכב</div>
-                    <div class="product-details-item">{{ coffee_blend_ratio }}</div>
-                </div>    
-                <div class="product-details-item-wrapper">
-                    <div class="product-details-item-title">דרגת קלייה</div>
-                    <div class="product-details-item">{{ coffee_roast_level }}</div>
-                </div>
-                <div class="product-details-item-wrapper">
-                    <div class="product-details-item-title">טעמים</div>
-                    <div class="product-details-item">{{ coffee_tastes | join: ", "}}</div>
-                </div>
-                <div class="product-details-item-wrapper">
-                    <div class="product-details-item-title">קטגוריה</div>
-                    <div class="product-details-item">{{ coffee_type }}</div>
-                </div>
-                <div class="product-details-item-wrapper">
-                    <div class="product-details-item-title">שיטת עיבוד</div>
-                    <div class="product-details-item">{{ coffee_process }}</div>
-                </div>
-                <div class="product-details-item-wrapper">
-                    <div class="product-details-item-title">גובה גידול</div>
-                    <div class="product-details-item">{{ coffee_altitude }}</div>
-                </div>
-            </div>
-        
-            <div class="product-description-divider-wrapper">
-                <div class="product-description-divider">
-                    <hr class="product-description-divider-line"/>
-                </div>
 
-                <div class="product-description-details-images-wrapper">
-                    {% assign coffee_prep_methods_raw = product.metafields.custom.coffee_prep_methods | strip %}
-                    {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
-                    {% for brew_img in coffee_prep_methods %}
-                        <img class="product-description-img" src="{{ brew_img  | strip | remove: '"' | append: '.png' | asset_url | replace: "files/", "" }}" alt="Brew Image" />
-                    {% endfor %}
-                </div>
 
-                <div class="product-description-divider">
-                    <hr class="product-description-divider-line"/>
-                </div>
-
-                <div class="product-location-img-wrapper">
-                    <img class="product-location-img" src="{{ coffee_origin_image.value  | img_url: 'master'  }}" alt="Product Location Image" />
-                </div>
-            </div>
-        </div>
-
-        <div class="product-description-wrapper" id="product-description" dir="rtl" onclick="showMoreDetails('roast')">
-            <div class="product-description-more-details-title">
-                <img class="side-arrow-more-details" src="{{'side-arrow-more-details.png' |  asset_url}}" alt="more details icon"/>
-                בית הקלייה
-            </div>
-            <div class="product-description-more-details">
-                    <div class="product-details-vendor-details-wrapper">
-                        <h2 class="product-details-vendor-details-title">
-                            {% case vendor_name %}
-                                {% when 'Canopy' %}
-                                    בית קלייה קאנופי - Canopy
-                                {% when 'Blooms' %}
-                                בית קלייה בלומס - Blooms
-                                {% when 'Coffee Org' %}
-                                בית קלייה קופי אורג - Coffee Organization
-                                {% when 'You Need Coffee' %}
-                                בית קלייה יו ניד קופי - You Need Coffee
-                                {% when 'Coffee Culture' %}
-                                בית קלייה קופי קולצ׳ר- Coffee Culture
-                                {% else %}
-                                קלייה לא ידועה
-                            {% endcase %}
-                        </h2>
-                        <div class="product-details-vendor-image-wrapper">
-                            <img src="{{ vendor_logo.value | img_url: 'small' }}" alt="{{ product.featured_image.alt | escape }}">
+    
+                    <div class="product-description-wrapper expanded" id="product-description" dir="rtl" onclick="showMoreDetails('details')">
+                        <div class="product-description-more-details-title">
+                            <img class="side-arrow-more-details rotated" src="{{'side-arrow-more-details.png' |  asset_url}}" alt="more details icon"/>
+                            פרטים נוספים
                         </div>
-                        <div class="product-details-vendor-story-wrapper" dir="rtl" id="product-details-vendor-story-wrapper">
-                            <div class="product-details-vendor-story">
-                                {%- if vendor_story != blank -%}
-                                    <div class="rich-text">
-                                    {%- for block in vendor_story.children -%}
-                                        {%- case block.type -%}
-                                        {%- when 'paragraph' -%}
-                                            <p class="rich-text__paragraph">
-                                            {%- for child in block.children -%}
-                                                {%- if child.type == 'text' -%}
-                                                {{- child.value | newline_to_br -}}
-                                                {%- endif -%}
-                                            {%- endfor -%}
-                                            </p>
-                                        {%- endcase -%}
-                                    {%- endfor -%}
-                                    </div>
-                                {%- endif -%}
+                        <div class="product-description-more-details">
+                            {{ product_description  }}
+                        </div>
+                        {% unless product.tags contains 'event' %}
+                        <div class="product-description-details-wrapper">
+                            <div class="product-description-divider">
+                                <hr  class="product-description-divider-line"/>
+                                <img class="product-description-divider-img" src="{{ 'divider.png' | asset_url }}" alt="Divider" />
                             </div>
                         </div>
-                </div>
-            </div>
-        </div>
-    {% endunless %}
-    </div>
-    {% comment %} <div dir="rtl" id="read-more-vendor-story" class="read-more-vendor-story">המשך לקרוא</div>     {% endcomment %}
-</div>
+                    
+                        <div class="product-details-wrapper" dir="rtl">
+                            <div class="product-details-item-wrapper">
+                                <div class="product-details-item-title">הרכב</div>
+                                <div class="product-details-item">{{ coffee_blend_ratio }}</div>
+                            </div>    
+                            <div class="product-details-item-wrapper">
+                                <div class="product-details-item-title">דרגת קלייה</div>
+                                <div class="product-details-item">{{ coffee_roast_level }}</div>
+                            </div>
+                            <div class="product-details-item-wrapper">
+                                <div class="product-details-item-title">טעמים</div>
+                                <div class="product-details-item">{{ coffee_tastes | join: ", "}}</div>
+                            </div>
+                            <div class="product-details-item-wrapper">
+                                <div class="product-details-item-title">קטגוריה</div>
+                                <div class="product-details-item">{{ coffee_type }}</div>
+                            </div>
+                            <div class="product-details-item-wrapper">
+                                <div class="product-details-item-title">שיטת עיבוד</div>
+                                <div class="product-details-item">{{ coffee_process }}</div>
+                            </div>
+                            <div class="product-details-item-wrapper">
+                                <div class="product-details-item-title">גובה גידול</div>
+                                <div class="product-details-item">{{ coffee_altitude }}</div>
+                            </div>
+                        </div>
+                    
+                        <div class="product-description-divider-wrapper">
+                            <div class="product-description-divider">
+                                <hr class="product-description-divider-line"/>
+                            </div>
 
+                            <div class="product-description-details-images-wrapper">
+                                {% assign coffee_prep_methods_raw = product.metafields.custom.coffee_prep_methods | strip %}
+                                {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
+                                {% for brew_img in coffee_prep_methods %}
+                                    <img class="product-description-img" src="{{ brew_img  | strip | remove: '"' | append: '.png' | asset_url | replace: "files/", "" }}" alt="Brew Image" />
+                                {% endfor %}
+                            </div>
 
+                            <div class="product-description-divider">
+                                <hr class="product-description-divider-line"/>
+                            </div>
+
+                            <div class="product-location-img-wrapper">
+                                <img class="product-location-img" src="{{ coffee_origin_image.value  | img_url: 'master'  }}" alt="Product Location Image" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-description-wrapper" id="product-description" dir="rtl" onclick="showMoreDetails('roast')">
+                        <div class="product-description-more-details-title">
+                            <img class="side-arrow-more-details" src="{{'side-arrow-more-details.png' |  asset_url}}" alt="more details icon"/>
+                            בית הקלייה
+                        </div>
+                        <div class="product-description-more-details">
+                                <video controls class="vendor-page-vendor-video" poster="{{ vendor_video_poster | file_url }}">
+                                    <source src="{{ vendor_video | file_url }}" type="video/mp4">
+                                </video>
+                                <div class="product-details-vendor-details-wrapper">
+                                    <h2 class="product-details-vendor-details-title">
+                                        {% case vendor_name %}
+                                            {% when 'Canopy' %}
+                                                בית קלייה קאנופי - Canopy
+                                            {% when 'Blooms' %}
+                                            בית קלייה בלומס - Blooms
+                                            {% when 'Coffee Org' %}
+                                            בית קלייה קופי אורג - Coffee Organization
+                                            {% when 'You Need Coffee' %}
+                                            בית קלייה יו ניד קופי - You Need Coffee
+                                            {% when 'Coffee Culture' %}
+                                            בית קלייה קופי קולצ׳ר- Coffee Culture
+                                            {% else %}
+                                            קלייה לא ידועה
+                                        {% endcase %}
+                                    </h2>
+                                    <div class="product-details-vendor-image-wrapper">
+                                        <img src="{{ vendor_logo.value | img_url: 'small' }}" alt="{{ product.featured_image.alt | escape }}">
+                                    </div>
+                                    <div class="product-details-vendor-story-wrapper" dir="rtl" id="product-details-vendor-story-wrapper">
+                                        <div class="product-details-vendor-story">
+                                            {%- if vendor_story != blank -%}
+                                                <div class="rich-text">
+                                                {%- for block in vendor_story.children -%}
+                                                    {%- case block.type -%}
+                                                    {%- when 'paragraph' -%}
+                                                        <p class="rich-text__paragraph">
+                                                        {%- for child in block.children -%}
+                                                            {%- if child.type == 'text' -%}
+                                                            {{- child.value | newline_to_br -}}
+                                                            {%- endif -%}
+                                                        {%- endfor -%}
+                                                        </p>
+                                                    {%- endcase -%}
+                                                {%- endfor -%}
+                                                </div>
+                                            {%- endif -%}
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endunless %}
+        
 <style>
     .product-details-vendor-story-wrapper {
         overflow: hidden;
@@ -245,7 +245,7 @@
         height: 52px;
     }
     .product-description-wrapper {
-        /* background-color: #FBFCFE; */
+        background-color: #FBFCFE;
         overflow: hidden;
         max-height: 75px; /* Use max-height instead of height */
         display: flex;
@@ -263,12 +263,15 @@
     }
     #product-description-main-wrapper {
         width: 100%;
+        flex: 1 1 auto;
+        min-width: 0; /* prevents flex item from overflowing */
     }
     .product-description-wrapper-main {
         display: flex;
         align-items: start  ;
         justify-content: center;
         flex-direction: column;
+        background-color: #FAFCFE;
     }
 
     .product-description-wrapper.expanded {
@@ -365,6 +368,35 @@
 
 .side-arrow-more-details.rotated {
     transform: rotate(-90deg); /* Change to 90deg for better visual */
+}
+  .vendor-page-vendor-video {
+    order: initial; /* Reset order for desktop */
+    width: 100%;
+    border-radius: 8px;
+    align-self: stretch;
+  }
+  
+  .vendor-page-vendor-video video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-description-wrapper-main {
+        background-color: transparent;
+    }
+
+    .product-description-wrapper {
+        background-color: transparent;
+    }
+    .product-details-wrapper {
+        width: 400px;
+        margin: 0 auto;
+    }
+    .product-details-item {
+        padding-right: 50px;
+    }
 }
 </style>
 

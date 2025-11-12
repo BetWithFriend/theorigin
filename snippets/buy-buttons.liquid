@@ -33,7 +33,6 @@
         assign show_dynamic_checkout = true
       endif
     -%}
-
     <product-form
       class="product-form"
       data-hide-errors="{{ gift_card_recipient_feature_active }}"
@@ -66,12 +65,12 @@
           class="product-variant-id"
         >
 
-          <input
+          {% comment %} <input
           type="hidden"
           name="properties[Weight]"
           id="properties_weight"
          value="{{ product_weight | default: '250 ג׳' }}"
-        >
+        > {% endcomment %}
 
         {% comment %} <input
           type="hidden"

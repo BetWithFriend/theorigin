@@ -112,7 +112,7 @@
   text-align: right;
   letter-spacing: 2px;
   line-height: normal;
-  margin: 0 24px;
+  margin: 0 16px;
   padding: 0;
 }
 
@@ -1086,7 +1086,7 @@ summary::-webkit-details-marker {
 }
 
 .product__info-wrapper {
-  padding: 0 8px;
+  /* padding: 0 8px; */
 }
 
 .grid--1-col .grid__item {

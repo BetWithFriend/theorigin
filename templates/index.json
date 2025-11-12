@@ -156,6 +156,7 @@
     },
     "featured_collection_hp_specials": {
       "type": "featured-collection",
+      "disabled": true,
       "settings": {
         "title": "כעת במבצע",
         "heading_size": "h2",

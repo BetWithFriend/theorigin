@@ -63,7 +63,7 @@
   border-radius: var(--border-radius);
   border: var(--border-width) solid rgba(var(--color-foreground), var(--border-opacity));
   /* padding: 24px 0; */
-  width: 60%;
+  width: 57%;
   height: 100%;
 }
 

@@ -11,7 +11,7 @@
 {%- unless product.has_only_default_variant -%}
   <variant-selects
     id="variant-selects-{{ section.id }}"
-    data-section="{{ section.id }}"
+    data-section="{{ section.id }}" class="product-variant-picker-wrapper"
     {{ block.shopify_attributes }}
   >
     {%- for option in product.options_with_values -%}
@@ -44,7 +44,14 @@
         </fieldset>
       {%- elsif picker_type == 'button' -%}
         <fieldset class="js product-form__input product-form__input--pill">
-          <legend class="form__label">{{ option.name }}</legend>
+          {%- if option.name == 'Coffee product form' -%}
+            <legend class="form__label">משקל</legend>
+          {%- elsif option.name == 'Grind size' -%}
+            <legend class="form__label">טחינה</legend>
+          {%- else -%}
+            <legend class="form__label">{{ option.name }}</legend>
+          {%- endif -%}
+          {% comment %} <legend class="form__label">{{ option.name }}</legend> {% endcomment %}
           {% render 'product-variant-options',
             product: product,
             option: option,
