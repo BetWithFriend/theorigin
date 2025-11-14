@@ -48,7 +48,7 @@
   margin: 20px 0;
   text-align: center;
   color: #1C201D;
-  width: 80%;
+  width: 100%;
   line-height: 120%;
 }
 .one-time-modal-desc {
@@ -177,11 +177,25 @@
   color: #1C201D;
 }
 
+.one-time-modal-skip-btn {
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: 'Assistant', sans-serif;
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 400;
+  color: #1C201D;
+}
+
 @media screen and (min-width: 750px) {
   .one-time-modal-close-image {
     top: 70px;
     /* right: 150px; */
     left: calc(50% + 250px);
+  }
+
+  .one-time-modal-title {
+    width: 80%;
   }
 }
 
@@ -200,9 +214,9 @@
       <img src="{{ 'new-subscribers-coupon.png' | asset_url }}" alt="Lets be friends" class="floating-img" />
     </div>
     <div class="one-time-modal-content" id="one-time-modal-content">
-      <div class="one-time-modal-title" dir="rtl">קפה טוב מתחיל בהנחה טובה!</div>
+      <div class="one-time-modal-title" dir="rtl">הצטרפו לקהילת הקפה הטובה בישראל!</div>
       <div class="one-time-modal-desc">
-        <span>הזינו את כתובת האימייל וקבלו</span>
+        <span>תשמעו ראשונים על מבצעים, עדכונים, סיפורי קפה וקבלו</span>
         <span class="one-time-modal-discount-per" dir="rtl">12% הנחה</span>
         <span>על הקניה הראשונה</span>
       </div>
@@ -212,6 +226,7 @@
         <input class="one-time-modal-input" type="name" id="oneTimeModalName" name="name" placeholder="שם" required>
         <input class="one-time-modal-input" type="email" id="oneTimeModalEmail" name="email" placeholder="אימייל" required>
         <button id="oneTimeModalSubmitBtn" type="submit">שלחו לי את ההנחה</button>
+        <div id="oneTimeModalSkipBtn" class="one-time-modal-skip-btn" onclick="hideOneTimeModal()">בפעם אחרת</div>
         <div id="oneTimeModalError" class="one-time-modal-error" style="display:none;"></div>
         <div id="oneTimeModalSuccess" class="one-time-modal-success" style="display:none;"></div>
       </form>
