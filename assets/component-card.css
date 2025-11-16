@@ -357,7 +357,7 @@
 }
 
 .main-collection-add-to-cart-wrapper {
-  width: 50%;
+  width: 60%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -382,6 +382,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: transparent;
 }
 
 .add-to-cart-catalog-img {
