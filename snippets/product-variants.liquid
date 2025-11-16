@@ -39,7 +39,7 @@
             {% comment %} <div class="product-roast-level">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
             <div class="product-roast-level">עיבוד {{ product.metafields.custom.coffee_process }}</div> {% endcomment %}
             <div class="product-roast-level">
-              <span class="inline-price" id="inline-price-{{ section.id }}">{% render 'price', product: product, use_variant: true %}</span>
+              <span class="inline-price" id="inline-price-{{ section.id }}">{% render 'price', product: product, use_variant: true, render_weight: false %}</span>
             </div>
           
           </div>
