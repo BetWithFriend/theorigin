@@ -1,0 +1,170 @@
+<div class="join-us-banner-wrapper">
+  <div class="join-us-banner-title-wrapper">
+    <div class="join-us-banner-title">בלאק פריידיי ב-Origin</div>
+    <div class="join-us-banner-sub-title">גלו ראשונים על מבצעים מיוחדים וקליות חדשות</div>
+    <div class="join-us-action-wrapper">
+      <input
+        type="email"
+        class="join-us-banner-input"
+        placeholder="מייל"
+        id="newsletterEmail"
+        required>
+      <button onclick="subscribeUser(document.getElementById('newsletterEmail').value)" class="join-us-banner-btn form-submit">כן, תרשמו אותי</button>
+    </div>
+    <div class="join-us-banner-disclaimer">אנחנו שונאים ספאם בדיוק כמוכם – נשלח רק דברים שטובים לקפה שלכם.</div>
+  </div>
+</div>
+
+<script>
+
+  function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+      function subscribeUser(email) {
+  debugger
+            // analytics.trackClick('Quiz Email Subscribe', {
+            // 'email': email
+            // });
+
+            if (isValidEmail(email)) {
+            const url = 'https://elghwmw2jd3c5ve65agcrezqru0lrwtc.lambda-url.us-east-1.on.aws/';
+            const data = { email };
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+
+            // .then(response => response.json())
+            .then(data => {
+                closeForm(true);
+                // Add localStorage item to prevent showing the form again
+            })
+            .catch(error => {
+                console.error('Error subscribing:', error);
+            });
+        }
+    }
+</script>
+
+<style>
+  .join-us-banner-wrapper {
+    color: #1C201D;
+    background-color: #BEA499;
+    padding: 16px;
+    text-align: center;
+    margin: 16px;
+    border-radius: 8px;
+    background-image: url("{{ 'join-us-banner-img.png' | asset_url }}");
+    background-size: 120%;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .join-us-banner-title {
+    font-family: 'Assistant'
+    , sans-serif;
+    color: #1C201D;
+    font-size: 32px;
+    line-height: 34px;
+    font-weight: 700;
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+
+  .join-us-banner-sub-title {
+    font-family: 'Assistant'
+    , sans-serif;
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: 700;
+    color: #1C201D;
+    margin-bottom: 6px;
+  }
+
+  .join-us-action-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .join-us-banner-input {
+    width: 100%;
+    /* max-width: 400px; */
+    padding: 12px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: 'Assistant'
+    , sans-serif;
+  }
+
+  .join-us-banner-btn {
+    background-color: #333634;
+    border-radius: 16px;
+    color: #FAFCFE;
+    font-family: 'Assistant'
+    , sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 16px 48px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .join-us-banner-disclaimer {
+    font-family: 'Assistant'
+    , sans-serif;
+    font-size: 10px;
+    line-height: 15px;
+    color: #FBFCFE;
+    margin-top: 20px;
+    white-space: nowrap;
+  }
+
+
+  @media (min-width: 750px) {
+
+    .join-us-banner-wrapper {
+      padding: 16px 0;
+    }
+
+    .join-us-banner-title-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      justify-content: center;
+      width: 70%;
+      margin: 0 auto;
+    }
+
+    .join-us-action-wrapper {
+      flex-direction: row;
+      gap: 8px;
+    }
+
+    .join-us-banner-title {
+      font-size: 48px;
+      line-height: 48px;
+      margin-bottom: 12px;
+    }
+
+    .join-us-banner-input {
+      margin-bottom: 0;
+      height: 48px;
+      width: 420px;
+    }
+    .join-us-banner-disclaimer {
+      font-size: 14px;
+      line-height: 21px;
+      /* text-align: right; */
+    }
+  }
+</style>

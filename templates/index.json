@@ -67,6 +67,10 @@
         "padding_bottom": 0
       }
     },
+    "join_us_banner": {
+      "type": "join-us-banner",
+      "settings": {}
+    },
     "our_vendors": {
       "type": "our-vendors",
       "settings": {}
@@ -234,6 +238,7 @@
   "order": [
     "image_banner",
     "custom_liquid_aWGKXY",
+    "join_us_banner",
     "our_vendors",
     "why_us",
     "credibility_icons",
