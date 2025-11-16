@@ -180,11 +180,14 @@
             {% render 'product-taste-icon-color', tastes: coffee_tastes, prep_methods: coffee_prep_methods, coffee_tastes_list: coffee_taste_list  %}
           </div>
           <div class="product-tastes-list-product-cart">
+            {{ card_product.metafields.custom.short_description }}
+          </div>
+          {% comment %} <div class="product-tastes-list-product-cart">
             עיבוד {{ card_product.metafields.custom.coffee_process }}
           </div>
           <div class="product-tastes-list-product-cart">
             קלייה {{ card_product.metafields.custom.coffee_roast_level }}
-          </div>
+          </div> {% endcomment %}
           <div class="card-information" style="display:none;">
             <!-- {%- if show_vendor -%}
               <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
