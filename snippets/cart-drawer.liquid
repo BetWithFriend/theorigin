@@ -833,10 +833,13 @@
                             <div class="free-shipping-notice">
                               <span>משלוח ₪39</span>
                                 <div>
+                                  <!--
                                   {%- assign remaining_for_free = vendor_free_threshold | minus: regular_items_total -%}
                                   <img class="cart-icon-delivery " src="{{  'cart_icon_delivery.png' | asset_url }}" alt="free shipping Icon" />
                                   {% assign formatted_amount = remaining_for_free | money %}
                                   {{ 'sections.cart.free_shipping_text' | t: amount: formatted_amount }}
+                                   -->
+                                  משלוח חינם מעל {{ vendor_free_threshold | money }}
                                 </div>
                             </div>
                             {%- endif -%}

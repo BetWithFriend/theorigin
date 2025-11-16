@@ -103,7 +103,8 @@
         {%- endif -%}
       </div>
       <div class="price__sale">
-        {%- unless product.price_varies == false and product.compare_at_price_varies %}
+      {%- unless product.price_varies == false and product.compare_at_price_varies and target.compare_at_price > target.price %}
+
           <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
           <span style="line-height: normal;">
             <s class="price-item price-item--regular" style="font-weight: 500;">
@@ -119,7 +120,6 @@
         <span class="price-item price-item--sale price-item--last">
           {{ money_price }}
           {% unless product.tags contains 'event' or target.compare_at_price > target.price %} 
-            <script>console.log('boom', {{ target | json }})</script>
             {% unless product.tags contains 'no-weight' %}
               <span class="price-item-weight"> / 250 גרם</span>
             {% endunless %}
