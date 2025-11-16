@@ -301,7 +301,7 @@
         {%- endcase -%}
       {%- endfor -%}
 
-      <a class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
+      <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
           {% if cart == empty %}
             <span class="svg-wrapper">{{'cart.svg' | inline_asset_content }}</span>
           {% else %}

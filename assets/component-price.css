@@ -33,7 +33,7 @@
   font-family: 'Assistant', sans-serif;
   /* font-size: 16px; */
   line-height: 24px;
-  font-weight: 600;
+  font-weight: 500;
   color: #1C201D;
   /* color: #FBFCFE; */
   font-size: 18px;
@@ -42,7 +42,7 @@
 .price .price-item .price-item-weight {
   font-size: 16px;
   font-weight: 400;
-  color: #1C201D;
+  color: #878686;
 }
 
 .price_item_cart {

@@ -111,6 +111,7 @@ class CartItems extends HTMLElement {
     const selectorsToUpdate = this.tagName === 'CART-DRAWER-ITEMS'
       ? ['cart-drawer-items', '.cart-drawer__footer', '#CartDrawer-LineItemStatus', '#CartDrawer-LiveRegionText']
       : ['cart-items', '.cart-total-delivery-wrapper', '#shopping-cart-line-item-status', '#cart-live-region-text', '#main-cart-footer', '#cart-icon-bubble'];
+
     fetch(`${routes.cart_url}?section_id=${sectionId}`)
       .then((response) => response.text())
       .then((responseText) => {
