@@ -486,7 +486,7 @@
       <div class="background-stripe"> </div>
 
       <div class="main-product-taste-icons">
-            {% assign coffee_tastes = product.metafields.custom.coffee_taste %} 
+            {% assign coffee_tastes = product.metafields.custom.coffee_tastes | remove_first: '[' | remove_last: ']' | split: ',' | replace: '"', '' %} 
             {% assign coffee_prep_methods_raw = product.metafields.custom.coffee_prep_methods | strip %}
             {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
             {% assign coffee_taste_list = product.metafields.custom.coffee_tastes.value %}
@@ -523,7 +523,7 @@
       brew_images: product.metafields.custom.product_brew_image,
       product_details: product_details,
       coffee_origin_image: product.metafields.custom.coffee_origin_image,
-      coffee_tastes: coffee_tastes | split " ",
+      coffee_tastes: coffee_taste_list,
       coffee_roast_level: coffee_roast_level,
       coffee_altitude: coffee_altitude,
       coffee_process: coffee_process,
