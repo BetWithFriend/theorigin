@@ -388,6 +388,7 @@
 .add-to-cart-catalog-img {
   width: 21px;
   height: 21px;
+  margin-left: 4px;
 }
 
 .card__heading:last-child {

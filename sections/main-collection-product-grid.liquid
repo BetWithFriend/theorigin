@@ -123,12 +123,12 @@
           data-id="{{ section.id }}">
 
           {% comment %} {% render 'facets',
-                                                                                                                                                                                                                                                                results: collection,
-                                                                                                                                                                                                                                                                enable_filtering: section.settings.enable_filtering,
-                                                                                                                                                                                                                                                                enable_sorting: section.settings.enable_sorting,
-                                                                                                                                                                                                                                                                filter_type: section.settings.filter_type,
-                                                                                                                                                                                                                                                                paginate: paginate
-                                                                                                                                                                                                                      %} {% endcomment %}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                results: collection,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                enable_filtering: section.settings.enable_filtering,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                enable_sorting: section.settings.enable_sorting,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                filter_type: section.settings.filter_type,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                paginate: paginate
+                                                                                                                                                                                                                                                                                                                                                                                      %} {% endcomment %}
         </aside>
     {%- endif -%}
 
@@ -413,7 +413,25 @@
       }
     }
     
-    getSectionsToRender(['cart-icon-bubble'], sections);
+    // Update cart icon bubble
+    const cartIconBubble = document.getElementById('cart-icon-bubble');
+    if (cartIconBubble && sections['cart-icon-bubble']) {
+    const parser = new DOMParser();
+    const newContent = parser.parseFromString(sections['cart-icon-bubble'], 'text/html');
+    
+    // Get the shopify-section wrapper
+    const sectionWrapper = newContent.querySelector('#shopify-section-cart-icon-bubble');
+    if (sectionWrapper) {
+    // The actual cart icon content is the innerHTML of the section
+    cartIconBubble.outerHTML = sectionWrapper.innerHTML;
+    
+    // Re-attach event listeners
+    const cartDrawerElement = document.querySelector('cart-drawer');
+    if (cartDrawerElement) {
+      cartDrawerElement.setHeaderCartIconAccessibility();
+    }
+  }
+  }
   })
   .catch(error => {
     console.error('Error updating cart:', error);
