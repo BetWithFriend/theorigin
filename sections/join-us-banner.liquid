@@ -1,8 +1,10 @@
 <div class="join-us-banner-wrapper">
   <div class="join-us-banner-title-wrapper">
-    <div class="join-us-banner-title">בלאק פריידיי ב-Origin</div>
+    <div class="join-us-banner-title">בלאק פריידיי באוריג׳ין</div>
     <div class="join-us-banner-sub-title">גלו ראשונים על מבצעים מיוחדים וקליות חדשות</div>
-    <div class="join-us-action-wrapper">
+  </div>
+  <div class="join-us-action-wrapper">
+    <div class="join-us-button-wrapper">
       <input
         type="email"
         class="join-us-banner-input"
@@ -12,9 +14,9 @@
       <button onclick="subscribeUser(document.getElementById('newsletterEmail').value)" class="join-us-banner-btn form-submit">כן, תרשמו אותי</button>
     </div>
     <div class="join-us-banner-disclaimer">אנחנו שונאים ספאם בדיוק כמוכם – נשלח רק דברים שטובים לקפה שלכם.</div>
+
   </div>
 </div>
-
 <script>
 
   function isValidEmail(email) {
@@ -22,7 +24,6 @@
     return emailRegex.test(email);
   }
       function subscribeUser(email) {
-  debugger
             // analytics.trackClick('Quiz Email Subscribe', {
             // 'email': email
             // });
@@ -50,19 +51,19 @@
         }
     }
 </script>
-
 <style>
   .join-us-banner-wrapper {
     color: #1C201D;
-    background-color: #BEA499;
+    background-color: #E3E0DA;
     padding: 16px;
     text-align: center;
     margin: 16px;
     border-radius: 8px;
     background-image: url("{{ 'join-us-banner-img.png' | asset_url }}");
-    background-size: 120%;
+    background-size: 129px 129px;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: bottom left
+    , top right;
   }
 
   .join-us-banner-title {
@@ -83,7 +84,7 @@
     line-height: 16px;
     font-weight: 700;
     color: #1C201D;
-    margin-bottom: 6px;
+    margin-bottom: 12px;
   }
 
   .join-us-action-wrapper {
@@ -124,16 +125,24 @@
     , sans-serif;
     font-size: 10px;
     line-height: 15px;
-    color: #FBFCFE;
+    color: #1C201D;
     margin-top: 20px;
-    white-space: nowrap;
+    /* white-space: nowrap; */
+    width: 70%;
+    text-align: right;
   }
 
-
+  .join-us-button-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   @media (min-width: 750px) {
 
     .join-us-banner-wrapper {
       padding: 16px 0;
+      flex-direction: row;
+      display: flex;
     }
 
     .join-us-banner-title-wrapper {
@@ -146,7 +155,7 @@
     }
 
     .join-us-action-wrapper {
-      flex-direction: row;
+      flex-direction: column;
       gap: 8px;
     }
 
@@ -165,6 +174,10 @@
       font-size: 14px;
       line-height: 21px;
       /* text-align: right; */
+    }
+
+    .join-us-button-wrapper {
+      flex-direction: row;
     }
   }
 </style>
