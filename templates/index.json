@@ -160,7 +160,6 @@
     },
     "featured_collection_hp_specials": {
       "type": "featured-collection",
-      "disabled": true,
       "settings": {
         "title": "כעת במבצע",
         "heading_size": "h2",
@@ -242,12 +241,12 @@
     "our_vendors",
     "why_us",
     "credibility_icons",
+    "featured_collection_hp_specials",
     "featured_collection_ErHj6f",
     "find_your_coffee",
     "blends_filter_icons",
     "credibility_text",
     "featured_collection_qNARrT",
-    "featured_collection_hp_specials",
     "new_roasters_slider",
     "main_recommendations",
     "discover_the_roaster",
