@@ -28,7 +28,8 @@
   flex-direction: column;
   transform: translateX(100%);
   transition: transform var(--duration-default) ease;
-  background-color: #F5F4F2;
+  /* background-color: #F5F4F2; */
+  background-color: #fff
 }
 
 .drawer__inner-empty {
@@ -219,7 +220,7 @@ cart-drawer-items {
   align-items: start;
   justify-content: start;
   gap: 6px;
-  padding: 0 16px;
+  padding: 12px 16px;
   margin-bottom: 24px;
   /* display: grid;
   grid-template: repeat(2, auto) / repeat(4, 1fr);
