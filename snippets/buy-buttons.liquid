@@ -10,15 +10,15 @@
   - product_grind: {String}
 
   Usage:
-  {% render 'buy-buttons', 
-      block: block,
-      product: product,
-      product_form_id: product_form_id,
-      section_id: section.id,
-      show_pickup_availability: true,
-      product_weight: product_weight,
-      product_grind: product_grind
-      %}
+  {% render 'buy-buttons',
+  block: block,
+  product: product,
+  product_form_id: product_form_id,
+  section_id: section.id,
+  show_pickup_availability: true,
+  product_weight: product_weight,
+  product_grind: product_grind
+  %}
 {% endcomment %}
 <div {{ block.shopify_attributes }}>
   {%- if product != blank -%}
@@ -36,152 +36,151 @@
     <product-form
       class="product-form"
       data-hide-errors="{{ gift_card_recipient_feature_active }}"
-      data-section-id="{{ section.id }}"
-    >
-      <div class="product-form__error-message-wrapper" role="alert" hidden>
+      data-section-id="{{ section.id }}">
+      <div
+        class="product-form__error-message-wrapper"
+        role="alert"
+        hidden>
         <span class="svg-wrapper">
           {{- 'icon-error.svg' | inline_asset_content -}}
         </span>
         <span class="product-form__error-message"></span>
       </div>
 
-      {%- form 'product',
-        product,
-        id: product_form_id,
-        class: 'form',
-        novalidate: 'novalidate',
-        data-type: 'add-to-cart-form'
+      {%- form 'product'
+        , product
+        , id: product_form_id
+        , class: 'form'
+        , novalidate: 'novalidate'
+        , data-type: 'add-to-cart-form'
       -%}
         <input
           type="hidden"
           name="id"
           value="{{ product.selected_or_first_available_variant.id }}"
-          {% if product.selected_or_first_available_variant.available == false
-            or quantity_rule_soldout
-            or product.selected_or_first_available_variant == null
-          %}
-            disabled
-          {% endif %}
-          class="product-variant-id"
-        >
 
-          {% comment %} <input
-          type="hidden"
-          name="properties[Weight]"
-          id="properties_weight"
-         value="{{ product_weight | default: '250 ג׳' }}"
-        > {% endcomment %}
+          {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout or product.selected_or_first_available_variant == null %}
+          disabled
+          {% endif %}
+          class="product-variant-id">
 
         {% comment %} <input
-          type="hidden"
-          name="properties[Grind]"
-          id="properties_grind"
-          value="{{ product_grind | default: 'פולים' }}"
-        > {% endcomment %}
-        
+                              type="hidden"
+                              name="properties[Weight]"
+                              id="properties_weight"
+                             value="{{ product_weight | default: '250 ג׳' }}"
+                        > {% endcomment %}
+
+        {% comment %} <input
+                              type="hidden"
+                              name="properties[Grind]"
+                              id="properties_grind"
+                              value="{{ product_grind | default: 'פולים' }}"
+                        > {% endcomment %}
+
         <!-- Toast Message -->
         {% comment %} <div class="quantity-toast" data-quantity-toast>
-          <div class="quantity-toast__content">
-            <span class="quantity-toast__message">לא ניתן להזמין פחות מ-2 חבילות על מנת לשמור על טריות המשלוח ועלות נמוכה</span>
-            <button class="quantity-toast__close" type="button" aria-label="סגור" style="background:none;border:none;cursor:pointer;font-size:18px;line-height:1;padding:0 0 0 8px;color:#fff;">&times;</button>
-          </div>
-        </div> {% endcomment %}
-        
-          <div class="product-variants-wrapper" id="sticky-buy-buttons-{{ section_id }}">
-              {% comment %} {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
-              
-              {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
-              {% render 'variant-dropdown' , grind_size: grind_size_array %}
-              
-              {% assign weights_array = vendor.allowed_weights %}
-              {% render 'dropdown-weights' , weights: weights_array %} {% endcomment %}
-              {% render 'quantity-counter', product: product, field_id: 'quantity' %}        
+                              <div class="quantity-toast__content">
+                                <span class="quantity-toast__message">לא ניתן להזמין פחות מ-2 חבילות על מנת לשמור על טריות המשלוח ועלות נמוכה</span>
+                                <button class="quantity-toast__close" type="button" aria-label="סגור" style="background:none;border:none;cursor:pointer;font-size:18px;line-height:1;padding:0 0 0 8px;color:#fff;">&times;</button>
+                              </div>
+                        </div> {% endcomment %}
 
-              <div class="product-form__buttons">
-              {%- liquid
-                assign check_against_inventory = true
-                if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
-                  assign check_against_inventory = false
-                endif
-                if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
-                  assign quantity_rule_soldout = true
-                endif
-              -%}
-              <button
-                id="ProductSubmitButton-{{ section_id }}"
-                type="submit"
-                name="add"
-                class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
-                {% if product.selected_or_first_available_variant.available == false
-                  or quantity_rule_soldout
-                  or product.selected_or_first_available_variant == null
-                %}
-                  disabled
-                {% endif %}
-              >
-                <span class="add-to-cart-text">
-                  {%- if product.selected_or_first_available_variant == null -%}
-                    {{ 'products.product.unavailable' | t }}
-                    {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
-                    {{ 'products.product.sold_out' | t }}
-                    {%- else -%}
-                    {{ 'products.product.add_to_cart' | t }}
-                  {%- endif -%}
-                </span>
-                {%- render 'loading-spinner' -%}
-              </button>
-              {%- if show_dynamic_checkout -%}
-                {{ form | payment_button }}
-              {%- endif -%}
-            </div>
+        <div class="product-variants-wrapper" id="sticky-buy-buttons-{{ section_id }}">
+          {% comment %} {% assign vendor = product.metafields.vendor_info.coffee_vendor.value %}
+                  
+                                      {% assign grind_size_array = vendor.grind_size | remove: '[' | remove: ']' |  remove: '"' | split: ',' %}
+                                      {% render 'variant-dropdown' , grind_size: grind_size_array %}
+                  
+                                      {% assign weights_array = vendor.allowed_weights %}
+                                  {% render 'dropdown-weights' , weights: weights_array %} {% endcomment %}
+          {% render 'quantity-counter'
+            , product: product
+            , field_id: 'quantity' %}
+
+          <div class="product-form__buttons">
+            {%- liquid
+              assign check_against_inventory = true
+              if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
+                assign check_against_inventory = false
+              endif
+              if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
+                assign quantity_rule_soldout = true
+              endif
+            -%}
+            <button
+              id="ProductSubmitButton-{{ section_id }}"
+              type="submit"
+              name="add"
+              class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
+
+              {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout or product.selected_or_first_available_variant == null %}
+              disabled
+              {% endif %}>
+              <span class="add-to-cart-text">
+                {%- if product.selected_or_first_available_variant == null -%}
+                  {{ 'products.product.unavailable' | t }}
+                {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+                  {{ 'products.product.sold_out' | t }}
+                {%- else -%}
+                  {{ 'products.product.add_to_cart' | t }}
+                {%- endif -%}
+              </span>
+              {%- render 'loading-spinner' -%}
+            </button>
+            {%- if show_dynamic_checkout -%}
+              {{ form | payment_button }}
+            {%- endif -%}
           </div>
-          {% if min_order_for_free_shipping %}
-            <!--<div class="free-shipping-pdp-notice">
-              משלוח חינם מעל {{ min_order_for_free_shipping }} ש״ח בבית קלייה זה
-            </div>-->
-          {% endif %}
+        </div>
+        {% if min_order_for_free_shipping %}
+          <!-- <div class="free-shipping-pdp-notice">  משלוח חינם מעל {{ min_order_for_free_shipping }} ש״ח בבית קלייה זה        </div> -->
+        {% endif %}
 
         {%- if gift_card_recipient_feature_active -%}
-          {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
+          {%- render 'gift-card-recipient-form'
+            , product: product
+            , form: form
+            , section: section -%}
         {%- endif -%}
 
         {% comment %} <div class="product-form__buttons">
-          {%- liquid
-            assign check_against_inventory = true
-            if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
-              assign check_against_inventory = false
-            endif
-            if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
-              assign quantity_rule_soldout = true
-            endif
-          -%}
-          <button
-            id="ProductSubmitButton-{{ section_id }}"
-            type="submit"
-            name="add"
-            class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
-            {% if product.selected_or_first_available_variant.available == false
-              or quantity_rule_soldout
-              or product.selected_or_first_available_variant == null
-            %}
-              disabled
-            {% endif %}
-          >
-            <span>
-              {%- if product.selected_or_first_available_variant == null -%}
-                {{ 'products.product.unavailable' | t }}
-              {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
-                {{ 'products.product.sold_out' | t }}
-              {%- else -%}
-                {{ 'products.product.add_to_cart' | t }}
-              {%- endif -%}
-            </span>
-            {%- render 'loading-spinner' -%}
-          </button>
-          {%- if show_dynamic_checkout -%}
-            {{ form | payment_button }}
-          {%- endif -%}
-        </div> {% endcomment %}
+                              {%- liquid
+                                assign check_against_inventory = true
+                                if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
+                                  assign check_against_inventory = false
+                                endif
+                                if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
+                                  assign quantity_rule_soldout = true
+                                endif
+                              -%}
+                              <button
+                                id="ProductSubmitButton-{{ section_id }}"
+                                type="submit"
+                                name="add"
+                                class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
+                                {% if product.selected_or_first_available_variant.available == false
+                                  or quantity_rule_soldout
+                                  or product.selected_or_first_available_variant == null
+                                %}
+                                  disabled
+                                {% endif %}
+                              >
+                                <span>
+                                  {%- if product.selected_or_first_available_variant == null -%}
+                                    {{ 'products.product.unavailable' | t }}
+                                  {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+                                    {{ 'products.product.sold_out' | t }}
+                                  {%- else -%}
+                                    {{ 'products.product.add_to_cart' | t }}
+                                  {%- endif -%}
+                                </span>
+                                {%- render 'loading-spinner' -%}
+                              </button>
+                              {%- if show_dynamic_checkout -%}
+                                {{ form | payment_button }}
+                              {%- endif -%}
+                        </div> {% endcomment %}
       {%- endform -%}
     </product-form>
   {%- else -%}
@@ -191,8 +190,7 @@
           type="submit"
           name="add"
           class="product-form__submit button button--full-width button--primary"
-          disabled
-        >
+          disabled>
           {{ 'products.product.sold_out' | t }}
         </button>
       </div>
@@ -202,20 +200,18 @@
   {%- if show_pickup_availability -%}
     {{ 'component-pickup-availability.css' | asset_url | stylesheet_tag }}
 
-    {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities
-      | where: 'pick_up_enabled', true
+    {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities | where: 'pick_up_enabled', true
     -%}
 
     <pickup-availability
       class="product__pickup-availabilities quick-add-hidden"
       {% if product.selected_or_first_available_variant.available and pick_up_availabilities.size > 0 %}
-        available
+      available
       {% endif %}
       data-root-url="{{ routes.root_url }}"
       data-variant-id="{{ product.selected_or_first_available_variant.id }}"
       data-has-only-default-variant="{{ product.has_only_default_variant }}"
-      data-product-page-color-scheme="gradient color-{{ section.settings.color_scheme }}"
-    >
+      data-product-page-color-scheme="gradient color-{{ section.settings.color_scheme }}">
       <template>
         <pickup-availability-preview class="pickup-availability-preview">
           <span class="svg-wrapper">
@@ -328,5 +324,5 @@
 
     window.addEventListener('scroll', handleScroll);
   }
-});
+  });
 </script>
