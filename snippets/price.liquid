@@ -59,7 +59,7 @@
           - div.price__sale: Displayed when a variant is a sale
       {%- endcomment -%}
     
-      <div class="price__regular{% unless product.tags contains 'sale' %} show-regular-price{% endunless %}">
+      <div class="price__regular{%  unless target.compare_at_price > target.price %} show-regular-price{% endunless %}">
         {%- if product.quantity_price_breaks_configured? -%}
           {%- if show_compare_at_price and compare_at_price -%}
             {%- unless product.price_varies == false and product.compare_at_price_varies %}
@@ -105,7 +105,8 @@
         {%- endif -%}
       </div>
       <div class="price__sale">
-        {%- unless product.price_varies == false and product.compare_at_price_varies %}
+      {%- unless product.price_varies == false and product.compare_at_price_varies and target.compare_at_price > target.price %}
+
           <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
           <span style="line-height: normal;">
             <s class="price-item price-item--regular" style="font-weight: 500;">
@@ -120,7 +121,7 @@
         <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.sale_price' | t }}</span>
         <span class="price-item price-item--sale price-item--last">
           {{ money_price }}
-          {% unless product.tags contains 'event' or product.tags contains 'sale'%} 
+          {% unless product.tags contains 'event' or target.compare_at_price > target.price %} 
             {% unless product.tags contains 'no-weight' %}
               <span class="price-item-weight"> / 250 גרם</span>
             {% endunless %}
@@ -143,7 +144,7 @@
       </small>
     </div>
     {%- if show_badges -%}
-    {% unless product.tags contains 'sale' %}
+    {% unless target.compare_at_price > target.price %}
       <span class="badge price__badge-sale color-{{ settings.sale_badge_color_scheme }}">
         {{ 'products.product.on_sale' | t }}
       </span>

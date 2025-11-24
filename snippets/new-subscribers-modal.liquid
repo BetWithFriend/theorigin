@@ -217,7 +217,7 @@
       <div class="one-time-modal-title" dir="rtl">הצטרפו לקהילת הקפה הטובה בישראל!</div>
       <div class="one-time-modal-desc">
         <span>תשמעו ראשונים על מבצעים, עדכונים, סיפורי קפה וקבלו</span>
-        <span class="one-time-modal-discount-per" dir="rtl">12% הנחה</span>
+        <span class="one-time-modal-discount-per" dir="rtl">10% הנחה</span>
         <span>על הקניה הראשונה</span>
       </div>
       {% comment %} <div class="one-time-modal-desc" dir="rtl">הנחה על הקניה הראשונה</div> {% endcomment %}
@@ -253,7 +253,17 @@
     sessionStorage.removeItem('justVisitedPolicy');
   }
 
+  // Helper to check if cart drawer is currently open
+  function isCartDrawerOpen() {
+    const cartDrawer = document.querySelector('cart-drawer');
+    return cartDrawer && cartDrawer.classList.contains('active');
+  }
+
   function showModal() {
+    // Don't show modal if cart drawer is open
+    if (isCartDrawerOpen()) {
+      return;
+    }
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     analytics.trackScreenView('Email Modal', {
