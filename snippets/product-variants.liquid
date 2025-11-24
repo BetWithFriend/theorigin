@@ -1,23 +1,4 @@
         
-          <div class="product-tastes-list  {% if section.settings.product_tastes_center %}center{% endif %}">
-                <div class="single-coffee-main-product-vendor">בית קלייה: {{ vendor.vendor_name.value }}, {{ vendor.vendor_location.value }}</div>
-          </div>
-            <h1 class="product-title">{{ product.title }}</h1>
-            {% unless product.tags contains 'event' %}
-              <div class="product-tastes-list product-sub-title-pdp {% if section.settings.product_tastes_center %}center{% endif %}">
-                  
-              {% comment %} {% for roast_level in product.metafields.custom.custom.coffee_roast_level.value %}       {% endcomment %}
-                  <div class="single-coffee-taste-main-product">קלייה {{ product.metafields.custom.coffee_roast_level.value }}</div>
-                  
-                  &nbsp;|&nbsp;
-                  <div class="single-coffee-taste-main-product">עיבוד {{ product.metafields.custom.coffee_process.value }}</div>
-                {% comment %} {% endfor %} {% endcomment %}
-              </div>
-            {% endunless %}
-            {% comment %} <div class="product-tastes-list {% if section.settings.product_tastes_center %}center{% endif %}">
-              <div class="single-coffee-taste-main-product">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
-            </div> {% endcomment %}
-
           {% assign coffee_details = product.metafields.custom.product_info.value %}
           {% assign coffee_origin_image = product.metafields.custom.coffee_origin_image.value %}
           {% assign coffee_tastes = product.metafields.custom.coffee_tastes.value %}
@@ -26,6 +7,30 @@
           {% assign coffee_process = product.metafields.custom.coffee_process.value %}
           {% assign coffee_type = product.metafields.custom.coffee_type.value %}
           {% assign coffee_blend_ratio = product.metafields.custom.coffee_blend_ratio.value %}
+
+          <div class="product-tastes-list  {% if section.settings.product_tastes_center %}center{% endif %}">
+                <div class="single-coffee-main-product-vendor">בית קלייה: {{ vendor.vendor_name.value }}, {{ vendor.vendor_location.value }}</div>
+          </div>
+            <h1 class="product-title">{{ product.title }}</h1>
+            {% unless product.tags contains 'event' %}
+              <div class="product-tastes-list product-sub-title-pdp {% if section.settings.product_tastes_center %}center{% endif %}">
+                  
+              {% comment %} {% for roast_level in product.metafields.custom.custom.coffee_roast_level.value %}       {% endcomment %}
+                <div class="single-coffee-taste-main-product">{{ coffee_tastes | join: " | " }}</div>    
+                {% comment %} &nbsp;|&nbsp;
+                
+                  <div class="single-coffee-taste-main-product grey-text">קלייה {{ product.metafields.custom.coffee_roast_level.value }}</div>
+                  &nbsp;|&nbsp;
+                  <div class="single-coffee-taste-main-product grey-text">עיבוד {{ product.metafields.custom.coffee_process.value }}</div>
+                   {% endcomment %}
+                  {% comment %} {% endfor %} {% endcomment %}
+              </div>
+            {% endunless %}
+            {% comment %} <div class="product-tastes-list {% if section.settings.product_tastes_center %}center{% endif %}">
+              <div class="single-coffee-taste-main-product">קלייה {{ product.metafields.custom.coffee_roast_level }}</div>
+            </div> {% endcomment %}
+
+
 
           {% comment %} <div class="background-stripe"> </div> {% endcomment %}
           <div class="product-short-description-wrapper">

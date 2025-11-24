@@ -3800,7 +3800,7 @@
       "estimated_total": "סה״כ",
       "cart_delivery": "משלוח",
       "free_shipping": "משלוח חינם",
-      "free_shipping_text": "עוד {{ amount }} למשלוח חינם",
+      "free_shipping_text": "&bull; עוד {{ amount }} למשלוח חינם",
       "new_estimated_total": "סה\"כ משוער חדש",
       "note": "הזמינו הוראות מיוחדות",
       "checkout": "לרכישה",

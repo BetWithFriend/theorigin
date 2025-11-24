@@ -20,15 +20,17 @@
     font-family: 'Noto Sans', sans-serif;
     color: #1C201D;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 15px;
     /* line-height: 25px; */
     text-align: center;
-    background-color: #C4C0BC;
+    /* background-color: #C4C0BC; */
     border-radius: 0px 0px 7px 7px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 4px 16px;
+    gap: 4px;
+    border: 1px solid rgba(28, 32, 29, 0.22)
     /* margin-bottom: 12px; */
   }
 
@@ -43,6 +45,11 @@
   .cart-icon-delivery {
     width: 20px;
     /* margin-left: 10px; */
+  }
+
+  .total-price-divider {
+    color: #0000003B;
+    margin: 8px 0;
   }
 
 </style>
@@ -124,12 +131,12 @@
           {%- if cart != empty -%}
             {%- assign vendors = "" -%}
             {%- assign shipping_price = 0 -%}
-            {% assign canopy_shipping = 39 %}
-            {% assign blooms_shipping = 39 %}
-            {% assign youneedcoffee_shipping = 39 %}
-            {% assign coffeeorg_shipping = 39 %}
-            {% assign coffeeculture_shipping = 39 %}
-            {% assign elijahscoffee_shipping = 39 %}
+            {% assign canopy_shipping = 35 %}
+            {% assign blooms_shipping = 35 %}
+            {% assign youneedcoffee_shipping = 35 %}
+            {% assign coffeeorg_shipping = 35 %}
+            {% assign coffeeculture_shipping = 35 %}
+            {% assign elijahscoffee_shipping = 35 %}
             {% assign event_shipping = 0 %}
             
             {%- comment -%} Free shipping thresholds in cents {%- endcomment -%}
@@ -138,7 +145,7 @@
              {% assign coffeeculture_free_shipping_threshold = 30000 %}
             {% assign coffeeorg_free_shipping_threshold = 25000 %}
             {% assign ync_free_shipping_threshold = 45000 %}
-            {% assign elijahscoffee_free_shipping_threshold = 17500 %}
+            {% assign elijahscoffee_free_shipping_threshold = 30000 %}
             {% assign event_free_shipping_threshold = 0 %}
             
             {%- comment -%} Calculate vendor totals {%- endcomment -%}
@@ -264,7 +271,7 @@
                       <div class="cart-item-logo">
                         <img class="cart-item-logo-img" src="{{ current_vendor_logo |  image_url: 'small' }}" alt="{{ vendor_name }}"  width="42"/>
                       </div>
-                      <div class="cart-item-vendor">מבית {{ vendor_name |  upcase }}</div>
+                      <div class="cart-item-vendor">{{ vendor_name |  upcase }}</div>
                     </div>
                     {%- for item in cart.items -%}
                       {%- if item.vendor == vendor -%}
@@ -494,9 +501,10 @@
                                     <div class="product-option">
                                       {% comment %} <dt>{{ option.name }}:</dt> {% endcomment %}
                                       <dd>{{ option.value }}</dd>
-                                      {%- unless forloop.last -%}
-                                        &nbsp;|&nbsp;
-                                      {%- endunless -%}
+                                      {% comment %} {%- unless forloop.last -%} {% endcomment %}
+                                        &nbsp;|&nbsp;פולים
+                                        
+                                      {% comment %} {%- endunless -%} {% endcomment %}
                                     </div>
                                   {%- endfor -%}
                                 {%- endif -%}
@@ -504,9 +512,9 @@
 
                               <p class="product-option">{{ item.selling_plan_allocation.selling_plan.name }}</p>
                             {%- endif -%}
-                                                      <div class="product-option cart-price-item-option" dir="ltr">
+                            {% comment %} <div class="product-option cart-price-item-option" dir="ltr">
                                {{ item.original_price | times: item.quantity | money_without_trailing_zeros}}
-                            </div>
+                            </div> {% endcomment %}
                             {%- liquid
                               assign has_qty_rules = false
                               if item.variant.quantity_rule.increment > 1 or item.variant.quantity_rule.min > 1 or item.variant.quantity_rule.max != null
@@ -702,7 +710,10 @@
                              {{ item.original_price | times: item.quantity | money }}
                             </div> {% endcomment %}
                           
-                            {%- endif -%}
+                              {%- endif -%}
+                                <div class="cart-price-item-option" dir="ltr">
+                                {{ item.original_price | times: item.quantity | money_without_trailing_zeros }}
+                                </div>
                           </div>
                           <div class="cart-item__totals right medium-hide large-up-hide">
                             {%- render 'loading-spinner' -%}
@@ -812,7 +823,7 @@
                         </div> {% endcomment %}
                          {%- if vendor == 'temp_placeholder' -%}
                           <div class="free-shipping-notice">
-                            <span>משלוח ₪39</span>
+                            <span>משלוח ₪35</span>
                               <div>
                               </div>
                           </div>
@@ -820,10 +831,9 @@
                           {%- elsif vendor_qualifies_free_shipping -%}
                             {%- if vendor_has_regular_items -%}
                             <div class="free-shipping-notice">
-                              <div>
-                                <span>משלוח </span><span class="shipping-crossed-out">₪39</span>
-                                <span>0</span>
-                              </div>
+                                <img class="cart-icon-delivery " src="{{  'cart_icon_delivery.png' | asset_url }}" alt="free shipping Icon" />
+                                {% comment %} <span>משלוח </span><span class="shipping-crossed-out">₪39</span> {% endcomment %}
+                                {% comment %} <span>0</span> {% endcomment %}
                               {{ 'sections.cart.free_shipping' | t | default: 'משלוח חינם!' }}
                             </div>
                             {%- endif -%}
@@ -831,15 +841,15 @@
                             {%- assign shipping_items_paid = shipping_items_paid | plus: 1 -%}
                             {%- if vendor_has_regular_items -%}
                             <div class="free-shipping-notice">
-                              <span>משלוח ₪39</span>
                                 <div>
-                                  <!--
                                   {%- assign remaining_for_free = vendor_free_threshold | minus: regular_items_total -%}
                                   <img class="cart-icon-delivery " src="{{  'cart_icon_delivery.png' | asset_url }}" alt="free shipping Icon" />
+                                  משלוח
+                                   <span style="font-weight: bold">₪35</span>
                                   {% assign formatted_amount = remaining_for_free | money %}
                                   {{ 'sections.cart.free_shipping_text' | t: amount: formatted_amount }}
-                                   -->
-                                  משלוח חינם מעל {{ vendor_free_threshold | money }}
+                                   
+                                  {% comment %} משלוח חינם מעל {{ vendor_free_threshold | money }} {% endcomment %}
                                 </div>
                             </div>
                             {%- endif -%}
@@ -883,6 +893,18 @@
 
         <div class="cart-drawer__footer" {{ block.shopify_attributes }}>
           <div>
+            <div class="cart_payment_types_icons">
+              <div class="cart_payment_types_icon_first">
+                <img class="cart_payment_img" src="{{ 'secure_buy.png' | asset_url }}" alt="secure buy" />
+                <div class="cart-payment-title">רכישה מאובטחת</div>
+              </div>
+              <img class="cart_payment_icon_img" src="{{ 'payment-visa.webp' | asset_url }}" alt="Visa" />
+              <img class="cart_payment_icon_img"  src="{{ 'payment-mastercard.webp' | asset_url }}" alt="MasterCard" />
+              {% comment %} <img src="{{ 'payment-max.webp' | asset_url }}" alt="Max" /> {% endcomment %}
+              <img class="cart_payment_icon_img"  src="{{ 'payment-apple-pay.webp' | asset_url }}" alt="Apple Pay" />
+              <img class="cart_payment_icon_img"  src="{{ 'payment-google-pay.webp' | asset_url }}" alt="Google Pay" />
+              {% comment %} <img src="{{ 'payment-paypal.png' | asset_url }}" alt="Pay Pal" /> {% endcomment %}
+            </div>
             {%- if cart.cart_level_discount_applications.size > 0 -%}
               <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
                 {%- for discount in cart.cart_level_discount_applications -%}
@@ -902,13 +924,14 @@
 
               {%- assign adjusted_total = cart.total_price | plus: shipping_price_cents -%}
 
-            <p class="totals__total-value totals-value-secondary"><span>עלות קפה:</span> <span class="totals-value-secondary-value">{{ cart.total_price | money_with_currency }}</span></p>
+            <p class="totals__total-value totals-value-secondary"><span>עלות קפה:</span> <span class="totals-value-secondary-value" dir="rtl">{{ cart.total_price | money_with_currency }}</span></p>
             {%- if shipping_items_paid > 0 %}
               <p class="totals__total-value totals-value-secondary"><span>סה״כ משלוח ({% if shipping_items_paid == 1 %}מבית קלייה אחד{% else %}מ-{{ shipping_items_paid }} בתי קלייה{% endif %}):</span> <span class="totals-value-secondary-value">{{ shipping_price_cents | money_with_currency }}</span></p>
             {%- else -%}
               <p class="totals__total-value totals-value-secondary"><span>סה״כ משלוח:</span> <span class="totals-value-secondary-value">0</span></p>
             {%- endif -%}
-            <p class="totals__total-value totals-value-primary"><span>סה״כ:</span> <span class="totals-value-secondary-value">{{ adjusted_total | money_with_currency }}</span></p>
+            <hr class="total-price-divider"/>
+            <p class="totals__total-value totals-value-primary"><span>סה״כ לתשלום</span> <span class="totals-value-secondary-value">{{ adjusted_total | money_with_currency }}</span></p>
           </div>
 
           <!-- 
@@ -971,14 +994,6 @@
           >
             {{ 'sections.cart.checkout' | t }}
           </button>
-          <div class="cart_payment_types_icons">
-            <img src="{{ 'payment-visa.webp' | asset_url }}" alt="Visa" />
-            <img src="{{ 'payment-mastercard.webp' | asset_url }}" alt="MasterCard" />
-            <img src="{{ 'payment-max.webp' | asset_url }}" alt="Max" />
-            <img src="{{ 'payment-apple-pay.webp' | asset_url }}" alt="Apple Pay" />
-            <img src="{{ 'payment-google-pay.webp' | asset_url }}" alt="Google Pay" />
-            <img src="{{ 'payment-paypal.png' | asset_url }}" alt="Pay Pal" />
-          </div>
         <!--<button type="button" onclick="this.closest('cart-drawer').close()" class="button button--primary button--full-width cart-btn-checkout" aria-label="{{ 'accessibility.close' | t }}">{{ 'general.continue_shopping' | t }}</button>-->
           <!-- <div class="cart_continue_shopping_link" onclick="this.closest('cart-drawer').close()">המשך בקנייה</div> -->
           </div>

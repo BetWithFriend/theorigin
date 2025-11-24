@@ -253,7 +253,17 @@
     sessionStorage.removeItem('justVisitedPolicy');
   }
 
+  // Helper to check if cart drawer is currently open
+  function isCartDrawerOpen() {
+    const cartDrawer = document.querySelector('cart-drawer');
+    return cartDrawer && cartDrawer.classList.contains('active');
+  }
+
   function showModal() {
+    // Don't show modal if cart drawer is open
+    if (isCartDrawerOpen()) {
+      return;
+    }
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     analytics.trackScreenView('Email Modal', {

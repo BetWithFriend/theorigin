@@ -450,6 +450,10 @@ slider-component.slider-component-full-width {
   font-weight: 700;
 }
 
+.single-coffee-taste-main-product.grey-text {
+  color: #a4a4a4;
+}
+
 .product-roast-level {
   /* background-color: #E3E0DA; */
   /* padding: 2px 10px; */

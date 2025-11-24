@@ -2747,6 +2747,7 @@ input[type='checkbox'] {
   justify-content: center;
   /* Ido */
   width: 28px;
+  cursor:pointer;
 }
 
 .header__icon {
