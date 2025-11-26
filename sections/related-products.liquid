@@ -61,7 +61,7 @@
             %}
             <hr class="card-product-divider" />
             <div class="price-product-wrapper">{% render 'price'
-, product: recommendation %}</div>
+, product: recommendation, use_variant: true %}</div>
           </li>
           {%- assign skip_card_product_styles = true -%}
         {% endfor %}
