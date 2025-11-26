@@ -1,0 +1,423 @@
+<style>
+.dynamic-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  z-index: 10001;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none; /* Allow clicks to pass through overlay */
+}
+
+.dynamic-popup-container {
+  background: #fff;
+  width: 90%;
+  max-width: 400px;
+  height: 300px;
+  position: relative;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12), 0 -2px 8px rgba(0, 0, 0, 0.08);
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  box-sizing: border-box;
+  pointer-events: auto; /* Allow interaction with popup itself */
+}
+
+.dynamic-popup-overlay.active .dynamic-popup-container {
+  transform: translateY(0);
+}
+
+.dynamic-popup-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 0;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.dynamic-popup-close:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dynamic-popup-close::before,
+.dynamic-popup-close::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 18px;
+  background-color: #333;
+  border-radius: 1px;
+}
+
+.dynamic-popup-close::before {
+  transform: rotate(45deg);
+}
+
+.dynamic-popup-close::after {
+  transform: rotate(-45deg);
+}
+
+.dynamic-popup-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  text-align: center;
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.dynamic-popup-title {
+  font-family: 'Assistant', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1C201D;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.dynamic-popup-subtitle {
+  font-family: 'Assistant', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #1C201D;
+  margin: 0;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+.dynamic-popup-button {
+  font-family: 'Assistant', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  background-color: #AD7B7E;
+  color: #FAFCFE;
+  border: none;
+  border-radius: 55px;
+  padding: 14px 32px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  margin-top: 8px;
+  text-decoration: none;
+  display: inline-block;
+  align-self: center;
+}
+
+.dynamic-popup-button:hover {
+  background-color: #9a6b6e;
+  transform: scale(1.02);
+}
+
+.dynamic-popup-button:active {
+  transform: scale(0.98);
+}
+
+/* Desktop styles */
+@media screen and (min-width: 750px) {
+  .dynamic-popup-overlay {
+    align-items: flex-end;
+    padding-bottom: 50px;
+  }
+
+  .dynamic-popup-container {
+    width: 400px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* Mobile styles */
+@media screen and (max-width: 749px) {
+  .dynamic-popup-overlay {
+    align-items: flex-end;
+    padding-bottom: 0;
+  }
+
+  .dynamic-popup-container {
+    width: 90%;
+    border-radius: 16px 16px 0 0;
+  }
+}
+</style>
+
+<div id="dynamicPopupOverlay" class="dynamic-popup-overlay">
+  <div class="dynamic-popup-container" dir="rtl">
+    <button class="dynamic-popup-close" aria-label="Close popup" onclick="hideDynamicPopup()"></button>
+    <div class="dynamic-popup-content" dir="rtl">
+      <h2 class="dynamic-popup-title" id="dynamicPopupTitle" dir="rtl"></h2>
+      <p class="dynamic-popup-subtitle" id="dynamicPopupSubtitle" dir="rtl"></p>
+      <a href="#" class="dynamic-popup-button" id="dynamicPopupButton" dir="rtl"></a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  {% comment %}
+    ============================================
+    CONFIGURATION - Edit these values to customize the popup texts and URLs
+    ============================================
+  {% endcomment %}
+  
+  // Configuration for Collection Page Popup (20 seconds condition)
+  const COLLECTION_POPUP_CONFIG = {
+    title: 'לא מוצאים את הקפה שרציתם?',
+    subtitle: 'השתמשו בשאלון כדי למצוא את קפה המשולם עבורכם',
+    buttonText: 'קחו אותי לשאלון הקפה',
+    buttonUrl: '/collections/חנות-קפה?from=main-cta',
+    buttonTarget: '_self' // '_self' = same window, '_blank' = new window
+  };
+
+  // Configuration for Product Views Popup (2 products viewed condition)
+  const PRODUCT_POPUP_CONFIG = {
+    title: 'צריכים עזרה?',
+    subtitle: 'אם יש לכם שאלות, נשמח לעזור למצוא את הקפה המושלם עבורכם בווטסאפ',
+    buttonText: 'לתחילת צ׳ט בווטאסאפ',
+    buttonUrl: 'https://wa.me/972545631523?text=%D7%94%D7%99%D7%99%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%94%D7%AA%D7%99%D7%99%D7%A2%D7%A5%20%D7%9C%D7%92%D7%91%D7%99%20%D7%A7%D7%A4%D7%94',
+    buttonTarget: '_blank' // '_self' = same window, '_blank' = new window
+  };
+
+  // Storage keys
+  const STORAGE_KEYS = {
+    POPUP_SHOWN: 'dynamicPopupShown', // Tracks which popup types have been shown in this session
+    PRODUCT_VIEWS: 'dynamicPopupProductViews',
+    COLLECTION_TIME_START: 'dynamicPopupCollectionTimeStart'
+  };
+
+  const popupOverlay = document.getElementById('dynamicPopupOverlay');
+  const popupTitle = document.getElementById('dynamicPopupTitle');
+  const popupSubtitle = document.getElementById('dynamicPopupSubtitle');
+  const popupButton = document.getElementById('dynamicPopupButton');
+
+  let activeCondition = null;
+  let collectionPageTimer = null;
+
+  // Check if a specific popup type was already shown in this session
+  function isPopupTypeShown(conditionId) {
+    const shownPopups = JSON.parse(sessionStorage.getItem(STORAGE_KEYS.POPUP_SHOWN) || '[]');
+    return shownPopups.includes(conditionId);
+  }
+
+  // Mark a specific popup type as shown in this session
+  function markPopupTypeShown(conditionId) {
+    const shownPopups = JSON.parse(sessionStorage.getItem(STORAGE_KEYS.POPUP_SHOWN) || '[]');
+    if (!shownPopups.includes(conditionId)) {
+      shownPopups.push(conditionId);
+      sessionStorage.setItem(STORAGE_KEYS.POPUP_SHOWN, JSON.stringify(shownPopups));
+    }
+  }
+
+  // Check if user is on collection page for more than 20 seconds
+  function checkCollectionPageTime() {
+    const path = window.location.pathname;
+    const isCollectionPage = path.startsWith('/collections/');
+    
+    if (!isCollectionPage) {
+      // Clear timer if not on collection page
+      if (collectionPageTimer) {
+        clearTimeout(collectionPageTimer);
+        collectionPageTimer = null;
+        sessionStorage.removeItem(STORAGE_KEYS.COLLECTION_TIME_START);
+      }
+      return false;
+    }
+
+    // Check if we already started tracking time for this session
+    const startTime = sessionStorage.getItem(STORAGE_KEYS.COLLECTION_TIME_START);
+    
+    if (!startTime) {
+      // Start tracking time
+      sessionStorage.setItem(STORAGE_KEYS.COLLECTION_TIME_START, Date.now().toString());
+      // Set timer for 20 seconds
+      collectionPageTimer = setTimeout(() => {
+        if (checkCollectionPageTime()) {
+          showPopup('collection_20s');
+        }
+      }, 15000);
+      return false;
+    }
+
+    const elapsed = Date.now() - parseInt(startTime, 10);
+    return elapsed >= 15000;
+  }
+
+  // Check if user has viewed 2 product pages
+  function checkProductPageViews() {
+    const path = window.location.pathname;
+    const isProductPage = path.startsWith('/products/');
+    
+    if (!isProductPage) {
+      return false;
+    }
+
+    // Get current product views
+    let views = parseInt(localStorage.getItem(STORAGE_KEYS.PRODUCT_VIEWS) || '0', 10);
+    
+    // Get the current product handle
+    const currentProduct = path.split('/products/')[1]?.split('?')[0] || '';
+    const viewedProducts = JSON.parse(localStorage.getItem('dynamicPopupViewedProducts') || '[]');
+    
+    // Check if we've already counted this product
+    if (!viewedProducts.includes(currentProduct) && currentProduct) {
+      views++;
+      viewedProducts.push(currentProduct);
+      localStorage.setItem(STORAGE_KEYS.PRODUCT_VIEWS, views.toString());
+      localStorage.setItem('dynamicPopupViewedProducts', JSON.stringify(viewedProducts));
+    }
+
+    return views >= 2;
+  }
+
+  // Get condition configuration by ID
+  function getConditionConfig(conditionId) {
+    const conditions = {
+      'collection_20s': {
+        config: COLLECTION_POPUP_CONFIG
+      },
+      'product_views': {
+        config: PRODUCT_POPUP_CONFIG
+      }
+    };
+    return conditions[conditionId];
+  }
+
+  // Show popup with specific condition config
+  function showPopup(conditionId) {
+    // Check if this popup type was already shown in this session
+    if (isPopupTypeShown(conditionId)) {
+      return;
+    }
+
+    const condition = getConditionConfig(conditionId);
+    if (!condition) {
+      return;
+    }
+
+    // Don't show if cart drawer is open
+    const cartDrawer = document.querySelector('cart-drawer');
+    if (cartDrawer && cartDrawer.classList.contains('active')) {
+      return;
+    }
+
+    // Mark this popup type as shown in this session
+    markPopupTypeShown(conditionId);
+
+    activeCondition = condition;
+    const config = condition.config;
+
+    // Update popup content
+    popupTitle.textContent = config.title;
+    popupSubtitle.textContent = config.subtitle;
+    popupButton.textContent = config.buttonText;
+    popupButton.href = config.buttonUrl;
+    popupButton.target = config.buttonTarget || '_self'; // Default to same window if not specified
+
+    // Show popup
+    popupOverlay.style.display = 'flex';
+    setTimeout(() => {
+      popupOverlay.classList.add('active');
+    }, 10);
+  }
+
+  // Hide popup
+  window.hideDynamicPopup = function() {
+    popupOverlay.classList.remove('active');
+    setTimeout(() => {
+      popupOverlay.style.display = 'none';
+      // Note: The popup type is already marked as shown when it was displayed,
+      // so we don't need to mark it again here
+    }, 400);
+  };
+
+  // Reset all popup counts and tracking data
+  // Can be called from anywhere: window.resetDynamicPopupCounts()
+  window.resetDynamicPopupCounts = function() {
+    // Clear sessionStorage items (session-based tracking)
+    sessionStorage.removeItem(STORAGE_KEYS.POPUP_SHOWN);
+    sessionStorage.removeItem(STORAGE_KEYS.COLLECTION_TIME_START);
+    
+    // Clear localStorage items (persistent tracking)
+    localStorage.removeItem(STORAGE_KEYS.PRODUCT_VIEWS);
+    localStorage.removeItem('dynamicPopupViewedProducts');
+    
+    // Clear any active timers
+    if (collectionPageTimer) {
+      clearTimeout(collectionPageTimer);
+      collectionPageTimer = null;
+    }
+    
+    console.log('Dynamic popup counts have been reset');
+  };
+
+
+  // Track page navigation for product views
+  function trackPageView() {
+    const path = window.location.pathname;
+    
+    // Check product page views condition
+    if (checkProductPageViews()) {
+      setTimeout(() => {
+        showPopup('product_views');
+      }, 1000); // Small delay to ensure page is loaded
+    }
+
+    // Check collection page time condition
+    checkCollectionPageTime();
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    trackPageView();
+  });
+
+  // Also check when navigating (for SPA-like behavior)
+  let lastPath = window.location.pathname;
+  setInterval(() => {
+    if (window.location.pathname !== lastPath) {
+      lastPath = window.location.pathname;
+      trackPageView();
+    }
+  }, 500);
+
+  // Listen for popstate (back/forward navigation)
+  window.addEventListener('popstate', function() {
+    setTimeout(trackPageView, 100);
+  });
+})();
+</script>
+
+{% comment %}
+  ============================================
+  DYNAMIC POPUP SNIPPET
+  ============================================
+  
+  This popup appears based on conditions:
+  1. User spends more than 20 seconds on a collection page (/collections/*)
+  2. User has viewed 2 different product pages
+  
+  To customize the popup texts and URLs, edit the configuration
+  values in the JavaScript section above (COLLECTION_POPUP_CONFIG and PRODUCT_POPUP_CONFIG).
+  
+  To include this popup in your theme, add this line to theme.liquid:
+  {% render 'dynamic_popup' %}
+{% endcomment %}
+
