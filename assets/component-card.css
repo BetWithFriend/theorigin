@@ -13,7 +13,7 @@
 .card:not(.ratio) {
   display: flex;
   flex-direction: row-reverse;
-  /* height: 150px; */
+  height: 200px;
   background-color: #F5F4F2;
   overflow-y: hidden;
   border-radius: 8px;
@@ -24,7 +24,7 @@
 
 @media screen and (min-width: 749px) {
   .card:not(.ratio) {
-    height: 170px;
+    height: 220px;
   }
 
   .card.article-card {
@@ -280,7 +280,7 @@
 @media screen and (min-width: 750px) {
   .card__information {
     padding-bottom: 1.7rem;
-    padding-top: 1.7rem;
+    /* padding-top: 1.7rem; */
   }
 }
 
@@ -354,7 +354,7 @@
 }
 
 .main-collention-price-wrapper {
-  width: 45%;
+  width: 50%;
 }
 
 .main-collection-add-to-cart-wrapper {
@@ -370,11 +370,11 @@
   /* justify-content: center; */
   justify-content: space-between;
   width: 100%;
-  margin-top: 12px;
+  /* margin-top: 12px; */
 }
 
 .add-to-cart-catalogue-btn {
-  padding: 6px 12px;
+  padding: 6px 5px;
   border-radius: 60px;
   border: 1px solid #55555580;
   font-family: 'Assistant', sans-serif;

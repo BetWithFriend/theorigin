@@ -124,7 +124,7 @@ slider-component.slider-component-full-width {
 
 @media screen and (max-width: 360px) {
   .slider.slider--tablet.contains-card--standard .slider__slide:not(.collection-list__item--no-media) {
-    width: 220px;
+    width: 260px;
   }
 
   .full-unstyled-link {
