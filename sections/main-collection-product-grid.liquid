@@ -123,12 +123,12 @@
           data-id="{{ section.id }}">
 
           {% comment %} {% render 'facets',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    results: collection,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    enable_filtering: section.settings.enable_filtering,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    enable_sorting: section.settings.enable_sorting,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    filter_type: section.settings.filter_type,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    paginate: paginate
-                                                                                                                                                                                                                                                                                                                                                                                                                    %} {% endcomment %}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        results: collection,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        enable_filtering: section.settings.enable_filtering,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        enable_sorting: section.settings.enable_sorting,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        filter_type: section.settings.filter_type,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        paginate: paginate
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  %} {% endcomment %}
         </aside>
     {%- endif -%}
 
@@ -274,6 +274,7 @@
                       <div class="main-collention-price-wrapper">
                         {% render 'price'
                           , product: product
+                          , use_variant: true
                           , render_weight: true %}
                       </div>
 
@@ -346,7 +347,7 @@
   // Disable button to prevent double submissions
   submitButton.disabled = true;
   const originalText = submitButton.innerHTML;
-  submitButton.innerHTML = 'Adding...';
+  submitButton.innerHTML = 'מוסיף מוצר...';
   
   // Use Shopify's Cart API to add item
   fetch('/cart/add.js', {
@@ -362,7 +363,7 @@
   .then(response => response.json())
   .then(data => {
     // Successfully added to cart
-    submitButton.innerHTML = 'Added!';
+    submitButton.innerHTML = '!!!התווסף';
     
     // Update cart drawer and icon
     updateCartDrawer();

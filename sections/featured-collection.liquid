@@ -132,7 +132,47 @@
               , quick_add: section.settings.quick_add
             %}
             <hr class="card-product-divider" />
-            <div class="price-product-wrapper">{% render 'price', product: product, use_variant: true %}</div>
+            <div class="main-collection-cart-bottom-wrapper">
+              <div class="main-collention-price-wrapper">
+                {% render 'price'
+                  , product: product
+                  , use_variant: true
+                  , render_weight: true %}
+              </div>
+
+
+              <div class="main-collection-add-to-cart-wrapper">
+                {%- form 'product'
+                  , product
+                  , class: 'form product-form--quick-add js-quick-add-form'
+                  , data-type: 'add-to-cart-form' -%}
+                  <input
+                    type="hidden"
+                    name="id"
+                    value="{{ product.selected_or_first_available_variant.id }}"
+                    class="product-variant-id"
+                    {% if product.selected_or_first_available_variant.available == false %}
+                    disabled{% endif %}>
+                  <button
+                    id="ProductSubmitButton-add-{{ product.id }}"
+                    type="submit"
+                    name="add"
+                    class="add-to-cart-catalogue-btn"
+                    data-variant-id="{{ product.selected_or_first_available_variant.id }}">
+                    <img
+                      class="add-to-cart-catalog-img"
+                      src="{{ 'add-to-cart-catalog.png' |  asset_url }}"
+                      alt="add to cart icon" />
+                    {{ 'products.product.add_to_cart' | t }}
+                  </button>
+                {%- endform -%}
+              </div>
+            </div>
+          {% comment %} <div class="price-product-wrapper">
+                          {% render 'price'
+                            , product: product
+                            , use_variant: true %}
+                      </div> {% endcomment %}
 
           </li>
           {%- assign skip_card_product_styles = true -%}
@@ -199,9 +239,7 @@
     </slider-component>
 
     <!--
-      {%- if section.settings.show_view_all and more_in_collection -%}  <div class="center collection__view-all{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">    <a
-          href="{{ section.settings.collection.url }}"
-          class="{% if section.settings.view_all_style == 'link' %}link underlined-link{% elsif section.settings.view_all_style == 'solid' %}button{% else %}button button--secondary {% endif %}"
+      {%- if section.settings.show_view_all and more_in_collection -%}  <div class="center collection__view-all{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">    <a      href="{{ section.settings.collection.url }}"      class="{% if section.settings.view_all_style == 'link' %}link underlined-link{% elsif section.settings.view_all_style == 'solid' %}button{% else %}button button--secondary {% endif %}"
           aria-label="{{ 'sections.featured_collection.view_all_label' | t: collection_name: section.settings.collection.title | escape }}"
         >
           {{ 'sections.featured_collection.view_all' | t }}

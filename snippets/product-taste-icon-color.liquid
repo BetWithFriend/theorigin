@@ -1,98 +1,99 @@
 <!-- snippets/product-taste-icon-color.liquid -->
 <div class="selection-wrapper plp-taste-text-wrapper">
   <!-- Dynamic Text Section -->
-  
- {% if tastes.size > 0 %}
-  {% for taste in tastes %}
-    <!-- Conditional Color -->
-    {% case taste %}
-      {% when 'Fruity' %}
-      <span class="fruity">פירותי</span>
+
+  {% if tastes.size > 0 %}
+    {% for taste in tastes %}
+      <!-- Conditional Color -->
+      {% case taste %}
+        {% when 'Fruity' %}
+          <span class="fruity">פירותי</span>
         {% comment %} <span class="selection-color" style="background-color: #FFDF70;" aria-label="Yellow Indicator"></span> {% endcomment %}
-      {% when 'Chocolate' %}
-      <span class="chocolate">שוקולדי</span>
+        {% when 'Chocolate' %}
+          <span class="chocolate">שוקולדי</span>
         {% comment %} <span class="selection-color" style="background-color: #8B4513;" aria-label="Brown Indicator"></span> {% endcomment %}
-      {% when 'Sweet-Chocolate' %}
-      <span class="sweet-chocolate">מתוק שוקולדי</span>
+        {% when 'Sweet-Chocolate' %}
+          <span class="sweet-chocolate">מתוק שוקולדי</span>
         {% comment %} <span class="selection-color" style="background-color: #C4823E;" aria-label="Orange Indicator"></span> {% endcomment %}
-      {% when 'Sweet' %}
-      <span class="sweet-balanced">מתוק מאוזן</span>
+        {% when 'Sweet' %}
+          <span class="sweet-balanced">מתוק מאוזן</span>
         {% comment %} <span class="selection-color" style="background-color: #D60540;" aria-label="Red Indicator"></span> {% endcomment %}
-      {% when 'Fruity-Sweet' %}
-      <span class="sweet-fruity">פירותי מתוק</span>
-        {% comment %} <span class="selection-color" style="background-color: #FF974A;" aria-label="Orange Indicator"></span> {% endcomment %}
-    {% endcase %}
-  {% endfor %}
-{% endif %}
+        {% when 'Fruity-Sweet' %}
+          <span class="sweet-fruity">פירותי מתוק</span>
+      {% comment %} <span class="selection-color" style="background-color: #FF974A;" aria-label="Orange Indicator"></span> {% endcomment %}
+      {% endcase %}
+    {% endfor %}
+  {% endif %}
 </div>
-    <!-- Conditional Icons -->
-     {% comment %} <div class="selection-icons">
-    {% if prep_methods.size > 0 %}
-      {% for method in prep_methods %}
-        {% assign updated_method = method | strip | remove: '"' %}
-     
-        {% case updated_method %}
-          {% when 'Espresso' %}
-          <img src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Brew" class="icon" />
-          {% when 'Black' %}
-          <img src="{{ 'dropdown-brew-Turkish.png' | asset_url }}" alt="Turkish Brew" class="icon" />
-          {% when 'Aeropress' %}
-          <img src="{{ 'dropdown-brew-Chemex.png' | asset_url }}" alt="Chemex Brew" class="icon" />
-          {% when 'MokaPot' %}
-          <img src="{{ 'dropdown-brew-Moka.png' | asset_url }}" alt="Moka Brew" class="icon" />
-          {% when 'Filter' %}
-          <img src="{{ 'dropdown-brew-Filter.png' | asset_url }}" alt="Filter Brew" class="icon" />
-        {% endcase %}
-  
-  {% endfor %}
-{% endif %}
+<!-- Conditional Icons -->
+{% comment %} <div class="selection-icons">
+            {% if prep_methods.size > 0 %}
+              {% for method in prep_methods %}
+                {% assign updated_method = method | strip | remove: '"' %}
+             
+                {% case updated_method %}
+                  {% when 'Espresso' %}
+                  <img src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Brew" class="icon" />
+                  {% when 'Black' %}
+                  <img src="{{ 'dropdown-brew-Turkish.png' | asset_url }}" alt="Turkish Brew" class="icon" />
+                  {% when 'Aeropress' %}
+                  <img src="{{ 'dropdown-brew-Chemex.png' | asset_url }}" alt="Chemex Brew" class="icon" />
+                  {% when 'MokaPot' %}
+                  <img src="{{ 'dropdown-brew-Moka.png' | asset_url }}" alt="Moka Brew" class="icon" />
+                  {% when 'Filter' %}
+                  <img src="{{ 'dropdown-brew-Filter.png' | asset_url }}" alt="Filter Brew" class="icon" />
+                {% endcase %}
+          
+          {% endfor %}
+        {% endif %}
 </div> {% endcomment %}
 <div class="product-tastes-list-icon">
-  {% for taste in coffee_tastes_list %}      
+  {% for taste in coffee_tastes_list %}
     <div class="single-coffee-taste">{{ taste }}</div>
   {% endfor %}
 </div>
 
 <style>
-.selection-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  font-family: 'Assistant', sans-serif;
-  flex-direction: row-reverse;
-  line-height: 30px;
-  font-size: 14px;
-  font-weight: 400;
-}
+  .selection-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-family: 'Assistant'
+    , sans-serif;
+    flex-direction: row-reverse;
+    line-height: 20px;
+    font-size: 14px;
+    font-weight: 400;
+  }
 
-.selection-text {
-  font-size: 16px;
-  color: #333;
-}
+  .selection-text {
+    font-size: 16px;
+    color: #333;
+  }
 
-.selection-color {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  display: inline-block;
-}
+  .selection-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-block;
+  }
 
-.selection-icons {
-  display: flex;
-  gap: 4px;
-  height: 30px;
-  width: 100%;
-  flex-wrap: wrap;
-}
+  .selection-icons {
+    display: flex;
+    gap: 4px;
+    height: 30px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
 
-.selection-icons .icon {
-  width: 24px;
-  height: 24px;
-}
+  .selection-icons .icon {
+    width: 24px;
+    height: 24px;
+  }
 
   .product-taste-icons {
-  /* margin-top: 10px; /* Add space between the image and the icons */
+    /* margin-top: 10px; /* Add space between the image and the icons */
     /* text-align: center; */
     display: flex;
     align-items: start;
@@ -101,52 +102,68 @@
     gap: 4px;
     white-space: nowrap;
     width: 100%;
-    margin-bottom: 32px;
-}
-
-.product-taste-icons img {
-  width: 24px; /* Ensure icons are a consistent size */
-  height: 24px;
-  /* margin: 0 5px;  */
-}
-
-.product-tastes-list-icon {
-  text-wrap: auto;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: start;
-
-  display: none;
-}
-
-.product-tastes-list-icon.center {
-  justify-content: center;
-}
-
-.product-tastes-list-icon .single-coffee-taste {
-  background-color: #E3E0DA;
-  padding: 4px 8px;
-  border-radius: 16px;
-  margin: 2px;
-  font-size: 14px;
-}
-
-.plp-taste-text-wrapper span {
-  padding: 0px 12px;
-  /* border-radius: 16px; */
-}
-
-.plp-taste-text-wrapper span.chocolate { background-color: rgb(162, 137, 114); color: #1C201D;}
-.plp-taste-text-wrapper span.sweet-chocolate { background-color: #c1a089;color: #1C201D;}
-.plp-taste-text-wrapper span.sweet-balanced {background-color: #dec2b5;color: #1C201D;}
-.plp-taste-text-wrapper span.sweet-fruity {background-color: #f3d5b8;color: #1C201D;}
-.plp-taste-text-wrapper span.fruity {background-color: #ebe4cc;color: #1C201D;}
-
-@media screen and (min-width: 749px) {
-  .product-tastes-list-icon {
-    justify-content: start;
-    /* margin-right: 24px; */
+    margin-bottom: 20px;
   }
-}
+
+  .product-taste-icons img {
+    width: 24px;
+    /* Ensure icons are a consistent size */
+    height: 24px;
+    /* margin: 0 5px;  */
+  }
+
+  .product-tastes-list-icon {
+    text-wrap: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+
+    display: none;
+  }
+
+  .product-tastes-list-icon.center {
+    justify-content: center;
+  }
+
+  .product-tastes-list-icon .single-coffee-taste {
+    background-color: #E3E0DA;
+    padding: 4px 8px;
+    border-radius: 16px;
+    margin: 2px;
+    font-size: 14px;
+  }
+
+  .plp-taste-text-wrapper span {
+    padding: 0 12px;
+    /* border-radius: 16px; */
+  }
+
+  .plp-taste-text-wrapper span.chocolate {
+    background-color: rgb(162, 137, 114);
+    color: #1C201D;
+  }
+  .plp-taste-text-wrapper span.sweet-chocolate {
+    background-color: #c1a089;
+    color: #1C201D;
+  }
+  .plp-taste-text-wrapper span.sweet-balanced {
+    background-color: #dec2b5;
+    color: #1C201D;
+  }
+  .plp-taste-text-wrapper span.sweet-fruity {
+    background-color: #f3d5b8;
+    color: #1C201D;
+  }
+  .plp-taste-text-wrapper span.fruity {
+    background-color: #ebe4cc;
+    color: #1C201D;
+  }
+
+  @media screen and (min-width: 749px) {
+    .product-tastes-list-icon {
+      justify-content: start;
+      /* margin-right: 24px; */
+    }
+  }
 </style>
