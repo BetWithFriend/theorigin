@@ -1134,6 +1134,7 @@ summary::-webkit-details-marker {
     background-color: #F5F4F2;
     border-radius: 8px;
     padding: 24px 32px 16px 0;
+    position: relative;
   }
 
   .slider--tablet.grid--peek {
@@ -1203,6 +1204,7 @@ summary::-webkit-details-marker {
     background-color: #F5F4F2;
     border-radius: 8px;
     padding: 24px 32px 16px 0;
+    position: relative;
   }
 
   .slider--tablet.grid--peek {

@@ -40,6 +40,18 @@
       assign ratio = 1
     endif
   -%}
+      <div class="cart-info-title-wrapper">
+        {%  if card_product.tags contains 'new' %}
+          <span class="cart-info-new-tag new-product" >חדש</span>
+        {% endif %}
+        {%  if card_product.tags contains 'deal' %}
+          <span class="cart-info-new-tag deal">מבצע</span>
+        {% endif %}
+        {%  if card_product.tags contains 'recommended' %}
+          <span class="cart-info-new-tag recommended" >מומלץ</span>
+        {% endif %}
+      </div>
+      
   <!-- {% assign vendor_logo = card_product.vendor | append: '_logo'| handle | append: '.png' %} -->
   <div class="card-wrapper product-card-wrapper underline-links-hover">
     <div
