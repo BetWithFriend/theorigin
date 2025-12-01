@@ -135,6 +135,11 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function handleQuickAddToCart(form) {
+
+  analytics.trackClick('Add To Cart', {
+    'Source': 'Catalogue',
+  });
+
   const submitButton = form.querySelector('button[type="submit"]');
   const variantId = form.querySelector('.product-variant-id').value;
   const img = submitButton.querySelector('.add-to-cart-catalog-img');
@@ -161,6 +166,7 @@ function handleQuickAddToCart(form) {
     .then(data => {
       // Successfully added to cart
       originalText = originalText.replace('add-to-cart-catalog.png', 'add-to-cart-catalog-added.png')
+      originalText = originalText.replace('הוספה לסל', 'נוסף לסל')
 
       // Update cart drawer and icon
       updateCartDrawer();

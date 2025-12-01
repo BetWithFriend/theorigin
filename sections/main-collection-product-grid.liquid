@@ -10,7 +10,6 @@
   {{ 'quick-add.css' | asset_url | stylesheet_tag }}
 {%- endunless -%}
 <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
-<script>console.log('boom1')</script>
 {%- if section.settings.quick_add == 'standard' -%}
   
   {% comment %} <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script> {% endcomment %}
@@ -18,7 +17,6 @@
 {%- endif -%}
 
 {%- if section.settings.quick_add == 'bulk' -%}
-  <script>console.log('boom2')</script>
   <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>

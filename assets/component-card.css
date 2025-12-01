@@ -406,6 +406,8 @@
   background-color: transparent;
   gap: 4px;
   cursor: pointer;
+  width: 120px;
+  height: 32px;
 }
 
 @media screen and (max-width: 360px) {
