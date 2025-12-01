@@ -17,7 +17,7 @@
   background: #fff;
   width: 90%;
   max-width: 400px;
-  height: 300px;
+  height: 250px;
   position: relative;
   border-radius: 16px 16px 0 0;
   box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12), 0 -2px 8px rgba(0, 0, 0, 0.08);
@@ -262,6 +262,10 @@
 
   // Check if user has viewed 2 product pages
   function checkProductPageViews() {
+
+    // DISABLE FOR NOW
+    return false;
+
     const path = window.location.pathname;
     const isProductPage = path.startsWith('/products/');
     

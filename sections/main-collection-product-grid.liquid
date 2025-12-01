@@ -268,6 +268,7 @@
                       , skip_styles: skip_card_product_styles
                       , quick_add: section.settings.quick_add
                       , section_id: section.id
+                      , not_catalog: false
                     %}
                     {% comment %} <hr class="card-product-divider"/> {% endcomment %}
                     <div class="main-collection-cart-bottom-wrapper">
@@ -341,47 +342,55 @@
   });
 
   function handleQuickAddToCart(form) {
-  const submitButton = form.querySelector('button[type="submit"]');
-  const variantId = form.querySelector('.product-variant-id').value;
-  
-  // Disable button to prevent double submissions
-  submitButton.disabled = true;
-  const originalText = submitButton.innerHTML;
-  submitButton.innerHTML = 'מוסיף מוצר...';
-  
-  // Use Shopify's Cart API to add item
-  fetch('/cart/add.js', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      id: variantId,
-      quantity: 1
+    const submitButton = form.querySelector('button[type="submit"]');
+    const variantId = form.querySelector('.product-variant-id').value;
+    const img = submitButton.querySelector('.add-to-cart-catalog-img');
+    
+    // Disable button to prevent double submissions
+    submitButton.disabled = true;
+    const originalText = submitButton.innerHTML;
+    const originalSrc = img ? img.src : null;
+    
+    submitButton.innerHTML = 'מוסיף מוצר...';
+    
+    // Use Shopify's Cart API to add item
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: variantId,
+        quantity: 1
+      })
     })
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Successfully added to cart
-    submitButton.innerHTML = '!!!התווסף';
-    
-    // Update cart drawer and icon
-    updateCartDrawer();
-    
-    // Reset button after 2 seconds
-    setTimeout(() => {
+    .then(response => response.json())
+    .then(data => {
+      // Successfully added to cart
+      if (img) {
+        img.src = "{{ 'add-to-cart-catalog-added.png' | asset_url }}";
+      }
+      
+      // Update cart drawer and icon
+      updateCartDrawer();
+      
+      // Re-enable button and keep original text, just change the image
       submitButton.disabled = false;
       submitButton.innerHTML = originalText;
-    }, 2000);
-  })
-  .catch(error => {
-    console.error('Error adding to cart:', error);
-    submitButton.innerHTML = 'Error - Try Again';
-    setTimeout(() => {
+    })
+    .catch(error => {
+      console.error('Error adding to cart:', error);
+      submitButton.innerHTML = 'Error - Try Again';
       submitButton.disabled = false;
-      submitButton.innerHTML = originalText;
-    }, 2000);
-  });
+      
+      // Reset after 2 seconds on error
+      setTimeout(() => {
+        submitButton.innerHTML = originalText;
+        if (img && originalSrc) {
+          img.src = originalSrc;
+        }
+      }, 2000);
+    });
   }
 
   function updateCartDrawer() {

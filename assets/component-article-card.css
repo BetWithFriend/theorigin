@@ -4,6 +4,12 @@
   }
 }
 
+.blog-article-card-information {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  /* padding: 1.3rem 1rem; */
+}
+
 .article {
   display: flex;
   align-items: center;
@@ -17,7 +23,7 @@
   box-sizing: border-box;
 }
 
-.article-card__image-wrapper > a {
+.article-card__image-wrapper>a {
   display: block;
 }
 
@@ -54,6 +60,10 @@
 .blog__posts .article-card .card__information {
   padding-left: 2rem;
   padding-right: 2rem;
+}
+
+.blog-articles .article-card .card__information.blog-article-card-information {
+  padding: 1.3rem 1rem;
 }
 
 .article-card__info {

@@ -37,7 +37,8 @@
   font-weight: 700;
   /* font-size: 48px; */
   line-height: 36px;
-  font-size: 32px;
+  /* font-size: 32px; */
+  font-size: 26px;
   /* line-height: 42px; */
   text-align: right;
   color: #333634;
@@ -66,6 +67,9 @@
     align-items: center;
     flex-direction: row;
     padding-bottom: 0;
+  }
+  .vendors-collection-title-main {
+    font-size: 32px;
   }
 }
 

@@ -40,6 +40,18 @@
       assign ratio = 1
     endif
   -%}
+      {% comment %} <div class="cart-info-title-wrapper">
+        {%  if card_product.tags contains 'new' %}
+          <span class="cart-info-new-tag new-product" >חדש</span>
+        {% endif %}
+        {%  if card_product.tags contains 'deal' %}
+          <span class="cart-info-new-tag deal">מבצע</span>
+        {% endif %}
+        {%  if card_product.tags contains 'recommended' %}
+          <span class="cart-info-new-tag recommended" >מומלץ</span>
+        {% endif %}
+      </div> {% endcomment %}
+      
   <!-- {% assign vendor_logo = card_product.vendor | append: '_logo'| handle | append: '.png' %} -->
   <div class="card-wrapper product-card-wrapper underline-links-hover">
       <div class="cart-info-title-wrapper">
@@ -49,12 +61,16 @@
         {%  if card_product.tags contains 'deal' %}
           <span class="cart-info-new-tag deal" >מבצע</span>
         {% endif %}
-        <div class="full-unstyled-link">{{ card_product.title | escape }}</div>
+        {%  if card_product.tags contains 'recommended' %}
+          <span class="cart-info-new-tag recommended" >מומלץ</span>
+        {% endif %}
+        
       </div>
+      {% comment %} <div class="full-unstyled-link">{{ card_product.title | escape }}</div>
       <div class="cart-info-sub-title-wrapper">בית קלייה: 
         {{ card_product.metafields.vendor_info.coffee_vendor.value.vendor_short_name | upcase }}, 
         {{ card_product.metafields.vendor_info.coffee_vendor.value.vendor_location.value  }}
-        </div>
+        </div> {% endcomment %}
     <div
       class="
         card card--{{ settings.card_style }}
@@ -163,6 +179,13 @@
       <div class="card__content">
         <div class="card__information">
           <div class="card__information-top">
+            <div class="full-unstyled-link">{{ card_product.title | escape }}</div>
+            <div class="cart-info-sub-title-wrapper">בית קלייה: 
+              {{ card_product.metafields.vendor_info.coffee_vendor.value.vendor_short_name | upcase }}
+              {% unless not_catalog %}
+                , {{ card_product.metafields.vendor_info.coffee_vendor.value.vendor_location.value  }}
+              {% endunless %}
+            </div>
             {% comment %} <div class="card__information-vendor-name">{{ card_product.metafields.vendor_info.coffee_vendor.value.vendor_short_name | upcase }}</div> {% endcomment %}
             <h3
             class="card__heading{% if card_product.featured_media or settings.card_style == 'standard' %} h5{% endif %}"
@@ -184,9 +207,9 @@
             </h3>
 
           </div>
-          <div class="product-tastes-list-product-cart">
+            <div class="product-tastes-list-product-cart {% if not_catalog %}three_lines{% endif %}">
             {{ card_product.metafields.custom.short_description }}
-          </div>
+            </div>
           {% comment %} <div class="product-tastes-list-product-cart">
             עיבוד {{ card_product.metafields.custom.coffee_process }}
           </div>

@@ -130,12 +130,12 @@
           {%- if cart != empty -%}
             {%- assign vendors = "" -%}
             {%- assign shipping_price = 0 -%}
-            {% assign canopy_shipping = 35 %}
-            {% assign blooms_shipping = 35 %}
-            {% assign youneedcoffee_shipping = 35 %}
-            {% assign coffeeorg_shipping = 35 %}
-            {% assign coffeeculture_shipping = 35 %}
-            {% assign elijahscoffee_shipping = 35 %}
+            {% assign canopy_shipping = 39 %}
+            {% assign blooms_shipping = 39 %}
+            {% assign youneedcoffee_shipping = 39 %}
+            {% assign coffeeorg_shipping = 39 %}
+            {% assign coffeeculture_shipping = 39 %}
+            {% assign elijahscoffee_shipping = 39 %}
             {% assign event_shipping = 0 %}
             
             {%- comment -%} Free shipping thresholds in cents {%- endcomment -%}
@@ -822,7 +822,7 @@
                         </div> {% endcomment %}
                          {%- if vendor == 'temp_placeholder' -%}
                           <div class="free-shipping-notice">
-                            <span>משלוח ₪35</span>
+                            <span>משלוח ₪39</span>
                               <div>
                               </div>
                           </div>
@@ -844,7 +844,7 @@
                                   {%- assign remaining_for_free = vendor_free_threshold | minus: regular_items_total -%}
                                   <img class="cart-icon-delivery " src="{{  'cart_icon_delivery.png' | asset_url }}" alt="free shipping Icon" />
                                   משלוח
-                                   <span style="font-weight: bold">₪35</span>
+                                   <span style="font-weight: bold">₪39</span>
                                   {% assign formatted_amount = remaining_for_free | money %}
                                   {{ 'sections.cart.free_shipping_text' | t: amount: formatted_amount }}
                                    
