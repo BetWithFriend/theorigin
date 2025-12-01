@@ -42,13 +42,13 @@
   -%}
       {% comment %} <div class="cart-info-title-wrapper">
         {%  if card_product.tags contains 'new' %}
-          <span class="cart-info-new-tag new-product" >חדש</span>
+          <span class="cart-info-new-tag new-product">חדש</span>
         {% endif %}
         {%  if card_product.tags contains 'deal' %}
           <span class="cart-info-new-tag deal">מבצע</span>
         {% endif %}
         {%  if card_product.tags contains 'recommended' %}
-          <span class="cart-info-new-tag recommended" >מומלץ</span>
+          <span class="cart-info-new-tag recommended">מומלץ</span>
         {% endif %}
       </div> {% endcomment %}
       
@@ -56,7 +56,7 @@
   <div class="card-wrapper product-card-wrapper underline-links-hover">
       <div class="cart-info-title-wrapper">
         {%  if card_product.tags contains 'new' %}
-          <span class="cart-info-new-tag" >חדש</span>
+          <span class="cart-info-new-tag new-product" >חדש</span>
         {% endif %}
         {%  if card_product.tags contains 'deal' %}
           <span class="cart-info-new-tag deal" >מבצע</span>
@@ -180,11 +180,11 @@
         <div class="card__information">
           <div class="card__information-top">
             <div class="full-unstyled-link">{{ card_product.title | escape }}</div>
-            <div class="cart-info-sub-title-wrapper">בית קלייה: 
+            <div class="cart-info-sub-title-wrapper">
               {{ card_product.metafields.vendor_info.coffee_vendor.value.vendor_short_name | upcase }}
-              {% unless not_catalog %}
+              {% comment %} {% unless not_catalog %} {% endcomment %}
                 , {{ card_product.metafields.vendor_info.coffee_vendor.value.vendor_location.value  }}
-              {% endunless %}
+              {% comment %} {% endunless %} {% endcomment %}
             </div>
             {% comment %} <div class="card__information-vendor-name">{{ card_product.metafields.vendor_info.coffee_vendor.value.vendor_short_name | upcase }}</div> {% endcomment %}
             <h3

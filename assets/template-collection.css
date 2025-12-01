@@ -111,6 +111,12 @@
     height: 290px;
     padding: 25px 16px 0 16px;
   }
+
+  .product-grid-container .grid__item.grid__item--product {
+    /* width: 320px; */
+    height: 330px;
+    /* padding: 25px 16px 0 16px; */
+  }
 }
 
 @media screen and (min-width: 990px) {

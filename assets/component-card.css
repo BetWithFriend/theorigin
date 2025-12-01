@@ -25,7 +25,7 @@
 @media screen and (min-width: 749px) {
   .card:not(.ratio) {
     height: 220px;
-    padding: 12px;
+    /* padding: 12px; */
   }
 
   .card.article-card {
@@ -379,6 +379,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .main-collection-cart-bottom-wrapper {
@@ -391,7 +392,7 @@
 }
 
 .add-to-cart-catalogue-btn {
-  padding: 6px 5px;
+  padding: 6px 10px;
   border-radius: 60px;
   border: 1px solid #55555580;
   font-family: 'Assistant', sans-serif;
@@ -404,6 +405,14 @@
   justify-content: center;
   background-color: transparent;
   gap: 4px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 360px) {
+  .add-to-cart-catalogue-btn {
+    gap: 0;
+    padding: 6px 7px;
+  }
 }
 
 .add-to-cart-catalog-img {
@@ -850,6 +859,14 @@
 
 .cart-info-new-tag.deal {
   background-color: #FFA15C;
+}
+
+.cart-info-new-tag.new-product {
+  background-color: #F8F2D6;
+}
+
+.cart-info-new-tag.recommended {
+  background-color: #38ead0;
 }
 
 .cart-info-title-wrapper {

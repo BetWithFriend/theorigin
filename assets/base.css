@@ -1067,6 +1067,10 @@ summary::-webkit-details-marker {
   flex-shrink: 0;
 }
 
+.grid__item:last-child {
+  flex-grow: 0;
+}
+
 @media screen and (min-width: 750px) {
   .grid__item {
     width: calc(25% - var(--grid-desktop-horizontal-spacing) * 3 / 4);
@@ -1172,8 +1176,17 @@ summary::-webkit-details-marker {
   }
 
   .grid--4-col-desktop .grid__item {
-    width: calc(50% - var(--grid-desktop-horizontal-spacing) * 3 / 4);
-    max-width: calc(50% - var(--grid-desktop-horizontal-spacing) * 3 / 4);
+    width: calc(50% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
+    max-width: 95%;
+    /* max-width: 50%; */
+    min-width: 25%;
+    margin: 0 auto;
+    background-color: #F5F4F2;
+    border-radius: 8px;
+    padding: 24px 16px 16px 16px;
+    position: relative;
+    /* width: calc(50% - var(--grid-desktop-horizontal-spacing) * 3 / 4);
+    max-width: calc(50% - var(--grid-desktop-horizontal-spacing) * 3 / 4); */
   }
 
   .grid--3-col-desktop .grid__item {

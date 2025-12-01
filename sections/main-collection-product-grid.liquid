@@ -9,13 +9,16 @@
 {%- unless section.settings.quick_add == 'none' -%}
   {{ 'quick-add.css' | asset_url | stylesheet_tag }}
 {%- endunless -%}
-
+<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+<script>console.log('boom1')</script>
 {%- if section.settings.quick_add == 'standard' -%}
-  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  
+  {% comment %} <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script> {% endcomment %}
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {%- if section.settings.quick_add == 'bulk' -%}
+  <script>console.log('boom2')</script>
   <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
@@ -123,12 +126,12 @@
           data-id="{{ section.id }}">
 
           {% comment %} {% render 'facets',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        results: collection,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        enable_filtering: section.settings.enable_filtering,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        enable_sorting: section.settings.enable_sorting,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        filter_type: section.settings.filter_type,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        paginate: paginate
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  %} {% endcomment %}
+            results: collection,
+            enable_filtering: section.settings.enable_filtering,
+            enable_sorting: section.settings.enable_sorting,
+            filter_type: section.settings.filter_type,
+            paginate: paginate
+          %} {% endcomment %}
         </aside>
     {%- endif -%}
 
@@ -331,123 +334,7 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-  // Handle quick add forms on collection page
-  document.addEventListener('submit', function(event) {
-    if (event.target.classList.contains('js-quick-add-form')) {
-      event.preventDefault();
-      handleQuickAddToCart(event.target);
-    }
-  });
-  });
-
-  function handleQuickAddToCart(form) {
-    const submitButton = form.querySelector('button[type="submit"]');
-    const variantId = form.querySelector('.product-variant-id').value;
-    const img = submitButton.querySelector('.add-to-cart-catalog-img');
-    
-    // Disable button to prevent double submissions
-    submitButton.disabled = true;
-    const originalText = submitButton.innerHTML;
-    const originalSrc = img ? img.src : null;
-    
-    submitButton.innerHTML = 'מוסיף מוצר...';
-    
-    // Use Shopify's Cart API to add item
-    fetch('/cart/add.js', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: variantId,
-        quantity: 1
-      })
-    })
-    .then(response => response.json())
-    .then(data => {
-      // Successfully added to cart
-      if (img) {
-        img.src = "{{ 'add-to-cart-catalog-added.png' | asset_url }}";
-      }
-      
-      // Update cart drawer and icon
-      updateCartDrawer();
-      
-      // Re-enable button and keep original text, just change the image
-      submitButton.disabled = false;
-      submitButton.innerHTML = originalText;
-    })
-    .catch(error => {
-      console.error('Error adding to cart:', error);
-      submitButton.innerHTML = 'Error - Try Again';
-      submitButton.disabled = false;
-      
-      // Reset after 2 seconds on error
-      setTimeout(() => {
-        submitButton.innerHTML = originalText;
-        if (img && originalSrc) {
-          img.src = originalSrc;
-        }
-      }, 2000);
-    });
-  }
-
-  function updateCartDrawer() {
-  // Fetch both the cart data and updated sections
-  Promise.all([
-    fetch('/cart.js').then(r => r.json()),
-    fetch(`${window.location.origin}?sections=cart-drawer,cart-icon-bubble`).then(r => r.json())
-  ])
-  .then(([cart, sections]) => {
-    // Update cart drawer content
-    const cartDrawerInner = document.querySelector('#CartDrawer .drawer__inner');
-    if (cartDrawerInner && sections['cart-drawer']) {
-      const parser = new DOMParser();
-      const newContent = parser.parseFromString(sections['cart-drawer'], 'text/html');
-      const newDrawerInner = newContent.querySelector('.drawer__inner');
-      
-      if (newDrawerInner) {
-        cartDrawerInner.innerHTML = newDrawerInner.innerHTML;
-      }
-    }
-    
-    // Remove is-empty class if cart has items
-    if (cart.item_count > 0) {
-      const cartDrawerElement = document.querySelector('cart-drawer');
-      if (cartDrawerElement) {
-        cartDrawerElement.classList.remove('is-empty');
-      }
-      if (cartDrawerInner) {
-        cartDrawerInner.classList.remove('is-empty');
-      }
-    }
-    
-    // Update cart icon bubble
-    const cartIconBubble = document.getElementById('cart-icon-bubble');
-    if (cartIconBubble && sections['cart-icon-bubble']) {
-    const parser = new DOMParser();
-    const newContent = parser.parseFromString(sections['cart-icon-bubble'], 'text/html');
-    
-    // Get the shopify-section wrapper
-    const sectionWrapper = newContent.querySelector('#shopify-section-cart-icon-bubble');
-    if (sectionWrapper) {
-    // The actual cart icon content is the innerHTML of the section
-    cartIconBubble.outerHTML = sectionWrapper.innerHTML;
-    
-    // Re-attach event listeners
-    const cartDrawerElement = document.querySelector('cart-drawer');
-    if (cartDrawerElement) {
-      cartDrawerElement.setHeaderCartIconAccessibility();
-    }
-  }
-  }
-  })
-  .catch(error => {
-    console.error('Error updating cart:', error);
-  });
-  }
-
+ 
 </script>
 
 {% schema %}
