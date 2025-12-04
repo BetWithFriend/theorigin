@@ -120,3 +120,128 @@ if (!customElements.get('quick-add-modal')) {
     }
   );
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Handle quick add forms on collection page
+  if (!window.__quickAddSubmitListenerAdded) {
+    window.__quickAddSubmitListenerAdded = true;
+    document.addEventListener('submit', function (event) {
+      if (event.target.classList && event.target.classList.contains('js-quick-add-form')) {
+        event.preventDefault();
+        handleQuickAddToCart(event.target);
+      }
+    });
+  }
+});
+
+function handleQuickAddToCart(form) {
+
+  analytics.trackClick('Add To Cart', {
+    'Source': 'Catalogue',
+  });
+
+  const submitButton = form.querySelector('button[type="submit"]');
+  const variantId = form.querySelector('.product-variant-id').value;
+  const img = submitButton.querySelector('.add-to-cart-catalog-img');
+
+  // Disable button to prevent double submissions
+  submitButton.disabled = true;
+  let originalText = submitButton.innerHTML;
+  const originalSrc = img ? img.src : null;
+
+  submitButton.innerHTML = 'מוסיף מוצר...';
+
+  // Use Shopify's Cart API to add item
+  fetch('/cart/add.js', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: variantId,
+      quantity: 1
+    })
+  })
+    .then(response => response.json())
+    .then(data => {
+      // Successfully added to cart
+      originalText = originalText.replace('add-to-cart-catalog.png', 'add-to-cart-catalog-added.png')
+      originalText = originalText.replace('הוספה לסל', 'נוסף לסל')
+
+      // Update cart drawer and icon
+      updateCartDrawer();
+
+      // Re-enable button and keep original text, just change the image
+      submitButton.disabled = false;
+      submitButton.innerHTML = originalText;
+    })
+    .catch(error => {
+      console.error('Error adding to cart:', error);
+      submitButton.innerHTML = 'Error - Try Again';
+      submitButton.disabled = false;
+
+      // Reset after 2 seconds on error
+      setTimeout(() => {
+        submitButton.innerHTML = originalText;
+        if (img && originalSrc) {
+          img.src = originalSrc;
+        }
+      }, 2000);
+    });
+}
+
+function updateCartDrawer() {
+  // Fetch both the cart data and updated sections
+  Promise.all([
+    fetch('/cart.js').then(r => r.json()),
+    fetch(`${window.location.origin}?sections=cart-drawer,cart-icon-bubble`).then(r => r.json())
+  ])
+    .then(([cart, sections]) => {
+      // Update cart drawer content
+      const cartDrawerInner = document.querySelector('#CartDrawer .drawer__inner');
+      if (cartDrawerInner && sections['cart-drawer']) {
+        const parser = new DOMParser();
+        const newContent = parser.parseFromString(sections['cart-drawer'], 'text/html');
+        const newDrawerInner = newContent.querySelector('.drawer__inner');
+
+        if (newDrawerInner) {
+          cartDrawerInner.innerHTML = newDrawerInner.innerHTML;
+        }
+      }
+
+      // Remove is-empty class if cart has items
+      if (cart.item_count > 0) {
+        const cartDrawerElement = document.querySelector('cart-drawer');
+        if (cartDrawerElement) {
+          cartDrawerElement.classList.remove('is-empty');
+        }
+        if (cartDrawerInner) {
+          cartDrawerInner.classList.remove('is-empty');
+        }
+      }
+
+      // Update cart icon bubble
+      const cartIconBubble = document.getElementById('cart-icon-bubble');
+      if (cartIconBubble && sections['cart-icon-bubble']) {
+        const parser = new DOMParser();
+        const newContent = parser.parseFromString(sections['cart-icon-bubble'], 'text/html');
+
+        // Get the shopify-section wrapper
+        const sectionWrapper = newContent.querySelector('#shopify-section-cart-icon-bubble');
+        if (sectionWrapper) {
+          // The actual cart icon content is the innerHTML of the section
+          cartIconBubble.outerHTML = sectionWrapper.innerHTML;
+
+          // Re-attach event listeners
+          const cartDrawerElement = document.querySelector('cart-drawer');
+          if (cartDrawerElement) {
+            cartDrawerElement.setHeaderCartIconAccessibility();
+          }
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Error updating cart:', error);
+    });
+}
+

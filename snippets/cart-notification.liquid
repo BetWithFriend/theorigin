@@ -17,66 +17,64 @@
       aria-modal="true"
       aria-label="{{ 'general.cart.item_added' | t }}"
       role="dialog"
-      tabindex="-1"
-    >
+      tabindex="-1">
       <div class="cart-notification__header">
         <h2 class="cart-notification__heading caption-large text-body">
           {% comment %} {{- 'icon-checkmark.svg' | inline_asset_content -}} {% endcomment %}
-          {{ 'general.cart.item_added' | t }}
-        </h2>
-        <button
-          type="button"
-          class="cart-notification__close modal__close-button link link--text focus-inset"
-          aria-label="{{ 'accessibility.close' | t }}"
-        >
-          <span class="svg-wrapper">
-            {{- 'icon-close.svg' | inline_asset_content -}}
-          </span>
-        </button>
-      </div>
-      <hr  class="cart-notification-divider"/>
-      <div id="cart-notification-product" class="cart-notification-product" dir="rtl"></div>
-      <div class="cart-notification__links cart_drawer">
-        <a
-          href="{{ routes.cart_url }}"
-          id="cart-notification-button"
-          class="button button--secondary button--full-width cart-btn-buy"
-        >
-          {{- 'general.cart.view_empty_cart' | t -}}
-        </a>
-        {% comment %} <form action="{{ routes.cart_url }}" method="post" id="cart-notification-form">
-          <button class="button button--primary button--full-width cart-btn-checkout" name="checkout">
-            {{ 'sections.cart.checkout' | t }}
-          </button>
-        </form> {% endcomment %}
-        <button type="button" class="button button--primary button--full-width cart-btn-checkout">{{ 'general.continue_shopping' | t }}</button>
-      </div>
-    </div>
-    <div class="cart-notification-overlay"> </div>
-  </div>
-</cart-notification>
-{% style %}
-  .cart-notification {
-    display: none;
-  }
-{% endstyle %}
-
-<script>
-  // Function to set the header height CSS variable
-  function setHeaderHeight() {
-    const headerWrapper = document.querySelector('.header-wrapper');
-    
-    if (headerWrapper) {
-      const headerHeight = headerWrapper.offsetHeight;
-      document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
-    }
-  }
-
-  // Set initial height when DOM is loaded
-  document.addEventListener('DOMContentLoaded', setHeaderHeight);
-
-  // Update height when window is resized (in case header height changes)
-  window.addEventListener('resize', setHeaderHeight);
-
-  setHeaderHeight();
-</script>
+          {{ 'general.cart.item_ | t }}
+                    </h2>
+                    <button
+                      type="button"
+                      class="cart-notification__close modal__close-button link link--text focus-inset"
+                      aria-label="{{ ' a ccessibility.close' | t }}"
+                    >
+                      <span class="svg-wrapper">
+                        {{- ' i con-close.svg' | inline_asset_content -}}
+                      </span>
+                    </button>
+                  </div>
+                  <hr  class="cart-notification-divider"/>
+                  <div id="cart-notification-product" class="cart-notification-product" dir="rtl"></div>
+                  <div class="cart-notification__links cart_drawer">
+                    <a
+                      id="cart-notification-button"
+                      class="button button--secondary button--full-width cart-btn-buy"
+                    >
+                      {{- ' g eneral.cart.view_empty_cart' | t -}}
+                    </a>
+                    {% comment %} <form action="{{ routes.cart_url }}" method="post" id="cart-notification-form">
+                      <button class="button button--primary button--full-width cart-btn-checkout" name="checkout">
+                        {{ ' s ections.cart.checkout' | t }}
+                      </button>
+                    </form> {% endcomment %}
+                    <button type="button" class="button button--primary button--full-width cart-btn-checkout">{{ ' g eneral.continue_shopping' | t }}</button>
+                  </div>
+                </div>
+                <div class="cart-notification-overlay"> </div>
+              </div>
+            </cart-notification>
+            {% style %}
+              .cart-notification {
+                display: none;
+              }
+            {% endstyle %}
+            
+            <script>
+              // Function to set the header height CSS variable
+              function setHeaderHeight() {
+                const headerWrapper = document.querySelector('.header-wrapper');
+                
+                if (headerWrapper) {
+                  const headerHeight = headerWrapper.offsetHeight;
+                  document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+                }
+              }
+            
+              // Set initial height when DOM is loaded
+              document.addEventListener('DOMContentLoaded', setHeaderHeight);
+            
+              // Update height when window is resized (in case header height changes)
+              window.addEventListener('resize', setHeaderHeight);
+            
+              setHeaderHeight();
+            </scrip t>
