@@ -355,7 +355,7 @@
   font-weight: 400;
   color: #555555;
   text-align: right;
-  margin-bottom: 26px;
+  margin-bottom: 18px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
@@ -408,6 +408,7 @@
   cursor: pointer;
   width: 120px;
   height: 32px;
+  box-sizing: border-box;
 }
 
 @media screen and (max-width: 360px) {

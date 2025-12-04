@@ -156,14 +156,13 @@
     },
     "featured_collection_hp_specials": {
       "type": "featured-collection",
-      "disabled": true,
       "settings": {
-        "title": "כעת במבצע",
+        "title": "מארזי טעימות קפה",
         "heading_size": "h2",
         "description": "",
         "show_description": true,
         "description_style": "body",
-        "collection": "featured-collection-specialty-beans",
+        "collection": "מארזי-קפה",
         "products_to_show": 16,
         "columns_desktop": 4,
         "full_width": true,
