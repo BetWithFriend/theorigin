@@ -177,7 +177,7 @@ function handleQuickAddToCart(form) {
     })
     .catch(error => {
       console.error('Error adding to cart:', error);
-      submitButton.innerHTML = 'Error - Try Again';
+      submitButton.innerHTML = 'שגיאה';
       submitButton.disabled = false;
 
       // Reset after 2 seconds on error
