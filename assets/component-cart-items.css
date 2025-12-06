@@ -89,7 +89,7 @@ cart-items .title-wrapper-with-link {
 
 .cart-item__details>*+* {
   /* margin-top: 0.6rem; */
-  margin-top: 4px;
+  /* margin-top: 4px; */
   display: flex;
 }
 

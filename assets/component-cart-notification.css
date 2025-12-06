@@ -284,6 +284,15 @@
   font-weight: 700;
   color: #1C201D;
   text-align: right;
+  line-height: 24px;
+}
+
+.cart-price-item-option.sale {
+  text-decoration: line-through;
+  font-family: 'Assistant', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: #B3B3B3;
 }
 
 @media screen and (max-width: 370px) {

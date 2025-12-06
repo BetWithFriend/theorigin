@@ -708,11 +708,19 @@
                             {% comment %} <div class="product-option cart-price-item-option" dir="ltr">
                              {{ item.original_price | times: item.quantity | money }}
                             </div> {% endcomment %}
-                          
                               {%- endif -%}
-                                <div class="cart-price-item-option" dir="ltr">
-                                {{ item.original_price | times: item.quantity | money_without_trailing_zeros }}
-                                </div>
+                              <div class="cart-price-item-option" dir="ltr">
+                                {{ item.discounted_price | times: item.quantity | money_without_trailing_zeros }}
+                                {% if item.variant.compare_at_price > 0 %}
+                                  <div class="cart-price-item-option sale" dir="ltr">
+                                    {{ item.variant.compare_at_price | times: item.quantity  | money_without_trailing_zeros}}
+                                  </div>
+                                {% elsif item.discounted_price != item.final_price %}
+                                  <div class="cart-price-item-option sale" dir="ltr">
+                                    {{ item.final_price | times: item.quantity  | money_without_trailing_zeros}}
+                                  </div>
+                                {% endif %}
+                              </div>
                           </div>
                           <div class="cart-item__totals right medium-hide large-up-hide">
                             {%- render 'loading-spinner' -%}
@@ -845,7 +853,7 @@
                                   <img class="cart-icon-delivery " src="{{  'cart_icon_delivery.png' | asset_url }}" alt="free shipping Icon" />
                                   משלוח
                                    <span style="font-weight: bold">₪39</span>
-                                  {% assign formatted_amount = remaining_for_free | money %}
+                                  {% assign formatted_amount = remaining_for_free | money_without_trailing_zeros %}
                                   {{ 'sections.cart.free_shipping_text' | t: amount: formatted_amount }}
                                    
                                   {% comment %} משלוח חינם מעל {{ vendor_free_threshold | money }} {% endcomment %}
@@ -923,14 +931,14 @@
 
               {%- assign adjusted_total = cart.total_price | plus: shipping_price_cents -%}
 
-            <p class="totals__total-value totals-value-secondary"><span>עלות קפה:</span> <span class="totals-value-secondary-value" dir="rtl">{{ cart.total_price | money_with_currency }}</span></p>
+            <p class="totals__total-value totals-value-secondary"><span>עלות קפה:</span> <span class="totals-value-secondary-value" dir="rtl">{{ cart.total_price | money_without_trailing_zeros }}</span></p>
             {%- if shipping_items_paid > 0 %}
-              <p class="totals__total-value totals-value-secondary"><span>סה״כ משלוח ({% if shipping_items_paid == 1 %}מבית קלייה אחד{% else %}מ-{{ shipping_items_paid }} בתי קלייה{% endif %}):</span> <span class="totals-value-secondary-value">{{ shipping_price_cents | money_with_currency }}</span></p>
+              <p class="totals__total-value totals-value-secondary"><span>סה״כ משלוח ({% if shipping_items_paid == 1 %}מבית קלייה אחד{% else %}מ-{{ shipping_items_paid }} בתי קלייה{% endif %}):</span> <span class="totals-value-secondary-value">{{ shipping_price_cents | money_without_trailing_zeros }}</span></p>
             {%- else -%}
               <p class="totals__total-value totals-value-secondary"><span>סה״כ משלוח:</span> <span class="totals-value-secondary-value">0</span></p>
             {%- endif -%}
             <hr class="total-price-divider"/>
-            <p class="totals__total-value totals-value-primary"><span>סה״כ לתשלום</span> <span class="totals-value-secondary-value">{{ adjusted_total | money_with_currency }}</span></p>
+            <p class="totals__total-value totals-value-primary"><span>סה״כ לתשלום</span> <span class="totals-value-secondary-value">{{ adjusted_total | money_without_trailing_zeros }}</span></p>
           </div>
 
           <!-- 

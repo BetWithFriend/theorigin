@@ -171,6 +171,10 @@ function handleQuickAddToCart(form) {
       // Update cart drawer and icon
       updateCartDrawer();
 
+      // Open cart drawer
+      const cartDrawer = document.querySelector('cart-drawer');
+      if (cartDrawer) cartDrawer.open();
+
       // Re-enable button and keep original text, just change the image
       submitButton.disabled = false;
       submitButton.innerHTML = originalText;
