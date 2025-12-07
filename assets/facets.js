@@ -268,13 +268,14 @@ class FacetFiltersForm extends HTMLElement {
   onSubmitHandler(event) {
     event.preventDefault();
     const sortFilterForms = document.querySelectorAll('facet-filters-form form');
-    if (event.srcElement.className == 'mobile-facets__checkbox') {
-      const searchParams = this.createSearchParams(event.target.closest('form'));
+    // Defensive: Only proceed if event and event.target.closest('form') are valid
+    const targetForm = event && event.target && event.target.closest && event.target.closest('form') ? event.target.closest('form') : null;
+    if (event && event.srcElement && event.srcElement.className == 'mobile-facets__checkbox' && targetForm) {
+      const searchParams = this.createSearchParams(targetForm);
       this.onSubmitForm(searchParams, event);
-    } else {
+    } else if (targetForm) {
       const forms = [];
-      const isMobile = event.target.closest('form').id === 'FacetFiltersFormMobile';
-
+      const isMobile = targetForm.id === 'FacetFiltersFormMobile';
       sortFilterForms.forEach((form) => {
         if (!isMobile) {
           if (form.id === 'FacetSortForm' || form.id === 'FacetFiltersForm' || form.id === 'FacetSortDrawerForm') {
@@ -286,6 +287,7 @@ class FacetFiltersForm extends HTMLElement {
       });
       this.onSubmitForm(forms.join('&'), event);
     }
+    // Always update the dropdown button state regardless if form submit is skipped
     this.updateDropdownButtonText('taste');
     this.updateDropdownButtonText('prep');
   }
@@ -349,6 +351,59 @@ FacetFiltersForm.searchParamsInitial = window.location.search.slice(1);
 FacetFiltersForm.searchParamsPrev = window.location.search.slice(1);
 customElements.define('facet-filters-form', FacetFiltersForm);
 FacetFiltersForm.setListeners();
+
+// Helper for instant update from taste/prep checkboxes
+window.handleFacetFilterChange = function (type) {
+  let paramName = '';
+  if (type === 'taste') {
+    paramName = 'filter.p.m.custom.coffee_taste';
+  } else if (type === 'prep') {
+    paramName = 'filter.p.m.custom.coffee_prep_methods';
+  } else {
+    return;
+  }
+  // Only collect checked, visible boxes in relevant dropdown
+  const values = Array.from(
+    document.querySelectorAll('#dropdownMenu-' + type + ' .dropdown-icons-input:checked')
+  ).filter(cb => cb.offsetParent !== null)
+    .map(cb => cb.value);
+  const params = new URLSearchParams(window.location.search);
+  // Remove all existing entries for this facet key, to prevent duplicates
+  while (params.has(paramName)) {
+    params.delete(paramName);
+  }
+  values.forEach(val => params.append(paramName, val));
+  params.delete('page');
+  FacetFiltersForm.renderPage(params.toString());
+}
+
+FacetFiltersForm.reApplyCheckedFilters = function () {
+  const params = new URLSearchParams(window.location.search);
+  // First, uncheck all checkboxes
+  document.querySelectorAll('.dropdown-icons-input').forEach(cb => cb.checked = false);
+  const tasteParams = params.getAll('filter.p.m.custom.coffee_taste');
+  const prepParams = params.getAll('filter.p.m.custom.coffee_prep_methods');
+  if (tasteParams.length) {
+    tasteParams.forEach(function (value) {
+      var checkbox = document.querySelector('#dropdownMenu-taste .dropdown-icons-input[value="' + value + '"]');
+      if (checkbox) checkbox.checked = true;
+    });
+  }
+  if (prepParams.length) {
+    prepParams.forEach(function (value) {
+      var checkbox = document.querySelector('#dropdownMenu-prep .dropdown-icons-input[value="' + value + '"]');
+      if (checkbox) checkbox.checked = true;
+    });
+  }
+};
+// Call after filter render, ideally at end of FacetFiltersForm.renderFilters
+(function (origRenderFilters) {
+  FacetFiltersForm.renderFilters = function (html, event) {
+    origRenderFilters.call(this, html, event);
+    // Always run fix-up after DOM update (defer to end of JS tick)
+    setTimeout(FacetFiltersForm.reApplyCheckedFilters, 0);
+  };
+})(FacetFiltersForm.renderFilters);
 
 class PriceRange extends HTMLElement {
   constructor() {

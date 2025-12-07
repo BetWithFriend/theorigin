@@ -1,19 +1,28 @@
 <div class="dropdown">
-  <button class="dropdown-toggle" type="button" id="variantDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <button
+    class="dropdown-toggle"
+    type="button"
+    id="variantDropdown"
+    data-toggle="dropdown"
+    aria-haspopup="true"
+    aria-expanded="false">
     טחינה
-    <img src="{{ 'dropdown-icon.png' | asset_url }}" alt="Dropdown Icon" class="dropdown-wieght-icon" />
+    <img
+      src="{{ 'dropdown-icon.png' | asset_url }}"
+      alt="Dropdown Icon"
+      class="dropdown-wieght-icon" />
   </button>
 
   <div class="dropdown-menu" aria-labelledby="variantDropdown">
-    {% for size in grind_size  %}       
-    <div class="dropdown-item" onclick="filterByvariant('{{ size }}'); selectGrind('{{ size }}')">
-      <div class="dropdown-icons">
-        <span>{{ size }}</span>
+    {% for size in grind_size %}
+      <div class="dropdown-item" onclick="filterByvariant('{{ size }}'); selectGrind('{{ size }}')">
+        <div class="dropdown-icons">
+          <span>{{ size }}</span>
+        </div>
       </div>
-    </div>
     {% endfor %}
   </div>
-  </div>
+</div>
 
 <style>
   .dropdown {
@@ -21,7 +30,8 @@
     display: inline-block;
   }
   .dropdown-toggle {
-    font-family:  'Noto Sans', sans-serif;
+    font-family: 'Noto Sans'
+    , sans-serif;
     font-size: 16px;
     line-height: 22px;
     font-weight: 700;
@@ -40,15 +50,19 @@
   }
   .dropdown-menu {
     display: none;
-    position: absolute;
+    /* position: absolute; */
     background-color: #E3E0DA;
-    width: 112px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    /* width: 112px; */
+    /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); */
     z-index: 2;
   }
-  /* .dropdown:hover .dropdown-menu {
-    display: block;
-  } */
+
+
+  /*
+   .dropdown:hover .dropdown-menu {
+   display: block;
+   }
+*/
   .dropdown-item {
     padding: 10px;
     cursor: pointer;

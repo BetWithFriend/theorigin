@@ -111,15 +111,15 @@
 .sort-dropdown-menu {
   position: absolute;
   top: 45px;
-  background: #FAFCFE;
+  background: #ffffff;
   border: 1px solid #ddd;
   border-radius: 4px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 4px 0px #00000040;
   z-index: 9999;
-  max-height: 250px;
+  /* max-height: 250px; */
   overflow-y: auto;
   display: none;
-  width: 180px;
+  width: 344px;
   padding: 16px 24px;
   overflow: hidden;
 }
@@ -184,10 +184,11 @@
 .sort-label-mobile {
   display: block;
   cursor: pointer;
-  font-size: 14px;
-  line-height: 25px;
+  font-size: 20px;
+  line-height: 20px;
   /* margin-bottom: 16px; */
   transition: background-color 0.2s ease;
+  font-weight: 700;
   color: #1C201D;
 }
 

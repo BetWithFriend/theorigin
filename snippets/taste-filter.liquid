@@ -1,103 +1,180 @@
 <!-- snippets/filter-dropdown.liquid -->
 
 <div class="dropdown-filters">
-  <button id="dropdown-button-taste" class="dropdown-button" onclick="toggleDropdown('taste')">
-      טעם
-      <div class="selected-icons" id="selected-icons-taste"></div>
-    <img src="{{ 'dropdown-icon.png' | asset_url }}" alt="Dropdown Icon" class="dropdown-icon" />
+  <button
+    id="dropdown-button-taste"
+    class="dropdown-button"
+    onclick="toggleDropdown('taste')">
+      {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
+    <img
+      src="{{ 'dropdown-icon.png' | asset_url }}"
+      alt="Dropdown Icon"
+      class="dropdown-icon" />
+    טעם
   </button>
-  <div class="dropdown-divider"> </div>
-  <button id="dropdown-button-prep" class="dropdown-button" onclick="toggleDropdown('prep')">
-      הכנה
-      <div class="selected-icons" id="selected-icons-prep"></div>
-    <img src="{{ 'dropdown-icon.png' | asset_url }}" alt="Dropdown Icon" class="dropdown-icon" />
-  </button>
-  <div class="dropdown-menu-wrapper">
-    <div class="dropdown-menu" id="dropdownMenu-taste">
+  <div class="dropdown-menu" id="dropdownMenu-taste">
 
-      <div class="dropdown-item">
-        <label class="dropdown-icons">
-          <input class="dropdown-icons-input" type="checkbox" name="Fruity" value="Fruity">
-          <span class="color-circle" style="background-color: #FFDF70;"></span>
-          <span>פירותי</span>
-        </label>
-      </div>
-      <div class="dropdown-item">
-        <label class="dropdown-icons">
-        <input class="dropdown-icons-input"  type="checkbox" name="Fruity-Sweet" value="Fruity-Sweet">
-        <span class="color-circle" style="background-color: #FF974A;"></span>
-        <span>פירותי מתוק</span>
-        </label>
-      </div>
-      <div class="dropdown-item" >
-        <label class="dropdown-icons">
-          <input class="dropdown-icons-input"  type="checkbox" name="Sweet" value="Sweet">
-          <span class="color-circle" style="background-color: #D60540;"></span>
-          <span>מתוק מאוזן</span>
-        </label>
-      </div>
-      <div class="dropdown-item" >
-        <label class="dropdown-icons">
-          <input class="dropdown-icons-input"  type="checkbox" name="Sweet-Chocolate" value="Sweet-Chocolate">
-          <span class="color-circle" style="background-color: #C4823E;"></span>
-          <span>מתוק שוקולדי</span>
-        </label>
-      </div>
-      <div class="dropdown-item" >
-        <label class="dropdown-icons">
-          <input class="dropdown-icons-input"  type="checkbox" name="Chocolate" value="Chocolate">
-          <span class="color-circle" style="background-color: #8B4513;"></span>
-          <span>שוקולדי</span>
-        </label>
-      </div>
-      <div class="dropdown-menu-btn" data-type="taste" onclick="filterByTag('taste')">הצג הכל</div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_taste"
+          value="Fruity"
+          onchange="handleFacetFilterChange('taste')">
+        <span class="color-circle" style="background-color: #FFDF70;"></span>
+        <span class="filter-item-text">פירותי</span>
+      </label>
     </div>
-
-    <div class="dropdown-menu" id="dropdownMenu-prep">
-        <div class="dropdown-item">
-        <label class="dropdown-icons">
-          <input class="dropdown-icons-input"  type="checkbox" name="Filter" value="Filter">
-          <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Filter.png' | asset_url }}" alt="Filter Icon" /> 
-          <span>פילטר</span>
-          </label>
-        </div>
-        <div class="dropdown-item">
-          <label class="dropdown-icons">
-            <input class="dropdown-icons-input"  type="checkbox" name="Black" value="Black">
-            <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Turkish.png' | asset_url }}" alt="Turkish Icon" /> 
-            <span>קפה שחור</span>
-          </label>
-        </div>
-        <div class="dropdown-item">
-          <label class="dropdown-icons">
-            <input class="dropdown-icons-input"  type="checkbox" name="MokaPot" value="MokaPot">
-            <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Moka.png' | asset_url }}" alt="MokaPot Icon" /> 
-            <span>מקינטה</span>
-          </label>
-        </div>
-        <div class="dropdown-item">
-          <label class="dropdown-icons">
-            <input class="dropdown-icons-input"  type="checkbox" name="Espresso" value="Espresso">
-            <img class="dropdown-icon-img" src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}" alt="Espresso Icon" /> 
-            <span>אספרסו</span>
-          </label>
-        </div>
-        <div class="dropdown-item">
-          <label class="dropdown-icons">
-            <input class="dropdown-icons-input"  type="checkbox" name="Aeropress" value="Aeropress">
-            <img class="dropdown-icon-img " src="{{  'dropdown-brew-Chemex.png' | asset_url }}" alt="Aeropress Icon" />
-            <span>חליטה</span>
-          </label>
-        </div>
-        <div class="dropdown-menu-btn" data-type="prep" onclick="filterByTag('prep')">הצג הכל</div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_taste"
+          value="Fruity-Sweet"
+          onchange="handleFacetFilterChange('taste')">
+        <span class="color-circle" style="background-color: #FF974A;"></span>
+        <span class="filter-item-text">פירותי מתוק</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_taste"
+          value="Sweet"
+          onchange="handleFacetFilterChange('taste')">
+        <span class="color-circle" style="background-color: #D60540;"></span>
+        <span class="filter-item-text">מתוק מאוזן</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_taste"
+          value="Sweet-Chocolate"
+          onchange="handleFacetFilterChange('taste')">
+        <span class="color-circle" style="background-color: #C4823E;"></span>
+        <span class="filter-item-text">מתוק שוקולדי</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_taste"
+          value="Chocolate"
+          onchange="handleFacetFilterChange('taste')">
+        <span class="color-circle" style="background-color: #8B4513;"></span>
+        <span class="filter-item-text">שוקולדי</span>
+      </label>
     </div>
   </div>
+  {% comment %} <div class="dropdown-divider"> </div> {% endcomment %}
+  <button
+    id="dropdown-button-prep"
+    class="dropdown-button"
+    onclick="toggleDropdown('prep')">
+    <div class="selected-icons" id="selected-icons-prep"></div>
+    <img
+      src="{{ 'dropdown-icon.png' | asset_url }}"
+      alt="Dropdown Icon"
+      class="dropdown-icon" />
+    הכנה
+  </button>
+  {% comment %} <div class="dropdown-menu-wrapper"> {% endcomment %}
+
+
+  <div class="dropdown-menu" id="dropdownMenu-prep">
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_prep_methods"
+          value="Filter"
+          onchange="handleFacetFilterChange('prep')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'dropdown-brew-Filter.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">פילטר</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_prep_methods"
+          value="Black"
+          onchange="handleFacetFilterChange('prep')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'dropdown-brew-Turkish.png' | asset_url }}"
+          alt="Turkish Icon" />
+        <span class="filter-item-text">קפה שחור</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_prep_methods"
+          value="MokaPot"
+          onchange="handleFacetFilterChange('prep')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'dropdown-brew-Moka.png' | asset_url }}"
+          alt="MokaPot Icon" />
+        <span class="filter-item-text">מקינטה</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_prep_methods"
+          value="Espresso"
+          onchange="handleFacetFilterChange('prep')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}"
+          alt="Espresso Icon" />
+        <span class="filter-item-text">אספרסו</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_prep_methods"
+          value="Aeropress"
+          onchange="handleFacetFilterChange('prep')">
+        <img
+          class="dropdown-icon-img "
+          src="{{  'dropdown-brew-Chemex.png' | asset_url }}"
+          alt="Aeropress Icon" />
+        <span class="filter-item-text">חליטה</span>
+      </label>
+    </div>
+  </div>
+{% comment %} </div> {% endcomment %}
 </div>
 
 
 <style>
   .dropdown-menu-wrapper {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
   }
@@ -107,55 +184,59 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+    flex-direction: column;
   }
   .dropdown-hidden {
     visibility: hidden
   }
 
   .dropdown-button {
-    height: 60px;
-    font-family:  'Assistant', sans-serif;
+    /* height: 60px; */
+    font-family: 'Assistant'
+    , sans-serif;
     width: 100%;
-    color: #767676;
-    background-color: #ffffff;
+    color: #1C201D;
+    background-color: transparent;
     /* border: 1px solid #0000001A; */
     padding: 11px 16px;
     text-align: center;
     font-size: 16px;
     cursor: pointer;
-    font-weight: 400;
+    font-weight: 700;
     /* border-radius: 4px; */
     display: flex;
     align-items: center;
     /* flex-direction: row-reverse; */
-    justify-content: center;
+    justify-content: start;
   }
 
   .dropdown-menu {
-    display: none;
-    position: absolute;
-    border: 1px solid #DEDBD666;
+    /* display: none; */
+    /* position: absolute; */
+    /* border: 1px solid #DEDBD666; */
     border-radius: 4px;
-    width: 47%;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    /* width: 47%; */
+    /* background-color: #fff; */
+    /* border: 1px solid #ddd; */
     z-index: 10;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   }
 
   #dropdownMenu-taste {
-    top: 60px;
-    right: 0;
-    gap: 32px;
-    padding: 16px;
-    width: 200px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px
   }
   #dropdownMenu-prep {
-    top: 60px;
-    left: 0;
-    gap: 32px;
-    padding: 16px;
-    width: 200px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px
   }
 
   .dropdown-item {
@@ -167,9 +248,12 @@
     width: 100%;
   }
 
-  .dropdown-item:hover {
-    background-color: #f4f4f4;
-  }
+
+  /*
+   .dropdown-item:hover {
+   background-color: #f4f4f4;
+   }
+*/
 
   .dropdown-icons {
     display: flex;
@@ -182,195 +266,244 @@
   }
 
   .dropdown-icons-input {
-    width: 22px !important;
-    height: 22px !important;
-    margin-left: 10px;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px !important;
+    height: 24px !important;
+    margin-left: 24px;
+    border: 1px solid #33363466;
+    border-radius: 2px;
+    background-color: transparent;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    cursor: pointer;
+    /* fallback for browsers that still render native boxes */
+    accent-color: #333634;
+  }
+
+  /* Checked state: solid fill + white checkmark */
+  .dropdown-icons-input:checked {
+    background-color: #333634;
+    border-color: #333634;
+  }
+
+  /* Draw the checkmark using ::after */
+  .dropdown-icons-input::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid transparent;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: opacity 0.12s ease;
+    pointer-events: none;
+  }
+
+  .dropdown-icons-input:checked::after {
+    border-color: #fff;
+    opacity: 1;
+  }
+
+  /* Accessibility focus ring */
+  .dropdown-icons-input:focus {
+    outline: 2px solid rgba(51, 54, 52, 0.18);
+    outline-offset: 2px;
   }
 
   .color-circle {
     width: 24px;
     height: 24px;
     border-radius: 30px;
-    margin-left: 8px;
+    margin-left: 4px;
   }
 
   .dropdown-button {
-  /* background: url("{{ 'dropdown-icon.svg' | asset_url }}") no-repeat right center; */
-  /* background-size: 16px;
-  padding-right: 24px;  */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  width: 40%;
-  border: none;
-}
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 16px;
+    /* width: 40%; */
+    border: none;
+    /* flex-direction: column; */
+  }
 
-.dropdown-divider {
-  border: 1px solid #CDCDCD;
+  .dropdown-divider {
+    border: 1px solid #CDCDCD;
     width: 1px;
     display: block;
     height: 45px;
-}
-
-.dropdown-icon-img {
-  height: 24px;
-  width: 24px;
-}
-
-.dropdown-menu-btn {
-  background-color: #1C201D;
-  width: 113px;
-  height: 40px;
-  border-radius: 8px;
-  padding: 16px 10px;
-  font-family:  'Assistant', sans-serif;
-  font-size: 18px;
-  color: #E3E0DA;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 16px 0;
-}
-
-.selected-icons {
-  display: flex;
-  gap: 4px;
-  /* margin-left: 4px; */
-}
-
-#selected-icons-taste .color-circle,
-#selected-icons-prep img {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  margin-left: 0;
-}
-
-@media screen and (min-width: 749px) {
-  #dropdownMenu-taste {
-    right: 17%;
   }
-  #dropdownMenu-prep {
-    left: 17%;
+
+  .dropdown-icon-img {
+    height: 24px;
+    width: 24px;
   }
-}
+
+  .dropdown-menu-btn {
+    background-color: #1C201D;
+    width: 113px;
+    height: 40px;
+    border-radius: 8px;
+    padding: 16px 10px;
+    font-family: 'Assistant'
+    , sans-serif;
+    font-size: 18px;
+    color: #E3E0DA;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px 0;
+  }
+
+  .selected-icons {
+    display: flex;
+    gap: 4px;
+    /* margin-left: 4px; */
+  }
+
+  #selected-icons-taste .color-circle,
+  #selected-icons-prep img {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin-left: 0;
+  }
+
+  .filter-item-text {
+    font-family: 'Assistant'
+    , sans-serif;
+    font-size: 16px;
+    line-height: 25px;
+  }
+
+  @media screen and (min-width: 749px) {
+    #dropdownMenu-taste {
+      right: 17%;
+    }
+    #dropdownMenu-prep {
+      left: 17%;
+    }
+  }
 </style>
 
 <script>
-// Function to update the URL with selected filters
-function updateUrlWithFilters() {
-  const tasteChecked = Array.from(document.querySelectorAll('#dropdownMenu-taste .dropdown-icons-input:checked'))
-    .map(checkbox => checkbox.value);
-  const prepChecked = Array.from(document.querySelectorAll('#dropdownMenu-prep .dropdown-icons-input:checked'))
-    .map(checkbox => checkbox.value);
+  // Function to update the URL with selected filters
+  function updateUrlWithFilters() {
+    debugger;
+    const tasteChecked = Array.from(document.querySelectorAll('#dropdownMenu-taste .dropdown-icons-input:checked'))
+      .map(checkbox => checkbox.value);
+    const prepChecked = Array.from(document.querySelectorAll('#dropdownMenu-prep .dropdown-icons-input:checked'))
+      .map(checkbox => checkbox.value);
 
-  const params = new URLSearchParams(window.location.search);
-  const page = params.get('page') || 1;
+    const params = new URLSearchParams(window.location.search);
+    const page = params.get('page') || 1;
 
-  if (tasteChecked.length > 0) {
-    params.set('taste', tasteChecked.join(','));
+    if (tasteChecked.length > 0) {
+      params.set('taste', tasteChecked.join(','));
+      } else {
+      params.delete('taste');
+    }
+
+    if (prepChecked.length > 0) {
+      params.set('prep', prepChecked.join(','));
     } else {
-    params.delete('taste');
+      params.delete('prep');
+    }
+
+    if (page > 1) {
+      params.set('page', page);
+    } else {
+      params.delete('page');
+    }
+
+    // Update the URL without reloading the page, only changing the history state
+    // window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
+
+    // Instead of replacing state, we will just update the pagination links
+    // The actual URL update will happen when the user clicks a pagination link
+    updatePaginationLinks(params.toString());
   }
 
-  if (prepChecked.length > 0) {
-    params.set('prep', prepChecked.join(','));
-  } else {
-    params.delete('prep');
-  }
-
-  if (page > 1) {
-    params.set('page', page);
-  } else {
-    params.delete('page');
-  }
-
-  // Update the URL without reloading the page, only changing the history state
-  // window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
-
-  // Instead of replacing state, we will just update the pagination links
-  // The actual URL update will happen when the user clicks a pagination link
-  updatePaginationLinks(params.toString());
-}
-
-// Modify filterByTag to call updateUrlWithFilters
+  // Modify filterByTag to call updateUrlWithFilters
   function filterByTag() {
+    debugger;
     // Gather checked checkboxes from both dropdowns
     const tasteChecked = Array.from(document.querySelectorAll('#dropdownMenu-taste .dropdown-icons-input:checked'))
       .map(checkbox => checkbox.value);
     const prepChecked = Array.from(document.querySelectorAll('#dropdownMenu-prep .dropdown-icons-input:checked'))
       .map(checkbox => checkbox.value);
 
-  document.querySelectorAll('.grid__item').forEach(card => {
-    const prepMethods = card.dataset.prepMethods;
+    document.querySelectorAll('.grid__item').forEach(card => {
+      const prepMethods = card.dataset.prepMethods;
 
-    if (!prepMethods) return;
+      if (!prepMethods) return;
 
-    const flavorPart = prepMethods.substring(0, prepMethods.indexOf('[')).trim();
-    const methodsString = prepMethods.substring(prepMethods.indexOf('['));
-    const methodsArray = JSON.parse(methodsString);
+      const flavorPart = prepMethods.substring(0, prepMethods.indexOf('[')).trim();
+      const methodsString = prepMethods.substring(prepMethods.indexOf('['));
+      const methodsArray = JSON.parse(methodsString);
 
-    // OR logic inside each category
-    const tasteMatch = tasteChecked.length === 0 || tasteChecked.includes(flavorPart);
-    const prepMatch = prepChecked.length === 0 || prepChecked.some(tag => methodsArray.includes(tag));
+      // OR logic inside each category
+      const tasteMatch = tasteChecked.length === 0 || tasteChecked.includes(flavorPart);
+      const prepMatch = prepChecked.length === 0 || prepChecked.some(tag => methodsArray.includes(tag));
 
-    // AND logic between taste and prep
-    const show = tasteMatch && prepMatch;
-    card.style.display = show ? 'block' : 'none';
-  });
+      // AND logic between taste and prep
+      const show = tasteMatch && prepMatch;
+      // card.style.display = show ? 'block' : 'none';
+    });
 
     // Close the menu after selecting
-    const menuTaste = document.getElementById('dropdownMenu-taste');
-    const menuPrep = document.getElementById('dropdownMenu-prep');
-    menuPrep.style.display = 'none';
-    menuTaste.style.display = 'none';
+    // const menuTaste = document.getElementById('dropdownMenu-taste');
+    // const menuPrep = document.getElementById('dropdownMenu-prep');
+    // menuPrep.style.display = 'none';
+    // menuTaste.style.display = 'none';
 
-  updateDropdownButtonText('taste');
-  updateDropdownButtonText('prep');
+    updateDropdownButtonText('taste');
+    updateDropdownButtonText('prep');
 
-  // Call the function to update the URL parameters
-  updateUrlWithFilters();
-}
+    // Call the function to update the URL parameters
+    updateUrlWithFilters();
+  }
 
-// Existing functions: toggleDropdown, updateDropdownButtonText, filterByTag, updateUrlWithFilters
-// ... (keep these exactly as in the previous successful response) ...
+  // Function to update pagination links with current filter parameters
+  function updatePaginationLinks(filterParamsString) {
+    // Parse the filterParamsString into a URLSearchParams object for the current active filters
+    const activeFilterParams = new URLSearchParams(filterParamsString);
 
-// Function to update pagination links with current filter parameters
-function updatePaginationLinks(filterParamsString) {
-  // Parse the filterParamsString into a URLSearchParams object for the current active filters
-  const activeFilterParams = new URLSearchParams(filterParamsString);
+    document.querySelectorAll('.pagination__item').forEach(link => {
+      const originalHref = link.getAttribute('href');
+      if (!originalHref) return; // Skip if no href
 
-  document.querySelectorAll('.pagination__item').forEach(link => {
-    const originalHref = link.getAttribute('href');
-    if (!originalHref) return; // Skip if no href
+      const originalUrl = new URL(originalHref, window.location.origin);
+      const linkSpecificParams = new URLSearchParams(originalUrl.search); // Params from this specific pagination link
 
-    const originalUrl = new URL(originalHref, window.location.origin);
-    const linkSpecificParams = new URLSearchParams(originalUrl.search); // Params from this specific pagination link
+      // 1. Get the page number that THIS pagination link is *supposed* to go to.
+      // This is the most crucial part.
+      let targetPage = linkSpecificParams.get('page');
 
-    // 1. Get the page number that THIS pagination link is *supposed* to go to.
-    // This is the most crucial part.
-    let targetPage = linkSpecificParams.get('page');
-
-    // If the original link for page 1 doesn't have a 'page' param, treat it as 1.
-    if (!targetPage && originalUrl.pathname === window.location.pathname) {
-        // This check ensures we're on the same base collection path
-        // and if there's no page param, it's implicitly page 1.
-        targetPage = '1';
-    }
+      // If the original link for page 1 doesn't have a 'page' param, treat it as 1.
+      if (!targetPage && originalUrl.pathname === window.location.pathname) {
+          // This check ensures we're on the same base collection path
+          // and if there's no page param, it's implicitly page 1.
+          targetPage = '1';
+      }
 
 
-    // 2. Clear all existing filter parameters from this link's specific params
-    linkSpecificParams.delete('taste');
-    linkSpecificParams.delete('prep');
-    // Also remove any existing 'page' parameter, we'll re-add it carefully
-    linkSpecificParams.delete('page');
+      // 2. Clear all existing filter parameters from this link's specific params
+      linkSpecificParams.delete('taste');
+      linkSpecificParams.delete('prep');
+      // Also remove any existing 'page' parameter, we'll re-add it carefully
+      linkSpecificParams.delete('page');
 
 
-    // 3. Add the *currently active filters* to this link's specific parameters
-    activeFilterParams.forEach((value, key) => {
-      linkSpecificParams.set(key, value);
-    });
+      // 3. Add the *currently active filters* to this link's specific parameters
+      activeFilterParams.forEach((value, key) => {
+        linkSpecificParams.set(key, value);
+      });
 
 
     // 4. Re-add the *correct page number for THIS link* to its parameters.
@@ -391,88 +524,84 @@ function updatePaginationLinks(filterParamsString) {
     // 5. Construct the final href for this link
     originalUrl.search = linkSpecificParams.toString();
     link.setAttribute('href', originalUrl.pathname + originalUrl.search + (originalUrl.hash || ''));
-  });
-}
-
-// ... (Rest of your script: DOMContentLoaded, toggleDropdown, etc. remain unchanged from previous good version)
-
-// Initialize filters and update pagination links on page load
-document.addEventListener('DOMContentLoaded', () => {
-  // Parse URL parameters on page load to apply filters
-  const params = new URLSearchParams(window.location.search);
-  const tasteParam = params.get('taste');
-  const prepParam = params.get('prep');
-
-  if (tasteParam) {
-    const tasteValues = tasteParam.split(',');
-    tasteValues.forEach(value => {
-      const checkbox = document.querySelector(`#dropdownMenu-taste .dropdown-icons-input[value="${value}"]`);
-      if (checkbox) checkbox.checked = true;
-    });
+   });
   }
 
-  if (prepParam) {
-    const prepValues = prepParam.split(',');
-    prepValues.forEach(value => {
-      const checkbox = document.querySelector(`#dropdownMenu-prep .dropdown-icons-input[value="${value}"]`);
-      if (checkbox) checkbox.checked = true;
-    });
-  }
+  // Initialize filters and update pagination links on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    // Parse URL parameters on page load to apply filters
+    const params = new URLSearchParams(window.location.search);
+    const tasteParam = params.get('taste');
+    const prepParam = params.get('prep');
 
-  // After setting checkboxes, apply the filters and update button text
-  filterByTag(); // This will also call updateUrlWithFilters
-});
-
-// Existing toggleDropdown and updateDropdownButtonText functions remain the same
-function toggleDropdown(menuType) {
-  const menuTaste = document.getElementById('dropdownMenu-taste')
-  const menuPrep = document.getElementById('dropdownMenu-prep')
-  if (menuType === 'taste') {
-    menuPrep.style.display = 'none'
-  } else {
-    menuTaste.style.display = 'none'
-  }
-  const menu = document.getElementById('dropdownMenu-' + menuType);
-  menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-  menu.style.flexDirection = menu.style.display === 'flex' ? 'column' : 'flex';
-  menu.style.alignItems = menu.style.display === 'flex' ? 'center' : 'flex';
-  menu.style.justifyContent = menu.style.display === 'flex' ? 'end' : 'flex';
-  menu.style.gpa = menu.style.display === '8px' ? 'end' : '8px';
-  menu.style.margin = menu.style.display === '0px 10px' ? 'end' : '0px 10px';
-  menu.style.paddingTop = menu.style.display === 'flex' ? '16px' : '0px';
-}
-
-function updateDropdownButtonText(type) {
-  const selectedCheckboxes = document.querySelectorAll(`#dropdownMenu-${type} .dropdown-icons-input:checked`);
-  const button = document.querySelector(`.dropdown-menu-btn[data-type="${type}"]`);
-  if (selectedCheckboxes.length > 0) {
-    button.textContent = 'בחר';
-  } else {
-    button.textContent = `הצג הכל`;
-  }
-
-  const selectedIconsContainer = document.getElementById(`selected-icons-${type}`);
-  selectedIconsContainer.innerHTML = '';
-
-  selectedCheckboxes.forEach((checkbox, index) => {
-    if (index >= 3) return;
-
-    const label = checkbox.closest('label');
-    if (type === 'taste') {
-      const colorCircle = label.querySelector('.color-circle');
-      if (colorCircle) {
-        const clone = colorCircle.cloneNode(true);
-        selectedIconsContainer.appendChild(clone);
-      }
-    } else if (type === 'prep') {
-      const iconImg = label.querySelector('.dropdown-icon-img');
-      if (iconImg) {
-        const clone = iconImg.cloneNode(true);
-        selectedIconsContainer.appendChild(clone);
-      }
+    if (tasteParam) {
+      const tasteValues = tasteParam.split(',');
+      tasteValues.forEach(value => {
+        const checkbox = document.querySelector(`#dropdownMenu-taste .dropdown-icons-input[value="${value}"]`);
+        if (checkbox) checkbox.checked = true;
+      });
     }
-  });
-}
 
-      document.addEventListener('DOMContentLoaded', updateDropdownButtonText)
+    if (prepParam) {
+      const prepValues = prepParam.split(',');
+      prepValues.forEach(value => {
+        const checkbox = document.querySelector(`#dropdownMenu-prep .dropdown-icons-input[value="${value}"]`);
+        if (checkbox) checkbox.checked = true;
+      });
+    }
+
+    // After setting checkboxes, apply the filters and update button text
+    if (tasteParam || prepParam) {
+      filterByTag();
+    } // This will also call updateUrlWithFilters
+  });
+
+  // Existing toggleDropdown and updateDropdownButtonText functions remain the same
+  function toggleDropdown(menuType) {
+    const menuTaste = document.getElementById('dropdownMenu-taste')
+    const menuPrep = document.getElementById('dropdownMenu-prep')
+    // if (menuType === 'taste') {
+    //   menuPrep.style.display = 'none'
+    // } else {
+    //   menuTaste.style.display = 'none'
+    // }
+    const menu = document.getElementById('dropdownMenu-' + menuType);
+    menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+    menu.style.flexDirection = menu.style.display === 'flex' ? 'column' : 'flex';
+    menu.style.alignItems = menu.style.display === 'flex' ? 'center' : 'flex';
+    menu.style.justifyContent = menu.style.display === 'flex' ? 'end' : 'flex';
+    menu.style.gpa = menu.style.display === '8px' ? 'end' : '8px';
+    menu.style.margin = menu.style.display === '0px 10px' ? 'end' : '0px 10px';
+    menu.style.paddingTop = menu.style.display === 'flex' ? '16px' : '0px';
+  }
+
+  function updateDropdownButtonText(type) {
+    const selectedCheckboxes = document.querySelectorAll(`.dropdown-icons-input:checked`);
+    debugger;
+    const button = document.querySelector(`.dropdown-menu-btn[data-type="${type}"]`);
+
+    const selectedIconsContainer = document.getElementById(`selected-icons-${type}`);
+    selectedIconsContainer.innerHTML = '';
+
+    selectedCheckboxes.forEach((checkbox, index) => {
+      if (index >= 3) return;
+
+      const label = checkbox.closest('label');
+      if (type === 'taste') {
+        const colorCircle = label.querySelector('.color-circle');
+        if (colorCircle) {
+          const clone = colorCircle.cloneNode(true);
+          selectedIconsContainer.appendChild(clone);
+        }
+      } else if (type === 'prep') {
+        const iconImg = label.querySelector('.dropdown-icon-img');
+        if (iconImg) {
+          const clone = iconImg.cloneNode(true);
+          selectedIconsContainer.appendChild(clone);
+        }
+      }
+    });
+  }
+
+  // document.addEventListener('DOMContentLoaded', updateDropdownButtonText)
 </script>
