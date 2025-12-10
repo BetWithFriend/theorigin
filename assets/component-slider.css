@@ -260,7 +260,7 @@ slider-component.slider-component-full-width {
     padding-bottom: var(--focus-outline-padding);
     position: relative;
     background-color: #F5F4F2;
-    height: 290px;
+    height: 270px;
   }
 
   .slider.slider--desktop.contains-content-container .slider__slide {
