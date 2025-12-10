@@ -89,8 +89,7 @@
   </button>
   {% comment %} <div class="dropdown-menu-wrapper"> {% endcomment %}
 
-
-  <div class="dropdown-menu" id="dropdownMenu-prep">
+  <div class="dropdown-menu" id="dropdownMenu-roast-level">
     <div class="dropdown-item">
       <label class="dropdown-icons">
         <input
@@ -167,7 +166,187 @@
       </label>
     </div>
   </div>
-{% comment %} </div> {% endcomment %}
+
+  <button
+    id="dropdown-button-roast-level"
+    class="dropdown-button"
+    onclick="toggleDropdown('taste')">
+      {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
+    <img
+      src="{{ 'dropdown-icon.png' | asset_url }}"
+      alt="Dropdown Icon"
+      class="dropdown-icon" />
+    רמת קלייה
+  </button>
+  <div class="dropdown-menu" id="dropdownMenu-roast-level">
+
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_roast_level"
+          value="בהירה"
+          onchange="handleFacetFilterChange('roast-level')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'filter-roast-level-light.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">בהירה</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_roast_level"
+          value="בהירה-בינונית"
+          onchange="handleFacetFilterChange('roast-level')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'filter-roast-level-light-medium.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">בהירה-בינונית</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_roast_level"
+          value="בינונית-כהה"
+          onchange="handleFacetFilterChange('roast-level')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'filter-roast-level-medium-dark.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">בינונית-כהה</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_roast_level"
+          value="כהה"
+          onchange="handleFacetFilterChange('roast-level')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'filter-roast-level-dark.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">כהה</span>
+      </label>
+    </div>
+  </div>
+
+  <button
+    id="dropdown-button-roaster-origin"
+    class="dropdown-button"
+    onclick="toggleDropdown('taste')">
+      {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
+    <img
+      src="{{ 'dropdown-icon.png' | asset_url }}"
+      alt="Dropdown Icon"
+      class="dropdown-icon" />
+    בית קלייה
+  </button>
+  <div class="dropdown-menu" id="dropdownMenu-roast-origin">
+
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.vendor_info.coffee_vendor"
+          value="gid://shopify/Metaobject/80938893369"
+          onchange="handleFacetFilterChange('roast-origin')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'filter-roast-level-light.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">Canopy</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.vendor_info.coffee_vendor"
+          value="gid://shopify/Metaobject/80936304697"
+          onchange="handleFacetFilterChange('roast-origin')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'filter-roast-level-light-medium.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">Blooms</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.vendor_info.coffee_vendor"
+          value="coffee-org"
+          onchange="handleFacetFilterChange('roast-origin')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'filter-roast-level-medium-dark.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">Coffee Org</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.vendor_info.coffee_vendor"
+          value="coffee-culture"
+          onchange="handleFacetFilterChange('roast-origin')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'filter-roast-level-dark.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">Coffee Culture</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.vendor_info.coffee_vendor"
+          value="you-need-coffee"
+          onchange="handleFacetFilterChange('roast-origin')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'filter-roast-level-dark.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">You Need Coffee</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.vendor_info.coffee_vendor"
+          value="elijahs-coffee"
+          onchange="handleFacetFilterChange('roast-origin')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'filter-roast-level-dark.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">Elijahs Coffee</span>
+      </label>
+    </div>
+  </div>
+
 </div>
 
 
@@ -222,15 +401,10 @@
     /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   }
 
-  #dropdownMenu-taste {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 16px
-  }
-  #dropdownMenu-prep {
+  #dropdownMenu-taste,
+  #dropdownMenu-roast-level,
+  #dropdownMenu-prep,
+  #dropdownMenu-roast-origin {
     width: 100%;
     display: flex;
     align-items: center;

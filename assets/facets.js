@@ -359,6 +359,10 @@ window.handleFacetFilterChange = function (type) {
     paramName = 'filter.p.m.custom.coffee_taste';
   } else if (type === 'prep') {
     paramName = 'filter.p.m.custom.coffee_prep_methods';
+  } else if (type === 'roast-level') {
+    paramName = 'filter.p.m.custom.coffee_roast_level';
+  } else if (type === 'roast-origin') {
+    paramName = 'filter.p.m.vendor_info.coffee_vendor';
   } else {
     return;
   }
