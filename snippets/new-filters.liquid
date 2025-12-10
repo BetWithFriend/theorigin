@@ -18,17 +18,17 @@
                 </div>
             </div>-->
 
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Chocolate,Sweet-Chocolate')">
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_roast_level', 'כהה,בינונית-כהה')">
                 <div class="bubble-text">
-                    <div class="bubble-title">שוקולדי ומתוק</div>
-                    <div class="bubble-subtitle">טעמים עמוקים</div>
+                    <div class="bubble-title">קלייה כהה</div>
+                    <div class="bubble-subtitle">טעמים שוקולדיים</div>
                 </div>
             </div>
 
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Sweet')">
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_roast_level', 'בינונית,בינונית-כהה')">
                 <div class="bubble-text">
-                    <div class="bubble-title">מאוזן</div>
-                    <div class="bubble-subtitle">מתוק וקרמלי</div>
+                    <div class="bubble-title">קלייה בינונית</div>
+                    <div class="bubble-subtitle">מתוק ומאוזן</div>
                 </div>
             </div>
 
@@ -39,10 +39,10 @@
                 </div>
             </div> {% endcomment %}
 
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet,Fruity')">
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_roast_level', 'בהירה-בינונית,בהירה')">
                 <div class="bubble-text">
-                    <div class="bubble-title">מתקתק ופירותי</div>
-                    <div class="bubble-subtitle">חמצמץ וקליל</div>
+                    <div class="bubble-title">קלייה בהירה</div>
+                    <div class="bubble-subtitle">פירותי וקליל</div>
                 </div>
             </div>
 
@@ -164,7 +164,7 @@ function removeAllFilters() {
         const allActiveValues = {}; // An object to store active values for all keys
         
         // The filter keys used by your bubbles
-        const filterKeys = ['filter.p.m.custom.coffee_taste', 'filter.p.m.custom.coffee_type']; 
+        const filterKeys = ['filter.p.m.custom.coffee_roast_level', 'filter.p.m.custom.coffee_type']; 
         
         // 2. Get all active values for each filter key
         filterKeys.forEach(filterKey => {

@@ -277,7 +277,7 @@
                         {% render 'price'
                           , product: product
                           , use_variant: true
-                          , render_weight: false %}
+                          , render_weight: true %}
                       </div>
 
 
@@ -309,6 +309,17 @@
                       </div>
                     </div>
                   </li>
+                    {% if forloop.index == 6 %}
+                      {% render 'main-page-black-component' | 
+                        title: 'מצאו את הקפה שלכם',
+                        description: 'ענו על 3 שאלות בלבד ונתאים לכם את הקפה שבטוח תאהבו'
+                        com_image: 'find-your-coffee.png',
+                        btn_text: 'לשאלון הקפה'
+                        btn_url: '/collections/חנות-קפה?from=main-cta',
+                        img_class: 'find-your-coffee-img'
+                        %}
+                    {% endif %}
+
                   {%- assign skip_card_product_styles = true -%}
                 {%- endfor -%}
               {% endif %}
