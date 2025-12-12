@@ -41,7 +41,12 @@
             >
           {%- endif -%}
           <p class="announcement-bar__message h5">
-            <span class="announcement-bar-text" dir="rtl">{{ section.blocks.first.settings.text }}</span>
+            <div class="announcement-bar-scroll-wrapper">
+              <div class="announcement-bar-scroll-content">
+                <span class="announcement-bar-text">{{ section.blocks.first.settings.text }}</span>
+                <span class="announcement-bar-text" aria-hidden="true">{{ section.blocks.first.settings.text }}</span>
+              </div>
+            </div>
             {%- if section.blocks.first.settings.link != blank -%}
               {{- 'icon-arrow.svg' | inline_asset_content -}}
             {%- endif -%}
@@ -166,7 +171,57 @@
 </div>
 <style>
   .announcement-bar-text {
-     font-size: 11px;
+    font-size: 14px;
+  }
+
+  .announcement-bar-scroll-wrapper {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    max-width: 100%;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    flex: 1;
+    min-width: 0;
+    position: relative;
+  }
+
+  .announcement-bar-scroll-content {
+    display: inline-flex;
+    white-space: nowrap;
+    animation: scroll-infinite 30s linear infinite;
+    align-items: center;
+    will-change: transform;
+  }
+
+  .announcement-bar-scroll-content .announcement-bar-text {
+    display: inline-block;
+    padding-right: 50px;
+    white-space: nowrap;
+  }
+
+  @keyframes scroll-infinite {
+    0% {
+      transform: translateX(-90%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  .announcement-bar__message {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  .announcement-bar,
+  .announcement-bar__announcement {
+    overflow-x: hidden;
+    max-width: 100%;
   }
 </style>
 

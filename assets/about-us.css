@@ -27,7 +27,7 @@
     margin-top: 16px
 }
 
-.about-us-image img {
+.about-us-image img, .about-us-image video {
     width: 100%;
     height: auto;
     margin-top: 16px;
@@ -43,11 +43,15 @@
     }
 
     .about-us-image {
-        max-width: 80%;
+        /* max-width: 80%; */
         margin: 0 auto;
     }
 
     .about-us-image img {
         border-radius: 16px;
+    }
+
+    .about-us-image video {
+        width: 450px;
     }
 }

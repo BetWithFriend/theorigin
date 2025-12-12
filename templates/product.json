@@ -132,6 +132,10 @@
         "padding_bottom": 28
       }
     },
+    "main_recommendations": {
+      "type": "main-recommendations",
+      "settings": {}
+    },
     "main_product_footer": {
       "type": "main-product-footer",
       "settings": {}
@@ -142,6 +146,7 @@
     "main",
     "custom_liquid_MyJnRy",
     "related-products",
+    "main_recommendations",
     "main_product_footer"
   ]
 }

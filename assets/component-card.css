@@ -860,6 +860,14 @@
   box-shadow: 0 2px 8px rgba(30, 41, 59, 0.2);
 }
 
+.page-width-product-page .cart-info-new-tag {
+  top: 20px;
+  left: 20px;
+  padding: 4px 12px;
+  width: auto;
+  height: 28px;
+}
+
 .cart-info-new-tag.deal {
   background-color: #FFA15C;
 }
