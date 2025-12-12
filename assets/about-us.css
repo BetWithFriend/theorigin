@@ -2,6 +2,7 @@
     background-color: #E6E3DE;
     padding: 24px;
 }
+
 .about-us-title {
     font-family: 'Assistant', sans-serif;
     font-size: 20px;
@@ -27,7 +28,8 @@
     margin-top: 16px
 }
 
-.about-us-image img, .about-us-image video {
+.about-us-image img,
+.about-us-image video {
     width: 100%;
     height: auto;
     margin-top: 16px;

@@ -1,57 +1,70 @@
 {{ 'new-roasters-slider.css' | asset_url | stylesheet_tag }}
 <div class="new-roasters-slider-wrapper">
-    <div class="new-roasters-slider-title" dir="rtl">הכירו את בתי הקלייה</div>
-    <div class="new-roasters-slider-subtitle">הסיפור מאחורי בתי הקלייה</div>
-    <div class="new-rosters-slider-content-wrapper" dir="rtl">
-     {% for vendor in shop.metaobjects.vendor_definitions.values %}
-        <div class="new-roasters-slider-content-wrapper" dir="rtl">
-            <div class="new-roastes-slider-top">
-                <div class="new-roastes-slider-roaster-logo-wrapper">
-                    <img class="new-roastes-slider-roaster-logo" src="{{ vendor.vendor_logo | img_url: 'small' }}" alt="">
-                </div>
-                <div class="new-roastes-slider-roaster-id">
-                    <div class="new-roastes-slider-roaster-id-content">מיקום: {{vendor.vendor_location}}</div>
-                    <div class="new-roastes-slider-roaster-id-content">הקמה: {{vendor.vendor_year_establishment}}</div>
-                    <div class="new-roastes-slider-roaster-id-content hp-vendor-link" onclick="goToVendorPageHP(&quot;{{ vendor.vendor_name.value }}&quot;)">לבית הקליה</div>
-                </div>
-            </div>
-            <div class="new-roastes-slider-roaster-video-wrapper">
-                  <video controls class="new-roastes-slider-roaster-video" poster="{{ vendor.vendor_video_poster | file_url }}" preload="none">
-                    <source src="{{ vendor.vendor_video | file_url }}" type="video/mp4">
-                  </video>
-                {% comment %} <img class="new-roastes-slider-roaster-video" src="{{ vendor.vendor_video_poster | file_url }}" alt=""> {% endcomment %}
-            </div>
-            <div class="new-roastes-slider-roaster-description">            
-            {%- if vendor.vendor_details != blank -%}
-                <div class="rich-text">
-                  {{ vendor.vendor_short_description.value }}
-                  {% comment %} {%- for block in vendor.vendor_details.value.children -%}
-                    {%- case block.type -%}
-                      {%- when 'paragraph' -%}
-                        <p class="rich-text__paragraph">
-                          {%- for child in block.children -%}
-                            {%- if child.type == 'text' -%}
-                              {{- child.value | newline_to_br -}}
-                            {%- endif -%}
-                          {%- endfor -%}
-                        </p>
-                    {%- endcase -%}
-                  {%- endfor -%} {% endcomment %}
-                </div>
-            {%- endif -%}
-              </div>
+  <div class="new-roasters-slider-title" dir="rtl">הכירו את בתי הקלייה</div>
+  <div class="new-roasters-slider-subtitle">הסיפור מאחורי בתי הקלייה</div>
+  <div class="new-rosters-slider-content-wrapper" dir="rtl">
+    {% for vendor in shop.metaobjects.vendor_definitions.values %}
+      <div class="new-roasters-slider-content-wrapper" dir="rtl">
+        <div class="new-roastes-slider-top">
+          <div class="new-roastes-slider-roaster-logo-wrapper">
+            <img
+              class="new-roastes-slider-roaster-logo"
+              src="{{ vendor.vendor_logo | img_url: 'small' }}"
+              alt="">
+          </div>
+          <div class="new-roastes-slider-roaster-id">
+            <div class="new-roastes-slider-roaster-id-content">מיקום: {{ vendor.vendor_location }}</div>
+            <div class="new-roastes-slider-roaster-id-content">הקמה: {{ vendor.vendor_year_establishment }}</div>
+            <div class="new-roastes-slider-roaster-id-content hp-vendor-link" onclick="goToVendorPageHP(&quot;{{ vendor.vendor_name.value }}&quot;)">לבית הקליה</div>
+          </div>
         </div>
-     {% endfor %} 
-    </div>
-    <div class="new-roasters-slider-action-wrapper">
-      <img onclick="slideVendor('right')" class="new-roasters-slider-arrow" src="{{ 'arrow_vendor_right.png' |  asset_url }}"/>
-        <div class="new-roasters-slider-bullets-wrapper">
-            {% for vendor in shop.metaobjects.vendor_definitions.values %}
-                <div class="new-roasters-slider-bullet"> </div>
-            {% endfor %} 
+        <div class="new-roastes-slider-roaster-video-wrapper">
+          <video
+            controls
+            class="new-roastes-slider-roaster-video"
+            poster="{{ vendor.vendor_video_poster | file_url }}"
+            preload="none">
+            <source src="{{ vendor.vendor_video | file_url }}" type="video/mp4">
+          </video>
+        {% comment %} <img class="new-roastes-slider-roaster-video" src="{{ vendor.vendor_video_poster | file_url }}" alt=""> {% endcomment %}
         </div>
-        <img onclick="slideVendor('left')" class="new-roasters-slider-arrow" src="{{ 'arrow_vendor_left.png' |  asset_url }}"/>
+        <div class="new-roastes-slider-roaster-description">
+          {%- if vendor.vendor_details != blank -%}
+            <div class="rich-text">
+              {{ vendor.vendor_short_description.value }}
+            {% comment %} {%- for block in vendor.vendor_details.value.children -%}
+                                                                                                        {%- case block.type -%}
+                                                                                                          {%- when 'paragraph' -%}
+                                                                                                            <p class="rich-text__paragraph">
+                                                                                                              {%- for child in block.children -%}
+                                                                                                                {%- if child.type == 'text' -%}
+                                                                                                                  {{- child.value | newline_to_br -}}
+                                                                                                                {%- endif -%}
+                                                                                                              {%- endfor -%}
+                                                                                                            </p>
+                                                                                                        {%- endcase -%}
+                                                                                          {%- endfor -%} {% endcomment %}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="new-roasters-slider-action-wrapper">
+    <img
+      onclick="slideVendor('right')"
+      class="new-roasters-slider-arrow"
+      src="{{ 'arrow_vendor_right.png' |  asset_url }}" />
+    <div class="new-roasters-slider-bullets-wrapper">
+      {% for vendor in shop.metaobjects.vendor_definitions.values %}
+        <div class="new-roasters-slider-bullet"></div>
+      {% endfor %}
     </div>
+    <img
+      onclick="slideVendor('left')"
+      class="new-roasters-slider-arrow"
+      src="{{ 'arrow_vendor_left.png' |  asset_url }}" />
+  </div>
 </div>
 
 <script>
@@ -176,6 +189,3 @@
     }
 
 </script>
-
-
-
