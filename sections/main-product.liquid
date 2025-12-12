@@ -143,7 +143,9 @@
   .single-coffee-main-product-vendor {
     font-weight: 400;
     font-size: 16px;
-     font-family: 'Assistant', sans-serif
+     font-family: 'Assistant', sans-serif;
+     display: inline-block;
+     width: 100%;
   }
 
   .why-us-desktop {
@@ -162,6 +164,7 @@
 
   .product-sub-title-pdp {
       margin-top: 16px;
+      flex-direction: column;
     }
 
   @media screen and (min-width: 750px) {
@@ -478,6 +481,17 @@
           {% render 'product-media-gallery', variant_images: variant_images %}
         </div>
       </div> {% endcomment %}
+
+      {%  if product.tags contains 'new' %}
+        <span class="cart-info-new-tag new-product" >חדש</span>
+      {% endif %}
+      {%  if product.tags contains 'deal' %}
+        <span class="cart-info-new-tag deal" >מבצע</span>
+      {% endif %}
+      {%  if product.tags contains 'recommended' %}
+        <span class="cart-info-new-tag recommended" >מומלץ</span>
+      {% endif %}
+
       <div class="product-info-top-wrapper">
         <div class="grid__item product__media-wrapper">
           {% render 'product-media-gallery', variant_images: variant_images %}

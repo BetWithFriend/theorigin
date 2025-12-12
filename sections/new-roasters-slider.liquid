@@ -1,6 +1,6 @@
 {{ 'new-roasters-slider.css' | asset_url | stylesheet_tag }}
 <div class="new-roasters-slider-wrapper">
-    <div class="new-roasters-slider-title" dir="rtl">בתי קלייה חדשים</div>
+    <div class="new-roasters-slider-title" dir="rtl">הכירו את בתי הקלייה</div>
     <div class="new-roasters-slider-subtitle">הסיפור מאחורי בתי הקלייה</div>
     <div class="new-rosters-slider-content-wrapper" dir="rtl">
      {% for vendor in shop.metaobjects.vendor_definitions.values %}
@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="new-roastes-slider-roaster-video-wrapper">
-                  <video controls class="new-roastes-slider-roaster-video" poster="{{ vendor.vendor_video_poster | file_url }}">
+                  <video controls class="new-roastes-slider-roaster-video" poster="{{ vendor.vendor_video_poster | file_url }}" preload="none">
                     <source src="{{ vendor.vendor_video | file_url }}" type="video/mp4">
                   </video>
                 {% comment %} <img class="new-roastes-slider-roaster-video" src="{{ vendor.vendor_video_poster | file_url }}" alt=""> {% endcomment %}

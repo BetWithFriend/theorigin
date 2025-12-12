@@ -16,7 +16,15 @@
               <div class="product-tastes-list product-sub-title-pdp {% if section.settings.product_tastes_center %}center{% endif %}">
                   
               {% comment %} {% for roast_level in product.metafields.custom.custom.coffee_roast_level.value %}       {% endcomment %}
-                <div class="single-coffee-taste-main-product">{{ coffee_tastes | join: " | " }}</div>    
+                <div class="single-coffee-taste-main-product">{{ coffee_tastes | join: " | " }}</div>
+                
+                <div class="product-page-info-bubble-container">
+                  <div class="product-page-info-bubble">קלייה {{ product.metafields.custom.coffee_roast_level.value }}</div>
+                  <div class="product-page-info-bubble add-margin-right">עיבוד {{ product.metafields.custom.coffee_process.value }}</div>
+                </div>
+
+
+
                 {% comment %} &nbsp;|&nbsp;
                 
                   <div class="single-coffee-taste-main-product grey-text">קלייה {{ product.metafields.custom.coffee_roast_level.value }}</div>
