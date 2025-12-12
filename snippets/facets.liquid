@@ -24,7 +24,7 @@
     assign results_url = results.url
   else
     assign terms = results.terms | escape
-    assign results_url = '?q=' | append: terms | append: '&options%5Bprefix%5D=last&sort_by=' | append: sort_by
+    assign results_url = '?q=' | append: terms | append: '&options%5Bprefix%5D=last'
   endif
 -%}
 
@@ -498,10 +498,8 @@
                     </button>
                   </div>
                   <div class="sort-dropdown-menu show" id="sortDropdownMenu">
-                        <span class="sort-label-mobile">פילטרים</span>
-                        <hr class="sort-line-mobile" />
                         {% assign product_taste = collection.products %} 
-                        {% render 'taste-filter', tastes: product_taste %} 
+                        {% render 'taste-filter', tastes: product_taste, results: results %} 
                     {% comment %} {%- for option in results.sort_options -%}
                       {%  unless option.value == 'manual' 
                           or option.value == 'title-ascending' 
@@ -516,7 +514,7 @@
                       {% endunless %}
                     {%- endfor -%} {% endcomment %}
                   </div>
-                  <input type="hidden" name="sort_by" id="SortBy" value="{{ sort_by }}">
+                  {% comment %} <input type="hidden" name="sort_by" id="SortBy" value="{{ sort_by }}"> {% endcomment %}
                 </sort-dropdown>
                   <div class="vertical-line-border">&nbsp;</div>
               </div>

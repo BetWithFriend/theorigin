@@ -258,6 +258,10 @@ class FacetFiltersForm extends HTMLElement {
 
   createSearchParams(form) {
     const formData = new FormData(form);
+    // Remove sort_by if empty
+    if (!formData.get('sort_by')) {
+      formData.delete('sort_by');
+    }
     return new URLSearchParams(formData).toString();
   }
 
@@ -268,7 +272,6 @@ class FacetFiltersForm extends HTMLElement {
   onSubmitHandler(event) {
     event.preventDefault();
     const sortFilterForms = document.querySelectorAll('facet-filters-form form');
-    // Defensive: Only proceed if event and event.target.closest('form') are valid
     const targetForm = event && event.target && event.target.closest && event.target.closest('form') ? event.target.closest('form') : null;
     if (event && event.srcElement && event.srcElement.className == 'mobile-facets__checkbox' && targetForm) {
       const searchParams = this.createSearchParams(targetForm);
@@ -285,11 +288,17 @@ class FacetFiltersForm extends HTMLElement {
           forms.push(this.createSearchParams(form));
         }
       });
-      this.onSubmitForm(forms.join('&'), event);
+      // Remove duplicate keys and empty values
+      const params = new URLSearchParams(forms.join('&'));
+      // Remove empty values
+      for (const [key, value] of params.entries()) {
+        if (value === '') params.delete(key);
+      }
+      this.onSubmitForm(params.toString(), event);
     }
     // Always update the dropdown button state regardless if form submit is skipped
-    this.updateDropdownButtonText('taste');
-    this.updateDropdownButtonText('prep');
+    // this.updateDropdownButtonText('taste');
+    // this.updateDropdownButtonText('prep');
   }
 
   updateDropdownButtonText(type) {
@@ -354,19 +363,18 @@ FacetFiltersForm.setListeners();
 
 // Helper for instant update from taste/prep checkboxes
 window.handleFacetFilterChange = function (type) {
-  let paramName = '';
-  if (type === 'taste') {
-    paramName = 'filter.p.m.custom.coffee_taste';
-  } else if (type === 'prep') {
-    paramName = 'filter.p.m.custom.coffee_prep_methods';
-  } else if (type === 'roast-level') {
-    paramName = 'filter.p.m.custom.coffee_roast_level';
-  } else if (type === 'roast-origin') {
-    paramName = 'filter.p.m.vendor_info.coffee_vendor';
-  } else {
-    return;
-  }
-  // Only collect checked, visible boxes in relevant dropdown
+  // Map type to param name
+  const paramMap = {
+    'taste': 'filter.p.m.custom.coffee_taste',
+    'prep': 'filter.p.m.custom.coffee_prep_methods',
+    'roast-level': 'filter.p.m.custom.coffee_roast_level',
+    'roast-origin': 'filter.p.m.vendor_info.coffee_vendor',
+    'coffee-process': 'filter.p.m.custom.coffee_process'
+  };
+  const paramName = paramMap[type];
+  if (!paramName) return;
+
+  // Collect checked, visible boxes in relevant dropdown
   const values = Array.from(
     document.querySelectorAll('#dropdownMenu-' + type + ' .dropdown-icons-input:checked')
   ).filter(cb => cb.offsetParent !== null)
@@ -378,34 +386,38 @@ window.handleFacetFilterChange = function (type) {
   }
   values.forEach(val => params.append(paramName, val));
   params.delete('page');
-  FacetFiltersForm.renderPage(params.toString());
+
+  // Call renderPage with updated params
+  FacetFiltersForm.renderPage(params.toString(), null, true, params.toString());
 }
 
-FacetFiltersForm.reApplyCheckedFilters = function () {
-  const params = new URLSearchParams(window.location.search);
+FacetFiltersForm.reApplyCheckedFilters = function (paramsString) {
+  const params = new URLSearchParams(paramsString || window.location.search);
   // First, uncheck all checkboxes
   document.querySelectorAll('.dropdown-icons-input').forEach(cb => cb.checked = false);
-  const tasteParams = params.getAll('filter.p.m.custom.coffee_taste');
-  const prepParams = params.getAll('filter.p.m.custom.coffee_prep_methods');
-  if (tasteParams.length) {
-    tasteParams.forEach(function (value) {
-      var checkbox = document.querySelector('#dropdownMenu-taste .dropdown-icons-input[value="' + value + '"]');
-      if (checkbox) checkbox.checked = true;
-    });
-  }
-  if (prepParams.length) {
-    prepParams.forEach(function (value) {
-      var checkbox = document.querySelector('#dropdownMenu-prep .dropdown-icons-input[value="' + value + '"]');
-      if (checkbox) checkbox.checked = true;
-    });
-  }
+  // Map of dropdown types to param names
+  const typeParamMap = {
+    'taste': 'filter.p.m.custom.coffee_taste',
+    'prep': 'filter.p.m.custom.coffee_prep_methods',
+    'roast-level': 'filter.p.m.custom.coffee_roast_level',
+    'roast-origin': 'filter.p.m.vendor_info.coffee_vendor',
+    'coffee-process': 'filter.p.m.custom.coffee_process'
+  };
+  Object.entries(typeParamMap).forEach(([type, paramName]) => {
+    const values = params.getAll(paramName);
+    if (values.length) {
+      values.forEach(function (value) {
+        var checkbox = document.querySelector(`#dropdownMenu-${type} .dropdown-icons-input[value="${value}"]`);
+        if (checkbox) checkbox.checked = true;
+      });
+    }
+  });
 };
 // Call after filter render, ideally at end of FacetFiltersForm.renderFilters
 (function (origRenderFilters) {
-  FacetFiltersForm.renderFilters = function (html, event) {
+  FacetFiltersForm.renderFilters = function (html, event, paramsString) {
     origRenderFilters.call(this, html, event);
-    // Always run fix-up after DOM update (defer to end of JS tick)
-    setTimeout(FacetFiltersForm.reApplyCheckedFilters, 0);
+    setTimeout(() => FacetFiltersForm.reApplyCheckedFilters(paramsString), 0);
   };
 })(FacetFiltersForm.renderFilters);
 

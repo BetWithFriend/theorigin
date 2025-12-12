@@ -1,8 +1,44 @@
 <!-- snippets/filter-dropdown.liquid -->
 
+<span class="sort-label-mobile">פילטרים</span>
+<hr class="sort-line-mobile" />
 <div class="dropdown-filters">
   <button
+    id="dropdown-button-sort-by"
+    type="button"
+    class="dropdown-button"
+    onclick="toggleDropdown('sort-by')">
+      {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
+    <img
+      src="{{ 'dropdown-icon.png' | asset_url }}"
+      alt="Dropdown Icon"
+      class="dropdown-icon" />
+    מיון לפי
+  </button>
+  {%- for option in results.sort_options -%}
+    {% unless option.value == 'manual' or option.value == 'title-ascending' or option.value == 'title-descending' or option.value == 'created-ascending' or option.value == 'created-descending' %}
+      <div class="sort-option-value{% if option.value == sort_by %} selected{% endif %}" data-value="{{ option.value | escape }}">
+        <div class="dropdown-menu" id="dropdownMenu-sort-by">
+          <div class="dropdown-item">
+            <label class="dropdown-icons">
+              <input class="dropdown-icons-input" type="checkbox">
+              <span class="filter-item-text">{{ option.name | escape }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    {% endunless %}
+  {%- endfor -%}
+  {% if sort_by %}
+    <input
+      type="hidden"
+      name="sort_by"
+      id="SortBy"
+      value="{{ sort_by }}">
+  {% endif %}
+  <button
     id="dropdown-button-taste"
+    type="button"
     class="dropdown-button"
     onclick="toggleDropdown('taste')">
       {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
@@ -78,6 +114,7 @@
   {% comment %} <div class="dropdown-divider"> </div> {% endcomment %}
   <button
     id="dropdown-button-prep"
+    type="button"
     class="dropdown-button"
     onclick="toggleDropdown('prep')">
     <div class="selected-icons" id="selected-icons-prep"></div>
@@ -89,7 +126,7 @@
   </button>
   {% comment %} <div class="dropdown-menu-wrapper"> {% endcomment %}
 
-  <div class="dropdown-menu" id="dropdownMenu-roast-level">
+  <div class="dropdown-menu" id="dropdownMenu-prep">
     <div class="dropdown-item">
       <label class="dropdown-icons">
         <input
@@ -169,8 +206,9 @@
 
   <button
     id="dropdown-button-roast-level"
+    type="button"
     class="dropdown-button"
-    onclick="toggleDropdown('taste')">
+    onclick="toggleDropdown('roast-level')">
       {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
     <img
       src="{{ 'dropdown-icon.png' | asset_url }}"
@@ -243,9 +281,131 @@
   </div>
 
   <button
-    id="dropdown-button-roaster-origin"
+    id="dropdown-button-coffee-process"
+    type="button"
     class="dropdown-button"
-    onclick="toggleDropdown('taste')">
+    onclick="toggleDropdown('coffee-process')">
+      {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
+    <img
+      src="{{ 'dropdown-icon.png' | asset_url }}"
+      alt="Dropdown Icon"
+      class="dropdown-icon" />
+    צורת עיבוד
+  </button>
+  <div class="dropdown-menu" id="dropdownMenu-coffee-process">
+
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_process"
+          value="שטוף"
+          onchange="handleFacetFilterChange('coffee-process')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'coffee-process-filter-washed.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">שטוף</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_process"
+          value="אנירובי שטוף"
+          onchange="handleFacetFilterChange('coffee-process')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'coffee-process-filter-anirobi-washed.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">אנירובי שטוף</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_process"
+          value="חצי שטוף"
+          onchange="handleFacetFilterChange('coffee-process')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'coffee-process-filter-half-washed.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">חצי שטוף</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_process"
+          value="טבעי"
+          onchange="handleFacetFilterChange('coffee-process')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'coffee-process-filter-natural.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">טבעי</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_process"
+          value="חצי טבעי"
+          onchange="handleFacetFilterChange('coffee-process')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'coffee-process-filter-half-natural.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">חצי טבעי</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_process"
+          value="אנאירובי טבעי"
+          onchange="handleFacetFilterChange('coffee-process')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'coffee-process-filter-anirobi-natural.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">אנאירובי טבעי</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="filter.p.m.custom.coffee_process"
+          value="דבש"
+          onchange="handleFacetFilterChange('coffee-process')">
+        <img
+          class="dropdown-icon-img"
+          src="{{ 'coffee-process-filter-honey.png' | asset_url }}"
+          alt="Filter Icon" />
+        <span class="filter-item-text">דבש</span>
+      </label>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    id="dropdown-button-roast-origin"
+    class="dropdown-button"
+    onclick="toggleDropdown('roast-origin')">
       {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
     <img
       src="{{ 'dropdown-icon.png' | asset_url }}"
@@ -263,10 +423,6 @@
           name="filter.p.m.vendor_info.coffee_vendor"
           value="gid://shopify/Metaobject/80938893369"
           onchange="handleFacetFilterChange('roast-origin')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'filter-roast-level-light.png' | asset_url }}"
-          alt="Filter Icon" />
         <span class="filter-item-text">Canopy</span>
       </label>
     </div>
@@ -278,10 +434,6 @@
           name="filter.p.m.vendor_info.coffee_vendor"
           value="gid://shopify/Metaobject/80936304697"
           onchange="handleFacetFilterChange('roast-origin')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'filter-roast-level-light-medium.png' | asset_url }}"
-          alt="Filter Icon" />
         <span class="filter-item-text">Blooms</span>
       </label>
     </div>
@@ -291,12 +443,8 @@
           class="dropdown-icons-input"
           type="checkbox"
           name="filter.p.m.vendor_info.coffee_vendor"
-          value="coffee-org"
+          value="gid://shopify/Metaobject/92340289593"
           onchange="handleFacetFilterChange('roast-origin')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'filter-roast-level-medium-dark.png' | asset_url }}"
-          alt="Filter Icon" />
         <span class="filter-item-text">Coffee Org</span>
       </label>
     </div>
@@ -306,12 +454,8 @@
           class="dropdown-icons-input"
           type="checkbox"
           name="filter.p.m.vendor_info.coffee_vendor"
-          value="coffee-culture"
+          value="gid://shopify/Metaobject/107700617273"
           onchange="handleFacetFilterChange('roast-origin')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'filter-roast-level-dark.png' | asset_url }}"
-          alt="Filter Icon" />
         <span class="filter-item-text">Coffee Culture</span>
       </label>
     </div>
@@ -321,12 +465,8 @@
           class="dropdown-icons-input"
           type="checkbox"
           name="filter.p.m.vendor_info.coffee_vendor"
-          value="you-need-coffee"
+          value="gid://shopify/Metaobject/80936370233"
           onchange="handleFacetFilterChange('roast-origin')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'filter-roast-level-dark.png' | asset_url }}"
-          alt="Filter Icon" />
         <span class="filter-item-text">You Need Coffee</span>
       </label>
     </div>
@@ -336,12 +476,8 @@
           class="dropdown-icons-input"
           type="checkbox"
           name="filter.p.m.vendor_info.coffee_vendor"
-          value="elijahs-coffee"
+          value="gid://shopify/Metaobject/129521614905"
           onchange="handleFacetFilterChange('roast-origin')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'filter-roast-level-dark.png' | asset_url }}"
-          alt="Filter Icon" />
         <span class="filter-item-text">Elijahs Coffee</span>
       </label>
     </div>
@@ -402,8 +538,10 @@
   }
 
   #dropdownMenu-taste,
+  #dropdownMenu-sort-option,
   #dropdownMenu-roast-level,
   #dropdownMenu-prep,
+  #dropdownMenu-coffee-process,
   #dropdownMenu-roast-origin {
     width: 100%;
     display: flex;
@@ -701,52 +839,68 @@
    });
   }
 
-  // Initialize filters and update pagination links on page load
-  document.addEventListener('DOMContentLoaded', () => {
-    // Parse URL parameters on page load to apply filters
-    const params = new URLSearchParams(window.location.search);
-    const tasteParam = params.get('taste');
-    const prepParam = params.get('prep');
+  // // Initialize filters and update pagination links on page load
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   // Parse URL parameters on page load to apply filters
+  //   const params = new URLSearchParams(window.location.search);
+  //   const tasteParam = params.get('taste');
+  //   const prepParam = params.get('prep');
 
-    if (tasteParam) {
-      const tasteValues = tasteParam.split(',');
-      tasteValues.forEach(value => {
-        const checkbox = document.querySelector(`#dropdownMenu-taste .dropdown-icons-input[value="${value}"]`);
-        if (checkbox) checkbox.checked = true;
-      });
-    }
+  //   if (tasteParam) {
+  //     const tasteValues = tasteParam.split(',');
+  //     tasteValues.forEach(value => {
+  //       const checkbox = document.querySelector(`#dropdownMenu-taste .dropdown-icons-input[value="${value}"]`);
+  //       if (checkbox) checkbox.checked = true;
+  //     });
+  //   }
 
-    if (prepParam) {
-      const prepValues = prepParam.split(',');
-      prepValues.forEach(value => {
-        const checkbox = document.querySelector(`#dropdownMenu-prep .dropdown-icons-input[value="${value}"]`);
-        if (checkbox) checkbox.checked = true;
-      });
-    }
+  //   if (prepParam) {
+  //     const prepValues = prepParam.split(',');
+  //     prepValues.forEach(value => {
+  //       const checkbox = document.querySelector(`#dropdownMenu-prep .dropdown-icons-input[value="${value}"]`);
+  //       if (checkbox) checkbox.checked = true;
+  //     });
+  //   }
 
-    // After setting checkboxes, apply the filters and update button text
-    if (tasteParam || prepParam) {
-      filterByTag();
-    } // This will also call updateUrlWithFilters
-  });
+  //   // After setting checkboxes, apply the filters and update button text
+  //   if (tasteParam || prepParam) {
+  //     filterByTag();
+  //   } // This will also call updateUrlWithFilters
+  // });
 
   // Existing toggleDropdown and updateDropdownButtonText functions remain the same
   function toggleDropdown(menuType) {
-    const menuTaste = document.getElementById('dropdownMenu-taste')
-    const menuPrep = document.getElementById('dropdownMenu-prep')
+    const menuTaste = document.getElementById(`dropdownMenu-${menuType}`);
+    const menus = document.querySelectorAll('.dropdown-menu');
+    const target = document.getElementById(`dropdownMenu-${menuType}`);
+    const currentDisplay = window.getComputedStyle(target).display;
+
+    // hide all other menus
+    // menus.forEach(m => {
+    //   if (m !== target) m.style.display = 'none';
+    // });
+
+    // toggle target between 'none' and 'block'
+    target.style.display = currentDisplay === 'none' ? 'flex' : 'none';
+    // const menuPrep = document.getElementById('dropdownMenu-prep');
+    // const menuSort = document.getElementById('dropdownMenu-sort-by');
+    // const menuRoastLevel = document.getElementById('dropdownMenu-roast-level');
+    // const menucoffeeProcess = document.getElementById('dropdownMenu-coffee-process');
+    // const menuRoastOrigin = document.getElementById('dropdownMenu-roast-origin');
+
     // if (menuType === 'taste') {
     //   menuPrep.style.display = 'none'
     // } else {
     //   menuTaste.style.display = 'none'
     // }
-    const menu = document.getElementById('dropdownMenu-' + menuType);
-    menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-    menu.style.flexDirection = menu.style.display === 'flex' ? 'column' : 'flex';
-    menu.style.alignItems = menu.style.display === 'flex' ? 'center' : 'flex';
-    menu.style.justifyContent = menu.style.display === 'flex' ? 'end' : 'flex';
-    menu.style.gpa = menu.style.display === '8px' ? 'end' : '8px';
-    menu.style.margin = menu.style.display === '0px 10px' ? 'end' : '0px 10px';
-    menu.style.paddingTop = menu.style.display === 'flex' ? '16px' : '0px';
+    // const menu = document.getElementById('dropdownMenu-' + menuType);
+    // menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+    // menu.style.flexDirection = menu.style.display === 'flex' ? 'column' : 'flex';
+    // menu.style.alignItems = menu.style.display === 'flex' ? 'center' : 'flex';
+    // menu.style.justifyContent = menu.style.display === 'flex' ? 'end' : 'flex';
+    // menu.style.gpa = menu.style.display === '8px' ? 'end' : '8px';
+    // menu.style.margin = menu.style.display === '0px 10px' ? 'end' : '0px 10px';
+    // menu.style.paddingTop = menu.style.display === 'flex' ? '16px' : '0px';
   }
 
   function updateDropdownButtonText(type) {
