@@ -128,7 +128,7 @@
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
-  position: relative;
+  position: absolute;
 }
 
 .sort-option-value {
