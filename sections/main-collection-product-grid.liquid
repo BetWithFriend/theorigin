@@ -173,7 +173,7 @@
               ">
               {% assign skip_card_product_styles = false %}
               {% assign all_products = collection.products %}
-              {% assign max_products = 7 %}
+              {% assign max_products = 3 %}
 
               {%- liquid
                 # theme-check-disable
@@ -238,7 +238,7 @@
                       %}
                         {% comment %} <hr class="card-product-divider"/> {% endcomment %}
                         {% render 'price'
-                          , product: product %}
+                          , product: product, use_variant: true, render_weight: true %}
                       </li>
                       {%- assign skip_card_product_styles = true -%}
                     {% endif %}

@@ -5,6 +5,10 @@
     justify-content: end;
     /* margin-top: 50px; */
     /* background-color: #FBFCFE; */
+
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
 }
 
 .our-vendors-wrapper::after {
@@ -25,7 +29,7 @@
 
 .our-vendors-title {
     margin-top: 56px;
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-size: 20px;
     line-height: 27px;
     font-weight: 600;
@@ -39,8 +43,13 @@
     margin-top: 16px;
     margin-bottom: 16px;
     width: 100%;
-    overflow: hidden;
-    position: relative;
+    /* overflow: hidden;
+    position: relative; */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
 }
 
 .our-vendors-scroll-track {
@@ -66,8 +75,10 @@
 }
 
 .our-vendor-logo {
-    width: 140px;
-    height: 100px;
+    /* width: 140px;
+    height: 100px; */
+    width: auto;
+    height: auto;
     /* background-color: #F5F4F2; */
     /* border-radius: 16px; */
     display: flex;
@@ -112,6 +123,62 @@
     flex-direction: column;
 }
 
+/* Mobile-only: show 3 logos at a time, rotating every 2s (JS-enhanced). */
+.our-vendors-rotator {
+    display: none;
+    width: 100%;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    /* Reserve space so the section never "breathes" during scroll. */
+    min-height: 80px;
+}
+
+.our-vendors-rotator__row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    opacity: 1;
+    transition: opacity 350ms ease;
+    /* Keep fades cheap (composited) and reduce scroll jank on mobile. */
+    will-change: opacity;
+    transform: translateZ(0);
+}
+
+.our-vendors-rotator__row.is-fading {
+    opacity: 0;
+}
+
+/* Make the 3 slots share the row evenly on mobile. */
+.our-vendors-rotator__slot {
+    flex: 1 1 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    /* Lock slot box size so swapping logos can't shift layout while scrolling. */
+    height: 80px;
+    max-width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ensure rotator images scale within fixed slot box on mobile. */
+.our-vendors-rotator__slot .our-vendor-logo-img {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .our-vendors-rotator__row {
+        transition: none;
+    }
+}
+
 .product-description-divider {
     display: flex;
     align-items: center;
@@ -144,7 +211,7 @@
 }
 
 .our-vendors-mantra-text {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Assistant', sans-serif;
     font-size: 20px;
     line-height: 30px;
     font-weight: 400;
@@ -161,7 +228,7 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        width: 140px;
+        width: 100px;
         height: 150px;
     }
 
@@ -171,5 +238,20 @@
 
     .our-vendors-wrapper {
         position: unset;
+    }
+
+    .our-vendors-logo-wrapper {
+        min-width: 750px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    /* Only switch to rotator after JS adds the enhanced class. */
+    .our-vendors-wrapper.our-vendors--enhanced .our-vendors-logo-wrapper {
+        display: none;
+    }
+
+    .our-vendors-wrapper.our-vendors--enhanced .our-vendors-rotator {
+        display: block;
     }
 }
