@@ -20,39 +20,15 @@
 
     function updateCollectionTitle() {
       var titleElem = document.querySelector('.vendors-collection-title-main');
+      var subtitleElem = document.querySelector('.vendors-collection-title-submain');
       var collectionName = '{{ collection.handle | escape }}';
 
       if (titleElem) {
         if (window.location.search.includes('from_quiz=true')) {
           titleElem.textContent = 'מומלץ בשבילך';
+          subtitleElem.textContent = 'התאמנו לכם המלצות לקפה מבתי הקלייה המובילים בישראל. לחצו על שם בית הקלייה כדי לראות המלצות רק ממנו.';
           return;
         }
-
-        {% comment %} switch (collectionName) {
-          case 'חנות-קפה':
-            titleElem.textContent = 'הקפה שלנו';
-            break;
-          case 'קפה-חד-זני':
-            titleElem.textContent = 'קפה חד זני';
-            break;
-          case 'תערובות-קפה':
-            titleElem.textContent = 'תערובות קפה';
-            break;
-          case 'פולי-קפה-מיוחדים':
-            titleElem.textContent = 'קפה מיוחד';
-            break;
-          case 'פולי-קפה-קלייה-בהירה':
-            titleElem.textContent = 'קלייה בהירה';
-            break;
-          case 'פולי-קפה-קלייה-בינונית':
-            titleElem.textContent = 'קלייה בינונית';
-            break;
-          case 'פולי-קפה-קלייה-כהה':
-            titleElem.textContent = 'קלייה כהה';
-            break;
-          default:
-            titleElem.textContent = 'הקפה שלנו';
-        } {% endcomment %}
       }
     }
 
@@ -69,7 +45,7 @@
       <div class="vendors-collection-title-wrapper" dir="rtl">
         <h1 class="vendors-collection-title-main">
           {%- case collection.handle -%}
-            {%- when 'חנות-קפה' -%}המסע לקפה שלכם מתחיל כאן
+            {%- when 'חנות-קפה' -%}פולי הקפה הטעימים ביותר
             {%- when 'קפה-חד-זני' -%}קפה חד זני
             {%- when 'תערובות-קפה' -%}תערובות קפה
             {%- when 'פולי-קפה-מיוחדים' -%}קפה מיוחד
@@ -87,12 +63,13 @@
             {%- when 'קפה-שחור-פולי-קפה' -%}פולים לקפה שחור
             {%- when 'קפה-ברזילאי' -%}קפה ברזילאי
             {%- when 'black-friday-2025-coffee-sale' -%}מבצעי בלאק פריידיי 2025
-            {%- when 'מארזי-קפה' -%}בואו למסע עולמי דרך הקפה
-            {%- else -%}המסע לקפה שלכם מתחיל כאן
+            {%- when 'מארזי-קפה' -%}מארזי טעימות קפה ספשלטי
+            {%- else -%}פולי הקפה הטעימים ביותר
           {%- endcase -%}
         </h1>
         <div class="vendors-collection-title-submain">
-          מפירותי וקליל ועד שוקולדי ועמוק. בואו למצוא את הקפה שירגש אתכם כל בוקר מחדש.          </div>
+          הגיע הזמן לגלות ולהנות מקפה מהקולים הטובים בישראל. הקפה נקלה טרי ונשלח ישירות מבית הקלייה אליכם לבית. מקומי, טרי, טעים. 
+          </div>
     </div> 
       <!-- <h1 class="collection-hero__title">
         <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>

@@ -10,8 +10,8 @@
     <div class="about-us-title">מי אנחנו?</div>
     <div class="about-us-image">
         {% comment %} <img src="https://cdn.shopify.com/s/files/1/0701/9151/3657/files/roman_levin_beans.jpg?v=1747343009" alt="About Us Image" class="about-us-img" > {% endcomment %}
-        <video controls class="about-us-video" poster="">
-            <source src="https://cdn.shopify.com/videos/c/o/v/6746c13ccdf6466f93f5cf88e0cfca4c.mov" type="video/mp4">
+        <video controls class="about-us-video" poster="{{ 'about-video-placeholder.jpg' | file_url }}">
+            <source src="https://cdn.shopify.com/videos/c/o/v/6746c13ccdf6466f93f5cf88e0cfca4c.mov" preload="none" type="video/mp4">
             הדפדפן שלך לא תומך בווידאו.
         </video>
     </div>

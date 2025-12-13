@@ -18,45 +18,45 @@
                 </div>
             </div>-->
 
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_roast_level', 'כהה,בינונית-כהה')">
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.vendor_info.coffee_vendor', 'gid://shopify/Metaobject/80938893369')">
                 <div class="bubble-text">
-                    <div class="bubble-title">קלייה כהה</div>
-                    <div class="bubble-subtitle">אסרפסו ומקינטה</div>
+                    <div class="bubble-title">קנופי</div>
+                    <div class="bubble-subtitle">ירושלים</div>
                 </div>
             </div>
 
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_roast_level', 'בינונית,בינונית-כהה')">
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.vendor_info.coffee_vendor', 'gid://shopify/Metaobject/80936304697')">
                 <div class="bubble-text">
-                    <div class="bubble-title">קלייה בינונית</div>
-                    <div class="bubble-subtitle">מתאים להכל</div>
+                    <div class="bubble-title">בלומס</div>
+                    <div class="bubble-subtitle">פרדס חנה</div>
                 </div>
             </div>
 
-            {% comment %} <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet')">
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.vendor_info.coffee_vendor', 'gid://shopify/Metaobject/92340289593')">
                 <div class="bubble-text">
-                    <div class="bubble-title">פירותי מתוק</div>
-                    <div class="bubble-subtitle">חמיצות קלה</div>
-                </div>
-            </div> {% endcomment %}
-
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_roast_level', 'בהירה-בינונית,בהירה')">
-                <div class="bubble-text">
-                    <div class="bubble-title">קלייה בהירה</div>
-                    <div class="bubble-subtitle">בעיקר לפילטר</div>
+                    <div class="bubble-title">Coffee Org</div>
+                    <div class="bubble-subtitle">תל אביב</div>
                 </div>
             </div>
 
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_type', 'חד זני')">
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.vendor_info.coffee_vendor', 'gid://shopify/Metaobject/107700617273')">
                 <div class="bubble-text">
-                    <div class="bubble-title">חד זני</div>
-                    <div class="bubble-subtitle">מקור יחיד</div>
+                    <div class="bubble-title">קופי קולצ׳ור</div>
+                    <div class="bubble-subtitle">כפר עציון</div>
                 </div>
             </div>
 
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_type', 'בלנד')">
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.vendor_info.coffee_vendor', 'gid://shopify/Metaobject/80936370233')">
                 <div class="bubble-text">
-                    <div class="bubble-title">בלנדים</div>
-                    <div class="bubble-subtitle">תערובות הבית</div>
+                    <div class="bubble-title">You Need Coffee</div>
+                    <div class="bubble-subtitle">ירושלים</div>
+                </div>
+            </div>
+
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.vendor_info.coffee_vendor', 'gid://shopify/Metaobject/129521614905')">
+                <div class="bubble-text">
+                    <div class="bubble-title">Elijah's</div>
+                    <div class="bubble-subtitle">ירושלים</div>
                 </div>
             </div>
         </div>
@@ -109,45 +109,29 @@ function removeAllFilters() {
                 'Filter Name': filterValue
             });
 
-            element.classList.toggle('active'); 
-
-            const params = new URLSearchParams(window.location.search);
-
-            // Handle comma-separated values
-            const valuesToToggle = filterValue.split(',').map(v => v.trim());
-            let currentValues = params.getAll(filterKey);
-            
-            // Check if any of the values are already active
-            const hasAnyActive = valuesToToggle.some(value => currentValues.includes(value));
-            
-            if (hasAnyActive) {
-                // Remove all values that are being toggled
-                valuesToToggle.forEach(value => {
-                    const index = currentValues.indexOf(value);
-                    if (index > -1) {
-                        currentValues.splice(index, 1);
-                    }
-                });
-            } else {
-                // Add all values that are being toggled
-                valuesToToggle.forEach(value => {
-                    if (!currentValues.includes(value)) {
-                        currentValues.push(value);
-                    }
-                });
-            }
-            
-            params.delete(filterKey);
-
-            currentValues.forEach(value => {
-                // This adds the parameter multiple times: ?key=val1&key=val2
-                params.append(filterKey, value); 
+            // Remove 'active' class from all bubble-items for this filterKey
+            document.querySelectorAll(`.bubble-item[onclick*="'${filterKey}'"]`).forEach(bubble => {
+                bubble.classList.remove('active');
             });
+
+            // If this value is already selected, unselect it (remove filter for this key entirely)
+            const params = new URLSearchParams(window.location.search);
+            let currentValues = params.getAll(filterKey);
+
+            // Only operate for a single value at a time
+            if (currentValues.length === 1 && currentValues[0] === filterValue) {
+                params.delete(filterKey);
+                element.classList.remove('active');
+            } else {
+                params.delete(filterKey);
+                params.append(filterKey, filterValue);
+                element.classList.add('active');
+            }
 
             const newQueryString = params.toString();
             FacetFiltersForm.renderPage(newQueryString, null, true);
 
-            // 7. Dispatch the custom event
+            // Dispatch the custom event
             const event = new CustomEvent('collectionPageUpdated');
             window.dispatchEvent(event);
 
