@@ -25,13 +25,3 @@ if (!customElements.get('show-more-button')) {
     }
   );
 }
-
-function toggleSortMenu(button) {
-  const menu = button.closest('.sort-select-wrapper').querySelector('.sort-dropdown-menu');
-  if (menu) {
-    menu.classList.toggle('show');
-    // Optionally update aria-expanded for accessibility
-    const expanded = button.getAttribute('aria-expanded') === 'true';
-    button.setAttribute('aria-expanded', !expanded);
-  }
-}

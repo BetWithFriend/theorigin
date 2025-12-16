@@ -497,9 +497,11 @@
                         </span>
                     </button>
                   </div>
-                  <div class="sort-dropdown-menu" id="sortDropdownMenu">
+                  {% comment %} {% assign product_taste = collection.products %} 
+                  {% render 'taste-filter', tastes: product_taste, results: results %}  {% endcomment %}
+                  {% comment %} <div class="sort-dropdown-menu" id="sortDropdownMenu">
                         {% assign product_taste = collection.products %} 
-                        {% render 'taste-filter', tastes: product_taste, results: results %} 
+                        {% render 'taste-filter', tastes: product_taste, results: results %}  {% endcomment %}
                     {% comment %} {%- for option in results.sort_options -%}
                       {%  unless option.value == 'manual' 
                           or option.value == 'title-ascending' 
@@ -513,7 +515,7 @@
                         </div>
                       {% endunless %}
                     {%- endfor -%} {% endcomment %}
-                  </div>
+                  {% comment %} </div> {% endcomment %}
                   {% comment %} <input type="hidden" name="sort_by" id="SortBy" value="{{ sort_by }}"> {% endcomment %}
                 </sort-dropdown>
                   <div class="vertical-line-border">&nbsp;</div>

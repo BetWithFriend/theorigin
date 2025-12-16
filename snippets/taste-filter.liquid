@@ -1,6 +1,13 @@
 <!-- snippets/filter-dropdown.liquid -->
-
-<span class="sort-label-mobile">פילטרים</span>
+<div class="filter-top-menu-wrapper">
+  <img 
+      src="{{ 'close-filter-icon.png' | asset_url }}" 
+      class="filter-top-menu-close" 
+      onclick="toggleSortMenu(this)"
+  />
+  <span class="sort-label-mobile">פילטרים</span>
+  <div class="filter-top-menu-clear" onclick="cleanFilters()">איפוס</div>
+</div>
 <hr class="sort-line-mobile" />
 <div class="dropdown-filters">
   <button
@@ -8,14 +15,13 @@
     type="button"
     class="dropdown-button"
     onclick="toggleDropdown('sort-by')">
-      {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
     <img
       src="{{ 'dropdown-icon.png' | asset_url }}"
       alt="Dropdown Icon"
       class="dropdown-icon" />
     מיון לפי
   </button>
-  {%- for option in results.sort_options -%}
+  {%- for option in collection.sort_options -%}
     {% unless option.value == 'manual' or option.value == 'title-ascending' or option.value == 'title-descending' or option.value == 'created-ascending' or option.value == 'created-descending' %}
       <div class="sort-option-value{% if option.value == sort_by %} selected{% endif %}" data-value="{{ option.value | escape }}">
         <div class="dropdown-menu" id="dropdownMenu-sort-by">
@@ -743,7 +749,6 @@
 
   // Modify filterByTag to call updateUrlWithFilters
   function filterByTag() {
-    debugger;
     // Gather checked checkboxes from both dropdowns
     const tasteChecked = Array.from(document.querySelectorAll('#dropdownMenu-taste .dropdown-icons-input:checked'))
       .map(checkbox => checkbox.value);
@@ -874,38 +879,20 @@
     const menus = document.querySelectorAll('.dropdown-menu');
     const target = document.getElementById(`dropdownMenu-${menuType}`);
     const currentDisplay = window.getComputedStyle(target).display;
-
-    // hide all other menus
-    // menus.forEach(m => {
-    //   if (m !== target) m.style.display = 'none';
-    // });
-
-    // toggle target between 'none' and 'block'
     target.style.display = currentDisplay === 'none' ? 'flex' : 'none';
-    // const menuPrep = document.getElementById('dropdownMenu-prep');
-    // const menuSort = document.getElementById('dropdownMenu-sort-by');
-    // const menuRoastLevel = document.getElementById('dropdownMenu-roast-level');
-    // const menucoffeeProcess = document.getElementById('dropdownMenu-coffee-process');
-    // const menuRoastOrigin = document.getElementById('dropdownMenu-roast-origin');
+  }
 
-    // if (menuType === 'taste') {
-    //   menuPrep.style.display = 'none'
-    // } else {
-    //   menuTaste.style.display = 'none'
-    // }
-    // const menu = document.getElementById('dropdownMenu-' + menuType);
-    // menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-    // menu.style.flexDirection = menu.style.display === 'flex' ? 'column' : 'flex';
-    // menu.style.alignItems = menu.style.display === 'flex' ? 'center' : 'flex';
-    // menu.style.justifyContent = menu.style.display === 'flex' ? 'end' : 'flex';
-    // menu.style.gpa = menu.style.display === '8px' ? 'end' : '8px';
-    // menu.style.margin = menu.style.display === '0px 10px' ? 'end' : '0px 10px';
-    // menu.style.paddingTop = menu.style.display === 'flex' ? '16px' : '0px';
+  function cleanFilters () {
+    // Uncheck all checkboxes
+    document.querySelectorAll('.dropdown-icons-input').forEach(checkbox => {
+      checkbox.checked = false;
+    });
+
+    FacetFiltersForm.renderPage('', null, true);
   }
 
   function updateDropdownButtonText(type) {
     const selectedCheckboxes = document.querySelectorAll(`.dropdown-icons-input:checked`);
-    debugger;
     const button = document.querySelector(`.dropdown-menu-btn[data-type="${type}"]`);
 
     const selectedIconsContainer = document.getElementById(`selected-icons-${type}`);
@@ -929,6 +916,37 @@
         }
       }
     });
+  }
+
+  // Helper for instant update from taste/prep checkboxes
+  function handleFacetFilterChange  (type) {
+    // Map type to param name
+    const paramMap = {
+      'taste': 'filter.p.m.custom.coffee_taste',
+      'prep': 'filter.p.m.custom.coffee_prep_methods',
+      'roast-level': 'filter.p.m.custom.coffee_roast_level',
+      'roast-origin': 'filter.p.m.vendor_info.coffee_vendor',
+      'coffee-process': 'filter.p.m.custom.coffee_process'
+    };
+    const paramName = paramMap[type];
+    if (!paramName) return;
+
+    // Collect checked, visible boxes in relevant dropdown
+    const values = Array.from(
+      document.querySelectorAll('#dropdownMenu-' + type + ' .dropdown-icons-input:checked')
+    ).filter(cb => cb.offsetParent !== null)
+      .map(cb => cb.value);
+    const params = new URLSearchParams(window.location.search);
+    // Remove all existing entries for this facet key, to prevent duplicates
+    while (params.has(paramName)) {
+      params.delete(paramName);
+    }
+    values.forEach(val => params.append(paramName, val));
+    params.delete('page');
+
+    // Call renderPage with updated params
+    const newQueryString = params.toString();
+    FacetFiltersForm.renderPage(newQueryString, null, true);
   }
 
   // document.addEventListener('DOMContentLoaded', updateDropdownButtonText)

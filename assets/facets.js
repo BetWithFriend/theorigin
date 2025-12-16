@@ -95,6 +95,7 @@ class FacetFiltersForm extends HTMLElement {
   }
 
   static renderProductCount(html) {
+    if (!document.getElementById('ProductCount')) return;
     const count = new DOMParser().parseFromString(html, 'text/html').getElementById('ProductCount').innerHTML;
     const container = document.getElementById('ProductCount');
 
@@ -201,8 +202,9 @@ class FacetFiltersForm extends HTMLElement {
       if (!html.querySelector(selector)) return;
       document.querySelector(selector).innerHTML = html.querySelector(selector).innerHTML;
     });
-
-    document.getElementById('FacetFiltersFormMobile').closest('menu-drawer').bindEvents();
+    if (document.getElementById('FacetFiltersFormMobile')) {
+      document.getElementById('FacetFiltersFormMobile').closest('menu-drawer').bindEvents();
+    }
   }
 
   static renderCounts(source, target) {
@@ -361,65 +363,35 @@ FacetFiltersForm.searchParamsPrev = window.location.search.slice(1);
 customElements.define('facet-filters-form', FacetFiltersForm);
 FacetFiltersForm.setListeners();
 
-// Helper for instant update from taste/prep checkboxes
-window.handleFacetFilterChange = function (type) {
-  // Map type to param name
-  const paramMap = {
-    'taste': 'filter.p.m.custom.coffee_taste',
-    'prep': 'filter.p.m.custom.coffee_prep_methods',
-    'roast-level': 'filter.p.m.custom.coffee_roast_level',
-    'roast-origin': 'filter.p.m.vendor_info.coffee_vendor',
-    'coffee-process': 'filter.p.m.custom.coffee_process'
-  };
-  const paramName = paramMap[type];
-  if (!paramName) return;
-
-  // Collect checked, visible boxes in relevant dropdown
-  const values = Array.from(
-    document.querySelectorAll('#dropdownMenu-' + type + ' .dropdown-icons-input:checked')
-  ).filter(cb => cb.offsetParent !== null)
-    .map(cb => cb.value);
-  const params = new URLSearchParams(window.location.search);
-  // Remove all existing entries for this facet key, to prevent duplicates
-  while (params.has(paramName)) {
-    params.delete(paramName);
-  }
-  values.forEach(val => params.append(paramName, val));
-  params.delete('page');
-
-  // Call renderPage with updated params
-  FacetFiltersForm.renderPage(params.toString(), null, true, params.toString());
-}
-
-FacetFiltersForm.reApplyCheckedFilters = function (paramsString) {
-  const params = new URLSearchParams(paramsString || window.location.search);
-  // First, uncheck all checkboxes
-  document.querySelectorAll('.dropdown-icons-input').forEach(cb => cb.checked = false);
-  // Map of dropdown types to param names
-  const typeParamMap = {
-    'taste': 'filter.p.m.custom.coffee_taste',
-    'prep': 'filter.p.m.custom.coffee_prep_methods',
-    'roast-level': 'filter.p.m.custom.coffee_roast_level',
-    'roast-origin': 'filter.p.m.vendor_info.coffee_vendor',
-    'coffee-process': 'filter.p.m.custom.coffee_process'
-  };
-  Object.entries(typeParamMap).forEach(([type, paramName]) => {
-    const values = params.getAll(paramName);
-    if (values.length) {
-      values.forEach(function (value) {
-        var checkbox = document.querySelector(`#dropdownMenu-${type} .dropdown-icons-input[value="${value}"]`);
-        if (checkbox) checkbox.checked = true;
-      });
-    }
-  });
-};
-// Call after filter render, ideally at end of FacetFiltersForm.renderFilters
-(function (origRenderFilters) {
-  FacetFiltersForm.renderFilters = function (html, event, paramsString) {
-    origRenderFilters.call(this, html, event);
-    setTimeout(() => FacetFiltersForm.reApplyCheckedFilters(paramsString), 0);
-  };
-})(FacetFiltersForm.renderFilters);
+// FacetFiltersForm.reApplyCheckedFilters = function (paramsString) {
+//   const params = new URLSearchParams(paramsString || window.location.search);
+//   // First, uncheck all checkboxes
+//   document.querySelectorAll('.dropdown-icons-input').forEach(cb => cb.checked = false);
+//   // Map of dropdown types to param names
+//   const typeParamMap = {
+//     'taste': 'filter.p.m.custom.coffee_taste',
+//     'prep': 'filter.p.m.custom.coffee_prep_methods',
+//     'roast-level': 'filter.p.m.custom.coffee_roast_level',
+//     'roast-origin': 'filter.p.m.vendor_info.coffee_vendor',
+//     'coffee-process': 'filter.p.m.custom.coffee_process'
+//   };
+//   Object.entries(typeParamMap).forEach(([type, paramName]) => {
+//     const values = params.getAll(paramName);
+//     if (values.length) {
+//       values.forEach(function (value) {
+//         var checkbox = document.querySelector(`#dropdownMenu-${type} .dropdown-icons-input[value="${value}"]`);
+//         if (checkbox) checkbox.checked = true;
+//       });
+//     }
+//   });
+// };
+// // Call after filter render, ideally at end of FacetFiltersForm.renderFilters
+// (function (origRenderFilters) {
+//   FacetFiltersForm.renderFilters = function (html, event, paramsString) {
+//     origRenderFilters.call(this, html, event);
+//     setTimeout(() => FacetFiltersForm.reApplyCheckedFilters(paramsString), 0);
+//   };
+// })(FacetFiltersForm.renderFilters);
 
 class PriceRange extends HTMLElement {
   constructor() {
@@ -501,10 +473,10 @@ class SortDropdown extends HTMLElement {
     if (!button || !menu || !hiddenInput) return;
 
     // Toggle dropdown on button click
-    button.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.toggleDropdown();
-    });
+    // button.addEventListener('click', (e) => {
+    //   e.stopPropagation();
+    //   this.toggleDropdown();
+    // });
 
     // Handle option selection
     options.forEach(option => {
@@ -589,7 +561,7 @@ class SortDropdown extends HTMLElement {
     option.classList.add('selected');
 
     // Close dropdown
-    this.closeDropdown();
+    // this.closeDropdown();
 
     // Trigger form submission to update results
     this.submitForm();

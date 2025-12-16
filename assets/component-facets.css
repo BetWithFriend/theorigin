@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   /* width: 100%; */
-  position: relative;
+  /* position: relative; */
 }
 
 
@@ -171,7 +171,7 @@
     align-items: center;
     justify-content: center;
     /* width: 100%; */
-    position: relative;
+    /* position: relative; */
     /* grid-template-columns: auto minmax(0, max-content);
     column-gap: 2rem; */
   }
