@@ -14,55 +14,47 @@
     {% assign product_taste = collection.products %} 
     {% render 'taste-filter', tastes: product_taste, results: results %} 
   </div>
-  {% comment %} {% render 'facets'
-    , results: collection
-    , enable_filtering: section.settings.enable_filtering
-    , enable_sorting: section.settings.enable_sorting
-    , filter_type: section.settings.filter_type
-    , paginate: paginate
-  %} {% endcomment %}
-  <div class="horizontal-bubbles-wrapper" id="horizontal-bubbles-wrapper">
-    <div class="horizontal-bubbles-container">
-
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.vendor_info.coffee_vendor', `gid://shopify/Metaobject/80938893369`)">
+    <div class="horizontal-bubbles-wrapper" id="horizontal-bubbles-wrapper">
+        <div class="horizontal-bubbles-container">
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_roast_level', 'כהה, בינונית-כהה')">
                 <div class="bubble-text">
-                    <div class="bubble-title">קנופי</div>
-                    <div class="bubble-subtitle">ירושלים</div>
+                    <div class="bubble-title">קלייה כהה</div>
+                    <div class="bubble-subtitle">אספרסו ומקינטה</div>
                 </div>
             </div>
 
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.vendor_info.coffee_vendor', `gid://shopify/Metaobject/80936304697`)">
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_roast_level', 'בינונית,בינונית-כהה')">
                 <div class="bubble-text">
-                    <div class="bubble-title">בלומס</div>
-                    <div class="bubble-subtitle">פרדס חנה</div>
+                    <div class="bubble-title">קלייה בינונית</div>
+                    <div class="bubble-subtitle">מתאים להכל</div>
                 </div>
             </div>
 
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.vendor_info.coffee_vendor', `gid://shopify/Metaobject/92340289593`)">
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_roast_level', 'בהירה-בינונית,בהירה')">
                 <div class="bubble-text">
-                    <div class="bubble-title">Coffee Org</div>
-                    <div class="bubble-subtitle">תל אביב</div>
+                    <div class="bubble-title">קלייה בהירה</div>
+                    <div class="bubble-subtitle">בעיקר לפילטר</div>
                 </div>
             </div>
 
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.vendor_info.coffee_vendor', `gid://shopify/Metaobject/107700617273`)">
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_process', 'שטוף, חצי-שטוף, אנאירובי שטוף')">
                 <div class="bubble-text">
-                    <div class="bubble-title">קופי קולצ׳ור</div>
-                    <div class="bubble-subtitle">כפר עציון</div>
+                    <div class="bubble-title">עיבוד שטוף</div>
+                    <div class="bubble-subtitle">טעם נקי</div>
                 </div>
             </div>
 
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.vendor_info.coffee_vendor', `gid://shopify/Metaobject/80936370233`)">
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_process', 'טבעי, חצי-טבעי, אנאירובי טבעי, דבש')">
                 <div class="bubble-text">
-                    <div class="bubble-title">You Need Coffee</div>
-                    <div class="bubble-subtitle">ירושלים</div>
+                    <div class="bubble-title">עיבוד טבעי</div>
+                    <div class="bubble-subtitle">מתיקות טבעית</div>
                 </div>
             </div>
 
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.vendor_info.coffee_vendor', `gid://shopify/Metaobject/129521614905`)">
+            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_process', 'אנאירובי שטוף, אנאירובי טבעי')">
                 <div class="bubble-text">
-                    <div class="bubble-title">Elijah's</div>
-                    <div class="bubble-subtitle">ירושלים</div>
+                    <div class="bubble-title">עיבוד אנאירובי</div>
+                    <div class="bubble-subtitle">טעם מורכב</div>
                 </div>
             </div>
         </div>
@@ -114,10 +106,12 @@
     function goToFilter(element, filterKey, filterValue) {
         if (window.FacetFiltersForm && typeof FacetFiltersForm.renderPage === 'function') {
 
-            analytics.trackClick('Filter select', {
-                'Source': 'Catalogue',
-                'Filter Name': filterValue
-            });
+            if (typeof analytics !== 'undefined' && analytics && typeof analytics.trackClick === 'function') {
+                analytics.trackClick('Filter select', {
+                    'Source': 'Catalogue',
+                    'Filter Name': filterValue
+                });
+            }
 
             // Remove 'active' class from all bubble-items for this filterKey
             document.querySelectorAll(`.bubble-item[onclick*="'${filterKey}'"]`).forEach(bubble => {
@@ -126,15 +120,31 @@
 
             // If this value is already selected, unselect it (remove filter for this key entirely)
             const params = new URLSearchParams(window.location.search);
-            let currentValues = params.getAll(filterKey);
+            const currentValues = params.getAll(filterKey);
 
-            // Only operate for a single value at a time
-            if (currentValues.length === 1 && currentValues[0] === filterValue) {
+            const desiredValues = String(filterValue)
+                .split(',')
+                .map((v) => v.trim())
+                .filter(Boolean);
+
+            const sameValueSet = (a, b) => {
+                const aSet = new Set(a);
+                const bSet = new Set(b);
+                if (aSet.size !== bSet.size) return false;
+                for (const v of aSet) {
+                    if (!bSet.has(v)) return false;
+                }
+                return true;
+            };
+
+            // Toggle off only if the current values for this key match this bubble exactly.
+            if (desiredValues.length > 0 && sameValueSet(currentValues, desiredValues)) {
                 params.delete(filterKey);
                 element.classList.remove('active');
             } else {
+                // Overwrite this filter key with all desired values (Shopify expects repeated params for multi-select).
                 params.delete(filterKey);
-                params.append(filterKey, filterValue);
+                desiredValues.forEach((v) => params.append(filterKey, v));
                 element.classList.add('active');
             }
 
@@ -174,7 +184,7 @@
         const allActiveValues = {}; // An object to store active values for all keys
         
         // The filter keys used by your bubbles
-        const filterKeys = ['filter.p.m.custom.coffee_roast_level', 'filter.p.m.custom.coffee_type']; 
+        const filterKeys = ['filter.p.m.custom.coffee_roast_level', 'filter.p.m.custom.coffee_process']; 
         
         // 2. Get all active values for each filter key
         filterKeys.forEach(filterKey => {

@@ -8,10 +8,12 @@
           {% assign coffee_type = product.metafields.custom.coffee_type.value %}
           {% assign coffee_blend_ratio = product.metafields.custom.coffee_blend_ratio.value %}
 
-          <div class="product-tastes-list  {% if section.settings.product_tastes_center %}center{% endif %}">
-                <div class="single-coffee-main-product-vendor">בית קלייה: {{ vendor.vendor_name.value }}, {{ vendor.vendor_location.value }}</div>
-          </div>
             <h1 class="product-title">{{ product.title }}</h1>
+
+            {% comment %} <div class="product-tastes-list  {% if section.settings.product_tastes_center %}center{% endif %}">
+              <div class="single-coffee-main-product-vendor">{{ vendor.vendor_name.value }}, {{ vendor.vendor_location.value }}</div>
+            </div> {% endcomment %}
+
             {% unless product.tags contains 'event' %}
               <div class="product-tastes-list product-sub-title-pdp {% if section.settings.product_tastes_center %}center{% endif %}">
                   
@@ -21,6 +23,7 @@
                 <div class="product-page-info-bubble-container">
                   <div class="product-page-info-bubble">קלייה {{ product.metafields.custom.coffee_roast_level.value }}</div>
                   <div class="product-page-info-bubble add-margin-right">עיבוד {{ product.metafields.custom.coffee_process.value }}</div>
+                  <div class="product-page-info-bubble add-margin-right">{{ product.metafields.custom.coffee_type.value }}</div>
                 </div>
 
 
@@ -46,6 +49,14 @@
               {{ product.metafields.custom.short_description }}
             </div>
           </div>
+
+          {% comment %} {% if vendor.vendor_name.value == 'You Need Coffee' %}
+            <div class="product-short-description-wrapper">
+              <div class="product-short-description">
+                <strong>שימו לב</strong> - בבית קלייה זה (You Need Coffee) המשלוח מתבצע עם דואר ישראל. יתכן והחבילה תגיע לסניף הדואר.
+              </div>
+            </div>
+          {% endif %} {% endcomment %}
 
           <div class="product-tastes-list product-page-price-main  {% if section.settings.product_tastes_center %}center{% endif %}">
             {% comment %} <div class="product-roast-level with-weight">250 ג׳</div>   {% endcomment %}

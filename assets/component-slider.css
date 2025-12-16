@@ -487,14 +487,16 @@ slider-component.slider-component-full-width {
 .product-page-info-bubble-container {
   display: flex;
   flex-direction: row;
-  margin-top: 16px;
+  margin-top: 4px;
 }
 
 .product-page-info-bubble-container .product-page-info-bubble {
   display: inline-block;
-  background-color: #f4f4f4;
-  padding: 2px 16px;
+  background-color: #fff;
+  padding: 0px 4px;
   border-radius: 4px;
+  font-size: 14px;
+  border: 1px solid #666;
 }
 
 .add-margin-right {

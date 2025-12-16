@@ -44,45 +44,27 @@
 </style>
 
 <div class="why-us-vertical-wrapper">
-  <div class="why-us-vertical-item">
-    <img
-      class="why-us-vertical-img"
-      src="{{ 'why-us-vertical-roaster-icon.png' | asset_url }}"
-      alt="Roaster"
-      width="22"
-      height="26" />
+  {% comment %} <div class="why-us-vertical-item">
+    <img class="why-us-vertical-img" src="{{ 'why-us-vertical-roaster-icon.png' | asset_url }}" alt="Roaster" width="22" height="26" />  
     <div class="why-us-vertical-text" dir="rtl">
-      בית קלייה מ{{ vendor.vendor_location.value }} &#9679; קלייה בכמויות קטנות
+        בית קלייה מ{{ vendor.vendor_location.value }} &#9679; קלייה בכמויות קטנות
+        </div>
+  </div> {% endcomment %}
+  <div class="why-us-vertical-item">
+    <img class="why-us-vertical-img" src="{{ 'why-us-vertical-glass-icon.png' | asset_url }}" alt="Free Shipping" width="22" height="26" />  
+    {% comment %} <div class="why-us-vertical-text" dir="rtl">משלוח עד הבית ב-39 ש״ח &#9679; חינם בקנייה מעל {{ vendor.min_order_for_free_shipping  }} ₪ בבית קלייה זה</div> {% endcomment %}
+    <div class="why-us-vertical-text" dir="rtl">משלוח חינם בקנייה מעל {{ vendor.min_order_for_free_shipping  }} ₪ בבית קלייה זה</div>
+  </div>
+  <div class="why-us-vertical-item">
+    <img class="why-us-vertical-img" src="{{ 'why-us-vertical-delivery-icon.png' | asset_url }}" alt="Fast Delivery" width="22" height="18" />  
+    <div class="why-us-vertical-text" dir="rtl">
+        משלוח ישירות מבית הקלייה לשמירה על טריות מקסימלית &#9679; מגיע תוך 1-7 ימים
     </div>
   </div>
-  <div class="why-us-vertical-item">
-    <img
-      class="why-us-vertical-img"
-      src="{{ 'why-us-vertical-glass-icon.png' | asset_url }}"
-      alt="Free Shipping"
-      width="22"
-      height="26" />
-    <div class="why-us-vertical-text" dir="rtl">משלוח עד הבית ב-39 ש״ח &#9679; חינם בקנייה מעל {{ vendor.min_order_for_free_shipping }} ₪ בבית קלייה זה</div>
-  </div>
-  <div class="why-us-vertical-item">
-    <img
-      class="why-us-vertical-img"
-      src="{{ 'why-us-vertical-delivery-icon.png' | asset_url }}"
-      alt="Fast Delivery"
-      width="22"
-      height="18" />
-    <div class="why-us-vertical-text" dir="rtl">
-      משלוח ישירות מבית הקלייה לשמירה על טריות מקסימלית &#9679; מגיע תוך 1-7 ימים
-    </div>
-  </div>
-  <div class="why-us-vertical-item">
-    <img
-      class="why-us-vertical-img"
-      src="{{ 'why-us-vertical-whaysapp-icon.png' | asset_url }}"
-      alt="Support Local Business"
-      width="22"
-      height="22" />
+  {% comment %} <div class="why-us-vertical-item">
+    <img class="why-us-vertical-img" src="{{ 'why-us-vertical-whaysapp-icon.png' | asset_url }}" alt="Support Local Business" width="22" height="22" />  
     <div class="why-us-vertical-text" dir="rtl">
       כל רכישה תומכת בבית קלייה מקומי קטן</div>
-  </div>
+  </div> {% endcomment %}
 </div>
+
