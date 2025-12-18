@@ -1,14 +1,15 @@
 <!-- snippets/filter-dropdown.liquid -->
-<div class="filter-top-menu-wrapper">
-  <img 
-      src="{{ 'close-filter-icon.png' | asset_url }}" 
-      class="filter-top-menu-close" 
-      onclick="toggleSortMenu(this)"
-  />
-  <span class="sort-label-mobile">פילטרים</span>
-  <div class="filter-top-menu-clear" onclick="cleanFilters()">איפוס</div>
-</div>
-<hr class="sort-line-mobile" />
+ 
+    <div class="filter-top-menu-wrapper">
+      <img 
+          src="{{ 'close-filter-icon.png' | asset_url }}" 
+          class="filter-top-menu-close" 
+          onclick="toggleSortMenu(this)"
+      />
+      <span class="sort-label-mobile">פילטרים</span>
+      <div class="filter-top-menu-clear" onclick="cleanFilters()">איפוס</div>
+    </div>
+
 <div class="dropdown-filters">
   <button
     id="dropdown-button-sort-by"
@@ -21,27 +22,42 @@
       class="dropdown-icon" />
     מיון לפי
   </button>
-  {%- for option in collection.sort_options -%}
-    {% unless option.value == 'manual' or option.value == 'title-ascending' or option.value == 'title-descending' or option.value == 'created-ascending' or option.value == 'created-descending' %}
-      <div class="sort-option-value{% if option.value == sort_by %} selected{% endif %}" data-value="{{ option.value | escape }}">
-        <div class="dropdown-menu" id="dropdownMenu-sort-by">
-          <div class="dropdown-item">
-            <label class="dropdown-icons">
-              <input class="dropdown-icons-input" type="checkbox">
-              <span class="filter-item-text">{{ option.name | escape }}</span>
-            </label>
-          </div>
-        </div>
-      </div>
-    {% endunless %}
-  {%- endfor -%}
-  {% if sort_by %}
-    <input
-      type="hidden"
-      name="sort_by"
-      id="SortBy"
-      value="{{ sort_by }}">
-  {% endif %}
+  <div class="dropdown-menu" id="dropdownMenu-sort-by">
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="sort_by"
+          value="best-selling"
+          onchange="handleFacetFilterChange('sort-by')">
+        <span class="filter-item-text">הכי נמכר</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="sort_by"
+          value="price-ascending"
+          onchange="handleFacetFilterChange('sort-by')">
+        <span class="filter-item-text">מחיר (נמוך לגבוה)</span>
+      </label>
+    </div>
+    <div class="dropdown-item">
+      <label class="dropdown-icons">
+        <input
+          class="dropdown-icons-input"
+          type="checkbox"
+          name="sort_by"
+          value="price-descending"
+          onchange="handleFacetFilterChange('sort-by')">
+        <span class="filter-item-text">מחיר (גבוה לנמוך)</span>
+      </label>
+    </div>
+    </div>
+  <hr class="sort-line-mobile"/>
   <button
     id="dropdown-button-taste"
     type="button"
@@ -130,7 +146,6 @@
       class="dropdown-icon" />
     הכנה
   </button>
-  {% comment %} <div class="dropdown-menu-wrapper"> {% endcomment %}
 
   <div class="dropdown-menu" id="dropdownMenu-prep">
     <div class="dropdown-item">
@@ -215,7 +230,6 @@
     type="button"
     class="dropdown-button"
     onclick="toggleDropdown('roast-level')">
-      {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
     <img
       src="{{ 'dropdown-icon.png' | asset_url }}"
       alt="Dropdown Icon"
@@ -230,7 +244,7 @@
           class="dropdown-icons-input"
           type="checkbox"
           name="filter.p.m.custom.coffee_roast_level"
-          value="בהירה"
+          value="בהירה,בהירה-בינונית"
           onchange="handleFacetFilterChange('roast-level')">
         <img
           class="dropdown-icon-img"
@@ -245,13 +259,13 @@
           class="dropdown-icons-input"
           type="checkbox"
           name="filter.p.m.custom.coffee_roast_level"
-          value="בהירה-בינונית"
+          value="בינונית"
           onchange="handleFacetFilterChange('roast-level')">
         <img
           class="dropdown-icon-img"
           src="{{ 'filter-roast-level-light-medium.png' | asset_url }}"
           alt="Filter Icon" />
-        <span class="filter-item-text">בהירה-בינונית</span>
+        <span class="filter-item-text">בינונית</span>
       </label>
     </div>
     <div class="dropdown-item">
@@ -260,22 +274,7 @@
           class="dropdown-icons-input"
           type="checkbox"
           name="filter.p.m.custom.coffee_roast_level"
-          value="בינונית-כהה"
-          onchange="handleFacetFilterChange('roast-level')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'filter-roast-level-medium-dark.png' | asset_url }}"
-          alt="Filter Icon" />
-        <span class="filter-item-text">בינונית-כהה</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_roast_level"
-          value="כהה"
+          value="כהה, בינונית-כהה"
           onchange="handleFacetFilterChange('roast-level')">
         <img
           class="dropdown-icon-img"
@@ -306,13 +305,13 @@
           class="dropdown-icons-input"
           type="checkbox"
           name="filter.p.m.custom.coffee_process"
-          value="שטוף"
+          value="שטוף,חצי-שטוף"
           onchange="handleFacetFilterChange('coffee-process')">
         <img
           class="dropdown-icon-img"
           src="{{ 'coffee-process-filter-washed.png' | asset_url }}"
           alt="Filter Icon" />
-        <span class="filter-item-text">שטוף</span>
+        <span class="filter-item-text">שטוף/חצי שטוף</span>
       </label>
     </div>
     <div class="dropdown-item">
@@ -321,43 +320,13 @@
           class="dropdown-icons-input"
           type="checkbox"
           name="filter.p.m.custom.coffee_process"
-          value="אנירובי שטוף"
-          onchange="handleFacetFilterChange('coffee-process')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'coffee-process-filter-anirobi-washed.png' | asset_url }}"
-          alt="Filter Icon" />
-        <span class="filter-item-text">אנירובי שטוף</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_process"
-          value="חצי שטוף"
-          onchange="handleFacetFilterChange('coffee-process')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'coffee-process-filter-half-washed.png' | asset_url }}"
-          alt="Filter Icon" />
-        <span class="filter-item-text">חצי שטוף</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_process"
-          value="טבעי"
+          value="טבעי, חצי-טבעי,דבש"
           onchange="handleFacetFilterChange('coffee-process')">
         <img
           class="dropdown-icon-img"
           src="{{ 'coffee-process-filter-natural.png' | asset_url }}"
           alt="Filter Icon" />
-        <span class="filter-item-text">טבעי</span>
+        <span class="filter-item-text">טבעי/חצי טבעי</span>
       </label>
     </div>
     <div class="dropdown-item">
@@ -366,28 +335,13 @@
           class="dropdown-icons-input"
           type="checkbox"
           name="filter.p.m.custom.coffee_process"
-          value="חצי טבעי"
-          onchange="handleFacetFilterChange('coffee-process')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'coffee-process-filter-half-natural.png' | asset_url }}"
-          alt="Filter Icon" />
-        <span class="filter-item-text">חצי טבעי</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_process"
-          value="אנאירובי טבעי"
+          value="אנאירובי טבעי,אנאירובי שטוף,אנאירובי שטוף"
           onchange="handleFacetFilterChange('coffee-process')">
         <img
           class="dropdown-icon-img"
           src="{{ 'coffee-process-filter-anirobi-natural.png' | asset_url }}"
           alt="Filter Icon" />
-        <span class="filter-item-text">אנאירובי טבעי</span>
+        <span class="filter-item-text">אנאירובי/אנירובי שטוף/אנירובי שטוף</span>
       </label>
     </div>
     <div class="dropdown-item">
@@ -491,6 +445,10 @@
 
 </div>
 
+<div class="filter-bottom-menu-select">
+  <div class="filter-bottom-menu-apply-btn" onclick="toggleSortMenu(this)">בחר</div>
+</div>
+
 
 <style>
   .dropdown-menu-wrapper {
@@ -546,6 +504,7 @@
   #dropdownMenu-taste,
   #dropdownMenu-sort-option,
   #dropdownMenu-roast-level,
+  #dropdownMenu-sort-by,
   #dropdownMenu-prep,
   #dropdownMenu-coffee-process,
   #dropdownMenu-roast-origin {
@@ -554,7 +513,8 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 16px
+    gap: 16px;  
+    margin-bottom: 24px;
   }
 
   .dropdown-item {
@@ -926,27 +886,53 @@
       'prep': 'filter.p.m.custom.coffee_prep_methods',
       'roast-level': 'filter.p.m.custom.coffee_roast_level',
       'roast-origin': 'filter.p.m.vendor_info.coffee_vendor',
-      'coffee-process': 'filter.p.m.custom.coffee_process'
+      'coffee-process': 'filter.p.m.custom.coffee_process',
+      'sort-by': 'sort_by'
     };
     const paramName = paramMap[type];
     if (!paramName) return;
 
     // Collect checked, visible boxes in relevant dropdown
-    const values = Array.from(
+    const filterValue = Array.from(
       document.querySelectorAll('#dropdownMenu-' + type + ' .dropdown-icons-input:checked')
     ).filter(cb => cb.offsetParent !== null)
       .map(cb => cb.value);
-    const params = new URLSearchParams(window.location.search);
-    // Remove all existing entries for this facet key, to prevent duplicates
-    while (params.has(paramName)) {
-      params.delete(paramName);
-    }
-    values.forEach(val => params.append(paramName, val));
-    params.delete('page');
 
-    // Call renderPage with updated params
-    const newQueryString = params.toString();
-    FacetFiltersForm.renderPage(newQueryString, null, true);
+            const params = new URLSearchParams(window.location.search);
+            const currentValues = params.getAll(paramName);
+
+            const desiredValues = String(filterValue)
+                .split(',')
+                .map((v) => v.trim())
+                .filter(Boolean);
+
+            const sameValueSet = (a, b) => {
+                const aSet = new Set(a);
+                const bSet = new Set(b);
+                if (aSet.size !== bSet.size) return false;
+                for (const v of aSet) {
+                    if (!bSet.has(v)) return false;
+                }
+                return true;
+            };
+
+            // Toggle off only if the current values for this key match this bubble exactly.
+            if (desiredValues.length > 0 && sameValueSet(currentValues, desiredValues)) {
+                params.delete(paramName);
+                // element.classList.remove('active');
+            } else {
+                // Overwrite this filter key with all desired values (Shopify expects repeated params for multi-select).
+                params.delete(paramName);
+                desiredValues.forEach((v) => params.append(paramName, v));
+                // element.classList.add('active');
+            }
+
+            const newQueryString = params.toString();
+            FacetFiltersForm.renderPage(newQueryString, null, true);
+
+            // Dispatch the custom event
+            const event = new CustomEvent('collectionPageUpdated');
+            window.dispatchEvent(event);
   }
 
   // document.addEventListener('DOMContentLoaded', updateDropdownButtonText)
