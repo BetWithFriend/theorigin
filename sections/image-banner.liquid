@@ -1,4 +1,6 @@
-{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}
+{%- comment -%} Lazy load image banner CSS {%- endcomment -%}
+<link rel="preload" href="{{ 'section-image-banner.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}</noscript>
 
 {%- if section.settings.image_height == 'adapt' and section.settings.image != blank -%}
   {%- style -%}
