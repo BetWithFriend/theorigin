@@ -229,8 +229,8 @@
   {%- endif -%}
 </div>
 <style>
-  /* Sticky buy buttons section styles for mobile */
-  @media screen and (max-width: 749px) {
+  /* Sticky buy buttons section styles for mobile - DISABLED */
+  /* @media screen and (max-width: 749px) {
     .product-variants-wrapper.sticky-to-bottom {
       position: fixed;
       bottom: 0;
@@ -244,12 +244,10 @@
     };
 
 
-    /*
-   body.trigger-position-left #enable-toolbar-trigger {
+    body.trigger-position-left #enable-toolbar-trigger {
    top: -100px;
    }
-*/
-  }
+  } */
 </style>
 
 <script>
@@ -296,8 +294,8 @@
     updateTotalPrice();
   }
 
-  // Sticky buy buttons functionality (mobile only)
-  const stickyBuyButtons = document.getElementById('sticky-buy-buttons-{{ section_id }}');
+  // Sticky buy buttons functionality (mobile only) - DISABLED
+  /* const stickyBuyButtons = document.getElementById('sticky-buy-buttons-{{ section_id }}');
   if (stickyBuyButtons && window.innerWidth <= 749) {
     // Calculate and store the original position BEFORE making it sticky
     const rect = stickyBuyButtons.getBoundingClientRect();
@@ -324,6 +322,6 @@
     }
 
     window.addEventListener('scroll', handleScroll);
-  }
+  } */
   });
 </script>

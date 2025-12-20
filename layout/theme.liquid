@@ -309,7 +309,13 @@ body {
 }
     {% endstyle %}
 
-    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {%- comment -%} CSS Loader Helper - Ensures preload compatibility {%- endcomment -%}
+    {% render 'css-loader-helper' %}
+    
+    {%- comment -%} Load base.css with preload for better performance {%- endcomment -%}
+    <link rel="preload" href="{{ 'base.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>{{ 'base.css' | asset_url | stylesheet_tag }}</noscript>
+    
     <link
       rel="stylesheet"
       href="{{ 'component-cart-items.css' | asset_url }}"
@@ -317,11 +323,19 @@ body {
       onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
-      {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
-      {{ 'component-cart.css' | asset_url | stylesheet_tag }}
-      {{ 'component-totals.css' | asset_url | stylesheet_tag }}
-      {{ 'component-price.css' | asset_url | stylesheet_tag }}
-      {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+      {%- comment -%} Lazy load cart drawer CSS - only needed when cart is opened {%- endcomment -%}
+      <link rel="preload" href="{{ 'component-cart-drawer.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      <link rel="preload" href="{{ 'component-cart.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      <link rel="preload" href="{{ 'component-totals.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      <link rel="preload" href="{{ 'component-price.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      <link rel="preload" href="{{ 'component-discounts.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      <noscript>
+        {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
+        {{ 'component-cart.css' | asset_url | stylesheet_tag }}
+        {{ 'component-totals.css' | asset_url | stylesheet_tag }}
+        {{ 'component-price.css' | asset_url | stylesheet_tag }}
+        {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+      </noscript>
     {%- endif -%}
 
     {%- unless settings.type_body_font.system? -%}
@@ -351,11 +365,13 @@ body {
     {%- endif -%}
 
     {%- if settings.predictive_search_enabled -%}
+      {%- comment -%} Lazy load predictive search CSS - only needed when search is activated {%- endcomment -%}
       <link
-        rel="stylesheet"
+        rel="preload"
         href="{{ 'component-predictive-search.css' | asset_url }}"
-        media="print"
-        onload="this.media='all'">
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+      <noscript><link rel="stylesheet" href="{{ 'component-predictive-search.css' | asset_url }}"></noscript>
     {%- endif -%}
 
     <script>
@@ -364,10 +380,33 @@ body {
       }
     </script>
 
-    <!-- Mixpanel -->
-    <script type="text/javascript">
-      (function (f, b) { if (!b.__SV) { var e, g, i, h; window.mixpanel = b; b._i = []; b.init = function (e, f, c) { function g(a, d) { var b = d.split("."); 2 == b.length && ((a = a[b[0]]), (d = b[1])); a[d] = function () { a.push([d].concat(Array.prototype.slice.call(arguments, 0))); }; } var a = b; "undefined" !== typeof c ? (a = b[c] = []) : (c = "mixpanel"); a.people = a.people || []; a.toString = function (a) { var d = "mixpanel"; "mixpanel" !== c && (d += "." + c); a || (d += " (stub)"); return d; }; a.people.toString = function () { return a.toString(1) + ".people (stub)"; }; i = "disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split( " "); for (h = 0; h < i.length; h++) g(a, i[h]); var j = "set set_once union unset remove delete".split(" "); a.get_group = function () { function b(c) { d[c] = function () { call2_args = arguments; call2 = [c].concat(Array.prototype.slice.call(call2_args, 0)); a.push([e, call2]); }; } for ( var d = {}, e = ["get_group"].concat( Array.prototype.slice.call(arguments, 0)), c = 0; c < j.length; c++) b(j[c]); return d; }; b._i.push([e, f, c]); }; b.__SV = 1.2; e = f.createElement("script"); e.type = "text/javascript"; e.async = !0; e.src = "undefined" !== typeof MIXPANEL_CUSTOM_LIB_URL ? MIXPANEL_CUSTOM_LIB_URL : "file:" === f.location.protocol && "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//) ? "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js" : "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js"; g = f.getElementsByTagName("script")[0]; g.parentNode.insertBefore(e, g); } })(document, window.mixpanel || []);
-       
+    {%- comment -%} Optimize Mixpanel loading - defer until after page load {%- endcomment -%}
+    <script>
+      // Initialize Mixpanel stub to queue events
+      window.mixpanel = window.mixpanel || [];
+      window.mixpanel._i = [];
+      window.mixpanel.init = function(token, config, name) {
+        var target = window.mixpanel;
+        if (typeof(name) !== 'undefined') {
+          target = window.mixpanel[name] = [];
+        } else {
+          name = 'mixpanel';
+        }
+        target.people = target.people || [];
+        target._i.push([token, config, name]);
+      };
+      
+      // Queue all methods
+      var methods = 'disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove'.split(' ');
+      for (var i = 0; i < methods.length; i++) {
+        (function(methodName) {
+          window.mixpanel[methodName] = function() {
+            window.mixpanel.push([methodName].concat(Array.prototype.slice.call(arguments, 0)));
+          };
+        })(methods[i]);
+      }
+      
+      // Initialize with config
       mixpanel.init("74ec42c3ea7e8196cd6cbd7aefeafaf5", {
         persistence: "localStorage",
         ignore_dnt: true,
@@ -375,29 +414,95 @@ body {
         record_sessions_percent: 0,
         record_heatmap_data: false
       });
+      
+      // Load actual Mixpanel library after page load
+      window.addEventListener('load', function() {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.async = true;
+        script.src = 'https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
+        document.head.appendChild(script);
+      });
     </script>
 
-    <script src="{{ 'event_reporting.js' | asset_url }}"></script>
     <script>
-        // Wait for both DOM and deferred scripts to load
-        function initializeAnalytics() {
-            // Check if MixpanelReporter is available
-            if (typeof MixpanelReporter === 'undefined') {
-                console.warn('MixpanelReporter not yet loaded, retrying...');
-                setTimeout(initializeAnalytics, 100);
-                return;
-            }
+        // Create analytics stub to queue method calls until real object is ready
+        (function() {
+            // Queue to store method calls
+            var queue = [];
+            var isReady = false;
+            var realAnalytics = null;
             
-            // Initialize the MixpanelReporter
-            const analytics = new MixpanelReporter();
+            // Stub object with common methods
+            window.analytics = {
+                trackClick: function() { 
+                    if (isReady && realAnalytics) {
+                        realAnalytics.trackClick.apply(realAnalytics, arguments);
+                    } else {
+                        queue.push(['trackClick', arguments]); 
+                    }
+                },
+                trackScreenView: function() { 
+                    if (isReady && realAnalytics) {
+                        realAnalytics.trackScreenView.apply(realAnalytics, arguments);
+                    } else {
+                        queue.push(['trackScreenView', arguments]); 
+                    }
+                },
+                track: function() { 
+                    if (isReady && realAnalytics) {
+                        realAnalytics.track.apply(realAnalytics, arguments);
+                    } else {
+                        queue.push(['track', arguments]); 
+                    }
+                },
+                trackFormSubmit: function() { 
+                    if (isReady && realAnalytics) {
+                        realAnalytics.trackFormSubmit.apply(realAnalytics, arguments);
+                    } else {
+                        queue.push(['trackFormSubmit', arguments]); 
+                    }
+                },
+                trackPageView: function() { 
+                    if (isReady && realAnalytics) {
+                        realAnalytics.trackPageView.apply(realAnalytics, arguments);
+                    } else {
+                        queue.push(['trackPageView', arguments]); 
+                    }
+                }
+            };
             
-            // Store analytics instance globally for other functions to use
-            window.analytics = analytics;
-        }
-        
-        initializeAnalytics();
+            // Function to initialize real analytics and replay queue
+            window._initializeRealAnalytics = function() {
+                if (typeof MixpanelReporter === 'undefined') {
+                    setTimeout(window._initializeRealAnalytics, 50);
+                    return;
+                }
+                
+                // Create real analytics instance
+                realAnalytics = new MixpanelReporter();
+                isReady = true;
+                
+                // Replay all queued calls
+                queue.forEach(function(item) {
+                    var method = item[0];
+                    var args = item[1];
+                    if (realAnalytics[method]) {
+                        realAnalytics[method].apply(realAnalytics, args);
+                    }
+                });
+                
+                // Clear queue
+                queue = [];
+                
+                // Replace stub with real object (preserving queued functionality)
+                window.analytics = realAnalytics;
+            };
+        })();
     </script>
-    <script src="https://cdn.enable.co.il/licenses/enable-L44664oja1kh2qyl-0625-71744/init.js" defer></script>
+    <script src="{{ 'event_reporting.js' | asset_url }}" defer="defer" onload="window._initializeRealAnalytics()"></script>
+    {%- comment -%} Load Enable accessibility script with lower priority {%- endcomment -%}
+    <script src="https://cdn.enable.co.il/licenses/enable-L44664oja1kh2qyl-0625-71744/init.js" defer async></script>
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">

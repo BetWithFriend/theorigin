@@ -1,4 +1,6 @@
-{{ 'questionnaire.css' | asset_url | stylesheet_tag }}
+{%- comment -%} Lazy load questionnaire CSS {%- endcomment -%}
+<link rel="preload" href="{{ 'questionnaire.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>{{ 'questionnaire.css' | asset_url | stylesheet_tag }}</noscript>
 
 <div class="questionnaire-wrapper hidden" id="questionnaireWrapperDesktop">
     <div class="questionnaire-icons-wrapper active">
