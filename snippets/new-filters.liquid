@@ -2,12 +2,13 @@
 {{ 'component-show-more.css' | asset_url | stylesheet_tag }}
 <div class="all-new-filters-wrapper">
   <button onclick="toggleSortMenu(this)" class="sort-dropdown-button" type="button" aria-expanded="false" aria-haspopup="true">
-    <span class="sort-icon-wrapper">
+    {% comment %} <div class="sort-icon-wrapper"> {% endcomment %}
+      <div class="sort-text-wrapper">
+        סינון לפי:
+      </div>
       <img class="sort-icon-image" src="{{ 'sort-icon-image.png' | asset_url }}" alt="sort icon"/>
-    </span>
-    <span class="sort-text-wrapper">
-        <img class="sort-icon-image-large" src="{{ 'sort-icon-arrow.png' | asset_url }}" alt="sort icon"/>
-      </span>
+      <div class="sort-icon-image-selected {% if content_for_header contains 'filter.p.' or content_for_header contains 'filter.v.' or content_for_header contains 'sort_by=' %}show{% endif %}">&nbsp;</div>
+    {% comment %} </div> {% endcomment %}
   </button>
   <div class="vertical-line-border">&nbsp;</div>
   <div class="sort-dropdown-menu" id="sortDropdownMenu">
@@ -168,7 +169,7 @@
         const expanded = button.getAttribute('aria-expanded') === 'true';
         button.setAttribute('aria-expanded', !expanded);
         // Lock or unlock body scroll when menu is open/closed
-        if (isOpen) {
+        if (isOpen && window.innerWidth <= 750) {
           document.body.classList.add('no-scroll');
         } else {
           document.body.classList.remove('no-scroll');

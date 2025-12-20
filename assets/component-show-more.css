@@ -14,6 +14,22 @@
   height: 24px;
 }
 
+.sort-icon-image-selected {
+  display: none;
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background-color: #D60540;
+  border-radius: 10px;
+  top: 11px;
+  left: 11px;
+
+}
+
+.sort-icon-image-selected.show {
+  display: block;
+}
+
 .sort-select-wrapper {
   position: unset;
   display: inline-block;
@@ -61,6 +77,7 @@
   /* background-color: #E3E0DA; */
   border-radius: 4px;
   pointer-events: none;
+  position: relative;
 }
 
 /* Sort Dropdown Styles */
@@ -70,17 +87,18 @@
   justify-content: center;
   padding: 8px;
   background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: none;
+  /* border-radius: 4px; */
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s ease;
-  width: 40px;
-  height: 40px;
+  position: relative;
+  /* width: 40px;
+  height: 40px; */
 }
 
 .sort-dropdown-button:hover {
-  border-color: #999;
+  /* border-color: #999; */
   background: #f9f9f9;
 }
 
@@ -102,9 +120,13 @@
   pointer-events: none;
 }
 
+.sort-text-wrapper {
+  display: none;
+}
+
 .sort-icon-image {
-  width: 24px;
-  height: 24px;
+  width: 25px;
+  height: 25px;
   pointer-events: none;
 }
 
@@ -272,7 +294,7 @@
 /* Show text and hide icon on screens larger than 750px */
 @media screen and (min-width: 751px) {
   .sort-icon-wrapper {
-    display: none;
+    display: block;
   }
 
   .sort-text-wrapper {
@@ -284,11 +306,12 @@
   }
 
   .sort-dropdown-button {
-    height: 41px;
-    min-width: 147px;
-    padding: 8px 14px;
-    border: 1px solid #33363480;
-    border-radius: 8px;
+    /* height: 41px; */
+    /* min-width: 147px; */
+    /* padding: 8px 14px; */
+    /* border: 1px solid #33363480; */
+    /* border-radius: 8px; */
+    gap: 16px;
   }
 
   .sort-by-text-wrapper {
@@ -299,9 +322,9 @@
     /* flex-direction: column; */
   }
 
-  .sort-label-mobile {
+  /* .sort-label-mobile {
     display: none;
-  }
+  } */
 
   .sort-line-mobile {
     display: none;
@@ -335,6 +358,18 @@
   }
 
   .sort-dropdown-menu.show {
-    right: 72px;
+    right: 64px;
+    width: 550px;
+    top: 400px;
+    height: auto;
+    overflow: visible;
+  }
+
+  .filter-bottom-menu-select {
+    position: relative;
+  }
+
+  .filter-top-menu-wrapper {
+    position: relative;
   }
 }

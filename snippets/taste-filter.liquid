@@ -11,219 +11,297 @@
     </div>
 
 <div class="dropdown-filters">
-  <button
-    id="dropdown-button-sort-by"
-    type="button"
-    class="dropdown-button"
-    onclick="toggleDropdown('sort-by')">
-    <img
-      src="{{ 'dropdown-icon.png' | asset_url }}"
-      alt="Dropdown Icon"
-      class="dropdown-icon" />
-    מיון לפי
-  </button>
-  <div class="dropdown-menu" id="dropdownMenu-sort-by">
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="sort_by"
-          value="best-selling"
-          onchange="handleFacetFilterChange('sort-by')">
-        <span class="filter-item-text">הכי נמכר</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="sort_by"
-          value="price-ascending"
-          onchange="handleFacetFilterChange('sort-by')">
-        <span class="filter-item-text">מחיר (נמוך לגבוה)</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="sort_by"
-          value="price-descending"
-          onchange="handleFacetFilterChange('sort-by')">
-        <span class="filter-item-text">מחיר (גבוה לנמוך)</span>
-      </label>
-    </div>
-    </div>
-  <hr class="sort-line-mobile"/>
-  <button
-    id="dropdown-button-taste"
-    type="button"
-    class="dropdown-button"
-    onclick="toggleDropdown('taste')">
-      {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
-    <img
-      src="{{ 'dropdown-icon.png' | asset_url }}"
-      alt="Dropdown Icon"
-      class="dropdown-icon" />
-    טעם
-  </button>
-  <div class="dropdown-menu" id="dropdownMenu-taste">
+  <div class="dropdown-filter-wrapper">
+    <button
+      id="dropdown-button-sort-by"
+      type="button"
+      class="dropdown-button"
+      onclick="toggleDropdown('sort-by')">
+      <img
+        src="{{ 'dropdown-icon.png' | asset_url }}"
+        alt="Dropdown Icon"
+        class="dropdown-icon" />
+      מיון לפי
+    </button>
+    <div class="dropdown-menu" id="dropdownMenu-sort-by">
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="sort_by"
+            value="best-selling"
+            onchange="handleFacetFilterChange('sort-by', this)">
+          <span class="filter-item-text">הכי נמכר</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="sort_by"
+            value="price-ascending"
+            onchange="handleFacetFilterChange('sort-by', this)">
+          <span class="filter-item-text">מחיר (נמוך לגבוה)</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="sort_by"
+            value="price-descending"
+            onchange="handleFacetFilterChange('sort-by', this)">
+          <span class="filter-item-text">מחיר (גבוה לנמוך)</span>
+        </label>
+      </div>
+      </div>
+    <hr class="sort-line-mobile"/>
+  </div>
+  <div class="dropdown-filter-wrapper">
+    <button
+      id="dropdown-button-taste"
+      type="button"
+      class="dropdown-button"
+      onclick="toggleDropdown('taste')">
+        {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
+      <img
+        src="{{ 'dropdown-icon.png' | asset_url }}"
+        alt="Dropdown Icon"
+        class="dropdown-icon" />
+      טעם
+    </button>
+    <div class="dropdown-menu" id="dropdownMenu-taste">
 
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_taste"
-          value="Fruity"
-          onchange="handleFacetFilterChange('taste')">
-        <span class="color-circle" style="background-color: #FFDF70;"></span>
-        <span class="filter-item-text">פירותי</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_taste"
-          value="Fruity-Sweet"
-          onchange="handleFacetFilterChange('taste')">
-        <span class="color-circle" style="background-color: #FF974A;"></span>
-        <span class="filter-item-text">פירותי מתוק</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_taste"
-          value="Sweet"
-          onchange="handleFacetFilterChange('taste')">
-        <span class="color-circle" style="background-color: #D60540;"></span>
-        <span class="filter-item-text">מתוק מאוזן</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_taste"
-          value="Sweet-Chocolate"
-          onchange="handleFacetFilterChange('taste')">
-        <span class="color-circle" style="background-color: #C4823E;"></span>
-        <span class="filter-item-text">מתוק שוקולדי</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_taste"
-          value="Chocolate"
-          onchange="handleFacetFilterChange('taste')">
-        <span class="color-circle" style="background-color: #8B4513;"></span>
-        <span class="filter-item-text">שוקולדי</span>
-      </label>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.coffee_taste"
+            value="Fruity"
+            onchange="handleFacetFilterChange('taste')">
+          <span class="color-circle" style="background-color: #FFDF70;"></span>
+          <span class="filter-item-text">פירותי</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.coffee_taste"
+            value="Fruity-Sweet"
+            onchange="handleFacetFilterChange('taste')">
+          <span class="color-circle" style="background-color: #FF974A;"></span>
+          <span class="filter-item-text">פירותי מתוק</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.coffee_taste"
+            value="Sweet"
+            onchange="handleFacetFilterChange('taste')">
+          <span class="color-circle" style="background-color: #D60540;"></span>
+          <span class="filter-item-text">מתוק מאוזן</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.coffee_taste"
+            value="Sweet-Chocolate"
+            onchange="handleFacetFilterChange('taste')">
+          <span class="color-circle" style="background-color: #C4823E;"></span>
+          <span class="filter-item-text">מתוק שוקולדי</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.coffee_taste"
+            value="Chocolate"
+            onchange="handleFacetFilterChange('taste')">
+          <span class="color-circle" style="background-color: #8B4513;"></span>
+          <span class="filter-item-text">שוקולדי</span>
+        </label>
+      </div>
     </div>
   </div>
-  {% comment %} <div class="dropdown-divider"> </div> {% endcomment %}
-  <button
-    id="dropdown-button-prep"
-    type="button"
-    class="dropdown-button"
-    onclick="toggleDropdown('prep')">
-    <div class="selected-icons" id="selected-icons-prep"></div>
-    <img
-      src="{{ 'dropdown-icon.png' | asset_url }}"
-      alt="Dropdown Icon"
-      class="dropdown-icon" />
-    הכנה
-  </button>
+  <div class="dropdown-filter-wrapper">
+      <button
+      id="dropdown-button-taste"
+      type="button"
+      class="dropdown-button"
+      onclick="toggleDropdown('taste')">
+        {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
+      <img
+        src="{{ 'dropdown-icon.png' | asset_url }}"
+        alt="Dropdown Icon"
+        class="dropdown-icon" />
+      גיאוגרפיה
+    </button>
+    <div class="dropdown-menu" id="dropdownMenu-bean-origin-continent">
 
-  <div class="dropdown-menu" id="dropdownMenu-prep">
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_prep_methods"
-          value="Filter"
-          onchange="handleFacetFilterChange('prep')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'dropdown-brew-Filter.png' | asset_url }}"
-          alt="Filter Icon" />
-        <span class="filter-item-text">פילטר</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_prep_methods"
-          value="Black"
-          onchange="handleFacetFilterChange('prep')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'dropdown-brew-Turkish.png' | asset_url }}"
-          alt="Turkish Icon" />
-        <span class="filter-item-text">קפה שחור</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_prep_methods"
-          value="MokaPot"
-          onchange="handleFacetFilterChange('prep')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'dropdown-brew-Moka.png' | asset_url }}"
-          alt="MokaPot Icon" />
-        <span class="filter-item-text">מקינטה</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_prep_methods"
-          value="Espresso"
-          onchange="handleFacetFilterChange('prep')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}"
-          alt="Espresso Icon" />
-        <span class="filter-item-text">אספרסו</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_prep_methods"
-          value="Aeropress"
-          onchange="handleFacetFilterChange('prep')">
-        <img
-          class="dropdown-icon-img "
-          src="{{  'dropdown-brew-Chemex.png' | asset_url }}"
-          alt="Aeropress Icon" />
-        <span class="filter-item-text">חליטה</span>
-      </label>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.bean_origin_continent"
+            value="אסיה"
+            onchange="handleFacetFilterChange('bean-origin-continent')">
+          <span class="filter-item-text">אסיה</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.bean_origin_continent"
+            value="אפריקה"
+            onchange="handleFacetFilterChange('bean-origin-continent')">
+          <span class="filter-item-text">אפריקה</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.bean_origin_continent"
+            value="דרום אמריקה"
+            onchange="handleFacetFilterChange('bean-origin-continent')">
+          <span class="filter-item-text">דרום אמריקה</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.bean_origin_continent"
+            value="מרכז אמריקה"
+            onchange="handleFacetFilterChange('bean-origin-continent')">
+          <span class="filter-item-text">מרכז אמריקה</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.bean_origin_continent"
+            value="עולם"
+            onchange="handleFacetFilterChange('bean-origin-continent')">
+          <span class="filter-item-text">עולם</span>
+        </label>
+      </div>
     </div>
   </div>
+  <div class="dropdown-filter-wrapper">
+        <button
+          id="dropdown-button-prep"
+          type="button"
+          class="dropdown-button"
+          onclick="toggleDropdown('prep')">
+          <div class="selected-icons" id="selected-icons-prep"></div>
+          <img
+            src="{{ 'dropdown-icon.png' | asset_url }}"
+            alt="Dropdown Icon"
+            class="dropdown-icon" />
+          הכנה
+        </button>
+
+        <div class="dropdown-menu" id="dropdownMenu-prep">
+          <div class="dropdown-item">
+            <label class="dropdown-icons">
+              <input
+                class="dropdown-icons-input"
+                type="checkbox"
+                name="filter.p.m.custom.coffee_prep_methods"
+                value="Filter"
+                onchange="handleFacetFilterChange('prep')">
+              <img
+                class="dropdown-icon-img"
+                src="{{ 'dropdown-brew-Filter.png' | asset_url }}"
+                alt="Filter Icon" />
+              <span class="filter-item-text">פילטר</span>
+            </label>
+          </div>
+          <div class="dropdown-item">
+            <label class="dropdown-icons">
+              <input
+                class="dropdown-icons-input"
+                type="checkbox"
+                name="filter.p.m.custom.coffee_prep_methods"
+                value="Black"
+                onchange="handleFacetFilterChange('prep')">
+              <img
+                class="dropdown-icon-img"
+                src="{{ 'dropdown-brew-Turkish.png' | asset_url }}"
+                alt="Turkish Icon" />
+              <span class="filter-item-text">קפה שחור</span>
+            </label>
+          </div>
+          <div class="dropdown-item">
+            <label class="dropdown-icons">
+              <input
+                class="dropdown-icons-input"
+                type="checkbox"
+                name="filter.p.m.custom.coffee_prep_methods"
+                value="MokaPot"
+                onchange="handleFacetFilterChange('prep')">
+              <img
+                class="dropdown-icon-img"
+                src="{{ 'dropdown-brew-Moka.png' | asset_url }}"
+                alt="MokaPot Icon" />
+              <span class="filter-item-text">מקינטה</span>
+            </label>
+          </div>
+          <div class="dropdown-item">
+            <label class="dropdown-icons">
+              <input
+                class="dropdown-icons-input"
+                type="checkbox"
+                name="filter.p.m.custom.coffee_prep_methods"
+                value="Espresso"
+                onchange="handleFacetFilterChange('prep')">
+              <img
+                class="dropdown-icon-img"
+                src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}"
+                alt="Espresso Icon" />
+              <span class="filter-item-text">אספרסו</span>
+            </label>
+          </div>
+          <div class="dropdown-item">
+            <label class="dropdown-icons">
+              <input
+                class="dropdown-icons-input"
+                type="checkbox"
+                name="filter.p.m.custom.coffee_prep_methods"
+                value="Aeropress"
+                onchange="handleFacetFilterChange('prep')">
+              <img
+                class="dropdown-icon-img "
+                src="{{  'dropdown-brew-Chemex.png' | asset_url }}"
+                alt="Aeropress Icon" />
+              <span class="filter-item-text">חליטה</span>
+            </label>
+          </div>
+        </div>
+  </div>
+  <div class="dropdown-filter-wrapper">
 
   <button
     id="dropdown-button-roast-level"
@@ -284,7 +362,9 @@
       </label>
     </div>
   </div>
+  </div>
 
+  <div class="dropdown-filter-wrapper">
   <button
     id="dropdown-button-coffee-process"
     type="button"
@@ -341,7 +421,7 @@
           class="dropdown-icon-img"
           src="{{ 'coffee-process-filter-anirobi-natural.png' | asset_url }}"
           alt="Filter Icon" />
-        <span class="filter-item-text">אנאירובי/אנירובי שטוף/אנירובי שטוף</span>
+        <span class="filter-item-text">אנאירובי</span>
       </label>
     </div>
     <div class="dropdown-item">
@@ -360,7 +440,9 @@
       </label>
     </div>
   </div>
+  </div>
 
+  <div class="dropdown-filter-wrapper">
   <button
     type="button"
     id="dropdown-button-roast-origin"
@@ -442,6 +524,7 @@
       </label>
     </div>
   </div>
+  </div>
 
 </div>
 
@@ -507,10 +590,11 @@
   #dropdownMenu-sort-by,
   #dropdownMenu-prep,
   #dropdownMenu-coffee-process,
+  #dropdownMenu-bean-origin-continent,
   #dropdownMenu-roast-origin {
     width: 100%;
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: center;
     flex-direction: column;
     gap: 16px;  
@@ -523,7 +607,7 @@
     justify-content: start;
     align-items: center;
     cursor: pointer;
-    width: 100%;
+    /* width: 100%; */
   }
 
 
@@ -665,6 +749,34 @@
     }
     #dropdownMenu-prep {
       left: 17%;
+    }
+
+    .dropdown-filters {
+      flex-direction: row !important; /* Overwrite mobile column view */
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      
+      /* 2. Set the fixed height and allow scrolling if content overflows */
+      /* max-height: 900px;  */
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .dropdown-filters > .dropdown-button,
+    .dropdown-filters > .dropdown-menu {
+      width: 48% !important;
+      margin-bottom: 10px;
+    }
+
+    .filter-top-menu-wrapper, 
+    .filter-bottom-menu-select {
+      width: 100%;
+      flex-basis: 100%;
+    }
+
+    .dropdown-filter-wrapper {
+      width: 48%;
     }
   }
 </style>
@@ -879,61 +991,103 @@
   }
 
   // Helper for instant update from taste/prep checkboxes
-  function handleFacetFilterChange  (type) {
-    // Map type to param name
-    const paramMap = {
+  // Added targetElement as the second argument
+function handleFacetFilterChange(type, targetElement = null) {
+
+    // --- 1. UI LOGIC: Enforce Single Select for Sort-By ---
+      if (type === 'sort-by' && targetElement) {
+        // If the user just checked this box, uncheck all others in the same group
+        if (targetElement.checked) {
+          const allSortInputs = document.querySelectorAll('#dropdownMenu-' + type + ' .dropdown-icons-input');
+          allSortInputs.forEach(input => {
+            if (input !== targetElement) {
+              input.checked = false;
+          }
+        });
+      }
+    }
+
+    // --- 2. EXISTING LOGIC ---
+      const paramMap = {
       'taste': 'filter.p.m.custom.coffee_taste',
       'prep': 'filter.p.m.custom.coffee_prep_methods',
       'roast-level': 'filter.p.m.custom.coffee_roast_level',
       'roast-origin': 'filter.p.m.vendor_info.coffee_vendor',
       'coffee-process': 'filter.p.m.custom.coffee_process',
+      'bean-origin-continent': 'filter.p.m.custom.bean_origin_continent',
       'sort-by': 'sort_by'
     };
+
     const paramName = paramMap[type];
     if (!paramName) return;
 
-    // Collect checked, visible boxes in relevant dropdown
+    // Collect checked, visible boxes (Now this will only find 1 item for sort-by)
     const filterValue = Array.from(
-      document.querySelectorAll('#dropdownMenu-' + type + ' .dropdown-icons-input:checked')
-    ).filter(cb => cb.offsetParent !== null)
+        document.querySelectorAll('#dropdownMenu-' + type + ' .dropdown-icons-input:checked')
+      ).filter(cb => cb.offsetParent !== null)
       .map(cb => cb.value);
 
-            const params = new URLSearchParams(window.location.search);
-            const currentValues = params.getAll(paramName);
+    const params = new URLSearchParams(window.location.search);
+    const currentValues = params.getAll(paramName);
 
-            const desiredValues = String(filterValue)
-                .split(',')
-                .map((v) => v.trim())
-                .filter(Boolean);
+    const desiredValues = String(filterValue)
+      .split(',')
+      .map((v) => v.trim())
+      .filter(Boolean);
 
-            const sameValueSet = (a, b) => {
-                const aSet = new Set(a);
-                const bSet = new Set(b);
-                if (aSet.size !== bSet.size) return false;
-                for (const v of aSet) {
-                    if (!bSet.has(v)) return false;
-                }
-                return true;
-            };
+    // --- 3. URL LOGIC ---
 
-            // Toggle off only if the current values for this key match this bubble exactly.
-            if (desiredValues.length > 0 && sameValueSet(currentValues, desiredValues)) {
-                params.delete(paramName);
-                // element.classList.remove('active');
-            } else {
-                // Overwrite this filter key with all desired values (Shopify expects repeated params for multi-select).
-                params.delete(paramName);
-                desiredValues.forEach((v) => params.append(paramName, v));
-                // element.classList.add('active');
-            }
+    if (type === 'sort-by') {
+      // Clear existing sort params
+      params.delete(paramName);
+      
+      // Since we handled the UI unchecking above, desiredValues will have max 1 item
+      if (desiredValues.length > 0) {
+        params.set(paramName, desiredValues[0]);
+      }
+    } else {
+      // Logic for other multi-select filters
+      const sameValueSet = (a, b) => {
+        const aSet = new Set(a);
+        const bSet = new Set(b);
+        if (aSet.size !== bSet.size) return false;
+        for (const v of aSet) {
+          if (!bSet.has(v)) return false;
+        }
+        return true;
+      };
 
-            const newQueryString = params.toString();
-            FacetFiltersForm.renderPage(newQueryString, null, true);
+      if (desiredValues.length > 0 && sameValueSet(currentValues, desiredValues)) {
+        params.delete(paramName);
+      } else {
+        params.delete(paramName);
+        desiredValues.forEach((v) => params.append(paramName, v));
+      }
+    }
 
-            // Dispatch the custom event
-            const event = new CustomEvent('collectionPageUpdated');
-            window.dispatchEvent(event);
-  }
+    const newQueryString = params.toString();
+    FacetFiltersForm.renderPage(newQueryString, null, true);
+
+    const event = new CustomEvent('collectionPageUpdated');
+    window.dispatchEvent(event);
+
+    // --- 4. UPDATE SORT ICON VISIBILITY ---
+    const indicator = document.querySelector('.sort-icon-image-selected');
+    if (indicator) {
+      // Check the new params object we just built
+      const hasActiveFilters = Array.from(params.keys()).some(key => 
+        key.startsWith('filter.p.') || 
+        key.startsWith('filter.v.') || 
+        key === 'sort_by'
+      );
+
+      if (hasActiveFilters) {
+        indicator.classList.add('show');
+      } else {
+        indicator.classList.remove('show');
+      }
+    }
+}
 
   // document.addEventListener('DOMContentLoaded', updateDropdownButtonText)
 </script>

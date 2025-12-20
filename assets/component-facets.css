@@ -1519,13 +1519,12 @@ input.mobile-facets__checkbox {
   justify-content: center;
 }
 
-.dropdown-filters {
+/* .dropdown-filters {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-}
+} */
 
 .dropdown-hidden {
   visibility: hidden
@@ -1537,7 +1536,7 @@ input.mobile-facets__checkbox {
   justify-content: start;
   align-items: center;
   cursor: pointer;
-  width: 100%;
+  /* width: 100%; */
 }
 
 /* .dropdown-item:hover {
