@@ -543,7 +543,7 @@
   .dropdown-filters {
     position: relative;
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: center;
     width: 100%;
     flex-direction: column;
@@ -752,21 +752,26 @@
     }
 
     .dropdown-filters {
-      flex-direction: row !important; /* Overwrite mobile column view */
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: space-between;
-      
-      /* 2. Set the fixed height and allow scrolling if content overflows */
-      /* max-height: 900px;  */
-      overflow-y: auto;
-      padding: 10px;
+      display: flex !important;
+      flex-direction: column !important; /* Single column stack */
+      padding: 0 24px;
+      direction: rtl;
     }
 
-    .dropdown-filters > .dropdown-button,
-    .dropdown-filters > .dropdown-menu {
-      width: 48% !important;
-      margin-bottom: 10px;
+    .dropdown-button {
+      width: 100% !important;
+      padding: 12px 0;
+      border-bottom: 1px solid #f9f9f9;
+    }
+
+    .dropdown-menu {
+      position: static !important;
+      display: flex !important; /* Keeps them open by default in sidebar */
+      width: 100% !important;
+      box-shadow: none !important;
+      border: none !important;
+      margin-bottom: 24px !important;
+      padding-right: 10px; /* Indent options slightly from button */
     }
 
     .filter-top-menu-wrapper, 
@@ -1066,7 +1071,8 @@ function handleFacetFilterChange(type, targetElement = null) {
     }
 
     const newQueryString = params.toString();
-    FacetFiltersForm.renderPage(newQueryString, null, true);
+    // FacetFiltersForm.renderPage(newQueryString, null, true);
+    debouncedRender(newQueryString);
 
     const event = new CustomEvent('collectionPageUpdated');
     window.dispatchEvent(event);
@@ -1088,6 +1094,20 @@ function handleFacetFilterChange(type, targetElement = null) {
       }
     }
 }
+
+    // Helper function to delay execution
+    function debounce(func, wait) {
+      let timeout;
+      return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    }
+
+    // Create a debounced version of your render function
+    const debouncedRender = debounce((queryString) => {
+      FacetFiltersForm.renderPage(queryString, null, true);
+    }, 300);
 
   // document.addEventListener('DOMContentLoaded', updateDropdownButtonText)
 </script>

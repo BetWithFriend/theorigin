@@ -161,21 +161,27 @@
         }
     }
 
-    function toggleSortMenu(button) {
-      const menu = document.getElementById('sortDropdownMenu');
-      if (menu) {
-        const isOpen = menu.classList.toggle('show');
-        // Optionally update aria-expanded for accessibility
-        const expanded = button.getAttribute('aria-expanded') === 'true';
-        button.setAttribute('aria-expanded', !expanded);
-        // Lock or unlock body scroll when menu is open/closed
-        if (isOpen && window.innerWidth <= 750) {
-          document.body.classList.add('no-scroll');
-        } else {
-          document.body.classList.remove('no-scroll');
-        }
+function toggleSortMenu(button) {
+  const menu = document.getElementById('sortDropdownMenu');
+  if (menu) {
+    const isOpen = menu.classList.toggle('show');
+    const expanded = button.getAttribute('aria-expanded') === 'true';
+    button.setAttribute('aria-expanded', !expanded);
+
+    if (isOpen) {
+      // Mobile: Lock scroll
+      if (window.innerWidth <= 750) {
+        document.body.classList.add('no-scroll');
+      } else {
+        document.body.classList.add('filter-open');
       }
+    } else {
+      // Cleanup: Remove both classes when closing
+      document.body.classList.remove('no-scroll');
+      document.body.classList.remove('filter-open');
     }
+  }
+}
 
     // ... (Place this code block inside your existing <script> tags) ...
 
