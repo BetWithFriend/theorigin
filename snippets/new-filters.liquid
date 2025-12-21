@@ -161,8 +161,11 @@
         }
     }
 
-function toggleSortMenu(button) {
+function toggleSortMenu(button, source = null) {
   const menu = document.getElementById('sortDropdownMenu');
+  if (source) {
+    analytics.trackClick(`Filter ${source}`);
+  }
   if (menu) {
     const isOpen = menu.classList.toggle('show');
     const expanded = button.getAttribute('aria-expanded') === 'true';
@@ -170,15 +173,17 @@ function toggleSortMenu(button) {
 
     if (isOpen) {
       // Mobile: Lock scroll
+      analytics.trackClick('Filter Menu Open');
       if (window.innerWidth <= 750) {
         document.body.classList.add('no-scroll');
       } else {
-        document.body.classList.add('filter-open');
+        // document.body.classList.add('filter-open');
       }
     } else {
+      analytics.trackClick('Filter Menu Close');
       // Cleanup: Remove both classes when closing
       document.body.classList.remove('no-scroll');
-      document.body.classList.remove('filter-open');
+      // document.body.classList.remove('filter-open');
     }
   }
 }

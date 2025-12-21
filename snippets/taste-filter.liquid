@@ -4,7 +4,7 @@
       <img 
           src="{{ 'close-filter-icon.png' | asset_url }}" 
           class="filter-top-menu-close" 
-          onclick="toggleSortMenu(this)"
+          onclick="toggleSortMenu(this, 'x')"
       />
       <span class="sort-label-mobile">פילטרים</span>
       <div class="filter-top-menu-clear" onclick="cleanFilters()">איפוס</div>
@@ -59,6 +59,253 @@
       </div>
       </div>
     <hr class="sort-line-mobile"/>
+  </div>
+  <div class="dropdown-filter-wrapper">
+    <button
+      id="dropdown-button-roast-level"
+      type="button"
+      class="dropdown-button"
+      onclick="toggleDropdown('roast-level')">
+      <img
+        src="{{ 'dropdown-icon.png' | asset_url }}"
+        alt="Dropdown Icon"
+        class="dropdown-icon" />
+      רמת קלייה
+    </button>
+    <div class="dropdown-menu" id="dropdownMenu-roast-level">
+
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.coffee_roast_level"
+            value="בהירה,בהירה-בינונית"
+            onchange="handleFacetFilterChange('roast-level')">
+          <img
+            class="dropdown-icon-img"
+            src="{{ 'filter-roast-level-light.png' | asset_url }}"
+            alt="Filter Icon" />
+          <span class="filter-item-text">בהירה</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.coffee_roast_level"
+            value="בינונית"
+            onchange="handleFacetFilterChange('roast-level')">
+          <img
+            class="dropdown-icon-img"
+            src="{{ 'filter-roast-level-light-medium.png' | asset_url }}"
+            alt="Filter Icon" />
+          <span class="filter-item-text">בינונית</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.coffee_roast_level"
+            value="כהה, בינונית-כהה"
+            onchange="handleFacetFilterChange('roast-level')">
+          <img
+            class="dropdown-icon-img"
+            src="{{ 'filter-roast-level-dark.png' | asset_url }}"
+            alt="Filter Icon" />
+          <span class="filter-item-text">כהה</span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="dropdown-filter-wrapper">
+    <button
+      id="dropdown-button-coffee-process"
+      type="button"
+      class="dropdown-button"
+      onclick="toggleDropdown('coffee-process')">
+        {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
+      <img
+        src="{{ 'dropdown-icon.png' | asset_url }}"
+        alt="Dropdown Icon"
+        class="dropdown-icon" />
+      צורת עיבוד
+    </button>
+    <div class="dropdown-menu" id="dropdownMenu-coffee-process">
+
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.coffee_process"
+            value="שטוף,חצי-שטוף"
+            onchange="handleFacetFilterChange('coffee-process')">
+          <img
+            class="dropdown-icon-img"
+            src="{{ 'coffee-process-filter-washed.png' | asset_url }}"
+            alt="Filter Icon" />
+          <span class="filter-item-text">שטוף/חצי שטוף</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.coffee_process"
+            value="טבעי, חצי-טבעי,דבש"
+            onchange="handleFacetFilterChange('coffee-process')">
+          <img
+            class="dropdown-icon-img"
+            src="{{ 'coffee-process-filter-natural.png' | asset_url }}"
+            alt="Filter Icon" />
+          <span class="filter-item-text">טבעי/חצי טבעי</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.coffee_process"
+            value="אנאירובי טבעי,אנאירובי שטוף,אנאירובי שטוף"
+            onchange="handleFacetFilterChange('coffee-process')">
+          <img
+            class="dropdown-icon-img"
+            src="{{ 'coffee-process-filter-anirobi-natural.png' | asset_url }}"
+            alt="Filter Icon" />
+          <span class="filter-item-text">אנאירובי</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.coffee_process"
+            value="דבש"
+            onchange="handleFacetFilterChange('coffee-process')">
+          <img
+            class="dropdown-icon-img"
+            src="{{ 'coffee-process-filter-honey.png' | asset_url }}"
+            alt="Filter Icon" />
+          <span class="filter-item-text">דבש</span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="dropdown-filter-wrapper">
+    <button
+      id="dropdown-button-coffee-type"
+      type="button"
+      class="dropdown-button"
+      onclick="toggleDropdown('coffee-type')">
+      <img
+        src="{{ 'dropdown-icon.png' | asset_url }}"
+        alt="Dropdown Icon"
+        class="dropdown-icon" />
+      סוג
+    </button>
+    <div class="dropdown-menu" id="dropdownMenu-coffee-type">
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.coffee_type"
+            value="בלנד"
+            onchange="handleFacetFilterChange('coffee-type')">
+          <span class="filter-item-text">תערובת</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.coffee_type"
+            value="חד זני"
+            onchange="handleFacetFilterChange('coffee-type')">
+          <span class="filter-item-text">חד זני</span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="dropdown-filter-wrapper">
+    <button
+    id="dropdown-button-bean-origin-continent"
+    type="button"
+    class="dropdown-button"
+    onclick="toggleDropdown('bean-origin-continent')">
+      {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
+    <img
+      src="{{ 'dropdown-icon.png' | asset_url }}"
+      alt="Dropdown Icon"
+      class="dropdown-icon" />
+    גיאוגרפיה
+    </button>
+    <div class="dropdown-menu" id="dropdownMenu-bean-origin-continent">
+
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.bean_origin_continent"
+            value="אסיה"
+            onchange="handleFacetFilterChange('bean-origin-continent')">
+          <span class="filter-item-text">אסיה</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.bean_origin_continent"
+            value="אפריקה"
+            onchange="handleFacetFilterChange('bean-origin-continent')">
+          <span class="filter-item-text">אפריקה</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.bean_origin_continent"
+            value="דרום אמריקה"
+            onchange="handleFacetFilterChange('bean-origin-continent')">
+          <span class="filter-item-text">דרום אמריקה</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.bean_origin_continent"
+            value="מרכז אמריקה"
+            onchange="handleFacetFilterChange('bean-origin-continent')">
+          <span class="filter-item-text">מרכז אמריקה</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.custom.bean_origin_continent"
+            value="עולם"
+            onchange="handleFacetFilterChange('bean-origin-continent')">
+          <span class="filter-item-text">עולם</span>
+        </label>
+      </div>
+    </div>
   </div>
   <div class="dropdown-filter-wrapper">
     <button
@@ -137,78 +384,7 @@
       </div>
     </div>
   </div>
-  <div class="dropdown-filter-wrapper">
-      <button
-      id="dropdown-button-taste"
-      type="button"
-      class="dropdown-button"
-      onclick="toggleDropdown('taste')">
-        {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
-      <img
-        src="{{ 'dropdown-icon.png' | asset_url }}"
-        alt="Dropdown Icon"
-        class="dropdown-icon" />
-      גיאוגרפיה
-    </button>
-    <div class="dropdown-menu" id="dropdownMenu-bean-origin-continent">
 
-      <div class="dropdown-item">
-        <label class="dropdown-icons">
-          <input
-            class="dropdown-icons-input"
-            type="checkbox"
-            name="filter.p.m.custom.bean_origin_continent"
-            value="אסיה"
-            onchange="handleFacetFilterChange('bean-origin-continent')">
-          <span class="filter-item-text">אסיה</span>
-        </label>
-      </div>
-      <div class="dropdown-item">
-        <label class="dropdown-icons">
-          <input
-            class="dropdown-icons-input"
-            type="checkbox"
-            name="filter.p.m.custom.bean_origin_continent"
-            value="אפריקה"
-            onchange="handleFacetFilterChange('bean-origin-continent')">
-          <span class="filter-item-text">אפריקה</span>
-        </label>
-      </div>
-      <div class="dropdown-item">
-        <label class="dropdown-icons">
-          <input
-            class="dropdown-icons-input"
-            type="checkbox"
-            name="filter.p.m.custom.bean_origin_continent"
-            value="דרום אמריקה"
-            onchange="handleFacetFilterChange('bean-origin-continent')">
-          <span class="filter-item-text">דרום אמריקה</span>
-        </label>
-      </div>
-      <div class="dropdown-item">
-        <label class="dropdown-icons">
-          <input
-            class="dropdown-icons-input"
-            type="checkbox"
-            name="filter.p.m.custom.bean_origin_continent"
-            value="מרכז אמריקה"
-            onchange="handleFacetFilterChange('bean-origin-continent')">
-          <span class="filter-item-text">מרכז אמריקה</span>
-        </label>
-      </div>
-      <div class="dropdown-item">
-        <label class="dropdown-icons">
-          <input
-            class="dropdown-icons-input"
-            type="checkbox"
-            name="filter.p.m.custom.bean_origin_continent"
-            value="עולם"
-            onchange="handleFacetFilterChange('bean-origin-continent')">
-          <span class="filter-item-text">עולם</span>
-        </label>
-      </div>
-    </div>
-  </div>
   <div class="dropdown-filter-wrapper">
         <button
           id="dropdown-button-prep"
@@ -301,235 +477,95 @@
           </div>
         </div>
   </div>
-  <div class="dropdown-filter-wrapper">
-
-  <button
-    id="dropdown-button-roast-level"
-    type="button"
-    class="dropdown-button"
-    onclick="toggleDropdown('roast-level')">
-    <img
-      src="{{ 'dropdown-icon.png' | asset_url }}"
-      alt="Dropdown Icon"
-      class="dropdown-icon" />
-    רמת קלייה
-  </button>
-  <div class="dropdown-menu" id="dropdownMenu-roast-level">
-
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_roast_level"
-          value="בהירה,בהירה-בינונית"
-          onchange="handleFacetFilterChange('roast-level')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'filter-roast-level-light.png' | asset_url }}"
-          alt="Filter Icon" />
-        <span class="filter-item-text">בהירה</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_roast_level"
-          value="בינונית"
-          onchange="handleFacetFilterChange('roast-level')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'filter-roast-level-light-medium.png' | asset_url }}"
-          alt="Filter Icon" />
-        <span class="filter-item-text">בינונית</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_roast_level"
-          value="כהה, בינונית-כהה"
-          onchange="handleFacetFilterChange('roast-level')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'filter-roast-level-dark.png' | asset_url }}"
-          alt="Filter Icon" />
-        <span class="filter-item-text">כהה</span>
-      </label>
-    </div>
-  </div>
-  </div>
 
   <div class="dropdown-filter-wrapper">
-  <button
-    id="dropdown-button-coffee-process"
-    type="button"
-    class="dropdown-button"
-    onclick="toggleDropdown('coffee-process')">
-      {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
-    <img
-      src="{{ 'dropdown-icon.png' | asset_url }}"
-      alt="Dropdown Icon"
-      class="dropdown-icon" />
-    צורת עיבוד
-  </button>
-  <div class="dropdown-menu" id="dropdownMenu-coffee-process">
+    <button
+      type="button"
+      id="dropdown-button-roast-origin"
+      class="dropdown-button"
+      onclick="toggleDropdown('roast-origin')">
+        {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
+      <img
+        src="{{ 'dropdown-icon.png' | asset_url }}"
+        alt="Dropdown Icon"
+        class="dropdown-icon" />
+      בית קלייה
+    </button>
+    <div class="dropdown-menu" id="dropdownMenu-roast-origin">
 
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_process"
-          value="שטוף,חצי-שטוף"
-          onchange="handleFacetFilterChange('coffee-process')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'coffee-process-filter-washed.png' | asset_url }}"
-          alt="Filter Icon" />
-        <span class="filter-item-text">שטוף/חצי שטוף</span>
-      </label>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.vendor_info.coffee_vendor"
+            value="gid://shopify/Metaobject/80938893369"
+            onchange="handleFacetFilterChange('roast-origin')">
+          <span class="filter-item-text">Canopy</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.vendor_info.coffee_vendor"
+            value="gid://shopify/Metaobject/80936304697"
+            onchange="handleFacetFilterChange('roast-origin')">
+          <span class="filter-item-text">Blooms</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.vendor_info.coffee_vendor"
+            value="gid://shopify/Metaobject/92340289593"
+            onchange="handleFacetFilterChange('roast-origin')">
+          <span class="filter-item-text">Coffee Org</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.vendor_info.coffee_vendor"
+            value="gid://shopify/Metaobject/107700617273"
+            onchange="handleFacetFilterChange('roast-origin')">
+          <span class="filter-item-text">Coffee Culture</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.vendor_info.coffee_vendor"
+            value="gid://shopify/Metaobject/80936370233"
+            onchange="handleFacetFilterChange('roast-origin')">
+          <span class="filter-item-text">You Need Coffee</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.vendor_info.coffee_vendor"
+            value="gid://shopify/Metaobject/129521614905"
+            onchange="handleFacetFilterChange('roast-origin')">
+          <span class="filter-item-text">Elijahs Coffee</span>
+        </label>
+      </div>
     </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_process"
-          value="טבעי, חצי-טבעי,דבש"
-          onchange="handleFacetFilterChange('coffee-process')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'coffee-process-filter-natural.png' | asset_url }}"
-          alt="Filter Icon" />
-        <span class="filter-item-text">טבעי/חצי טבעי</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_process"
-          value="אנאירובי טבעי,אנאירובי שטוף,אנאירובי שטוף"
-          onchange="handleFacetFilterChange('coffee-process')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'coffee-process-filter-anirobi-natural.png' | asset_url }}"
-          alt="Filter Icon" />
-        <span class="filter-item-text">אנאירובי</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.custom.coffee_process"
-          value="דבש"
-          onchange="handleFacetFilterChange('coffee-process')">
-        <img
-          class="dropdown-icon-img"
-          src="{{ 'coffee-process-filter-honey.png' | asset_url }}"
-          alt="Filter Icon" />
-        <span class="filter-item-text">דבש</span>
-      </label>
-    </div>
-  </div>
-  </div>
-
-  <div class="dropdown-filter-wrapper">
-  <button
-    type="button"
-    id="dropdown-button-roast-origin"
-    class="dropdown-button"
-    onclick="toggleDropdown('roast-origin')">
-      {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
-    <img
-      src="{{ 'dropdown-icon.png' | asset_url }}"
-      alt="Dropdown Icon"
-      class="dropdown-icon" />
-    בית קלייה
-  </button>
-  <div class="dropdown-menu" id="dropdownMenu-roast-origin">
-
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.vendor_info.coffee_vendor"
-          value="gid://shopify/Metaobject/80938893369"
-          onchange="handleFacetFilterChange('roast-origin')">
-        <span class="filter-item-text">Canopy</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.vendor_info.coffee_vendor"
-          value="gid://shopify/Metaobject/80936304697"
-          onchange="handleFacetFilterChange('roast-origin')">
-        <span class="filter-item-text">Blooms</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.vendor_info.coffee_vendor"
-          value="gid://shopify/Metaobject/92340289593"
-          onchange="handleFacetFilterChange('roast-origin')">
-        <span class="filter-item-text">Coffee Org</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.vendor_info.coffee_vendor"
-          value="gid://shopify/Metaobject/107700617273"
-          onchange="handleFacetFilterChange('roast-origin')">
-        <span class="filter-item-text">Coffee Culture</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.vendor_info.coffee_vendor"
-          value="gid://shopify/Metaobject/80936370233"
-          onchange="handleFacetFilterChange('roast-origin')">
-        <span class="filter-item-text">You Need Coffee</span>
-      </label>
-    </div>
-    <div class="dropdown-item">
-      <label class="dropdown-icons">
-        <input
-          class="dropdown-icons-input"
-          type="checkbox"
-          name="filter.p.m.vendor_info.coffee_vendor"
-          value="gid://shopify/Metaobject/129521614905"
-          onchange="handleFacetFilterChange('roast-origin')">
-        <span class="filter-item-text">Elijahs Coffee</span>
-      </label>
-    </div>
-  </div>
   </div>
 
 </div>
 
 <div class="filter-bottom-menu-select">
-  <div class="filter-bottom-menu-apply-btn" onclick="toggleSortMenu(this)">בחר</div>
+  <div class="filter-bottom-menu-apply-btn" onclick="toggleSortMenu(this, 'submit')">בחר</div>
 </div>
 
 
@@ -591,6 +627,7 @@
   #dropdownMenu-prep,
   #dropdownMenu-coffee-process,
   #dropdownMenu-bean-origin-continent,
+  #dropdownMenu-coffee-type,
   #dropdownMenu-roast-origin {
     width: 100%;
     display: flex;
@@ -966,6 +1003,16 @@
     });
 
     FacetFiltersForm.renderPage('', null, true);
+    const button = document.querySelector('.sort-dropdown-button');
+    if (screen.width <= 749) {
+      toggleSortMenu(button);
+    }
+    
+    const indicator = document.querySelector('.sort-icon-image-selected');
+    if (indicator) {
+      indicator.classList.remove('show');
+    }
+    analytics.trackClick('Filter Reset');
   }
 
   function updateDropdownButtonText(type) {
@@ -1020,6 +1067,7 @@ function handleFacetFilterChange(type, targetElement = null) {
       'roast-origin': 'filter.p.m.vendor_info.coffee_vendor',
       'coffee-process': 'filter.p.m.custom.coffee_process',
       'bean-origin-continent': 'filter.p.m.custom.bean_origin_continent',
+      'coffee-type': 'filter.p.m.custom.coffee_type',
       'sort-by': 'sort_by'
     };
 
@@ -1069,6 +1117,12 @@ function handleFacetFilterChange(type, targetElement = null) {
         desiredValues.forEach((v) => params.append(paramName, v));
       }
     }
+
+    analytics.trackClick('Filter Select', {
+      'Source': 'Filter Menu',
+      'Filter Name': type,
+      'Filter Value': desiredValues.join(', ')
+    });
 
     const newQueryString = params.toString();
     // FacetFiltersForm.renderPage(newQueryString, null, true);
