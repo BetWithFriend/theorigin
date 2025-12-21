@@ -31,7 +31,7 @@
             type="checkbox"
             name="sort_by"
             value="best-selling"
-            onchange="handleFacetFilterChange('sort-by', this)">
+            onchange="handleFacetFilterChange('sort-by', this, 'הכי נמכר')">
           <span class="filter-item-text">הכי נמכר</span>
         </label>
       </div>
@@ -42,7 +42,7 @@
             type="checkbox"
             name="sort_by"
             value="price-ascending"
-            onchange="handleFacetFilterChange('sort-by', this)">
+            onchange="handleFacetFilterChange('sort-by', this, 'מחיר (נמוך לגבוה)')">
           <span class="filter-item-text">מחיר (נמוך לגבוה)</span>
         </label>
       </div>
@@ -53,7 +53,7 @@
             type="checkbox"
             name="sort_by"
             value="price-descending"
-            onchange="handleFacetFilterChange('sort-by', this)">
+            onchange="handleFacetFilterChange('sort-by', this, 'מחיר (גבוה לנמוך)')">
           <span class="filter-item-text">מחיר (גבוה לנמוך)</span>
         </label>
       </div>
@@ -81,7 +81,7 @@
             type="checkbox"
             name="filter.p.m.custom.coffee_roast_level"
             value="בהירה,בהירה-בינונית"
-            onchange="handleFacetFilterChange('roast-level')">
+            onchange="handleFacetFilterChange('roast-level', null, 'בהירה')">
           <img
             class="dropdown-icon-img"
             src="{{ 'filter-roast-level-light.png' | asset_url }}"
@@ -96,7 +96,7 @@
             type="checkbox"
             name="filter.p.m.custom.coffee_roast_level"
             value="בינונית"
-            onchange="handleFacetFilterChange('roast-level')">
+            onchange="handleFacetFilterChange('roast-level', null, 'בינונית')">
           <img
             class="dropdown-icon-img"
             src="{{ 'filter-roast-level-light-medium.png' | asset_url }}"
@@ -111,7 +111,7 @@
             type="checkbox"
             name="filter.p.m.custom.coffee_roast_level"
             value="כהה, בינונית-כהה"
-            onchange="handleFacetFilterChange('roast-level')">
+            onchange="handleFacetFilterChange('roast-level', null, 'כהה')">
           <img
             class="dropdown-icon-img"
             src="{{ 'filter-roast-level-dark.png' | asset_url }}"
@@ -143,7 +143,7 @@
             type="checkbox"
             name="filter.p.m.custom.coffee_process"
             value="שטוף,חצי-שטוף"
-            onchange="handleFacetFilterChange('coffee-process')">
+            onchange="handleFacetFilterChange('coffee-process', null, 'שטוף/חצי שטוף')">
           <img
             class="dropdown-icon-img"
             src="{{ 'coffee-process-filter-washed.png' | asset_url }}"
@@ -158,7 +158,7 @@
             type="checkbox"
             name="filter.p.m.custom.coffee_process"
             value="טבעי, חצי-טבעי,דבש"
-            onchange="handleFacetFilterChange('coffee-process')">
+            onchange="handleFacetFilterChange('coffee-process', null, 'טבעי/חצי טבעי')">
           <img
             class="dropdown-icon-img"
             src="{{ 'coffee-process-filter-natural.png' | asset_url }}"
@@ -173,7 +173,7 @@
             type="checkbox"
             name="filter.p.m.custom.coffee_process"
             value="אנאירובי טבעי,אנאירובי שטוף,אנאירובי שטוף"
-            onchange="handleFacetFilterChange('coffee-process')">
+            onchange="handleFacetFilterChange('coffee-process', null, 'אנאירובי')">
           <img
             class="dropdown-icon-img"
             src="{{ 'coffee-process-filter-anirobi-natural.png' | asset_url }}"
@@ -188,7 +188,7 @@
             type="checkbox"
             name="filter.p.m.custom.coffee_process"
             value="דבש"
-            onchange="handleFacetFilterChange('coffee-process')">
+            onchange="handleFacetFilterChange('coffee-process', null, 'דבש')">
           <img
             class="dropdown-icon-img"
             src="{{ 'coffee-process-filter-honey.png' | asset_url }}"
@@ -218,7 +218,7 @@
             type="checkbox"
             name="filter.p.m.custom.coffee_type"
             value="בלנד"
-            onchange="handleFacetFilterChange('coffee-type')">
+            onchange="handleFacetFilterChange('coffee-type', null, 'תערובת')">
           <span class="filter-item-text">תערובת</span>
         </label>
       </div>
@@ -229,7 +229,7 @@
             type="checkbox"
             name="filter.p.m.custom.coffee_type"
             value="חד זני"
-            onchange="handleFacetFilterChange('coffee-type')">
+            onchange="handleFacetFilterChange('coffee-type', null, 'חד זני')">
           <span class="filter-item-text">חד זני</span>
         </label>
       </div>
@@ -257,7 +257,7 @@
             type="checkbox"
             name="filter.p.m.custom.bean_origin_continent"
             value="אסיה"
-            onchange="handleFacetFilterChange('bean-origin-continent')">
+            onchange="handleFacetFilterChange('bean-origin-continent', null, 'אסיה')">
           <span class="filter-item-text">אסיה</span>
         </label>
       </div>
@@ -268,7 +268,7 @@
             type="checkbox"
             name="filter.p.m.custom.bean_origin_continent"
             value="אפריקה"
-            onchange="handleFacetFilterChange('bean-origin-continent')">
+            onchange="handleFacetFilterChange('bean-origin-continent', null, 'אפריקה')">
           <span class="filter-item-text">אפריקה</span>
         </label>
       </div>
@@ -279,7 +279,7 @@
             type="checkbox"
             name="filter.p.m.custom.bean_origin_continent"
             value="דרום אמריקה"
-            onchange="handleFacetFilterChange('bean-origin-continent')">
+            onchange="handleFacetFilterChange('bean-origin-continent', null, 'דרום אמריקה')">
           <span class="filter-item-text">דרום אמריקה</span>
         </label>
       </div>
@@ -290,7 +290,7 @@
             type="checkbox"
             name="filter.p.m.custom.bean_origin_continent"
             value="מרכז אמריקה"
-            onchange="handleFacetFilterChange('bean-origin-continent')">
+            onchange="handleFacetFilterChange('bean-origin-continent', null, 'מרכז אמריקה')">
           <span class="filter-item-text">מרכז אמריקה</span>
         </label>
       </div>
@@ -301,19 +301,18 @@
             type="checkbox"
             name="filter.p.m.custom.bean_origin_continent"
             value="עולם"
-            onchange="handleFacetFilterChange('bean-origin-continent')">
+            onchange="handleFacetFilterChange('bean-origin-continent', null, 'עולם')">
           <span class="filter-item-text">עולם</span>
         </label>
       </div>
     </div>
   </div>
-  <div class="dropdown-filter-wrapper">
+  {% comment %} <div class="dropdown-filter-wrapper">
     <button
       id="dropdown-button-taste"
       type="button"
       class="dropdown-button"
       onclick="toggleDropdown('taste')">
-        {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
       <img
         src="{{ 'dropdown-icon.png' | asset_url }}"
         alt="Dropdown Icon"
@@ -383,7 +382,7 @@
         </label>
       </div>
     </div>
-  </div>
+  </div> {% endcomment %}
 
   <div class="dropdown-filter-wrapper">
         <button
@@ -407,7 +406,7 @@
                 type="checkbox"
                 name="filter.p.m.custom.coffee_prep_methods"
                 value="Filter"
-                onchange="handleFacetFilterChange('prep')">
+                onchange="handleFacetFilterChange('prep', null, 'פילטר')">
               <img
                 class="dropdown-icon-img"
                 src="{{ 'dropdown-brew-Filter.png' | asset_url }}"
@@ -422,7 +421,7 @@
                 type="checkbox"
                 name="filter.p.m.custom.coffee_prep_methods"
                 value="Black"
-                onchange="handleFacetFilterChange('prep')">
+                onchange="handleFacetFilterChange('prep', null, 'קפה שחור')">
               <img
                 class="dropdown-icon-img"
                 src="{{ 'dropdown-brew-Turkish.png' | asset_url }}"
@@ -437,7 +436,7 @@
                 type="checkbox"
                 name="filter.p.m.custom.coffee_prep_methods"
                 value="MokaPot"
-                onchange="handleFacetFilterChange('prep')">
+                onchange="handleFacetFilterChange('prep', null, 'מקינטה')">
               <img
                 class="dropdown-icon-img"
                 src="{{ 'dropdown-brew-Moka.png' | asset_url }}"
@@ -452,7 +451,7 @@
                 type="checkbox"
                 name="filter.p.m.custom.coffee_prep_methods"
                 value="Espresso"
-                onchange="handleFacetFilterChange('prep')">
+                onchange="handleFacetFilterChange('prep', null, 'אספרסו')">
               <img
                 class="dropdown-icon-img"
                 src="{{ 'dropdown-brew-Espresso-Machine.png' | asset_url }}"
@@ -467,7 +466,7 @@
                 type="checkbox"
                 name="filter.p.m.custom.coffee_prep_methods"
                 value="Aeropress"
-                onchange="handleFacetFilterChange('prep')">
+                onchange="handleFacetFilterChange('prep', null, 'חליטה')">
               <img
                 class="dropdown-icon-img "
                 src="{{  'dropdown-brew-Chemex.png' | asset_url }}"
@@ -481,9 +480,9 @@
   <div class="dropdown-filter-wrapper">
     <button
       type="button"
-      id="dropdown-button-roast-origin"
+      id="dropdown-button-roaster"
       class="dropdown-button"
-      onclick="toggleDropdown('roast-origin')">
+      onclick="toggleDropdown('roaster')">
         {% comment %} <div class="selected-icons" id="selected-icons-taste"></div> {% endcomment %}
       <img
         src="{{ 'dropdown-icon.png' | asset_url }}"
@@ -491,7 +490,7 @@
         class="dropdown-icon" />
       בית קלייה
     </button>
-    <div class="dropdown-menu" id="dropdownMenu-roast-origin">
+    <div class="dropdown-menu" id="dropdownMenu-roaster">
 
       <div class="dropdown-item">
         <label class="dropdown-icons">
@@ -500,7 +499,7 @@
             type="checkbox"
             name="filter.p.m.vendor_info.coffee_vendor"
             value="gid://shopify/Metaobject/80938893369"
-            onchange="handleFacetFilterChange('roast-origin')">
+            onchange="handleFacetFilterChange('roaster', null, 'Canopy')">
           <span class="filter-item-text">Canopy</span>
         </label>
       </div>
@@ -511,7 +510,7 @@
             type="checkbox"
             name="filter.p.m.vendor_info.coffee_vendor"
             value="gid://shopify/Metaobject/80936304697"
-            onchange="handleFacetFilterChange('roast-origin')">
+            onchange="handleFacetFilterChange('roaster', null, 'Blooms')">
           <span class="filter-item-text">Blooms</span>
         </label>
       </div>
@@ -522,7 +521,7 @@
             type="checkbox"
             name="filter.p.m.vendor_info.coffee_vendor"
             value="gid://shopify/Metaobject/92340289593"
-            onchange="handleFacetFilterChange('roast-origin')">
+            onchange="handleFacetFilterChange('roaster', null, 'Coffee Org')">
           <span class="filter-item-text">Coffee Org</span>
         </label>
       </div>
@@ -533,7 +532,7 @@
             type="checkbox"
             name="filter.p.m.vendor_info.coffee_vendor"
             value="gid://shopify/Metaobject/107700617273"
-            onchange="handleFacetFilterChange('roast-origin')">
+            onchange="handleFacetFilterChange('roaster', null, 'Coffee Culture')">
           <span class="filter-item-text">Coffee Culture</span>
         </label>
       </div>
@@ -544,7 +543,7 @@
             type="checkbox"
             name="filter.p.m.vendor_info.coffee_vendor"
             value="gid://shopify/Metaobject/80936370233"
-            onchange="handleFacetFilterChange('roast-origin')">
+            onchange="handleFacetFilterChange('roaster', null, 'You Need Coffee')">
           <span class="filter-item-text">You Need Coffee</span>
         </label>
       </div>
@@ -555,7 +554,7 @@
             type="checkbox"
             name="filter.p.m.vendor_info.coffee_vendor"
             value="gid://shopify/Metaobject/129521614905"
-            onchange="handleFacetFilterChange('roast-origin')">
+            onchange="handleFacetFilterChange('roaster', null, 'Elijahs Coffee')">
           <span class="filter-item-text">Elijahs Coffee</span>
         </label>
       </div>
@@ -628,7 +627,7 @@
   #dropdownMenu-coffee-process,
   #dropdownMenu-bean-origin-continent,
   #dropdownMenu-coffee-type,
-  #dropdownMenu-roast-origin {
+  #dropdownMenu-roaster {
     width: 100%;
     display: flex;
     align-items: start;
@@ -1012,6 +1011,12 @@
     if (indicator) {
       indicator.classList.remove('show');
     }
+    const bubbleItem = document.querySelectorAll('.bubble-item.active');
+    if (bubbleItem) {
+      bubbleItem.forEach(item => {
+        item.classList.remove('active');
+      });
+    }
     analytics.trackClick('Filter Reset');
   }
 
@@ -1044,110 +1049,110 @@
 
   // Helper for instant update from taste/prep checkboxes
   // Added targetElement as the second argument
-function handleFacetFilterChange(type, targetElement = null) {
+    function handleFacetFilterChange(type, targetElement = null, filterName) {
 
-    // --- 1. UI LOGIC: Enforce Single Select for Sort-By ---
-      if (type === 'sort-by' && targetElement) {
-        // If the user just checked this box, uncheck all others in the same group
-        if (targetElement.checked) {
-          const allSortInputs = document.querySelectorAll('#dropdownMenu-' + type + ' .dropdown-icons-input');
-          allSortInputs.forEach(input => {
-            if (input !== targetElement) {
-              input.checked = false;
+        // --- 1. UI LOGIC: Enforce Single Select for Sort-By ---
+          if (type === 'sort-by' && targetElement) {
+            // If the user just checked this box, uncheck all others in the same group
+            if (targetElement.checked) {
+              const allSortInputs = document.querySelectorAll('#dropdownMenu-' + type + ' .dropdown-icons-input');
+              allSortInputs.forEach(input => {
+                if (input !== targetElement) {
+                  input.checked = false;
+              }
+            });
           }
-        });
-      }
-    }
-
-    // --- 2. EXISTING LOGIC ---
-      const paramMap = {
-      'taste': 'filter.p.m.custom.coffee_taste',
-      'prep': 'filter.p.m.custom.coffee_prep_methods',
-      'roast-level': 'filter.p.m.custom.coffee_roast_level',
-      'roast-origin': 'filter.p.m.vendor_info.coffee_vendor',
-      'coffee-process': 'filter.p.m.custom.coffee_process',
-      'bean-origin-continent': 'filter.p.m.custom.bean_origin_continent',
-      'coffee-type': 'filter.p.m.custom.coffee_type',
-      'sort-by': 'sort_by'
-    };
-
-    const paramName = paramMap[type];
-    if (!paramName) return;
-
-    // Collect checked, visible boxes (Now this will only find 1 item for sort-by)
-    const filterValue = Array.from(
-        document.querySelectorAll('#dropdownMenu-' + type + ' .dropdown-icons-input:checked')
-      ).filter(cb => cb.offsetParent !== null)
-      .map(cb => cb.value);
-
-    const params = new URLSearchParams(window.location.search);
-    const currentValues = params.getAll(paramName);
-
-    const desiredValues = String(filterValue)
-      .split(',')
-      .map((v) => v.trim())
-      .filter(Boolean);
-
-    // --- 3. URL LOGIC ---
-
-    if (type === 'sort-by') {
-      // Clear existing sort params
-      params.delete(paramName);
-      
-      // Since we handled the UI unchecking above, desiredValues will have max 1 item
-      if (desiredValues.length > 0) {
-        params.set(paramName, desiredValues[0]);
-      }
-    } else {
-      // Logic for other multi-select filters
-      const sameValueSet = (a, b) => {
-        const aSet = new Set(a);
-        const bSet = new Set(b);
-        if (aSet.size !== bSet.size) return false;
-        for (const v of aSet) {
-          if (!bSet.has(v)) return false;
         }
-        return true;
-      };
 
-      if (desiredValues.length > 0 && sameValueSet(currentValues, desiredValues)) {
-        params.delete(paramName);
-      } else {
-        params.delete(paramName);
-        desiredValues.forEach((v) => params.append(paramName, v));
-      }
+        // --- 2. EXISTING LOGIC ---
+          const paramMap = {
+          'taste': 'filter.p.m.custom.coffee_taste',
+          'prep': 'filter.p.m.custom.coffee_prep_methods',
+          'roast-level': 'filter.p.m.custom.coffee_roast_level',
+          'roaster': 'filter.p.m.vendor_info.coffee_vendor',
+          'coffee-process': 'filter.p.m.custom.coffee_process',
+          'bean-origin-continent': 'filter.p.m.custom.bean_origin_continent',
+          'coffee-type': 'filter.p.m.custom.coffee_type',
+          'sort-by': 'sort_by'
+        };
+
+        const paramName = paramMap[type];
+        if (!paramName) return;
+
+        // Collect checked, visible boxes (Now this will only find 1 item for sort-by)
+        const filterValue = Array.from(
+            document.querySelectorAll('#dropdownMenu-' + type + ' .dropdown-icons-input:checked')
+          ).filter(cb => cb.offsetParent !== null)
+          .map(cb => cb.value);
+
+        const params = new URLSearchParams(window.location.search);
+        const currentValues = params.getAll(paramName);
+
+        const desiredValues = String(filterValue)
+          .split(',')
+          .map((v) => v.trim())
+          .filter(Boolean);
+
+        // --- 3. URL LOGIC ---
+
+        if (type === 'sort-by') {
+          // Clear existing sort params
+          params.delete(paramName);
+          
+          // Since we handled the UI unchecking above, desiredValues will have max 1 item
+          if (desiredValues.length > 0) {
+            params.set(paramName, desiredValues[0]);
+          }
+        } else {
+          // Logic for other multi-select filters
+          const sameValueSet = (a, b) => {
+            const aSet = new Set(a);
+            const bSet = new Set(b);
+            if (aSet.size !== bSet.size) return false;
+            for (const v of aSet) {
+              if (!bSet.has(v)) return false;
+            }
+            return true;
+          };
+
+          if (desiredValues.length > 0 && sameValueSet(currentValues, desiredValues)) {
+            params.delete(paramName);
+          } else {
+            params.delete(paramName);
+            desiredValues.forEach((v) => params.append(paramName, v));
+          }
+        }
+        
+        analytics.trackClick('Filter Select', {
+          'Source': 'Filter Menu',
+          'Filter Name': type,
+          'Filter Value': filterName
+        });
+
+        const newQueryString = params.toString();
+        // FacetFiltersForm.renderPage(newQueryString, null, true);
+        debouncedRender(newQueryString);
+
+        const event = new CustomEvent('collectionPageUpdated');
+        window.dispatchEvent(event);
+
+        // --- 4. UPDATE SORT ICON VISIBILITY ---
+        const indicator = document.querySelector('.sort-icon-image-selected');
+        if (indicator) {
+          // Check the new params object we just built
+          const hasActiveFilters = Array.from(params.keys()).some(key => 
+            key.startsWith('filter.p.') || 
+            key.startsWith('filter.v.') || 
+            key === 'sort_by'
+          );
+
+          if (hasActiveFilters) {
+            indicator.classList.add('show');
+          } else {
+            indicator.classList.remove('show');
+          }
+        }
     }
-
-    analytics.trackClick('Filter Select', {
-      'Source': 'Filter Menu',
-      'Filter Name': type,
-      'Filter Value': desiredValues.join(', ')
-    });
-
-    const newQueryString = params.toString();
-    // FacetFiltersForm.renderPage(newQueryString, null, true);
-    debouncedRender(newQueryString);
-
-    const event = new CustomEvent('collectionPageUpdated');
-    window.dispatchEvent(event);
-
-    // --- 4. UPDATE SORT ICON VISIBILITY ---
-    const indicator = document.querySelector('.sort-icon-image-selected');
-    if (indicator) {
-      // Check the new params object we just built
-      const hasActiveFilters = Array.from(params.keys()).some(key => 
-        key.startsWith('filter.p.') || 
-        key.startsWith('filter.v.') || 
-        key === 'sort_by'
-      );
-
-      if (hasActiveFilters) {
-        indicator.classList.add('show');
-      } else {
-        indicator.classList.remove('show');
-      }
-    }
-}
 
     // Helper function to delay execution
     function debounce(func, wait) {
