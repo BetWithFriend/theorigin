@@ -1,63 +1,68 @@
-    {{ 'horizontal-bubbles.css' | asset_url | stylesheet_tag }}
+{{ 'horizontal-bubbles.css' | asset_url | stylesheet_tag }}
+{{ 'component-show-more.css' | asset_url | stylesheet_tag }}
 <div class="all-new-filters-wrapper">
-    {% render 'facets',
-        results: collection,
-        enable_filtering: section.settings.enable_filtering,
-        enable_sorting: section.settings.enable_sorting,
-        filter_type: section.settings.filter_type,
-        paginate: paginate
-    %}
+  <button onclick="toggleSortMenu(this)" class="sort-dropdown-button" type="button" aria-expanded="false" aria-haspopup="true">
+    {% comment %} <div class="sort-icon-wrapper"> {% endcomment %}
+      <div class="sort-text-wrapper">
+        סינון לפי:
+      </div>
+      <img class="sort-icon-image" src="{{ 'sort-icon-image.png' | asset_url }}" alt="sort icon"/>
+      <div class="sort-icon-image-selected {% if content_for_header contains 'filter.p.' or content_for_header contains 'filter.v.' or content_for_header contains 'sort_by=' %}show{% endif %}">&nbsp;</div>
+    {% comment %} </div> {% endcomment %}
+  </button>
+  <div class="vertical-line-border">&nbsp;</div>
+  <div class="sort-dropdown-menu" id="sortDropdownMenu">
+    {% assign product_taste = collection.products %} 
+    {% render 'taste-filter', tastes: product_taste, results: results %} 
+  </div>
     <div class="horizontal-bubbles-wrapper" id="horizontal-bubbles-wrapper">
         <div class="horizontal-bubbles-container">
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_roast_level', 'כהה, בינונית-כהה')">
-                <div class="bubble-text">
-                    <div class="bubble-title">קלייה כהה</div>
-                    <div class="bubble-subtitle">אספרסו ומקינטה</div>
-                </div>
-            </div>
-
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_roast_level', 'בינונית,בינונית-כהה')">
-                <div class="bubble-text">
-                    <div class="bubble-title">קלייה בינונית</div>
-                    <div class="bubble-subtitle">מתאים להכל</div>
-                </div>
-            </div>
-
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_roast_level', 'בהירה-בינונית,בהירה')">
-                <div class="bubble-text">
-                    <div class="bubble-title">קלייה בהירה</div>
-                    <div class="bubble-subtitle">בעיקר לפילטר</div>
-                </div>
-            </div>
-
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_process', 'שטוף, חצי-שטוף, אנאירובי שטוף')">
-                <div class="bubble-text">
-                    <div class="bubble-title">עיבוד שטוף</div>
-                    <div class="bubble-subtitle">טעם נקי</div>
-                </div>
-            </div>
-
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_process', 'טבעי, חצי-טבעי, אנאירובי טבעי, דבש')">
-                <div class="bubble-text">
-                    <div class="bubble-title">עיבוד טבעי</div>
-                    <div class="bubble-subtitle">מתיקות טבעית</div>
-                </div>
-            </div>
-
-            <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_process', 'אנאירובי שטוף, אנאירובי טבעי')">
-                <div class="bubble-text">
-                    <div class="bubble-title">עיבוד אנאירובי</div>
-                    <div class="bubble-subtitle">טעם מורכב</div>
-                </div>
+          <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Chocolate')">
+            <div class="bubble-text">
+                <div class="bubble-title">שוקולדי</div>
+                <div class="bubble-subtitle">מריר ואגוזי</div>
             </div>
         </div>
-    </div>
-</div>
-{% comment %} <p class="product-count-main-store">מספר מוצרים: {{ collection.products_count }}</p> {% endcomment %}
 
+        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Sweet-Chocolate')">
+            <div class="bubble-text">
+                <div class="bubble-title">מתוק שוקולדי</div>
+                <div class="bubble-subtitle">עמוק ועשיר</div>
+            </div>
+        </div>
+
+        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Sweet')">
+            <div class="bubble-text">
+                <div class="bubble-title">מתוק מאוזן</div>
+                <div class="bubble-subtitle">מאוזן וקרמלי</div>
+            </div>
+        </div>
+
+        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet')">
+            <div class="bubble-text">
+                <div class="bubble-title">פירותי מתוק</div>
+                <div class="bubble-subtitle">חמיצות קלה</div>
+            </div>
+        </div>
+
+        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity')">
+            <div class="bubble-text">
+                <div class="bubble-title">פירותי</div>
+                <div class="bubble-subtitle">חמצמץ והדרי</div>
+            </div>
+        </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+  
 <script>
 
-function removeAllFilters() {
+  function removeAllFilters() {
     const params = new URLSearchParams(window.location.search);
     // Remove all filter-related params and reset pagination
     const keysToDelete = [];
@@ -71,7 +76,7 @@ function removeAllFilters() {
 
     const newQueryString = params.toString();
 
-    if (window.FacetFiltersForm && typeof FacetFiltersForm.renderPage === 'function') {
+    if (typeof FacetFiltersForm.renderPage === 'function') {
         if (typeof analytics !== 'undefined' && analytics && typeof analytics.trackClick === 'function') {
             analytics.trackClick('Filter select', {
                 'Source': 'Catalogue',
@@ -90,10 +95,10 @@ function removeAllFilters() {
         const url = newQueryString ? `${window.location.pathname}?${newQueryString}` : window.location.pathname;
         window.location.href = url;
     }
-}
+  }
 
     function goToFilter(element, filterKey, filterValue) {
-        if (window.FacetFiltersForm && typeof FacetFiltersForm.renderPage === 'function') {
+        if (typeof FacetFiltersForm.renderPage === 'function') {
 
             if (typeof analytics !== 'undefined' && analytics && typeof analytics.trackClick === 'function') {
                 analytics.trackClick('Filter select', {
@@ -149,7 +154,34 @@ function removeAllFilters() {
         }
     }
 
-    // ... (Place this code block inside your existing script tags) ...
+function toggleSortMenu(button, source = null) {
+  const menu = document.getElementById('sortDropdownMenu');
+  if (source) {
+    analytics.trackClick(`Filter ${source}`);
+  }
+  if (menu) {
+    const isOpen = menu.classList.toggle('show');
+    const expanded = button.getAttribute('aria-expanded') === 'true';
+    button.setAttribute('aria-expanded', !expanded);
+
+    if (isOpen) {
+      // Mobile: Lock scroll
+      analytics.trackClick('Filter Menu Open');
+      if (window.innerWidth <= 750) {
+        document.body.classList.add('no-scroll');
+      } else {
+        // document.body.classList.add('filter-open');
+      }
+    } else {
+      analytics.trackClick('Filter Menu Close');
+      // Cleanup: Remove both classes when closing
+      document.body.classList.remove('no-scroll');
+      // document.body.classList.remove('filter-open');
+    }
+  }
+}
+
+    // ... (Place this code block inside your existing <script> tags) ...
 
     function highlightActiveFilters() {
         // 1. Get the current URL parameters

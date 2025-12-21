@@ -24,7 +24,7 @@
     assign results_url = results.url
   else
     assign terms = results.terms | escape
-    assign results_url = '?q=' | append: terms | append: '&options%5Bprefix%5D=last&sort_by=' | append: sort_by
+    assign results_url = '?q=' | append: terms | append: '&options%5Bprefix%5D=last'
   endif
 -%}
 
@@ -483,7 +483,7 @@
                   {%- endfor -%}
                   <div class="sort-by-text-wrapper">
                     <span class="sort-by-text">מיון לפי: </span>
-                    <button class="sort-dropdown-button" type="button" aria-expanded="false" aria-haspopup="true">
+                    <button onclick="toggleSortMenu(this)" class="sort-dropdown-button" type="button" aria-expanded="false" aria-haspopup="true">
                       <span class="sort-icon-wrapper">
                         <img class="sort-icon-image" src="{{ 'sort-icon.png' | asset_url }}" alt="sort icon"/>
                       </span>
@@ -497,10 +497,12 @@
                         </span>
                     </button>
                   </div>
-                  <div class="sort-dropdown-menu" id="sortDropdownMenu">
-                        <span class="sort-label-mobile">מיון לפי:</span>
-                        <hr class="sort-line-mobile" />
-                    {%- for option in results.sort_options -%}
+                  {% comment %} {% assign product_taste = collection.products %} 
+                  {% render 'taste-filter', tastes: product_taste, results: results %}  {% endcomment %}
+                  {% comment %} <div class="sort-dropdown-menu" id="sortDropdownMenu">
+                        {% assign product_taste = collection.products %} 
+                        {% render 'taste-filter', tastes: product_taste, results: results %}  {% endcomment %}
+                    {% comment %} {%- for option in results.sort_options -%}
                       {%  unless option.value == 'manual' 
                           or option.value == 'title-ascending' 
                           or  option.value == 'title-descending' 
@@ -512,9 +514,9 @@
                           {{ option.name | escape }}
                         </div>
                       {% endunless %}
-                    {%- endfor -%}
-                  </div>
-                  <input type="hidden" name="sort_by" id="SortBy" value="{{ sort_by }}">
+                    {%- endfor -%} {% endcomment %}
+                  {% comment %} </div> {% endcomment %}
+                  {% comment %} <input type="hidden" name="sort_by" id="SortBy" value="{{ sort_by }}"> {% endcomment %}
                 </sort-dropdown>
                   <div class="vertical-line-border">&nbsp;</div>
               </div>

@@ -95,6 +95,7 @@ class FacetFiltersForm extends HTMLElement {
   }
 
   static renderProductCount(html) {
+    if (!document.getElementById('ProductCount')) return;
     const count = new DOMParser().parseFromString(html, 'text/html').getElementById('ProductCount').innerHTML;
     const container = document.getElementById('ProductCount');
 
@@ -201,8 +202,9 @@ class FacetFiltersForm extends HTMLElement {
       if (!html.querySelector(selector)) return;
       document.querySelector(selector).innerHTML = html.querySelector(selector).innerHTML;
     });
-
-    document.getElementById('FacetFiltersFormMobile').closest('menu-drawer').bindEvents();
+    if (document.getElementById('FacetFiltersFormMobile')) {
+      document.getElementById('FacetFiltersFormMobile').closest('menu-drawer').bindEvents();
+    }
   }
 
   static renderCounts(source, target) {
@@ -258,6 +260,10 @@ class FacetFiltersForm extends HTMLElement {
 
   createSearchParams(form) {
     const formData = new FormData(form);
+    // Remove sort_by if empty
+    if (!formData.get('sort_by')) {
+      formData.delete('sort_by');
+    }
     return new URLSearchParams(formData).toString();
   }
 
@@ -268,13 +274,13 @@ class FacetFiltersForm extends HTMLElement {
   onSubmitHandler(event) {
     event.preventDefault();
     const sortFilterForms = document.querySelectorAll('facet-filters-form form');
-    if (event.srcElement.className == 'mobile-facets__checkbox') {
-      const searchParams = this.createSearchParams(event.target.closest('form'));
+    const targetForm = event && event.target && event.target.closest && event.target.closest('form') ? event.target.closest('form') : null;
+    if (event && event.srcElement && event.srcElement.className == 'mobile-facets__checkbox' && targetForm) {
+      const searchParams = this.createSearchParams(targetForm);
       this.onSubmitForm(searchParams, event);
-    } else {
+    } else if (targetForm) {
       const forms = [];
-      const isMobile = event.target.closest('form').id === 'FacetFiltersFormMobile';
-
+      const isMobile = targetForm.id === 'FacetFiltersFormMobile';
       sortFilterForms.forEach((form) => {
         if (!isMobile) {
           if (form.id === 'FacetSortForm' || form.id === 'FacetFiltersForm' || form.id === 'FacetSortDrawerForm') {
@@ -284,10 +290,17 @@ class FacetFiltersForm extends HTMLElement {
           forms.push(this.createSearchParams(form));
         }
       });
-      this.onSubmitForm(forms.join('&'), event);
+      // Remove duplicate keys and empty values
+      const params = new URLSearchParams(forms.join('&'));
+      // Remove empty values
+      for (const [key, value] of params.entries()) {
+        if (value === '') params.delete(key);
+      }
+      this.onSubmitForm(params.toString(), event);
     }
-    this.updateDropdownButtonText('taste');
-    this.updateDropdownButtonText('prep');
+    // Always update the dropdown button state regardless if form submit is skipped
+    // this.updateDropdownButtonText('taste');
+    // this.updateDropdownButtonText('prep');
   }
 
   updateDropdownButtonText(type) {
@@ -349,6 +362,36 @@ FacetFiltersForm.searchParamsInitial = window.location.search.slice(1);
 FacetFiltersForm.searchParamsPrev = window.location.search.slice(1);
 customElements.define('facet-filters-form', FacetFiltersForm);
 FacetFiltersForm.setListeners();
+
+// FacetFiltersForm.reApplyCheckedFilters = function (paramsString) {
+//   const params = new URLSearchParams(paramsString || window.location.search);
+//   // First, uncheck all checkboxes
+//   document.querySelectorAll('.dropdown-icons-input').forEach(cb => cb.checked = false);
+//   // Map of dropdown types to param names
+//   const typeParamMap = {
+//     'taste': 'filter.p.m.custom.coffee_taste',
+//     'prep': 'filter.p.m.custom.coffee_prep_methods',
+//     'roast-level': 'filter.p.m.custom.coffee_roast_level',
+//     'roast-origin': 'filter.p.m.vendor_info.coffee_vendor',
+//     'coffee-process': 'filter.p.m.custom.coffee_process'
+//   };
+//   Object.entries(typeParamMap).forEach(([type, paramName]) => {
+//     const values = params.getAll(paramName);
+//     if (values.length) {
+//       values.forEach(function (value) {
+//         var checkbox = document.querySelector(`#dropdownMenu-${type} .dropdown-icons-input[value="${value}"]`);
+//         if (checkbox) checkbox.checked = true;
+//       });
+//     }
+//   });
+// };
+// // Call after filter render, ideally at end of FacetFiltersForm.renderFilters
+// (function (origRenderFilters) {
+//   FacetFiltersForm.renderFilters = function (html, event, paramsString) {
+//     origRenderFilters.call(this, html, event);
+//     setTimeout(() => FacetFiltersForm.reApplyCheckedFilters(paramsString), 0);
+//   };
+// })(FacetFiltersForm.renderFilters);
 
 class PriceRange extends HTMLElement {
   constructor() {
@@ -430,10 +473,10 @@ class SortDropdown extends HTMLElement {
     if (!button || !menu || !hiddenInput) return;
 
     // Toggle dropdown on button click
-    button.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.toggleDropdown();
-    });
+    // button.addEventListener('click', (e) => {
+    //   e.stopPropagation();
+    //   this.toggleDropdown();
+    // });
 
     // Handle option selection
     options.forEach(option => {
@@ -518,7 +561,7 @@ class SortDropdown extends HTMLElement {
     option.classList.add('selected');
 
     // Close dropdown
-    this.closeDropdown();
+    // this.closeDropdown();
 
     // Trigger form submission to update results
     this.submitForm();
