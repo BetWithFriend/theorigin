@@ -46,7 +46,7 @@ class MixpanelReporter {
       };
 
       mixpanel.track(eventName, eventData);
-      console.log(`Tracked event: ${eventName}`, eventData);
+      // console.log(`Tracked event: ${eventName}`, eventData);
     } catch (error) {
       console.error('Error tracking event:', error);
     }
@@ -139,7 +139,7 @@ class MixpanelReporter {
     try {
       mixpanel.identify(userId);
       mixpanel.people.set(userProperties);
-      console.log(`User identified: ${userId}`, userProperties);
+      // console.log(`User identified: ${userId}`, userProperties);
     } catch (error) {
       console.error('Error identifying user:', error);
     }

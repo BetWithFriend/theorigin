@@ -353,7 +353,8 @@
       enableScrollWithEvents();
 
       let newQueryParams = arrayToQueryString(window.appliedFilters)
-      if (window.FacetFiltersForm && typeof FacetFiltersForm.renderPage === 'function') {
+      // if (window.FacetFiltersForm && typeof FacetFiltersForm.renderPage === 'function') {
+      if (typeof FacetFiltersForm.renderPage === 'function') {
         newQueryParams = `${newQueryParams}&from_quiz=true`;
         const facetsPage = document.querySelector('.facets-wrapper--sticky');
         facetsPage.classList.add('hide-filters');

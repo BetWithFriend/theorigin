@@ -89,7 +89,7 @@
 <div id="shopify-section-featured-collection">
       {% assign collection = collections['blooms-collection'].products | json %}
       {% assign product_taste = collection.products %} 
-      {% render 'taste-filter', tastes: product_taste %} 
+      {% comment %} {% render 'taste-filter', tastes: product_taste %}  {% endcomment %}
       {% section 'featured-collection'  %}
   </div>
 

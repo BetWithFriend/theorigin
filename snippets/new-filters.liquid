@@ -4,7 +4,7 @@
   <button onclick="toggleSortMenu(this)" class="sort-dropdown-button" type="button" aria-expanded="false" aria-haspopup="true">
     {% comment %} <div class="sort-icon-wrapper"> {% endcomment %}
       <div class="sort-text-wrapper">
-        סינון לפי:
+       סינון
       </div>
       <img class="sort-icon-image" src="{{ 'sort-icon-image.png' | asset_url }}" alt="sort icon"/>
       <div class="sort-icon-image-selected {% if content_for_header contains 'filter.p.' or content_for_header contains 'filter.v.' or content_for_header contains 'sort_by=' %}show{% endif %}">&nbsp;</div>

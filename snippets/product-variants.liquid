@@ -14,11 +14,17 @@
               <div class="single-coffee-main-product-vendor">{{ vendor.vendor_name.value }}, {{ vendor.vendor_location.value }}</div>
             </div> {% endcomment %}
 
+            <div class="product-short-description-wrapper">
+              <div class="product-short-description">
+                {{ product.metafields.custom.short_description }}
+              </div>
+            </div>
+
             {% unless product.tags contains 'event' %}
               <div class="product-tastes-list product-sub-title-pdp {% if section.settings.product_tastes_center %}center{% endif %}">
                   
               {% comment %} {% for roast_level in product.metafields.custom.custom.coffee_roast_level.value %}       {% endcomment %}
-                <div class="single-coffee-taste-main-product">{{ coffee_tastes | join: " | " }}</div>
+                {% comment %} <div class="single-coffee-taste-main-product">{{ coffee_tastes | join: " | " }}</div> {% endcomment %}
                 
                 <div class="product-page-info-bubble-container">
                   <div class="product-page-info-bubble">קלייה {{ product.metafields.custom.coffee_roast_level.value }}</div>
@@ -44,11 +50,7 @@
 
 
           {% comment %} <div class="background-stripe"> </div> {% endcomment %}
-          <div class="product-short-description-wrapper">
-            <div class="product-short-description">
-              {{ product.metafields.custom.short_description }}
-            </div>
-          </div>
+
 
           {% comment %} {% if vendor.vendor_name.value == 'You Need Coffee' %}
             <div class="product-short-description-wrapper">

@@ -44,7 +44,7 @@ slider-component.slider-component-full-width {
     scroll-behavior: smooth;
     scroll-padding-left: 1.5rem;
     -webkit-overflow-scrolling: touch;
-    margin-bottom: 1rem;
+    /* margin-bottom: 1rem; */
   }
 
   /* Fix to show some space at the end of our sliders in all browsers */
@@ -446,7 +446,7 @@ slider-component.slider-component-full-width {
 
 .product-page-price-main {
   /* margin-top: 16px; */
-  margin-bottom: 16px;
+  /* margin-bottom: 16px; */
 }
 
 .single-coffee-taste-main-product {
@@ -487,7 +487,8 @@ slider-component.slider-component-full-width {
 .product-page-info-bubble-container {
   display: flex;
   flex-direction: row;
-  margin-top: 4px;
+  /* margin-top: 4px; */
+  margin-top: 0;
 }
 
 .product-page-info-bubble-container .product-page-info-bubble {
