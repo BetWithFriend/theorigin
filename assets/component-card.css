@@ -861,11 +861,13 @@
 }
 
 .page-width-product-page .cart-info-new-tag {
-  top: 20px;
-  left: 20px;
+  top: 54px;
+  right: 20px;
   padding: 4px 12px;
-  width: auto;
-  height: 28px;
+  height: 47px;
+  width: 47px;
+  border-radius: 50%;
+  color: #FBFCFE;
 }
 
 .cart-info-new-tag.deal {

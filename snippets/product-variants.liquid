@@ -8,17 +8,17 @@
           {% assign coffee_type = product.metafields.custom.coffee_type.value %}
           {% assign coffee_blend_ratio = product.metafields.custom.coffee_blend_ratio.value %}
 
-            <h1 class="product-title">{{ product.title }}</h1>
+            {% comment %} <h1 class="product-title">{{ product.title }}</h1> {% endcomment %}
 
             {% comment %} <div class="product-tastes-list  {% if section.settings.product_tastes_center %}center{% endif %}">
               <div class="single-coffee-main-product-vendor">{{ vendor.vendor_name.value }}, {{ vendor.vendor_location.value }}</div>
             </div> {% endcomment %}
 
-            <div class="product-short-description-wrapper">
+            {% comment %} <div class="product-short-description-wrapper">
               <div class="product-short-description">
                 {{ product.metafields.custom.short_description }}
               </div>
-            </div>
+            </div> {% endcomment %}
 
             {% unless product.tags contains 'event' %}
               <div class="product-tastes-list product-sub-title-pdp {% if section.settings.product_tastes_center %}center{% endif %}">
@@ -26,14 +26,6 @@
               {% comment %} {% for roast_level in product.metafields.custom.custom.coffee_roast_level.value %}       {% endcomment %}
                 {% comment %} <div class="single-coffee-taste-main-product">{{ coffee_tastes | join: " | " }}</div> {% endcomment %}
                 
-                <div class="product-page-info-bubble-container">
-                  <div class="product-page-info-bubble">קלייה {{ product.metafields.custom.coffee_roast_level.value }}</div>
-                  <div class="product-page-info-bubble add-margin-right">עיבוד {{ product.metafields.custom.coffee_process.value }}</div>
-                  <div class="product-page-info-bubble add-margin-right">{{ product.metafields.custom.coffee_type.value }}</div>
-                </div>
-
-
-
                 {% comment %} &nbsp;|&nbsp;
                 
                   <div class="single-coffee-taste-main-product grey-text">קלייה {{ product.metafields.custom.coffee_roast_level.value }}</div>
