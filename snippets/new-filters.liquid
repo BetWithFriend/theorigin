@@ -1,61 +1,108 @@
 {{ 'horizontal-bubbles.css' | asset_url | stylesheet_tag }}
 {{ 'component-show-more.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .all-new-filters-wrapper {
+    position: relative;
+    z-index: 20; /* Ensure higher stacking context */
+  }
+
+  @media screen and (max-width: 750px) {
+    .all-new-filters-wrapper {
+      position: -webkit-sticky;
+      position: sticky;
+      top: calc(var(--header-height, 0px) + 10px);
+      z-index: 10;
+      transition: top 0.3s ease;
+    }
+    
+    body.header-is-hidden .all-new-filters-wrapper {
+      top: 10px;
+    }
+  }
+</style>
+<style>
+  /* Menu Separation Logic */
+  #sortDropdownMenu[data-mode="sort"] .dropdown-filter-wrapper:not(.sort-wrapper) {
+    display: none !important;
+  }
+  #sortDropdownMenu[data-mode="sort"] .dropdown-filter-wrapper.sort-wrapper {
+     /* display: flex !important; Restore display for sort wrapper */
+  }
+
+  #sortDropdownMenu[data-mode="filter"] .dropdown-filter-wrapper.sort-wrapper {
+    display: none !important;
+  }
+  #sortDropdownMenu[data-mode="filter"] .dropdown-filter-wrapper:not(.sort-wrapper) {
+    /*display: flex !important; /* Restore display for filter wrappers */
+  }
+
+  /* Sort Mode Specific Styles */
+  #sortDropdownMenu[data-mode="sort"] {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: max-content;
+    min-width: 200px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    z-index: 100;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    height: 165px;
+  }
+
+  @media screen and (min-width: 750px) {
+    #sortDropdownMenu[data-mode="sort"] {
+      right: 50px;
+    }
+  }
+
+  /* Hide top and bottom bars in sort mode */
+  #sortDropdownMenu[data-mode="sort"] .filter-top-menu-wrapper,
+  #sortDropdownMenu[data-mode="sort"] .filter-bottom-menu-select {
+    display: none !important;
+  }
+
+  /* Reveal sort items directly */
+  #sortDropdownMenu[data-mode="sort"] .dropdown-filter-wrapper.sort-wrapper button.dropdown-button {
+    display: none !important;
+  }
+  #sortDropdownMenu[data-mode="sort"] .dropdown-filter-wrapper.sort-wrapper .dropdown-menu {
+    display: flex !important; /* Force open as flex column */
+    box-shadow: none;
+    border: none;
+    position: static;
+    width: 100%;
+    margin-bottom: 0;
+    flex-direction: column;
+    gap: 0; /* Reset gap if needed */
+  }
+  #sortDropdownMenu[data-mode="sort"] .dropdown-filter-wrapper.sort-wrapper .dropdown-menu .dropdown-item {
+       padding: 8px 0;
+  }
+  
+  #sortDropdownMenu[data-mode="sort"] .sort-line-mobile {
+    display: none !important;
+  }
+</style>
+
 <div class="all-new-filters-wrapper">
-  <button onclick="toggleSortMenu(this)" class="sort-dropdown-button" type="button" aria-expanded="false" aria-haspopup="true">
-    {% comment %} <div class="sort-icon-wrapper"> {% endcomment %}
-      <div class="sort-text-wrapper">
-       סינון
-      </div>
+ <button onclick="toggleSortMenu(this, 'sort_icon', 'sort')" class="sort-dropdown-button short-button" type="button" aria-expanded="false" aria-haspopup="true">
+    <img class="sort-icon-image" src="{{ 'sort-icon-catalogue.svg' | asset_url }}" alt="sort icon"/>
+  </button>
+  <button onclick="toggleSortMenu(this, 'filter_text', 'filter')" class="sort-dropdown-button" type="button" aria-expanded="false" aria-haspopup="true">
+    <span>סינון וחיפוש</span>
+    {% comment %} <div style="position: relative">
       <img class="sort-icon-image" src="{{ 'sort-icon-image.png' | asset_url }}" alt="sort icon"/>
       <div class="sort-icon-image-selected {% if content_for_header contains 'filter.p.' or content_for_header contains 'filter.v.' or content_for_header contains 'sort_by=' %}show{% endif %}">&nbsp;</div>
-    {% comment %} </div> {% endcomment %}
+    </div> {% endcomment %}
   </button>
-  <div class="vertical-line-border">&nbsp;</div>
+
   <div class="sort-dropdown-menu" id="sortDropdownMenu">
     {% assign product_taste = collection.products %} 
     {% render 'taste-filter', tastes: product_taste, results: results %} 
-  </div>
-    <div class="horizontal-bubbles-wrapper" id="horizontal-bubbles-wrapper">
-        <div class="horizontal-bubbles-container">
-          <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Chocolate')">
-            <div class="bubble-text">
-                <div class="bubble-title">שוקולדי</div>
-                <div class="bubble-subtitle">מריר ואגוזי</div>
-            </div>
-        </div>
-
-        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Sweet-Chocolate')">
-            <div class="bubble-text">
-                <div class="bubble-title">מתוק שוקולדי</div>
-                <div class="bubble-subtitle">עמוק ועשיר</div>
-            </div>
-        </div>
-
-        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Sweet')">
-            <div class="bubble-text">
-                <div class="bubble-title">מתוק מאוזן</div>
-                <div class="bubble-subtitle">מאוזן וקרמלי</div>
-            </div>
-        </div>
-
-        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity-Sweet')">
-            <div class="bubble-text">
-                <div class="bubble-title">פירותי מתוק</div>
-                <div class="bubble-subtitle">חמיצות קלה</div>
-            </div>
-        </div>
-
-        <div class="bubble-item" onclick="goToFilter(this, 'filter.p.m.custom.coffee_taste', 'Fruity')">
-            <div class="bubble-text">
-                <div class="bubble-title">פירותי</div>
-                <div class="bubble-subtitle">חמצמץ והדרי</div>
-            </div>
-        </div>
-        </div>
-      </div>
-
-
-    </div>
   </div>
 </div>
 
@@ -154,8 +201,11 @@
         }
     }
 
-function toggleSortMenu(button, source = null) {
+function toggleSortMenu(button, source = null, mode = null) {
   const menu = document.getElementById('sortDropdownMenu');
+  if (mode && menu) {
+    menu.setAttribute('data-mode', mode);
+  }
   if (source) {
     analytics.trackClick(`Filter ${source}`);
   }
@@ -166,7 +216,7 @@ function toggleSortMenu(button, source = null) {
 
     if (isOpen) {
       // Mobile: Lock scroll
-      analytics.trackClick('Filter Menu Open');
+      analytics.trackClick('Filter Menu Open', { 'mode': mode });
       if (window.innerWidth <= 750) {
         document.body.classList.add('no-scroll');
       } else {
@@ -178,6 +228,18 @@ function toggleSortMenu(button, source = null) {
       document.body.classList.remove('no-scroll');
       // document.body.classList.remove('filter-open');
     }
+  }
+}
+
+function closeSortMenu() {
+  const menu = document.getElementById('sortDropdownMenu');
+  if (menu && menu.classList.contains('show')) {
+      menu.classList.remove('show');
+      document.body.classList.remove('no-scroll');
+      // Update aria-expanded for buttons that control this menu
+      document.querySelectorAll('.sort-dropdown-button[aria-expanded="true"]').forEach(btn => {
+          btn.setAttribute('aria-expanded', 'false');
+      });
   }
 }
 

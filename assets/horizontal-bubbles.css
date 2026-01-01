@@ -218,6 +218,8 @@
     width: 95%;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    z-index:10;
     /* padding-right: 0 5rem; */
 }
 
