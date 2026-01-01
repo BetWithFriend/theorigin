@@ -13,14 +13,16 @@
       <link
         rel="icon"
         type="image/png"
-        href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+        href="{{ settings.favicon | image_url: width: 32, height: 32 }}"
+      >
     {%- endif -%}
 
     {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
       <link
         rel="preconnect"
         href="https://fonts.shopifycdn.com"
-        crossorigin>
+        crossorigin
+      >
     {%- endunless -%}
 
     <title>
@@ -29,11 +31,14 @@
       {% endif -%}
       {{ page_title }}
       {%- if current_tags %}
-        &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+        &ndash; tagged "{{ current_tags | join: ', ' }}"
+      {%- endif -%}
       {%- if current_page != 1 %}
-        &ndash; Page {{ current_page }}{% endif -%}
+        &ndash; Page {{ current_page -}}
+      {%- endif -%}
       {%- unless page_title contains shop.name %}
-        &ndash; {{ shop.name }}{% endunless -%}
+        &ndash; {{ shop.name -}}
+      {%- endunless -%}
     </title>
 
     {% if page_description %}
@@ -57,7 +62,8 @@
     <link
       rel="preconnect"
       href="https://fonts.gstatic.com"
-      crossorigin>
+      crossorigin
+    >
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     {{ content_for_header }}
@@ -69,275 +75,301 @@
     %}
 
     {% style %}
-      {{ settings.type_body_font | font_face: font_display: 'swap' }}
-      {{ body_font_bold | font_face: font_display: 'swap' }}
-      {{ body_font_italic | font_face: font_display: 'swap' }}
-      {{ body_font_bold_italic | font_face: font_display: 'swap' }}
-      {{ settings.type_header_font | font_face: font_display: 'swap' }}
+            {{ settings.type_body_font | font_face: font_display: 'swap' }}
+            {{ body_font_bold | font_face: font_display: 'swap' }}
+            {{ body_font_italic | font_face: font_display: 'swap' }}
+            {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+            {{ settings.type_header_font | font_face: font_display: 'swap' }}
 
-      {% for scheme in settings.color_schemes -%}
-        {% assign scheme_classes = scheme_classes | append: ', .color-' | append: scheme.id %}
-        {% if forloop.index == 1 -%}
-          :root, 
-        {%- endif %}
-        .color-{{ scheme.id }} {
-          --color-background: {{ scheme.settings.background.red }}, 
-          {{ scheme.settings.background.green }}, 
-          {{ scheme.settings.background.blue }};
-          {% if scheme.settings.background_gradient != empty %}
-            --gradient-background: {{ scheme.settings.background_gradient }};
-          {% else %}
-            --gradient-background: {{ scheme.settings.background }};
-          {% endif %}
+            {% for scheme in settings.color_schemes -%}
+              {% assign scheme_classes = scheme_classes | append: ', .color-' | append: scheme.id %}
+              {% if forloop.index == 1 -%}
+                :root,
+              {%- endif %}
+              .color-{{ scheme.id }} {
+                --color-background: {{ scheme.settings.background.red }},
+                {{ scheme.settings.background.green }},
+                {{ scheme.settings.background.blue }};
+                {% if scheme.settings.background_gradient != empty %}
+                  --gradient-background: {{ scheme.settings.background_gradient }};
+                {% else %}
+                  --gradient-background: {{ scheme.settings.background }};
+                {% endif %}
 
-          {% liquid
-          assign background_color = scheme.settings.background
-          assign background_color_brightness = background_color | color_brightness
-          if background_color_brightness <= 26
-            assign background_color_contrast = background_color | color_lighten: 50
-          elsif background_color_brightness <= 65
-            assign background_color_contrast = background_color | color_lighten: 5
-          else
-            assign background_color_contrast = background_color | color_darken: 25
-          endif
-%}
+                {% liquid
+                assign background_color = scheme.settings.background
+                assign background_color_brightness = background_color | color_brightness
+                if background_color_brightness <= 26
+                  assign background_color_contrast = background_color | color_lighten: 50
+                elsif background_color_brightness <= 65
+                  assign background_color_contrast = background_color | color_lighten: 5
+                else
+                  assign background_color_contrast = background_color | color_darken: 25
+                endif
+      %}
 
-          --color-foreground: {{ scheme.settings.text.red }}, 
-          {{ scheme.settings.text.green }}, 
-          {{ scheme.settings.text.blue }};
-          --color-background-contrast: {{ background_color_contrast.red }}, 
-          {{ background_color_contrast.green }}, 
-          {{ background_color_contrast.blue }};
-          --color-shadow: {{ scheme.settings.shadow.red }}, 
-          {{ scheme.settings.shadow.green }}, 
-          {{ scheme.settings.shadow.blue }};
-          --color-button: {{ scheme.settings.button.red }}, 
-          {{ scheme.settings.button.green }}, 
-          {{ scheme.settings.button.blue }};
-          --color-button-text: {{ scheme.settings.button_label.red }}, 
-          {{ scheme.settings.button_label.green }}, 
-          {{ scheme.settings.button_label.blue }};
-          --color-secondary-button: {{ scheme.settings.background.red }}, 
-          {{ scheme.settings.background.green }}, 
-          {{ scheme.settings.background.blue }};
-          --color-secondary-button-text: {{ scheme.settings.secondary_button_label.red }}, 
-          {{ scheme.settings.secondary_button_label.green }}, 
-          {{ scheme.settings.secondary_button_label.blue }};
-          --color-link: {{ scheme.settings.secondary_button_label.red }}, 
-          {{ scheme.settings.secondary_button_label.green }}, 
-          {{ scheme.settings.secondary_button_label.blue }};
-          --color-badge-foreground: {{ scheme.settings.text.red }}, 
-          {{ scheme.settings.text.green }}, 
-          {{ scheme.settings.text.blue }};
-          --color-badge-background: {{ scheme.settings.background.red }}, 
-          {{ scheme.settings.background.green }}, 
-          {{ scheme.settings.background.blue }};
-          --color-badge-border: {{ scheme.settings.text.red }}, 
-          {{ scheme.settings.text.green }}, 
-          {{ scheme.settings.text.blue }};
-          --payment-terms-background-color: rgb({{ scheme.settings.background.rgb }});
-        }
-      {% endfor %}
+                --color-foreground: {{ scheme.settings.text.red }},
+                {{ scheme.settings.text.green }},
+                {{ scheme.settings.text.blue }};
+                --color-background-contrast: {{ background_color_contrast.red }},
+                {{ background_color_contrast.green }},
+                {{ background_color_contrast.blue }};
+                --color-shadow: {{ scheme.settings.shadow.red }},
+                {{ scheme.settings.shadow.green }},
+                {{ scheme.settings.shadow.blue }};
+                --color-button: {{ scheme.settings.button.red }},
+                {{ scheme.settings.button.green }},
+                {{ scheme.settings.button.blue }};
+                --color-button-text: {{ scheme.settings.button_label.red }},
+                {{ scheme.settings.button_label.green }},
+                {{ scheme.settings.button_label.blue }};
+                --color-secondary-button: {{ scheme.settings.background.red }},
+                {{ scheme.settings.background.green }},
+                {{ scheme.settings.background.blue }};
+                --color-secondary-button-text: {{ scheme.settings.secondary_button_label.red }},
+                {{ scheme.settings.secondary_button_label.green }},
+                {{ scheme.settings.secondary_button_label.blue }};
+                --color-link: {{ scheme.settings.secondary_button_label.red }},
+                {{ scheme.settings.secondary_button_label.green }},
+                {{ scheme.settings.secondary_button_label.blue }};
+                --color-badge-foreground: {{ scheme.settings.text.red }},
+                {{ scheme.settings.text.green }},
+                {{ scheme.settings.text.blue }};
+                --color-badge-background: {{ scheme.settings.background.red }},
+                {{ scheme.settings.background.green }},
+                {{ scheme.settings.background.blue }};
+                --color-badge-border: {{ scheme.settings.text.red }},
+                {{ scheme.settings.text.green }},
+                {{ scheme.settings.text.blue }};
+                --payment-terms-background-color: rgb({{ scheme.settings.background.rgb }});
+              }
+            {% endfor %}
 
-      {{ scheme_classes | prepend: 'body' }} {
-        color: rgba(var(--color-foreground), 0.75);
-        background-color: rgb(var(--color-background));
+            {{ scheme_classes | prepend: 'body' }} {
+              color: rgba(var(--color-foreground), 0.75);
+              background-color: rgb(var(--color-background));
+            }
+
+            :root {
+              --font-body-family: {{ settings.type_body_font.family }},
+              {{ settings.type_body_font.fallback_families }};
+              --font-body-style: {{ settings.type_body_font.style }};
+              --font-body-weight: {{ settings.type_body_font.weight }};
+              --font-body-weight-bold: {{ settings.type_body_font.weight | plus: 300 | at_most: 1000 }};
+
+              --font-heading-family: {{ settings.type_header_font.family }},
+              {{ settings.type_header_font.fallback_families }};
+              --font-heading-style: {{ settings.type_header_font.style }};
+              --font-heading-weight: {{ settings.type_header_font.weight }};
+
+              --font-body-scale: {{ settings.body_scale | divided_by: 100.0 }};
+              --font-heading-scale: {{ settings.heading_scale | times: 1.0 | divided_by: settings.body_scale }};
+
+              --media-padding: {{ settings.media_padding }}px;
+              --media-border-opacity: {{ settings.media_border_opacity | divided_by: 100.0 }};
+              --media-border-width: {{ settings.media_border_thickness }}px;
+              --media-radius: {{ settings.media_radius }}px;
+              --media-shadow-opacity: {{ settings.media_shadow_opacity | divided_by: 100.0 }};
+              --media-shadow-horizontal-offset: {{ settings.media_shadow_horizontal_offset }}px;
+              --media-shadow-vertical-offset: {{ settings.media_shadow_vertical_offset }}px;
+              --media-shadow-blur-radius: {{ settings.media_shadow_blur }}px;
+              --media-shadow-visible: {% if settings.media_shadow_opacity > 0 %}1{% else %}0{% endif %};
+
+          /* --page-width: {{ settings.page_width | divided_by: 10 }}rem; */
+          --page-width: 1440px;
+          --page-width-margin: {% if settings.page_width == '1600' %}2{% else %}0{% endif %}rem;
+
+        --product-card-image-padding: {{ settings.card_image_padding | divided_by: 10.0 }}rem;
+        --product-card-corner-radius: {{ settings.card_corner_radius | divided_by: 10.0 }}rem;
+        --product-card-text-alignment: {{ settings.card_text_alignment }};
+        --product-card-border-width: {{ settings.card_border_thickness | divided_by: 10.0 }}rem;
+        --product-card-border-opacity: {{ settings.card_border_opacity | divided_by: 100.0 }};
+        --product-card-shadow-opacity: {{ settings.card_shadow_opacity | divided_by: 100.0 }};
+        --product-card-shadow-visible: {% if settings.card_shadow_opacity > 0 %}1{% else %}0{% endif %};
+        --product-card-shadow-horizontal-offset: {{ settings.card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
+        --product-card-shadow-vertical-offset: {{ settings.card_shadow_vertical_offset | divided_by: 10.0 }}rem;
+        --product-card-shadow-blur-radius: {{ settings.card_shadow_blur | divided_by: 10.0 }}rem;
+
+        --collection-card-image-padding: {{ settings.collection_card_image_padding | divided_by: 10.0 }}rem;
+        --collection-card-corner-radius: {{ settings.collection_card_corner_radius | divided_by: 10.0 }}rem;
+        --collection-card-text-alignment: {{ settings.collection_card_text_alignment }};
+        --collection-card-border-width: {{ settings.collection_card_border_thickness | divided_by: 10.0 }}rem;
+        --collection-card-border-opacity: {{ settings.collection_card_border_opacity | divided_by: 100.0 }};
+        --collection-card-shadow-opacity: {{ settings.collection_card_shadow_opacity | divided_by: 100.0 }};
+        --collection-card-shadow-visible: {% if settings.collection_card_shadow_opacity > 0 %}1{% else %}0{% endif %};
+        --collection-card-shadow-horizontal-offset: {{ settings.collection_card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
+        --collection-card-shadow-vertical-offset: {{ settings.collection_card_shadow_vertical_offset | divided_by: 10.0 }}rem;
+        --collection-card-shadow-blur-radius: {{ settings.collection_card_shadow_blur | divided_by: 10.0 }}rem;
+
+        --blog-card-image-padding: {{ settings.blog_card_image_padding | divided_by: 10.0 }}rem;
+        --blog-card-corner-radius: {{ settings.blog_card_corner_radius | divided_by: 10.0 }}rem;
+        --blog-card-text-alignment: {{ settings.blog_card_text_alignment }};
+        --blog-card-border-width: {{ settings.blog_card_border_thickness | divided_by: 10.0 }}rem;
+        --blog-card-border-opacity: {{ settings.blog_card_border_opacity | divided_by: 100.0 }};
+        --blog-card-shadow-opacity: {{ settings.blog_card_shadow_opacity | divided_by: 100.0 }};
+        --blog-card-shadow-visible: {% if settings.blog_card_shadow_opacity > 0 %}1{% else %}0{% endif %};
+        --blog-card-shadow-horizontal-offset: {{ settings.blog_card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
+        --blog-card-shadow-vertical-offset: {{ settings.blog_card_shadow_vertical_offset | divided_by: 10.0 }}rem;
+        --blog-card-shadow-blur-radius: {{ settings.blog_card_shadow_blur | divided_by: 10.0 }}rem;
+
+        --badge-corner-radius: {{ settings.badge_corner_radius | divided_by: 10.0 }}rem;
+
+        --popup-border-width: {{ settings.popup_border_thickness }}px;
+        --popup-border-opacity: {{ settings.popup_border_opacity | divided_by: 100.0 }};
+        --popup-corner-radius: {{ settings.popup_corner_radius }}px;
+        --popup-shadow-opacity: {{ settings.popup_shadow_opacity | divided_by: 100.0 }};
+        --popup-shadow-horizontal-offset: {{ settings.popup_shadow_horizontal_offset }}px;
+        --popup-shadow-vertical-offset: {{ settings.popup_shadow_vertical_offset }}px;
+        --popup-shadow-blur-radius: {{ settings.popup_shadow_blur }}px;
+
+        --drawer-border-width: {{ settings.drawer_border_thickness }}px;
+        --drawer-border-opacity: {{ settings.drawer_border_opacity | divided_by: 100.0 }};
+        --drawer-shadow-opacity: {{ settings.drawer_shadow_opacity | divided_by: 100.0 }};
+        --drawer-shadow-horizontal-offset: {{ settings.drawer_shadow_horizontal_offset }}px;
+        --drawer-shadow-vertical-offset: {{ settings.drawer_shadow_vertical_offset }}px;
+        --drawer-shadow-blur-radius: {{ settings.drawer_shadow_blur }}px;
+
+        --spacing-sections-desktop: {{ settings.spacing_sections }}px;
+        --spacing-sections-mobile: {% if settings.spacing_sections < 24 %}{{ settings.spacing_sections }}
+      {% else %}{{ settings.spacing_sections | times: 0.7 | round | at_least: 20 }}
+      {% endif %}px;
+
+        --grid-desktop-vertical-spacing: {{ settings.spacing_grid_vertical }}px;
+        --grid-desktop-horizontal-spacing: {{ settings.spacing_grid_horizontal }}px;
+        --grid-mobile-vertical-spacing: {{ settings.spacing_grid_vertical | divided_by: 2 }}px;
+        --grid-mobile-horizontal-spacing: {{ settings.spacing_grid_horizontal | divided_by: 2 }}px;
+
+        --text-boxes-border-opacity: {{ settings.text_boxes_border_opacity | divided_by: 100.0 }};
+        --text-boxes-border-width: {{ settings.text_boxes_border_thickness }}px;
+        --text-boxes-radius: {{ settings.text_boxes_radius }}px;
+        --text-boxes-shadow-opacity: {{ settings.text_boxes_shadow_opacity | divided_by: 100.0 }};
+        --text-boxes-shadow-visible: {% if settings.text_boxes_shadow_opacity > 0 %}1{% else %}0{% endif %};
+        --text-boxes-shadow-horizontal-offset: {{ settings.text_boxes_shadow_horizontal_offset }}px;
+        --text-boxes-shadow-vertical-offset: {{ settings.text_boxes_shadow_vertical_offset }}px;
+        --text-boxes-shadow-blur-radius: {{ settings.text_boxes_shadow_blur }}px;
+
+        --buttons-radius: {{ settings.buttons_radius }}px;
+        --buttons-radius-outset: {% if settings.buttons_radius > 0 %}{{ settings.buttons_radius | plus: settings.buttons_border_thickness }}
+      {% else %}0{% endif %}px;
+        --buttons-border-width: {% if settings.buttons_border_opacity > 0 %}{{ settings.buttons_border_thickness }}
+      {% else %}0{% endif %}px;
+        --buttons-border-opacity: {{ settings.buttons_border_opacity | divided_by: 100.0 }};
+        --buttons-shadow-opacity: {{ settings.buttons_shadow_opacity | divided_by: 100.0 }};
+        --buttons-shadow-visible: {% if settings.buttons_shadow_opacity > 0 %}1{% else %}0{% endif %};
+        --buttons-shadow-horizontal-offset: {{ settings.buttons_shadow_horizontal_offset }}px;
+        --buttons-shadow-vertical-offset: {{ settings.buttons_shadow_vertical_offset }}px;
+        --buttons-shadow-blur-radius: {{ settings.buttons_shadow_blur }}px;
+        --buttons-border-offset: {% if settings.buttons_radius > 0 or settings.buttons_shadow_opacity > 0 %}0.3{% else %}0{% endif %}px;
+
+        --inputs-radius: {{ settings.inputs_radius }}px;
+        --inputs-border-width: {{ settings.inputs_border_thickness }}px;
+        --inputs-border-opacity: {{ settings.inputs_border_opacity | divided_by: 100.0 }};
+        --inputs-shadow-opacity: {{ settings.inputs_shadow_opacity | divided_by: 100.0 }};
+        --inputs-shadow-horizontal-offset: {{ settings.inputs_shadow_horizontal_offset }}px;
+        --inputs-margin-offset: {% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_opacity > 0 %}{{ settings.inputs_shadow_vertical_offset | abs }}
+      {% else %}0{% endif %}px;
+        --inputs-shadow-vertical-offset: {{ settings.inputs_shadow_vertical_offset }}px;
+        --inputs-shadow-blur-radius: {{ settings.inputs_shadow_blur }}px;
+        --inputs-radius-outset: {% if settings.inputs_radius > 0 %}{{ settings.inputs_radius | plus: settings.inputs_border_thickness }}
+      {% else %}0{% endif %}px;
+
+        --variant-pills-radius: {{ settings.variant_pills_radius }}px;
+        --variant-pills-border-width: {{ settings.variant_pills_border_thickness }}px;
+        --variant-pills-border-opacity: {{ settings.variant_pills_border_opacity | divided_by: 100.0 }};
+        --variant-pills-shadow-opacity: {{ settings.variant_pills_shadow_opacity | divided_by: 100.0 }};
+        --variant-pills-shadow-horizontal-offset: {{ settings.variant_pills_shadow_horizontal_offset }}px;
+        --variant-pills-shadow-vertical-offset: {{ settings.variant_pills_shadow_vertical_offset }}px;
+        --variant-pills-shadow-blur-radius: {{ settings.variant_pills_shadow_blur }}px;
       }
 
-      :root {
-        --font-body-family: {{ settings.type_body_font.family }}, 
-        {{ settings.type_body_font.fallback_families }};
-        --font-body-style: {{ settings.type_body_font.style }};
-        --font-body-weight: {{ settings.type_body_font.weight }};
-        --font-body-weight-bold: {{ settings.type_body_font.weight | plus: 300 | at_most: 1000 }};
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
 
-        --font-heading-family: {{ settings.type_header_font.family }}, 
-        {{ settings.type_header_font.fallback_families }};
-        --font-heading-style: {{ settings.type_header_font.style }};
-        --font-heading-weight: {{ settings.type_header_font.weight }};
+      html {
+        box-sizing: border-box;
+        font-size: calc(var(--font-body-scale) * 62.5%);
+        height: 100%;
+      }
 
-        --font-body-scale: {{ settings.body_scale | divided_by: 100.0 }};
-        --font-heading-scale: {{ settings.heading_scale | times: 1.0 | divided_by: settings.body_scale }};
+      body {
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        grid-template-columns: 100%;
+        min-height: 100%;
+        margin: 0;
+        font-size: 1.5rem;
+        letter-spacing: 0.06rem;
+        line-height: calc(1 + 0.8 / var(--font-body-scale));
+        font-family: var(--font-body-family);
+        font-style: var(--font-body-style);
+        font-weight: var(--font-body-weight);
+      }
 
-        --media-padding: {{ settings.media_padding }}px;
-        --media-border-opacity: {{ settings.media_border_opacity | divided_by: 100.0 }};
-        --media-border-width: {{ settings.media_border_thickness }}px;
-        --media-radius: {{ settings.media_radius }}px;
-        --media-shadow-opacity: {{ settings.media_shadow_opacity | divided_by: 100.0 }};
-        --media-shadow-horizontal-offset: {{ settings.media_shadow_horizontal_offset }}px;
-        --media-shadow-vertical-offset: {{ settings.media_shadow_vertical_offset }}px;
-        --media-shadow-blur-radius: {{ settings.media_shadow_blur }}px;
-        --media-shadow-visible: {% if settings.media_shadow_opacity > 0 %}1{% else %}0{% endif %};
+      body.no-scroll {
+        overflow: hidden;
+      }
 
-    /* --page-width: {{ settings.page_width | divided_by: 10 }}rem; */
-    --page-width: 1440px;
-    --page-width-margin: {% if settings.page_width == '1600' %}2{% else %}0{% endif %}rem;
+      /* body.filter-open {
+        width: calc(100vw - 320px);
+        transition: all 0.3s ease;
+      } */
 
-  --product-card-image-padding: {{ settings.card_image_padding | divided_by: 10.0 }}rem;
-  --product-card-corner-radius: {{ settings.card_corner_radius | divided_by: 10.0 }}rem;
-  --product-card-text-alignment: {{ settings.card_text_alignment }};
-  --product-card-border-width: {{ settings.card_border_thickness | divided_by: 10.0 }}rem;
-  --product-card-border-opacity: {{ settings.card_border_opacity | divided_by: 100.0 }};
-  --product-card-shadow-opacity: {{ settings.card_shadow_opacity | divided_by: 100.0 }};
-  --product-card-shadow-visible: {% if settings.card_shadow_opacity > 0 %}1{% else %}0{% endif %};
-  --product-card-shadow-horizontal-offset: {{ settings.card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
-  --product-card-shadow-vertical-offset: {{ settings.card_shadow_vertical_offset | divided_by: 10.0 }}rem;
-  --product-card-shadow-blur-radius: {{ settings.card_shadow_blur | divided_by: 10.0 }}rem;
-
-  --collection-card-image-padding: {{ settings.collection_card_image_padding | divided_by: 10.0 }}rem;
-  --collection-card-corner-radius: {{ settings.collection_card_corner_radius | divided_by: 10.0 }}rem;
-  --collection-card-text-alignment: {{ settings.collection_card_text_alignment }};
-  --collection-card-border-width: {{ settings.collection_card_border_thickness | divided_by: 10.0 }}rem;
-  --collection-card-border-opacity: {{ settings.collection_card_border_opacity | divided_by: 100.0 }};
-  --collection-card-shadow-opacity: {{ settings.collection_card_shadow_opacity | divided_by: 100.0 }};
-  --collection-card-shadow-visible: {% if settings.collection_card_shadow_opacity > 0 %}1{% else %}0{% endif %};
-  --collection-card-shadow-horizontal-offset: {{ settings.collection_card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
-  --collection-card-shadow-vertical-offset: {{ settings.collection_card_shadow_vertical_offset | divided_by: 10.0 }}rem;
-  --collection-card-shadow-blur-radius: {{ settings.collection_card_shadow_blur | divided_by: 10.0 }}rem;
-
-  --blog-card-image-padding: {{ settings.blog_card_image_padding | divided_by: 10.0 }}rem;
-  --blog-card-corner-radius: {{ settings.blog_card_corner_radius | divided_by: 10.0 }}rem;
-  --blog-card-text-alignment: {{ settings.blog_card_text_alignment }};
-  --blog-card-border-width: {{ settings.blog_card_border_thickness | divided_by: 10.0 }}rem;
-  --blog-card-border-opacity: {{ settings.blog_card_border_opacity | divided_by: 100.0 }};
-  --blog-card-shadow-opacity: {{ settings.blog_card_shadow_opacity | divided_by: 100.0 }};
-  --blog-card-shadow-visible: {% if settings.blog_card_shadow_opacity > 0 %}1{% else %}0{% endif %};
-  --blog-card-shadow-horizontal-offset: {{ settings.blog_card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
-  --blog-card-shadow-vertical-offset: {{ settings.blog_card_shadow_vertical_offset | divided_by: 10.0 }}rem;
-  --blog-card-shadow-blur-radius: {{ settings.blog_card_shadow_blur | divided_by: 10.0 }}rem;
-
-  --badge-corner-radius: {{ settings.badge_corner_radius | divided_by: 10.0 }}rem;
-
-  --popup-border-width: {{ settings.popup_border_thickness }}px;
-  --popup-border-opacity: {{ settings.popup_border_opacity | divided_by: 100.0 }};
-  --popup-corner-radius: {{ settings.popup_corner_radius }}px;
-  --popup-shadow-opacity: {{ settings.popup_shadow_opacity | divided_by: 100.0 }};
-  --popup-shadow-horizontal-offset: {{ settings.popup_shadow_horizontal_offset }}px;
-  --popup-shadow-vertical-offset: {{ settings.popup_shadow_vertical_offset }}px;
-  --popup-shadow-blur-radius: {{ settings.popup_shadow_blur }}px;
-
-  --drawer-border-width: {{ settings.drawer_border_thickness }}px;
-  --drawer-border-opacity: {{ settings.drawer_border_opacity | divided_by: 100.0 }};
-  --drawer-shadow-opacity: {{ settings.drawer_shadow_opacity | divided_by: 100.0 }};
-  --drawer-shadow-horizontal-offset: {{ settings.drawer_shadow_horizontal_offset }}px;
-  --drawer-shadow-vertical-offset: {{ settings.drawer_shadow_vertical_offset }}px;
-  --drawer-shadow-blur-radius: {{ settings.drawer_shadow_blur }}px;
-
-  --spacing-sections-desktop: {{ settings.spacing_sections }}px;
-  --spacing-sections-mobile: {% if settings.spacing_sections < 24 %}{{ settings.spacing_sections }}
-{% else %}{{ settings.spacing_sections | times: 0.7 | round | at_least: 20 }}
-{% endif %}px;
-
-  --grid-desktop-vertical-spacing: {{ settings.spacing_grid_vertical }}px;
-  --grid-desktop-horizontal-spacing: {{ settings.spacing_grid_horizontal }}px;
-  --grid-mobile-vertical-spacing: {{ settings.spacing_grid_vertical | divided_by: 2 }}px;
-  --grid-mobile-horizontal-spacing: {{ settings.spacing_grid_horizontal | divided_by: 2 }}px;
-
-  --text-boxes-border-opacity: {{ settings.text_boxes_border_opacity | divided_by: 100.0 }};
-  --text-boxes-border-width: {{ settings.text_boxes_border_thickness }}px;
-  --text-boxes-radius: {{ settings.text_boxes_radius }}px;
-  --text-boxes-shadow-opacity: {{ settings.text_boxes_shadow_opacity | divided_by: 100.0 }};
-  --text-boxes-shadow-visible: {% if settings.text_boxes_shadow_opacity > 0 %}1{% else %}0{% endif %};
-  --text-boxes-shadow-horizontal-offset: {{ settings.text_boxes_shadow_horizontal_offset }}px;
-  --text-boxes-shadow-vertical-offset: {{ settings.text_boxes_shadow_vertical_offset }}px;
-  --text-boxes-shadow-blur-radius: {{ settings.text_boxes_shadow_blur }}px;
-
-  --buttons-radius: {{ settings.buttons_radius }}px;
-  --buttons-radius-outset: {% if settings.buttons_radius > 0 %}{{ settings.buttons_radius | plus: settings.buttons_border_thickness }}
-{% else %}0{% endif %}px;
-  --buttons-border-width: {% if settings.buttons_border_opacity > 0 %}{{ settings.buttons_border_thickness }}
-{% else %}0{% endif %}px;
-  --buttons-border-opacity: {{ settings.buttons_border_opacity | divided_by: 100.0 }};
-  --buttons-shadow-opacity: {{ settings.buttons_shadow_opacity | divided_by: 100.0 }};
-  --buttons-shadow-visible: {% if settings.buttons_shadow_opacity > 0 %}1{% else %}0{% endif %};
-  --buttons-shadow-horizontal-offset: {{ settings.buttons_shadow_horizontal_offset }}px;
-  --buttons-shadow-vertical-offset: {{ settings.buttons_shadow_vertical_offset }}px;
-  --buttons-shadow-blur-radius: {{ settings.buttons_shadow_blur }}px;
-  --buttons-border-offset: {% if settings.buttons_radius > 0 or settings.buttons_shadow_opacity > 0 %}0.3{% else %}0{% endif %}px;
-
-  --inputs-radius: {{ settings.inputs_radius }}px;
-  --inputs-border-width: {{ settings.inputs_border_thickness }}px;
-  --inputs-border-opacity: {{ settings.inputs_border_opacity | divided_by: 100.0 }};
-  --inputs-shadow-opacity: {{ settings.inputs_shadow_opacity | divided_by: 100.0 }};
-  --inputs-shadow-horizontal-offset: {{ settings.inputs_shadow_horizontal_offset }}px;
-  --inputs-margin-offset: {% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_opacity > 0 %}{{ settings.inputs_shadow_vertical_offset | abs }}
-{% else %}0{% endif %}px;
-  --inputs-shadow-vertical-offset: {{ settings.inputs_shadow_vertical_offset }}px;
-  --inputs-shadow-blur-radius: {{ settings.inputs_shadow_blur }}px;
-  --inputs-radius-outset: {% if settings.inputs_radius > 0 %}{{ settings.inputs_radius | plus: settings.inputs_border_thickness }}
-{% else %}0{% endif %}px;
-
-  --variant-pills-radius: {{ settings.variant_pills_radius }}px;
-  --variant-pills-border-width: {{ settings.variant_pills_border_thickness }}px;
-  --variant-pills-border-opacity: {{ settings.variant_pills_border_opacity | divided_by: 100.0 }};
-  --variant-pills-shadow-opacity: {{ settings.variant_pills_shadow_opacity | divided_by: 100.0 }};
-  --variant-pills-shadow-horizontal-offset: {{ settings.variant_pills_shadow_horizontal_offset }}px;
-  --variant-pills-shadow-vertical-offset: {{ settings.variant_pills_shadow_vertical_offset }}px;
-  --variant-pills-shadow-blur-radius: {{ settings.variant_pills_shadow_blur }}px;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
-html {
-  box-sizing: border-box;
-  font-size: calc(var(--font-body-scale) * 62.5%);
-  height: 100%;
-}
-
-body {
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  grid-template-columns: 100%;
-  min-height: 100%;
-  margin: 0;
-  font-size: 1.5rem;
-  letter-spacing: 0.06rem;
-  line-height: calc(1 + 0.8 / var(--font-body-scale));
-  font-family: var(--font-body-family);
-  font-style: var(--font-body-style);
-  font-weight: var(--font-body-weight);
-}
-
-body.no-scroll {
-  overflow: hidden;
-}
-
-/* body.filter-open {
-  width: calc(100vw - 320px);
-  transition: all 0.3s ease;
-} */
-
-@media screen and (min-width: 750px) {
-  body {
-    font-size: 1.6rem;
-  }
-}
+      @media screen and (min-width: 750px) {
+        body {
+          font-size: 1.6rem;
+        }
+      }
     {% endstyle %}
 
     {%- comment -%} CSS Loader Helper - Ensures preload compatibility {%- endcomment -%}
     {% render 'css-loader-helper' %}
-    
+
     {%- comment -%} Load base.css with preload for better performance {%- endcomment -%}
     <link rel="preload" href="{{ 'base.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>{{ 'base.css' | asset_url | stylesheet_tag }}</noscript>
-    
+
     <link
       rel="stylesheet"
       href="{{ 'component-cart-items.css' | asset_url }}"
       media="print"
-      onload="this.media='all'">
+      onload="this.media='all'"
+    >
 
     {%- if settings.cart_type == 'drawer' -%}
       {%- comment -%} Lazy load cart drawer CSS - only needed when cart is opened {%- endcomment -%}
-      <link rel="preload" href="{{ 'component-cart-drawer.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-      <link rel="preload" href="{{ 'component-cart.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-      <link rel="preload" href="{{ 'component-totals.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-      <link rel="preload" href="{{ 'component-price.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-      <link rel="preload" href="{{ 'component-discounts.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      <link
+        rel="preload"
+        href="{{ 'component-cart-drawer.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
+      <link
+        rel="preload"
+        href="{{ 'component-cart.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
+      <link
+        rel="preload"
+        href="{{ 'component-totals.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
+      <link
+        rel="preload"
+        href="{{ 'component-price.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
+      <link
+        rel="preload"
+        href="{{ 'component-discounts.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
       <noscript>
         {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
         {{ 'component-cart.css' | asset_url | stylesheet_tag }}
@@ -354,7 +386,8 @@ body.no-scroll {
         as="font"
         href="{{ settings.type_body_font | font_url }}"
         type="font/woff2"
-        crossorigin>
+        crossorigin
+      >
       {% comment %}theme-check-enable AssetPreload{% endcomment %}
     {%- endunless -%}
     {%- unless settings.type_header_font.system? -%}
@@ -364,7 +397,8 @@ body.no-scroll {
         as="font"
         href="{{ settings.type_header_font | font_url }}"
         type="font/woff2"
-        crossorigin>
+        crossorigin
+      >
       {% comment %}theme-check-enable AssetPreload{% endcomment %}
     {%- endunless -%}
 
@@ -379,7 +413,8 @@ body.no-scroll {
         rel="preload"
         href="{{ 'component-predictive-search.css' | asset_url }}"
         as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
       <noscript><link rel="stylesheet" href="{{ 'component-predictive-search.css' | asset_url }}"></noscript>
     {%- endif -%}
 
@@ -388,104 +423,171 @@ body.no-scroll {
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
-  
+
     <script type="text/javascript">
-        (function (f, b) { if (!b.__SV) { var e, g, i, h; window.mixpanel = b; b._i = []; b.init = function (e, f, c) { function g(a, d) { var b = d.split("."); 2 == b.length && ((a = a[b[0]]), (d = b[1])); a[d] = function () { a.push([d].concat(Array.prototype.slice.call(arguments, 0))); }; } var a = b; "undefined" !== typeof c ? (a = b[c] = []) : (c = "mixpanel"); a.people = a.people || []; a.toString = function (a) { var d = "mixpanel"; "mixpanel" !== c && (d += "." + c); a || (d += " (stub)"); return d; }; a.people.toString = function () { return a.toString(1) + ".people (stub)"; }; i = "disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split( " "); for (h = 0; h < i.length; h++) g(a, i[h]); var j = "set set_once union unset remove delete".split(" "); a.get_group = function () { function b(c) { d[c] = function () { call2_args = arguments; call2 = [c].concat(Array.prototype.slice.call(call2_args, 0)); a.push([e, call2]); }; } for ( var d = {}, e = ["get_group"].concat( Array.prototype.slice.call(arguments, 0)), c = 0; c < j.length; c++) b(j[c]); return d; }; b._i.push([e, f, c]); }; b.__SV = 1.2; e = f.createElement("script"); e.type = "text/javascript"; e.async = !0; e.src = "undefined" !== typeof MIXPANEL_CUSTOM_LIB_URL ? MIXPANEL_CUSTOM_LIB_URL : "file:" === f.location.protocol && "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//) ? "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js" : "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js"; g = f.getElementsByTagName("script")[0]; g.parentNode.insertBefore(e, g); } })(document, window.mixpanel || []);
-    
-        // Create an instance of the Mixpanel object
-        mixpanel.init("74ec42c3ea7e8196cd6cbd7aefeafaf5", {
-          persistence: "localStorage",
-          ignore_dnt: true,
-          stop_utm_persistence: true,
-          record_sessions_percent: 0, //records 100% of all sessions
-          record_heatmap_data: false,
-        });
+      (function (f, b) {
+        if (!b.__SV) {
+          var e, g, i, h;
+          window.mixpanel = b;
+          b._i = [];
+          b.init = function (e, f, c) {
+            function g(a, d) {
+              var b = d.split('.');
+              2 == b.length && ((a = a[b[0]]), (d = b[1]));
+              a[d] = function () {
+                a.push([d].concat(Array.prototype.slice.call(arguments, 0)));
+              };
+            }
+            var a = b;
+            'undefined' !== typeof c ? (a = b[c] = []) : (c = 'mixpanel');
+            a.people = a.people || [];
+            a.toString = function (a) {
+              var d = 'mixpanel';
+              'mixpanel' !== c && (d += '.' + c);
+              a || (d += ' (stub)');
+              return d;
+            };
+            a.people.toString = function () {
+              return a.toString(1) + '.people (stub)';
+            };
+            i =
+              'disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove'.split(
+                ' '
+              );
+            for (h = 0; h < i.length; h++) g(a, i[h]);
+            var j = 'set set_once union unset remove delete'.split(' ');
+            a.get_group = function () {
+              function b(c) {
+                d[c] = function () {
+                  call2_args = arguments;
+                  call2 = [c].concat(Array.prototype.slice.call(call2_args, 0));
+                  a.push([e, call2]);
+                };
+              }
+              for (
+                var d = {}, e = ['get_group'].concat(Array.prototype.slice.call(arguments, 0)), c = 0;
+                c < j.length;
+                c++
+              )
+                b(j[c]);
+              return d;
+            };
+            b._i.push([e, f, c]);
+          };
+          b.__SV = 1.2;
+          e = f.createElement('script');
+          e.type = 'text/javascript';
+          e.async = !0;
+          e.src =
+            'undefined' !== typeof MIXPANEL_CUSTOM_LIB_URL
+              ? MIXPANEL_CUSTOM_LIB_URL
+              : 'file:' === f.location.protocol && '//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js'.match(/^\/\//)
+              ? 'https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js'
+              : '//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
+          g = f.getElementsByTagName('script')[0];
+          g.parentNode.insertBefore(e, g);
+        }
+      })(document, window.mixpanel || []);
+
+      // Create an instance of the Mixpanel object
+      mixpanel.init('74ec42c3ea7e8196cd6cbd7aefeafaf5', {
+        persistence: 'localStorage',
+        ignore_dnt: true,
+        stop_utm_persistence: true,
+        record_sessions_percent: 0, //records 100% of all sessions
+        record_heatmap_data: false,
+      });
     </script>
 
     <script src="{{ 'event_reporting.js' | asset_url }}" defer="defer"></script>
     <script>
-        // Create an event queue and stub analytics object to collect events before initialization
-        (function() {
-            const eventQueue = [];
-            let isInitialized = false;
-            
-            // Create a stub analytics object that queues method calls
-            window.analytics = {
-                track: function(eventName, properties) {
-                    if (isInitialized) {
-                        // If already initialized, call directly (shouldn't happen, but safety check)
-                        return;
-                    }
-                    eventQueue.push({ method: 'track', args: [eventName, properties] });
-                },
-                trackClick: function(elementName, additionalProperties) {
-                    if (isInitialized) return;
-                    eventQueue.push({ method: 'trackClick', args: [elementName, additionalProperties] });
-                },
-                trackScreenView: function(screenName, additionalProperties) {
-                    if (isInitialized) return;
-                    eventQueue.push({ method: 'trackScreenView', args: [screenName, additionalProperties] });
-                },
-                trackCurrentPageView: function(additionalProperties) {
-                    if (isInitialized) return;
-                    eventQueue.push({ method: 'trackCurrentPageView', args: [additionalProperties] });
-                },
-                identifyUser: function(userId, userProperties) {
-                    if (isInitialized) return;
-                    eventQueue.push({ method: 'identifyUser', args: [userId, userProperties] });
-                },
-                enableAutoClickTracking: function() {
-                    if (isInitialized) return;
-                    eventQueue.push({ method: 'enableAutoClickTracking', args: [] });
-                },
-                reset: function() {
-                    if (isInitialized) return;
-                    eventQueue.push({ method: 'reset', args: [] });
-                }
-            };
-            
-            // Wait for both DOM and deferred scripts to load
-            function initializeAnalytics() {
-                // Check if MixpanelReporter is available
-                if (typeof MixpanelReporter === 'undefined') {
-                    console.warn('MixpanelReporter not yet loaded, retrying...');
-                    setTimeout(initializeAnalytics, 200);
-                    return;
-                }
-                
-                // Initialize the MixpanelReporter
-                const analytics = new MixpanelReporter();
-                
-                // Replay all queued events
-                if (eventQueue.length > 0) {
-                    console.log('Replaying ' + eventQueue.length + ' queued analytics events');
-                    eventQueue.forEach(function(event) {
-                        try {
-                            analytics[event.method].apply(analytics, event.args);
-                        } catch (error) {
-                            console.error('Error replaying analytics event:', event.method, error);
-                        }
-                    });
-                    // Clear the queue
-                    eventQueue.length = 0;
-                }
-                
-                // Replace the stub with the real analytics instance
-                window.analytics = analytics;
-                isInitialized = true;
-                
-                console.log('MixpanelReporter initialized and event queue processed');
+      // Create an event queue and stub analytics object to collect events before initialization
+      (function () {
+        const eventQueue = [];
+        let isInitialized = false;
+
+        // Create a stub analytics object that queues method calls
+        window.analytics = {
+          track: function (eventName, properties) {
+            if (isInitialized) {
+              // If already initialized, call directly (shouldn't happen, but safety check)
+              return;
             }
-            
-            initializeAnalytics();
-        })();
+            eventQueue.push({ method: 'track', args: [eventName, properties] });
+          },
+          trackClick: function (elementName, additionalProperties) {
+            if (isInitialized) return;
+            eventQueue.push({ method: 'trackClick', args: [elementName, additionalProperties] });
+          },
+          trackScreenView: function (screenName, additionalProperties) {
+            if (isInitialized) return;
+            eventQueue.push({ method: 'trackScreenView', args: [screenName, additionalProperties] });
+          },
+          trackCurrentPageView: function (additionalProperties) {
+            if (isInitialized) return;
+            eventQueue.push({ method: 'trackCurrentPageView', args: [additionalProperties] });
+          },
+          identifyUser: function (userId, userProperties) {
+            if (isInitialized) return;
+            eventQueue.push({ method: 'identifyUser', args: [userId, userProperties] });
+          },
+          enableAutoClickTracking: function () {
+            if (isInitialized) return;
+            eventQueue.push({ method: 'enableAutoClickTracking', args: [] });
+          },
+          reset: function () {
+            if (isInitialized) return;
+            eventQueue.push({ method: 'reset', args: [] });
+          },
+        };
+
+        // Wait for both DOM and deferred scripts to load
+        function initializeAnalytics() {
+          // Check if MixpanelReporter is available
+          if (typeof MixpanelReporter === 'undefined') {
+            console.warn('MixpanelReporter not yet loaded, retrying...');
+            setTimeout(initializeAnalytics, 200);
+            return;
+          }
+
+          // Initialize the MixpanelReporter
+          const analytics = new MixpanelReporter();
+
+          // Replay all queued events
+          if (eventQueue.length > 0) {
+            console.log('Replaying ' + eventQueue.length + ' queued analytics events');
+            eventQueue.forEach(function (event) {
+              try {
+                analytics[event.method].apply(analytics, event.args);
+              } catch (error) {
+                console.error('Error replaying analytics event:', event.method, error);
+              }
+            });
+            // Clear the queue
+            eventQueue.length = 0;
+          }
+
+          // Replace the stub with the real analytics instance
+          window.analytics = analytics;
+          isInitialized = true;
+
+          console.log('MixpanelReporter initialized and event queue processed');
+        }
+
+        initializeAnalytics();
+      })();
     </script>
     {%- comment -%} Load Enable accessibility script with lower priority {%- endcomment -%}
-    <script src="https://cdn.enable.co.il/licenses/enable-L44664oja1kh2qyl-0625-71744/init.js" defer async></script>
+    <script>
+      window.addEventListener('load', () => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.enable.co.il/licenses/enable-L44664oja1kh2qyl-0625-71744/init.js';
+        document.body.appendChild(script);
+      });
+    </script>
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
-
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
       {{ 'accessibility.skip_to_text' | t }}
     </a>
@@ -495,7 +597,8 @@ body.no-scroll {
           src="{{ 'whatsapp-tooltip-close.png' |  asset_url }}"
           class="tooltip-close"
           aria-label="Close tooltip"
-          onclick="closeTooltip()" />
+          onclick="closeTooltip()"
+        >
         <div class="whatsapp-tooltip-text">מתלבטים? אנחנו כאן כדי לעזור</div>
         <div class="tooltip-arrow">&nbsp;</div>
       </div>
@@ -503,11 +606,13 @@ body.no-scroll {
       <a
         href="https://wa.me/972545631523?text=%D7%94%D7%99%D7%99%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%94%D7%AA%D7%99%D7%99%D7%A2%D7%A5%20%D7%9C%D7%92%D7%91%D7%99%20%D7%A7%D7%A4%D7%94"
         target="_blank"
-        id="whatsapp-link">
+        id="whatsapp-link"
+      >
         <img
           class="whatsapp-icon"
           src="{{ 'WhatsApp.png' |  asset_url }}"
-          alt="WhatsApp" />
+          alt="WhatsApp"
+        >
       </a>
     </div>
 
@@ -522,13 +627,13 @@ body.no-scroll {
       function closeTooltip() {
         localStorage.setItem('whatsappTooltipClosed', 'true');
         analytics.trackClick('WhatsApp Icon', {
-          'Action': 'Close Tooltip',
+          Action: 'Close Tooltip',
         });
         const whatsappWrapper = document.querySelector('.whatsapp-tooltip');
         if (whatsappWrapper) {
           whatsappWrapper.classList.add('hidden');
         }
-      };
+      }
       setTimeout(() => {
         const whatsappWrapper = document.querySelector('.whatsapp-tooltip');
         if (whatsappWrapper) {
@@ -537,12 +642,12 @@ body.no-scroll {
       }, 13000); // Show after 5 seconds
 
       // Add event listener to WhatsApp link
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', function () {
         var whatsappLink = document.getElementById('whatsapp-link');
         if (whatsappLink) {
-          whatsappLink.addEventListener('click', function() {
-             analytics.trackClick('WhatsApp Icon', {
-              'Action': 'Open',
+          whatsappLink.addEventListener('click', function () {
+            analytics.trackClick('WhatsApp Icon', {
+              Action: 'Open',
             });
           });
         }
@@ -558,28 +663,32 @@ body.no-scroll {
 
     {% sections 'header-group' %}
 
-
     <main
       id="MainContent"
       class="content-for-layout focus-none"
       role="main"
       tabindex="-1"
-      dir="rtl">
+      dir="rtl"
+    >
       {{ content_for_layout }}
-  </main>
-    {% comment %} <div class="why-us-section">
-                                                                                    {% render 'why-us' %}
-                                                                                  </div>
+    </main>
+    {% comment %}
+      <div class="why-us-section">
+                                  {% render 'why-us' %}
+                                </div>
 
-                                                                                  {% render 'more-questions' %}
-                                                        <hr class="product-divider"/> {% endcomment %}
+                                {% render 'more-questions' %}
+      <hr class="product-divider"/>
+    {% endcomment %}
 
-    {% comment %} <div class="contact-us-whatsapp-wrapper" dir="rtl">
-                                                                                    <div class="contact-us-whatsapp-text">שאלות נוספות?</div>
-                                                                                    <a href="https://wa.me/972545631523?text=%D7%94%D7%99%D7%99%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%94%D7%AA%D7%99%D7%99%D7%A2%D7%A5%20%D7%9C%D7%92%D7%91%D7%99%20%D7%A7%D7%A4%D7%94" target="_blank" id="whatsapp-link"  style="text-decoration: none;">
-                                                                                      <div class="contact-us-whatsapp-text">דברו איתנו ב - WhatsApp</div>
-                                                                                    </a>
-                                                        </div> {% endcomment %}
+    {% comment %}
+      <div class="contact-us-whatsapp-wrapper" dir="rtl">
+                                  <div class="contact-us-whatsapp-text">שאלות נוספות?</div>
+                                  <a href="https://wa.me/972545631523?text=%D7%94%D7%99%D7%99%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%94%D7%AA%D7%99%D7%99%D7%A2%D7%A5%20%D7%9C%D7%92%D7%91%D7%99%20%D7%A7%D7%A4%D7%94" target="_blank" id="whatsapp-link"  style="text-decoration: none;">
+                                    <div class="contact-us-whatsapp-text">דברו איתנו ב - WhatsApp</div>
+                                  </a>
+      </div>
+    {% endcomment %}
 
     {% sections 'footer-group' %}
 

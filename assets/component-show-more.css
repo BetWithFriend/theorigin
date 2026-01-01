@@ -21,8 +21,8 @@
   height: 7px;
   background-color: #D60540;
   border-radius: 10px;
-  top: 11px;
-  left: 11px;
+  top: 1px;
+  left: 1px;
 
 }
 
@@ -93,16 +93,32 @@
   font-size: 14px;
   transition: all 0.2s ease;
   position: relative;
-  border: 1px solid #000;
-  border-radius: 8px;
+  border: 1px solid #919191;
+  border-radius: 4px;
   /* width: 40px;
   height: 40px; */
+
+  width: 100%;
+  gap: 16px;
 }
 
 .sort-dropdown-button:hover {
   /* border-color: #999; */
   background: #f9f9f9;
 }
+
+.sort-dropdown-button span {
+  font-size: 16px;
+  line-height: 30px;
+  font-weight: 400;
+  color: #1C201D;
+}
+
+.sort-dropdown-button.short-button {
+  /* width: 46px; */
+  /* height: 46px; */
+  width: 80px;
+} 
 
 /* .sort-dropdown-button:focus {
   outline: 2px solid #007bff;
@@ -128,7 +144,7 @@
 
 .sort-icon-image {
   width: 25px;
-  height: 25px;
+  height: 30px;
   pointer-events: none;
 }
 
