@@ -124,7 +124,7 @@
 <style>
     .product-details-vendor-story-wrapper {
         overflow: hidden;
-        max-height: calc(23px * 20); /* 5 full lines of text */
+        max-height: calc(23px * 25); /* 5 full lines of text */
         transition: max-height 0.6s ease-in-out;
         position: relative;
     }
@@ -245,13 +245,14 @@
         height: 52px;
     }
     .product-description-wrapper {
-        background-color: #FBFCFE;
+        /* background-color: #FBFCFE; */
+        background-color: #ffffff;
         overflow: hidden;
         max-height: 75px; /* Use max-height instead of height */
         display: flex;
         align-items: start;
         justify-content: start;
-        padding: 24px;
+        padding: 24px 32px;
         cursor: pointer;
         transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; /* Add transition */
         flex-direction: column; /* This is already here, but good to have */
@@ -335,6 +336,7 @@
     }
     .product-description-more-details {
         font-family: 'Assistant', sans-serif;
+        padding: 0 16px;
         font-weight: 400;
         font-size: 16px;
         line-height: 22px;

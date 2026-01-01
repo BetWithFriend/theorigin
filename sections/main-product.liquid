@@ -496,6 +496,7 @@
 
     {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
     <div class="page-width-product-page">
+      <script>console.log('boom',  {{product.tags | json}});</script>
       {%  if product.tags contains 'new' %}
         <span class="cart-info-new-tag new-product" >חדש</span>
       {% endif %}
@@ -504,6 +505,19 @@
       {% endif %}
       {%  if product.tags contains 'recommended' %}
         <span class="cart-info-new-tag recommended" >מומלץ</span>
+      {% endif %}
+      {% assign all_tags = product.tags | join: ',' %}
+      {%  if all_tags contains 'shotim' %}
+        {% for tag in product.tags %}
+          {% if tag contains 'shotim:' %}
+            {% assign tag_parts = tag | split: ':' %}
+            {% capture filename %}{{ tag_parts[0] }}-{{ tag_parts[2] }}-{{ tag_parts[1] }}.png{% endcapture %}
+            <img src="{{ filename | asset_url }}" 
+                 alt="{{ tag_parts[1] }} tag" 
+                 class="cart-info-new-tag shotim" />
+            {% break %}
+          {% endif %}
+        {% endfor %}
       {% endif %}
 
       <div class="product-info-top-wrapper">
