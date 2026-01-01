@@ -269,6 +269,7 @@
         -ms-user-select: auto;
         user-select: auto;
         cursor: default;
+        background-color: #fff;
     }
 
     .main-recom-left-arrow,
@@ -277,7 +278,7 @@
     }
 
     .testimonial-slide {
-        width: 30%;
+        width: 32%;
         position: relative;
         opacity: 1;
         transform: translateX(0);
@@ -291,6 +292,7 @@
         border-radius: 16px;
         margin-bottom: 36px;
         margin-top: 0;
+        height: 340px;
     }
 
     .main-recom-wrapper {
@@ -312,6 +314,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        background-color: #24323B;
     }
 
     .main-recom-img-wrapper {

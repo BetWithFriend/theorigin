@@ -1624,7 +1624,7 @@ a.product__text {
 
 .background-stripe {
   position: absolute;
-  top: 200px;
+  top: 185px;
   left: 0;
   right: 0;
   height: 180px;
@@ -1641,7 +1641,7 @@ a.product__text {
   height: 100%;
   position: relative;
   flex-direction: column;
-  padding: 16px 24px;
+  padding: 16px 24px 16px 0px;
   gap: 4px;
   /* padding: 0 2rem; */
 }
