@@ -3,7 +3,7 @@ variant-selects {
 }
 
 .product-variant-picker-wrapper {
-  padding: 16px;
+  padding: 16px 16px 0 16px;
 }
 
 .product--no-media .product-form__input--pill,
