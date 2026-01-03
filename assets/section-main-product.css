@@ -1708,3 +1708,9 @@ a.product__text {
   letter-spacing: 2%;
   text-align: right;
 }
+
+@media screen and (min-width: 750px) {
+  .bg-strip-text-wrapper {
+    display: none;
+  }
+}

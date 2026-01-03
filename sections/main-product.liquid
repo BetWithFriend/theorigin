@@ -182,7 +182,10 @@
     }
 
     .buy-buttons-wrapper-product-page {
-      background-color: #F4F3F0;
+      /* background-color: #F4F3F0; */
+      background-color: #fff;
+      border-top: 1px solid #1C201D80;
+      border-bottom: 1px solid #1C201D80;
     }
 
     .product-sub-title-pdp .single-coffee-taste-main-product {
@@ -546,6 +549,7 @@
 
   <div id="product-description-main-wrapper">
     <div class="product-description-wrapper-main">
+      {% comment %} <div class="product-vendor">{{ product.vendor }}</div> {% endcomment %}
   
     <div class="main-product-description-details-mobile-wrapper">
       {% render 'product-variants', { product: product, vendor: vendor } %}
@@ -584,7 +588,7 @@
       brew_images: product.metafields.custom.product_brew_image,
       product_details: product_details,
       coffee_origin_image: product.metafields.custom.coffee_origin_image,
-      coffee_tastes: coffee_taste_list,
+      coffee_tastes: product.metafields.custom.coffee_tastes.value,
       coffee_roast_level: coffee_roast_level,
       coffee_altitude: coffee_altitude,
       coffee_process: coffee_process,
