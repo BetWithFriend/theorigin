@@ -1480,6 +1480,10 @@ a.product__text {
   .main-product-description-details-mobile-wrapper {
     width: 100%;
   }
+
+  .product-media-container.constrain-height.media-fit-contain {
+    justify-content: center;
+  }
 }
 
 .product-media-container .product__modal-opener {
@@ -1700,6 +1704,14 @@ a.product__text {
   text-align: right;
 }
 
+.product-page-info-short-description-wrapper {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  /* margin-top: 8px; */
+}
+
 .product-page-info-short-description {
   font-weight: 400;
   font-style: Regular;
@@ -1712,5 +1724,9 @@ a.product__text {
 @media screen and (min-width: 750px) {
   .bg-strip-text-wrapper {
     display: none;
+  }
+
+  .product-tastes-details-wrapper-outer {
+    background-color: transparent;
   }
 }

@@ -181,9 +181,13 @@
       gap: 1rem;  */
     }
 
+    .main-product-taste-icons {
+      display: none;
+    }
+
     .buy-buttons-wrapper-product-page {
       /* background-color: #F4F3F0; */
-      background-color: #fff;
+      /* background-color: #fff; */
       border-top: 1px solid #1C201D80;
       border-bottom: 1px solid #1C201D80;
     }
@@ -549,9 +553,20 @@
 
   <div id="product-description-main-wrapper">
     <div class="product-description-wrapper-main">
-      {% comment %} <div class="product-vendor">{{ product.vendor }}</div> {% endcomment %}
+      {% comment %} <div class="product-desktop-vendor-name">{{ product.vendor }}</div>
+      <div class="product-desktop-name">{{ product.title }}</div>
+      <div class="product-desktop-product-taste-icons">
+            {% assign coffee_tastes = product.metafields.custom.coffee_taste %} 
+            {% render 'product-taste-icon-color', tastes: coffee_tastes %}
+        </div> {% endcomment %}
   
     <div class="main-product-description-details-mobile-wrapper">
+      <div class="product-desktop-vendor-name">{{ product.vendor }}</div>
+      <div class="product-desktop-name">{{ product.title }}</div>
+      <div class="product-desktop-product-taste-icons">
+            {% assign coffee_tastes = product.metafields.custom.coffee_taste %} 
+            {% render 'product-taste-icon-color', tastes: coffee_tastes %}
+        </div>
       {% render 'product-variants', { product: product, vendor: vendor } %}
     </div>
   

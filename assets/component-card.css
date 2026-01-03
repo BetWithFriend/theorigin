@@ -880,7 +880,7 @@
 
 .cart-info-new-tag.recommended {
   background-color: #FFA15C;
-  color: #1C201D;
+  /* color: #1C201D; */
 }
 
 .cart-info-new-tag.shotim {

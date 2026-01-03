@@ -489,6 +489,8 @@ slider-component.slider-component-full-width {
   /* flex-direction: row; */
   gap: 8px;
   width: 100%;
+  align-items: center;
+  justify-content: flex-start;
   /* margin-top: 4px; */
   /* margin-top: 0; */
 }

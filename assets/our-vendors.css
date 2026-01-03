@@ -69,6 +69,7 @@
     0% {
         transform: translateX(calc(100% - 420px));
     }
+
     100% {
         transform: translateX(-33.333%);
     }
@@ -238,12 +239,13 @@
 }
 
 @media screen and (max-width: 768px) {
+
     /* Force exactly 3 vendors per row on mobile. */
     .our-vendors-logo-wrapper {
         gap: 16px;
     }
 
-    .our-vendors-logo-wrapper > .our-vendor-container {
+    .our-vendors-logo-wrapper>.our-vendor-container {
         box-sizing: border-box;
         flex: 0 0 calc((100% - 32px) / 3);
         max-width: calc((100% - 32px) / 3);
