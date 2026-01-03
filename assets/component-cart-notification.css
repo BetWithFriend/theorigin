@@ -234,7 +234,7 @@
 }
 
 .cart_payment_types_icons {
-  margin-top: 12px;
+  /* margin-top: 12px; */
   display: flex;
   white-space: nowrap;
   align-items: center;
