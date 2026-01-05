@@ -21,12 +21,12 @@
   }
 
   .why-us-vertical-text {
-    font-family: "Assistant"
+    font-family: 'Assistant'
     , sans-serif;
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;
-    color: #1C201D;
+    color: #1c201d;
     flex: 1;
     text-align: right;
   }
@@ -44,24 +44,26 @@
   }
   @media screen and (min-width: 750px) {
     .why-us-vertical-wrapper {
-      background-color: #E3E0DA;
+      background-color: #e3e0da;
       border-radius: unset;
     }
   }
-
 </style>
 
 <div class="why-us-vertical-wrapper">
-
   <div class="why-us-vertical-item">
     <img
       class="why-us-vertical-img"
       src="{{ 'why-us-vertical-glass-icon.png' | asset_url }}"
       alt="Free Shipping"
       width="22"
-      height="26" />
+      height="26">
     {% comment %} <div class="why-us-vertical-text" dir="rtl">משלוח עד הבית ב-39 ש״ח &#9679; חינם בקנייה מעל {{ vendor.min_order_for_free_shipping  }} ₪ בבית קלייה זה</div> {% endcomment %}
-    <div class="why-us-vertical-text" dir="rtl">משלוח עד הבית ב-29 ש״ח בלבד</div>
+    {%- if vendor.vendor_name.value == 'You Need Coffee' -%}
+      <div class="why-us-vertical-text" dir="rtl">משלוח עד הבית ב-55 ש״ח בלבד (זמנית גבוה יותר רק בבית הקלייה הזה)</div>
+    {% else %}
+      <div class="why-us-vertical-text" dir="rtl">משלוח עד הבית ב-29 ש״ח בלבד</div>
+    {% endif %}
   </div>
   <div class="why-us-vertical-item">
     <img
@@ -69,7 +71,7 @@
       src="{{ 'why-us-vertical-delivery-icon.png' | asset_url }}"
       alt="Fast Delivery"
       width="22"
-      height="18" />
+      height="18">
     <div class="why-us-vertical-text" dir="rtl">
       משלוח חינם בקנייה מעל {{ vendor.min_order_for_free_shipping }} ₪ בבית קלייה זה
     </div>
@@ -80,14 +82,17 @@
       src="{{ 'why-us-vertical-roaster-icon.png' | asset_url }}"
       alt="Roaster"
       width="22"
-      height="26" />
+      height="26">
     <div class="why-us-vertical-text" dir="rtl">
-      {{ vendor.vendor_name.value | upcase }} בית קלייה בוטיק מ{{ vendor.vendor_location.value }} &#9679; נשלח טרי ישירות מבית הקלייה
+      {{ vendor.vendor_name.value | upcase }} בית קלייה בוטיק מ{{ vendor.vendor_location.value }} &#9679; נשלח טרי  
+      ישירות מבית הקלייה
     </div>
   </div>
-{% comment %} <div class="why-us-vertical-item">
-                            <img class="why-us-vertical-img" src="{{ 'why-us-vertical-whaysapp-icon.png' | asset_url }}" alt="Support Local Business" width="22" height="22" />  
-                            <div class="why-us-vertical-text" dir="rtl">
-                              כל רכישה תומכת בבית קלייה מקומי קטן</div>
-  </div> {% endcomment %}
+{% comment %}
+  <div class="why-us-vertical-item">
+  <img class="why-us-vertical-img" src="{{ 'why-us-vertical-whaysapp-icon.png' | asset_url }}" alt="Support Local Business" width="22" height="22" />
+  <div class="why-us-vertical-text" dir="rtl">
+  כל רכישה תומכת בבית קלייה מקומי קטן</div>
+  </div>
+{% endcomment %}
 </div>
