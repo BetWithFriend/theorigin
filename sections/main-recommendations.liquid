@@ -1,217 +1,244 @@
 {{ 'main-recommendations.css' | asset_url | stylesheet_tag }}
 
 <div class="main-recom-wrapper-container">
-    <div class="main-recom-title">לקוחות מספרים</div>
-    <div class="main-recom-wrapper">
-        <div class="testimonials-container" id="testimonials-container">
-            <!-- Testimonial 1 -->
-            <div class="testimonial-slide active">
-                <div class="main-recom-img-wrapper">
-                    <img class="main-recom-img" src="{{ 'testimonial_img_1.png' |  asset_url }}" alt="user recommendation image"/>
-                </div>
-                <div class="main-recom-text-wrapper">
-                    <div class="main-recom-text">"הטעם והשירות פשוט מעולים. רמה גבוהה, קפה מדהים - לגמרי אמשיך להזמין כל חודש. מתכנן לנסות משהו חדש כל פעם."</div>
-                    <div class="main-recom-name">לוטן ג.</div>
-                    <div class="main-recom-location">תל אביב</div>
-                </div>
-            </div>
-
-            <!-- Testimonial 2 -->
-            <div class="testimonial-slide">
-                <div class="main-recom-img-wrapper">
-                    <img class="main-recom-img" src="{{ 'testimonial_img_2.png' |  asset_url }}" alt="user recommendation image"/>
-                </div>
-                <div class="main-recom-text-wrapper">
-                    <div class="main-recom-text">"גיליתי בתי קלייה שלא הכרתי לפני כן. הזמנתי כבר כמה פעמים, כל פעם מבית קלייה אחר - ופשוט וואו. שירות גאוני ונח."</div>
-                    <div class="main-recom-name">סלבה מ.</div>
-                    <div class="main-recom-location">רחובות</div>
-                </div>
-            </div>
-
-            <!-- Testimonial 3 -->
-            <div class="testimonial-slide">
-                <div class="main-recom-img-wrapper">
-                    <img class="main-recom-img" src="{{ 'testimonial_img_3.png' |  asset_url }}" alt="user recommendation image"/>
-                </div>
-                <div class="main-recom-text-wrapper">
-                    <div class="main-recom-text">"הזמנה קלה, משלוח מהיר ושירות מצוין – בהחלט אזמין שוב!"</div>
-                    <div class="main-recom-name">עידו ג.</div>
-                    <div class="main-recom-location">חיפה</div>
-                </div>
-            </div>
+  <div class="main-recom-title">מה אומרים חובבי הקפה שלנו</div>
+  <div class="main-recom-wrapper">
+    <div class="testimonials-container" id="testimonials-container">
+      <!-- Testimonial 1 -->
+      <div class="testimonial-slide active">
+        <div class="main-recom-img-wrapper">
+          <img
+            class="main-recom-img"
+            src="{{ 'testimonial_img_1.png' |  asset_url }}"
+            alt="user recommendation image">
         </div>
-
-        <div class="main-recom-bullet-wrapper">
-            <div class="main-recom-bullet active" data-slide="0" onclick="showSlide(0, 'bullets')"> </div>
-            <div class="main-recom-bullet" data-slide="1" onclick="showSlide(1, 'bullets')"> </div>
-            <div class="main-recom-bullet" data-slide="2" onclick="showSlide(2, 'bullets')"> </div>
+        <div class="main-recom-text-wrapper">
+          <div class="main-recom-text">
+            "הטעם והשירות פשוט מעולים. רמה גבוהה, קפה מדהים - לגמרי אמשיך להזמין כל חודש. מתכנן לנסות משהו חדש כל פעם."
+          </div>
+          <div class="main-recom-name">לוטן ג.</div>
+          <div class="main-recom-location">תל אביב</div>
         </div>
+      </div>
 
-        <img class="main-recom-right-arrow" src="{{ 'main-recom-right-arrow.png' |  asset_url }}" onclick="prevSlide()" />
-        <img class="main-recom-left-arrow" src="{{ 'main-recom-left-arrow.png' |  asset_url }}" onclick="nextSlide()" />
+      <!-- Testimonial 2 -->
+      <div class="testimonial-slide">
+        <div class="main-recom-img-wrapper">
+          <img
+            class="main-recom-img"
+            src="{{ 'testimonial_img_2.png' |  asset_url }}"
+            alt="user recommendation image">
+        </div>
+        <div class="main-recom-text-wrapper">
+          <div class="main-recom-text">
+            "גיליתי בתי קלייה שלא הכרתי לפני כן. הזמנתי כבר כמה פעמים, כל פעם מבית קלייה אחר - ופשוט וואו. שירות גאוני           
+            ונח."
+          </div>
+          <div class="main-recom-name">סלבה מ.</div>
+          <div class="main-recom-location">רחובות</div>
+        </div>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="testimonial-slide">
+        <div class="main-recom-img-wrapper">
+          <img
+            class="main-recom-img"
+            src="{{ 'testimonial_img_3.png' |  asset_url }}"
+            alt="user recommendation image">
+        </div>
+        <div class="main-recom-text-wrapper">
+          <div class="main-recom-text">"הזמנה קלה, משלוח מהיר ושירות מצוין – בהחלט אזמין שוב!"</div>
+          <div class="main-recom-name">עידו ג.</div>
+          <div class="main-recom-location">חיפה</div>
+        </div>
+      </div>
     </div>
+
+    <img
+      class="main-recom-right-arrow"
+      src="{{ 'main-recom-right-arrow.png' |  asset_url }}"
+      onclick="prevSlide()">
+    <img
+      class="main-recom-left-arrow"
+      src="{{ 'main-recom-left-arrow.png' |  asset_url }}"
+      onclick="nextSlide()">
+  </div>
+
+  <div class="main-recom-bullet-wrapper">
+    <div
+      class="main-recom-bullet active"
+      data-slide="0"
+      onclick="showSlide(0, 'bullets')">&nbsp;</div>
+    <div
+      class="main-recom-bullet"
+      data-slide="1"
+      onclick="showSlide(1, 'bullets')">&nbsp;</div>
+    <div
+      class="main-recom-bullet"
+      data-slide="2"
+      onclick="showSlide(2, 'bullets')">&nbsp;</div>
+  </div>
 </div>
 
 <script>
-    let testimonial_currentSlide = 1; // Start with slide 1 (second slide) as active
-    const testimonial_slides = document.querySelectorAll('.testimonial-slide');
-    const testimonial_bullets = document.querySelectorAll('.main-recom-bullet');
-    const testimonial_totalSlides = testimonial_slides.length;
-    const testimonials_container = document.getElementById('testimonials-container');
+  let testimonial_currentSlide = 1; // Start with slide 1 (second slide) as active
+  const testimonial_slides = document.querySelectorAll('.testimonial-slide');
+  const testimonial_bullets = document.querySelectorAll('.main-recom-bullet');
+  const testimonial_totalSlides = testimonial_slides.length;
+  const testimonials_container = document.getElementById('testimonials-container');
 
-    // Touch/swipe variables
-    let startX = 0;
-    let endX = 0;
-    let startY = 0;
-    let endY = 0;
-    let isTouch = false;
-    const minSwipeDistance = 50; // Minimum distance for a swipe
+  // Touch/swipe variables
+  let startX = 0;
+  let endX = 0;
+  let startY = 0;
+  let endY = 0;
+  let isTouch = false;
+  const minSwipeDistance = 50; // Minimum distance for a swipe
 
-    // Add active class to all slides if screen width > 769px
-    function updateSlidesForScreenWidth() {
-        if (window.innerWidth > 769) {
-            testimonial_slides.forEach(slide => slide.classList.add('active'));
+  // Add active class to all slides if screen width > 769px
+  function updateSlidesForScreenWidth() {
+    if (window.innerWidth > 769) {
+      testimonial_slides.forEach((slide) => slide.classList.add('active'));
+    } else {
+      testimonial_slides.forEach((slide, idx) => {
+        if (idx === testimonial_currentSlide) {
+          slide.classList.add('active');
         } else {
-            testimonial_slides.forEach((slide, idx) => {
-                if (idx === testimonial_currentSlide) {
-                    slide.classList.add('active');
-                } else {
-                    slide.classList.remove('active');
-                }
-            });
+          slide.classList.remove('active');
         }
+      });
+    }
+  }
+
+  window.addEventListener('resize', updateSlidesForScreenWidth);
+  window.addEventListener('DOMContentLoaded', updateSlidesForScreenWidth);
+
+  function showSlide(index, direction = 'none') {
+    const currentSlide = testimonial_slides[testimonial_currentSlide];
+    const nextSlide = testimonial_slides[index];
+    if (direction === 'bullets') {
+      if (testimonial_currentSlide > index) {
+        direction = 'left'; // Previous slide
+      } else {
+        direction = 'right'; // Next slide
+      }
     }
 
-    window.addEventListener('resize', updateSlidesForScreenWidth);
-    window.addEventListener('DOMContentLoaded', updateSlidesForScreenWidth);
-    
+    if (window.innerWidth <= 768 && direction !== 'none') {
+      // Set exit direction for current slide
+      if (direction === 'right') {
+        currentSlide.classList.add('slide-out-right');
+        nextSlide.classList.remove('slide-out-left', 'slide-out-right');
+        nextSlide.classList.add('slide-in-left');
+      } else if (direction === 'left') {
+        currentSlide.classList.add('slide-out-left');
+        nextSlide.classList.remove('slide-out-left', 'slide-out-right');
+        nextSlide.classList.add('slide-in-right');
+      }
 
-    function showSlide(index, direction = 'none') {
-        const currentSlide = testimonial_slides[testimonial_currentSlide];
-        const nextSlide = testimonial_slides[index];
-        if (direction === 'bullets') {
-            if (testimonial_currentSlide > index) {
-                direction = 'left'; // Previous slide
-            } else {
-                direction = 'right'; // Next slide
-            }
-        }
-        
-        if (window.innerWidth <= 768 && direction !== 'none') {
-            // Set exit direction for current slide
-            if (direction === 'right') {
-                currentSlide.classList.add('slide-out-right');
-                nextSlide.classList.remove('slide-out-left', 'slide-out-right');
-                nextSlide.classList.add('slide-in-left');
-            } else if (direction === 'left') {
-                currentSlide.classList.add('slide-out-left');
-                nextSlide.classList.remove('slide-out-left', 'slide-out-right');
-                nextSlide.classList.add('slide-in-right');
-            }
-            
-            // Clean up classes after transition
-            setTimeout(() => {
-                testimonial_slides.forEach(slide => {
-                    slide.classList.remove('slide-out-left', 'slide-out-right', 'slide-in-left', 'slide-in-right');
-                });
-            }, 300);
-        }
-        
-        // Hide all slides
-        testimonial_slides.forEach(slide => {
-            slide.classList.remove('active');
+      // Clean up classes after transition
+      setTimeout(() => {
+        testimonial_slides.forEach((slide) => {
+          slide.classList.remove('slide-out-left', 'slide-out-right', 'slide-in-left', 'slide-in-right');
         });
-        // Remove active class from all bullets
-        testimonial_bullets.forEach(bullet => {
-            bullet.classList.remove('active');
-        });
-        // Show current slide and activate bullet
-        testimonial_slides[index].classList.add('active');
-        testimonial_bullets[index].classList.add('active');
-        testimonial_currentSlide = index;
-        // Update for screen width
-        updateSlidesForScreenWidth();
+      }, 300);
     }
 
-
-    function nextSlide() {
-        const prev = (testimonial_currentSlide - 1 + testimonial_totalSlides) % testimonial_totalSlides;
-        showSlide(prev, 'left');
-    }
-
-    function prevSlide() {
-        const next = (testimonial_currentSlide + 1) % testimonial_totalSlides;
-        showSlide(next, 'right');
-    }
-
-    // Touch event handlers
-    function handleTouchStart(e) {
-        if (window.innerWidth > 769) return; // Only on mobile
-        
-        isTouch = true;
-        const touch = e.touches[0];
-        startX = touch.clientX;
-        startY = touch.clientY;
-    }
-
-    function handleTouchMove(e) {
-        if (!isTouch || window.innerWidth > 769) return;
-        
-        // Prevent default scrolling behavior during horizontal swipe
-        const touch = e.touches[0];
-        const currentX = touch.clientX;
-        const currentY = touch.clientY;
-        
-        const deltaX = Math.abs(currentX - startX);
-        const deltaY = Math.abs(currentY - startY);
-        
-        // If horizontal movement is greater than vertical, prevent scrolling
-        if (deltaX > deltaY) {
-            e.preventDefault();
-        }
-    }
-
-    function handleTouchEnd(e) {
-        if (!isTouch || window.innerWidth > 769) return;
-        
-        const touch = e.changedTouches[0];
-        endX = touch.clientX;
-        endY = touch.clientY;
-        
-        handleSwipe();
-        isTouch = false;
-    }
-
-    function handleSwipe() {
-        const deltaX = endX - startX;
-        const deltaY = endY - startY;
-        const absDeltaX = Math.abs(deltaX);
-        const absDeltaY = Math.abs(deltaY);
-        
-        // Check if it's a horizontal swipe (horizontal movement > vertical movement)
-        if (absDeltaX > absDeltaY && absDeltaX > minSwipeDistance) {
-            if (deltaX > 0) {
-                // Swipe right - go to previous slide
-                prevSlide();
-            } else {
-                // Swipe left - go to next slide
-                nextSlide();
-            }
-        }
-    }
-
-    // Add touch event listeners to the testimonials container
-    testimonials_container.addEventListener('touchstart', handleTouchStart, { passive: false });
-    testimonials_container.addEventListener('touchmove', handleTouchMove, { passive: false });
-    testimonials_container.addEventListener('touchend', handleTouchEnd, { passive: false });
-
-    // Add click event listeners to bullets
-    testimonial_bullets.forEach((bullet, index) => {
-        bullet.addEventListener('click', () => {
-            showSlide(index);
-        });
+    // Hide all slides
+    testimonial_slides.forEach((slide) => {
+      slide.classList.remove('active');
     });
+    // Remove active class from all bullets
+    testimonial_bullets.forEach((bullet) => {
+      bullet.classList.remove('active');
+    });
+    // Show current slide and activate bullet
+    testimonial_slides[index].classList.add('active');
+    testimonial_bullets[index].classList.add('active');
+    testimonial_currentSlide = index;
+    // Update for screen width
+    updateSlidesForScreenWidth();
+  }
 
-    // Optional: Auto-slide every 5 seconds
-    // setInterval(nextSlide, 5000);
+  function nextSlide() {
+    const prev = (testimonial_currentSlide - 1 + testimonial_totalSlides) % testimonial_totalSlides;
+    showSlide(prev, 'left');
+  }
+
+  function prevSlide() {
+    const next = (testimonial_currentSlide + 1) % testimonial_totalSlides;
+    showSlide(next, 'right');
+  }
+
+  // Touch event handlers
+  function handleTouchStart(e) {
+    if (window.innerWidth > 769) return; // Only on mobile
+
+    isTouch = true;
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+  }
+
+  function handleTouchMove(e) {
+    if (!isTouch || window.innerWidth > 769) return;
+
+    // Prevent default scrolling behavior during horizontal swipe
+    const touch = e.touches[0];
+    const currentX = touch.clientX;
+    const currentY = touch.clientY;
+
+    const deltaX = Math.abs(currentX - startX);
+    const deltaY = Math.abs(currentY - startY);
+
+    // If horizontal movement is greater than vertical, prevent scrolling
+    if (deltaX > deltaY) {
+      e.preventDefault();
+    }
+  }
+
+  function handleTouchEnd(e) {
+    if (!isTouch || window.innerWidth > 769) return;
+
+    const touch = e.changedTouches[0];
+    endX = touch.clientX;
+    endY = touch.clientY;
+
+    handleSwipe();
+    isTouch = false;
+  }
+
+  function handleSwipe() {
+    const deltaX = endX - startX;
+    const deltaY = endY - startY;
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+
+    // Check if it's a horizontal swipe (horizontal movement > vertical movement)
+    if (absDeltaX > absDeltaY && absDeltaX > minSwipeDistance) {
+      if (deltaX > 0) {
+        // Swipe right - go to previous slide
+        prevSlide();
+      } else {
+        // Swipe left - go to next slide
+        nextSlide();
+      }
+    }
+  }
+
+  // Add touch event listeners to the testimonials container
+  testimonials_container.addEventListener('touchstart', handleTouchStart, { passive: false });
+  testimonials_container.addEventListener('touchmove', handleTouchMove, { passive: false });
+  testimonials_container.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+  // Add click event listeners to bullets
+  testimonial_bullets.forEach((bullet, index) => {
+    bullet.addEventListener('click', () => {
+      showSlide(index);
+    });
+  });
+
+  // Optional: Auto-slide every 5 seconds
+  // setInterval(nextSlide, 5000);
 </script>

@@ -3,20 +3,22 @@
     
                     <div class="product-description-wrapper" id="product-description" dir="rtl" onclick="showMoreDetails('details')">
                         <div class="product-description-more-details-title">
-                            <img class="side-arrow-more-details rotated" src="{{'side-arrow-more-details.png' |  asset_url}}" alt="more details icon"/>
+                            <img class="side-arrow-more-details" src="{{'side-arrow-more-details.png' |  asset_url}}" alt="more details icon"/>
                             מידע למביני עניין
                         </div>
-                        <div class="product-description-more-details">
-                            {{ product_description  }}
-                        </div>
-                        {% unless product.tags contains 'event' %}
                         <div class="product-description-details-wrapper">
                             <div class="product-description-divider">
                                 <hr  class="product-description-divider-line"/>
                                 <img class="product-description-divider-img" src="{{ 'divider.png' | asset_url }}" alt="Divider" />
                             </div>
                         </div>
-                    
+                        <div class="product-description-details-images-wrapper">
+                            {% assign coffee_prep_methods_raw = product.metafields.custom.coffee_prep_methods | strip %}
+                            {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
+                            {% for brew_img in coffee_prep_methods %}
+                                <img class="product-description-img" src="{{ brew_img  | strip | remove: '"' | append: '.png' | asset_url | replace: "files/", "" }}" alt="Brew Image" />
+                            {% endfor %}
+                        </div>
                         <div class="product-details-wrapper" dir="rtl">
                             <div class="product-details-item-wrapper">
                                 <div class="product-details-item-title">הרכב</div>
@@ -43,27 +45,67 @@
                                 <div class="product-details-item">{{ coffee_altitude }}</div>
                             </div>
                         </div>
+                        {% comment %} <div class="product-description-more-details">
+                            {{ product_description  }}
+                        </div> {% endcomment %}
+                        {% unless product.tags contains 'event' %}
+                        {% comment %} <div class="product-description-details-wrapper">
+                            <div class="product-description-divider">
+                                <hr  class="product-description-divider-line"/>
+                                <img class="product-description-divider-img" src="{{ 'divider.png' | asset_url }}" alt="Divider" />
+                            </div>
+                        </div> {% endcomment %}
+                    
+                        {% comment %} <div class="product-details-wrapper" dir="rtl">
+                            <div class="product-details-item-wrapper">
+                                <div class="product-details-item-title">הרכב</div>
+                                <div class="product-details-item">{{ coffee_blend_ratio }}</div>
+                            </div>    
+                            <div class="product-details-item-wrapper">
+                                <div class="product-details-item-title">דרגת קלייה</div>
+                                <div class="product-details-item">{{ coffee_roast_level }}</div>
+                            </div>
+                            <div class="product-details-item-wrapper">
+                                <div class="product-details-item-title">טעמים</div>
+                                <div class="product-details-item">{{ coffee_tastes | join: ", "}}</div>
+                            </div>
+                            <div class="product-details-item-wrapper">
+                                <div class="product-details-item-title">קטגוריה</div>
+                                <div class="product-details-item">{{ coffee_type }}</div>
+                            </div>
+                            <div class="product-details-item-wrapper">
+                                <div class="product-details-item-title">שיטת עיבוד</div>
+                                <div class="product-details-item">{{ coffee_process }}</div>
+                            </div>
+                            <div class="product-details-item-wrapper">
+                                <div class="product-details-item-title">גובה גידול</div>
+                                <div class="product-details-item">{{ coffee_altitude }}</div>
+                            </div>
+                        </div> {% endcomment %}
                     
                         <div class="product-description-divider-wrapper">
-                            <div class="product-description-divider">
+                            {% comment %} <div class="product-description-divider">
                                 <hr class="product-description-divider-line"/>
-                            </div>
+                            </div> {% endcomment %}
 
-                            <div class="product-description-details-images-wrapper">
+                            {% comment %} <div class="product-description-details-images-wrapper">
                                 {% assign coffee_prep_methods_raw = product.metafields.custom.coffee_prep_methods | strip %}
                                 {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
                                 {% for brew_img in coffee_prep_methods %}
                                     <img class="product-description-img" src="{{ brew_img  | strip | remove: '"' | append: '.png' | asset_url | replace: "files/", "" }}" alt="Brew Image" />
                                 {% endfor %}
-                            </div>
+                            </div> {% endcomment %}
 
-                            <div class="product-description-divider">
+                            {% comment %} <div class="product-description-divider">
                                 <hr class="product-description-divider-line"/>
-                            </div>
+                            </div> {% endcomment %}
 
                             <div class="product-location-img-wrapper">
                                 <img class="product-location-img" src="{{ coffee_origin_image.value  | img_url: 'master'  }}" alt="Product Location Image" />
                             </div>
+                        </div>
+                        <div class="product-description-more-details">
+                            {{ product_description  }}
                         </div>
                     </div>
 
@@ -124,7 +166,7 @@
 <style>
     .product-details-vendor-story-wrapper {
         overflow: hidden;
-        max-height: calc(23px * 20); /* 5 full lines of text */
+        max-height: calc(23px * 25); /* 5 full lines of text */
         transition: max-height 0.6s ease-in-out;
         position: relative;
     }
@@ -214,12 +256,21 @@
         justify-content: space-around;
         /* gap: 40px; */
     }
+
+    .product-description-wrapper  .product-description-details-images-wrapper {
+        display: none;
+    }
+
+    .product-description-wrapper.expanded  .product-description-details-images-wrapper {
+        display: flex;
+    }
     .product-description-details-images-wrapper {
         display: flex;
         gap: 40px;
         align-items: center;
         justify-content: center;
         width: 100%;
+        margin-bottom: 32px;
     }
     .product-description-img {
         height: 27px;
@@ -233,7 +284,7 @@
         position: relative;
     }
     .product-description-divider-line {
-        width: 60%;
+        width: 100%;
         border: 1px solid #C8C8C7;
         position: relative;
         margin: 32px 0;
@@ -245,13 +296,14 @@
         height: 52px;
     }
     .product-description-wrapper {
-        background-color: #FBFCFE;
+        /* background-color: #FBFCFE; */
+        background-color: #ffffff;
         overflow: hidden;
         max-height: 75px; /* Use max-height instead of height */
         display: flex;
         align-items: start;
         justify-content: start;
-        padding: 24px;
+        padding: 24px 32px;
         cursor: pointer;
         transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; /* Add transition */
         flex-direction: column; /* This is already here, but good to have */
@@ -272,6 +324,18 @@
         justify-content: center;
         flex-direction: column;
         background-color: #FAFCFE;
+    }
+
+    .product-desktop-vendor-name {
+        display: none;
+    }
+
+    .product-desktop-name {
+        display: none;
+    }
+
+    .product-desktop-product-taste-icons {
+        display: none;
     }
 
     .product-description-wrapper.expanded {
@@ -335,6 +399,7 @@
     }
     .product-description-more-details {
         font-family: 'Assistant', sans-serif;
+        padding: 0 16px;
         font-weight: 400;
         font-size: 16px;
         line-height: 22px;
@@ -364,6 +429,7 @@
 .product-description-wrapper.expanded .product-details-wrapper {
     max-height: 1800px; /* Adjust as needed */
     opacity: 1;
+    margin-bottom: 24px;
 }
 
 .side-arrow-more-details.rotated {
@@ -385,6 +451,40 @@
   @media screen and (min-width: 750px) {
     .product-description-wrapper-main {
         background-color: transparent;
+        /* padding-right: 24px; */
+    }
+
+    .product-desktop-vendor-name {
+        font-family: 'Assistant', sans-serif;
+        font-weight: 400;
+        font-style: Regular;
+        font-size: 14px;
+        line-height: 25px;
+        letter-spacing: 2%;
+        text-align: right;
+        display: block;
+        text-transform: uppercase;
+        padding-right: 16px;
+    }
+
+    .product-desktop-name {
+        font-family: 'Assistant', sans-serif;
+        font-weight: 700;
+        font-style: Bold;
+        font-size: 32px;
+        line-height: 100%;
+        letter-spacing: 0px;
+        text-align: right;
+        text-transform: capitalize;
+        display: block;
+        padding-right: 16px;
+    }
+
+    .product-desktop-product-taste-icons {
+        display: flex;
+        /* gap: 12px; */
+        margin: 18px 0;
+        padding-right: 16px;
     }
 
     .product-description-wrapper {

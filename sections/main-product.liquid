@@ -135,9 +135,12 @@
 
   .main-product-taste-icons {
     position: absolute;
-    top: 10px;
-    left: 30px;
+    bottom: -13px;
+    right: 24px;
     z-index: 2;
+    padding: 2px;
+    background-color: #fff;
+    border-radius: 4px;
   }
 
   .single-coffee-main-product-vendor {
@@ -157,14 +160,14 @@
   }
 
   .buy-buttons-wrapper-product-page {
-    background-color: #e3e0da;
+    /* background-color: #e3e0da; */
     padding: 16px;
     margin: 0;
   }
 
   .product-sub-title-pdp {
       /* margin-top: 16px; */
-      margin-bottom: 16px;
+      /* margin-bottom: 16px; */
       flex-direction: column;
     }
 
@@ -178,8 +181,15 @@
       gap: 1rem;  */
     }
 
+    .main-product-taste-icons {
+      display: none;
+    }
+
     .buy-buttons-wrapper-product-page {
-      background-color: #F4F3F0;
+      /* background-color: #F4F3F0; */
+      /* background-color: #fff; */
+      border-top: 1px solid #1C201D80;
+      border-bottom: 1px solid #1C201D80;
     }
 
     .product-sub-title-pdp .single-coffee-taste-main-product {
@@ -493,12 +503,7 @@
 
     {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
     <div class="page-width-product-page">
-      {% comment %} <div class="product-info-top-wrapper">
-        <div class="grid__item product__media-wrapper">
-          {% render 'product-media-gallery', variant_images: variant_images %}
-        </div>
-      </div> {% endcomment %}
-
+      <script>console.log('boom',  {{product.tags | json}});</script>
       {%  if product.tags contains 'new' %}
         <span class="cart-info-new-tag new-product" >חדש</span>
       {% endif %}
@@ -508,24 +513,36 @@
       {%  if product.tags contains 'recommended' %}
         <span class="cart-info-new-tag recommended" >מומלץ</span>
       {% endif %}
+      {% assign all_tags = product.tags | join: ',' %}
+      {%  if all_tags contains 'shotim' %}
+        {% for tag in product.tags %}
+          {% if tag contains 'shotim:' %}
+            {% assign tag_parts = tag | split: ':' %}
+            {% capture filename %}{{ tag_parts[0] }}-{{ tag_parts[2] }}-{{ tag_parts[1] }}.png{% endcapture %}
+            <img src="{{ filename | asset_url }}" 
+                 alt="{{ tag_parts[1] }} tag" 
+                 class="cart-info-new-tag shotim" />
+            {% break %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
 
       <div class="product-info-top-wrapper">
         <div class="grid__item product__media-wrapper">
           {% render 'product-media-gallery', variant_images: variant_images %}
         </div>
       </div>
-      <div class="background-stripe"> </div>
+      <div class="background-stripe">
+        <div class="bg-strip-text-wrapper">
+          <div class="bg-strip-vendor">{{ product.vendor }}</div>
+          <div class="bg-strip-product-title">{{ product.title }}</div>
+        </div>
+        <div class="main-product-taste-icons">
+            {% assign coffee_tastes = product.metafields.custom.coffee_taste %} 
+            {% render 'product-taste-icon-color', tastes: coffee_tastes %}
+        </div>
+       </div>
 
-      <div class="main-product-taste-icons">
-            {% assign coffee_tastes = product.metafields.custom.coffee_tastes | remove_first: '[' | remove_last: ']' | split: ',' | replace: '"', '' %} 
-            {% assign coffee_prep_methods_raw = product.metafields.custom.coffee_prep_methods | strip %}
-            {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
-            {% assign coffee_taste_list = product.metafields.custom.coffee_tastes.value %}
-            {% render 'product-taste-icon-color', tastes: coffee_tastes, prep_methods: coffee_prep_methods, coffee_tastes_list: coffee_taste_list  %}
-      </div>
-        {% comment %} <div class="main-product-description-details-mobile-wrapper">
-          {% render 'product-variants', { product: product, vendor: vendor } %}
-        </div> {% endcomment %}
     
     {% unless product.tags contains 'event' %}
       <div class="why-us-product-page-wrapper why-us-desktop">
@@ -536,8 +553,20 @@
 
   <div id="product-description-main-wrapper">
     <div class="product-description-wrapper-main">
+      {% comment %} <div class="product-desktop-vendor-name">{{ product.vendor }}</div>
+      <div class="product-desktop-name">{{ product.title }}</div>
+      <div class="product-desktop-product-taste-icons">
+            {% assign coffee_tastes = product.metafields.custom.coffee_taste %} 
+            {% render 'product-taste-icon-color', tastes: coffee_tastes %}
+        </div> {% endcomment %}
   
     <div class="main-product-description-details-mobile-wrapper">
+      <div class="product-desktop-vendor-name">{{ product.vendor }}</div>
+      <div class="product-desktop-name">{{ product.title }}</div>
+      <div class="product-desktop-product-taste-icons">
+            {% assign coffee_tastes = product.metafields.custom.coffee_taste %} 
+            {% render 'product-taste-icon-color', tastes: coffee_tastes %}
+        </div>
       {% render 'product-variants', { product: product, vendor: vendor } %}
     </div>
   
@@ -545,6 +574,26 @@
       <div class="why-us-product-page-wrapper why-us-mobile">
         {% render 'why-us-vertical', vendor: vendor %}
       </div>
+      
+      <div class="product-tastes-details-wrapper-outer">
+        <div class="product-tastes-details-wrapper">
+          <div class="product-page-info-taste-wrapper">
+            <div class="product-page-info-taste-list">{{ product.metafields.custom.coffee_tastes.value | join: ' | ' }}</div>
+          </div>
+          <div class="product-page-info-bubble-container">
+            <div class="product-page-info-bubble">קלייה {{ product.metafields.custom.coffee_roast_level.value }}</div>
+            <div class="product-page-info-bubble">עיבוד {{ product.metafields.custom.coffee_process.value }}</div>
+            <div class="product-page-info-bubble">{{ product.metafields.custom.coffee_type.value }}</div>
+          </div>
+          <div class="product-page-info-short-description-wrapper">
+            <div class="product-page-info-short-description">{{ product.metafields.custom.short_description }}</div>
+          </div>
+        </div>
+      </div>
+
+      
+
+
     {% endunless %}
 
 
@@ -554,7 +603,7 @@
       brew_images: product.metafields.custom.product_brew_image,
       product_details: product_details,
       coffee_origin_image: product.metafields.custom.coffee_origin_image,
-      coffee_tastes: coffee_taste_list,
+      coffee_tastes: product.metafields.custom.coffee_tastes.value,
       coffee_roast_level: coffee_roast_level,
       coffee_altitude: coffee_altitude,
       coffee_process: coffee_process,

@@ -102,6 +102,7 @@
     },
     "custom_liquid_MyJnRy": {
       "type": "custom-liquid",
+      "disabled": true,
       "custom_css": [
         ".product-vendor-wrapper {padding: 16px 24px; display: flex; align-items: center; justify-content: center; height: 105px; gap: 16px; background-color: #dad7d1;}",
         ".product-vendor-text {font-size: 16px; font-weight: 400; line-height: 21px;}",

@@ -172,17 +172,6 @@ details[open]:hover>.header__menu-item {
   padding: 0
 }
 
-.background-stripe {
-  position: absolute;
-  top: 200px;
-  left: 0;
-  right: 0;
-  height: 155px;
-  background-color: #ad7b7e;
-  z-index: 0;
-  transform: translateY(-50%)
-}
-
 .card-vendor-logo,
 .card-vendor-logo-img {
   width: 36px;
