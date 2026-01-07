@@ -86,8 +86,8 @@
           <span class="price-item price-item--regular" dir="rtl">
             {{ money_price }}
             {% if render_weight %}
-              {% unless product.tags contains 'event' %}
-                <span class="price-item-weight">/ 250 גרם</span>
+                {% unless product.tags contains 'event' or product.metafields.custom.coffee_type == 'מארז'%}
+                  <span class="price-item-weight">/ 250 גרם</span>
               {% endunless %}
             {% endif %}
           </span>
