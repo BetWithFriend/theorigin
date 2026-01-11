@@ -64,7 +64,9 @@
         {%  if card_product.tags contains 'recommended' %}
           <span class="cart-info-new-tag recommended" >מומלץ</span>
         {% endif %}
-        
+        {%  if card_product.tags contains 'decaf' %}
+          <span class="cart-info-new-tag decaf" >נטול</span>
+        {% endif %}
       </div>
       {% comment %} <div class="full-unstyled-link">{{ card_product.title | escape }}</div>
       <div class="cart-info-sub-title-wrapper">בית קלייה: 

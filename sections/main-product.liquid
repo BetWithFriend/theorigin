@@ -513,6 +513,9 @@
       {%  if product.tags contains 'recommended' %}
         <span class="cart-info-new-tag recommended" >מומלץ</span>
       {% endif %}
+      {%  if product.tags contains 'decaf' %}
+        <span class="cart-info-new-tag decaf" >נטול</span>
+      {% endif %}
       {% assign all_tags = product.tags | join: ',' %}
       {%  if all_tags contains 'shotim' %}
         {% for tag in product.tags %}

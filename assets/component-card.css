@@ -844,7 +844,7 @@
   height: 24px;
   padding: 2px 8px;
   background-color: #43C7B4;
-  color: #1C201D;
+  color: #FBFCFE;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -876,6 +876,10 @@
 
 .cart-info-new-tag.new-product {
   background-color: #43C7B4;
+}
+
+.cart-info-new-tag.decaf {
+  background-color: #738290;
 }
 
 .cart-info-new-tag.recommended {
