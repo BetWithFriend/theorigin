@@ -11,6 +11,7 @@
   "sections": {
     "questionnaire": {
       "type": "questionnaire",
+      "disabled": true,
       "settings": {}
     },
     "banner": {
