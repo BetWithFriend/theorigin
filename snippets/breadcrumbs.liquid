@@ -22,6 +22,8 @@
       {% assign collectionName = 'coffee-culture-collection' %}
       {% elsif page_vendor == 'elijahscoffee' %}
       {% assign collectionName = 'elijahs-coffee-collection' %}
+      {% elsif page_vendor == 'tostato' %}
+      {% assign collectionName = 'tostato-collection' %}
     {% endif %}
         <a class="vendor-link" href="/collections/{{ collectionName }}">{{ product.vendor | upcase }}</a>
       
