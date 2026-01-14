@@ -860,6 +860,12 @@
   box-shadow: 0 2px 8px rgba(30, 41, 59, 0.2);
 }
 
+.cart-info-title-wrapper .cart-info-new-tag.shotim {
+  top: 30px;
+  left: -8px;
+  right: unset;
+}
+
 .page-width-product-page .cart-info-new-tag {
   top: 40px;
   right: 20px;
