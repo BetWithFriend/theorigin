@@ -170,11 +170,17 @@
 
 .success-desc {
   font-family: 'Assistant', sans-serif;
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 400;
   line-height: 24px;
   text-align: center;
   color: #1C201D;
+}
+
+.coupon-code {
+  background-color: lightgrey;
+  padding: 0 10px;
+  cursor: pointer;
 }
 
 .one-time-modal-skip-btn {
@@ -314,16 +320,17 @@
     })
     .then(function() {
       localStorage.setItem(LS_KEY, 'true');
-      document.getElementById('one-time-modal-content').innerHTML = '<div class="one-time-modal-success" dir="rtl"><p class="success-title" dir="rtl">איזה כיף לכם!</p><p class="success-desc">ההנחה מחכה לכם בתיבת הדוא״ל</p></div>';
+      document.getElementById('one-time-modal-content').innerHTML = 
+    '<div class="one-time-modal-success" dir="rtl"><p class="success-title" dir="rtl">איזה כיף לכם!</p><p class="success-desc">ההנחה מחכה לכם בתיבת הדוא״ל</p><p class="success-desc">קוד קופון <span class="coupon-code">ORIGIN_10OFF</span></p><p class="success-desc">לחצו על קוד הקופון להפעלה או הזינו בעמוד התשלום</p></div>';
       setTimeout(hideOneTimeModal, 10000);
     })
     .catch(function() {
       errorDiv.textContent = 'אירעה שגיאה. בבקשה נסו שוב';
       errorDiv.style.display = 'block';
     })
-    // .finally(function(){
-    //   document.getElementById('oneTimeModalSubmitBtn').disabled = false;
-    // });
+    .finally(function(){
+      document.getElementById('oneTimeModalSubmitBtn').disabled = false;
+    });
   }
 
   function isValidEmail(email) {
@@ -346,6 +353,46 @@
       }
     }, 5000);
   });
+
+  // Delegated click handler for coupon-code elements (works for dynamically inserted content)
+// Delegated click handler for coupon-code elements
+document.addEventListener('click', function(event) {
+  var couponEl = event.target.closest && event.target.closest('.coupon-code');
+  if (!couponEl) return;
+
+  event.preventDefault();
+
+  var code = couponEl.textContent.trim();
+  if (!code || code === 'הועתק') return;
+
+  // 1. Copy to clipboard
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(code).catch(function() {});
+  }
+
+  // 2. Visual Feedback
+  var originalText = couponEl.textContent;
+  couponEl.style.backgroundColor = '#d4f5d4'; 
+  couponEl.textContent = 'הועתק והופעל!'; // "Copied and Activated!"
+
+  // 3. APPLY WITHOUT REDIRECT
+  // We fetch the discount URL in the background. 
+  // This tells Shopify to associate the code with the current session.
+  fetch('/discount/' + encodeURIComponent(code))
+    .then(function() {
+      console.log('Discount applied successfully in background');
+    })
+    .catch(function() {
+      // Fallback: if fetch fails, we try a hidden iframe or image ping
+      var img = new Image();
+      img.src = '/discount/' + encodeURIComponent(code);
+    });
+
+  // 4. Optional: Close the modal after a short delay so they can keep shopping
+  setTimeout(function() {
+    hideOneTimeModal();
+  }, 2000);
+});
 
 })();
 </script>
