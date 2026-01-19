@@ -679,7 +679,11 @@
       tabindex="-1"
       dir="rtl"
     >
-      {{ content_for_layout }}
+      {% if request.query_string contains 'from=main-cta' %}
+        {% section 'questionnaire' %}
+      {% else %}
+        {{ content_for_layout }}
+      {% endif %}
     </main>
     {% comment %}
       <div class="why-us-section">
