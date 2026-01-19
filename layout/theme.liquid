@@ -577,14 +577,23 @@
         initializeAnalytics();
       })();
     </script>
+
+    <script
+      src="https://widget.tabnav.com/limited-widget.min.js.gz?req=YVgiCz7JHmNq8Tq4a48YL25mJenXWR8"
+      tnv-data-config='{"language":"he","color":"#995e0a","buttonColor":"#4c7485","buttonSize":"small","widgetSize":"small","widgetLocation":"left","buttonLocation":"bottom"}'
+      defer
+    ></script>
+
     {%- comment -%} Load Enable accessibility script with lower priority {%- endcomment -%}
-    <script>
-      window.addEventListener('load', () => {
-        const script = document.createElement('script');
-        script.src = 'https://cdn.enable.co.il/licenses/enable-L44664oja1kh2qyl-0625-71744/init.js';
-        document.body.appendChild(script);
-      });
-    </script>
+    {% comment %}
+      <script>
+        window.addEventListener('load', () => {
+          const script = document.createElement('script');
+          script.src = 'https://cdn.enable.co.il/licenses/enable-L44664oja1kh2qyl-0625-71744/init.js';
+          document.body.appendChild(script);
+        });
+      </script>
+    {% endcomment %}
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
@@ -658,7 +667,7 @@
       {%- render 'cart-drawer' -%}
     {%- endif -%}
 
-    {% comment %} {% render 'new-subscribers-modal' %} {% endcomment %}
+    {% render 'new-subscribers-modal' %}
     {% comment %} {% render 'dynamic_popup' %} {% endcomment %}
 
     {% sections 'header-group' %}

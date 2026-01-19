@@ -361,11 +361,13 @@
             type="checkbox"
             name="filter.p.m.custom.coffee_process"
             value="נטול קפאין"
-            onchange="handleFacetFilterChange('coffee-process', null, 'נטול קפאין')">
+            onchange="handleFacetFilterChange('coffee-process', null, 'נטול קפאין')"
+          >
           <img
             class="dropdown-icon-img"
             src="{{ 'coffee-process-filter-decaf.png' | asset_url }}"
-            alt="Filter Icon">
+            alt="Filter Icon"
+          >
           <span class="filter-item-text">נטול קפאין</span>
         </label>
       </div>
@@ -629,6 +631,18 @@
             onchange="handleFacetFilterChange('roaster', null, 'You Need Coffee')"
           >
           <span class="filter-item-text">You Need Coffee</span>
+        </label>
+      </div>
+      <div class="dropdown-item">
+        <label class="dropdown-icons">
+          <input
+            class="dropdown-icons-input"
+            type="checkbox"
+            name="filter.p.m.vendor_info.coffee_vendor"
+            value="gid://shopify/Metaobject/149196374073"
+            onchange="handleFacetFilterChange('roaster', null, 'tostato')"
+          >
+          <span class="filter-item-text">Tostato</span>
         </label>
       </div>
       {% comment %}
