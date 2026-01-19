@@ -3,7 +3,7 @@
     <div class="discover_roaster-title-wrap">
         <div class="discover-roaster-title">{{ title  }}</div>
         <div class="discover-roaster-subtitle" dir="rtl">{{ description }}</div>
-        <div onclick="goToPageRoasters('{{ btn_url }}')" class="discover-roaster-btn">{{ btn_text }}</div>
+    <div onclick="openQuestionnaireAndMaybeNavigate('{{ btn_url }}')" class="discover-roaster-btn">{{ btn_text }}</div>
     </div>
     
 </div>
@@ -136,6 +136,68 @@
 </style>
 
 <script>
+    // AJAX-load the questionnaire section only when the user clicks the button.
+    var __questionnaire_loaded = false;
+    var __questionnaire_fetching = false;
+    var __questionnaire_target = null;
+
+    function openQuestionnaireAndMaybeNavigate(url_postfix) {
+        // Save where we might want to navigate after the quiz completes
+        __questionnaire_target = "{{ section.settings.collection.url }}" + url_postfix;
+
+        if (__questionnaire_loaded) {
+            if (typeof openForm === 'function') openForm();
+            return;
+        }
+        if (__questionnaire_fetching) return;
+        __questionnaire_fetching = true;
+
+        // Fetch the rendered section HTML from Shopify
+        var sectionUrl = window.location.pathname + '?section_id=questionnaire-ajax';
+        fetch(sectionUrl)
+            .then(function(response) {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.text();
+            })
+            .then(function(html) {
+                var container = document.createElement('div');
+                container.id = 'questionnaire-inserted';
+                container.innerHTML = html;
+                document.body.appendChild(container);
+
+                // Recreate and append scripts so they execute
+                var scripts = container.querySelectorAll('script');
+                scripts.forEach(function(oldScript) {
+                    var newScript = document.createElement('script');
+                    for (var i = 0; i < oldScript.attributes.length; i++) {
+                        var attr = oldScript.attributes[i];
+                        newScript.setAttribute(attr.name, attr.value);
+                    }
+                    newScript.text = oldScript.innerHTML;
+                    document.body.appendChild(newScript);
+                    oldScript.parentNode.removeChild(oldScript);
+                });
+
+                __questionnaire_loaded = true;
+                __questionnaire_fetching = false;
+
+                // Call openForm from the injected snippet if present
+                if (typeof openForm === 'function') {
+                    openForm();
+                } else {
+                    var q = document.querySelector('.questionnaire-wrapper');
+                    if (q) q.classList.remove('hidden');
+                }
+            })
+            .catch(function(err) {
+                console.error('Failed to load questionnaire:', err);
+                __questionnaire_fetching = false;
+                // fallback: navigate to collection if AJAX load fails
+                window.location.href = "{{ section.settings.collection.url }}" + url_postfix;
+            });
+    }
+
+    // keep an explicit navigation helper if other code expects it
     function goToPageRoasters(url_postfix) {
         window.location.href = "{{ section.settings.collection.url }}" + url_postfix;
     }
