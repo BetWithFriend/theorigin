@@ -1,176 +1,308 @@
 {%- comment -%} Lazy load questionnaire CSS {%- endcomment -%}
-<link rel="preload" href="{{ 'questionnaire.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link
+  rel="preload"
+  href="{{ 'questionnaire.css' | asset_url }}"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'">
 <noscript>{{ 'questionnaire.css' | asset_url | stylesheet_tag }}</noscript>
 
 <div class="questionnaire-wrapper hidden" id="questionnaireWrapperDesktop">
-    <div class="questionnaire-icons-wrapper active">
-      <div class="questionnaire-title-wrapper">
-          <div class="questionnaire-close-icon" onclick="closeForm()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-              <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="questionnaire-title">איך אתם מכינים את הקפה</div>
-          <div class="questionnaire-back-icon-wrapper">
-            {% comment %} <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="closeForm()"/> {% endcomment %}
-          </div> 
+  <div class="questionnaire-icons-wrapper active">
+    <div class="questionnaire-title-wrapper">
+      <div class="questionnaire-close-icon" onclick="closeForm()">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          focusable="false">
+          <line
+            x1="6"
+            y1="6"
+            x2="18"
+            y2="18"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round" />
+          <line
+            x1="18"
+            y1="6"
+            x2="6"
+            y2="18"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round" />
+        </svg>
       </div>
-      
-        <div class="questionnaire-selection-wrapper"  data-filter-value="Espresso"> 
-            <img class="questionnaire-img-icon" src="{{ 'questionnaire_Espresso_Machine.png' |  asset_url }}" alt="Espresso icon"/>
-            <div class="questionnaire-text">מכונת אספרסו</div>
-        </div>
-        <div class="questionnaire-selection-wrapper"  data-filter-value="MokaPot">
-            <img class="questionnaire-img-icon" src="{{ 'questionnaire_Moka_Pot.png' |  asset_url }}" alt="Moka pot icon"/>
-            <div class="questionnaire-text">מקינטה</div>
-        </div>
-        <div class="questionnaire-selection-wrapper"  data-filter-value="Black">
-            <img class="questionnaire-img-icon" src="{{ 'questionnaire_Turkish_Cezve.png' |  asset_url }}" alt="Turkish icon"/>
-            <div class="questionnaire-text">קפה טורקי</div>
-        </div>
-        <div class="questionnaire-selection-wrapper"  data-filter-value="Filter">
-            <img class="questionnaire-img-icon" src="{{ 'questionnaire_v60.png' |  asset_url }}" alt="V60 icon"/>
-            <div class="questionnaire-text">פילטר</div>
-        </div>
-        <div class="questionnaire-selection-wrapper"  data-filter-value="Espresso">
-            <img class="questionnaire-img-icon" src="{{ 'questionnaire_Auto_Machine.png' |  asset_url }}" alt="Espresso Auto icon"/>
-            <div class="questionnaire-text">מכונה אוטומטית</div>
-        </div>
-        <div class="questionnaire-selection-wrapper" data-filter-value="Aeropress">
-            <img class="questionnaire-img-icon" src="{{ 'questionnaire_Aeropress.png' |  asset_url }}" alt="Aeropress icon"/>
-            <div class="questionnaire-text">אירופרס</div>
-        </div>
-        <div class="questionnaire-btn-wrapper">
-          <button class="questionnaire-skip-btn" onclick="goToPreviousStep(0)">
-             <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" />
-          </button>
-          <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_prep_methods', 1)" disabled>בחרו אפשרות</button>
-        </div>
-        <div class="questionnaire-progress-bar-wrapper">
-          <div class="questionnaire-progress-bar filled">&nbsp;</div>
-          <div class="questionnaire-progress-bar">&nbsp;</div>
-          <div class="questionnaire-progress-bar">&nbsp;</div>
-        </div>
-    </div>
-    <div class="questionnaire-icons-wrapper ">
-          <div class="questionnaire-title-wrapper">
-            <div class="questionnaire-close-icon" onclick="closeForm()">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="questionnaire-title">בחרו דרגת קלייה מועדפת</div>
-            <div class="questionnaire-back-icon-wrapper">
-              {% comment %} <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/> {% endcomment %}
-            </div>
-          </div>
-            <div class="questionnaire-selection-wrapper" data-filter-value="בהירה, בהירה-בינונית"> 
-                <img class="questionnaire-img-icon" src="{{ 'questionnaire_light.png' |  asset_url }}" alt="light roast icon"/>
-                <div class="questionnaire-text">בהירה</div>
-                <div class="questionnaire-expl-text">טעמים פירותיים וקלילים</div>
-            </div>
-            <div class="questionnaire-selection-wrapper" data-filter-value="בהירה-בינונית, בינונית, בינונית-כהה">
-                <img class="questionnaire-img-icon" src="{{ 'questionnaire_medium.png' |  asset_url }}" alt="medium roast icon"/>
-                <div class="questionnaire-text">בינונית</div>
-                <div class="questionnaire-expl-text">טעמים מתוקים יותר ומאוזנים</div>
-            </div>
-            <div class="questionnaire-selection-wrapper" data-filter-value="בינונית-כהה, כהה">
-                <img class="questionnaire-img-icon" src="{{ 'questionnaire_dark.png' |  asset_url }}" alt="dark roast icon"/>
-                <div class="questionnaire-text">כהה</div>
-                <div class="questionnaire-expl-text">טעמים שוקולדיים וקצת מרירים</div>
-            </div>
-            <div class="questionnaire-selection-wrapper" data-filter-value="">
-                <img class="questionnaire-img-icon" src="{{ 'questionnaire_dont_know.png' |  asset_url }}" alt="dont know icon"/>
-                <div class="questionnaire-text">לא יודעים</div>
-                <div class="questionnaire-expl-text">התאימו בשבילי</div>
-            </div>
-            <div class="questionnaire-selection-wrapper"></div>
-            <div class="questionnaire-selection-wrapper"></div>
-            <div class="questionnaire-btn-wrapper">
-              <button class="questionnaire-skip-btn" onclick="goToPreviousStep(2)"> 
-                <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon"/>
-              </button> 
-              <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_roast_level', 2)">בחרו אפשרות</button>       
-            </div>
-          <div class="questionnaire-progress-bar-wrapper">
-            <div class="questionnaire-progress-bar filled">&nbsp;</div>
-            <div class="questionnaire-progress-bar filled">&nbsp;</div>
-            <div class="questionnaire-progress-bar">&nbsp;</div>
-          </div>
-    </div>
-    <div class="questionnaire-icons-wrapper ">
-      <div class="questionnaire-title-wrapper">
-        <div class="questionnaire-close-icon" onclick="closeForm()">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-            <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="questionnaire-title">בחרו טעמים מועדפים</div>
-        <div class="questionnaire-back-icon-wrapper">
-          {% comment %} <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/> {% endcomment %}
-        </div>
-      </div>
-        <div class="questionnaire-selection-wrapper" data-filter-value="Fruity & Floral"> 
-            <img class="questionnaire-img-icon" src="{{ 'questionnaire_Dark_2.png' |  asset_url }}" alt="dark coffee icon"/>
-            <div class="questionnaire-text">פרחוני ופירותי</div>
-            <div class="questionnaire-expl-text">קליל, מזכיר פירות הדר, תה מיוחד</div>
-        </div>
-        <div class="questionnaire-selection-wrapper" data-filter-value="Sweet & Caramelly">
-            <img class="questionnaire-img-icon" src="{{ 'questionnaire_soft.png' |  asset_url }}" alt="soft coffee icon"/>
-            <div class="questionnaire-text">מתקתק ומאוזן</div>
-            <div class="questionnaire-expl-text">מתיקות טבעית, מזכיר קרמל, טופי</div>
-        </div>
-        <div class="questionnaire-selection-wrapper" data-filter-value="Rich & Chocolaty">
-            <img class="questionnaire-img-icon" src="{{ 'questionnaire_special.png' |  asset_url }}" alt="Turkish icon"/>
-            <div class="questionnaire-text">שוקולדי ועשיר</div>
-            <div class="questionnaire-expl-text">טעם עמוק, מזכיר שוקולד מריר, אגוז</div>
-        </div>
-        {% comment %} <div class="questionnaire-selection-wrapper" data-filter-value="">
-            <img class="questionnaire-img-icon" src="{{ 'questionnaire_milk.png' |  asset_url }}" alt="V60 icon"/>
-            <div class="questionnaire-text">עם חלב</div>
-            <div class="questionnaire-expl-text">קפוצ׳ינו, לאטה או הפוך</div>
-        </div> {% endcomment %}
-        <div class="questionnaire-selection-wrapper" data-filter-value="">
-            <img class="questionnaire-img-icon" src="{{ 'questionnaire_dont_know_2.png' |  asset_url }}" alt="dont know icon"/>
-            <div class="questionnaire-text">עדיין לא בטוחים</div>
-            <div class="questionnaire-expl-text">פתוחים להצעות</div>
-        </div>
-        <div class="questionnaire-selection-wrapper"></div>
-        <div class="questionnaire-selection-wrapper"></div>
-        <div class="questionnaire-btn-wrapper">
-          <button class="questionnaire-skip-btn" onclick="goToPreviousStep(3)"> 
-            <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon"/>
-          </button>  
-          <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_tastes', 3)">בחרו אפשרות</button>
-        </div>
-          <div class="questionnaire-progress-bar-wrapper">
-            <div class="questionnaire-progress-bar filled">&nbsp;</div>
-            <div class="questionnaire-progress-bar filled">&nbsp;</div>
-            <div class="questionnaire-progress-bar filled">&nbsp;</div>
-          </div>
-       </div>
-    <div class="questionnaire-icons-wrapper ">
-        <div class="questionnaire-loader-wrapper">
-            <img class="questionnaire-loader-img" src="{{ 'questionnaire_loader.png'  |  asset_url}}" alt=""/>
-            <div class="questionnaire-loader-text">מתאימים את פולי הקפה בדיוק בשבילך</div>
-        </div>
+      <div class="questionnaire-title">איך אתם מכינים את הקפה</div>
+      <div class="questionnaire-back-icon-wrapper">
+        {% comment %} <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="closeForm()"/> {% endcomment %}
       </div>
     </div>
-    <div class="lets-be-friends-wrapper ">
-        <img class="lets-be-friends-img" src="{{ 'lets_be_friends.png' | asset_url }}" alt="Lets be friends"/>
-        <div class="lets-be-friends-title">בואו נהיה חברים</div>
-        <div class="lets-be-friends-text">השאירו מייל כדי לשמוע על קפה חדש, בתי קלייה מעניינים, צורות הכנה ועוד.
-    בלי ספאם. מבטיחים.</div>
-      <input type="email" class="lets-be-friends-input" placeholder="הכניסו מייל" id="newsletterEmail" required>
-      <button onclick="subscribeUser(document.getElementById('newsletterEmail').value)" class="questionnaire-select-btn form-submit">הרשמו</button>
-      <div onclick="closeForm(true)" class="questionnaire-select-skip">בפעם אחרת</div>
-</div>
-            
 
-<script>  
+    <div class="questionnaire-selection-wrapper" data-filter-value="Espresso">
+      <img
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_Espresso_Machine.png' |  asset_url }}"
+        alt="Espresso icon" />
+      <div class="questionnaire-text">מכונת אספרסו</div>
+    </div>
+    <div class="questionnaire-selection-wrapper" data-filter-value="MokaPot">
+      <img
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_Moka_Pot.png' |  asset_url }}"
+        alt="Moka pot icon" />
+      <div class="questionnaire-text">מקינטה</div>
+    </div>
+    <div class="questionnaire-selection-wrapper" data-filter-value="Black">
+      <img
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_Turkish_Cezve.png' |  asset_url }}"
+        alt="Turkish icon" />
+      <div class="questionnaire-text">קפה טורקי</div>
+    </div>
+    <div class="questionnaire-selection-wrapper" data-filter-value="Filter">
+      <img
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_v60.png' |  asset_url }}"
+        alt="V60 icon" />
+      <div class="questionnaire-text">פילטר</div>
+    </div>
+    <div class="questionnaire-selection-wrapper" data-filter-value="Espresso">
+      <img
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_Auto_Machine.png' |  asset_url }}"
+        alt="Espresso Auto icon" />
+      <div class="questionnaire-text">מכונה אוטומטית</div>
+    </div>
+    <div class="questionnaire-selection-wrapper" data-filter-value="Aeropress">
+      <img
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_Aeropress.png' |  asset_url }}"
+        alt="Aeropress icon" />
+      <div class="questionnaire-text">אירופרס</div>
+    </div>
+    <div class="questionnaire-btn-wrapper">
+      <button class="questionnaire-skip-btn" onclick="goToPreviousStep(0)">
+        <img
+          class="questionnaire-back-icon"
+          src="{{ 'questionnaire_back_icon.png' |  asset_url }}"
+          alt="Close icon" />
+      </button>
+      <button
+        class="questionnaire-select-btn"
+        onclick="getFilters('filter.p.m.custom.coffee_prep_methods', 1)"
+        disabled>בחרו אפשרות</button>
+    </div>
+    <div class="questionnaire-progress-bar-wrapper">
+      <div class="questionnaire-progress-bar filled">&nbsp;</div>
+      <div class="questionnaire-progress-bar">&nbsp;</div>
+      <div class="questionnaire-progress-bar">&nbsp;</div>
+    </div>
+  </div>
+  <div class="questionnaire-icons-wrapper ">
+    <div class="questionnaire-title-wrapper">
+      <div class="questionnaire-close-icon" onclick="closeForm()">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          focusable="false">
+          <line
+            x1="6"
+            y1="6"
+            x2="18"
+            y2="18"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round" />
+          <line
+            x1="18"
+            y1="6"
+            x2="6"
+            y2="18"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round" />
+        </svg>
+      </div>
+      <div class="questionnaire-title">בחרו דרגת קלייה מועדפת</div>
+      <div class="questionnaire-back-icon-wrapper">
+        {% comment %} <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/> {% endcomment %}
+      </div>
+    </div>
+    <div class="questionnaire-selection-wrapper" data-filter-value="בהירה, בהירה-בינונית">
+      <img
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_light.png' |  asset_url }}"
+        alt="light roast icon" />
+      <div class="questionnaire-text">בהירה</div>
+      <div class="questionnaire-expl-text">טעמים פירותיים וקלילים</div>
+    </div>
+    <div class="questionnaire-selection-wrapper" data-filter-value="בהירה-בינונית, בינונית, בינונית-כהה">
+      <img
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_medium.png' |  asset_url }}"
+        alt="medium roast icon" />
+      <div class="questionnaire-text">בינונית</div>
+      <div class="questionnaire-expl-text">טעמים מתוקים יותר ומאוזנים</div>
+    </div>
+    <div class="questionnaire-selection-wrapper" data-filter-value="בינונית-כהה, כהה">
+      <img
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_dark.png' |  asset_url }}"
+        alt="dark roast icon" />
+      <div class="questionnaire-text">כהה</div>
+      <div class="questionnaire-expl-text">טעמים שוקולדיים וקצת מרירים</div>
+    </div>
+    <div class="questionnaire-selection-wrapper" data-filter-value="">
+      <img
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_dont_know.png' |  asset_url }}"
+        alt="dont know icon" />
+      <div class="questionnaire-text">לא יודעים</div>
+      <div class="questionnaire-expl-text">התאימו בשבילי</div>
+    </div>
+    <div class="questionnaire-selection-wrapper"></div>
+    <div class="questionnaire-selection-wrapper"></div>
+    <div class="questionnaire-btn-wrapper">
+      <button class="questionnaire-skip-btn" onclick="goToPreviousStep(2)">
+        <img
+          class="questionnaire-back-icon"
+          src="{{ 'questionnaire_back_icon.png' |  asset_url }}"
+          alt="Close icon" />
+      </button>
+      <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_roast_level', 2)">בחרו אפשרות</button>
+    </div>
+    <div class="questionnaire-progress-bar-wrapper">
+      <div class="questionnaire-progress-bar filled">&nbsp;</div>
+      <div class="questionnaire-progress-bar filled">&nbsp;</div>
+      <div class="questionnaire-progress-bar">&nbsp;</div>
+    </div>
+  </div>
+  <div class="questionnaire-icons-wrapper ">
+    <div class="questionnaire-title-wrapper">
+      <div class="questionnaire-close-icon" onclick="closeForm()">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          focusable="false">
+          <line
+            x1="6"
+            y1="6"
+            x2="18"
+            y2="18"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round" />
+          <line
+            x1="18"
+            y1="6"
+            x2="6"
+            y2="18"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round" />
+        </svg>
+      </div>
+      <div class="questionnaire-title">בחרו טעמים מועדפים</div>
+      <div class="questionnaire-back-icon-wrapper">
+        {% comment %} <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/> {% endcomment %}
+      </div>
+    </div>
+    <div class="questionnaire-selection-wrapper" data-filter-value="Fruity & Floral">
+      <img
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_Dark_2.png' |  asset_url }}"
+        alt="dark coffee icon" />
+      <div class="questionnaire-text">פרחוני ופירותי</div>
+      <div class="questionnaire-expl-text">קליל, מזכיר פירות הדר, תה מיוחד</div>
+    </div>
+    <div class="questionnaire-selection-wrapper" data-filter-value="Sweet & Caramelly">
+      <img
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_soft.png' |  asset_url }}"
+        alt="soft coffee icon" />
+      <div class="questionnaire-text">מתקתק ומאוזן</div>
+      <div class="questionnaire-expl-text">מתיקות טבעית, מזכיר קרמל, טופי</div>
+    </div>
+    <div class="questionnaire-selection-wrapper" data-filter-value="Rich & Chocolaty">
+      <img
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_special.png' |  asset_url }}"
+        alt="Turkish icon" />
+      <div class="questionnaire-text">שוקולדי ועשיר</div>
+      <div class="questionnaire-expl-text">טעם עמוק, מזכיר שוקולד מריר, אגוז</div>
+    </div>
+    {% comment %} <div class="questionnaire-selection-wrapper" data-filter-value="">
+                                          <img class="questionnaire-img-icon" src="{{ 'questionnaire_milk.png' |  asset_url }}" alt="V60 icon"/>
+                                          <div class="questionnaire-text">עם חלב</div>
+                                          <div class="questionnaire-expl-text">קפוצ׳ינו, לאטה או הפוך</div>
+                            </div> {% endcomment %}
+    <div class="questionnaire-selection-wrapper" data-filter-value="">
+      <img
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_dont_know_2.png' |  asset_url }}"
+        alt="dont know icon" />
+      <div class="questionnaire-text">עדיין לא בטוחים</div>
+      <div class="questionnaire-expl-text">פתוחים להצעות</div>
+    </div>
+    <div class="questionnaire-selection-wrapper"></div>
+    <div class="questionnaire-selection-wrapper"></div>
+    <div class="questionnaire-btn-wrapper">
+      <button class="questionnaire-skip-btn" onclick="goToPreviousStep(3)">
+        <img
+          class="questionnaire-back-icon"
+          src="{{ 'questionnaire_back_icon.png' |  asset_url }}"
+          alt="Close icon" />
+      </button>
+      <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_tastes', 3)">בחרו אפשרות</button>
+    </div>
+    <div class="questionnaire-progress-bar-wrapper">
+      <div class="questionnaire-progress-bar filled">&nbsp;</div>
+      <div class="questionnaire-progress-bar filled">&nbsp;</div>
+      <div class="questionnaire-progress-bar filled">&nbsp;</div>
+    </div>
+  </div>
+  <div class="questionnaire-icons-wrapper ">
+    <div class="questionnaire-loader-wrapper">
+      <img
+        class="questionnaire-loader-img"
+        src="{{ 'questionnaire_loader.png'  |  asset_url}}"
+        alt="" />
+      <div class="questionnaire-loader-text">מתאימים את פולי הקפה בדיוק בשבילך</div>
+    </div>
+  </div>
+</div>
+<div class="lets-be-friends-wrapper ">
+  <img
+    class="lets-be-friends-img"
+    src="{{ 'lets_be_friends.png' | asset_url }}"
+    alt="Lets be friends" />
+  <div class="lets-be-friends-title">בואו נהיה חברים</div>
+  <div class="lets-be-friends-text">השאירו מייל כדי לשמוע על קפה חדש, בתי קלייה מעניינים, צורות הכנה ועוד.     
+    בלי ספאם. מבטיחים.</div>
+  <input
+    type="email"
+    class="lets-be-friends-input"
+    placeholder="הכניסו מייל"
+    id="newsletterEmail"
+    required>
+  <button onclick="subscribeUser(document.getElementById('newsletterEmail').value)" class="questionnaire-select-btn form-submit">הרשמו</button>
+  <div onclick="closeForm(true)" class="questionnaire-select-skip">בפעם אחרת</div>
+</div>
+
+
+<script>
   function getSuitTasteProfile(selectedFilters) {
 
     if (!window.questionnaireData) return [];
@@ -379,7 +511,7 @@
   }
   
     return params.toString();
-}
+  }
   // // Keep your existing functions unchanged
   function updateSelectButton() {
     // Get the current active questionnaire step
@@ -896,5 +1028,4 @@
       document.body.classList.remove('questionnaire-wrapper-open');
       document.getElementById('MainContent').classList.remove('questionnaire-wrapper-open');
   };
-    
 </script>
