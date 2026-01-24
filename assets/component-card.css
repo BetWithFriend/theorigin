@@ -919,5 +919,6 @@
   font-weight: 400;
   color: #989BA3;
   text-align: right;
+  text-transform: uppercase;
   /* margin-bottom: 12px; */
 }
