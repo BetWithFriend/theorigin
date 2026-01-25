@@ -1,7 +1,7 @@
 // assets/recently-viewed.js
 
 class RecentlyViewedProducts {
-  constructor(limit = 5) {
+  constructor(limit = 7) {
     this.limit = limit;
     this.localStorageKey = 'shopify_recently_viewed_handles'; // Changed key to reflect handles
   }
@@ -31,7 +31,11 @@ class RecentlyViewedProducts {
     products = products.slice(0, this.limit);
 
     try {
-      localStorage.setItem(this.localStorageKey, JSON.stringify(products));
+      const expiry = Date.now() + 14 * 24 * 60 * 60 * 1000; // 2 weeks in ms
+      localStorage.setItem(this.localStorageKey, JSON.stringify({
+        handles: products,
+        expiresAt: expiry
+      }));
     } catch (e) {
       console.error('Error saving recently viewed product handles to localStorage:', e);
     }
@@ -57,17 +61,15 @@ class RecentlyViewedProductsComponent extends HTMLElement {
   async init() {
     const productHandles = this.recentlyViewed.getProducts();
     if (productHandles.length === 0) {
-      this.style.display = 'none'; // Hide the section if no products
       return;
     }
 
     // Filter out the current product if on a product page
     const currentProductElement = document.querySelector('product-info');
     const currentProductHandle = currentProductElement ? currentProductElement.dataset.productHandle : null;
-    const filteredProductHandles = currentProductHandle ? productHandles.filter(handle => handle !== currentProductHandle) : productHandles;
+    const filteredProductHandles = currentProductHandle ? productHandles.handles.filter(handle => handle !== currentProductHandle) : productHandles;
 
     if (filteredProductHandles.length === 0) {
-      this.style.display = 'none';
       return;
     }
 
@@ -76,10 +78,12 @@ class RecentlyViewedProductsComponent extends HTMLElement {
     try {
       const products = await this.fetchProducts(handlesToFetch);
       window.recentlyViewedProducts = products;
-      this.renderProducts(products);
+      if (products.length > 0) {
+        this.renderProducts(products);
+        this.style.display = 'block';
+      }
     } catch (error) {
       console.error('Error fetching or rendering recently viewed products:', error);
-      this.style.display = 'none';
     }
   }
 
@@ -102,14 +106,13 @@ class RecentlyViewedProductsComponent extends HTMLElement {
 
     products.forEach(product => {
       const li = document.createElement('li');
-      li.classList.add('grid__item', 'slider__slide', 'scroll-trigger', 'animate--slide-in');
+      li.classList.add('grid__item', 'slider__slide', 'scroll-trigger', 'animate--slide-in', 'recently-viewed');
 
       // Replicating a simplified card-product structure using the fetched JSON data
       const featuredImage = product.featured_image ? product.featured_image : '';
       const featuredImageWidth = product.media[0] ? product.media[0].width : '';
       const featuredImageHeight = product.media[0] ? product.media[0].height : '';
       const price = product.price;
-      console.log('boom', product);
       // const productTastes = product.product_tastes;
 
       // Logic for tags - API returns tags as array of strings
@@ -213,10 +216,9 @@ class RecentlyViewedProductsComponent extends HTMLElement {
   }
 }
 
-customElements.define('recently-viewed-products', RecentlyViewedProductsComponent);
-
 // Initialize and track product on product pages
 document.addEventListener('DOMContentLoaded', () => {
+  customElements.define('recently-viewed-products', RecentlyViewedProductsComponent);
   const productInfo = document.querySelector('product-info');
 
   // Access the product handle (assuming product-info has data-product-handle now)

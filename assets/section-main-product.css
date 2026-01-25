@@ -1730,3 +1730,9 @@ a.product__text {
     background-color: transparent;
   }
 }
+
+@media screen and (max-width: 370px) {
+  .bg-strip-product-title {
+    font-size: 30px;
+  }
+}

@@ -14,6 +14,7 @@
     endif
   -%}
   <recently-viewed-products
+    style="display: none;"
     class="recently-viewed-products-component slider-mobile-gutter{% if section.settings.full_width %} slider-component-full-width{% endif %}{% if section.settings.swipe_on_mobile == false %} page-width{% endif %}{% if section.settings.columns_desktop == 0 and section.settings.full_width == false %} page-width-desktop{% endif %}{% if section.settings.columns_desktop > 0 %} slider-component-desktop{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
     data-section-id="{{ section.id }}"
     data-products-to-show="{{ section.settings.products_to_show }}"
@@ -234,26 +235,6 @@
     {
       "type": "header",
       "content": "t:sections.all.padding.section_padding_heading"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 36
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
     }
   ]
 }
