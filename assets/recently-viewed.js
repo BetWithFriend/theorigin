@@ -9,7 +9,7 @@ class RecentlyViewedProducts {
   getProducts() {
     try {
       const products = JSON.parse(localStorage.getItem(this.localStorageKey)) || [];
-      return products;
+      return products.handles ? products.handles : [];
     } catch (e) {
       console.error('Error parsing recently viewed product handles from localStorage:', e);
       return [];
@@ -22,7 +22,7 @@ class RecentlyViewedProducts {
     let products = this.getProducts();
 
     // Remove the product if it's already in the list to move it to the front
-    products = products.length ? products.handles.filter(handle => handle !== productHandle) : [];
+    products = products.filter(handle => handle !== productHandle);
 
     // Add the new product to the beginning of the list
     products.unshift(productHandle);
@@ -67,7 +67,7 @@ class RecentlyViewedProductsComponent extends HTMLElement {
     // Filter out the current product if on a product page
     const currentProductElement = document.querySelector('product-info');
     const currentProductHandle = currentProductElement ? currentProductElement.dataset.productHandle : null;
-    const filteredProductHandles = currentProductHandle ? productHandles.handles.filter(handle => handle !== currentProductHandle) : productHandles;
+    const filteredProductHandles = currentProductHandle ? productHandles.filter(handle => handle !== currentProductHandle) : productHandles;
 
     if (filteredProductHandles.length === 0) {
       return;
@@ -197,6 +197,19 @@ class RecentlyViewedProductsComponent extends HTMLElement {
           </div>
         </div>
       `;
+
+      const link = li.querySelector('a');
+      if (link) {
+        link.addEventListener('click', () => {
+          analytics.track('Recently Viewed Product Clicked', {
+            product_title: product.title,
+            product_url: product.url,
+            product_price: product.price,
+            product_vendor: product.vendor
+          });
+        });
+      }
+
       this.productGrid.appendChild(li);
     });
 
