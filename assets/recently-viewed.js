@@ -201,12 +201,14 @@ class RecentlyViewedProductsComponent extends HTMLElement {
       const link = li.querySelector('a');
       if (link) {
         link.addEventListener('click', () => {
-          analytics.track('Recently Viewed Product Clicked', {
-            product_title: product.title,
-            product_url: product.url,
-            product_price: product.price,
-            product_vendor: product.vendor
-          });
+          analytics.trackClick('Recently Viewed Product',
+            {
+              product_handle: product.handle,
+              product_title: product.title,
+              product_vendor: product.vendor,
+              product_price: product.price,
+            }
+          )
         });
       }
 
