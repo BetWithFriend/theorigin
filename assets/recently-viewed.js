@@ -22,7 +22,7 @@ class RecentlyViewedProducts {
     let products = this.getProducts();
 
     // Remove the product if it's already in the list to move it to the front
-    products = products.handles.filter(handle => handle !== productHandle);
+    products = products.length ? products.handles.filter(handle => handle !== productHandle) : [];
 
     // Add the new product to the beginning of the list
     products.unshift(productHandle);
