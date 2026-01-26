@@ -9,10 +9,6 @@
  */
 {
   "sections": {
-    "questionnaire": {
-      "type": "questionnaire",
-      "settings": {}
-    },
     "banner": {
       "type": "main-collection-banner",
       "settings": {
@@ -40,6 +36,11 @@
         "padding_top": 16,
         "padding_bottom": 48
       }
+    },
+    "questionnaire": {
+      "type": "questionnaire",
+      "disabled": false,
+      "settings": {}
     }
   },
   "order": [

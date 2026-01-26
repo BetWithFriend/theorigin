@@ -1,7 +1,19 @@
 {%- comment -%} Lazy load CSS for better collection page performance {%- endcomment -%}
-<link rel="preload" href="{{ 'template-collection.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<link rel="preload" href="{{ 'component-card.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<link rel="preload" href="{{ 'component-price.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link
+  rel="preload"
+  href="{{ 'template-collection.css' | asset_url }}"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'">
+<link
+  rel="preload"
+  href="{{ 'component-card.css' | asset_url }}"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'">
+<link
+  rel="preload"
+  href="{{ 'component-price.css' | asset_url }}"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'">
 <noscript>
   {{ 'template-collection.css' | asset_url | stylesheet_tag }}
   {{ 'component-card.css' | asset_url | stylesheet_tag }}
@@ -9,17 +21,25 @@
 </noscript>
 
 {% if section.settings.image_shape == 'blob' %}
-  <link rel="preload" href="{{ 'mask-blobs.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link
+    rel="preload"
+    href="{{ 'mask-blobs.css' | asset_url }}"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
   <noscript>{{ 'mask-blobs.css' | asset_url | stylesheet_tag }}</noscript>
 {%- endif -%}
 
 {%- unless section.settings.quick_add == 'none' -%}
-  <link rel="preload" href="{{ 'quick-add.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link
+    rel="preload"
+    href="{{ 'quick-add.css' | asset_url }}"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
   <noscript>{{ 'quick-add.css' | asset_url | stylesheet_tag }}</noscript>
 {%- endunless -%}
 <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
 {%- if section.settings.quick_add == 'standard' -%}
-  
+
   {% comment %} <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script> {% endcomment %}
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
@@ -132,17 +152,17 @@
           data-id="{{ section.id }}">
 
           {% comment %} {% render 'facets',
-            results: collection,
-            enable_filtering: section.settings.enable_filtering,
-            enable_sorting: section.settings.enable_sorting,
-            filter_type: section.settings.filter_type,
-            paginate: paginate
-          %} {% endcomment %}
+                                    results: collection,
+                                    enable_filtering: section.settings.enable_filtering,
+                                    enable_sorting: section.settings.enable_sorting,
+                                    filter_type: section.settings.filter_type,
+                                    paginate: paginate
+                              %} {% endcomment %}
         </aside>
     {%- endif -%}
 
       <!-- new filters -->
-      {% render 'new-filters'%}
+      {% render 'new-filters' %}
 
       {% comment %} <p class="product-count-main-store">מספר מוצרים: {{ collection.products_count }}</p> {% endcomment %}
 
@@ -246,7 +266,9 @@
                       %}
                         {% comment %} <hr class="card-product-divider"/> {% endcomment %}
                         {% render 'price'
-                          , product: product, use_variant: true, render_weight: true %}
+                          , product: product
+                          , use_variant: true
+                          , render_weight: true %}
                       </li>
                       {%- assign skip_card_product_styles = true -%}
                     {% endif %}
@@ -317,16 +339,10 @@
                       </div>
                     </div>
                   </li>
-                    {% if forloop.index == 6 %}
-                      {% render 'main-page-black-component' | 
-                        title: 'מצאו את הקפה שלכם',
-                        description: 'ענו על 3 שאלות בלבד ונתאים לכם את הקפה שבטוח תאהבו'
-                        com_image: 'find-your-coffee.png',
-                        btn_text: 'לשאלון הקפה'
-                        btn_url: '/collections/חנות-קפה?from=main-cta',
-                        img_class: 'find-your-coffee-img'
-                        %}
-                    {% endif %}
+                  {% if forloop.index == 6 %}
+                    {% render 'main-page-black-component' | title: 'מצאו את הקפה שלכם', description: 'ענו על 3 שאלות בלבד ונתאים לכם את הקפה שבטוח תאהבו' com_image: 'find-your-coffee.png', btn_text: 'לשאלון הקפה' btn_url: '/collections/חנות-קפה?from=main-cta', img_class: 'find-your-coffee-img'
+                    %}
+                  {% endif %}
 
                   {%- assign skip_card_product_styles = true -%}
                 {%- endfor -%}
@@ -350,9 +366,7 @@
   {%- endif -%}
 </div>
 
-<script>
- 
-</script>
+<script></script>
 
 {% schema %}
   {

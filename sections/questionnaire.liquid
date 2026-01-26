@@ -654,7 +654,9 @@
     });
   }
 
-  document.body.classList.add('questionnaire-wrapper-open');
+  // Only add the 'questionnaire-wrapper-open' class when the questionnaire
+  // is explicitly requested (e.g. via ?from=main-cta). The initializer below
+  // opens the form when that query parameter is present.
 
   function subscribeUser(email) {
 
