@@ -186,7 +186,7 @@
         "padding_bottom": 36
       }
     },
-"featured_collection_new_roaster": {
+    "featured_collection_new_roaster": {
       "type": "featured-collection",
       "disabled": true,
       "settings": {
@@ -217,6 +217,7 @@
     },
     "find_your_coffee": {
       "type": "find-your-coffee",
+      "disabled": true,
       "settings": {}
     },
     "new_roasters_slider": {

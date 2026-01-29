@@ -10,6 +10,7 @@
 {
   "sections": {
     "questionnaire": {
+      "disabled": true,
       "type": "questionnaire",
       "settings": {}
     },
