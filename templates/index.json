@@ -188,6 +188,7 @@
     },
 "featured_collection_new_roaster": {
       "type": "featured-collection",
+      "disabled": true,
       "settings": {
         "title": "בית קלייה חדש Tostato",
         "heading_size": "h2",
