@@ -1061,9 +1061,10 @@ a.product__text {
 
   .thumbnail-slider .thumbnail-list.slider {
     display: flex;
-    padding: 0.5rem;
+    padding: 1.5rem;
     flex: 1;
     scroll-padding-left: 0.5rem;
+    justify-content: end;
   }
 
   .thumbnail-list__item.slider__slide {
