@@ -1,0 +1,117 @@
+/* Component Product Taste Icon */
+.selection-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-family: 'Assistant', sans-serif;
+    flex-direction: row-reverse;
+    line-height: 20px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.selection-text {
+    font-size: 16px;
+    color: #333;
+}
+
+.selection-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.selection-icons {
+    display: flex;
+    gap: 4px;
+    height: 30px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.selection-icons .icon {
+    width: 24px;
+    height: 24px;
+}
+
+.product-taste-icons {
+    /* margin-top: 10px; /* Add space between the image and the icons */
+    /* text-align: center; */
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    flex-direction: column;
+    gap: 4px;
+    white-space: nowrap;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.product-taste-icons img {
+    width: 24px;
+    /* Ensure icons are a consistent size */
+    height: 24px;
+    /* margin: 0 5px;  */
+}
+
+.product-tastes-list-icon {
+    text-wrap: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+
+    display: none;
+}
+
+.product-tastes-list-icon.center {
+    justify-content: center;
+}
+
+.product-tastes-list-icon .single-coffee-taste {
+    background-color: #E3E0DA;
+    padding: 4px 8px;
+    border-radius: 16px;
+    margin: 2px;
+    font-size: 14px;
+}
+
+.plp-taste-text-wrapper span {
+    padding: 4px 12px;
+    border-radius: 4px;
+}
+
+.plp-taste-text-wrapper span.chocolate {
+    background-color: rgb(162, 137, 114);
+    color: #1C201D;
+    color: #fff;
+}
+
+.plp-taste-text-wrapper span.sweet-chocolate {
+    background-color: #c1a089;
+    color: #1C201D;
+}
+
+.plp-taste-text-wrapper span.sweet-balanced {
+    background-color: #dec2b5;
+    color: #1C201D;
+}
+
+.plp-taste-text-wrapper span.sweet-fruity {
+    background-color: #f3d5b8;
+    color: #1C201D;
+}
+
+.plp-taste-text-wrapper span.fruity {
+    background-color: #ebe4cc;
+    color: #1C201D;
+}
+
+@media screen and (min-width: 749px) {
+    .product-tastes-list-icon {
+        justify-content: start;
+        /* margin-right: 24px; */
+    }
+}
