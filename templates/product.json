@@ -135,6 +135,7 @@
     },
     "recently-viewed-products": {
       "type": "recently-viewed-products",
+      "disabled": true,
       "settings": {
         "heading": "צפית לאחרונה",
         "heading_size": "h2",
