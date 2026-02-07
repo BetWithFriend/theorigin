@@ -165,11 +165,31 @@
     margin: 0;
   }
 
+  @media screen and (max-width: 749px) {
+    .buy-buttons-wrapper-product-page.is-sticky-top {
+      position: fixed;
+      top: 0; /* We will adjust this via JS if header is present */
+      left: 0;
+      right: 0;
+      z-index: 101;
+      background-color: #FAFCFE;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      padding: 16px; /* Match original padding to prevent shrink */
+      margin: 0;
+    }
+  }
+
   .product-sub-title-pdp {
       /* margin-top: 16px; */
       /* margin-bottom: 16px; */
       flex-direction: column;
     }
+
+  .product-page-info-short-description-wrapper-top {
+    padding: 0 24px;
+    padding-bottom: 16px;
+    background-color: #FAFCFE;
+  }
 
   @media screen and (min-width: 750px) {
     #main-product-container {
@@ -382,6 +402,10 @@
     .buy-buttons-wrapper-product-page {
       padding-bottom: 0;
     }
+    
+    .product-page-info-short-description-wrapper-top {
+    display: none;
+    }
 
     {%- if product.tags contains 'event' -%}
       #main-product-container {
@@ -552,6 +576,10 @@
         {% render 'why-us-vertical', vendor: vendor %}
       </div>
     {% endunless %}
+  </div>
+
+  <div class="product-page-info-short-description-wrapper-top">
+    <div class="product-page-info-short-description">{{ product.metafields.custom.short_description }}</div>
   </div>
 
   <div id="product-description-main-wrapper">
@@ -764,6 +792,102 @@
 
 </script>
 
+
+
+<script>
+  (function() {
+    function initStickyAddToCart() {
+      if (window.innerWidth >= 750) return;
+
+      const buyButtonsWrapper = document.querySelector('.buy-buttons-wrapper-product-page');
+      if (!buyButtonsWrapper) return;
+
+      const stickyClass = 'is-sticky-top';
+      let isSticky = false;
+
+      // Create a sentinel to detect when to stick.
+      const sentinel = document.createElement('div');
+      sentinel.className = 'sticky-sentinel';
+      sentinel.style.cssText = 'height: 1px; width: 100%; display: block !important; visibility: hidden; pointer-events: none; margin-top: -1px;';
+      sentinel.innerHTML = '&nbsp;'; 
+      buyButtonsWrapper.parentNode.insertBefore(sentinel, buyButtonsWrapper);
+
+      function updateSticky() {
+        const sentinelRect = sentinel.getBoundingClientRect();
+        const stickyHeader = document.querySelector('sticky-header');
+        
+        let effectiveThreshold = 0;
+        if (stickyHeader) {
+          // getBoundingClientRect().bottom gives the exact bottom position relative to viewport.
+          // If the header is sticky and visible, this is its height.
+          // If it's hidden (top: -100px), this will be <= 0.
+          // If it's scrolled past, this will be <= 0.
+          const headerRect = stickyHeader.getBoundingClientRect();
+          effectiveThreshold = Math.max(0, headerRect.bottom);
+        }
+
+        // Trigger sticky when the sentinel's top hits the threshold relative to viewport
+        // We use a small buffer to avoid flickering
+        const shouldBeSticky = sentinelRect.top < effectiveThreshold - 1;
+
+        if (shouldBeSticky) {
+          if (!isSticky) {
+            // Measure current height before sticking to prevent jump
+            const wrapperHeight = buyButtonsWrapper.offsetHeight;
+            sentinel.style.height = wrapperHeight + 'px';
+            sentinel.style.marginTop = '0'; // Remove compensation when acting as placeholder
+            
+            buyButtonsWrapper.classList.add(stickyClass);
+            isSticky = true;
+          }
+          // Follow the header's position dynamically
+          buyButtonsWrapper.style.top = effectiveThreshold + 'px';
+          // Ensure it doesn't cover the header if z-indexing is weird
+          buyButtonsWrapper.style.zIndex = '99'; 
+        } else {
+          if (isSticky) {
+            buyButtonsWrapper.classList.remove(stickyClass);
+            buyButtonsWrapper.style.top = '';
+            buyButtonsWrapper.style.zIndex = '';
+            
+            // Reset sentinel to its minimal state
+            sentinel.style.height = '1px';
+            sentinel.style.marginTop = '-1px';
+            
+            isSticky = false;
+          }
+        }
+      }
+
+      // Use RequestAnimationFrame for smoother updates during scroll
+      let ticking = false;
+      function onScroll() {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            updateSticky();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', updateSticky);
+      
+      // Periodic check to catch header transitions not triggered by scroll (e.g. JS-based show/hide)
+      setInterval(updateSticky, 100);
+      
+      // Initial execution
+      updateSticky();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initStickyAddToCart);
+    } else {
+      initStickyAddToCart();
+    }
+  })();
+</script>
 
 {% schema %}
 {
