@@ -336,6 +336,17 @@ body.questionnaire-wrapper-open {
     background-color: #AD7B7E;
 }
 
+/* Standalone questionnaire page styles */
+.main-questionnaire-section .questionnaire-wrapper {
+    position: relative;
+    min-height: calc(100vh - 180px);
+}
+
+.main-questionnaire-section .lets-be-friends-wrapper {
+    position: relative;
+    min-height: calc(100vh - 180px);
+}
+
 @media screen and (min-width: 990px) {
     .header-wrapper.questionnaire-wrapper-open {
         z-index: 10001;
