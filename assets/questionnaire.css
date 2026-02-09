@@ -26,6 +26,19 @@ body.questionnaire-wrapper-open {
     margin: 0;
 }
 
+.questionnaire-back-text {
+    font-family: "Assistant", sans-serif;
+    font-weight: 400;
+    color: #1C201D;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 16px;
+    line-height: 25px;
+    letter-spacing: 2%;
+    text-align: right;
+
+}
+
 .questionnaire-skip-btn {
     color: #1C201D;
     font-family: "Assistant", sans-serif;
@@ -112,7 +125,7 @@ body.questionnaire-wrapper-open {
 }
 
 .questionnaire-img-icon {
-    width: 32px;
+    width: 23px;
     height: 32px;
     margin-bottom: 16px;
 }
@@ -130,13 +143,23 @@ body.questionnaire-wrapper-open {
     /* margin-top: 8px; */
 }
 
+.questionnaire-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+}
+
 .questionnaire-expl-text {
     font-family: 'Assistant', sans-serif;
-    font-size: 16px;
-    line-height: 18px;
-    font-weight: 400;
     color: #1C201D;
     /* margin-top: 8px; */
+    font-weight: 200;
+    font-size: 16px;
+    line-height: 110.00000000000001%;
+    letter-spacing: 0%;
+    text-align: right;
+    text-transform: capitalize;
 }
 
 .questionnaire-select-btn {

@@ -107,6 +107,7 @@
           src="{{ 'questionnaire_back_icon.png' |  asset_url }}"
           alt="Close icon"
         >
+        <span class="questionnaire-back-text">חזור</span>
       </button>
       <button
         class="questionnaire-select-btn"
@@ -163,8 +164,10 @@
         src="{{ 'questionnaire_light.png' |  asset_url }}"
         alt="light roast icon"
       >
-      <div class="questionnaire-text">בהירה</div>
-      <div class="questionnaire-expl-text">טעמים פירותיים וקלילים</div>
+      <div class="questionnaire-text-wrapper">
+        <div class="questionnaire-text">בהירה</div>
+        <div class="questionnaire-expl-text">טעמים פירותיים וקלילים</div>
+      </div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="בהירה-בינונית, בינונית, בינונית-כהה">
       <img
@@ -172,8 +175,10 @@
         src="{{ 'questionnaire_medium.png' |  asset_url }}"
         alt="medium roast icon"
       >
-      <div class="questionnaire-text">בינונית</div>
-      <div class="questionnaire-expl-text">טעמים מתוקים יותר ומאוזנים</div>
+      <div class="questionnaire-text-wrapper">
+        <div class="questionnaire-text">בינונית</div>
+        <div class="questionnaire-expl-text">טעמים מתוקים יותר ומאוזנים</div>
+      </div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="בינונית-כהה, כהה">
       <img
@@ -181,8 +186,10 @@
         src="{{ 'questionnaire_dark.png' |  asset_url }}"
         alt="dark roast icon"
       >
-      <div class="questionnaire-text">כהה</div>
-      <div class="questionnaire-expl-text">טעמים שוקולדיים וקצת מרירים</div>
+      <div class="questionnaire-text-wrapper">
+        <div class="questionnaire-text">כהה</div>
+        <div class="questionnaire-expl-text">טעמים שוקולדיים וקצת מרירים</div>
+      </div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="">
       <img
@@ -1004,7 +1011,7 @@
       "type": "text",
       "id": "step1_title",
       "label": "כותרת שלב 1 - שיטת הכנה",
-      "default": "איך אתם מכינים את הקפה"
+      "default": "איך אתם מכינים את הקפה?"
     },
     {
       "type": "text",
