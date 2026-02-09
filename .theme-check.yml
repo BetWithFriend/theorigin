@@ -1,0 +1,6 @@
+# Theme Check configuration
+# https://shopify.dev/docs/themes/tools/theme-check
+
+# Disable the ImgWidthAndHeight check since dimensions are handled via CSS
+ImgWidthAndHeight:
+  enabled: false

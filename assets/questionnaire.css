@@ -67,7 +67,8 @@ body.questionnaire-wrapper-open {
 
 .questionnaire-icons-wrapper {
     display: none;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 8px;
@@ -80,14 +81,15 @@ body.questionnaire-wrapper-open {
 }
 
 .questionnaire-selection-wrapper {
-    width: 160px;
-    height: 150px;
+    width: 320px;
+    height: 80px;
     border-radius: 16px;
     border: 1px solid #A9A9A9;
     padding: 24px 16px;
     display: flex;
+    gap: 16px;
     align-items: start;
-    flex-direction: column;
+    /* flex-direction: column; */
     justify-content: start;
 }
 
@@ -97,12 +99,12 @@ body.questionnaire-wrapper-open {
 }
 
 .questionnaire-selection-wrapper:empty {
-    border: none;
-    display: flex;
+    /* border: none;
+    display: flex; */
 }
 
 .questionnaire-selection-wrapper:empty.selected {
-    background-color: unset !important;
+    /* background-color: unset !important; */
 }
 
 .questionnaire-selection-wrapper.selected {
@@ -121,6 +123,10 @@ body.questionnaire-wrapper-open {
     line-height: 17px;
     font-weight: 600;
     color: #1C201D;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
     /* margin-top: 8px; */
 }
 

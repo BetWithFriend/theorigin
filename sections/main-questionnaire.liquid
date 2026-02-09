@@ -60,14 +60,16 @@
       >
       <div class="questionnaire-text">מקינטה</div>
     </div>
-    <div class="questionnaire-selection-wrapper" data-filter-value="Black">
-      <img
-        class="questionnaire-img-icon"
-        src="{{ 'questionnaire_Turkish_Cezve.png' |  asset_url }}"
-        alt="Turkish icon"
-      >
-      <div class="questionnaire-text">קפה טורקי</div>
-    </div>
+    {% comment %}
+      <div class="questionnaire-selection-wrapper" data-filter-value="Black">
+        <img
+          class="questionnaire-img-icon"
+          src="{{ 'questionnaire_Turkish_Cezve.png' |  asset_url }}"
+          alt="Turkish icon"
+        >
+        <div class="questionnaire-text">קפה טורקי</div>
+      </div>
+    {% endcomment %}
     <div class="questionnaire-selection-wrapper" data-filter-value="Filter">
       <img
         class="questionnaire-img-icon"
@@ -82,16 +84,22 @@
         src="{{ 'questionnaire_Auto_Machine.png' |  asset_url }}"
         alt="Espresso Auto icon"
       >
-      <div class="questionnaire-text">מכונה אוטומטית</div>
+      <div class="questionnaire-text">משקאות חלב</div>
     </div>
-    <div class="questionnaire-selection-wrapper" data-filter-value="Aeropress">
-      <img
-        class="questionnaire-img-icon"
-        src="{{ 'questionnaire_Aeropress.png' |  asset_url }}"
-        alt="Aeropress icon"
-      >
-      <div class="questionnaire-text">אירופרס</div>
+    <div class="questionnaire-selection-wrapper" data-filter-value="">
+      <div class="questionnaire-text">דלג, לא משנה לי</div>
     </div>
+
+    {% comment %}
+      <div class="questionnaire-selection-wrapper" data-filter-value="Aeropress">
+        <img
+          class="questionnaire-img-icon"
+          src="{{ 'questionnaire_Aeropress.png' |  asset_url }}"
+          alt="Aeropress icon"
+        >
+        <div class="questionnaire-text">אירופרס</div>
+      </div>
+    {% endcomment %}
     <div class="questionnaire-btn-wrapper">
       <button class="questionnaire-skip-btn" onclick="goToPreviousStep(0)">
         <img
