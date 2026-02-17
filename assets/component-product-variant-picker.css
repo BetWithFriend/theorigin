@@ -172,3 +172,11 @@ variant-selects {
 }
 
 /* End custom styles for Swatch display type */
+.variant-item__discount {
+  color: #AD7B7E;
+  font-size: 12px;
+}
+
+.product-form__input--pill input[type='radio']:checked + label .variant-item__discount {
+  color: inherit;
+}
