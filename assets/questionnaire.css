@@ -45,7 +45,7 @@ body.questionnaire-wrapper-open {
     font-size: 16px;
     line-height: 16px;
     font-weight: 400;
-    width: 64px;
+    width: 87px;
     height: 56px;
     /* text-decoration: underline; */
     margin-top: 18px;
@@ -112,20 +112,20 @@ body.questionnaire-wrapper-open {
 }
 
 .questionnaire-selection-wrapper:empty {
-    /* border: none;
-    display: flex; */
+    border: none;
+    display: flex;
 }
 
 .questionnaire-selection-wrapper:empty.selected {
-    /* background-color: unset !important; */
+    background-color: unset !important;
 }
 
 .questionnaire-selection-wrapper.selected {
-    background-color: #E3E0DA;
+    background-color: #F4F3F0;
 }
 
 .questionnaire-img-icon {
-    width: 23px;
+    width: 32px;
     height: 32px;
     margin-bottom: 16px;
 }
@@ -156,7 +156,7 @@ body.questionnaire-wrapper-open {
     /* margin-top: 8px; */
     font-weight: 200;
     font-size: 16px;
-    line-height: 110.00000000000001%;
+    line-height: 110%;
     letter-spacing: 0%;
     text-align: right;
     text-transform: capitalize;
@@ -166,7 +166,7 @@ body.questionnaire-wrapper-open {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 235px;
     height: 56px;
     cursor: pointer;
     border-radius: 8px;
@@ -368,12 +368,16 @@ body.questionnaire-wrapper-open {
 /* Standalone questionnaire page styles */
 .main-questionnaire-section .questionnaire-wrapper {
     position: relative;
-    min-height: calc(100vh - 180px);
+    min-height: 100%;
 }
 
 .main-questionnaire-section .lets-be-friends-wrapper {
     position: relative;
     min-height: calc(100vh - 180px);
+}
+
+.grid-item-feed {
+    flex-grow: 1;
 }
 
 @media screen and (min-width: 990px) {
@@ -442,4 +446,132 @@ body.questionnaire-wrapper-open {
     .questionnaire-icons-wrapper {
         padding: unset;
     }
+}
+
+/* Questionnaire Product Card Styles */
+.questionnaire-product-card {
+    background: #FAFCFE;
+    /* border: 1px solid #E3E0DA; */
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.questionnaire-product-image-wrapper {
+    width: 100%;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.questionnaire-product-image {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: contain;
+}
+
+.questionnaire-product-title {
+    font-family: 'Assistant', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1C201D;
+    margin-bottom: 4px;
+}
+
+.questionnaire-product-vendor {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    color: #555555;
+    margin-bottom: 16px;
+}
+
+.questionnaire-qty-selector-wrapper {
+    width: 100%;
+    margin: 16px 0;
+}
+
+.questionnaire-qty-label {
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    color: #1C201D;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.questionnaire-qty-options {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.qty-option {
+    border: 1px solid #1C201D;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    background: transparent;
+    color: #1C201D;
+}
+
+.qty-option.selected {
+    background: #1C201D;
+    color: #FFFFFF;
+}
+
+.questionnaire-price-wrapper {
+    display: flex;
+    flex-direction: column;
+    /* Or row depending on exact design */
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.questionnaire-price-wrapper .price-label {
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    color: #555555;
+}
+
+.questionnaire-price-wrapper .price-value {
+    font-family: 'Assistant', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1C201D;
+}
+
+.questionnaire-add-btn {
+    width: 100%;
+    background-color: #1C201D;
+    color: #FFFFFF;
+    font-family: 'Assistant', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.questionnaire-add-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.questionnaire-secure-icons {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
 }

@@ -6,9 +6,49 @@
   onload="this.onload=null;this.rel='stylesheet'"
 >
 <noscript>{{ 'questionnaire.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-slider.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'template-collection.css' | asset_url | stylesheet_tag }}</noscript>
 
 <div class="questionnaire-wrapper" id="questionnaireWrapperDesktop">
   <div class="questionnaire-icons-wrapper active">
+    {% paginate collections.all.products by 1000 %}
+      <script>
+        window.allProducts = [
+          {% for product in collections.all.products %}
+            {%- capture card_html -%}
+            <li class="grid__item slider__slide grid-item-feed" id="Slide-{{ section.id }}-{{ product.id }}">
+              {% render 'questionnaire-product', card_product: product %}
+            </li>
+            {%- endcapture -%}
+             {% unless product.tags contains 'bundle' %}
+            {
+                "id": {{ product.id }},
+                "title": {{ product.title | json }},
+                "handle": {{ product.handle | json }},
+                "price": {{ product.price | money | json }},
+                "image": {{ product.featured_image | image_url: width: 600 | json }},
+                "metafields": {
+                  "coffee_roast_level": {{ product.metafields.custom.coffee_roast_level | json }},
+                  "coffee_prep_methods": {{ product.metafields.custom.coffee_prep_methods }},
+                  "coffee_tastes": {{ product.metafields.custom.coffee_tastes }}
+                },
+                "html_card": {{ card_html | json }}
+            },
+              {% endunless %}
+          {% endfor %}
+        ];
+      </script>
+    {% endpaginate %}
+
+    {% for product in collection.products %}
+      <script>
+        console.log('boom2', {{ product | json }});
+      </script>
+      <!-- Access product data here -->
+      <h3>{{ product.title }}</h3>
+      <p>{{ product.description }}</p>
+    {% endfor %}
+
     <div class="questionnaire-title-wrapper">
       <div class="questionnaire-close-icon" onclick="closeForm()">
         <svg
@@ -73,15 +113,15 @@
     <div class="questionnaire-selection-wrapper" data-filter-value="Filter">
       <img
         class="questionnaire-img-icon"
-        src="{{ 'questionnaire_v60.png' |  asset_url }}"
-        alt="V60 icon"
+        src="{{ 'questionnaire_filter.png' |  asset_url }}"
+        alt="filter icon"
       >
       <div class="questionnaire-text">פילטר</div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="Espresso">
       <img
         class="questionnaire-img-icon"
-        src="{{ 'questionnaire_Auto_Machine.png' |  asset_url }}"
+        src="{{ 'questionnaire_milk.png' |  asset_url }}"
         alt="Espresso Auto icon"
       >
       <div class="questionnaire-text">משקאות חלב</div>
@@ -192,16 +232,20 @@
       </div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="">
-      <img
-        class="questionnaire-img-icon"
-        src="{{ 'questionnaire_dont_know.png' |  asset_url }}"
-        alt="dont know icon"
-      >
-      <div class="questionnaire-text">לא יודעים</div>
-      <div class="questionnaire-expl-text">התאימו בשבילי</div>
+      {% comment %}
+        <img
+          class="questionnaire-img-icon"
+          src="{{ 'questionnaire_dont_know.png' |  asset_url }}"
+          alt="dont know icon"
+        >
+      {% endcomment %}
+      <div class="questionnaire-text-wrapper">
+        <div class="questionnaire-text">לא יודעים</div>
+        <div class="questionnaire-expl-text">הציגו לי הכל</div>
+      </div>
     </div>
     <div class="questionnaire-selection-wrapper"></div>
-    <div class="questionnaire-selection-wrapper"></div>
+    {% comment %} <div class="questionnaire-selection-wrapper"></div> {% endcomment %}
     <div class="questionnaire-btn-wrapper">
       <button class="questionnaire-skip-btn" onclick="goToPreviousStep(2)">
         <img
@@ -209,6 +253,7 @@
           src="{{ 'questionnaire_back_icon.png' |  asset_url }}"
           alt="Close icon"
         >
+        <span class="questionnaire-back-text">חזור</span>
       </button>
       <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_roast_level', 2)">
         בחרו אפשרות
@@ -261,8 +306,10 @@
         src="{{ 'questionnaire_Dark_2.png' |  asset_url }}"
         alt="dark coffee icon"
       >
-      <div class="questionnaire-text">פרחוני ופירותי</div>
-      <div class="questionnaire-expl-text">קליל, מזכיר פירות הדר, תה מיוחד</div>
+      <div class="questionnaire-text-wrapper">
+        <div class="questionnaire-text">קפה קלאסי</div>
+        <div class="questionnaire-expl-text">מתוק, חלק ומעניין - מזכיר שוקולד וקרמל</div>
+      </div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="Sweet & Caramelly">
       <img
@@ -270,8 +317,10 @@
         src="{{ 'questionnaire_soft.png' |  asset_url }}"
         alt="soft coffee icon"
       >
-      <div class="questionnaire-text">מתקתק ומאוזן</div>
-      <div class="questionnaire-expl-text">מתיקות טבעית, מזכיר קרמל, טופי</div>
+      <div class="questionnaire-text-wrapper">
+        <div class="questionnaire-text">מודרני ומאוזן</div>
+        <div class="questionnaire-expl-text">מצד אחד מתוק, מצד שני קצת פירותי</div>
+      </div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="Rich & Chocolaty">
       <img
@@ -279,8 +328,10 @@
         src="{{ 'questionnaire_special.png' |  asset_url }}"
         alt="Turkish icon"
       >
-      <div class="questionnaire-text">שוקולדי ועשיר</div>
-      <div class="questionnaire-expl-text">טעם עמוק, מזכיר שוקולד מריר, אגוז</div>
+      <div class="questionnaire-text-wrapper">
+        <div class="questionnaire-text">הגל השלישי</div>
+        <div class="questionnaire-expl-text">קפה פירותי ופרחוני, טעמים מעניינים</div>
+      </div>
     </div>
     {% comment %}
       <div class="questionnaire-selection-wrapper" data-filter-value="">
@@ -290,16 +341,18 @@
       </div>
     {% endcomment %}
     <div class="questionnaire-selection-wrapper" data-filter-value="">
-      <img
-        class="questionnaire-img-icon"
-        src="{{ 'questionnaire_dont_know_2.png' |  asset_url }}"
-        alt="dont know icon"
-      >
-      <div class="questionnaire-text">עדיין לא בטוחים</div>
+      {% comment %}
+        <img
+          class="questionnaire-img-icon"
+          src="{{ 'questionnaire_dont_know_2.png' |  asset_url }}"
+          alt="dont know icon"
+        >
+      {% endcomment %}
+      {% comment %} <div class="questionnaire-text">עדיין לא בטוחים</div> {% endcomment %}
       <div class="questionnaire-expl-text">פתוחים להצעות</div>
     </div>
     <div class="questionnaire-selection-wrapper"></div>
-    <div class="questionnaire-selection-wrapper"></div>
+    {% comment %} <div class="questionnaire-selection-wrapper"></div> {% endcomment %}
     <div class="questionnaire-btn-wrapper">
       <button class="questionnaire-skip-btn" onclick="goToPreviousStep(3)">
         <img
@@ -307,6 +360,7 @@
           src="{{ 'questionnaire_back_icon.png' |  asset_url }}"
           alt="Close icon"
         >
+        <span class="questionnaire-back-text">חזור</span>
       </button>
       <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_tastes', 3)">
         בחרו אפשרות
@@ -328,6 +382,79 @@
       <div class="questionnaire-loader-text">
         {{ section.settings.loader_text | default: 'מתאימים את פולי הקפה בדיוק בשבילך' }}
       </div>
+    </div>
+  </div>
+  <div class="questionnaire-icons-wrapper" id="questionnaireResultsStep">
+    <div class="questionnaire-title-wrapper">
+      <div class="questionnaire-close-icon" onclick="closeForm()">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <line
+            x1="6"
+            y1="6"
+            x2="18"
+            y2="18"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round" />
+          <line
+            x1="18"
+            y1="6"
+            x2="6"
+            y2="18"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round" />
+        </svg>
+      </div>
+      <div class="questionnaire-title">התוצאות שלך</div>
+      <div class="questionnaire-back-icon-wrapper"></div>
+    </div>
+
+    <slider-component class="slider-mobile-gutter page-width">
+      <ul
+        class="grid product-grid slider slider--mobile slider--tablet grid--peek"
+        id="Slider-questionnaireResultsGrid"
+        role="list"
+        style="max-height: 50vh; overflow-y: auto; padding: 0 16px;"
+      >
+        <!-- Results will be injected here -->
+      </ul>
+      <div class="slider-buttons no-js-hidden">
+        <button
+          type="button"
+          class="slider-button slider-button--prev"
+          name="previous"
+          aria-label="{{ 'general.slider.previous_slide' | t }}"
+        >
+          {{ 'icon-caret.svg' | inline_asset_content }}
+        </button>
+        <div class="slider-counter caption">
+          <span class="slider-counter--current">1</span>
+          <span aria-hidden="true"> / </span>
+          <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+          <span class="slider-counter--total">1</span>
+        </div>
+        <button
+          type="button"
+          class="slider-button slider-button--next"
+          name="next"
+          aria-label="{{ 'general.slider.next_slide' | t }}"
+        >
+          {{ 'icon-caret.svg' | inline_asset_content }}
+        </button>
+      </div>
+    </slider-component>
+
+    <div class="questionnaire-btn-wrapper">
+      <button class="questionnaire-select-btn" onclick="window.location.href='/collections/all'">לכל הקטלוג</button>
     </div>
   </div>
 </div>
@@ -369,7 +496,9 @@
 {%- assign close_redirect_url = section.settings.close_redirect | default: '/' -%}
 {%- assign select_btn_text = section.settings.select_button_text | default: 'בחרו אפשרות' -%}
 {%- assign continue_single_text = section.settings.continue_single_text | default: 'המשיכו עם בחירה אחת' -%}
-
+<div>
+  <div id="my-custom-results-area"></div>
+</div>
 <script>
   // Pass schema settings to JavaScript
   const questionnaireSettings = {
@@ -566,11 +695,145 @@
   }
 
   function redirectToCollectionWithFilters() {
-    let newQueryParams = arrayToQueryString(window.appliedFilters);
-    newQueryParams = `${newQueryParams}&from_quiz=true`;
-    // Redirect to the collection page with the filters (use schema setting or default)
-    const baseUrl = questionnaireSettings.redirectCollection || '/collections/all';
-    window.location.href = baseUrl + '?' + newQueryParams;
+    // Collect text from selected UI elements to support Hebrew matching
+    const selectedWrappers = document.querySelectorAll('.questionnaire-selection-wrapper.selected');
+    const selectedTexts = Array.from(selectedWrappers).map((el) => {
+      const textEl = el.querySelector('.questionnaire-text');
+      return textEl ? textEl.innerText : '';
+    });
+
+    // Also collect applied filter values (English)
+    const filterValues = [];
+    for (const key in window.appliedFilters) {
+      if (Array.isArray(window.appliedFilters[key])) {
+        filterValues.push(...window.appliedFilters[key]);
+      }
+    }
+
+    const userText = selectedTexts.join(' ') + ' ' + filterValues.join(' ');
+    console.log('User Text for matching:', userText);
+
+    // Map window.allProducts to the structure expected by matchCoffeesFromText
+    const coffeeDatabase = window.allProducts.map((product) => ({
+      ...product,
+      prep_method: product.metafields.coffee_prep_methods || [],
+      tastes: product.metafields.coffee_tastes || [],
+    }));
+
+    function matchCoffeesFromText(userText) {
+      const text = userText.toLowerCase();
+      const scores = coffeeDatabase.map((coffee) => {
+        let score = 0;
+
+        // Match prep methods
+        if (Array.isArray(coffee.prep_method)) {
+          coffee.prep_method.forEach((method) => {
+            if (text.includes(method.toLowerCase())) score += 3;
+          });
+        }
+
+        // Match tastes
+        if (Array.isArray(coffee.tastes)) {
+          coffee.tastes.forEach((taste) => {
+            if (text.includes(taste.toLowerCase())) score += 2;
+          });
+        }
+
+        // Hebrew keyword matching for prep methods
+        if (Array.isArray(coffee.prep_method)) {
+          if (text.includes('אספרסו') || text.includes('חזק') || text.includes('עז')) {
+            if (coffee.prep_method.includes('Espresso')) score += 2;
+          }
+          if (
+            text.includes('חלב') ||
+            text.includes('לאטה') ||
+            text.includes("קפוצ'ינו") ||
+            text.includes('קפוצינו') ||
+            text.includes('קפה הפוך')
+          ) {
+            if (coffee.prep_method.includes('Espresso')) score += 2;
+          }
+          if (text.includes('פילטר') || text.includes('עדין') || text.includes('קל')) {
+            if (coffee.prep_method.includes('Filter')) score += 2;
+          }
+          if (text.includes('מקינטה') || text.includes('מוקה')) {
+            if (coffee.prep_method.includes('MokaPot')) score += 2;
+          }
+        }
+
+        // Hebrew keyword matching for tastes
+        if (Array.isArray(coffee.tastes)) {
+          if (text.includes('פירותי') || text.includes('בהיר') || text.includes('חמוץ') || text.includes('חמצמץ')) {
+            if (coffee.tastes.includes('Fruity') || coffee.tastes.includes('Fruity-Sweet')) score += 2;
+          }
+          if (text.includes('מתוק') || text.includes('מתיקות')) {
+            if (
+              coffee.tastes.includes('Sweet') ||
+              coffee.tastes.includes('Sweet-Chocolate') ||
+              coffee.tastes.includes('Fruity-Sweet')
+            )
+              score += 2;
+          }
+          if (text.includes('שוקולד') || text.includes('קקאו')) {
+            if (coffee.tastes.includes('Chocolate') || coffee.tastes.includes('Sweet-Chocolate')) score += 2;
+          }
+        }
+
+        return { coffee, score };
+      });
+      return scores
+        .filter((item) => item.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .map((item) => item.coffee)
+        .slice(0, 5);
+    }
+    const matchedCoffees = matchCoffeesFromText(userText);
+    console.log('Matched Coffees:', matchedCoffees);
+
+    // Render results in the new step
+    const resultsGrid = document.getElementById('Slider-questionnaireResultsGrid');
+    const resultsStep = document.getElementById('questionnaireResultsStep');
+    const mainWrapper = document.querySelector('.questionnaire-wrapper');
+    const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
+    document.body.classList.remove('questionnaire-wrapper-open');
+
+    if (resultsGrid && resultsStep && mainWrapper) {
+      // Populate results
+      if (matchedCoffees.length > 0) {
+        resultsGrid.innerHTML = matchedCoffees.map((product) => product.html_card).join('');
+
+        // Re-initialize slider
+        const sliderComponent = resultsGrid.closest('slider-component');
+        if (sliderComponent) {
+          sliderComponent.resetPages();
+          const totalElement = sliderComponent.querySelector('.slider-counter--total');
+          if (totalElement) {
+            totalElement.textContent = matchedCoffees.length;
+          }
+        }
+      } else {
+        resultsGrid.innerHTML =
+          '<div style="grid-column: 1 / -1; text-align: center;">לא נמצאו תוצאות מדוייקות, נסו שנית.</div>';
+      }
+
+      // Hide friends wrapper if open
+      if (friendsWrapper) {
+        friendsWrapper.classList.remove('active');
+      }
+
+      // Show main wrapper
+      mainWrapper.classList.remove('hidden');
+
+      // Hide all other steps
+      const steps = document.querySelectorAll('.questionnaire-icons-wrapper');
+      steps.forEach((step) => step.classList.remove('active'));
+
+      // Show results step
+      resultsStep.classList.add('active');
+
+      // Scroll to top of results?
+      resultsStep.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   function arrayToQueryString(filterData) {
@@ -994,6 +1257,17 @@
           'שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא',
       },
     ];
+
+    // Event delegation for quantity selector interaction
+    document.addEventListener('click', function (e) {
+      if (e.target && e.target.classList.contains('qty-option')) {
+        const wrapper = e.target.closest('.questionnaire-qty-options');
+        if (wrapper) {
+          wrapper.querySelectorAll('.qty-option').forEach((el) => el.classList.remove('selected'));
+          e.target.classList.add('selected');
+        }
+      }
+    });
   });
 </script>
 

@@ -1,0 +1,80 @@
+<div class="questionnaire-product-card">
+  <div class="questionnaire-product-image-wrapper">
+    <img
+      srcset="
+        {%- if card_product.featured_media.width >= 165 -%}{{ card_product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+        {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+        {%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+        {%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+        {{ card_product.featured_media | image_url: width: 533 }} {{ card_product.featured_media.width }}w
+      "
+      src="{{ card_product.featured_media | image_url: width: 533 }}"
+      sizes="(min-width: 1200px) 267px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+      alt="{{ card_product.featured_media.alt | escape }}"
+      class="questionnaire-product-image"
+      loading="lazy"
+      width="{{ card_product.featured_media.width }}"
+      height="{{ card_product.featured_media.height }}"
+    >
+  </div>
+
+  <div class="questionnaire-product-info">
+    <h3 class="questionnaire-product-title">{{ card_product.title | escape }}</h3>
+    <div class="questionnaire-product-vendor">{{ card_product.vendor }}</div>
+
+    <div class="questionnaire-qty-selector-wrapper">
+      <div class="questionnaire-qty-label">חבילות קפה במארז</div>
+      <div class="questionnaire-qty-options">
+        <div class="qty-option">3</div>
+        <div class="qty-option">5</div>
+        <div class="qty-option selected">7 (10% הנחה)</div>
+      </div>
+    </div>
+
+    <div class="questionnaire-price-wrapper">
+      <span class="price-label">סה״כ לתשלום (כולל משלוח)</span>
+      <div class="price-value">
+        {% render 'price', product: card_product, use_variant: true %}
+      </div>
+    </div>
+
+    <div class="questionnaire-add-to-cart-wrapper">
+      <product-form>
+        {%- form 'product',
+          card_product,
+          class: 'form product-form--questionnaire js-quick-add-form',
+          novalidate: 'novalidate',
+          data-type: 'add-to-cart-form'
+        -%}
+          <input
+            type="hidden"
+            name="id"
+            value="{{ card_product.selected_or_first_available_variant.id }}"
+            disabled
+          >
+          <button
+            type="submit"
+            name="add"
+            class="questionnaire-add-btn"
+            {% if card_product.selected_or_first_available_variant.available == false %}
+              disabled
+            {% endif %}
+          >
+            <span>
+              {%- if card_product.selected_or_first_available_variant.available -%}
+                קנייה מהירה
+              {%- else -%}
+                {{ 'products.product.sold_out' | t }}
+              {%- endif -%}
+            </span>
+          </button>
+        {%- endform -%}
+      </product-form>
+    </div>
+
+    <div class="questionnaire-secure-icons">
+      {%- comment -%} Add payment icons here if needed or static image {%- endcomment -%}
+      <div class="secure-text">רכישה מאובטחת</div>
+    </div>
+  </div>
+</div>
