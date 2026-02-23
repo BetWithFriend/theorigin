@@ -37,6 +37,21 @@
     if value.available
       assign option_disabled = false
     endif
+
+    assign variant = null
+    assign option_index = option.position | minus: 1
+    for v in product.variants
+      if v.options[option_index] == value
+        assign variant = v
+        break
+      endif
+    endfor
+
+    assign discount_text = ''
+    if variant.compare_at_price > variant.price
+      assign discount_percent = variant.compare_at_price | minus: variant.price | times: 100.0 | divided_by: variant.compare_at_price | round
+      assign discount_text = ' (' | append: discount_percent | append: '% הנחה)'
+    endif
   -%}
 
   {%- capture input_id -%}
@@ -93,6 +108,7 @@
     >
     <label for="{{ input_id }}">
       {{ value -}}
+      <span class="variant-item__discount">{{ discount_text }}</span>
       {{ label_unavailable }}
     </label>
   {%- elsif picker_type == 'dropdown' or picker_type == 'swatch_dropdown' -%}
@@ -112,8 +128,10 @@
     >
       {% if option_disabled -%}
         {{- 'products.product.value_unavailable' | t: option_value: value -}}
+        {{- discount_text -}}
       {%- else -%}
         {{- value -}}
+        {{- discount_text -}}
       {%- endif %}
     </option>
   {%- endif -%}
