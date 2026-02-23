@@ -7,6 +7,41 @@
     z-index: 20; /* Ensure higher stacking context */
   }
 
+  .bundles-link-wrapper {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    font-size: 16px;
+    width: 95%;
+    margin: 0 auto;
+    margin-top: 8px;  
+  }
+
+  .bundle-link-wrapper-internal {
+    background-color: #EAE8E0;
+    width: 100%;
+    border-radius: 4px;
+    padding: 8px;
+  }
+
+  .bundles-link-wrapper span {
+    margin-right: 8px;
+  }
+
+  .bundles-link-wrapper button {
+    {% comment %} font-weight: bold; {% endcomment %}
+    font-size: 16px;
+    margin-right: 16px;
+    display: inline-block;
+    {% comment %} background-color: #fff; {% endcomment %}
+    padding: 4px 12px;
+    border-radius: 4px;
+    color: #000;
+    border: 1px solid #919191;
+    background: transparent;
+    cursor: pointer;
+  }
+
   @media screen and (max-width: 750px) {
     .all-new-filters-wrapper {
       position: -webkit-sticky;
@@ -57,6 +92,11 @@
     #sortDropdownMenu[data-mode="sort"] {
       right: 50px;
     }
+
+    .bundles-link-wrapper {
+      padding: 0 5rem;
+      width: 100%;
+    }
   }
 
   /* Hide top and bottom bars in sort mode */
@@ -103,6 +143,13 @@
   <div class="sort-dropdown-menu" id="sortDropdownMenu">
     {% assign product_taste = collection.products %} 
     {% render 'taste-filter', tastes: product_taste, results: results %} 
+  </div>
+</div>
+
+<div class="bundles-link-wrapper">
+  <div class="bundle-link-wrapper-internal">
+    <span>מעדיפים מארזים מוכנים מראש?</span>
+    <button id="bundleToggleBtn" type="button" onclick="goToFilter(this, 'filter.p.m.custom.coffee_type', 'מארז')" aria-expanded="false" aria-haspopup="true" >עבור למארזים</button>
   </div>
 </div>
 
@@ -196,6 +243,23 @@
             const event = new CustomEvent('collectionPageUpdated');
             window.dispatchEvent(event);
 
+            // Toggle bundle button text and active state
+            const bundleToggleBtn = document.getElementById('bundleToggleBtn');
+            if (bundleToggleBtn) {
+                const isMarezActive = params.getAll('filter.p.m.custom.coffee_type').includes('מארז');
+                if (isMarezActive) {
+                    bundleToggleBtn.classList.add('active');
+                    bundleToggleBtn.textContent = 'הצג הכל';
+
+                    analytics.trackClick('Show Bundles', {
+                        'Source': 'Catalogue'
+                    });
+                } else {
+                    bundleToggleBtn.classList.remove('active');
+                    bundleToggleBtn.textContent = 'עבור למארזים';
+                }
+        }
+
         } else {
             console.log('filter failed: FacetFiltersForm not found or renderPage is not a function');
         }
@@ -251,7 +315,7 @@ function closeSortMenu() {
         const allActiveValues = {}; // An object to store active values for all keys
         
         // The filter keys used by your bubbles
-        const filterKeys = ['filter.p.m.custom.coffee_roast_level', 'filter.p.m.custom.coffee_process']; 
+        const filterKeys = ['filter.p.m.custom.coffee_roast_level', 'filter.p.m.custom.coffee_process', 'filter.p.m.custom.coffee_type']; 
         
         // 2. Get all active values for each filter key
         filterKeys.forEach(filterKey => {
@@ -324,5 +388,7 @@ function closeSortMenu() {
         if (document.readyState !== 'loading') {
             highlightActiveFilters();
         }
+
+        document.addEventListener('collectionPageUpdated', highlightActiveFilters);
 
 </script>
