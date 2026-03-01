@@ -41,7 +41,8 @@
 -%}
 
 {%- unless target == null and placeholder == null -%}
-  <div class="
+  <div
+    class="
       price
       {%- if price_class %} {{ price_class }}{% endif -%}
       {%- if available == false %} price--sold-out{% endif -%}
@@ -49,7 +50,8 @@
       {%- if compare_at_price > price and product.quantity_price_breaks_configured? %} volume-pricing--sale-badge{% endif -%}
       {%- if product.price_varies == false and product.compare_at_price_varies %} price--no-compare{% endif -%}
       {%- if show_badges %} price--show-badge{% endif -%}
-    ">
+    "
+  >
     <div class="price__container">
       {%- comment -%}
         Explanation of description list:
@@ -78,7 +80,8 @@
           <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
           <span class="price-item price-item--regular">
             {{-
-              'products.product.volume_pricing.price_range' | t: minimum: money_price_min, maximum: money_price_max
+              'products.product.volume_pricing.price_range'
+              | t: minimum: money_price_min, maximum: money_price_max
             -}}
           </span>
         {%- else -%}
@@ -86,8 +89,11 @@
           <span class="price-item price-item--regular" dir="rtl">
             {{ money_price }}
             {% if render_weight %}
-                {% unless product.tags contains 'event' or product.metafields.custom.coffee_type == 'מארז'%}
-                  <span class="price-item-weight">/ 250 גרם</span>
+              {% unless product.tags contains 'event' or product.metafields.custom.coffee_type == 'מארז' %}
+                <script>
+                  console.log('boom', {{ product.variants[0].options | json }})
+                </script>
+                <span class="price-item-weight">/ {{ product.variants[0].options[0] }}</span>
               {% endunless %}
             {% endif %}
           </span>
@@ -95,15 +101,15 @@
           {% if true %}
             <span class="price-item price-item--regular {{ class_added }}"></span>
           {% else %}
-            <span dir="rtl">
-              / {{ product.metafields.custom.set_number_of_items }} יח׳
-            </span>
+            <span dir="rtl"> / {{ product.metafields.custom.set_number_of_items }} יח׳ </span>
           {% endif %}
         {%- endif -%}
       </div>
       <div class="price__sale">
-        {%- unless product.price_varies == false and product.compare_at_price_varies and target.compare_at_price > target.price %}
-
+        {%- unless product.price_varies == false
+          and product.compare_at_price_varies
+          and target.compare_at_price > target.price
+        %}
           <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
           <span style="line-height: normal;">
             <span class="price-item price-item--regular" style="font-weight: 500;">
@@ -120,8 +126,7 @@
           {{ money_price }}
           {% unless product.tags contains 'event' or target.compare_at_price > target.price %}
             {% unless product.tags contains 'no-weight' %}
-              <span class="price-item-weight">
-                / 250 גרם</span>
+              <span class="price-item-weight"> / 250 גרם</span>
             {% endunless %}
           {% endunless %}
         </span>

@@ -1,0 +1,43 @@
+root: ./
+
+ignore:
+  - node_modules/**
+
+require: []
+
+# Checks configuration
+TemplateLength:
+  enabled: false
+
+UnusedAssign:
+  enabled: true
+
+LiquidHTMLSyntaxError:
+  enabled: true
+
+SyntaxError:
+  enabled: true
+
+MissingTemplate:
+  enabled: true
+
+ValidSchema:
+  enabled: true
+
+ValidHTMLTranslation:
+  enabled: true
+
+RequiredLayoutThemeObject:
+  enabled: true
+
+ImgLazyLoading:
+  enabled: true
+
+ImgWidthAndHeight:
+  enabled: true
+
+AssetSizeCSS:
+  enabled: false
+
+AssetSizeJavaScript:
+  enabled: false
