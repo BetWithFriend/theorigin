@@ -340,9 +340,7 @@ body.questionnaire-wrapper-open {
     /* flex-direction: column; */
 }
 
-.facets-wrapper--sticky.hide-filters {
-    /* display: none; */
-}
+
 
 .questionnaire-progress-bar-wrapper {
     display: flex;
@@ -574,4 +572,90 @@ body.questionnaire-wrapper-open {
     align-items: center;
     justify-content: center;
     gap: 4px;
+}
+
+/* ── Product Carousel ───────────────────────────────────── */
+.q-carousel-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+    padding: 0 4px;
+}
+
+.q-carousel-viewport {
+    /* flex: 1; */
+    /* overflow: hidden; */
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* width: 80%; */
+}
+
+.q-carousel-track {
+    display: flex;
+    flex-direction: row;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.q-carousel-slide {
+    min-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Strip the <li> grid styles the html_card wrapper adds */
+.q-carousel-slide .grid__item {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.q-carousel-slide--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    color: #555555;
+}
+
+/* Arrows */
+.q-carousel-arrow {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #E3E0DA;
+    border-radius: 50%;
+    background: #FAFCFE;
+    color: #1C201D;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.2s, opacity 0.2s;
+}
+
+.q-carousel-arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.q-carousel-arrow:not(:disabled):hover {
+    background: #F4F3F0;
+}
+
+
+/* Shared qty selector below carousel */
+#questionnaireResultsStep .questionnaire-qty-selector-wrapper {
+    width: 100%;
+    margin: 8px 0 16px;
+    padding: 12px 16px;
+    border-top: 1px solid #E3E0DA;
+    border-bottom: 1px solid #E3E0DA;
 }
