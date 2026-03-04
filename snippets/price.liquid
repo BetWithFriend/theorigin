@@ -90,9 +90,6 @@
             {{ money_price }}
             {% if render_weight %}
               {% unless product.tags contains 'event' or product.metafields.custom.coffee_type == 'מארז' %}
-                <script>
-                  console.log('boom', {{ product.variants[0].options | json }})
-                </script>
                 <span class="price-item-weight">/ {{ product.variants[0].options[0] }}</span>
               {% endunless %}
             {% endif %}
