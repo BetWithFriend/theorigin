@@ -52,6 +52,13 @@
     gap: 16px;
 }
 
+.our-vendors-logo-wrapper>.our-vendor-container {
+    flex: 0 0 calc(25% - 12px);
+    max-width: calc(25% - 12px);
+    display: flex;
+    justify-content: center;
+}
+
 .our-vendors-scroll-track {
     display: flex;
     align-items: center;
@@ -235,6 +242,13 @@
 
     .our-vendors-logo-wrapper {
         min-width: 750px;
+        flex-wrap: nowrap;
+        gap: 12px;
+    }
+
+    .our-vendors-logo-wrapper>.our-vendor-container {
+        flex: 0 0 auto;
+        max-width: none;
     }
 }
 
@@ -245,11 +259,10 @@
         gap: 16px;
     }
 
-    .our-vendors-logo-wrapper>.our-vendor-container {
-        box-sizing: border-box;
-        flex: 0 0 calc((100% - 32px) / 3);
-        max-width: calc((100% - 32px) / 3);
-    }
+    /* .our-vendors-logo-wrapper>.our-vendor-container {
+        flex: 0 0 calc((100% - 32px) / 4);
+        max-width: calc((100% - 32px) / 4);
+    } */
 
     /* Only switch to rotator after JS adds the enhanced class. */
     .our-vendors-wrapper.our-vendors--enhanced .our-vendors-logo-wrapper {

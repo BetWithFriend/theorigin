@@ -149,12 +149,14 @@
           {% render 'quantity-counter', product: product, field_id: 'quantity' %}
         </div>
 
-        {%- assign vendor_downcase = product.vendor | downcase -%}
-        {%- if vendor_downcase contains 'canopy' -%}
-          <div style="font-size: 18px; text-align: center; margin-top: 10px; font-weight: bold; width: 100%; color: #228334;">
-            בית הקלייה קנופי לא פעיל עקב שירות מילואים
-          </div>
-        {%- endif -%}
+        {% comment %} {%- assign vendor_downcase = product.vendor | downcase -%} {% endcomment %}
+        {% comment %}
+          {%- if vendor_downcase contains 'canopy' -%}
+            <div style="font-size: 18px; text-align: center; margin-top: 10px; font-weight: bold; width: 100%; color: #228334;">
+              בית הקלייה קנופי לא פעיל עקב שירות מילואים
+            </div>
+          {%- endif -%}
+        {% endcomment %}
 
         {% if min_order_for_free_shipping %}
           <!--
