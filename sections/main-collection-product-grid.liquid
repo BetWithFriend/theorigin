@@ -342,19 +342,29 @@
                               disabled
                             {% endif %}
                           >
+                          {%- assign vendor_downcase = product.vendor | downcase -%}
                           <button
                             id="ProductSubmitButton-add-{{ product.id }}"
                             type="submit"
                             name="add"
-                            class="add-to-cart-catalogue-btn"
+                            class="add-to-cart-catalogue-btn{% if vendor_downcase == 'temp_placeholder' %} disabled{% endif %}"
                             data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                            {% if vendor_downcase == 'temp_placeholder' %}
+                              disabled aria-disabled="true" style="opacity: 0.5;"
+                            {% endif %}
                           >
-                            <img
-                              class="add-to-cart-catalog-img"
-                              src="{{ 'add-to-cart-catalog.png' |  asset_url }}"
-                              alt="add to cart icon"
-                            >
-                            {{ 'products.product.add_to_cart' | t }}
+                            {%- unless vendor_downcase == 'temp_placeholder' -%}
+                              <img
+                                class="add-to-cart-catalog-img"
+                                src="{{ 'add-to-cart-catalog.png' |  asset_url }}"
+                                alt="add to cart icon"
+                              >
+                            {%- endunless -%}
+                            {%- if vendor_downcase == 'temp_placeholder' -%}
+                              יחזור בקרוב
+                            {%- else -%}
+                              {{ 'products.product.add_to_cart' | t }}
+                            {%- endif -%}
                           </button>
                         {%- endform -%}
                       </div>
