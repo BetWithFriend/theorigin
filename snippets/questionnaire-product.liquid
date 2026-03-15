@@ -21,51 +21,5 @@
   <div class="questionnaire-product-info">
     <h3 class="questionnaire-product-title">{{ card_product.title | escape }}</h3>
     <div class="questionnaire-product-vendor">{{ card_product.vendor }}</div>
-
-    <div class="questionnaire-price-wrapper">
-      <span class="price-label">סה״כ לתשלום (כולל משלוח)</span>
-      <div class="price-value">
-        {% render 'price', product: card_product, use_variant: true %}
-      </div>
-    </div>
-
-    <div class="questionnaire-add-to-cart-wrapper">
-      <product-form>
-        {%- form 'product',
-          card_product,
-          class: 'form product-form--questionnaire js-quick-add-form',
-          novalidate: 'novalidate',
-          data-type: 'add-to-cart-form'
-        -%}
-          <input
-            type="hidden"
-            name="id"
-            value="{{ card_product.selected_or_first_available_variant.id }}"
-            disabled
-          >
-          <button
-            type="submit"
-            name="add"
-            class="questionnaire-add-btn"
-            {% if card_product.selected_or_first_available_variant.available == false %}
-              disabled
-            {% endif %}
-          >
-            <span>
-              {%- if card_product.selected_or_first_available_variant.available -%}
-                קנייה מהירה
-              {%- else -%}
-                {{ 'products.product.sold_out' | t }}
-              {%- endif -%}
-            </span>
-          </button>
-        {%- endform -%}
-      </product-form>
-    </div>
-
-    <div class="questionnaire-secure-icons">
-      {%- comment -%} Add payment icons here if needed or static image {%- endcomment -%}
-      <div class="secure-text">רכישה מאובטחת</div>
-    </div>
   </div>
 </div>

@@ -26,6 +26,10 @@
                 "title": {{ product.title | json }},
                 "handle": {{ product.handle | json }},
                 "price": {{ product.price | money | json }},
+                "price_cents": {{ product.price }},
+                "compare_at_price_cents": {{ product.compare_at_price | default: 0 }},
+                "variantId": {{ product.selected_or_first_available_variant.id }},
+                "available": {{ product.selected_or_first_available_variant.available }},
                 "image": {{ product.featured_image | image_url: width: 600 | json }},
                 "metafields": {
                   "coffee_roast_level": {{ product.metafields.custom.coffee_roast_level | json }},
@@ -205,8 +209,8 @@
         alt="light roast icon"
       >
       <div class="questionnaire-text-wrapper">
-        <div class="questionnaire-text">בהירה</div>
-        <div class="questionnaire-expl-text">טעמים פירותיים וקלילים</div>
+        <div class="questionnaire-text">קלייה בהירה</div>
+        <div class="questionnaire-expl-text">קלייה בהירה פירותי וקליל, כמעט כמו תה</div>
       </div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="בהירה-בינונית, בינונית, בינונית-כהה">
@@ -216,8 +220,8 @@
         alt="medium roast icon"
       >
       <div class="questionnaire-text-wrapper">
-        <div class="questionnaire-text">בינונית</div>
-        <div class="questionnaire-expl-text">טעמים מתוקים יותר ומאוזנים</div>
+        <div class="questionnaire-text">קלייה בינונית</div>
+        <div class="questionnaire-expl-text">קלייה בינונית חלק, מתוק, קפה מודרני ומאוזן</div>
       </div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="בינונית-כהה, כהה">
@@ -227,8 +231,8 @@
         alt="dark roast icon"
       >
       <div class="questionnaire-text-wrapper">
-        <div class="questionnaire-text">כהה</div>
-        <div class="questionnaire-expl-text">טעמים שוקולדיים וקצת מרירים</div>
+        <div class="questionnaire-text">קלייה כהה</div>
+        <div class="questionnaire-expl-text">עוצמתי, גוף מלא, טעם עמוק ומעושן</div>
       </div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="">
@@ -443,6 +447,42 @@
         <div class="qty-option">5</div>
         <div class="qty-option selected">7 (10% הנחה)</div>
       </div>
+    </div>
+
+    <div class="questionnaire-price-wrapper">
+      <div class="price-label-group">
+        <span class="price-label-main">סה״כ לתשלום</span>
+        <span class="price-label-sub">(כולל משלוח)</span>
+      </div>
+      <div class="price-values-group">
+        <span class="price-current" id="q-footer-price"></span>
+        <span class="price-compare" id="q-footer-price-compare"></span>
+      </div>
+    </div>
+
+    <div class="questionnaire-add-to-cart-wrapper">
+      <form
+        id="q-footer-atc-form"
+        class="form product-form--questionnaire js-quick-add-form"
+        method="post"
+        action="/cart/add"
+        novalidate
+        data-type="add-to-cart-form"
+      >
+        <input type="hidden" name="id" id="q-footer-variant-id" value="">
+        <button
+          type="submit"
+          name="add"
+          id="q-footer-atc-btn"
+          class="questionnaire-add-btn"
+        >
+          <span id="q-footer-atc-label">קנייה מהירה</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="questionnaire-secure-icons">
+      <div class="secure-text">רכישה מאובטחת</div>
     </div>
 
     <div class="questionnaire-btn-wrapper">
@@ -802,7 +842,7 @@
       }
 
       // Init carousel
-      initProductCarousel();
+      initProductCarousel(matchedCoffees);
 
       // Hide friends wrapper if open
       if (friendsWrapper) {
@@ -824,12 +864,100 @@
     }
   }
 
-  function initProductCarousel() {
+  function initProductCarousel(products) {
     const track = document.getElementById('Slider-questionnaireResultsGrid');
     if (!track) return;
 
     const slides = Array.from(track.querySelectorAll('.q-carousel-slide'));
     let current = 0;
+
+    // ── Bundle price helpers ──────────────────────────────────────────────
+    function getSelectedQty() {
+      const sel = document.querySelector('.questionnaire-qty-selector-wrapper .qty-option.selected');
+      if (!sel) return 1;
+      // The label is e.g. "7 (10% הנחה)" — pull the leading integer
+      return parseInt(sel.textContent.trim(), 10) || 1;
+    }
+
+    function updateBundlePrice() {
+      if (!products || products.length === 0) return;
+      const qty = getSelectedQty();
+      const n = products.length;
+
+      // Each carousel product counts as 1. The qty selector is the total number
+      // of products in the bundle (3, 5, or 7). We compute the average price per
+      // product across all matched results, then multiply by qty.
+      let sumCents = 0;
+      let sumCompareCents = 0;
+      products.forEach(function (p) {
+        sumCents += p.price_cents || 0;
+        sumCompareCents += p.compare_at_price_cents || p.price_cents || 0;
+      });
+
+      const avgCents = sumCents / n;
+      const avgCompareCents = sumCompareCents / n;
+
+      const totalCents = Math.round(avgCents * qty);
+      const totalCompareCents = Math.round(avgCompareCents * qty);
+
+      const formatMoney = function (cents) {
+        return '\u20AA' + (cents / 100).toFixed(0);
+      };
+
+      const priceEl = document.getElementById('q-footer-price');
+      const compareEl = document.getElementById('q-footer-price-compare');
+
+      if (priceEl) priceEl.textContent = formatMoney(totalCents);
+
+      if (compareEl) {
+        if (totalCompareCents > totalCents) {
+          compareEl.textContent = formatMoney(totalCompareCents);
+          compareEl.style.display = '';
+        } else {
+          compareEl.textContent = '';
+          compareEl.style.display = 'none';
+        }
+      }
+    }
+
+    function syncFooter(index) {
+      const product = products && products[index];
+      if (!product) return;
+
+      // Bundle price (all products × qty)
+      updateBundlePrice();
+
+      // Variant ID (for the visible product)
+      const variantInput = document.getElementById('q-footer-variant-id');
+      if (variantInput) variantInput.value = product.variantId || '';
+
+      // Button label & state
+      const atcBtn = document.getElementById('q-footer-atc-btn');
+      const atcLabel = document.getElementById('q-footer-atc-label');
+      if (atcBtn && atcLabel) {
+        if (product.available) {
+          atcBtn.disabled = false;
+          atcLabel.textContent = 'קנייה מהירה';
+        } else {
+          atcBtn.disabled = true;
+          atcLabel.textContent = 'אזל המלאי';
+        }
+      }
+    }
+
+    // Re-run bundle price whenever qty selector changes
+    const qtyWrapper = document.querySelector('.questionnaire-qty-selector-wrapper');
+    if (qtyWrapper) {
+      qtyWrapper.addEventListener('click', function (e) {
+        const opt = e.target.closest('.qty-option');
+        if (!opt) return;
+        qtyWrapper.querySelectorAll('.qty-option').forEach(function (o) {
+          o.classList.remove('selected');
+        });
+        opt.classList.add('selected');
+        updateBundlePrice();
+      });
+    }
 
     function goTo(index) {
       current = Math.max(0, Math.min(index, slides.length - 1));
@@ -844,6 +972,9 @@
       const n = document.getElementById('qCarouselNext');
       if (p) p.disabled = current === 0;
       if (n) n.disabled = current === slides.length - 1;
+
+      // Sync shared footer with current product
+      syncFooter(current);
     }
 
     // Wire up arrows — clone to clear any old listeners, then update refs

@@ -365,7 +365,7 @@ body.questionnaire-wrapper-open {
 
 /* Standalone questionnaire page styles */
 .main-questionnaire-section .questionnaire-wrapper {
-    position: relative;
+    /* position: relative; */
     min-height: 100%;
 }
 
@@ -526,24 +526,59 @@ body.questionnaire-wrapper-open {
 
 .questionnaire-price-wrapper {
     display: flex;
-    flex-direction: column;
-    /* Or row depending on exact design */
+    flex-direction: row;
     align-items: center;
-    gap: 4px;
-    margin-bottom: 16px;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 0;
+    margin-bottom: 12px;
 }
 
-.questionnaire-price-wrapper .price-label {
-    font-family: 'Assistant', sans-serif;
-    font-size: 14px;
-    color: #555555;
+.price-label-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
 }
 
-.questionnaire-price-wrapper .price-value {
+.price-label-main {
     font-family: 'Assistant', sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     color: #1C201D;
+    line-height: 1.2;
+}
+
+.price-label-sub {
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #555555;
+    line-height: 1.2;
+}
+
+.price-values-group {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.price-current {
+    font-family: 'Assistant', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1C201D;
+    line-height: 1;
+}
+
+.price-compare {
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #9A9A9A;
+    text-decoration: line-through;
+    line-height: 1;
 }
 
 .questionnaire-add-btn {
