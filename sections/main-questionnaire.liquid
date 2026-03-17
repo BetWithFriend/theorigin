@@ -25,6 +25,7 @@
                 "id": {{ product.id }},
                 "title": {{ product.title | json }},
                 "handle": {{ product.handle | json }},
+                "vendor": {{ product.vendor | json }},
                 "price": {{ product.price | money | json }},
                 "price_cents": {{ product.price }},
                 "compare_at_price_cents": {{ product.compare_at_price | default: 0 }},
@@ -444,8 +445,8 @@
       <div class="questionnaire-qty-label">חבילות קפה במארז</div>
       <div class="questionnaire-qty-options">
         <div class="qty-option">3</div>
-        <div class="qty-option">5</div>
-        <div class="qty-option selected">7 (10% הנחה)</div>
+        <div class="qty-option selected">5</div>
+        <div class="qty-option">7 (10% הנחה)</div>
       </div>
     </div>
 
@@ -813,11 +814,16 @@
 
         return { coffee, score };
       });
-      return scores
-        .filter((item) => item.score > 0)
-        .sort((a, b) => b.score - a.score)
+      const positiveScores = scores.filter((item) => item.score > 0).sort((a, b) => b.score - a.score);
+
+      // Pick a random vendor from those that have at least one matching product
+      const vendors = [...new Set(positiveScores.map(({ coffee }) => coffee.vendor || ''))];
+      const topVendor = vendors[Math.floor(Math.random() * vendors.length)];
+
+      return positiveScores
+        .filter(({ coffee }) => (coffee.vendor || '') === topVendor)
         .map((item) => item.coffee)
-        .slice(0, 5);
+        .slice(0, 7);
     }
     const matchedCoffees = matchCoffeesFromText(userText);
     console.log('Matched Coffees:', matchedCoffees);
@@ -829,20 +835,44 @@
     const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
     document.body.classList.remove('questionnaire-wrapper-open');
 
-    if (resultsGrid && resultsStep && mainWrapper) {
-      // Populate results
-      if (matchedCoffees.length > 0) {
-        // Wrap each product html_card as a carousel slide
-        resultsGrid.innerHTML = matchedCoffees
+    // Helper: render up to `qty` slides and (re-)init the carousel
+    function renderCarousel(products, qty) {
+      const shown = products.slice(0, qty);
+      if (shown.length > 0) {
+        resultsGrid.innerHTML = shown
           .map((product) => `<div class="q-carousel-slide">${product.html_card}</div>`)
           .join('');
       } else {
         resultsGrid.innerHTML =
           '<div class="q-carousel-slide q-carousel-slide--empty">לא נמצאו תוצאות מדוייקות, נסו שנית.</div>';
       }
+      initProductCarousel(shown);
+    }
 
-      // Init carousel
-      initProductCarousel(matchedCoffees);
+    if (resultsGrid && resultsStep && mainWrapper) {
+      // Determine initial qty from the selected option (default 5)
+      const initialQtyEl = document.querySelector('.questionnaire-qty-selector-wrapper .qty-option.selected');
+      const initialQty = initialQtyEl ? parseInt(initialQtyEl.textContent.trim(), 10) || 5 : 5;
+
+      // Render only the first `initialQty` products
+      renderCarousel(matchedCoffees, initialQty);
+
+      // Wire up qty selector — re-render carousel + price on change
+      const qtyWrapper = document.querySelector('.questionnaire-qty-selector-wrapper');
+      if (qtyWrapper) {
+        const newQtyWrapper = qtyWrapper.cloneNode(true);
+        qtyWrapper.parentNode.replaceChild(newQtyWrapper, qtyWrapper);
+        newQtyWrapper.addEventListener('click', function (e) {
+          const opt = e.target.closest('.qty-option');
+          if (!opt) return;
+          newQtyWrapper.querySelectorAll('.qty-option').forEach(function (o) {
+            o.classList.remove('selected');
+          });
+          opt.classList.add('selected');
+          const newQty = parseInt(opt.textContent.trim(), 10) || matchedCoffees.length;
+          renderCarousel(matchedCoffees, newQty);
+        });
+      }
 
       // Hide friends wrapper if open
       if (friendsWrapper) {
@@ -943,20 +973,6 @@
           atcLabel.textContent = 'אזל המלאי';
         }
       }
-    }
-
-    // Re-run bundle price whenever qty selector changes
-    const qtyWrapper = document.querySelector('.questionnaire-qty-selector-wrapper');
-    if (qtyWrapper) {
-      qtyWrapper.addEventListener('click', function (e) {
-        const opt = e.target.closest('.qty-option');
-        if (!opt) return;
-        qtyWrapper.querySelectorAll('.qty-option').forEach(function (o) {
-          o.classList.remove('selected');
-        });
-        opt.classList.add('selected');
-        updateBundlePrice();
-      });
     }
 
     function goTo(index) {
