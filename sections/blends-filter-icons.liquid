@@ -1,101 +1,81 @@
 {{ 'blends-filter-icons.css' | asset_url | stylesheet_tag }}
 <div class="blends-filter-wrapper" id="blends-filter-wrapper">
-    <div class="blends-filter-item-wrpper">
-
-        <div class="blends-filter-item filter-special-beans" onclick="goToCollections('מארזי-קפה')">
-            <div class="blends-filter-icon-wrapper">
-                <img class="blends-filter-icon" src="{{ 'blend-filter-special.png' | asset_url }}" alt="פילטר פולים מיוחדים" />
-            </div>
-
-            <div class="blend-filter-text">
-                <div class="blend-filter-text-wrapper">
-                    <div>מארזים</div>
-                    <div class="blend-filter-explenation">מארזי טעימות</div>
-                </div>
-                <img src="{{ 'left-arrow-icon.png' | asset_url }}" alt="חץ שמאלה" />
-            </div>
-        </div>
-
-        <div class="blends-filter-item filter-single-origin" onclick="goToCalatogWithFilter('filter.p.m.custom.coffee_type', 'חד+זני')">
-            <div class="blends-filter-icon-wrapper">
-                <img class="blends-filter-icon" src="{{ 'blend-filter-single-origin.png' | asset_url }}" alt="פילטר חד זני" />
-            </div>
-
-            <div class="blend-filter-text">
-                <div class="blend-filter-text-wrapper">
-                    <div>חד זני</div>
-                    <div class="blend-filter-explenation">זנים איזוריים</div>
-                </div>
-                <img class="blends-filter-img-icon" src="{{ 'left-arrow-icon.png' | asset_url }}" alt="חץ שמאלה" />
-            </div>
-        </div>
-
-        <div class="blends-filter-item filter-blends" onclick="goToCalatogWithFilter('filter.p.m.custom.coffee_type', 'בלנד')">
-            <div class="blends-filter-icon-wrapper">
-                <img class="blends-filter-icon" src="{{ 'blend-filter-mix.png' | asset_url }}" alt="פילטר בלנדים" />
-            </div>
-            
-            <div class="blend-filter-text">
-                <div class="blend-filter-text-wrapper">
-                    <div>תערובות</div>
-                    <div class="blend-filter-explenation">תערובות הבית</div>
-                </div>
-                <img src="{{ 'left-arrow-icon.png' | asset_url }}" alt="חץ שמאלה" />
-            </div>
-        </div>
-
-        <div class="blends-filter-item filter-light-roast" onclick="goToCollections('קפה-קלייה-בהירה')">
-            <div class="blends-filter-icon-wrapper">
-                <img class="blends-filter-icon" src="{{ 'blend-filter-light-roast.png' | asset_url }}" alt="פילטר קליה בהירה" />
-            </div>
-            
-            
-            <div class="blend-filter-text">
-                <div class="blend-filter-text-wrapper">
-                    <div>קליה בהירה</div>
-                    <div class="blend-filter-explenation">קליל ופירותי</div>
-                </div>
-                <img src="{{ 'left-arrow-icon.png' | asset_url }}" alt="חץ שמאלה" />
-            </div>
-        </div>
-
-        <div class="blends-filter-item filter-medium-roast" onclick="goToCollections('פולי-קפה-קלייה-בינונית')">
-            <div class="blends-filter-icon-wrapper">
-                <img class="blends-filter-icon" src="{{ 'blend-filter-medium-roast.png' | asset_url }}" alt="פילטר קליה בינונית" />
-            </div>
-            
-            <div class="blend-filter-text">
-                <div class="blend-filter-text-wrapper">
-                    <div>קליה בינונית</div>
-                    <div class="blend-filter-explenation">מתקתק ועשיר</div>
-                </div>
-                <img src="{{ 'left-arrow-icon.png' | asset_url }}" alt="חץ שמאלה" />
-            </div>
-        </div>
-
-        <div class="blends-filter-item filter-dark-roast" onclick="goToCollections('פולי-קפה-קלייה-כהה')">
-            <div class="blends-filter-icon-wrapper">
-                <img class="blends-filter-icon" src="{{ 'blend-filter-dark-roast.png' | asset_url }}" alt="פילטר קליה כהה" />
-            </div>
-            
-            <div class="blend-filter-text">
-                <div class="blend-filter-text-wrapper">
-                    <div>קליה כהה</div>
-                    <div class="blend-filter-explenation">שוקולדי ומריר</div>
-                </div>
-                <img src="{{ 'left-arrow-icon.png' | asset_url }}" alt="חץ שמאלה" />
-            </div>
-        </div>
+  <div class="blends-filter-item-wrpper">
+    <div class="blends-filter-item" onclick="goToCollections('מארזי-קפה')">
+      <div class="blends-filter-icon-circle filter-special-beans">
+        <img class="blends-filter-icon" src="{{ 'icon-bundles.svg' | asset_url }}" alt="פילטר מארזים">
+      </div>
+      <div class="blend-filter-text">מארזים</div>
     </div>
+
+    <div class="blends-filter-item" onclick="goToCollections('קפה-חדש-ומומלץ')">
+      <div class="blends-filter-icon-circle filter-special-beans">
+        <img class="blends-filter-icon" src="{{ 'icon-new-coffee.svg' | asset_url }}" alt="פילטר פולי קפה חדשים">
+      </div>
+      <div class="blend-filter-text">חדשים</div>
+    </div>
+
+    <div class="blends-filter-item" onclick="goToCollections('פולי-קפה-הכי-נמכרים-ומומלצים')">
+      <div class="blends-filter-icon-circle filter-special-beans">
+        <img
+          class="blends-filter-icon"
+          src="{{ 'icon-recommended-coffee.svg' | asset_url }}"
+          alt="פילטר פולי קפה הכי נמכרים"
+        >
+      </div>
+      <div class="blend-filter-text">הכי נמכרים</div>
+    </div>
+
+    <div class="blends-filter-item" onclick="goToCalatogWithFilter('filter.p.m.custom.coffee_type', 'חד+זני')">
+      <div class="blends-filter-icon-circle filter-single-origin">
+        <img class="blends-filter-icon" src="{{ 'icon-single-origin.svg' | asset_url }}" alt="פילטר חד זני">
+      </div>
+      <div class="blend-filter-text">חד זני</div>
+    </div>
+
+    <div class="blends-filter-item" onclick="goToCalatogWithFilter('filter.p.m.custom.coffee_type', 'בלנד')">
+      <div class="blends-filter-icon-circle filter-blends">
+        <img class="blends-filter-icon" src="{{ 'icon-blends.svg' | asset_url }}" alt="פילטר בלנדים">
+      </div>
+      <div class="blend-filter-text">תערובות</div>
+    </div>
+
+    <div class="blends-filter-item" onclick="goToCollections('קפה-קלייה-בהירה')">
+      <div class="blends-filter-icon-circle filter-light-roast">
+        <img class="blends-filter-icon" src="{{ 'icon-single-bean.svg' | asset_url }}" alt="פילטר קליה בהירה">
+      </div>
+      <div class="blend-filter-text">קליה בהירה</div>
+    </div>
+
+    <div class="blends-filter-item" onclick="goToCollections('פולי-קפה-קלייה-בינונית')">
+      <div class="blends-filter-icon-circle filter-medium-roast">
+        <img
+          class="blends-filter-icon"
+          src="{{ 'icon-single-bean.svg' | asset_url }}"
+          alt="פילטר קליה בינונית"
+        >
+      </div>
+      <div class="blend-filter-text">קליה בינונית</div>
+    </div>
+
+    <div class="blends-filter-item" onclick="goToCollections('פולי-קפה-קלייה-כהה')">
+      <div class="blends-filter-icon-circle filter-dark-roast">
+        <img class="blends-filter-icon" src="{{ 'icon-single-bean.svg' | asset_url }}" alt="פילטר קליה כהה">
+      </div>
+      <div class="blend-filter-text">קליה כהה</div>
+    </div>
+  </div>
 </div>
 
 <script>
-    function goToCollections(collectionName) {
-        window.location.href = "{{ section.settings.collection.url }}/collections/" + collectionName;
-    }
+  function goToCollections(collectionName) {
+    analytics.trackClick('HP Filter', { 'filter name': collectionName });
+    window.location.href = '{{ section.settings.collection.url }}/collections/' + collectionName;
+  }
 
-    function goToCalatogWithFilter(filterName, collectionName) {
-        window.location.href = "{{ section.settings.collection.url }}/collections/חנות-קפה?" + filterName + '=' + collectionName;
-    }
-
+  function goToCalatogWithFilter(filterName, collectionName) {
+    analytics.trackClick('HP Filter', { 'filter name': collectionName });
+    window.location.href =
+      '{{ section.settings.collection.url }}/collections/חנות-קפה?' + filterName + '=' + collectionName;
+  }
 </script>

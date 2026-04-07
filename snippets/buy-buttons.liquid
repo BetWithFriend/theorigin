@@ -149,7 +149,7 @@
           {% render 'quantity-counter', product: product, field_id: 'quantity' %}
         </div>
 
-        {% comment %} {%- assign vendor_downcase = product.vendor | downcase -%} {% endcomment %}
+        {%- assign vendor_downcase = product.vendor | downcase -%}
         {% comment %}
           {%- if vendor_downcase contains 'canopy' -%}
             <div style="font-size: 18px; text-align: center; margin-top: 10px; font-weight: bold; width: 100%; color: #228334;">
@@ -157,6 +157,14 @@
             </div>
           {%- endif -%}
         {% endcomment %}
+
+        {% comment %} {%- if vendor_downcase contains 'youneedcoffee' -%} {% endcomment %}
+        <div
+          class="pdp-shipping-delay-message"
+        >
+          שימו לב: רוב בתי הקלייה בפגרת חג, והמשלוחים יגיעו רק לאחר סיום החג. עדיין ניתן לבצע הזמנות.
+        </div>
+        {% comment %} {%- endif -%} {% endcomment %}
 
         {% if min_order_for_free_shipping %}
           <!--

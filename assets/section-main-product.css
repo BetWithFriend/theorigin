@@ -1721,6 +1721,15 @@ a.product__text {
   text-align: right;
 }
 
+.pdp-shipping-delay-message {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+  width: 100%;
+  color: #228334;
+}
+
 @media screen and (min-width: 750px) {
   .bg-strip-text-wrapper {
     display: none;
@@ -1728,6 +1737,12 @@ a.product__text {
 
   .product-tastes-details-wrapper-outer {
     background-color: transparent;
+  }
+
+  .pdp-shipping-delay-message {
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-align: right;
   }
 }
 

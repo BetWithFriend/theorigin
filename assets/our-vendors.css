@@ -39,46 +39,40 @@
 }
 
 .our-vendors-logo-wrapper {
-    /* padding: 16px 24px; */
     margin-top: 16px;
     margin-bottom: 16px;
     width: 100%;
-    /* overflow: hidden;
-    position: relative; */
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-}
-
-.our-vendors-logo-wrapper>.our-vendor-container {
-    flex: 0 0 calc(25% - 12px);
-    max-width: calc(25% - 12px);
-    display: flex;
-    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    /* background-color: #F4F3F0; */
 }
 
 .our-vendors-scroll-track {
     display: flex;
-    align-items: center;
-    /* gap: 16px; */
-    gap: 0px;
-    animation: scrollRightToLeft 45s linear infinite;
     width: max-content;
+    animation: scrollVendors 40s linear infinite;
 }
 
 .our-vendors-scroll-track:hover {
     animation-play-state: paused;
 }
 
-@keyframes scrollRightToLeft {
-    0% {
-        transform: translateX(calc(100% - 420px));
-    }
+.our-vendors-logo-group {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding-right: 32px;
+    flex: 0 0 auto;
+}
 
+@keyframes scrollVendors {
+    0% {
+        transform: translateX(0);
+    }
     100% {
-        transform: translateX(-33.333%);
+        transform: translateX(-50%);
     }
 }
 
@@ -123,61 +117,7 @@
     flex-direction: column;
 }
 
-/* Mobile-only: show 3 logos at a time, rotating every 2s (JS-enhanced). */
-.our-vendors-rotator {
-    display: none;
-    width: 100%;
-    margin-top: 16px;
-    margin-bottom: 16px;
-    /* Reserve space so the section never "breathes" during scroll. */
-    min-height: 80px;
-}
-
-.our-vendors-rotator__row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    opacity: 1;
-    transition: opacity 350ms ease;
-    /* Keep fades cheap (composited) and reduce scroll jank on mobile. */
-    will-change: opacity;
-    transform: translateZ(0);
-}
-
-.our-vendors-rotator__row.is-fading {
-    opacity: 0;
-}
-
-/* Make the 3 slots share the row evenly on mobile. */
-.our-vendors-rotator__slot {
-    flex: 1 1 0;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    cursor: pointer;
-    /* Lock slot box size so swapping logos can't shift layout while scrolling. */
-    height: 80px;
-    max-width: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Ensure rotator images scale within fixed slot box on mobile. */
-.our-vendors-rotator__slot .our-vendor-logo-img {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    max-height: none;
-    object-fit: contain;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .our-vendors-rotator__row {
-        transition: none;
-    }
-}
+/* Rotator removed. Marquee runs consistently on mobile. */
 
 .product-description-divider {
     display: flex;
@@ -220,10 +160,6 @@
 }
 
 @media screen and (min-width: 769px) {
-    .our-vendors-scroll-track {
-        gap: 24px;
-    }
-
     .our-vendor-logo {
         align-items: center;
         justify-content: center;
@@ -241,40 +177,13 @@
     }
 
     .our-vendors-logo-wrapper {
-        min-width: 750px;
-        flex-wrap: nowrap;
-        gap: 12px;
-    }
-
-    .our-vendors-logo-wrapper>.our-vendor-container {
-        flex: 0 0 auto;
-        max-width: none;
+        background-color: transparent;
     }
 }
 
 @media screen and (max-width: 768px) {
-
-    /* Force exactly 3 vendors per row on mobile. */
-    .our-vendors-logo-wrapper {
-        gap: 16px;
-    }
-
-    /* .our-vendors-logo-wrapper>.our-vendor-container {
-        flex: 0 0 calc((100% - 32px) / 4);
-        max-width: calc((100% - 32px) / 4);
-    } */
-
-    /* Only switch to rotator after JS adds the enhanced class. */
-    .our-vendors-wrapper.our-vendors--enhanced .our-vendors-logo-wrapper {
-        display: none;
-    }
-
-    .our-vendors-wrapper.our-vendors--enhanced .our-vendors-rotator {
-        display: block;
-    }
-
-    .our-vendor-logo-img {
-        max-width: 60%;
-        max-height: 60%;
+    .our-vendor-logo {
+        width: 64px;
+        height: 64px;
     }
 }
