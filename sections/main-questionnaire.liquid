@@ -390,50 +390,33 @@
     </div>
   </div>
   <div class="questionnaire-icons-wrapper" id="questionnaireResultsStep">
-    <div class="questionnaire-title-wrapper">
-      <div class="questionnaire-close-icon" onclick="closeForm()">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <line
-            x1="6"
-            y1="6"
-            x2="18"
-            y2="18"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round" />
-          <line
-            x1="18"
-            y1="6"
-            x2="6"
-            y2="18"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round" />
-        </svg>
+    <div class="questionnaire-header">
+      <button class="questionnaire-start-over" onclick="window.location.reload()">התחל חדש</button>
+      <div class="questionnaire-logo">
+        <img src="{{ 'logo.png' | asset_url }}" alt="Origin Logo" width="100" height="auto">
       </div>
-      <div class="questionnaire-title">התוצאות שלך</div>
-      <div class="questionnaire-back-icon-wrapper"></div>
     </div>
 
-    <div class="q-carousel-wrapper">
+    <div class="questionnaire-results-title-wrapper">
+      <div class="results-title-main">המארז שלך <span id="q-carousel-counter">(1/5)</span></div>
+      <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 1L6 6L11 1" stroke="black" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="q-carousel-container">
       <button class="q-carousel-arrow q-carousel-arrow--prev" id="qCarouselPrev" aria-label="הקודם" type="button">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
+
       <div class="q-carousel-viewport" id="qCarouselViewport">
         <div class="q-carousel-track" id="Slider-questionnaireResultsGrid">
           <!-- Product cards injected here by JS -->
         </div>
       </div>
+
       <button class="q-carousel-arrow q-carousel-arrow--next" id="qCarouselNext" aria-label="הבא" type="button">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -441,53 +424,76 @@
       </button>
     </div>
 
-    <div class="questionnaire-qty-selector-wrapper">
-      <div class="questionnaire-qty-label">חבילות קפה במארז</div>
-      <div class="questionnaire-qty-options">
-        <div class="qty-option">3</div>
-        <div class="qty-option selected">5</div>
-        <div class="qty-option">7 (10% הנחה)</div>
+    <div class="questionnaire-selection-info">
+      <span>הבלנד של קנופי</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="8" cy="8" r="7.5" stroke="#9A9A9A"/>
+        <path d="M8 7V11M8 5V5.01" stroke="#9A9A9A" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="questionnaire-footer-content">
+      <div class="questionnaire-qty-selector-wrapper">
+        <div class="questionnaire-qty-label">חבילות קפה במארז</div>
+        <div class="questionnaire-qty-options">
+          <div class="qty-option">3</div>
+          <div class="qty-option selected">5</div>
+          <div class="qty-option">7 (10% הנחה)</div>
+        </div>
       </div>
-    </div>
 
-    <div class="questionnaire-price-wrapper">
-      <div class="price-label-group">
-        <span class="price-label-main">סה״כ לתשלום</span>
-        <span class="price-label-sub">(כולל משלוח)</span>
+      <div class="questionnaire-checkout-section">
+        <div class="questionnaire-price-wrapper">
+          <div class="price-label-group">
+            <span class="price-label-main">סה״כ לתשלום</span>
+            <span class="price-label-sub">(כולל משלוח)</span>
+          </div>
+          <div class="price-values-group">
+            <span class="price-current" id="q-footer-price"></span>
+            <span class="price-compare" id="q-footer-price-compare"></span>
+          </div>
+        </div>
+
+        <div class="questionnaire-add-to-cart-wrapper">
+          <form
+            id="q-footer-atc-form"
+            class="form product-form--questionnaire js-quick-add-form"
+            method="post"
+            action="/cart/add"
+            novalidate
+            data-type="add-to-cart-form"
+          >
+            <input type="hidden" name="id" id="q-footer-variant-id" value="">
+            <button
+              type="submit"
+              name="add"
+              id="q-footer-atc-btn"
+              class="questionnaire-add-btn"
+            >
+              <span id="q-footer-atc-label">קנייה מהירה</span>
+            </button>
+          </form>
+        </div>
       </div>
-      <div class="price-values-group">
-        <span class="price-current" id="q-footer-price"></span>
-        <span class="price-compare" id="q-footer-price-compare"></span>
+
+      <div class="questionnaire-secure-info-wrapper">
+        <div class="payment-icons">
+          <img src="{{ 'payment-mastercard.webp' | asset_url }}" alt="Mastercard" width="24" height="16">
+          <img src="{{ 'payment-google-pay.webp' | asset_url }}" alt="Google Pay" width="24" height="16">
+          <img src="{{ 'payment-visa.webp' | asset_url }}" alt="Visa" width="24" height="16">
+          <img src="{{ 'payment-apple-pay.webp' | asset_url }}" alt="Apple Pay" width="24" height="16">
+          <img src="{{ 'payment-paypal.png' | asset_url }}" alt="PayPal" width="24" height="16">
+          <img src="{{ 'payment-max.webp' | asset_url }}" alt="Max" width="24" height="16">
+        </div>
+        <div class="questionnaire-secure-icons">
+          <img src="{{ 'secure_buy.png' | asset_url }}" alt="Secure Buy" width="16" height="16">
+          <div class="secure-text">רכישה מאובטחת</div>
+        </div>
       </div>
-    </div>
 
-    <div class="questionnaire-add-to-cart-wrapper">
-      <form
-        id="q-footer-atc-form"
-        class="form product-form--questionnaire js-quick-add-form"
-        method="post"
-        action="/cart/add"
-        novalidate
-        data-type="add-to-cart-form"
-      >
-        <input type="hidden" name="id" id="q-footer-variant-id" value="">
-        <button
-          type="submit"
-          name="add"
-          id="q-footer-atc-btn"
-          class="questionnaire-add-btn"
-        >
-          <span id="q-footer-atc-label">קנייה מהירה</span>
-        </button>
-      </form>
-    </div>
-
-    <div class="questionnaire-secure-icons">
-      <div class="secure-text">רכישה מאובטחת</div>
-    </div>
-
-    <div class="questionnaire-btn-wrapper">
-      <button class="questionnaire-select-btn" onclick="window.location.href='/collections/all'">לכל הקטלוג</button>
+      <div class="questionnaire-btn-wrapper catalog-btn-wrapper">
+        <button class="questionnaire-select-btn" onclick="window.location.href='/collections/all'">לכל הקטלוג</button>
+      </div>
     </div>
   </div>
 </div>
@@ -838,6 +844,13 @@
     // Helper: render up to `qty` slides and (re-)init the carousel
     function renderCarousel(products, qty) {
       const shown = products.slice(0, qty);
+
+      // Update counter text
+      const counterEl = document.getElementById('q-carousel-counter');
+      if (counterEl) {
+        counterEl.textContent = `(1/${shown.length})`;
+      }
+
       if (shown.length > 0) {
         resultsGrid.innerHTML = shown
           .map((product) => `<div class="q-carousel-slide">${product.html_card}</div>`)
@@ -888,6 +901,7 @@
 
       // Show results step
       resultsStep.classList.add('active');
+      mainWrapper.classList.add('results-step-visible');
 
       // Scroll to top of results?
       resultsStep.scrollIntoView({ behavior: 'smooth' });
@@ -953,6 +967,12 @@
     function syncFooter(index) {
       const product = products && products[index];
       if (!product) return;
+
+      // Update counter
+      const counterEl = document.getElementById('q-carousel-counter');
+      if (counterEl) {
+        counterEl.textContent = `(${index + 1}/${products.length})`;
+      }
 
       // Bundle price (all products × qty)
       updateBundlePrice();

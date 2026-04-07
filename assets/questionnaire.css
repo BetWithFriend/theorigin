@@ -2,19 +2,21 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    /* On top of the bot */
     z-index: 10000;
-    background-color: #FAFCFE;
+    background-color: #F9F9F9;
     top: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    /* display: none; */
 }
 
 .questionnaire-wrapper.hidden {
     display: none;
+}
+
+.questionnaire-wrapper.results-step-visible {
+    justify-content: flex-start;
 }
 
 body.questionnaire-wrapper-open {
@@ -609,23 +611,91 @@ body.questionnaire-wrapper-open {
     gap: 4px;
 }
 
-/* ── Product Carousel ───────────────────────────────────── */
-.q-carousel-wrapper {
-    display: flex;
-    align-items: center;
+/* Results Step Updated Styles */
+#questionnaireResultsStep {
     width: 100%;
-    gap: 8px;
-    padding: 0 4px;
+    padding: 0;
+    background-color: #F9F9F9;
+
 }
 
-.q-carousel-viewport {
-    /* flex: 1; */
-    /* overflow: hidden; */
-    border-radius: 16px;
+.questionnaire-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    border-bottom: 1px solid #E3E0DA;
+}
+
+.questionnaire-start-over {
+    background: transparent;
+    border: 1px solid #1C201D;
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.questionnaire-logo {
+    display: flex;
+    align-items: center;
+}
+
+.questionnaire-results-title-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* width: 80%; */
+    gap: 8px;
+    padding: 24px 0 16px;
+    cursor: pointer;
+}
+
+.results-title-main {
+    font-family: 'Assistant', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1C201D;
+}
+
+.q-carousel-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 40px;
+}
+
+.q-carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: #FFFFFF;
+    border: 1px solid #E3E0DA;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+#qCarouselPrev {
+    left: 10px;
+}
+
+#qCarouselNext {
+    right: 10px;
+}
+
+.q-carousel-viewport {
+    width: 100%;
+    overflow: hidden;
 }
 
 .q-carousel-track {
@@ -641,56 +711,130 @@ body.questionnaire-wrapper-open {
     box-sizing: border-box;
 }
 
-/* Strip the <li> grid styles the html_card wrapper adds */
-.q-carousel-slide .grid__item {
-    list-style: none;
+.questionnaire-product-card {
+    background: transparent;
     padding: 0;
-    margin: 0;
-    width: 100%;
+    border: none;
 }
 
-.q-carousel-slide--empty {
+.questionnaire-product-image {
+    max-height: 300px;
+    filter: drop-shadow(0px 20px 30px rgba(0, 0, 0, 0.1));
+}
+
+.questionnaire-selection-info {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 32px;
+    gap: 8px;
+    margin-top: 16px;
     font-family: 'Assistant', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     color: #555555;
 }
 
-/* Arrows */
-.q-carousel-arrow {
-    flex-shrink: 0;
-    width: 36px;
-    height: 36px;
-    border: 1px solid #E3E0DA;
-    border-radius: 50%;
-    background: #FAFCFE;
-    color: #1C201D;
-    cursor: pointer;
+.questionnaire-footer-content {
+    width: 100%;
+    padding: 24px 20px;
+    background: #FFFFFF;
+    margin-top: 24px;
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0px -5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.questionnaire-qty-label {
+    text-align: center;
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    color: #555555;
+    margin-bottom: 12px;
+}
+
+.qty-option {
+    border: 1px solid #1C201D;
+    border-radius: 100px;
+    /* Capsule shape */
+    padding: 10px 24px;
+    min-width: 50px;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.qty-option.selected {
+    background: #1C201D;
+    color: #FFFFFF;
+}
+
+.questionnaire-checkout-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+.questionnaire-price-wrapper {
+    margin-bottom: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.price-label-main {
+    font-size: 14px;
+}
+
+.price-current {
+    font-size: 24px;
+}
+
+.questionnaire-add-to-cart-wrapper {
+    width: 100%;
+}
+
+.questionnaire-add-btn {
+    border-radius: 8px;
+    padding: 14px;
+    font-weight: 700;
+}
+
+.questionnaire-secure-info-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.payment-icons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.questionnaire-secure-icons {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 0;
-    transition: background 0.2s, opacity 0.2s;
+    gap: 6px;
+    margin-top: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555555;
 }
 
-.q-carousel-arrow:disabled {
-    opacity: 0.3;
-    cursor: default;
+.payment-icons img {
+    height: 16px;
+    width: auto;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.8;
 }
 
-.q-carousel-arrow:not(:disabled):hover {
-    background: #F4F3F0;
+.questionnaire-secure-icons img {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
 }
 
-
-/* Shared qty selector below carousel */
-#questionnaireResultsStep .questionnaire-qty-selector-wrapper {
-    width: 100%;
-    margin: 8px 0 16px;
-    padding: 12px 16px;
-    border-top: 1px solid #E3E0DA;
-    border-bottom: 1px solid #E3E0DA;
+.catalog-btn-wrapper {
+    margin-top: 32px;
 }
