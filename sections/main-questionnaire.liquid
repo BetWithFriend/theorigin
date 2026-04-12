@@ -935,14 +935,18 @@
       let sumCompareCents = 0;
       products.forEach(function (p) {
         sumCents += p.price_cents || 0;
-        sumCompareCents += p.compare_at_price_cents || p.price_cents || 0;
+        sumCompareCents += p.price_cents || 0;
       });
 
       const avgCents = sumCents / n;
       const avgCompareCents = sumCompareCents / n;
 
-      const totalCents = Math.round(avgCents * qty);
+      let totalCents = Math.round(avgCents * qty);
       const totalCompareCents = Math.round(avgCompareCents * qty);
+
+      if (qty === 7) {
+        totalCents = Math.round(totalCents * 0.9);
+      }
 
       const formatMoney = function (cents) {
         return '\u20AA' + (cents / 100).toFixed(0);
@@ -998,9 +1002,13 @@
     function goTo(index) {
       current = Math.max(0, Math.min(index, slides.length - 1));
 
-      // Show only the active slide
+      // RTL centered layout: formula is (current * slideWidthPct) - (50 - slideWidthPct / 2)
+      const slideWidthPct = 70;
+      const offsetPct = current * slideWidthPct - (50 - slideWidthPct / 2);
+      track.style.transform = `translateX(${offsetPct}%)`;
+
       slides.forEach((slide, i) => {
-        slide.style.display = i === current ? '' : 'none';
+        slide.classList.toggle('active', i === current);
       });
 
       // Update arrow disabled state (re-query after possible cloneNode replacement)
@@ -1041,7 +1049,7 @@
       'touchend',
       (e) => {
         const diff = touchStartX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+        if (Math.abs(diff) > 40) goTo(diff < 0 ? current + 1 : current - 1);
       },
       { passive: true }
     );

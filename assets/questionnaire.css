@@ -494,6 +494,10 @@ body.questionnaire-wrapper-open {
 .questionnaire-qty-selector-wrapper {
     width: 100%;
     margin: 16px 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .questionnaire-qty-label {
@@ -538,7 +542,7 @@ body.questionnaire-wrapper-open {
 
 .price-label-group {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-end;
     gap: 2px;
 }
@@ -667,7 +671,10 @@ body.questionnaire-wrapper-open {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 40px;
+    padding: 0;
+    /* Remove side padding to let slides bleed if needed, or keep it for arrows */
+    overflow: hidden;
+    /* Prevent horizontal scroll on body */
 }
 
 .q-carousel-arrow {
@@ -695,20 +702,37 @@ body.questionnaire-wrapper-open {
 
 .q-carousel-viewport {
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
+    /* Show neighbors */
+    position: relative;
 }
 
 .q-carousel-track {
     display: flex;
-    flex-direction: row;
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    flex-direction: row-reverse;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
+    align-items: center;
 }
 
 .q-carousel-slide {
-    min-width: 100%;
-    width: 100%;
+    min-width: 70%;
+    width: 70%;
     box-sizing: border-box;
+    opacity: 0.3;
+    /* Adjusted for visible neighbors */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: scale(0.85);
+    /* "Background" effect */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.q-carousel-slide.active {
+    opacity: 1;
+    transform: scale(1);
 }
 
 .questionnaire-product-card {
