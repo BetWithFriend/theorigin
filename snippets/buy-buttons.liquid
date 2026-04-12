@@ -159,11 +159,13 @@
         {% endcomment %}
 
         {% comment %} {%- if vendor_downcase contains 'youneedcoffee' -%} {% endcomment %}
-        <div
-          class="pdp-shipping-delay-message"
-        >
-          שימו לב: רוב בתי הקלייה בפגרת חג, והמשלוחים יגיעו רק לאחר סיום החג. עדיין ניתן לבצע הזמנות.
-        </div>
+        {% comment %}
+          <div
+            class="pdp-shipping-delay-message"
+          >
+            שימו לב: רוב בתי הקלייה בפגרת חג, והמשלוחים יגיעו רק לאחר סיום החג. עדיין ניתן לבצע הזמנות.
+          </div>
+        {% endcomment %}
         {% comment %} {%- endif -%} {% endcomment %}
 
         {% if min_order_for_free_shipping %}

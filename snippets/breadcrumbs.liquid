@@ -25,6 +25,8 @@
       {% assign collectionName = 'tostato-collection' %}
     {% elsif page_vendor == 'brewbrothers' %}
       {% assign collectionName = 'brew-brothers-collection' %}
+    {% elsif page_vendor == 'uru' %}
+      {% assign collectionName = 'uru-collection' %}
     {% endif %}
     <a class="vendor-link" href="/collections/{{ collectionName }}">{{ product.vendor | upcase }}</a>
 
@@ -47,7 +49,9 @@
     padding: 16px;
   }
   .vendor-link {
-    color: inherit; /* Uses the same color as parent element */
-    text-decoration: underline; /* Removes underline */
+    color: inherit;
+    /* Uses the same color as parent element */
+    text-decoration: underline;
+    /* Removes underline */
   }
 </style>
