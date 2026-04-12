@@ -20,8 +20,7 @@
     h1.vendor-name-title {
       font-size: 16px;
       font-weight: 400;
-      margin: 0;
-      margin-top: 16px;
+      margin: 16px 0 0;
     }
   </style>
 
@@ -30,8 +29,7 @@
       id="vendorVideo"
       controls
       class="vendor-page-vendor-video"
-      poster="{{ selected_vendor.vendor_video_poster | file_url }}"
-    >
+      poster="{{ selected_vendor.vendor_video_poster | file_url }}">
       <source src="{{ selected_vendor.vendor_video | file_url }}" type="video/mp4">
     </video>
 
@@ -56,16 +54,20 @@
               בית הקלייה Tostato
             {% when 'Brew Brothers' %}
               בית הקלייה Brew Brothers
+            {% when 'Uru' %}
+              בית הקלייה Uru
             {% else %}
               קלייה לא ידועה
           {% endcase %}
         </h1>
         <div class="vendor-page-title-wrapper" dir="rtl">
           <div class="vendor-page-vendor-name">
-            הקמה: <span style="color:#1C201D">{{ selected_vendor.vendor_year_establishment }}</span>
+            הקמה:
+            <span style="color:#1C201D">{{ selected_vendor.vendor_year_establishment }}</span>
           </div>
           <div class="vendor-page-vendor-location">
-            מיקום: <span style="color:#1C201D">{{ selected_vendor.vendor_location }}</span>
+            מיקום:
+            <span style="color:#1C201D">{{ selected_vendor.vendor_location }}</span>
           </div>
         </div>
       </div>
@@ -98,7 +100,7 @@
 
   <div id="shopify-section-featured-collection">
     {% assign collection = collections['blooms-collection'].products | json %}
-    {% assign product_taste = collection.products %}
+  {% assign product_taste = collection.products %}
     {% comment %} {% render 'taste-filter', tastes: product_taste %}  {% endcomment %}
     {% section 'featured-collection' %}
   </div>
@@ -133,7 +135,8 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 100%; /* Prevent expanding beyond its container */
+    max-width: 100%;
+    /* Prevent expanding beyond its container */
     gap: 16px;
   }
 
@@ -143,23 +146,28 @@
   }
 
   /* --- NEW ORDERING LOGIC --- */
-  /* Using negative order values to place controlled items first.
-    Any new, un-styled elements will default to order: 0 and appear last. */
 
-  .vendor-page-logo-wrapper {
-    order: -3; /* First */
+
+  /*
+   Using negative order values to place controlled items first.
+   Any new, un-styled elements will default to order: 0 and appear last.
+*/.vendor-page-logo-wrapper {
+    order: -3;
+    /* First */
     width: 100%;
     text-align: center;
   }
 
   .vendor-page-vendor-video {
-    order: -2; /* Second */
+    order: -2;
+    /* Second */
     width: 100%;
     height: auto;
   }
 
   .vendor-page-description-wrapper {
-    order: -1; /* Third */
+    order: -1;
+    /* Third */
     width: 100%;
   }
   /* --- END NEW ORDERING LOGIC --- */
@@ -178,7 +186,8 @@
 
   .vendor-page-vendor-name,
   .vendor-page-vendor-location {
-    font-family: 'Assistant', sans-serif;
+    font-family: 'Assistant'
+    , sans-serif;
     font-weight: 300;
     font-size: 14px;
     color: #555555;
@@ -197,7 +206,8 @@
   }
 
   .vendor-page-description-title {
-    font-family: 'Assistant', sans-serif;
+    font-family: 'Assistant'
+    , sans-serif;
     font-weight: 700;
     font-size: 20px;
     color: #555555;
@@ -205,7 +215,8 @@
   }
 
   .vendor-page-description {
-    font-family: 'Assistant', sans-serif;
+    font-family: 'Assistant'
+    , sans-serif;
     font-weight: 400;
     font-size: 16px;
     line-height: 25px;
@@ -222,7 +233,8 @@
     background: linear-gradient(to top, #e6e3de 80%, transparent);
     padding: 20px 0;
     text-align: right;
-    font-family: 'Assistant', sans-serif;
+    font-family: 'Assistant'
+    , sans-serif;
     font-size: 16px;
     cursor: pointer;
     color: #1c201d;
@@ -263,14 +275,13 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 15%; /* Fade out on the bottom 10% of the div */
-      background: linear-gradient(
-        to top,
-        #e6e3de 0%,
-        /* Fully opaque at the very bottom */ #e6e3de00 100% /* Fully transparent at the top of the fade area */
-      );
-      pointer-events: none; /* Allows interaction with content beneath the overlay */
-      border-bottom-left-radius: 0.75rem; /* Match parent container's rounded corners */
+      height: 15%;
+      /* Fade out on the bottom 10% of the div */
+      background: linear-gradient(to top, #e6e3de 0%, /* Fully opaque at the very bottom */ #e6e3de00 100% /* Fully transparent at the top of the fade area */);
+      pointer-events: none;
+      /* Allows interaction with content beneath the overlay */
+      border-bottom-left-radius: 0.75rem;
+      /* Match parent container's rounded corners */
       border-bottom-right-radius: 0.75rem;
     }
   }
@@ -286,7 +297,8 @@
     }
 
     .vendor-page-vendor-video {
-      order: initial; /* Reset order for desktop */
+      order: initial;
+      /* Reset order for desktop */
       width: 58%;
       align-self: stretch;
     }
@@ -300,7 +312,8 @@
     .vendor-page-content-wrapper {
       display: flex;
       flex-direction: column;
-      order: initial; /* Reset order for desktop */
+      order: initial;
+      /* Reset order for desktop */
       width: 40%;
       gap: 24px;
       direction: rtl;
@@ -308,7 +321,8 @@
 
     .vendor-page-logo-wrapper,
     .vendor-page-description-wrapper {
-      order: initial; /* Reset order for desktop */
+      order: initial;
+      /* Reset order for desktop */
       width: 100%;
     }
 

@@ -250,6 +250,7 @@
               {% assign elijahscoffee_shipping = 35 %}
               {% assign tostato_shipping = 35 %}
               {% assign brew_brother_shipping = 35 %}
+              {% assign uru_shipping = 35 %}
               {% assign event_shipping = 0 %}
 
               {%- comment -%} Free shipping thresholds in cents {%- endcomment -%}
@@ -261,6 +262,7 @@
               {% assign elijahscoffee_free_shipping_threshold = 30000 %}
               {% assign tostato_free_shipping_threshold = 25000 %}
               {% assign brew_brother_free_shipping_threshold = 30000 %}
+              {% assign uru_free_shipping_threshold = 25000 %}
               {% assign event_free_shipping_threshold = 0 %}
 
               {%- comment -%} Calculate vendor totals {%- endcomment -%}
@@ -382,6 +384,12 @@
                       {%- assign vendor_shipping_cost = brew_brother_shipping -%}
                       {%- assign vendor_free_threshold = brew_brother_free_shipping_threshold -%}
                       {%- if regular_items_total >= brew_brother_free_shipping_threshold -%}
+                        {%- assign vendor_qualifies_free_shipping = true -%}
+                      {%- endif -%}
+                    {%- elsif vendor == 'uru' -%}
+                      {%- assign vendor_shipping_cost = uru_shipping -%}
+                      {%- assign vendor_free_threshold = uru_free_shipping_threshold -%}
+                      {%- if regular_items_total >= uru_free_shipping_threshold -%}
                         {%- assign vendor_qualifies_free_shipping = true -%}
                       {%- endif -%}
                     {%- endif -%}
