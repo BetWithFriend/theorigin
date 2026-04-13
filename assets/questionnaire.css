@@ -95,6 +95,22 @@ body.questionnaire-wrapper-open {
     display: flex;
 }
 
+.questionnaire-loader-wrapper.questionnaire-init-loader {
+    display: none;
+}
+
+.questionnaire-loader-wrapper.questionnaire-init-loader .questionnaire-loader-text {
+    display: none;
+}
+
+.questionnaire-wrapper.initializing .questionnaire-icons-wrapper {
+    display: none;
+}
+
+.questionnaire-wrapper.initializing .questionnaire-loader-wrapper.questionnaire-init-loader {
+    display: flex;
+}
+
 .questionnaire-selection-wrapper {
     width: 320px;
     height: 80px;
@@ -500,36 +516,6 @@ body.questionnaire-wrapper-open {
     flex-direction: column;
 }
 
-.questionnaire-qty-label {
-    font-family: 'Assistant', sans-serif;
-    font-size: 14px;
-    color: #1C201D;
-    margin-bottom: 8px;
-    text-align: center;
-}
-
-.questionnaire-qty-options {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-}
-
-.qty-option {
-    border: 1px solid #1C201D;
-    border-radius: 20px;
-    padding: 8px 16px;
-    font-family: 'Assistant', sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-    background: transparent;
-    color: #1C201D;
-}
-
-.qty-option.selected {
-    background: #1C201D;
-    color: #FFFFFF;
-}
-
 .questionnaire-price-wrapper {
     display: flex;
     flex-direction: row;
@@ -618,29 +604,55 @@ body.questionnaire-wrapper-open {
 /* Results Step Updated Styles */
 #questionnaireResultsStep {
     width: 100%;
+    max-width: 100%;
     padding: 0;
     background-color: #F9F9F9;
-
+    flex: 1 1 auto;
+    /* min-height: 0; */
 }
 
-.questionnaire-header {
-    display: flex;
+#questionnaireResultsStep .q-carousel-container {
+    padding: 4px 0 0;
+    box-sizing: border-box;
+}
+
+/* Results step header — Figma: logo | centered title | start over */
+#questionnaireResultsStep .questionnaire-header--results {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
     width: 100%;
-    padding: 16px 20px;
+    padding: 14px 16px;
+    min-height: 52px;
     background: #FFFFFF;
     border-bottom: 1px solid #E3E0DA;
+    box-sizing: border-box;
+}
+
+#questionnaireResultsStep .questionnaire-header__start {
+    justify-self: start;
+}
+
+#questionnaireResultsStep .questionnaire-header__center {
+    justify-self: center;
+    text-align: center;
+    min-width: 0;
+}
+
+#questionnaireResultsStep .questionnaire-header__end {
+    justify-self: end;
 }
 
 .questionnaire-start-over {
     background: transparent;
-    border: 1px solid #1C201D;
-    border-radius: 4px;
-    padding: 4px 12px;
+    border: none;
+    padding: 6px 4px;
     font-family: 'Assistant', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 400;
+    color: #555555;
+    text-decoration: underline;
+    text-underline-offset: 3px;
     cursor: pointer;
 }
 
@@ -649,20 +661,24 @@ body.questionnaire-wrapper-open {
     align-items: center;
 }
 
-.questionnaire-results-title-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 24px 0 16px;
-    cursor: pointer;
+#questionnaireResultsStep .questionnaire-logo img {
+    display: block;
+    max-height: 28px;
+    width: auto;
 }
 
 .results-title-main {
+    margin: 0;
     font-family: 'Assistant', sans-serif;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 700;
     color: #1C201D;
+    line-height: 1.25;
+}
+
+.results-title-counter {
+    font-weight: 600;
+    color: #555555;
 }
 
 .q-carousel-container {
@@ -672,24 +688,30 @@ body.questionnaire-wrapper-open {
     align-items: center;
     justify-content: center;
     padding: 0;
-    /* Remove side padding to let slides bleed if needed, or keep it for arrows */
-    overflow: hidden;
-    /* Prevent horizontal scroll on body */
+    /* Neighbor slides peek inside the viewport; clipping happens on .q-carousel-viewport only */
+    overflow: visible;
 }
 
 .q-carousel-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     background: #FFFFFF;
-    border: 1px solid #E3E0DA;
+    border: 1px solid #D8D8D8;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 10;
+    color: #6B6B6B;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.q-carousel-arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
 }
 
 #qCarouselPrev {
@@ -702,29 +724,30 @@ body.questionnaire-wrapper-open {
 
 .q-carousel-viewport {
     width: 100%;
-    overflow: visible;
-    /* Show neighbors */
+    overflow: hidden;
     position: relative;
+    /* Isolate from page RTL so slide order + translate math match (first slide on the left). */
+    direction: ltr;
 }
 
 .q-carousel-track {
     display: flex;
-    width: 100%;
-    flex-direction: row-reverse;
+    width: max-content;
+    min-width: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
     align-items: center;
 }
 
 .q-carousel-slide {
-    min-width: 70%;
-    width: 70%;
+    /* Width set in JS from viewport (see Q_CAROUSEL_SLIDE_FRAC) — % of track ≠ % of viewport */
+    flex: 0 0 auto;
     box-sizing: border-box;
-    opacity: 0.3;
-    /* Adjusted for visible neighbors */
+    opacity: 0.42;
     transition: opacity 0.5s ease, transform 0.5s ease;
-    transform: scale(0.85);
-    /* "Background" effect */
+    transform: scale(0.88);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -750,43 +773,109 @@ body.questionnaire-wrapper-open {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    margin-top: 16px;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 0 12px;
     font-family: 'Assistant', sans-serif;
     font-size: 14px;
+    font-weight: 500;
     color: #555555;
+}
+
+.questionnaire-selection-info__label {
+    text-align: center;
+}
+
+.questionnaire-selection-info__hint {
+    display: inline-flex;
+    flex-shrink: 0;
+    opacity: 0.85;
 }
 
 .questionnaire-footer-content {
     width: 100%;
-    padding: 24px 20px;
+    padding: 24px 20px 28px;
     background: #FFFFFF;
-    margin-top: 24px;
-    border-radius: 24px 24px 0 0;
-    box-shadow: 0px -5px 15px rgba(0, 0, 0, 0.05);
+    margin-top: 20px;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0px -4px 20px rgba(0, 0, 0, 0.06);
 }
 
 .questionnaire-qty-label {
     text-align: center;
     font-family: 'Assistant', sans-serif;
     font-size: 14px;
+    font-weight: 500;
     color: #555555;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
+}
+
+.questionnaire-qty-options {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .qty-option {
-    border: 1px solid #1C201D;
-    border-radius: 100px;
-    /* Capsule shape */
-    padding: 10px 24px;
-    min-width: 50px;
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+    cursor: pointer;
+    font: inherit;
+    border: 1.5px solid #1C201D;
+    border-radius: 999px;
+    padding: 10px 18px;
+    min-height: 48px;
+    min-width: 48px;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     text-align: center;
-    transition: all 0.2s;
+    background: #FFFFFF;
+    color: #1C201D;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.qty-option__num {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.qty-option__discount {
+    font-family: 'Assistant', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    color: inherit;
+    opacity: 0.95;
+    white-space: nowrap;
+}
+
+.qty-option--with-discount {
+    padding-inline: 14px;
+    gap: 8px;
 }
 
 .qty-option.selected {
     background: #1C201D;
     color: #FFFFFF;
+    border-color: #1C201D;
+}
+
+.qty-option.selected .qty-option__discount {
+    color: #FFFFFF;
+}
+
+.qty-option:focus-visible {
+    outline: 2px solid #1C201D;
+    outline-offset: 2px;
 }
 
 .questionnaire-checkout-section {
@@ -823,16 +912,20 @@ body.questionnaire-wrapper-open {
 
 .questionnaire-secure-info-wrapper {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
-    margin-top: 24px;
+    margin-top: 20px;
+    width: 100%;
 }
 
 .payment-icons {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .questionnaire-secure-icons {
@@ -840,7 +933,7 @@ body.questionnaire-wrapper-open {
     align-items: center;
     gap: 6px;
     margin-top: 0;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: #555555;
 }
