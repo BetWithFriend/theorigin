@@ -674,11 +674,50 @@ body.questionnaire-wrapper-open {
     font-weight: 700;
     color: #1C201D;
     line-height: 1.25;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .results-title-counter {
     font-weight: 600;
     color: #555555;
+}
+
+.results-title-toggle {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #D8D8D8;
+    border-radius: 50%;
+    background: #FFFFFF;
+    color: #555555;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.results-title-toggle[aria-expanded='true'] svg {
+    transform: rotate(180deg);
+}
+
+.results-bundle-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    color: #555555;
+}
+
+.results-bundle-list__item,
+.results-bundle-list__empty {
+    line-height: 1.35;
 }
 
 .q-carousel-container {
@@ -777,13 +816,60 @@ body.questionnaire-wrapper-open {
     margin-top: 12px;
     padding: 0 12px;
     font-family: 'Assistant', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #555555;
+    min-height: 44px;
 }
 
-.questionnaire-selection-info__label {
-    text-align: center;
+.questionnaire-selection-info__thumbs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.questionnaire-selection-thumb {
+    width: 34px;
+    height: 34px;
+    /* border-radius: 999px; */
+    border: 1px solid #D9D9D9;
+    background: #FFFFFF;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.questionnaire-selection-thumb:hover {
+    border-color: #AFAFAF;
+    transform: translateY(-1px);
+}
+
+.questionnaire-selection-thumb.is-active {
+    border-color: #1C201D;
+    box-shadow: 0 0 0 1px #1C201D;
+}
+
+.questionnaire-selection-thumb:focus-visible {
+    outline: 2px solid #1C201D;
+    outline-offset: 2px;
+}
+
+.questionnaire-selection-thumb__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.questionnaire-selection-thumb__fallback {
+    font-family: 'Assistant', sans-serif;
+    font-size: 12px;
+    line-height: 1;
+    color: #555555;
+    font-weight: 700;
 }
 
 .questionnaire-selection-info__hint {

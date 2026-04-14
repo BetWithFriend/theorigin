@@ -465,29 +465,11 @@
     </div>
 
     <div class="questionnaire-selection-info">
-      <span class="questionnaire-selection-info__label" id="q-selection-info-label">הבלנד של קנופי</span>
-      <span
-        class="questionnaire-selection-info__hint"
-        aria-hidden="true"
-        title="מידע על הבלנד">
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <circle
-            cx="8"
-            cy="8"
-            r="7.5"
-            stroke="#9A9A9A" />
-          <path
-            d="M8 7V11M8 5V5.01"
-            stroke="#9A9A9A"
-            stroke-width="2"
-            stroke-linecap="round" />
-        </svg>
-      </span>
+      <div
+        class="questionnaire-selection-info__thumbs"
+        id="q-selection-info-thumbs"
+        role="tablist"
+        aria-label="מוצרים במארז"></div>
     </div>
 
     <div class="questionnaire-footer-content">
@@ -991,6 +973,23 @@
     document.body.classList.remove('questionnaire-wrapper-open');
 
     // Helper: render up to `qty` slides and (re-)init the carousel
+    function renderBundleList(allProducts, qty) {
+      const listEl = document.getElementById('qBundleList');
+      if (!listEl) return;
+      const shownProducts = allProducts.slice(0, qty);
+      if (!shownProducts.length) {
+        listEl.innerHTML = '<li class="results-bundle-list__empty">אין מוצרים להצגה</li>';
+        return;
+      }
+
+      listEl.innerHTML = shownProducts
+        .map(function (product, index) {
+          const vendorOrTitle = (product.vendor || '').trim() || (product.title || '').trim() || 'תערובת';
+          return '<li class="results-bundle-list__item">' + (index + 1) + '. ' + vendorOrTitle + '</li>';
+        })
+        .join('');
+    }
+
     function renderCarousel(products, qty) {
       const shown = products.slice(0, qty);
 
@@ -1008,6 +1007,7 @@
         resultsGrid.innerHTML =
           '<div class="q-carousel-slide q-carousel-slide--empty">לא נמצאו תוצאות מדוייקות, נסו שנית.</div>';
       }
+      renderBundleList(products, qty);
       initProductCarousel(shown);
     }
 
@@ -1020,6 +1020,7 @@
 
       // Render only the first `initialQty` products
       renderCarousel(products, initialQty);
+      // setupBundleListToggle();
 
       // Wire up qty selector — re-render carousel + price on change
       const qtyWrapper = document.querySelector('.questionnaire-qty-selector-wrapper');
@@ -1077,6 +1078,7 @@
     const slides = Array.from(track.querySelectorAll('.q-carousel-slide'));
     let current = 0;
     const viewport = track.parentElement;
+    const thumbsEl = document.getElementById('q-selection-info-thumbs');
     /** Fraction of viewport width for each slide (rest shows as peek of prev/next). */
     const Q_CAROUSEL_SLIDE_FRAC = 0.56;
 
@@ -1145,6 +1147,49 @@
       }
     }
 
+    function renderSelectionThumbs() {
+      if (!thumbsEl) return;
+
+      thumbsEl.innerHTML = products
+        .map(function (product, index) {
+          const vendorOrTitle = (product.vendor || '').trim() || (product.title || '').trim() || 'תערובת';
+          const image = product.image || '';
+          const isActiveClass = index === current ? ' is-active' : '';
+          const imageMarkup = image
+            ? '<img class="questionnaire-selection-thumb__image" src="' +
+              image +
+              '" alt="' +
+              vendorOrTitle +
+              '" loading="lazy">'
+            : '<span class="questionnaire-selection-thumb__fallback">' + (index + 1) + '</span>';
+
+          return (
+            '<button type="button" class="questionnaire-selection-thumb' +
+            isActiveClass +
+            '" data-index="' +
+            index +
+            '" role="tab" aria-selected="' +
+            (index === current ? 'true' : 'false') +
+            '" aria-label="' +
+            vendorOrTitle +
+            '" title="' +
+            vendorOrTitle +
+            '">' +
+            imageMarkup +
+            '</button>'
+          );
+        })
+        .join('');
+
+      thumbsEl.querySelectorAll('.questionnaire-selection-thumb').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const nextIndex = parseInt(btn.getAttribute('data-index') || '0', 10);
+          if (Number.isNaN(nextIndex)) return;
+          goTo(nextIndex);
+        });
+      });
+    }
+
     function syncFooter(index) {
       const product = products && products[index];
       if (!product) return;
@@ -1155,10 +1200,12 @@
         counterEl.textContent = `(${index + 1}/${products.length})`;
       }
 
-      const blendEl = document.getElementById('q-selection-info-label');
-      if (blendEl) {
-        const vendorOrTitle = (product.vendor || '').trim() || (product.title || '').trim();
-        blendEl.textContent = vendorOrTitle ? 'הבלנד של ' + vendorOrTitle : '';
+      if (thumbsEl) {
+        thumbsEl.querySelectorAll('.questionnaire-selection-thumb').forEach(function (thumb, thumbIndex) {
+          const isActive = thumbIndex === index;
+          thumb.classList.toggle('is-active', isActive);
+          thumb.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
       }
 
       // Bundle price (all products × qty)
@@ -1223,6 +1270,8 @@
       nextBtnOld.parentNode.replaceChild(newNext, nextBtnOld);
       newNext.addEventListener('click', () => goTo(current + 1));
     }
+
+    renderSelectionThumbs();
 
     // Touch / swipe support
     let touchStartX = 0;
