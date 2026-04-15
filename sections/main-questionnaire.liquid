@@ -7,6 +7,7 @@
 <noscript>{{ 'questionnaire.css' | asset_url | stylesheet_tag }}</noscript>
 <noscript>{{ 'component-slider.css' | asset_url | stylesheet_tag }}</noscript>
 <noscript>{{ 'template-collection.css' | asset_url | stylesheet_tag }}</noscript>
+<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
 
 <div class="questionnaire-wrapper" id="questionnaireWrapperDesktop">
   <script>
@@ -41,6 +42,7 @@
             {% comment %} </li> {% endcomment %}
             {%- endcapture -%}
              {% unless product.tags contains 'bundle' %}
+            {%- capture q_product_short_desc -%}{{ product.metafields.custom.short_description }}{%- endcapture -%}
             {
                 "id": {{ product.id }},
                 "title": {{ product.title | json }},
@@ -52,6 +54,10 @@
                 "variantId": {{ product.selected_or_first_available_variant.id }},
                 "available": {{ product.selected_or_first_available_variant.available }},
                 "image": {{ product.featured_image | image_url: width: 600 | json }},
+                "short_description": {{ q_product_short_desc | strip | json }},
+                "description": {{ product.description | strip_html | truncate: 4000 | json }},
+                "description_html": {{ product.description | json }},
+                "url": {{ product.url | json }},
                 "metafields": {
                   "coffee_roast_level": {{ product.metafields.custom.coffee_roast_level | json }},
                   "coffee_prep_methods": {{ product.metafields.custom.coffee_prep_methods }},
@@ -516,7 +522,7 @@
         <div class="questionnaire-add-to-cart-wrapper">
           <form
             id="q-footer-atc-form"
-            class="form product-form--questionnaire js-quick-add-form"
+            class="form product-form--questionnaire"
             method="post"
             action="/cart/add"
             novalidate
@@ -584,6 +590,70 @@
         <button class="questionnaire-select-btn" onclick="window.location.href='/collections/all'">לכל הקטלוג</button>
       </div>
     </div>
+
+    <div
+      id="q-product-detail-modal"
+      class="q-product-modal"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+      aria-labelledby="q-product-modal-title">
+      <div class="q-product-modal__backdrop" tabindex="-1" data-q-product-modal-close></div>
+      <div class="q-product-modal__panel">
+        <button
+          type="button"
+          class="q-product-modal__close"
+          aria-label="סגירה"
+          data-q-product-modal-close>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <div class="q-product-modal__body">
+          <div class="q-product-modal__media">
+            <img
+              id="q-product-modal-image"
+              class="q-product-modal__image"
+              src=""
+              alt=""
+              width="600"
+              height="600">
+          </div>
+          <div class="q-product-modal__content">
+            <h2 id="q-product-modal-title" class="q-product-modal__title"></h2>
+            <p id="q-product-modal-vendor" class="q-product-modal__vendor"></p>
+            <p id="q-product-modal-short" class="q-product-modal__lead" hidden></p>
+            <div id="q-product-modal-chips" class="q-product-modal__chips" hidden></div>
+            <div id="q-product-modal-description-block" class="q-product-modal__description-block" hidden>
+              <h3 class="q-product-modal__section-title">תיאור המוצר</h3>
+              <div
+                id="q-product-modal-description"
+                class="q-product-modal__description rte"
+                dir="rtl"></div>
+            </div>
+            <div class="q-product-modal__actions">
+              <div class="q-product-modal__price-row">
+                <span class="q-product-modal__price-label">מחיר ליחידה</span>
+                <span id="q-product-modal-price" class="q-product-modal__price"></span>
+              </div>
+              <form
+                id="q-product-modal-atc-form"
+                class="form product-form--questionnaire js-quick-add-form"
+                method="post"
+                action="/cart/add"
+                data-type="add-to-cart-form">
+                <input type="hidden" name="id" id="q-product-modal-variant-id" value="">
+                <button type="submit" id="q-product-modal-atc-btn" class="questionnaire-add-btn">
+                  <span id="q-product-modal-atc-label">הוספה לסל</span>
+                </button>
+              </form>
+              <a id="q-product-modal-pdp-link" class="q-product-modal__pdp-link" href="#">לעמוד המוצר המלא</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <div class="lets-be-friends-wrapper ">
@@ -631,6 +701,170 @@
     continueMultipleText: '{{ continue_multiple_js }}',
   };
   const QUESTIONNAIRE_RESULTS_STATE_KEY = 'questionnaireResultsState';
+  let _qModalPreviousFocus = null;
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function normalizeMetaList(val) {
+    if (val == null || val === '') return [];
+    if (Array.isArray(val)) return val.filter(Boolean).map(String);
+    if (typeof val === 'string') return [val];
+    if (typeof val === 'object') {
+      if (Array.isArray(val.value)) return val.value.map(String).filter(Boolean);
+      if (val.value != null && val.value !== '') return [String(val.value)];
+    }
+    return [String(val)];
+  }
+
+  function mergeProductFromCatalog(product) {
+    if (!product) return product;
+    const catalog = window.allProducts;
+    if (!Array.isArray(catalog)) return product;
+    const full = catalog.find(function (p) {
+      return String(p.id) === String(product.id);
+    });
+    /* Session/saved hits may omit fields; overlay catalog row so description/url/metafields resolve. */
+    return full ? Object.assign({}, product, full) : product;
+  }
+
+  function openQuestionnaireProductModal(product) {
+    const merged = mergeProductFromCatalog(product);
+    if (!merged) return;
+
+    const modal = document.getElementById('q-product-detail-modal');
+    if (!modal) return;
+
+    const img = document.getElementById('q-product-modal-image');
+    const titleEl = document.getElementById('q-product-modal-title');
+    const vendorEl = document.getElementById('q-product-modal-vendor');
+    const chipsEl = document.getElementById('q-product-modal-chips');
+    const shortEl = document.getElementById('q-product-modal-short');
+    const descBlock = document.getElementById('q-product-modal-description-block');
+    const descEl = document.getElementById('q-product-modal-description');
+    const priceEl = document.getElementById('q-product-modal-price');
+    const variantInput = document.getElementById('q-product-modal-variant-id');
+    const atcBtn = document.getElementById('q-product-modal-atc-btn');
+    const atcLabel = document.getElementById('q-product-modal-atc-label');
+    const pdpLink = document.getElementById('q-product-modal-pdp-link');
+
+    if (img) {
+      img.src = merged.image || '';
+      img.alt = merged.title || '';
+    }
+    if (titleEl) titleEl.textContent = merged.title || '';
+    if (vendorEl) {
+      vendorEl.textContent = merged.vendor || '';
+      vendorEl.style.display = merged.vendor ? '' : 'none';
+    }
+
+    const shortDesc = (merged.short_description || '').trim();
+    if (shortEl) {
+      shortEl.textContent = shortDesc;
+      shortEl.hidden = !shortDesc;
+    }
+
+    const htmlRaw = (merged.description_html || '').trim();
+    const plainFallback = (merged.description || '').trim();
+    const hasRte = !!htmlRaw;
+    const hasPlainOnly = !hasRte && !!plainFallback;
+    if (descBlock && descEl) {
+      if (hasRte) {
+        descEl.innerHTML = htmlRaw;
+        descEl.classList.add('rte');
+        descBlock.hidden = false;
+      } else if (hasPlainOnly) {
+        descEl.textContent = plainFallback;
+        descEl.classList.remove('rte');
+        descBlock.hidden = false;
+      } else {
+        descEl.innerHTML = '';
+        descEl.classList.remove('rte');
+        descBlock.hidden = true;
+      }
+    }
+
+    if (priceEl) priceEl.textContent = merged.price || '';
+
+    const mf = merged.metafields || {};
+    const roast = mf.coffee_roast_level;
+    const prep = normalizeMetaList(mf.coffee_prep_methods);
+    const tastes = normalizeMetaList(mf.coffee_tastes);
+
+    if (chipsEl) {
+      const sections = [];
+      if (roast) {
+        sections.push({ label: 'רמת קלייה', items: [String(roast)] });
+      }
+      if (prep.length) sections.push({ label: 'שיטת הכנה', items: prep });
+      if (tastes.length) sections.push({ label: 'פרופיל טעם', items: tastes });
+
+      if (sections.length === 0) {
+        chipsEl.innerHTML = '';
+        chipsEl.hidden = true;
+      } else {
+        chipsEl.hidden = false;
+        chipsEl.innerHTML = sections
+          .map(function (sec) {
+            const chips = sec.items
+              .map(function (t) {
+                return '<span class="q-product-modal__chip">' + escapeHtml(t) + '</span>';
+              })
+              .join('');
+            return (
+              '<div class="q-product-modal__chip-group">' +
+              '<span class="q-product-modal__chip-label">' +
+              escapeHtml(sec.label) +
+              '</span>' +
+              '<div class="q-product-modal__chip-row">' +
+              chips +
+              '</div></div>'
+            );
+          })
+          .join('');
+      }
+    }
+
+    if (variantInput) variantInput.value = merged.variantId || '';
+    if (atcBtn && atcLabel) {
+      if (merged.available) {
+        atcBtn.disabled = false;
+        atcLabel.textContent = 'הוספה לסל';
+      } else {
+        atcBtn.disabled = true;
+        atcLabel.textContent = 'אזל המלאי';
+      }
+    }
+
+    if (pdpLink) {
+      pdpLink.href = merged.url || '#';
+      pdpLink.style.display = merged.url ? '' : 'none';
+    }
+
+    _qModalPreviousFocus = document.activeElement;
+    modal.hidden = false;
+    modal.removeAttribute('aria-hidden');
+    document.body.style.overflow = 'hidden';
+    const closeBtn = modal.querySelector('.q-product-modal__close');
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeQuestionnaireProductModal() {
+    const modal = document.getElementById('q-product-detail-modal');
+    if (!modal) return;
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (_qModalPreviousFocus && typeof _qModalPreviousFocus.focus === 'function') {
+      _qModalPreviousFocus.focus();
+    }
+    _qModalPreviousFocus = null;
+  }
 
   function saveResultsState(products) {
     try {
@@ -1001,7 +1235,10 @@
 
       if (shown.length > 0) {
         resultsGrid.innerHTML = shown
-          .map((product) => `<div class="q-carousel-slide">${product.html_card}</div>`)
+          .map(
+            (product) =>
+              `<div class="q-carousel-slide" data-product-id="${product.id}">${product.html_card}</div>`
+          )
           .join('');
       } else {
         resultsGrid.innerHTML =
@@ -1211,20 +1448,27 @@
       // Bundle price (all products × qty)
       updateBundlePrice();
 
-      // Variant ID (for the visible product)
+      // Variant ID (for the visible product — informational; ATC adds the whole bundle)
       const variantInput = document.getElementById('q-footer-variant-id');
       if (variantInput) variantInput.value = product.variantId || '';
 
-      // Button label & state
+      // Button label & state — enabled only when every product in the bundle can be purchased
       const atcBtn = document.getElementById('q-footer-atc-btn');
       const atcLabel = document.getElementById('q-footer-atc-label');
+      const bundleReady =
+        products.length > 0 &&
+        products.every(function (p) {
+          return p && p.available && p.variantId;
+        });
       if (atcBtn && atcLabel) {
-        if (product.available) {
+        if (bundleReady) {
           atcBtn.disabled = false;
           atcLabel.textContent = 'קנייה מהירה';
         } else {
           atcBtn.disabled = true;
-          atcLabel.textContent = 'אזל המלאי';
+          atcLabel.textContent = products.length && products.some(function (p) { return p && !p.available; })
+            ? 'אזל המלאי'
+            : 'קנייה מהירה';
         }
       }
     }
@@ -1271,14 +1515,76 @@
       newNext.addEventListener('click', () => goTo(current + 1));
     }
 
+    const footerAtcFormEl = document.getElementById('q-footer-atc-form');
+    if (footerAtcFormEl && footerAtcFormEl.parentNode) {
+      const freshFooterForm = footerAtcFormEl.cloneNode(true);
+      footerAtcFormEl.parentNode.replaceChild(freshFooterForm, footerAtcFormEl);
+      freshFooterForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const byVariant = {};
+        products.forEach(function (p) {
+          if (!p || !p.variantId || !p.available) return;
+          const vid = String(p.variantId);
+          byVariant[vid] = (byVariant[vid] || 0) + 1;
+        });
+        const items = Object.keys(byVariant).map(function (vid) {
+          return { id: Number(vid), quantity: byVariant[vid] };
+        });
+        if (!items.length) return;
+
+        const atcBtn = document.getElementById('q-footer-atc-btn');
+        const atcLabel = document.getElementById('q-footer-atc-label');
+        const originalLabel = atcLabel ? atcLabel.textContent : '';
+        if (atcBtn) atcBtn.disabled = true;
+        if (atcLabel) atcLabel.textContent = 'מוסיף מוצרים...';
+
+        if (typeof analytics !== 'undefined' && analytics.trackClick) {
+          analytics.trackClick('Add To Cart', {
+            Source: 'Quiz bundle',
+            Items: items.length,
+          });
+        }
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: items }),
+        })
+          .then(function (response) {
+            if (!response.ok) {
+              return response.json().then(function (err) {
+                throw err;
+              });
+            }
+            return response.json();
+          })
+          .then(function () {
+            try {
+              sessionStorage.setItem('origin_questionnaire_open_cart_drawer', '1');
+            } catch (e) {}
+            window.location.assign('/collections/חנות-קפה');
+          })
+          .catch(function (err) {
+            console.error('Questionnaire bundle add to cart:', err);
+            if (atcLabel) atcLabel.textContent = 'שגיאה';
+            if (atcBtn) atcBtn.disabled = false;
+            setTimeout(function () {
+              if (atcLabel) atcLabel.textContent = originalLabel;
+            }, 2000);
+          });
+      });
+    }
+
     renderSelectionThumbs();
 
-    // Touch / swipe support
+    // Touch / swipe support (carouselTouchDidSwipe suppresses card-open click after swipe)
     let touchStartX = 0;
+    let carouselTouchDidSwipe = false;
     track.addEventListener(
       'touchstart',
       (e) => {
         touchStartX = e.touches[0].clientX;
+        carouselTouchDidSwipe = false;
       },
       { passive: true }
     );
@@ -1287,10 +1593,46 @@
       (e) => {
         const diff = touchStartX - e.changedTouches[0].clientX;
         /* Swipe left (diff > 0) → next slide; swipe right → previous */
-        if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+        if (Math.abs(diff) > 40) {
+          carouselTouchDidSwipe = true;
+          goTo(diff > 0 ? current + 1 : current - 1);
+        }
       },
       { passive: true }
     );
+
+    function openModalFromSlideTarget(target) {
+      const card = target && target.closest ? target.closest('.questionnaire-product-card') : null;
+      if (!card) return;
+      const slide = target.closest('.q-carousel-slide');
+      if (!slide || slide.classList.contains('q-carousel-slide--empty')) return;
+      const pid = slide.getAttribute('data-product-id');
+      if (!pid) return;
+      const found = products.find(function (pr) {
+        return String(pr.id) === String(pid);
+      });
+      if (!found) return;
+      openQuestionnaireProductModal(found);
+    }
+
+    track.addEventListener('click', function (e) {
+      if (carouselTouchDidSwipe) {
+        carouselTouchDidSwipe = false;
+        return;
+      }
+      openModalFromSlideTarget(e.target);
+    });
+
+    track.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return;
+      openModalFromSlideTarget(e.target);
+    });
+
+    slides.forEach(function (slide) {
+      if (slide.classList.contains('q-carousel-slide--empty')) return;
+      const card = slide.querySelector('.questionnaire-product-card');
+      if (card) card.setAttribute('tabindex', '0');
+    });
 
     applySlideWidths();
     const ro = new ResizeObserver(function () {
@@ -1451,6 +1793,21 @@
     });
 
     document.body.classList.add('questionnaire-wrapper-open');
+
+    const qProductModalEl = document.getElementById('q-product-detail-modal');
+    if (qProductModalEl) {
+      qProductModalEl.addEventListener('click', function (e) {
+        if (e.target.closest('[data-q-product-modal-close]')) {
+          closeQuestionnaireProductModal();
+        }
+      });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      const modal = document.getElementById('q-product-detail-modal');
+      if (!modal || modal.hidden) return;
+      closeQuestionnaireProductModal();
+    });
 
     // Object that will hold the filters data
     window.appliedFilters = [];

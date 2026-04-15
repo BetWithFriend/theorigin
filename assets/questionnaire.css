@@ -480,7 +480,7 @@ body.questionnaire-wrapper-open {
 
 .questionnaire-product-image-wrapper {
     width: 100%;
-    margin-bottom: 16px;
+    /* margin-bottom: 16px; */
     display: flex;
     justify-content: center;
 }
@@ -493,11 +493,49 @@ body.questionnaire-wrapper-open {
 }
 
 .questionnaire-product-title {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
     font-family: 'Assistant', sans-serif;
     font-size: 20px;
     font-weight: 700;
-    color: #1C201D;
+    color: #1c201d;
     margin-bottom: 4px;
+    margin-top: 0;
+    max-width: 100%;
+}
+
+.questionnaire-product-title__text {
+    min-width: 0;
+    text-align: center;
+}
+
+.questionnaire-product-title__hint {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    /* Secondary icon — visible on light cards (Origin / Figma) */
+    color: #6b6b6b;
+}
+
+.questionnaire-product-title__icon {
+    display: block;
+    width: 18px;
+    height: 17px;
+    flex-shrink: 0;
+}
+
+.q-carousel-slide .questionnaire-product-card:hover .questionnaire-product-title__hint,
+.q-carousel-slide .questionnaire-product-card:focus-within .questionnaire-product-title__hint {
+    color: #1c201d;
+}
+
+#questionnaireResultsStep .questionnaire-product-title__icon {
+    width: 18px;
+    height: 17px;
 }
 
 .questionnaire-product-vendor {
@@ -804,7 +842,7 @@ body.questionnaire-wrapper-open {
 }
 
 .questionnaire-product-image {
-    max-height: 300px;
+    max-height: 172px;
     filter: drop-shadow(0px 20px 30px rgba(0, 0, 0, 0.1));
 }
 
@@ -825,6 +863,8 @@ body.questionnaire-wrapper-open {
     justify-content: center;
     gap: 12px;
     flex-wrap: wrap;
+    /* Match .q-carousel-viewport: carousel math is LTR; page RTL would mirror thumb order vs slides. */
+    direction: ltr;
 }
 
 .questionnaire-selection-thumb {
@@ -1040,4 +1080,288 @@ body.questionnaire-wrapper-open {
 
 .catalog-btn-wrapper {
     margin-top: 32px;
+}
+
+/* Product detail modal (questionnaire results — tap product card) */
+.q-carousel-slide .questionnaire-product-card {
+    cursor: pointer;
+}
+
+.q-product-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    box-sizing: border-box;
+    direction: rtl;
+}
+
+.q-product-modal[hidden] {
+    display: none !important;
+}
+
+.q-product-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(28, 32, 29, 0.48);
+    cursor: pointer;
+}
+
+.q-product-modal__panel {
+    position: relative;
+    z-index: 1;
+    width: min(440px, calc(100vw - 32px));
+    max-width: 440px;
+    max-height: min(88vh, 720px);
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.q-product-modal__close {
+    position: absolute;
+    top: 10px;
+    inset-inline-start: 10px;
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #1c201d;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.q-product-modal__close:focus-visible {
+    outline: 2px solid #1c201d;
+    outline-offset: 2px;
+}
+
+.q-product-modal__body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex: 1;
+    min-height: 0;
+}
+
+.q-product-modal__media {
+    flex-shrink: 0;
+    background: #fafcfe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 20px 12px;
+}
+
+.q-product-modal__image {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    max-height: 280px;
+    object-fit: contain;
+    filter: drop-shadow(0px 16px 24px rgba(0, 0, 0, 0.1));
+}
+
+.q-product-modal__content {
+    padding: 8px 22px 22px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.q-product-modal__title {
+    margin: 0 0 6px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1c201d;
+    line-height: 1.25;
+}
+
+.q-product-modal__vendor {
+    margin: 0 0 14px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    color: #555555;
+    line-height: 1.3;
+}
+
+.q-product-modal__lead {
+    margin: -6px 0 16px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #3a3a3a;
+}
+
+.q-product-modal__description-block {
+    margin-bottom: 20px;
+}
+
+.q-product-modal__section-title {
+    margin: 0 0 10px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #1c201d;
+    line-height: 1.3;
+}
+
+.q-product-modal__chips {
+    margin-bottom: 16px;
+}
+
+.q-product-modal__chip-group {
+    margin-bottom: 12px;
+}
+
+.q-product-modal__chip-group:last-child {
+    margin-bottom: 0;
+}
+
+.q-product-modal__chip-label {
+    display: block;
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555555;
+    margin-bottom: 6px;
+}
+
+.q-product-modal__chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.q-product-modal__chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid #e3e0da;
+    background: #fafcfe;
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1c201d;
+    line-height: 1.2;
+}
+
+.q-product-modal__description {
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: #3a3a3a;
+}
+
+.q-product-modal__description.rte p {
+    margin: 0 0 12px;
+}
+
+.q-product-modal__description.rte p:last-child {
+    margin-bottom: 0;
+}
+
+.q-product-modal__description.rte ul,
+.q-product-modal__description.rte ol {
+    margin: 0 0 12px;
+    padding-inline-start: 1.35em;
+}
+
+.q-product-modal__description.rte li {
+    margin-bottom: 6px;
+}
+
+.q-product-modal__description.rte li:last-child {
+    margin-bottom: 0;
+}
+
+.q-product-modal__description.rte strong {
+    font-weight: 700;
+    color: #1c201d;
+}
+
+.q-product-modal__description.rte a {
+    color: #1c201d;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.q-product-modal__description.rte h1,
+.q-product-modal__description.rte h2,
+.q-product-modal__description.rte h3,
+.q-product-modal__description.rte h4 {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1c201d;
+    margin: 16px 0 8px;
+    line-height: 1.35;
+}
+
+.q-product-modal__description.rte h1:first-child,
+.q-product-modal__description.rte h2:first-child,
+.q-product-modal__description.rte h3:first-child,
+.q-product-modal__description.rte h4:first-child {
+    margin-top: 0;
+}
+
+.q-product-modal__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 4px;
+    border-top: 1px solid #e3e0da;
+}
+
+.q-product-modal__price-row {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.q-product-modal__price-label {
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    color: #555555;
+}
+
+.q-product-modal__price {
+    font-family: 'Assistant', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1c201d;
+}
+
+.q-product-modal__actions .questionnaire-add-btn {
+    margin-top: 0;
+}
+
+.q-product-modal__pdp-link {
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1c201d;
+    text-align: center;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.q-product-modal__pdp-link:hover {
+    opacity: 0.85;
 }
