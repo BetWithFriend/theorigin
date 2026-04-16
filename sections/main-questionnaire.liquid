@@ -599,15 +599,28 @@
       aria-modal="true"
       aria-hidden="true"
       aria-labelledby="q-product-modal-title">
-      <div class="q-product-modal__backdrop" tabindex="-1" data-q-product-modal-close></div>
+      <div
+        class="q-product-modal__backdrop"
+        tabindex="-1"
+        data-q-product-modal-close></div>
       <div class="q-product-modal__panel">
         <button
           type="button"
           class="q-product-modal__close"
           aria-label="סגירה"
           data-q-product-modal-close>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true">
+            <path
+              d="M6 6L18 18M18 6L6 18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round" />
           </svg>
         </button>
         <div class="q-product-modal__body">
@@ -623,33 +636,52 @@
           <div class="q-product-modal__content">
             <h2 id="q-product-modal-title" class="q-product-modal__title"></h2>
             <p id="q-product-modal-vendor" class="q-product-modal__vendor"></p>
-            <p id="q-product-modal-short" class="q-product-modal__lead" hidden></p>
-            <div id="q-product-modal-chips" class="q-product-modal__chips" hidden></div>
-            <div id="q-product-modal-description-block" class="q-product-modal__description-block" hidden>
-              <h3 class="q-product-modal__section-title">תיאור המוצר</h3>
-              <div
-                id="q-product-modal-description"
-                class="q-product-modal__description rte"
-                dir="rtl"></div>
-            </div>
-            <div class="q-product-modal__actions">
-              <div class="q-product-modal__price-row">
-                <span class="q-product-modal__price-label">מחיר ליחידה</span>
-                <span id="q-product-modal-price" class="q-product-modal__price"></span>
-              </div>
-              <form
-                id="q-product-modal-atc-form"
-                class="form product-form--questionnaire js-quick-add-form"
-                method="post"
-                action="/cart/add"
-                data-type="add-to-cart-form">
-                <input type="hidden" name="id" id="q-product-modal-variant-id" value="">
-                <button type="submit" id="q-product-modal-atc-btn" class="questionnaire-add-btn">
-                  <span id="q-product-modal-atc-label">הוספה לסל</span>
-                </button>
-              </form>
-              <a id="q-product-modal-pdp-link" class="q-product-modal__pdp-link" href="#">לעמוד המוצר המלא</a>
-            </div>
+            <p
+              id="q-product-modal-short"
+              class="q-product-modal__lead"
+              hidden></p>
+            <div
+              id="q-product-modal-chips"
+              class="q-product-modal__chips"
+              hidden></div>
+          {% comment %} <div
+                                                                                  id="q-product-modal-description-block"
+                                                                                  class="q-product-modal__description-block"
+                                                                                  hidden>
+                                                                                  <h3 class="q-product-modal__section-title">תיאור המוצר</h3>
+                                                                                  <div
+                                                                                    id="q-product-modal-description"
+                                                                                    class="q-product-modal__description rte"
+                                                                                    dir="rtl"></div>
+                                                                      </div> {% endcomment %}
+          {% comment %} <div class="q-product-modal__actions">
+                          <div class="q-product-modal__price-row">
+                            <span class="q-product-modal__price-label">מחיר ליחידה</span>
+                            <span id="q-product-modal-price" class="q-product-modal__price"></span>
+                          </div>
+                          <form
+                            id="q-product-modal-atc-form"
+                            class="form product-form--questionnaire js-quick-add-form"
+                            method="post"
+                            action="/cart/add"
+                            data-type="add-to-cart-form">
+                            <input
+                              type="hidden"
+                              name="id"
+                              id="q-product-modal-variant-id"
+                              value="">
+                            <button
+                              type="submit"
+                              id="q-product-modal-atc-btn"
+                              class="questionnaire-add-btn">
+                              <span id="q-product-modal-atc-label">הוספה לסל</span>
+                            </button>
+                          </form>
+                          <a
+                            id="q-product-modal-pdp-link"
+                            class="q-product-modal__pdp-link"
+                            href="#">לעמוד המוצר המלא</a>
+                      </div> {% endcomment %}
           </div>
         </div>
       </div>
@@ -703,6 +735,153 @@
   const QUESTIONNAIRE_RESULTS_STATE_KEY = 'questionnaireResultsState';
   let _qModalPreviousFocus = null;
 
+  function getQuestionnaireBundleQtyFromDom() {
+    const sel = document.querySelector('.questionnaire-qty-selector-wrapper .qty-option.selected');
+    if (!sel) return 5;
+    const dq = sel.getAttribute('data-qty');
+    const n = dq ? parseInt(dq, 10) : parseInt(sel.textContent.trim(), 10);
+    return [3, 5, 7].includes(n) ? n : 5;
+  }
+
+  function shuffleVendorList(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = a[i];
+      a[i] = a[j];
+      a[j] = t;
+    }
+    return a;
+  }
+
+  /**
+   * Picks three vendors for 3 / 5 / 7 pack sizes: randomly shuffled, distinct when
+   * at least three matching vendors exist; otherwise reuses from the available pool.
+   */
+  function pickRandomVendorsPerBundleQty(uniqueVendorsLower) {
+    const uniq = [...new Set((uniqueVendorsLower || []).map((v) => (v || '').trim().toLowerCase()).filter(Boolean))];
+    if (!uniq.length) {
+      return { 3: '', 5: '', 7: '' };
+    }
+    const shuffled = shuffleVendorList(uniq);
+    let a;
+    let b;
+    let c;
+    if (shuffled.length >= 3) {
+      a = shuffled[0];
+      b = shuffled[1];
+      c = shuffled[2];
+    } else if (shuffled.length === 2) {
+      a = shuffled[0];
+      b = shuffled[1];
+      c = shuffled[Math.random() < 0.5 ? 0 : 1];
+    } else {
+      a = b = c = shuffled[0];
+    }
+    return { 3: a, 5: b, 7: c };
+  }
+
+  function matchQuestionnaireCoffees(userText, bundleQty) {
+    const qty =
+      bundleQty == null || bundleQty === undefined ? getQuestionnaireBundleQtyFromDom() : bundleQty;
+    const normalizedQty = [3, 5, 7].includes(qty) ? qty : 5;
+
+    if (!window.allProducts || !Array.isArray(window.allProducts)) {
+      return [];
+    }
+
+    const coffeeDatabase = window.allProducts.map((product) => ({
+      ...product,
+      prep_method: product.metafields.coffee_prep_methods || [],
+      tastes: product.metafields.coffee_tastes || [],
+    }));
+
+    const text = userText.toLowerCase();
+    const scores = coffeeDatabase.map((coffee) => {
+      let score = 0;
+
+      if (Array.isArray(coffee.prep_method)) {
+        coffee.prep_method.forEach((method) => {
+          if (text.includes(method.toLowerCase())) score += 3;
+        });
+      }
+
+      if (Array.isArray(coffee.tastes)) {
+        coffee.tastes.forEach((taste) => {
+          if (text.includes(taste.toLowerCase())) score += 2;
+        });
+      }
+
+      if (Array.isArray(coffee.prep_method)) {
+        if (text.includes('אספרסו') || text.includes('חזק') || text.includes('עז')) {
+          if (coffee.prep_method.includes('Espresso')) score += 2;
+        }
+        if (
+          text.includes('חלב') ||
+          text.includes('לאטה') ||
+          text.includes("קפוצ'ינו") ||
+          text.includes('קפוצינו') ||
+          text.includes('קפה הפוך')
+        ) {
+          if (coffee.prep_method.includes('Espresso')) score += 2;
+        }
+        if (text.includes('פילטר') || text.includes('עדין') || text.includes('קל')) {
+          if (coffee.prep_method.includes('Filter')) score += 2;
+        }
+        if (text.includes('מקינטה') || text.includes('מוקה')) {
+          if (coffee.prep_method.includes('MokaPot')) score += 2;
+        }
+      }
+
+      if (Array.isArray(coffee.tastes)) {
+        if (text.includes('פירותי') || text.includes('בהיר') || text.includes('חמוץ') || text.includes('חמצמץ')) {
+          if (coffee.tastes.includes('Fruity') || coffee.tastes.includes('Fruity-Sweet')) score += 2;
+        }
+        if (text.includes('מתוק') || text.includes('מתיקות')) {
+          if (
+            coffee.tastes.includes('Sweet') ||
+            coffee.tastes.includes('Sweet-Chocolate') ||
+            coffee.tastes.includes('Fruity-Sweet')
+          )
+            score += 2;
+        }
+        if (text.includes('שוקולד') || text.includes('קקאו')) {
+          if (coffee.tastes.includes('Chocolate') || coffee.tastes.includes('Sweet-Chocolate')) score += 2;
+        }
+      }
+
+      return { coffee, score };
+    });
+
+    const positiveScores = scores.filter((item) => item.score > 0).sort((a, b) => b.score - a.score);
+
+    const vendorsWithMatches = [
+      ...new Set(positiveScores.map(({ coffee }) => (coffee.vendor || '').trim().toLowerCase()).filter(Boolean)),
+    ];
+
+    if (
+      !window.__questionnaireVendorByQty ||
+      window.__questionnaireVendorAssignmentForText !== userText
+    ) {
+      window.__questionnaireVendorByQty = pickRandomVendorsPerBundleQty(vendorsWithMatches);
+      window.__questionnaireVendorAssignmentForText = userText;
+    }
+
+    const targetVendor = (window.__questionnaireVendorByQty[normalizedQty] || '').toLowerCase();
+    if (!targetVendor) {
+      return [];
+    }
+
+    const forVendor = positiveScores.filter(({ coffee }) => {
+      const v = (coffee.vendor || '').trim().toLowerCase();
+      return v === targetVendor;
+    });
+
+    return forVendor
+      .map((item) => item.coffee)
+      .slice(0, 7);
+  }
+
   function escapeHtml(str) {
     return String(str)
       .replace(/&/g, '&amp;')
@@ -745,7 +924,7 @@
     const vendorEl = document.getElementById('q-product-modal-vendor');
     const chipsEl = document.getElementById('q-product-modal-chips');
     const shortEl = document.getElementById('q-product-modal-short');
-    const descBlock = document.getElementById('q-product-modal-description-block');
+    // const descBlock = document.getElementById('q-product-modal-description-block');
     const descEl = document.getElementById('q-product-modal-description');
     const priceEl = document.getElementById('q-product-modal-price');
     const variantInput = document.getElementById('q-product-modal-variant-id');
@@ -769,25 +948,25 @@
       shortEl.hidden = !shortDesc;
     }
 
-    const htmlRaw = (merged.description_html || '').trim();
-    const plainFallback = (merged.description || '').trim();
-    const hasRte = !!htmlRaw;
-    const hasPlainOnly = !hasRte && !!plainFallback;
-    if (descBlock && descEl) {
-      if (hasRte) {
-        descEl.innerHTML = htmlRaw;
-        descEl.classList.add('rte');
-        descBlock.hidden = false;
-      } else if (hasPlainOnly) {
-        descEl.textContent = plainFallback;
-        descEl.classList.remove('rte');
-        descBlock.hidden = false;
-      } else {
-        descEl.innerHTML = '';
-        descEl.classList.remove('rte');
-        descBlock.hidden = true;
-      }
-    }
+    // const htmlRaw = (merged.description_html || '').trim();
+    // const plainFallback = (merged.description || '').trim();
+    // const hasRte = !!htmlRaw;
+    // const hasPlainOnly = !hasRte && !!plainFallback;
+    // if (descBlock && descEl) {
+    //   if (hasRte) {
+    //     descEl.innerHTML = htmlRaw;
+    //     descEl.classList.add('rte');
+    //     descBlock.hidden = false;
+    //   } else if (hasPlainOnly) {
+    //     descEl.textContent = plainFallback;
+    //     descEl.classList.remove('rte');
+    //     descBlock.hidden = false;
+    //   } else {
+    //     descEl.innerHTML = '';
+    //     descEl.classList.remove('rte');
+    //     descBlock.hidden = true;
+    //   }
+    // }
 
     if (priceEl) priceEl.textContent = merged.price || '';
 
@@ -801,7 +980,7 @@
       if (roast) {
         sections.push({ label: 'רמת קלייה', items: [String(roast)] });
       }
-      if (prep.length) sections.push({ label: 'שיטת הכנה', items: prep });
+      // if (prep.length) sections.push({ label: 'שיטת הכנה', items: prep });
       if (tastes.length) sections.push({ label: 'פרופיל טעם', items: tastes });
 
       if (sections.length === 0) {
@@ -872,6 +1051,15 @@
         QUESTIONNAIRE_RESULTS_STATE_KEY,
         JSON.stringify({
           products: Array.isArray(products) ? products : [],
+          userText: typeof window.__questionnaireMatchUserText === 'string' ? window.__questionnaireMatchUserText : '',
+          vendorByQty:
+            window.__questionnaireVendorByQty && typeof window.__questionnaireVendorByQty === 'object'
+              ? window.__questionnaireVendorByQty
+              : null,
+          vendorAssignmentUserText:
+            typeof window.__questionnaireVendorAssignmentForText === 'string'
+              ? window.__questionnaireVendorAssignmentForText
+              : '',
           savedAt: Date.now(),
         })
       );
@@ -886,6 +1074,17 @@
       if (!rawState) return null;
       const parsedState = JSON.parse(rawState);
       if (!parsedState || !Array.isArray(parsedState.products)) return null;
+      if (typeof parsedState.userText === 'string' && parsedState.userText.length) {
+        window.__questionnaireMatchUserText = parsedState.userText;
+      }
+      if (parsedState.vendorByQty && typeof parsedState.vendorByQty === 'object') {
+        window.__questionnaireVendorByQty = parsedState.vendorByQty;
+      }
+      if (typeof parsedState.vendorAssignmentUserText === 'string' && parsedState.vendorAssignmentUserText.length) {
+        window.__questionnaireVendorAssignmentForText = parsedState.vendorAssignmentUserText;
+      } else if (parsedState.vendorByQty && typeof window.__questionnaireMatchUserText === 'string') {
+        window.__questionnaireVendorAssignmentForText = window.__questionnaireMatchUserText;
+      }
       return parsedState.products;
     } catch (error) {
       console.warn('Failed to load questionnaire results state:', error);
@@ -1110,86 +1309,9 @@
     const userText = selectedTexts.join(' ') + ' ' + filterValues.join(' ');
     console.log('User Text for matching:', userText);
 
-    // Map window.allProducts to the structure expected by matchCoffeesFromText
-    const coffeeDatabase = window.allProducts.map((product) => ({
-      ...product,
-      prep_method: product.metafields.coffee_prep_methods || [],
-      tastes: product.metafields.coffee_tastes || [],
-    }));
-
-    function matchCoffeesFromText(userText) {
-      const text = userText.toLowerCase();
-      const scores = coffeeDatabase.map((coffee) => {
-        let score = 0;
-
-        // Match prep methods
-        if (Array.isArray(coffee.prep_method)) {
-          coffee.prep_method.forEach((method) => {
-            if (text.includes(method.toLowerCase())) score += 3;
-          });
-        }
-
-        // Match tastes
-        if (Array.isArray(coffee.tastes)) {
-          coffee.tastes.forEach((taste) => {
-            if (text.includes(taste.toLowerCase())) score += 2;
-          });
-        }
-
-        // Hebrew keyword matching for prep methods
-        if (Array.isArray(coffee.prep_method)) {
-          if (text.includes('אספרסו') || text.includes('חזק') || text.includes('עז')) {
-            if (coffee.prep_method.includes('Espresso')) score += 2;
-          }
-          if (
-            text.includes('חלב') ||
-            text.includes('לאטה') ||
-            text.includes("קפוצ'ינו") ||
-            text.includes('קפוצינו') ||
-            text.includes('קפה הפוך')
-          ) {
-            if (coffee.prep_method.includes('Espresso')) score += 2;
-          }
-          if (text.includes('פילטר') || text.includes('עדין') || text.includes('קל')) {
-            if (coffee.prep_method.includes('Filter')) score += 2;
-          }
-          if (text.includes('מקינטה') || text.includes('מוקה')) {
-            if (coffee.prep_method.includes('MokaPot')) score += 2;
-          }
-        }
-
-        // Hebrew keyword matching for tastes
-        if (Array.isArray(coffee.tastes)) {
-          if (text.includes('פירותי') || text.includes('בהיר') || text.includes('חמוץ') || text.includes('חמצמץ')) {
-            if (coffee.tastes.includes('Fruity') || coffee.tastes.includes('Fruity-Sweet')) score += 2;
-          }
-          if (text.includes('מתוק') || text.includes('מתיקות')) {
-            if (
-              coffee.tastes.includes('Sweet') ||
-              coffee.tastes.includes('Sweet-Chocolate') ||
-              coffee.tastes.includes('Fruity-Sweet')
-            )
-              score += 2;
-          }
-          if (text.includes('שוקולד') || text.includes('קקאו')) {
-            if (coffee.tastes.includes('Chocolate') || coffee.tastes.includes('Sweet-Chocolate')) score += 2;
-          }
-        }
-
-        return { coffee, score };
-      });
-      const positiveScores = scores.filter((item) => item.score > 0).sort((a, b) => b.score - a.score);
-
-      // Pick a random vendor from those that have at least one matching product
-      const vendors = [...new Set(positiveScores.map(({ coffee }) => coffee.vendor || ''))];
-      const topVendor = vendors[Math.floor(Math.random() * vendors.length)];
-
-      return positiveScores
-        .filter(({ coffee }) => (coffee.vendor || '') === topVendor)
-        .map((item) => item.coffee)
-        .slice(0, 7);
-    }
-    const matchedCoffees = matchCoffeesFromText(userText);
+    window.__questionnaireMatchUserText = userText;
+    const bundleQty = getQuestionnaireBundleQtyFromDom();
+    const matchedCoffees = matchQuestionnaireCoffees(userText, bundleQty);
     console.log('Matched Coffees:', matchedCoffees);
     saveResultsState(matchedCoffees);
 
@@ -1273,7 +1395,13 @@
           opt.classList.add('selected');
           const newQty =
             parseInt(opt.getAttribute('data-qty') || opt.textContent.trim(), 10) || products.length;
-          renderCarousel(products, newQty);
+          let nextProducts = products;
+          const ut = window.__questionnaireMatchUserText;
+          if (typeof ut === 'string' && ut.length) {
+            nextProducts = matchQuestionnaireCoffees(ut, newQty);
+            saveResultsState(nextProducts);
+          }
+          renderCarousel(nextProducts, newQty);
         });
       }
 
@@ -1559,10 +1687,7 @@
             return response.json();
           })
           .then(function () {
-            try {
-              sessionStorage.setItem('origin_questionnaire_open_cart_drawer', '1');
-            } catch (e) {}
-            window.location.assign('/collections/חנות-קפה');
+            window.location.assign('/checkout');
           })
           .catch(function (err) {
             console.error('Questionnaire bundle add to cart:', err);
@@ -2102,7 +2227,13 @@
 
     const savedResultsProducts = loadResultsState();
     if (savedResultsProducts) {
-      renderQuestionnaireResults(savedResultsProducts);
+      let productsToShow = savedResultsProducts;
+      if (typeof window.__questionnaireMatchUserText === 'string' && window.__questionnaireMatchUserText.length) {
+        const q = getQuestionnaireBundleQtyFromDom();
+        productsToShow = matchQuestionnaireCoffees(window.__questionnaireMatchUserText, q);
+        saveResultsState(productsToShow);
+      }
+      renderQuestionnaireResults(productsToShow);
     } else {
       const questionnaireWrapper = document.getElementById('questionnaireWrapperDesktop');
       if (questionnaireWrapper) {

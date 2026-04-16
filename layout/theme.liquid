@@ -910,23 +910,6 @@
 
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
-      <script>
-        (function () {
-          var KEY = 'origin_questionnaire_open_cart_drawer';
-          function openDrawerIfFlagged() {
-            try {
-              if (sessionStorage.getItem(KEY) !== '1') return;
-              sessionStorage.removeItem(KEY);
-              var drawer = document.querySelector('cart-drawer');
-              if (drawer && typeof drawer.open === 'function') {
-                drawer.open();
-              }
-            } catch (e) {}
-          }
-          /* Deferred cart-drawer.js runs before DOMContentLoaded. */
-          document.addEventListener('DOMContentLoaded', openDrawerIfFlagged);
-        })();
-      </script>
     {%- endif -%}
 
     {% comment %} <script src="https://cdn.shopify.com/s/files/1/0701/9151/3657/files/origin-ai.js?v=1753652053" defer="defer"></script> {% endcomment %}
