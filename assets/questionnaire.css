@@ -1,9 +1,24 @@
+/* Origin questionnaire — tokens match PLP / card styles (design: Origin, Assistant) */
+:root {
+    --q-text: #1c201d;
+    --q-text-muted: #555555;
+    --q-border: #e3e0da;
+    --q-border-input: #a9a9a9;
+    --q-surface: #ffffff;
+    --q-surface-warm: #fafcfe;
+    --q-surface-selected: #f4f3f0;
+    --q-page-bg: #f9f9f9;
+    --q-accent: #ad7b7e;
+    --q-progress-track: #e3e0da;
+    --q-chip-radius: 4px;
+}
+
 .questionnaire-wrapper {
     position: absolute;
     width: 100%;
     height: 100%;
     z-index: 10000;
-    background-color: #F9F9F9;
+    background-color: var(--q-page-bg);
     top: 0;
     display: flex;
     align-items: center;
@@ -31,9 +46,7 @@ body.questionnaire-wrapper-open {
 .questionnaire-back-text {
     font-family: "Assistant", sans-serif;
     font-weight: 400;
-    color: #1C201D;
-    font-weight: 400;
-    font-style: Regular;
+    color: var(--q-text);
     font-size: 16px;
     line-height: 25px;
     letter-spacing: 2%;
@@ -42,7 +55,7 @@ body.questionnaire-wrapper-open {
 }
 
 .questionnaire-skip-btn {
-    color: #1C201D;
+    color: var(--q-text);
     font-family: "Assistant", sans-serif;
     font-size: 16px;
     line-height: 16px;
@@ -70,7 +83,7 @@ body.questionnaire-wrapper-open {
     font-size: 20px;
     line-height: 20px;
     font-weight: 700;
-    color: #1C201D;
+    color: var(--q-text);
     width: 100%;
     text-align: center;
     /* padding: 60px 0 32px 0; */
@@ -115,7 +128,7 @@ body.questionnaire-wrapper-open {
     width: 320px;
     height: 80px;
     border-radius: 16px;
-    border: 1px solid #A9A9A9;
+    border: 1px solid var(--q-border-input);
     padding: 24px 16px;
     display: flex;
     gap: 16px;
@@ -139,7 +152,7 @@ body.questionnaire-wrapper-open {
 }
 
 .questionnaire-selection-wrapper.selected {
-    background-color: #F4F3F0;
+    background-color: var(--q-surface-selected);
 }
 
 .questionnaire-img-icon {
@@ -153,7 +166,7 @@ body.questionnaire-wrapper-open {
     font-size: 18px;
     line-height: 17px;
     font-weight: 600;
-    color: #1C201D;
+    color: var(--q-text);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -170,7 +183,7 @@ body.questionnaire-wrapper-open {
 
 .questionnaire-expl-text {
     font-family: 'Assistant', sans-serif;
-    color: #1C201D;
+    color: var(--q-text);
     /* margin-top: 8px; */
     font-weight: 200;
     font-size: 16px;
@@ -190,7 +203,7 @@ body.questionnaire-wrapper-open {
     border-radius: 8px;
     padding: 16px 40px;
     margin-top: 20px;
-    background-color: #AD7B7E;
+    background-color: var(--q-accent);
     color: #FBFCFE;
     font-family: "Assistant", sans-serif;
     font-size: 18px;
@@ -238,7 +251,7 @@ body.questionnaire-wrapper-open {
     font-size: 20px;
     line-height: 30px;
     font-weight: 700;
-    color: #1C201D;
+    color: var(--q-text);
     text-align: center;
 }
 
@@ -248,7 +261,7 @@ body.questionnaire-wrapper-open {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #F4F3F0;
+    background-color: var(--q-surface-selected);
     width: 100%;
     height: 100%;
     padding: 0 32px;
@@ -373,12 +386,12 @@ body.questionnaire-wrapper-open {
 .questionnaire-progress-bar {
     width: 100%;
     height: 6px;
-    background-color: #E3E0DA;
+    background-color: var(--q-progress-track);
     border-radius: 24px;
 }
 
 .questionnaire-progress-bar.filled {
-    background-color: #AD7B7E;
+    background-color: var(--q-accent);
 }
 
 /* Standalone questionnaire page styles */
@@ -466,7 +479,7 @@ body.questionnaire-wrapper-open {
 
 /* Questionnaire Product Card Styles */
 .questionnaire-product-card {
-    background: #FAFCFE;
+    background: var(--q-surface-warm);
     /* border: 1px solid #E3E0DA; */
     border-radius: 16px;
     padding: 16px;
@@ -479,6 +492,7 @@ body.questionnaire-wrapper-open {
 }
 
 .questionnaire-product-image-wrapper {
+    position: relative;
     width: 100%;
     /* margin-bottom: 16px; */
     display: flex;
@@ -538,6 +552,52 @@ body.questionnaire-wrapper-open {
     height: 17px;
 }
 
+/* Match PLP card title (component-card .card__heading) */
+#questionnaireResultsStep .questionnaire-product-title {
+    font-size: 18px;
+    line-height: 25px;
+    font-weight: 700;
+    color: var(--q-text);
+}
+
+/* Taste tags on image — same chip spec as PLP (snippets/product-taste-icon-color.liquid) */
+#questionnaireResultsStep .questionnaire-product-taste-icons {
+    position: absolute;
+    top: 4px;
+    inset-inline-end: 4px;
+    z-index: 2;
+    margin: 0;
+    width: auto;
+    max-width: calc(100% - 12px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    pointer-events: none;
+}
+
+#questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    row-gap: 4px;
+    column-gap: 4px;
+}
+
+#questionnaireResultsStep .questionnaire-product-taste-icons .selection-wrapper.plp-taste-text-wrapper {
+    font-size: 11px;
+    line-height: 15px;
+    font-weight: 400;
+    gap: 3px;
+}
+
+#questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper span {
+    padding: 3px 8px;
+    border-radius: var(--q-chip-radius);
+    font-size: 11px;
+    line-height: 15px;
+}
+
 .questionnaire-product-vendor {
     font-family: 'Assistant', sans-serif;
     font-size: 16px;
@@ -575,15 +635,15 @@ body.questionnaire-wrapper-open {
     font-family: 'Assistant', sans-serif;
     font-size: 16px;
     font-weight: 700;
-    color: #1C201D;
+    color: var(--q-text);
     line-height: 1.2;
 }
 
 .price-label-sub {
     font-family: 'Assistant', sans-serif;
-    font-size: 13px;
+    font-size: 20px;
     font-weight: 400;
-    color: #555555;
+    color: var(--q-text-muted);
     line-height: 1.2;
 }
 
@@ -592,13 +652,34 @@ body.questionnaire-wrapper-open {
     flex-direction: row;
     align-items: baseline;
     gap: 8px;
+    flex-wrap: nowrap;
+    min-width: 0;
+}
+
+.price-line-primary {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.price-bundle-weight {
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--q-text-muted);
+    line-height: 1;
+    white-space: nowrap;
 }
 
 .price-current {
     font-family: 'Assistant', sans-serif;
     font-size: 22px;
     font-weight: 700;
-    color: #1C201D;
+    color: var(--q-text);
     line-height: 1;
 }
 
@@ -613,7 +694,7 @@ body.questionnaire-wrapper-open {
 
 .questionnaire-add-btn {
     width: 100%;
-    background-color: #1C201D;
+    background-color: var(--q-text);
     color: #FFFFFF;
     font-family: 'Assistant', sans-serif;
     font-size: 18px;
@@ -644,7 +725,7 @@ body.questionnaire-wrapper-open {
     width: 100%;
     max-width: 100%;
     padding: 0;
-    background-color: #F9F9F9;
+    background-color: var(--q-page-bg);
     flex: 1 1 auto;
     /* min-height: 0; */
 }
@@ -652,6 +733,18 @@ body.questionnaire-wrapper-open {
 #questionnaireResultsStep .q-carousel-container {
     padding: 4px 0 0;
     box-sizing: border-box;
+    height: 250px;
+}
+
+/* Equal-height slides: image area grows so shorter products don’t shrink the row */
+#questionnaireResultsStep .q-carousel-slide .questionnaire-product-image-wrapper {
+    flex: 1 1 auto;
+    min-height: 172px;
+    align-items: center;
+}
+
+#questionnaireResultsStep .q-carousel-slide .questionnaire-product-info {
+    flex-shrink: 0;
 }
 
 /* Results step header — Figma: logo | centered title | start over */
@@ -662,8 +755,8 @@ body.questionnaire-wrapper-open {
     width: 100%;
     padding: 14px 16px;
     min-height: 52px;
-    background: #FFFFFF;
-    border-bottom: 1px solid #E3E0DA;
+    background: var(--q-surface);
+    border-bottom: 1px solid var(--q-border);
     box-sizing: border-box;
 }
 
@@ -710,7 +803,7 @@ body.questionnaire-wrapper-open {
     font-family: 'Assistant', sans-serif;
     font-size: 17px;
     font-weight: 700;
-    color: #1C201D;
+    color: var(--q-text);
     line-height: 1.25;
     display: inline-flex;
     align-items: center;
@@ -801,33 +894,52 @@ body.questionnaire-wrapper-open {
 
 .q-carousel-viewport {
     width: 100%;
-    overflow: hidden;
     position: relative;
-    /* Isolate from page RTL so slide order + translate math match (first slide on the left). */
+    /* Native horizontal scroll: continuous / momentum on touch, smooth wheel/trackpad */
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: none;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    /* Isolate from page RTL so slide order matches (first slide on the left). */
     direction: ltr;
+}
+
+.q-carousel-viewport::-webkit-scrollbar {
+    height: 5px;
+}
+
+.q-carousel-viewport::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.22);
+    border-radius: 999px;
 }
 
 .q-carousel-track {
     display: flex;
     width: max-content;
-    min-width: 100%;
     flex-direction: row;
     flex-wrap: nowrap;
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
-    align-items: center;
+    /* Stretch so every slide matches the tallest card — avoids viewport height jumping between bundles */
+    align-items: stretch;
+    box-sizing: border-box;
 }
 
 .q-carousel-slide {
     /* Width set in JS from viewport (see Q_CAROUSEL_SLIDE_FRAC) — % of track ≠ % of viewport */
     flex: 0 0 auto;
     box-sizing: border-box;
-    opacity: 0.42;
+    opacity: 0.55;
     transition: opacity 0.5s ease, transform 0.5s ease;
-    transform: scale(0.88);
+    transform: scale(0.92);
     display: flex;
     justify-content: center;
+    align-items: stretch;
+}
+
+.q-carousel-slide--empty {
     align-items: center;
+    justify-content: center;
 }
 
 .q-carousel-slide.active {
@@ -921,7 +1033,7 @@ body.questionnaire-wrapper-open {
 .questionnaire-footer-content {
     width: 100%;
     padding: 12px 20px 28px;
-    background: #FFFFFF;
+    background: var(--q-surface);
     margin-top: 20px;
     border-radius: 20px 20px 0 0;
     box-shadow: 0px -4px 20px rgba(0, 0, 0, 0.06);
@@ -967,11 +1079,32 @@ body.questionnaire-wrapper-open {
     transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
+.qty-option__stack {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+
 .qty-option__num {
     font-family: 'Assistant', sans-serif;
     font-size: 16px;
     font-weight: 600;
     line-height: 1;
+}
+
+.qty-option__weight {
+    font-family: 'Assistant', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.15;
+    opacity: 0.92;
+    white-space: nowrap;
+}
+
+.qty-option.selected .qty-option__weight {
+    opacity: 0.95;
 }
 
 .qty-option__discount {
@@ -1019,11 +1152,7 @@ body.questionnaire-wrapper-open {
 }
 
 .price-label-main {
-    font-size: 14px;
-}
-
-.price-current {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .questionnaire-add-to-cart-wrapper {
