@@ -598,6 +598,32 @@ body.questionnaire-wrapper-open {
     line-height: 15px;
 }
 
+/* Profile chip fills (same as snippets/product-taste-icon-color.liquid) — table rows are built in JS */
+#questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper span.chocolate {
+    background-color: rgb(162, 137, 114);
+    color: #fff;
+}
+
+#questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper span.sweet-chocolate {
+    background-color: #c1a089;
+    color: #1C201D;
+}
+
+#questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper span.sweet-balanced {
+    background-color: #dec2b5;
+    color: #1C201D;
+}
+
+#questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper span.sweet-fruity {
+    background-color: #f3d5b8;
+    color: #1C201D;
+}
+
+#questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper span.fruity {
+    background-color: #ebe4cc;
+    color: #1C201D;
+}
+
 .questionnaire-product-vendor {
     font-family: 'Assistant', sans-serif;
     font-size: 16px;
@@ -763,7 +789,7 @@ body.questionnaire-wrapper-open {
     z-index: 1;
     background: var(--q-surface);
     text-align: right;
-    padding: 10px 8px;
+    padding: 0 8px;
     border-bottom: 1px solid var(--q-border);
     font-weight: 600;
     color: #555555;
@@ -779,7 +805,31 @@ body.questionnaire-wrapper-open {
 #questionnaireResultsStep .q-bundle-table__td--taste {
     color: #444444;
     line-height: 1.4;
-    max-width: 140px;
+    text-align: right;
+    max-width: 200px;
+}
+
+/* Table cell: same chip markup as carousel (product-taste-icons / plp-taste-text-wrapper), not image overlay */
+#questionnaireResultsStep .q-bundle-table__taste-icons {
+    position: static;
+    inset: auto;
+    top: auto;
+    max-width: none;
+    width: auto;
+    margin: 0;
+    /* margin-inline-start: auto; */
+    align-items: flex-start;
+    pointer-events: none;
+}
+
+#questionnaireResultsStep .q-bundle-table__taste-icons .plp-taste-text-wrapper {
+    justify-content: flex-end;
+}
+
+#questionnaireResultsStep .q-bundle-table__td--roast {
+    color: #444444;
+    text-align: right;
+    white-space: nowrap;
 }
 
 #questionnaireResultsStep .q-bundle-table__product {
