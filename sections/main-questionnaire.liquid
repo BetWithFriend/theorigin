@@ -417,8 +417,11 @@
     </div>
   </div>
   <div class="questionnaire-icons-wrapper" id="questionnaireResultsStep">
-    <header class="questionnaire-header questionnaire-header--results" role="banner">
-      <div class="questionnaire-header__start">
+    <header
+      class="questionnaire-header questionnaire-header--results"
+      role="banner"
+      dir="ltr">
+      <div class="questionnaire-header__brand">
         <div class="questionnaire-logo">
           <img
             src="{{ 'logo.png' | asset_url }}"
@@ -427,44 +430,82 @@
             height="auto">
         </div>
       </div>
-      <div class="questionnaire-header__center">
-        <div
-          class="results-header-bundle"
-          role="group"
-          aria-label="תצוגת מארז">
-          <button
-            type="button"
-            id="q-bundle-view-toggle"
-            class="results-bundle-view-toggle"
-            aria-expanded="false"
-            aria-controls="q-bundle-view-table">
-            <span class="results-bundle-view-toggle__stack">
-              {% comment %} <span class="results-bundle-view-toggle__title">המארז שלך</span> {% endcomment %}
-              <span id="q-bundle-view-toggle-sublabel" class="results-bundle-view-toggle__sublabel">הצג הכל בטבלה</span>
-            </span>
-            <svg
-              class="results-bundle-view-toggle__chev"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true">
-              <path
-                d="M4 6H20M4 12H20M4 18H20"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round" />
-            </svg>
-          </button>
-        {% comment %} <span class="results-title-counter" id="q-carousel-counter">(1/5)</span> {% endcomment %}
-        </div>
-      </div>
-      <div class="questionnaire-header__end">
+      <div class="questionnaire-header__actions" dir="ltr">
         <button
           type="button"
-          class="questionnaire-start-over"
-          onclick="window.location.reload()">התחל חדש</button>
+          class="q-results-icon-btn q-results-icon-btn--refresh"
+          onclick="restartQuestionnaire()"
+          aria-label="התחל מחדש"
+          title="התחל מחדש">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true">
+            <path
+              d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path
+              d="M21 3v5h-5"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          id="q-results-view-toggle"
+          class="q-results-view-toggle q-results-icon-btn q-results-icon-btn--menu"
+          aria-pressed="false"
+          aria-label="הצג תצוגת טבלה"
+          title="תצוגת טבלה">
+          <span class="q-results-view-toggle__icon q-results-view-toggle__icon--table" aria-hidden="true">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M4 7h16M4 12h16M4 17h16"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round" />
+            </svg>
+          </span>
+          <span class="q-results-view-toggle__icon q-results-view-toggle__icon--carousel" aria-hidden="true">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <rect
+                x="3.5"
+                y="6"
+                width="9"
+                height="12"
+                rx="1.5"
+                stroke="currentColor"
+                stroke-width="1.6" />
+              <rect
+                x="11.5"
+                y="6"
+                width="9"
+                height="12"
+                rx="1.5"
+                stroke="currentColor"
+                stroke-width="1.6"
+                opacity="0.45" />
+            </svg>
+          </span>
+        </button>
       </div>
     </header>
 
@@ -551,6 +592,75 @@
 
     <div class="questionnaire-footer-content">
       <div class="questionnaire-qty-selector-wrapper">
+        <div
+          class="results-header-bundle results-header-bundle--above-qty"
+          role="group"
+          aria-label="בחירת מותג למארז">
+          <div class="results-vendor-select-wrap">
+            <div class="results-vendor-select__label" id="q-results-vendor-lbl">מותג קפה</div>
+            <div
+              class="results-vendor-dropdown"
+              id="q-results-vendor-dropdown"
+              dir="rtl"
+              data-open="false"
+              data-empty="true">
+              <button
+                type="button"
+                dir="rtl"
+                class="results-vendor-dropdown__trigger"
+                id="q-results-vendor-trigger"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+                aria-controls="q-results-vendor-list"
+                aria-disabled="true"
+                disabled>
+                <span class="results-vendor-dropdown__trigger-body">
+                  <span class="results-vendor-dropdown__trigger-text" id="q-results-vendor-trigger-label">—</span>
+                  <span
+                    class="results-vendor-trigger__price-pill"
+                    id="q-results-vendor-trigger-price"
+                    hidden></span>
+                </span>
+                <svg
+                  class="results-vendor-dropdown__chev"
+                  width="14"
+                  height="8"
+                  viewBox="0 0 14 8"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true">
+                  <path
+                    d="M1 1.5L7 6.5L13 1.5"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </button>
+              <div
+                class="results-vendor-dropdown__panel"
+                id="q-results-vendor-panel"
+                dir="rtl"
+                hidden
+                data-position="bottom">
+                <div
+                  class="results-vendor-menu"
+                  id="q-results-vendor-menu"
+                  data-empty="true">
+                  <div
+                    class="results-vendor-menu__inner"
+                    id="q-results-vendor-list"
+                    role="listbox"
+                    aria-labelledby="q-results-vendor-lbl"
+                    aria-describedby="q-results-vendor-hint"></div>
+                </div>
+              </div>
+            </div>
+            <p id="q-results-vendor-hint" class="results-vendor-select__hint visually-hidden">
+              בחרו אחת משלושת ההתאמות. המחירים מחושבים לפי מארז וכמות החבילות. לחצו לפתיחת התפריט.
+            </p>
+          </div>
+        </div>
         <div class="questionnaire-qty-label">חבילות קפה במארז</div>
         <div
           class="questionnaire-qty-options"
@@ -562,68 +672,66 @@
             data-qty="3">
             <span class="qty-option__stack">
               <span class="qty-option__num">3</span>
-            {% comment %} <span class="qty-option__weight"></span> {% endcomment %}
+              <span class="qty-option__weight">(3ק״ג)</span>
             </span>
           </button>
           <button
             type="button"
-            class="qty-option selected"
+            class="qty-option qty-option--with-discount selected"
             data-qty="5">
+            <span class="qty-option__discount-badge" aria-hidden="true">5%</span>
             <span class="qty-option__stack">
               <span class="qty-option__num">5</span>
-            {% comment %} <span class="qty-option__weight"></span> {% endcomment %}
+              <span class="qty-option__weight">(3ק״ג)</span>
             </span>
           </button>
           <button
             type="button"
             class="qty-option qty-option--with-discount"
             data-qty="7">
+            <span class="qty-option__discount-badge" aria-hidden="true">10%</span>
             <span class="qty-option__stack">
               <span class="qty-option__num">7</span>
-            {% comment %} <span class="qty-option__weight"></span> {% endcomment %}
+              <span class="qty-option__weight">(3ק״ג)</span>
             </span>
-            <span class="qty-option__discount">10% הנחה</span>
           </button>
         </div>
       </div>
 
       <div class="questionnaire-checkout-section">
-        <div class="questionnaire-price-wrapper">
-          <div class="price-label-group">
-            <span class="price-label-main">סה״כ לתשלום</span>
-            <span class="price-label-sub">(כולל משלוח)</span>
+        <div class="questionnaire-checkout-row">
+          <div class="questionnaire-add-to-cart-wrapper">
+            <div class="questionnaire-atc-actions">
+              <form
+                id="q-footer-atc-form"
+                class="form product-form--questionnaire"
+                method="post"
+                action="/cart/add"
+                novalidate
+                data-type="add-to-cart-form">
+                <input
+                  type="hidden"
+                  name="id"
+                  id="q-footer-variant-id"
+                  value="">
+                <button
+                  type="submit"
+                  name="add"
+                  id="q-footer-atc-btn"
+                  class="questionnaire-add-btn">
+                  <span id="q-footer-atc-label">רכישת המארז</span>
+                </button>
+              </form>
+            </div>
           </div>
-          <div class="price-values-group">
-            <span class="price-line-primary">
-              <span class="price-current" id="q-footer-price"></span>
-            {% comment %} <span class="price-bundle-weight" id="q-footer-bundle-weight" hidden></span> {% endcomment %}
-            </span>
-            <span class="price-compare" id="q-footer-price-compare"></span>
-          </div>
-        </div>
-
-        <div class="questionnaire-add-to-cart-wrapper">
-          <div class="questionnaire-atc-actions">
-            <form
-              id="q-footer-atc-form"
-              class="form product-form--questionnaire"
-              method="post"
-              action="/cart/add"
-              novalidate
-              data-type="add-to-cart-form">
-              <input
-                type="hidden"
-                name="id"
-                id="q-footer-variant-id"
-                value="">
-              <button
-                type="submit"
-                name="add"
-                id="q-footer-atc-btn"
-                class="questionnaire-add-btn">
-                <span id="q-footer-atc-label">רכישת המארז</span>
-              </button>
-            </form>
+          <div class="questionnaire-price-wrapper">
+            <div class="price-values-group">
+              <span class="price-line-primary">
+                <span class="price-current" id="q-footer-price"></span>
+                <span class="price-compare" id="q-footer-price-compare"></span>
+              </span>
+            </div>
+            <p class="price-shipping-note">כולל משלוח</p>
           </div>
         </div>
       </div>
@@ -661,14 +769,15 @@
             width="24"
             height="16">
         </div>
-        <div class="questionnaire-secure-icons">
+        <div class="questionnaire-secure-icons" dir="rtl">
+          <div class="secure-text">רכישה מאובטחת</div>
           <img
             src="{{ 'secure_buy.png' | asset_url }}"
-            alt="Secure Buy"
-            width="16"
-            height="16">
-          <div class="secure-text">רכישה מאובטחת
-          </div>
+            alt=""
+            width="24"
+            height="24"
+            class="questionnaire-secure-icons__lock"
+            role="presentation">
         </div>
       </div>
 
@@ -802,43 +911,43 @@
               class="q-product-modal__chips"
               hidden></div>
           {% comment %} <div
-                                                                                                                                                                                                                                                                                                                      id="q-product-modal-description-block"
-                                                                                                                                                                                                                                                                                                                      class="q-product-modal__description-block"
-                                                                                                                                                                                                                                                                                                                      hidden>
-                                                                                                                                                                                                                                                                                                                      <h3 class="q-product-modal__section-title">תיאור המוצר</h3>
-                                                                                                                                                                                                                                                                                                                      <div
-                                                                                                                                                                                                                                                                                                                        id="q-product-modal-description"
-                                                                                                                                                                                                                                                                                                                        class="q-product-modal__description rte"
-                                                                                                                                                                                                                                                                                                                        dir="rtl"></div>
-                                                                                                                                                                                                                                                                    </div> {% endcomment %}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      id="q-product-modal-description-block"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      class="q-product-modal__description-block"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      hidden>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <h3 class="q-product-modal__section-title">תיאור המוצר</h3>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <div
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        id="q-product-modal-description"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        class="q-product-modal__description rte"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        dir="rtl"></div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                    </div> {% endcomment %}
           {% comment %} <div class="q-product-modal__actions">
-                                                                                                                                                                                                                                                              <div class="q-product-modal__price-row">
-                                                                                                                                                                                                                                                                <span class="q-product-modal__price-label">מחיר ליחידה</span>
-                                                                                                                                                                                                                                                                <span id="q-product-modal-price" class="q-product-modal__price"></span>
-                                                                                                                                                                                                                                                              </div>
-                                                                                                                                                                                                                                                              <form
-                                                                                                                                                                                                                                                                id="q-product-modal-atc-form"
-                                                                                                                                                                                                                                                                class="form product-form--questionnaire js-quick-add-form"
-                                                                                                                                                                                                                                                                method="post"
-                                                                                                                                                                                                                                                                action="/cart/add"
-                                                                                                                                                                                                                                                                data-type="add-to-cart-form">
-                                                                                                                                                                                                                                                                <input
-                                                                                                                                                                                                                                                                  type="hidden"
-                                                                                                                                                                                                                                                                  name="id"
-                                                                                                                                                                                                                                                                  id="q-product-modal-variant-id"
-                                                                                                                                                                                                                                                                  value="">
-                                                                                                                                                                                                                                                                <button
-                                                                                                                                                                                                                                                                  type="submit"
-                                                                                                                                                                                                                                                                  id="q-product-modal-atc-btn"
-                                                                                                                                                                                                                                                                  class="questionnaire-add-btn">
-                                                                                                                                                                                                                                                                  <span id="q-product-modal-atc-label">הוספה לסל</span>
-                                                                                                                                                                                                                                                                </button>
-                                                                                                                                                                                                                                                              </form>
-                                                                                                                                                                                                                                                              <a
-                                                                                                                                                                                                                                                                id="q-product-modal-pdp-link"
-                                                                                                                                                                                                                                                                class="q-product-modal__pdp-link"
-                                                                                                                                                                                                                                                                href="#">לעמוד המוצר המלא</a>
-                                                                                                                                                                                                                    </div> {% endcomment %}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                              <div class="q-product-modal__price-row">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                <span class="q-product-modal__price-label">מחיר ליחידה</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                <span id="q-product-modal-price" class="q-product-modal__price"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                              </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                              <form
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                id="q-product-modal-atc-form"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                class="form product-form--questionnaire js-quick-add-form"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                method="post"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                action="/cart/add"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                data-type="add-to-cart-form">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                <input
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  type="hidden"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  name="id"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  id="q-product-modal-variant-id"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  value="">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                <button
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  type="submit"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  id="q-product-modal-atc-btn"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  class="questionnaire-add-btn">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <span id="q-product-modal-atc-label">הוספה לסל</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                </button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                              </form>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                              <a
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                id="q-product-modal-pdp-link"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                class="q-product-modal__pdp-link"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                href="#">לעמוד המוצר המלא</a>
+                                                                                                                                                                                                                                                                                                                                                                                    </div> {% endcomment %}
           </div>
         </div>
       </div>
@@ -900,6 +1009,46 @@
     return [3, 5, 7].includes(n) ? n : 5;
   }
 
+  /** Same as qty used for results footer / carousel bundle price. */
+  function getQuestionnaireResultsBundleQty() {
+    const sel = document.querySelector('.questionnaire-qty-selector-wrapper .qty-option.selected');
+    if (!sel) return 1;
+    const dq = sel.getAttribute('data-qty');
+    if (dq) return parseInt(dq, 10) || 1;
+    return parseInt(sel.textContent.trim(), 10) || 1;
+  }
+
+  /** Mirrors footer bundle: avg price per matched product × qty, with 3/5/7 pack discounts. */
+  function bundleTotalCentsForQuestionnaireProducts(products, qty) {
+    if (!Array.isArray(products) || !products.length) return 0;
+    const n = products.length;
+    let sumCents = 0;
+    products.forEach(function (p) {
+      sumCents += p.price_cents || 0;
+    });
+    const avgCents = sumCents / n;
+    let totalCents = Math.round(avgCents * qty);
+    if (qty === 5) {
+      totalCents = Math.round(totalCents * 0.95);
+    } else if (qty === 7) {
+      totalCents = Math.round(totalCents * 0.9);
+    }
+    return totalCents;
+  }
+
+  function coffeesForVendorFromPositiveScores(positiveScores, vendorKeyLower) {
+    const v = (vendorKeyLower || '').toLowerCase();
+    if (!Array.isArray(positiveScores)) return [];
+    return positiveScores
+      .filter(function (item) {
+        return item.coffee && (item.coffee.vendor || '').trim().toLowerCase() === v;
+      })
+      .map(function (item) {
+        return item.coffee;
+      })
+      .slice(0, 7);
+  }
+
   function shuffleVendorList(arr) {
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -911,38 +1060,64 @@
     return a;
   }
 
-  /**
-   * Picks three vendors for 3 / 5 / 7 pack sizes: randomly shuffled, distinct when
-   * at least three matching vendors exist; otherwise reuses from the available pool.
-   */
-  function pickRandomVendorsPerBundleQty(uniqueVendorsLower) {
-    const uniq = [...new Set((uniqueVendorsLower || []).map((v) => (v || '').trim().toLowerCase()).filter(Boolean))];
-    if (!uniq.length) {
-      return { 3: '', 5: '', 7: '' };
+  function getVendorDisplayNameFromPool(vendorKeyLower, positiveScores) {
+    const k = (vendorKeyLower || '').toLowerCase();
+    for (var i = 0; i < positiveScores.length; i++) {
+      const coffee = positiveScores[i].coffee;
+      const v = (coffee.vendor || '').trim();
+      if (v && v.toLowerCase() === k) {
+        return v;
+      }
     }
-    const shuffled = shuffleVendorList(uniq);
-    let a;
-    let b;
-    let c;
-    if (shuffled.length >= 3) {
-      a = shuffled[0];
-      b = shuffled[1];
-      c = shuffled[2];
-    } else if (shuffled.length === 2) {
-      a = shuffled[0];
-      b = shuffled[1];
-      c = shuffled[Math.random() < 0.5 ? 0 : 1];
-    } else {
-      a = b = c = shuffled[0];
-    }
-    return { 3: a, 5: b, 7: c };
+    return '';
   }
 
-  function matchQuestionnaireCoffees(userText, bundleQty) {
-    const qty =
-      bundleQty == null || bundleQty === undefined ? getQuestionnaireBundleQtyFromDom() : bundleQty;
-    const normalizedQty = [3, 5, 7].includes(qty) ? qty : 5;
+  function sortVendorOptionsByMatchDesc(options) {
+    if (!Array.isArray(options) || !options.length) {
+      return options;
+    }
+    return options.slice().sort(function (a, b) {
+      const sb =
+        (b.orderScore != null ? b.orderScore : b.matchPercent != null ? b.matchPercent : 0);
+      const sa =
+        (a.orderScore != null ? a.orderScore : a.matchPercent != null ? a.matchPercent : 0);
+      return sb - sa;
+    });
+  }
 
+  /**
+   * Picks 3 random vendors (when possible) for the results menu.
+   * orderScore ranks by summed match score (higher = better); menu prices are computed in updateResultsVendorSelect.
+   */
+  function pickThreeVendorOptionsForResults(uniqueVendorsLower, positiveScores) {
+    const uniq = [...new Set((uniqueVendorsLower || []).map((v) => (v || '').trim().toLowerCase()).filter(Boolean))];
+    if (!uniq.length) {
+      return [];
+    }
+    const shuffled = shuffleVendorList(uniq);
+    let pickKeys;
+    if (shuffled.length >= 3) {
+      pickKeys = [shuffled[0], shuffled[1], shuffled[2]];
+    } else if (shuffled.length === 2) {
+      pickKeys = [shuffled[0], shuffled[1], shuffled[Math.random() < 0.5 ? 0 : 1]];
+    } else {
+      pickKeys = [shuffled[0], shuffled[0], shuffled[0]];
+    }
+    const rows = pickKeys.map((vendorKey) => {
+      const orderScore = (positiveScores || []).reduce(function (s, item) {
+        if ((item.coffee.vendor || '').trim().toLowerCase() === vendorKey) return s + (item.score || 0);
+        return s;
+      }, 0);
+      return {
+        vendorKey: vendorKey,
+        label: getVendorDisplayNameFromPool(vendorKey, positiveScores) || vendorKey,
+        orderScore: orderScore,
+      };
+    });
+    return sortVendorOptionsByMatchDesc(rows);
+  }
+
+  function matchQuestionnaireCoffees(userText) {
     if (!window.allProducts || !Array.isArray(window.allProducts)) {
       return [];
     }
@@ -1011,20 +1186,50 @@
     });
 
     const positiveScores = scores.filter((item) => item.score > 0).sort((a, b) => b.score - a.score);
+    window.__questionnaireLastPositiveScores = positiveScores;
 
     const vendorsWithMatches = [
       ...new Set(positiveScores.map(({ coffee }) => (coffee.vendor || '').trim().toLowerCase()).filter(Boolean)),
     ];
 
     if (
-      !window.__questionnaireVendorByQty ||
+      !window.__questionnaireVendorOptions ||
+      !window.__questionnaireVendorOptions.length ||
       window.__questionnaireVendorAssignmentForText !== userText
     ) {
-      window.__questionnaireVendorByQty = pickRandomVendorsPerBundleQty(vendorsWithMatches);
+      window.__questionnaireVendorOptions = pickThreeVendorOptionsForResults(vendorsWithMatches, positiveScores);
       window.__questionnaireVendorAssignmentForText = userText;
     }
 
-    const targetVendor = (window.__questionnaireVendorByQty[normalizedQty] || '').toLowerCase();
+    if (window.__questionnaireSelectedVendor && window.__questionnaireVendorOptions && window.__questionnaireVendorOptions.length) {
+      const want = (window.__questionnaireSelectedVendor || '').toLowerCase();
+      const inList = window.__questionnaireVendorOptions.some(function (o) {
+        return (o.vendorKey || '').toLowerCase() === want;
+      });
+      if (!inList && vendorsWithMatches.indexOf(want) !== -1) {
+        const name = getVendorDisplayNameFromPool(want, positiveScores) || want;
+        const injectScore = (positiveScores || []).reduce(function (s, item) {
+          if ((item.coffee.vendor || '').trim().toLowerCase() === want) return s + (item.score || 0);
+          return s;
+        }, 0);
+        window.__questionnaireVendorOptions[0] = { vendorKey: want, label: name, orderScore: Math.max(injectScore, 1) };
+        window.__questionnaireVendorOptions = sortVendorOptionsByMatchDesc(window.__questionnaireVendorOptions);
+      }
+    }
+
+    if (!window.__questionnaireVendorOptions || !window.__questionnaireVendorOptions.length) {
+      return [];
+    }
+
+    const optionKeys = window.__questionnaireVendorOptions.map(function (o) {
+      return (o.vendorKey || '').toLowerCase();
+    });
+    var sel = (window.__questionnaireSelectedVendor || '').toLowerCase();
+    if (!sel || optionKeys.indexOf(sel) === -1) {
+      window.__questionnaireSelectedVendor = window.__questionnaireVendorOptions[0].vendorKey;
+    }
+
+    const targetVendor = (window.__questionnaireSelectedVendor || '').toLowerCase();
     if (!targetVendor) {
       return [];
     }
@@ -1065,7 +1270,7 @@
         wEl.textContent = '';
         return;
       }
-      var prods = matchQuestionnaireCoffees(ut, q);
+      var prods = matchQuestionnaireCoffees(ut);
       var grams = 0;
       prods.slice(0, q).forEach(function (p) {
         grams += p.weight_grams || 0;
@@ -1080,6 +1285,149 @@
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
+  }
+
+  function setResultsVendorMenuOpen(isOpen) {
+    var drop = document.getElementById('q-results-vendor-dropdown');
+    var panel = document.getElementById('q-results-vendor-panel');
+    var tr = document.getElementById('q-results-vendor-trigger');
+    if (!drop || !panel || !tr) return;
+    if (isOpen) {
+      drop.setAttribute('data-open', 'true');
+      panel.removeAttribute('hidden');
+      tr.setAttribute('aria-expanded', 'true');
+    } else {
+      drop.setAttribute('data-open', 'false');
+      panel.setAttribute('hidden', 'hidden');
+      tr.setAttribute('aria-expanded', 'false');
+    }
+  }
+
+  function updateResultsVendorSelect() {
+    var list = document.getElementById('q-results-vendor-list');
+    if (!list) return;
+    var menu = document.getElementById('q-results-vendor-menu');
+    var drop = document.getElementById('q-results-vendor-dropdown');
+    var tr = document.getElementById('q-results-vendor-trigger');
+    var trLabel = document.getElementById('q-results-vendor-trigger-label');
+    var opts = window.__questionnaireVendorOptions;
+
+    setResultsVendorMenuOpen(false);
+
+    if (!Array.isArray(opts) || !opts.length) {
+      list.innerHTML = '<p class="results-vendor-menu__empty" role="status">' + escapeHtml('אין מותגים להצגה') + '</p>';
+      if (menu) menu.setAttribute('data-empty', 'true');
+      if (drop) drop.setAttribute('data-empty', 'true');
+      if (tr) {
+        tr.disabled = true;
+        tr.setAttribute('aria-disabled', 'true');
+      }
+      if (trLabel) trLabel.textContent = 'אין מותגים להצגה';
+      var trPrice = document.getElementById('q-results-vendor-trigger-price');
+      if (trPrice) {
+        trPrice.textContent = '';
+        trPrice.hidden = true;
+      }
+      return;
+    }
+    if (menu) menu.setAttribute('data-empty', 'false');
+    if (drop) drop.setAttribute('data-empty', 'false');
+    if (tr) {
+      tr.disabled = false;
+      tr.removeAttribute('aria-disabled');
+    }
+    var optionKeys = opts.map(function (o) {
+      return (o.vendorKey || '').toLowerCase();
+    });
+    var cur = (window.__questionnaireSelectedVendor || '').toLowerCase();
+    if (optionKeys.indexOf(cur) === -1) {
+      window.__questionnaireSelectedVendor = opts[0].vendorKey;
+    }
+    cur = (window.__questionnaireSelectedVendor || '').toLowerCase();
+    var currentOpt = opts.find(function (o) {
+      return (o.vendorKey || '').toLowerCase() === cur;
+    });
+    if (trLabel && currentOpt) {
+      var tl = currentOpt.label || currentOpt.vendorKey;
+      trLabel.textContent = 'מארז מבית הקלייה ' + tl;
+    } else if (trLabel) {
+      trLabel.textContent = '—';
+    }
+    var posScores = window.__questionnaireLastPositiveScores;
+    if (!Array.isArray(posScores)) posScores = [];
+    var menuQty = getQuestionnaireResultsBundleQty();
+    list.innerHTML = opts
+      .map(function (o) {
+        var v = o.vendorKey || '';
+        var vLower = (v || '').toLowerCase();
+        var label = o.label || v;
+        var prods = coffeesForVendorFromPositiveScores(posScores, vLower);
+        var totalCents = bundleTotalCentsForQuestionnaireProducts(prods, menuQty);
+        var priceStr =
+          totalCents > 0 ? (totalCents / 100).toFixed(0) + ' ש״ח' : '—';
+        var selected = vLower === cur;
+        return (
+          '<button type="button" class="results-vendor-menu__item' +
+          (selected ? ' is-selected' : '') +
+          '" role="option" data-vendor="' +
+          escapeHtml(String(v)) +
+          '" aria-selected="' +
+          (selected ? 'true' : 'false') +
+          '"><span class="results-vendor-menu__name">' +
+          escapeHtml(label) +
+          '</span><span class="results-vendor-trigger__price-pill">' + escapeHtml(priceStr) + '</span></button>'
+        );
+      })
+      .join('');
+  }
+
+  function setupResultsVendorSelect() {
+    var list = document.getElementById('q-results-vendor-list');
+    var drop = document.getElementById('q-results-vendor-dropdown');
+    var tr = document.getElementById('q-results-vendor-trigger');
+    if (!list || !drop || !tr || list._qVendorSelectBound) return;
+    list._qVendorSelectBound = true;
+    tr.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (tr.disabled) return;
+      var panel = document.getElementById('q-results-vendor-panel');
+      if (!panel) return;
+      setResultsVendorMenuOpen(!!panel.hidden);
+    });
+    list.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var btn = e.target.closest('.results-vendor-menu__item');
+      if (!btn) return;
+      var raw = (btn.getAttribute('data-vendor') || '').trim();
+      if (!raw) return;
+      window.__questionnaireSelectedVendor = raw.toLowerCase();
+      setResultsVendorMenuOpen(false);
+      var ut = window.__questionnaireMatchUserText;
+      if (typeof ut !== 'string' || !ut.length) return;
+      var next = matchQuestionnaireCoffees(ut);
+      saveResultsState(next);
+      renderQuestionnaireResults(next);
+    });
+    if (!window._qVendorMenuOutsideClick) {
+      window._qVendorMenuOutsideClick = true;
+      document.addEventListener(
+        'click',
+        function (e) {
+          if (!e.target || !e.target.closest) return;
+          if (e.target.closest('.results-vendor-dropdown')) return;
+          setResultsVendorMenuOpen(false);
+        },
+        true
+      );
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        if (!document.getElementById('q-results-vendor-dropdown') || !document.getElementById('q-results-vendor-panel')) return;
+        if (document.getElementById('q-results-vendor-panel').getAttribute('hidden') != null) return;
+        setResultsVendorMenuOpen(false);
+        var t = document.getElementById('q-results-vendor-trigger');
+        if (t) t.focus();
+      });
+    }
   }
 
   function normalizeMetaList(val) {
@@ -1205,47 +1553,43 @@
       .join('');
   }
 
-  function updateBundleToggleUi(isTable) {
-    var sub = document.getElementById('q-bundle-view-toggle-sublabel');
-    var btn = document.getElementById('q-bundle-view-toggle');
-    var counter = document.getElementById('q-carousel-counter');
-    if (sub) sub.textContent = isTable ? 'חזרה לתצוגת מארז' : 'הצג טבלה';
-    if (btn) {
-      btn.setAttribute('aria-expanded', isTable ? 'true' : 'false');
-      btn.classList.toggle('is-table-active', isTable);
-    }
-    if (counter) counter.hidden = !!isTable;
-  }
-
-  function setupBundleViewToggle() {
-    var btn = document.getElementById('q-bundle-view-toggle');
+  function setResultsBundleView(useTable) {
+    var step = document.getElementById('questionnaireResultsStep');
     var carouselView = document.getElementById('q-bundle-view-carousel');
     var tableView = document.getElementById('q-bundle-view-table');
-    var step = document.getElementById('questionnaireResultsStep');
-    if (!btn || !carouselView || !tableView || !step) return;
-    if (btn._qBundleToggleBound) return;
-    btn._qBundleToggleBound = true;
-    btn.addEventListener('click', function () {
-      var toTable = !step.classList.contains('results-step--table-view');
-      step.classList.toggle('results-step--table-view', toTable);
-      carouselView.hidden = toTable;
-      tableView.hidden = !toTable;
-      updateBundleToggleUi(toTable);
-      if (!toTable) {
-        window.dispatchEvent(new Event('resize'));
-      }
-    });
+    var btn = document.getElementById('q-results-view-toggle');
+    if (!step || !carouselView || !tableView) return;
+    if (useTable) {
+      step.classList.add('results-step--table-view');
+      carouselView.hidden = true;
+      tableView.hidden = false;
+    } else {
+      step.classList.remove('results-step--table-view');
+      carouselView.hidden = false;
+      tableView.hidden = true;
+    }
+    if (btn) {
+      btn.setAttribute('aria-pressed', useTable ? 'true' : 'false');
+      btn.setAttribute('aria-label', useTable ? 'הצג תצוגת קרוסלה' : 'הצג תצוגת טבלה');
+      btn.setAttribute('title', useTable ? 'תצוגת קרוסלה' : 'תצוגת טבלה');
+    }
   }
 
   function resetBundleViewToCarousel() {
-    var step = document.getElementById('questionnaireResultsStep');
-    var carouselView = document.getElementById('q-bundle-view-carousel');
-    var tableView = document.getElementById('q-bundle-view-table');
-    if (!step || !carouselView || !tableView) return;
-    step.classList.remove('results-step--table-view');
-    carouselView.hidden = false;
-    tableView.hidden = true;
-    updateBundleToggleUi(false);
+    setResultsBundleView(false);
+  }
+
+  var _qResultsViewToggleBound = false;
+
+  function setupResultsViewToggle() {
+    var btn = document.getElementById('q-results-view-toggle');
+    if (!btn || _qResultsViewToggleBound) return;
+    _qResultsViewToggleBound = true;
+    btn.addEventListener('click', function () {
+      var step = document.getElementById('questionnaireResultsStep');
+      var isTable = step && step.classList.contains('results-step--table-view');
+      setResultsBundleView(!isTable);
+    });
   }
 
   function mergeProductFromCatalog(product) {
@@ -1399,10 +1743,9 @@
         JSON.stringify({
           products: Array.isArray(products) ? products : [],
           userText: typeof window.__questionnaireMatchUserText === 'string' ? window.__questionnaireMatchUserText : '',
-          vendorByQty:
-            window.__questionnaireVendorByQty && typeof window.__questionnaireVendorByQty === 'object'
-              ? window.__questionnaireVendorByQty
-              : null,
+          vendorOptions: Array.isArray(window.__questionnaireVendorOptions) ? window.__questionnaireVendorOptions : null,
+          selectedVendor:
+            typeof window.__questionnaireSelectedVendor === 'string' ? window.__questionnaireSelectedVendor : '',
           vendorAssignmentUserText:
             typeof window.__questionnaireVendorAssignmentForText === 'string'
               ? window.__questionnaireVendorAssignmentForText
@@ -1424,12 +1767,24 @@
       if (typeof parsedState.userText === 'string' && parsedState.userText.length) {
         window.__questionnaireMatchUserText = parsedState.userText;
       }
-      if (parsedState.vendorByQty && typeof parsedState.vendorByQty === 'object') {
-        window.__questionnaireVendorByQty = parsedState.vendorByQty;
+      if (Array.isArray(parsedState.vendorOptions) && parsedState.vendorOptions.length) {
+        window.__questionnaireVendorOptions = sortVendorOptionsByMatchDesc(parsedState.vendorOptions);
+      } else if (parsedState.vendorByQty && typeof parsedState.vendorByQty === 'object') {
+        const legacy = parsedState.vendorByQty[5] || parsedState.vendorByQty['5'];
+        const v = (legacy != null && String(legacy).trim() !== '' ? String(legacy) : Object.values(parsedState.vendorByQty)[0]) || '';
+        if (v) {
+          window.__questionnaireSelectedVendor = String(v).toLowerCase();
+        }
+      }
+      if (typeof parsedState.selectedVendor === 'string' && parsedState.selectedVendor.trim() !== '') {
+        window.__questionnaireSelectedVendor = parsedState.selectedVendor.trim().toLowerCase();
       }
       if (typeof parsedState.vendorAssignmentUserText === 'string' && parsedState.vendorAssignmentUserText.length) {
         window.__questionnaireVendorAssignmentForText = parsedState.vendorAssignmentUserText;
-      } else if (parsedState.vendorByQty && typeof window.__questionnaireMatchUserText === 'string') {
+      } else if (
+        (Array.isArray(parsedState.vendorOptions) && parsedState.vendorOptions.length) ||
+        (parsedState.vendorByQty && typeof window.__questionnaireMatchUserText === 'string')
+      ) {
         window.__questionnaireVendorAssignmentForText = window.__questionnaireMatchUserText;
       }
       return parsedState.products;
@@ -1657,8 +2012,7 @@
     console.log('User Text for matching:', userText);
 
     window.__questionnaireMatchUserText = userText;
-    const bundleQty = getQuestionnaireBundleQtyFromDom();
-    const matchedCoffees = matchQuestionnaireCoffees(userText, bundleQty);
+    const matchedCoffees = matchQuestionnaireCoffees(userText);
     console.log('Matched Coffees:', matchedCoffees);
     saveResultsState(matchedCoffees);
 
@@ -1720,6 +2074,7 @@
 
     if (resultsGrid && resultsStep && mainWrapper) {
       resetBundleViewToCarousel();
+      updateResultsVendorSelect();
       // Determine initial qty from the selected option (default 5)
       const initialQtyEl = document.querySelector('.questionnaire-qty-selector-wrapper .qty-option.selected');
       const initialQty = initialQtyEl
@@ -1728,7 +2083,7 @@
 
       // Render only the first `initialQty` products
       renderCarousel(products, initialQty);
-      // setupBundleListToggle();
+      setupResultsViewToggle();
 
       // Wire up qty selector — re-render carousel + price on change
       const qtyWrapper = document.querySelector('.questionnaire-qty-selector-wrapper');
@@ -1744,15 +2099,12 @@
           opt.classList.add('selected');
           const newQty =
             parseInt(opt.getAttribute('data-qty') || opt.textContent.trim(), 10) || products.length;
-          let nextProducts = products;
-          const ut = window.__questionnaireMatchUserText;
-          if (typeof ut === 'string' && ut.length) {
-            nextProducts = matchQuestionnaireCoffees(ut, newQty);
-            saveResultsState(nextProducts);
-          }
-          renderCarousel(nextProducts, newQty);
+          renderCarousel(products, newQty);
           updateQuestionnaireQtyOptionWeights();
+          updateResultsVendorSelect();
         });
+        // cloneNode(true) replaces nodes; listeners are not cloned — re-bind vendor combobox.
+        setupResultsVendorSelect();
       }
 
       updateQuestionnaireQtyOptionWeights();
@@ -1815,38 +2167,23 @@
     }
 
     // ── Bundle price helpers ──────────────────────────────────────────────
-    function getSelectedQty() {
-      const sel = document.querySelector('.questionnaire-qty-selector-wrapper .qty-option.selected');
-      if (!sel) return 1;
-      const dq = sel.getAttribute('data-qty');
-      if (dq) return parseInt(dq, 10) || 1;
-      return parseInt(sel.textContent.trim(), 10) || 1;
-    }
-
     function updateBundlePrice() {
       if (!products || products.length === 0) return;
-      const qty = getSelectedQty();
+      const qty = getQuestionnaireResultsBundleQty();
       const n = products.length;
 
       // Each carousel product counts as 1. The qty selector is the total number
       // of products in the bundle (3, 5, or 7). We compute the average price per
       // product across all matched results, then multiply by qty.
-      let sumCents = 0;
       let sumCompareCents = 0;
       products.forEach(function (p) {
-        sumCents += p.price_cents || 0;
         sumCompareCents += p.price_cents || 0;
       });
 
-      const avgCents = sumCents / n;
       const avgCompareCents = sumCompareCents / n;
-
-      let totalCents = Math.round(avgCents * qty);
       const totalCompareCents = Math.round(avgCompareCents * qty);
 
-      if (qty === 7) {
-        totalCents = Math.round(totalCents * 0.9);
-      }
+      const totalCents = bundleTotalCentsForQuestionnaireProducts(products, qty);
 
       const formatMoney = function (cents) {
         return '\u20AA' + (cents / 100).toFixed(0);
@@ -1854,6 +2191,7 @@
 
       const priceEl = document.getElementById('q-footer-price');
       const compareEl = document.getElementById('q-footer-price-compare');
+      const triggerPriceEl = document.getElementById('q-results-vendor-trigger-price');
 
       if (priceEl) priceEl.textContent = formatMoney(totalCents);
 
@@ -1864,6 +2202,16 @@
         } else {
           compareEl.textContent = '';
           compareEl.style.display = 'none';
+        }
+      }
+
+      if (triggerPriceEl) {
+        if (products && products.length) {
+          triggerPriceEl.textContent = (totalCents / 100).toFixed(0) + ' ש״ח';
+          triggerPriceEl.hidden = false;
+        } else {
+          triggerPriceEl.textContent = '';
+          triggerPriceEl.hidden = true;
         }
       }
 
@@ -2081,20 +2429,13 @@
       const totalWeightNoteEl = document.getElementById('q-bundle-drawer-total-weight-note');
       if (!drawer || !itemsEl || !totalEl) return;
 
-      const qty = getSelectedQty();
-      const n = products.length;
-      let sumCents = 0;
+      const qty = getQuestionnaireResultsBundleQty();
       let totalGrams = 0;
       products.forEach(function (p) {
         if (!p) return;
-        sumCents += p.price_cents || 0;
         totalGrams += p.weight_grams || 0;
       });
-      const avgCents = n ? sumCents / n : 0;
-      let totalCents = Math.round(avgCents * qty);
-      if (qty === 7) {
-        totalCents = Math.round(totalCents * 0.9);
-      }
+      const totalCents = bundleTotalCentsForQuestionnaireProducts(products, qty);
 
       const formatMoney = function (cents) {
         return '\u20AA' + (cents / 100).toFixed(0);
@@ -2469,7 +2810,7 @@
       page_load_time: performance.now(),
     });
 
-    setupBundleViewToggle();
+    setupResultsVendorSelect();
 
     document.body.classList.add('questionnaire-wrapper-open');
 
@@ -2784,7 +3125,7 @@
       let productsToShow = savedResultsProducts;
       if (typeof window.__questionnaireMatchUserText === 'string' && window.__questionnaireMatchUserText.length) {
         const q = getQuestionnaireBundleQtyFromDom();
-        productsToShow = matchQuestionnaireCoffees(window.__questionnaireMatchUserText, q);
+        productsToShow = matchQuestionnaireCoffees(window.__questionnaireMatchUserText);
         saveResultsState(productsToShow);
       }
       renderQuestionnaireResults(productsToShow);
