@@ -1880,7 +1880,7 @@ body.questionnaire-wrapper-open {
     padding: 16px 40px;
     font-size: 20px;
     font-weight: 400;
-    background-color: #333634;
+    /* background-color: #333634; */
     border-radius: 8px;
     white-space: nowrap;
 }
