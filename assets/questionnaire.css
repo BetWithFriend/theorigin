@@ -410,6 +410,8 @@ body.questionnaire-wrapper-open {
     flex-grow: 1;
 }
 
+/* TabNav button position is overridden to "right" via inline script in questionnaire sections */
+
 @media screen and (min-width: 990px) {
     .header-wrapper.questionnaire-wrapper-open {
         z-index: 10001;
@@ -754,12 +756,11 @@ body.questionnaire-wrapper-open {
     padding: 0;
     background-color: var(--q-surface-warm);
     flex: 1 1 auto;
-    min-height: 0;
+    /* min-height: 0;
     display: flex;
     flex-direction: column;
-    /* Pin header + bundle + qty to the top; checkout + secure to the bottom of the step */
     justify-content: flex-start;
-    align-items: stretch;
+    align-items: stretch; */
     /* Between tight content-height and old fixed 318px — room under the carousel, not inside stretched slides */
     --q-bundle-views-min-height: 292px;
     /* Table panel: fixed height so qty (3/5/7) does not stretch the carousel+thumbs measurement. */
@@ -1753,7 +1754,7 @@ body.questionnaire-wrapper-open {
 }
 
 #questionnaireResultsStep .qty-option__weight {
-    font-size: 12px;
+    font-size: 14px;
     letter-spacing: 0.02em;
     opacity: 1;
 }
@@ -1887,8 +1888,14 @@ body.questionnaire-wrapper-open {
 }
 
 #questionnaireResultsStep .price-compare {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 300;
+}
+
+#questionnaireResultsStep #q-results-vendor-trigger-price {
+    font-size: 16px;
+    min-height: 22px;
+    line-height: 22px;
 }
 
 .price-shipping-note {
@@ -2312,6 +2319,70 @@ body.questionnaire-wrapper-open {
 
 .q-product-modal__pdp-link:hover {
     opacity: 0.85;
+}
+
+/* Restart questionnaire confirmation (results header refresh) */
+.q-restart-confirm-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100120;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    box-sizing: border-box;
+    direction: rtl;
+}
+
+.q-restart-confirm-modal[hidden] {
+    display: none !important;
+}
+
+.q-restart-confirm-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(28, 32, 29, 0.48);
+    cursor: pointer;
+}
+
+.q-restart-confirm-modal__panel {
+    position: relative;
+    z-index: 1;
+    width: min(360px, calc(100vw - 32px));
+    padding: 24px 22px 22px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+}
+
+.q-restart-confirm-modal__title {
+    margin: 0 0 12px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1c201d;
+    line-height: 1.3;
+}
+
+.q-restart-confirm-modal__text {
+    margin: 0 0 22px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+    color: #444444;
+}
+
+.q-restart-confirm-modal__actions {
+    display: flex;
+    /* flex-wrap: wrap; */
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+.q-restart-confirm-modal__actions .questionnaire-add-btn {
+    margin-top: 0;
+    flex: 0 1 auto;
 }
 
 /* Bundle review drawer (רכישת המארז — cart-like summary before checkout) */

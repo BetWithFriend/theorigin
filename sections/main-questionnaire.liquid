@@ -8,6 +8,15 @@
 <noscript>{{ 'component-slider.css' | asset_url | stylesheet_tag }}</noscript>
 <noscript>{{ 'template-collection.css' | asset_url | stylesheet_tag }}</noscript>
 <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+<script>
+  (function () {
+    var tnScript = document.querySelector('script[tnv-data-config]');
+    if (tnScript) {
+      var cfg = tnScript.getAttribute('tnv-data-config');
+      tnScript.setAttribute('tnv-data-config', cfg.replace('"widgetLocation":"left"', '"widgetLocation":"right"'));
+    }
+  })();
+</script>
 
 <div class="questionnaire-wrapper" id="questionnaireWrapperDesktop">
   <script>
@@ -438,9 +447,10 @@
         <button
           type="button"
           class="q-results-icon-btn q-results-icon-btn--refresh"
-          onclick="restartQuestionnaire()"
+          onclick="openRestartConfirmModal()"
           aria-label="התחל מחדש"
-          title="התחל מחדש">
+          title="התחל מחדש"
+          aria-haspopup="dialog">
           <svg
             width="20"
             height="20"
@@ -857,8 +867,8 @@
       </div>
 
     {% comment %} <div class="questionnaire-btn-wrapper catalog-btn-wrapper">
-              <button class="questionnaire-select-btn" onclick="window.location.href='/collections/all'">לכל הקטלוג</button>
-          </div> {% endcomment %}
+                                      <button class="questionnaire-select-btn" onclick="window.location.href='/collections/all'">לכל הקטלוג</button>
+                          </div> {% endcomment %}
     </div>
 
     <div
@@ -915,44 +925,79 @@
               class="q-product-modal__chips"
               hidden></div>
           {% comment %} <div
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      id="q-product-modal-description-block"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      class="q-product-modal__description-block"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      hidden>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <h3 class="q-product-modal__section-title">תיאור המוצר</h3>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <div
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        id="q-product-modal-description"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        class="q-product-modal__description rte"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        dir="rtl"></div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div> {% endcomment %}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      id="q-product-modal-description-block"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      class="q-product-modal__description-block"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      hidden>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <h3 class="q-product-modal__section-title">תיאור המוצר</h3>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <div
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        id="q-product-modal-description"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        class="q-product-modal__description rte"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        dir="rtl"></div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div> {% endcomment %}
           {% comment %} <div class="q-product-modal__actions">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <div class="q-product-modal__price-row">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <span class="q-product-modal__price-label">מחיר ליחידה</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <span id="q-product-modal-price" class="q-product-modal__price"></span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <form
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                id="q-product-modal-atc-form"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                class="form product-form--questionnaire js-quick-add-form"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                method="post"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                action="/cart/add"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                data-type="add-to-cart-form">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <input
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  type="hidden"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  name="id"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  id="q-product-modal-variant-id"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  value="">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <button
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  type="submit"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  id="q-product-modal-atc-btn"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  class="questionnaire-add-btn">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <span id="q-product-modal-atc-label">הוספה לסל</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </form>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <a
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                id="q-product-modal-pdp-link"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                class="q-product-modal__pdp-link"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                href="#">לעמוד המוצר המלא</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                            </div> {% endcomment %}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <div class="q-product-modal__price-row">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <span class="q-product-modal__price-label">מחיר ליחידה</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <span id="q-product-modal-price" class="q-product-modal__price"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <form
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                id="q-product-modal-atc-form"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                class="form product-form--questionnaire js-quick-add-form"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                method="post"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                action="/cart/add"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                data-type="add-to-cart-form">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <input
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  type="hidden"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  name="id"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  id="q-product-modal-variant-id"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  value="">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <button
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  type="submit"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  id="q-product-modal-atc-btn"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  class="questionnaire-add-btn">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <span id="q-product-modal-atc-label">הוספה לסל</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </form>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <a
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                id="q-product-modal-pdp-link"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                class="q-product-modal__pdp-link"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                href="#">לעמוד המוצר המלא</a>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div> {% endcomment %}
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="q-restart-confirm-modal"
+      class="q-restart-confirm-modal"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+      aria-labelledby="q-restart-confirm-title">
+      <div
+        class="q-restart-confirm-modal__backdrop"
+        tabindex="-1"
+        data-q-restart-confirm-close></div>
+      <div class="q-restart-confirm-modal__panel">
+        <h2 id="q-restart-confirm-title" class="q-restart-confirm-modal__title">להתחיל מחדש?</h2>
+        <p class="q-restart-confirm-modal__text">
+          התוצאות הנוכחיות יימחקו ותחזרו לשאלון מתחילתו.
+        </p>
+        <div class="q-restart-confirm-modal__actions">
+          <button
+            type="button"
+            id="q-restart-confirm-accept"
+            class="questionnaire-add-btn">
+            להתחיל מחדש
+          </button>
+          <button
+            type="button"
+            id="q-restart-confirm-cancel"
+            class="questionnaire-add-btn questionnaire-add-btn--link"
+            data-q-restart-confirm-close>
+            ביטול
+          </button>
         </div>
       </div>
     </div>
@@ -1004,6 +1049,7 @@
   };
   const QUESTIONNAIRE_RESULTS_STATE_KEY = 'questionnaireResultsState';
   let _qModalPreviousFocus = null;
+  let _qRestartConfirmPreviousFocus = null;
 
   function getQuestionnaireBundleQtyFromDom() {
     const sel = document.querySelector('.questionnaire-qty-selector-wrapper .qty-option.selected');
@@ -1261,6 +1307,10 @@
     return Math.round(grams) + ' גרם';
   }
 
+  function formatQuestionnaireMoney(cents) {
+    return '\u20AA' + (cents / 100).toFixed(0);
+  }
+
   function updateQuestionnaireQtyOptionWeights() {
     var ut = window.__questionnaireMatchUserText;
     var wrapper = document.querySelector('.questionnaire-qty-selector-wrapper');
@@ -1367,9 +1417,9 @@
         var vLower = (v || '').toLowerCase();
         var label = o.label || v;
         var prods = coffeesForVendorFromPositiveScores(posScores, vLower);
-        var totalCents = bundleTotalCentsForQuestionnaireProducts(prods, menuQty);
-        var priceStr =
-          totalCents > 0 ? (totalCents / 100).toFixed(0) + ' ש״ח' : '—';
+        var bundleProds = prods.slice(0, menuQty);
+        var totalCents = bundleTotalCentsForQuestionnaireProducts(bundleProds, menuQty);
+        var priceStr = totalCents > 0 ? formatQuestionnaireMoney(totalCents) : '—';
         var selected = vLower === cur;
         return (
           '<button type="button" class="results-vendor-menu__item' +
@@ -1811,6 +1861,30 @@
     clearResultsState();
     window.location.reload();
   }
+
+  function openRestartConfirmModal() {
+    const modal = document.getElementById('q-restart-confirm-modal');
+    if (!modal) return;
+    _qRestartConfirmPreviousFocus = document.activeElement;
+    closeQuestionnaireProductModal();
+    modal.hidden = false;
+    modal.removeAttribute('aria-hidden');
+    const cancelBtn = document.getElementById('q-restart-confirm-cancel');
+    if (cancelBtn && typeof cancelBtn.focus === 'function') {
+      cancelBtn.focus();
+    }
+  }
+
+  function closeRestartConfirmModal() {
+    const modal = document.getElementById('q-restart-confirm-modal');
+    if (!modal) return;
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+    if (_qRestartConfirmPreviousFocus && typeof _qRestartConfirmPreviousFocus.focus === 'function') {
+      _qRestartConfirmPreviousFocus.focus();
+    }
+    _qRestartConfirmPreviousFocus = null;
+  }
   function getSuitTasteProfile(selectedFilters) {
     if (!window.questionnaireData) return [];
 
@@ -2210,19 +2284,15 @@
 
       const totalCents = bundleTotalCentsForQuestionnaireProducts(products, qty);
 
-      const formatMoney = function (cents) {
-        return '\u20AA' + (cents / 100).toFixed(0);
-      };
-
       const priceEl = document.getElementById('q-footer-price');
       const compareEl = document.getElementById('q-footer-price-compare');
       const triggerPriceEl = document.getElementById('q-results-vendor-trigger-price');
 
-      if (priceEl) priceEl.textContent = formatMoney(totalCents);
+      if (priceEl) priceEl.textContent = formatQuestionnaireMoney(totalCents);
 
       if (compareEl) {
         if (totalCompareCents > totalCents) {
-          compareEl.textContent = formatMoney(totalCompareCents);
+          compareEl.textContent = formatQuestionnaireMoney(totalCompareCents);
           compareEl.style.display = '';
         } else {
           compareEl.textContent = '';
@@ -2232,7 +2302,7 @@
 
       if (triggerPriceEl) {
         if (products && products.length) {
-          triggerPriceEl.textContent = (totalCents / 100).toFixed(0) + ' ש״ח';
+          triggerPriceEl.textContent = formatQuestionnaireMoney(totalCents);
           triggerPriceEl.hidden = false;
         } else {
           triggerPriceEl.textContent = '';
@@ -2462,10 +2532,6 @@
       });
       const totalCents = bundleTotalCentsForQuestionnaireProducts(products, qty);
 
-      const formatMoney = function (cents) {
-        return '\u20AA' + (cents / 100).toFixed(0);
-      };
-
       itemsEl.innerHTML = products
         .map(function (p) {
           if (!p) return '';
@@ -2494,7 +2560,7 @@
         })
         .join('');
 
-      totalEl.textContent = formatMoney(totalCents);
+      totalEl.textContent = formatQuestionnaireMoney(totalCents);
       if (totalWeightEl) {
         totalWeightEl.textContent =
           totalGrams > 0 ? formatQuestionnaireBundleWeightKg(totalGrams) : '—';
@@ -2855,8 +2921,29 @@
         }
       });
     }
+
+    const qRestartConfirmModalEl = document.getElementById('q-restart-confirm-modal');
+    if (qRestartConfirmModalEl) {
+      qRestartConfirmModalEl.addEventListener('click', function (e) {
+        if (e.target.closest('[data-q-restart-confirm-close]')) {
+          closeRestartConfirmModal();
+        }
+      });
+      const acceptBtn = document.getElementById('q-restart-confirm-accept');
+      if (acceptBtn) {
+        acceptBtn.addEventListener('click', function () {
+          restartQuestionnaire();
+        });
+      }
+    }
+
     document.addEventListener('keydown', function (e) {
       if (e.key !== 'Escape') return;
+      const restartModal = document.getElementById('q-restart-confirm-modal');
+      if (restartModal && !restartModal.hidden) {
+        closeRestartConfirmModal();
+        return;
+      }
       const modal = document.getElementById('q-product-detail-modal');
       if (!modal || modal.hidden) return;
       closeQuestionnaireProductModal();
@@ -3150,7 +3237,7 @@
 
     const startOverButton = document.querySelector('.questionnaire-start-over');
     if (startOverButton) {
-      startOverButton.onclick = restartQuestionnaire;
+      startOverButton.onclick = openRestartConfirmModal;
     }
 
     const savedResultsProducts = loadResultsState();
