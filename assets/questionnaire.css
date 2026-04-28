@@ -514,7 +514,10 @@ body.questionnaire-wrapper-open {
     align-items: center;
     justify-content: center;
     gap: 6px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     font-family: 'Assistant', sans-serif;
     font-size: 20px;
     font-weight: 700;
@@ -527,6 +530,9 @@ body.questionnaire-wrapper-open {
 .questionnaire-product-title__text {
     min-width: 0;
     text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .questionnaire-product-title__hint {
@@ -588,7 +594,7 @@ body.questionnaire-wrapper-open {
 }
 
 #questionnaireResultsStep .questionnaire-product-taste-icons .selection-wrapper.plp-taste-text-wrapper {
-    font-size: 11px;
+    font-size: 12px;
     line-height: 15px;
     font-weight: 400;
     gap: 3px;
@@ -988,12 +994,6 @@ body.questionnaire-wrapper-open {
     flex-shrink: 0;
 }
 
-#questionnaireResultsStep .questionnaire-header__brand {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-}
-
 #questionnaireResultsStep .questionnaire-header__actions {
     display: inline-flex;
     flex-direction: row;
@@ -1104,7 +1104,7 @@ body.questionnaire-wrapper-open {
 #questionnaireResultsStep .questionnaire-qty-selector-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 24px;
 }
 
 .results-vendor-select-wrap {
@@ -1185,13 +1185,6 @@ body.questionnaire-wrapper-open {
 
 .results-vendor-trigger__price-pill {
     flex-shrink: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 20px;
-    padding: 0 10px;
-    border-radius: 16px;
-    background: rgba(204, 116, 116, 0.61);
     font-family: 'Assistant', sans-serif;
     font-size: 14px;
     font-weight: 400;
@@ -1321,7 +1314,7 @@ body.questionnaire-wrapper-open {
     min-width: 0;
 }
 
-/* List price: reuses trigger pill; row selected/hover must not change pill typography */
+/* List price; row selected/hover must not change price typography */
 #questionnaireResultsStep .results-vendor-menu__item .results-vendor-trigger__price-pill {
     font-variant-numeric: tabular-nums;
     font-weight: 400;
@@ -1443,20 +1436,26 @@ body.questionnaire-wrapper-open {
     cursor: default;
 }
 
-#qCarouselPrev {
-    left: 10px;
+/* Flip SVG icons to match swapped RTL arrow positions */
+.q-carousel-arrow--prev svg,
+.q-carousel-arrow--next svg {
+    transform: scaleX(-1);
 }
 
-#qCarouselNext {
+#qCarouselPrev {
     right: 10px;
 }
 
+#qCarouselNext {
+    left: 10px;
+}
+
 #questionnaireResultsStep #qCarouselPrev {
-    left: 4px;
+    right: 4px;
 }
 
 #questionnaireResultsStep #qCarouselNext {
-    right: 4px;
+    left: 4px;
 }
 
 .q-carousel-viewport {
@@ -1470,8 +1469,10 @@ body.questionnaire-wrapper-open {
     overscroll-behavior-x: contain;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    /* Isolate from page RTL so slide order matches (first slide on the left). */
+    /* Keep LTR so scrollLeft math is consistent across browsers. */
     direction: ltr;
+    /* Visually flip the viewport so slides appear RTL (first slide on the right). */
+    transform: scaleX(-1);
 }
 
 .q-carousel-viewport::-webkit-scrollbar {
@@ -1494,7 +1495,8 @@ body.questionnaire-wrapper-open {
     box-sizing: border-box;
     opacity: 0.55;
     transition: opacity 0.5s ease, transform 0.5s ease, filter 0.5s ease;
-    transform: scale(0.9);
+    /* scaleX(-1) counters the viewport flip so slide content is not mirrored. */
+    transform: scaleX(-1) scale(0.9);
     z-index: 0;
     display: flex;
     justify-content: center;
@@ -1503,7 +1505,7 @@ body.questionnaire-wrapper-open {
 
 #questionnaireResultsStep .q-carousel-slide {
     opacity: 0.32;
-    transform: scale(0.94);
+    transform: scaleX(-1) scale(0.94);
     transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -1514,13 +1516,13 @@ body.questionnaire-wrapper-open {
 
 .q-carousel-slide.active {
     opacity: 1;
-    transform: scale(1.04);
+    transform: scaleX(-1) scale(1.04);
     z-index: 1;
 }
 
 #questionnaireResultsStep .q-carousel-slide.active {
     opacity: 1;
-    transform: scale(1.04);
+    transform: scaleX(-1) scale(1.04);
 }
 
 /* Active slide: slightly larger product + soft lift on the image (carousel only) */
@@ -1562,8 +1564,8 @@ body.questionnaire-wrapper-open {
     justify-content: center;
     gap: 12px;
     flex-wrap: wrap;
-    /* Match .q-carousel-viewport: carousel math is LTR; page RTL would mirror thumb order vs slides. */
-    direction: ltr;
+    /* RTL order so thumb 0 sits on the right, matching the flipped carousel where slide 0 is rightmost. */
+    direction: rtl;
 }
 
 .questionnaire-selection-thumb {
@@ -1788,7 +1790,7 @@ body.questionnaire-wrapper-open {
     border-radius: 78px;
     background: #43c7b4;
     font-family: 'Assistant', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 400;
     line-height: 18px;
     letter-spacing: 0.02em;
