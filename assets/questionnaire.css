@@ -1035,15 +1035,15 @@ body.questionnaire-wrapper-open {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
+    width: 40px;
     height: 32px;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    border: 1px solid var(--q-text-muted);
-    border-radius: 4px;
+    border: 1.5px solid #9ca3af;
+    border-radius: 10px;
     background: transparent;
-    color: var(--q-text-muted);
+    color: #1e2235;
     cursor: pointer;
     flex-shrink: 0;
     -webkit-tap-highlight-color: transparent;
@@ -1051,7 +1051,8 @@ body.questionnaire-wrapper-open {
 
 #questionnaireResultsStep .q-results-icon-btn:hover {
     background: rgba(0, 0, 0, 0.04);
-    color: #333333;
+    border-color: #6b7280;
+    color: #1e2235;
 }
 
 #questionnaireResultsStep .q-results-icon-btn:focus-visible {
