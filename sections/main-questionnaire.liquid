@@ -64,9 +64,14 @@
               endcase
               assign q_weight_g = q_weight_g | round
               if q_weight_g == 0
-                unless product.tags contains 'no-weight'
-                  assign q_weight_g = 250
-                endunless
+                assign q_title_weight = qv.title | split: ' ' | first | plus: 0
+                if q_title_weight > 0
+                  assign q_weight_g = q_title_weight
+                else
+                  unless product.tags contains 'no-weight'
+                    assign q_weight_g = 250
+                  endunless
+                endif
               endif
               assign q_taste_labels = product.metafields.custom.coffee_tastes.value
             -%}
@@ -430,35 +435,40 @@
       class="questionnaire-header questionnaire-header--results"
       role="banner"
       dir="ltr">
-      <button
-        type="button"
-        class="q-results-icon-btn q-results-icon-btn--refresh"
-        onclick="openRestartConfirmModal()"
-        aria-label="התחל מחדש"
-        title="התחל מחדש"
-        aria-haspopup="dialog">
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true">
-          <path
-            d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linecap="round"
-            stroke-linejoin="round" />
-          <path
-            d="M21 3v5h-5"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linecap="round"
-            stroke-linejoin="round" />
-        </svg>
-      </button>
+      <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset" aria-label="{{ shop.name }}">
+        <div class="header__heading-logo-wrapper">
+          <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" class="header__heading-logo">
+        </div>
+      </a>
       <div class="questionnaire-header__actions" dir="ltr">
+        <button
+          type="button"
+          class="q-results-icon-btn q-results-icon-btn--refresh"
+          onclick="openRestartConfirmModal()"
+          aria-label="התחל מחדש"
+          title="התחל מחדש"
+          aria-haspopup="dialog">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true">
+            <path
+              d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path
+              d="M21 3v5h-5"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
         <button
           type="button"
           id="q-results-view-toggle"
@@ -474,7 +484,7 @@
               fill="none"
               xmlns="http://www.w3.org/2000/svg">
               <path
-                d="M4 7h16M4 12h16M4 17h16"
+                d="M4 9h16M4 15h16"
                 stroke="currentColor"
                 stroke-width="1.6"
                 stroke-linecap="round" />
@@ -617,10 +627,32 @@
                 disabled>
                 <span class="results-vendor-dropdown__trigger-body">
                   <span class="results-vendor-dropdown__trigger-text" id="q-results-vendor-trigger-label">—</span>
-                  <span
-                    class="results-vendor-trigger__price-pill"
-                    id="q-results-vendor-trigger-price"
-                    hidden></span>
+                  <span class="results-vendor-trigger__suffix">
+                    <span
+                      class="results-vendor-trigger__price"
+                      id="q-results-vendor-trigger-price"
+                      hidden></span>
+                    <span
+                      class="results-vendor-trigger__sep"
+                      id="q-results-vendor-trigger-sep"
+                      hidden
+                      aria-hidden="true">
+                      <svg
+                        class="results-vendor-trigger__sep-icon"
+                        width="10"
+                        height="10"
+                        viewBox="0 0 10 10"
+                        aria-hidden="true"
+                        focusable="false"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="5" cy="5" r="3.5" fill="currentColor" />
+                      </svg>
+                    </span>
+                    <span
+                      class="results-vendor-trigger__weight"
+                      id="q-results-vendor-trigger-weight"
+                      hidden></span>
+                  </span>
                 </span>
                 <svg
                   class="results-vendor-dropdown__chev"
@@ -1365,10 +1397,19 @@
         tr.setAttribute('aria-disabled', 'true');
       }
       if (trLabel) trLabel.textContent = 'אין מותגים להצגה';
+      var trWeight = document.getElementById('q-results-vendor-trigger-weight');
+      if (trWeight) {
+        trWeight.textContent = '';
+        trWeight.hidden = true;
+      }
       var trPrice = document.getElementById('q-results-vendor-trigger-price');
       if (trPrice) {
         trPrice.textContent = '';
         trPrice.hidden = true;
+      }
+      var trSep = document.getElementById('q-results-vendor-trigger-sep');
+      if (trSep) {
+        trSep.hidden = true;
       }
       return;
     }
@@ -1398,6 +1439,8 @@
     var posScores = window.__questionnaireLastPositiveScores;
     if (!Array.isArray(posScores)) posScores = [];
     var menuQty = getQuestionnaireResultsBundleQty();
+    var sepSvg =
+      '<svg class="results-vendor-trigger__sep-icon" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="3.5" fill="currentColor"/></svg>';
     list.innerHTML = opts
       .map(function (o) {
         var v = o.vendorKey || '';
@@ -1405,9 +1448,29 @@
         var label = o.label || v;
         var prods = coffeesForVendorFromPositiveScores(posScores, vLower);
         var bundleProds = prods.slice(0, menuQty);
+        var totalWeightGrams = 0;
+        bundleProds.forEach(function (p) {
+          totalWeightGrams += p.weight_grams || 0;
+        });
+        var weightInner =
+          totalWeightGrams > 0 ? formatQuestionnaireBundleWeightKg(totalWeightGrams) : '';
         var totalCents = bundleTotalCentsForQuestionnaireProducts(bundleProds, menuQty);
-        var priceStr = totalCents > 0 ? formatQuestionnaireMoney(totalCents) : '—';
+        var priceStr = formatQuestionnaireMoney(totalCents);
         var selected = vLower === cur;
+        var suffixHtml =
+          '<span class="results-vendor-trigger__suffix">' +
+          '<span class="results-vendor-trigger__price">' +
+          escapeHtml(priceStr) +
+          '</span>' +
+          (weightInner
+            ? '<span class="results-vendor-trigger__sep" aria-hidden="true">' +
+              sepSvg +
+              '</span>' +
+              '<span class="results-vendor-trigger__weight">' +
+              escapeHtml(weightInner) +
+              '</span>'
+            : '') +
+          '</span>';
         return (
           '<button type="button" class="results-vendor-menu__item' +
           (selected ? ' is-selected' : '') +
@@ -1415,9 +1478,11 @@
           escapeHtml(String(v)) +
           '" aria-selected="' +
           (selected ? 'true' : 'false') +
-          '"><span class="results-vendor-menu__name">מארז ' +
+          '"><span class="results-vendor-menu__name">' +
           escapeHtml(label) +
-          '</span><span class="results-vendor-trigger__price-pill">' + escapeHtml(priceStr) + '</span></button>'
+          '</span>' +
+          suffixHtml +
+          '</button>'
         );
       })
       .join('');
@@ -2274,6 +2339,8 @@
       const priceEl = document.getElementById('q-footer-price');
       const compareEl = document.getElementById('q-footer-price-compare');
       const triggerPriceEl = document.getElementById('q-results-vendor-trigger-price');
+      const triggerSepEl = document.getElementById('q-results-vendor-trigger-sep');
+      const triggerWeightEl = document.getElementById('q-results-vendor-trigger-weight');
 
       if (priceEl) priceEl.textContent = formatQuestionnaireMoney(totalCents);
 
@@ -2301,6 +2368,19 @@
       products.forEach(function (p) {
         totalGrams += p.weight_grams || 0;
       });
+
+      if (triggerWeightEl) {
+        if (totalGrams > 0) {
+          triggerWeightEl.textContent = formatQuestionnaireBundleWeightKg(totalGrams);
+          triggerWeightEl.hidden = false;
+        } else {
+          triggerWeightEl.textContent = '';
+          triggerWeightEl.hidden = true;
+        }
+      }
+      if (triggerSepEl) {
+        triggerSepEl.hidden = totalGrams <= 0;
+      }
       const bundleWeightEl = document.getElementById('q-footer-bundle-weight');
       if (bundleWeightEl) {
         if (totalGrams > 0) {

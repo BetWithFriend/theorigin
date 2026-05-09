@@ -767,10 +767,8 @@ body.questionnaire-wrapper-open {
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch; */
-    /* Between tight content-height and old fixed 318px — room under the carousel, not inside stretched slides */
-    --q-bundle-views-min-height: 292px;
-    /* Table panel: fixed height so qty (3/5/7) does not stretch the carousel+thumbs measurement. */
-    --q-bundle-table-view-height: 308px;
+    /* Single shell height: carousel ↔ table toggle must not shift the page (qty / thumb count). */
+    --q-bundle-views-height: 308px;
 }
 
 .questionnaire-wrapper.results-step-visible #questionnaireResultsStep {
@@ -779,8 +777,9 @@ body.questionnaire-wrapper-open {
 
 #questionnaireResultsStep .q-bundle-views {
     width: 100%;
-    min-height: var(--q-bundle-views-min-height);
-    height: auto;
+    height: var(--q-bundle-views-height);
+    min-height: var(--q-bundle-views-height);
+    max-height: var(--q-bundle-views-height);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -792,15 +791,18 @@ body.questionnaire-wrapper-open {
     flex-direction: column;
     flex: 1 1 auto;
     min-height: 0;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
     box-sizing: border-box;
 }
 
 #questionnaireResultsStep .q-bundle-view--table {
     display: flex;
     flex-direction: column;
-    flex: 0 0 auto;
-    height: var(--q-bundle-table-view-height);
-    max-height: var(--q-bundle-table-view-height);
+    flex: 1 1 auto;
+    height: 100%;
+    max-height: 100%;
     min-height: 0;
     overflow: hidden;
     box-sizing: border-box;
@@ -932,15 +934,18 @@ body.questionnaire-wrapper-open {
     min-height: 0;
     padding: 4px 0 0;
     box-sizing: border-box;
-    /* Viewport stays content-tall; this box absorbs extra min-height space below the cards */
-    align-items: flex-start;
+    align-items: stretch;
+    align-self: stretch;
+    width: 100%;
 }
 
 #questionnaireResultsStep .q-carousel-viewport {
     flex: 1 1 auto;
     min-width: 0;
     min-height: 0;
-    align-self: flex-start;
+    height: 100%;
+    max-height: 100%;
+    align-self: stretch;
     width: 100%;
     box-sizing: border-box;
     /* With overflow-x not visible, overflow-y:visible is ignored → used value becomes auto, so the
@@ -954,14 +959,36 @@ body.questionnaire-wrapper-open {
     padding-bottom: 6px;
 }
 
-#questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-info {
-    flex-shrink: 0;
+#questionnaireResultsStep .q-carousel-track {
+    height: 100%;
+    min-height: 0;
+    box-sizing: border-box;
 }
 
-/* Image + title: don’t let flex-grow steal space from the title (was clipped with overflow-y: hidden) */
+#questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-info {
+    flex-shrink: 0;
+    min-height: 44px;
+    max-height: 44px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-info__thumbs {
+    flex-wrap: nowrap;
+    justify-content: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+}
+
+/* Image + title: bounded by fixed shell; long titles clip rather than growing the block */
 #questionnaireResultsStep .q-carousel-slide .questionnaire-product-card {
-    height: auto;
+    max-height: 100%;
     min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 #questionnaireResultsStep .q-carousel-slide .questionnaire-product-image-wrapper {
@@ -977,9 +1004,11 @@ body.questionnaire-wrapper-open {
 
 #questionnaireResultsStep .q-carousel-slide .questionnaire-product-info {
     flex-shrink: 0;
+    min-height: 0;
+    overflow: hidden;
 }
 
-/* Results step header — Figma: logo | refresh + menu (square bordered icons) */
+/* Results step header — logo (home) left | refresh + table/carousel toggle right */
 #questionnaireResultsStep .questionnaire-header--results {
     display: flex;
     flex-direction: row;
@@ -998,7 +1027,7 @@ body.questionnaire-wrapper-open {
     display: inline-flex;
     flex-direction: row;
     align-items: center;
-    gap: 8px;
+    gap: 16px;
     flex-shrink: 0;
 }
 
@@ -1030,17 +1059,16 @@ body.questionnaire-wrapper-open {
     outline-offset: 2px;
 }
 
-#questionnaireResultsStep .q-results-view-toggle {
-    /* extends .q-results-icon-btn */
-    width: 32px;
-    height: 32px;
-    border-radius: 4px;
-}
-
 #questionnaireResultsStep .q-results-view-toggle__icon {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+#questionnaireResultsStep .q-results-view-toggle__icon img {
+    display: block;
+    width: 32px;
+    height: 32px;
 }
 
 #questionnaireResultsStep .q-results-view-toggle__icon--carousel {
@@ -1055,21 +1083,19 @@ body.questionnaire-wrapper-open {
     display: flex;
 }
 
-.questionnaire-logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: inherit;
+#questionnaireResultsStep .header__heading-link {
+    flex-shrink: 0;
+    min-width: 0;
     -webkit-tap-highlight-color: transparent;
 }
 
-#questionnaireResultsStep .questionnaire-logo:focus-visible {
+#questionnaireResultsStep .header__heading-link:focus-visible {
     outline: 2px solid #333333;
     outline-offset: 4px;
     border-radius: 4px;
 }
 
-#questionnaireResultsStep .questionnaire-logo img {
+#questionnaireResultsStep .header__heading-logo-wrapper .header__heading-logo {
     display: block;
     max-height: 32px;
     width: auto;
@@ -1146,7 +1172,7 @@ body.questionnaire-wrapper-open {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 8px;
     width: 100%;
     max-width: 100%;
     margin: 0;
@@ -1177,13 +1203,14 @@ body.questionnaire-wrapper-open {
     flex-direction: row;
     align-items: center;
     /* RTL: main-start is on the right — align label block to the text side of the field */
-    justify-content: flex-start;
+    justify-content: space-between;
     flex: 1 1 auto;
     min-width: 0;
-    gap: 8px;
+    gap: 18px;
+    width: 100%;
 }
 
-.results-vendor-trigger__price-pill {
+.results-vendor-trigger__weight {
     flex-shrink: 0;
     font-family: 'Assistant', sans-serif;
     font-size: 14px;
@@ -1194,7 +1221,52 @@ body.questionnaire-wrapper-open {
     white-space: nowrap;
 }
 
-.results-vendor-trigger__price-pill[hidden] {
+.results-vendor-trigger__weight[hidden] {
+    display: none !important;
+}
+
+.results-vendor-trigger__suffix {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    direction: ltr;
+    flex-shrink: 0;
+}
+
+.results-vendor-trigger__sep {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #555555;
+    user-select: none;
+}
+
+.results-vendor-trigger__sep-icon {
+    display: block;
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+}
+
+.results-vendor-trigger__sep[hidden] {
+    display: none !important;
+}
+
+.results-vendor-trigger__price {
+    flex-shrink: 0;
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 0.02em;
+    color: var(--q-text);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.results-vendor-trigger__price[hidden] {
     display: none !important;
 }
 
@@ -1314,10 +1386,33 @@ body.questionnaire-wrapper-open {
     min-width: 0;
 }
 
-/* List price; row selected/hover must not change price typography */
-#questionnaireResultsStep .results-vendor-menu__item .results-vendor-trigger__price-pill {
+/* List weight + price; row selected/hover must not change suffix typography */
+#questionnaireResultsStep .results-vendor-menu__item .results-vendor-trigger__suffix {
+    font-size: 13px;
+    line-height: 18px;
+}
+
+#questionnaireResultsStep .results-vendor-menu__item .results-vendor-trigger__weight {
     font-variant-numeric: tabular-nums;
     font-weight: 400;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+#questionnaireResultsStep .results-vendor-menu__item .results-vendor-trigger__price {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+#questionnaireResultsStep .results-vendor-menu__item .results-vendor-trigger__sep {
+    color: #555555;
+}
+
+#questionnaireResultsStep .results-vendor-menu__item .results-vendor-trigger__sep-icon {
+    width: 8px;
+    height: 8px;
 }
 
 .results-vendor-menu__empty {
@@ -1507,6 +1602,8 @@ body.questionnaire-wrapper-open {
     opacity: 0.32;
     transform: scaleX(-1) scale(0.94);
     transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: 100%;
+    min-height: 0;
 }
 
 .q-carousel-slide--empty {
@@ -1782,12 +1879,12 @@ body.questionnaire-wrapper-open {
 .qty-option__discount-badge {
     position: absolute;
     top: -10px;
-    left: 50%;
+    left: 25%;
     transform: translateX(-50%);
     min-width: 28px;
     height: 18px;
     padding: 0 8px;
-    border-radius: 78px;
+    border-radius: 5px;
     background: #43c7b4;
     font-family: 'Assistant', sans-serif;
     font-size: 12px;
@@ -1807,8 +1904,8 @@ body.questionnaire-wrapper-open {
 
 
 .qty-option.selected {
-    background: #1C201D;
-    color: #FFFFFF;
+    background: #E3E0DA;
+    color: #1C201D;
     border-color: #1C201D;
 }
 
