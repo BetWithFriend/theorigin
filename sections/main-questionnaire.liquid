@@ -96,7 +96,8 @@
                   "coffee_roast_level": {{ product.metafields.custom.coffee_roast_level | json }},
                   "coffee_prep_methods": {{ product.metafields.custom.coffee_prep_methods }},
                   "coffee_tastes": {{ product.metafields.custom.coffee_tastes }},
-                  "coffee_taste": {{ product.metafields.custom.coffee_taste | json }}
+                  "coffee_taste": {{ product.metafields.custom.coffee_taste | json }},
+                  "vendor_short_name": {{ product.metafields.vendor_info.coffee_vendor.value.vendor_short_name | json }}
                 },
                 "taste_labels": {% if q_taste_labels %}{{ q_taste_labels | json }}{% else %}[]{% endif %},
                 "html_card": {{ card_html | json }}
@@ -1135,6 +1136,10 @@
       const coffee = positiveScores[i].coffee;
       const v = (coffee.vendor || '').trim();
       if (v && v.toLowerCase() === k) {
+        const shortName = (coffee.metafields && coffee.metafields.vendor_short_name) ? String(coffee.metafields.vendor_short_name).trim() : '';
+        if (shortName) {
+          return shortName.charAt(0).toUpperCase() + shortName.slice(1);
+        }
         return v;
       }
     }
