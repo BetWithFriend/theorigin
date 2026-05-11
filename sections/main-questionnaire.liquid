@@ -40,7 +40,7 @@
       {{ section.settings.loader_text | default: 'מתאימים את פולי הקפה בדיוק בשבילך' }}
     </div>
   </div>
-  <div class="questionnaire-icons-wrapper active">
+  <div class="questionnaire-icons-wrapper active" data-filter-name="filter.p.m.custom.coffee_prep_methods" data-step-index="1">
     {% paginate collections.all.products by 1000 %}
       <script>
         window.allProducts = [
@@ -208,12 +208,6 @@
           alt="Close icon">
         <span class="questionnaire-back-text">חזור</span>
       </button>
-      <button
-        class="questionnaire-select-btn"
-        onclick="getFilters('filter.p.m.custom.coffee_prep_methods', 1)"
-        disabled>
-        בחרו אפשרות
-      </button>
     </div>
     <div class="questionnaire-progress-bar-wrapper">
       <div class="questionnaire-progress-bar filled">&nbsp;</div>
@@ -221,7 +215,7 @@
       <div class="questionnaire-progress-bar">&nbsp;</div>
     </div>
   </div>
-  <div class="questionnaire-icons-wrapper " id="questionnaireLoadingStep">
+  <div class="questionnaire-icons-wrapper " id="questionnaireLoadingStep" data-filter-name="filter.p.m.custom.coffee_roast_level" data-step-index="2">
     <div class="questionnaire-title-wrapper">
       <div class="questionnaire-close-icon" onclick="closeForm()">
         <svg
@@ -308,9 +302,6 @@
           alt="Close icon">
         <span class="questionnaire-back-text">חזור</span>
       </button>
-      <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_roast_level', 2)">
-        בחרו אפשרות
-      </button>
     </div>
     <div class="questionnaire-progress-bar-wrapper">
       <div class="questionnaire-progress-bar filled">&nbsp;</div>
@@ -318,7 +309,7 @@
       <div class="questionnaire-progress-bar">&nbsp;</div>
     </div>
   </div>
-  <div class="questionnaire-icons-wrapper ">
+  <div class="questionnaire-icons-wrapper " data-filter-name="filter.p.m.custom.coffee_tastes" data-step-index="3">
     <div class="questionnaire-title-wrapper">
       <div class="questionnaire-close-icon" onclick="closeForm()">
         <svg
@@ -409,9 +400,6 @@
           src="{{ 'questionnaire_back_icon.png' |  asset_url }}"
           alt="Close icon">
         <span class="questionnaire-back-text">חזור</span>
-      </button>
-      <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_tastes', 3)">
-        בחרו אפשרות
       </button>
     </div>
     <div class="questionnaire-progress-bar-wrapper">
@@ -1119,6 +1107,325 @@
       .slice(0, 7);
   }
 
+  /* ——— QuestionnaireScoring engine ——— */
+  (function (global) {
+    const BUNDLE_SIZES = [3, 5, 7];
+
+    const DEFAULT_WEIGHTS = {
+      guidedPrepPerMatch: 1,
+      guidedRoastPerMatch: 3,
+      guidedTastePerMatch: 5,
+    };
+
+    const DEFAULT_MIN_BUNDLE_SCORE = { 3: 24, 5: 35, 7: 47 };
+
+    const DEFAULT_THRESHOLDS = {
+      minProductScore: 0,
+      minBundleScore: { ...DEFAULT_MIN_BUNDLE_SCORE },
+    };
+
+    const HEBREW_TO_ENGLISH_PREP = {
+      'מכונת אספרסו': 'Espresso',
+      'משקאות חלב': 'Espresso',
+      'קפה פילטר': 'Filter',
+      'מקינטה': 'MokaPot',
+    };
+
+    const TASTE_CATEGORY_MAP = {
+      'קלאסי':    ['Sweet', 'Sweet-Chocolate'],
+      'מודרני':   ['Sweet', 'Fruity-Sweet'],
+      'גל שלישי': ['Fruity', 'Fruity-Sweet'],
+    };
+
+    const ROAST_ORDER = ['בהירה', 'בהירה-בינונית', 'בינונית', 'בינונית-כהה', 'כהה'];
+
+    function escapeRegExp(s) {
+      return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function tasteMatches(coffeeTaste, selected) {
+      return (
+        coffeeTaste === selected ||
+        (typeof coffeeTaste === 'string' &&
+          typeof selected === 'string' &&
+          (coffeeTaste.includes(selected) || selected.includes(coffeeTaste)))
+      );
+    }
+
+    function tasteMatchMultiplier(coffeeTaste, selected) {
+      if (coffeeTaste == null || selected == null) return 0;
+      const ct = String(coffeeTaste).trim();
+      const se = String(selected).trim();
+      if (!ct || !se) return 0;
+      if (ct === se) return 1;
+      const esc = escapeRegExp(se);
+      if (new RegExp('^' + esc + '(?:-|$)').test(ct)) return 0.65;
+      if (new RegExp('-' + esc + '$').test(ct) || new RegExp('-' + esc + '-').test(ct)) return 0.4;
+      if (tasteMatches(ct, se)) return 0.5;
+      return 0;
+    }
+
+    function tasteBestForSelected(coffeeTastes, selectedTaste, w) {
+      const base = w.guidedTastePerMatch;
+      let best = { pts: 0, coffeeTaste: null };
+      for (let i = 0; i < coffeeTastes.length; i++) {
+        const ct = coffeeTastes[i];
+        const mult = tasteMatchMultiplier(ct, selectedTaste);
+        if (mult <= 0) continue;
+        const pts = Math.round(base * mult * 10) / 10;
+        if (pts > best.pts) best = { pts, coffeeTaste: ct };
+      }
+      return best;
+    }
+
+    function roastDistance(productRoast, selected) {
+      const ip = ROAST_ORDER.indexOf(productRoast);
+      const is = ROAST_ORDER.indexOf(selected);
+      if (ip < 0 || is < 0) return -1;
+      return Math.abs(ip - is);
+    }
+
+    function roastScore(productRoast, selected, fullPts) {
+      if (!productRoast || !selected) return { pts: 0, type: null };
+      const p = String(productRoast).trim();
+      const s = String(selected).trim();
+      if (!p || !s) return { pts: 0, type: null };
+      if (p === s) return { pts: fullPts, type: 'exact' };
+      const d = roastDistance(p, s);
+      let mult = 0;
+      if (d === 1) mult = 0.5;
+      else if (d === 2) mult = 0.25;
+      if (mult <= 0) return { pts: 0, type: null };
+      return { pts: Math.round(fullPts * mult * 10) / 10, type: 'partial' };
+    }
+
+    function scoreOneCoffeeGuided(coffee, englishPrepMethods, selectedRoastLevels, tasteCategories, showAll, w) {
+      let score = 0;
+      let roastMeta = { type: null, selected: null, product: coffee.coffee_roast_level || '' };
+
+      if (englishPrepMethods.length > 0) {
+        const matchedPrep = englishPrepMethods.filter(function (method) {
+          return Array.isArray(coffee.prep_method) && coffee.prep_method.includes(method);
+        });
+        if (matchedPrep.length > 0) score += w.guidedPrepPerMatch;
+      }
+
+      if (selectedRoastLevels.length > 0) {
+        let bestRoast = { pts: 0, type: null, sel: selectedRoastLevels[0] };
+        selectedRoastLevels.forEach(function (sel) {
+          const r = roastScore(coffee.coffee_roast_level, sel, w.guidedRoastPerMatch);
+          if (r.pts > bestRoast.pts) bestRoast = { pts: r.pts, type: r.type, sel: sel };
+        });
+        if (bestRoast.pts > 0) score += bestRoast.pts;
+        roastMeta = { type: bestRoast.type || 'none', selected: bestRoast.sel, product: coffee.coffee_roast_level || '' };
+      }
+
+      if (showAll) {
+        score += w.guidedTastePerMatch;
+      } else if (tasteCategories.length > 0) {
+        tasteCategories.forEach(function (categoryHeb) {
+          const targets = TASTE_CATEGORY_MAP[categoryHeb] || [];
+          let best = { pts: 0 };
+          targets.forEach(function (targetEng) {
+            const b = tasteBestForSelected(Array.isArray(coffee.tastes) ? coffee.tastes : [], targetEng, w);
+            if (b.pts > best.pts) best = b;
+          });
+          if (best.pts > 0) score += best.pts;
+        });
+      }
+
+      return { score, roastMeta };
+    }
+
+    function matchCoffees(params, coffeeDatabase, weights, thresholds) {
+      const w = { ...DEFAULT_WEIGHTS, ...weights };
+      const th = {
+        ...DEFAULT_THRESHOLDS,
+        ...thresholds,
+        minBundleScore: { ...DEFAULT_MIN_BUNDLE_SCORE, ...(thresholds && thresholds.minBundleScore) },
+      };
+      const minProd = Number(th.minProductScore) || 0;
+
+      const showAll = params.tastes && params.tastes.includes('הצג הכל');
+      const englishPrepMethods = params.prep_method
+        ? params.prep_method.map(function (m) { return HEBREW_TO_ENGLISH_PREP[m] || m; })
+        : [];
+      const tasteCategories = params.tastes && !showAll
+        ? params.tastes.filter(function (t) { return t !== 'הצג הכל'; })
+        : [];
+      const roastLevels = Array.isArray(params.roast_levels) ? params.roast_levels.filter(Boolean) : [];
+
+      const scoredCoffees = coffeeDatabase.map(function (coffee) {
+        const d = scoreOneCoffeeGuided(coffee, englishPrepMethods, roastLevels, tasteCategories, showAll, w);
+        return { coffee: coffee, score: d.score, roastMeta: d.roastMeta };
+      });
+
+      let guidedBelowMin = false;
+      let sorted = scoredCoffees
+        .filter(function (item) { return showAll ? item.score >= 0 : item.score > minProd; })
+        .sort(function (a, b) { return b.score - a.score; });
+
+      if (sorted.length === 0) {
+        if (minProd > 0) {
+          const anyPositive = scoredCoffees.filter(function (x) { return x.score > 0; }).sort(function (a, b) { return b.score - a.score; });
+          sorted = anyPositive.length > 0 ? anyPositive : scoredCoffees.slice().sort(function (a, b) { return b.score - a.score; }).slice(0, 7);
+          guidedBelowMin = true;
+        }
+        if (!guidedBelowMin) {
+          sorted = coffeeDatabase.slice(0, 7).map(function (c, i) {
+            return { coffee: c, score: 7 - i, roastMeta: { type: null, selected: null, product: c.coffee_roast_level || '' } };
+          });
+        }
+      }
+
+      return {
+        coffees: sorted.map(function (item) { return item.coffee; }),
+        withScores: sorted,
+        mode: 'guided',
+        showAll: !!showAll,
+        belowMin: guidedBelowMin,
+      };
+    }
+
+    function arrangeInitialVendors(top3For3, top3For5, top3For7) {
+      let a = top3For3, b = top3For5, c = top3For7;
+      let attempts = 0;
+      while (attempts < 50) {
+        const v3 = a[0] && a[0].vendor;
+        const v5 = b[0] && b[0].vendor;
+        const v7 = c[0] && c[0].vendor;
+        const uniq = new Set([v3, v5, v7]);
+        if (uniq.size === 3 || !v3 || !v5 || !v7) return { top3For3: a, top3For5: b, top3For7: c };
+        if (v3 === v5 && b.length > 1) b = b.slice(1).concat(b[0]);
+        else if (v3 === v7 && c.length > 1) c = c.slice(1).concat(c[0]);
+        else if (v5 === v7 && c.length > 1) c = c.slice(1).concat(c[0]);
+        else if (a.length > 1) a = a.slice(1).concat(a[0]);
+        else return { top3For3: a, top3For5: b, top3For7: c };
+        attempts++;
+      }
+      return { top3For3: a, top3For5: b, top3For7: c };
+    }
+
+    function buildVendorBundles(withScores, thresholds, options) {
+      const relaxForShowAll = options && options.showAll;
+      const selectedRoastLevels = options && Array.isArray(options.selectedRoastLevels)
+        ? options.selectedRoastLevels.filter(Boolean) : [];
+      const hasRoastSelection = selectedRoastLevels.length > 0;
+      const th = {
+        ...DEFAULT_THRESHOLDS,
+        ...thresholds,
+        minBundleScore: { ...DEFAULT_MIN_BUNDLE_SCORE, ...(thresholds && thresholds.minBundleScore) },
+      };
+      const minProd = relaxForShowAll ? 0 : Number(th.minProductScore) || 0;
+
+      let filtered = withScores.filter(function (row) { return minProd > 0 ? row.score > minProd : row.score >= 0; });
+      let productsBelowMin = false;
+      if (filtered.length < 3) {
+        const relaxed = withScores.filter(function (row) { return row.score >= 0; }).sort(function (a, b) { return b.score - a.score; });
+        if (relaxed.length === 0) return { ok: false, reason: 'אין מוצרים בקטלוג.', bundles: null };
+        filtered = relaxed;
+        productsBelowMin = true;
+      }
+
+      const vendorGroups = {};
+      filtered.forEach(function (row) {
+        const v = (row.coffee.vendor || '').trim();
+        if (!vendorGroups[v]) vendorGroups[v] = { vendor: v, items: [] };
+        const roastType = row.roastMeta && row.roastMeta.type ? row.roastMeta.type : null;
+        const roastPriority = roastType === 'exact' ? 2 : roastType === 'partial' ? 1 : 0;
+        vendorGroups[v].items.push({ coffee: row.coffee, score: row.score, roastPriority: roastPriority, roastMeta: row.roastMeta || null });
+      });
+
+      Object.values(vendorGroups).forEach(function (vg) {
+        vg.items.sort(function (a, b) {
+          if (b.roastPriority !== a.roastPriority) return b.roastPriority - a.roastPriority;
+          return b.score - a.score;
+        });
+      });
+
+      function topItemsForVendor(vg, size) {
+        if (!hasRoastSelection) return vg.items.slice(0, size);
+        const roastMatched = vg.items.filter(function (item) { return item.roastPriority > 0; });
+        if (roastMatched.length >= size) return roastMatched.slice(0, size);
+        return vg.items.slice(0, size);
+      }
+
+      function getTopVendorsForSize(size) {
+        const minBundle = relaxForShowAll ? 0 : Number(th.minBundleScore[size]) || 0;
+        return Object.values(vendorGroups)
+          .filter(function (vg) { return vg.items.length >= size; })
+          .map(function (vg) {
+            const topItems = topItemsForVendor(vg, size);
+            const bundleScore = topItems.reduce(function (s, item) { return s + item.score; }, 0);
+            const roastHits = topItems.reduce(function (s, item) { return s + (item.roastPriority > 0 ? 1 : 0); }, 0);
+            const strictRoastEligible = hasRoastSelection
+              ? vg.items.filter(function (it) { return it.roastPriority > 0; }).length >= size
+              : false;
+            return { vendor: vg.vendor, items: vg.items, bundleScore: bundleScore, roastHits: roastHits, strictRoastEligible: strictRoastEligible, size: size, bundleItems: topItems };
+          })
+          .filter(function (x) { return x.bundleScore >= minBundle; })
+          .sort(function (a, b) {
+            if ((b.strictRoastEligible ? 1 : 0) !== (a.strictRoastEligible ? 1 : 0)) return (b.strictRoastEligible ? 1 : 0) - (a.strictRoastEligible ? 1 : 0);
+            if (b.roastHits !== a.roastHits) return b.roastHits - a.roastHits;
+            if (b.bundleScore !== a.bundleScore) return b.bundleScore - a.bundleScore;
+            return Math.random() - 0.5;
+          })
+          .slice(0, 3);
+      }
+
+      function getFallbackVendorsForSize(size) {
+        return Object.values(vendorGroups)
+          .filter(function (vg) { return vg.items.length > 0; })
+          .map(function (vg) {
+            const topItems = topItemsForVendor(vg, size);
+            const bundleScore = topItems.reduce(function (s, item) { return s + item.score; }, 0);
+            const roastHits = topItems.reduce(function (s, item) { return s + (item.roastPriority > 0 ? 1 : 0); }, 0);
+            return { vendor: vg.vendor, items: vg.items, bundleScore: bundleScore, roastHits: roastHits, size: size, bundleItems: topItems };
+          })
+          .sort(function (a, b) {
+            if (b.roastHits !== a.roastHits) return b.roastHits - a.roastHits;
+            if (b.bundleScore !== a.bundleScore) return b.bundleScore - a.bundleScore;
+            return Math.random() - 0.5;
+          })
+          .slice(0, 3);
+      }
+
+      let top3For3 = getTopVendorsForSize(3);
+      let top3For5 = getTopVendorsForSize(5);
+      let top3For7 = getTopVendorsForSize(7);
+
+      const belowMin3 = top3For3.length === 0;
+      const belowMin5 = top3For5.length === 0;
+      const belowMin7 = top3For7.length === 0;
+      if (belowMin3) top3For3 = getFallbackVendorsForSize(3);
+      if (belowMin5) top3For5 = getFallbackVendorsForSize(5);
+      if (belowMin7) top3For7 = getFallbackVendorsForSize(7);
+
+      if (!top3For3.length && !top3For5.length && !top3For7.length) {
+        return { ok: false, reason: 'אין ספקים עם מוצרים בקטלוג.', bundles: null };
+      }
+
+      const arranged = arrangeInitialVendors(top3For3, top3For5, top3For7);
+      top3For3 = arranged.top3For3;
+      top3For5 = arranged.top3For5;
+      top3For7 = arranged.top3For7;
+
+      const bundles = {
+        3: top3For3.map(function (v) { return (v.bundleItems || v.items.slice(0, 3)).map(function (item) { return item.coffee; }); }),
+        5: top3For5.map(function (v) { return (v.bundleItems || v.items.slice(0, 5)).map(function (item) { return item.coffee; }); }),
+        7: top3For7.map(function (v) { return (v.bundleItems || v.items.slice(0, 7)).map(function (item) { return item.coffee; }); }),
+      };
+
+      const sizesBelowMin = { 3: productsBelowMin || belowMin3, 5: productsBelowMin || belowMin5, 7: productsBelowMin || belowMin7 };
+      const meta = { topVendors: { 3: top3For3, 5: top3For5, 7: top3For7 }, sizesBelowMin: sizesBelowMin };
+
+      return { ok: true, bundles: bundles, meta: meta, belowMin: productsBelowMin || belowMin3 || belowMin5 || belowMin7 };
+    }
+
+    global.QuestionnaireScoring = { matchCoffees: matchCoffees, buildVendorBundles: buildVendorBundles, BUNDLE_SIZES: BUNDLE_SIZES };
+  })(typeof window !== 'undefined' ? window : globalThis);
+  /* ——— end QuestionnaireScoring engine ——— */
+
   function shuffleVendorList(arr) {
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -1151,11 +1458,10 @@
       return options;
     }
     return options.slice().sort(function (a, b) {
-      const sb =
-        (b.orderScore != null ? b.orderScore : b.matchPercent != null ? b.matchPercent : 0);
-      const sa =
-        (a.orderScore != null ? a.orderScore : a.matchPercent != null ? a.matchPercent : 0);
-      return sb - sa;
+      const sb = (b.orderScore != null ? b.orderScore : b.matchPercent != null ? b.matchPercent : 0);
+      const sa = (a.orderScore != null ? a.orderScore : a.matchPercent != null ? a.matchPercent : 0);
+      if (sb !== sa) return sb - sa;
+      return Math.random() - 0.5;
     });
   }
 
@@ -1196,83 +1502,89 @@
       return [];
     }
 
-    const coffeeDatabase = window.allProducts.map((product) => ({
-      ...product,
-      prep_method: product.metafields.coffee_prep_methods || [],
-      tastes: product.metafields.coffee_tastes || [],
-    }));
+    const S = window.QuestionnaireScoring;
+    const params = window.__questionnaireParams;
 
-    const text = userText.toLowerCase();
-    const scores = coffeeDatabase.map((coffee) => {
-      let score = 0;
+    const WEIGHTS = {
+      guidedPrepPerMatch: 1,
+      guidedRoastPerMatch: 3,
+      guidedTastePerMatch: 5,
+    };
+    const THRESHOLDS = {
+      minProductScore: 0,
+      minBundleScore: { 3: 24, 5: 35, 7: 47 },
+    };
 
-      if (Array.isArray(coffee.prep_method)) {
-        coffee.prep_method.forEach((method) => {
-          if (text.includes(method.toLowerCase())) score += 3;
-        });
-      }
-
-      if (Array.isArray(coffee.tastes)) {
-        coffee.tastes.forEach((taste) => {
-          if (text.includes(taste.toLowerCase())) score += 2;
-        });
-      }
-
-      if (Array.isArray(coffee.prep_method)) {
-        if (text.includes('אספרסו') || text.includes('חזק') || text.includes('עז')) {
-          if (coffee.prep_method.includes('Espresso')) score += 2;
-        }
-        if (
-          text.includes('חלב') ||
-          text.includes('לאטה') ||
-          text.includes("קפוצ'ינו") ||
-          text.includes('קפוצינו') ||
-          text.includes('קפה הפוך')
-        ) {
-          if (coffee.prep_method.includes('Espresso')) score += 2;
-        }
-        if (text.includes('פילטר') || text.includes('עדין') || text.includes('קל')) {
-          if (coffee.prep_method.includes('Filter')) score += 2;
-        }
-        if (text.includes('מקינטה') || text.includes('מוקה')) {
-          if (coffee.prep_method.includes('MokaPot')) score += 2;
-        }
-      }
-
-      if (Array.isArray(coffee.tastes)) {
-        if (text.includes('פירותי') || text.includes('בהיר') || text.includes('חמוץ') || text.includes('חמצמץ')) {
-          if (coffee.tastes.includes('Fruity') || coffee.tastes.includes('Fruity-Sweet')) score += 2;
-        }
-        if (text.includes('מתוק') || text.includes('מתיקות')) {
-          if (
-            coffee.tastes.includes('Sweet') ||
-            coffee.tastes.includes('Sweet-Chocolate') ||
-            coffee.tastes.includes('Fruity-Sweet')
-          )
-            score += 2;
-        }
-        if (text.includes('שוקולד') || text.includes('קקאו')) {
-          if (coffee.tastes.includes('Chocolate') || coffee.tastes.includes('Sweet-Chocolate')) score += 2;
-        }
-      }
-
-      return { coffee, score };
+    const coffeeDatabase = window.allProducts.map(function (product) {
+      const mf = product.metafields || {};
+      const roastRaw = mf.coffee_roast_level;
+      const coffeeRoastLevel =
+        roastRaw && typeof roastRaw === 'object' && roastRaw !== null && roastRaw.value != null
+          ? String(roastRaw.value)
+          : String(roastRaw || '');
+      return Object.assign({}, product, {
+        prep_method: normalizeMetaList(mf.coffee_prep_methods),
+        tastes: normalizeMetaList(mf.coffee_tastes),
+        coffee_roast_level: coffeeRoastLevel,
+      });
     });
 
-    const positiveScores = scores.filter((item) => item.score > 0).sort((a, b) => b.score - a.score);
-    window.__questionnaireLastPositiveScores = positiveScores;
+    let withScores;
+    let matchShowAll = false;
 
-    const vendorsWithMatches = [
-      ...new Set(positiveScores.map(({ coffee }) => (coffee.vendor || '').trim().toLowerCase()).filter(Boolean)),
-    ];
+    if (S && params) {
+      const matchResult = S.matchCoffees(params, coffeeDatabase, WEIGHTS, THRESHOLDS);
+      withScores = matchResult.withScores || [];
+      matchShowAll = !!matchResult.showAll;
+    } else {
+      const text = (userText || '').toLowerCase();
+      withScores = coffeeDatabase.map(function (coffee) {
+        let score = 0;
+        (coffee.prep_method || []).forEach(function (m) { if (text.includes(m.toLowerCase())) score += 1; });
+        (coffee.tastes || []).forEach(function (t) { if (text.includes(t.toLowerCase())) score += 5; });
+        return { coffee: coffee, score: score, roastMeta: { type: null, selected: null, product: coffee.coffee_roast_level || '' } };
+      }).filter(function (x) { return x.score > 0; }).sort(function (a, b) { return b.score - a.score; });
+    }
 
-    if (
+    window.__questionnaireLastWithScores = withScores;
+    window.__questionnaireLastPositiveScores = withScores;
+
+    const currentUserText = window.__questionnaireMatchUserText || userText || '';
+    const needsNewVendorOptions =
       !window.__questionnaireVendorOptions ||
       !window.__questionnaireVendorOptions.length ||
-      window.__questionnaireVendorAssignmentForText !== userText
-    ) {
-      window.__questionnaireVendorOptions = pickThreeVendorOptionsForResults(vendorsWithMatches, positiveScores);
-      window.__questionnaireVendorAssignmentForText = userText;
+      window.__questionnaireVendorAssignmentForText !== currentUserText;
+
+    if (needsNewVendorOptions) {
+      let vendorOptions = [];
+      if (S && withScores.length > 0) {
+        const bundleResult = S.buildVendorBundles(withScores, THRESHOLDS, {
+          showAll: matchShowAll,
+          selectedRoastLevels: params ? (params.roast_levels || []) : [],
+        });
+        window.__questionnaireBundleResult = bundleResult;
+        if (bundleResult.ok && bundleResult.meta && bundleResult.meta.topVendors) {
+          const primary = bundleResult.meta.topVendors[5] || [];
+          vendorOptions = primary.map(function (v) {
+            return {
+              vendorKey: (v.vendor || '').toLowerCase(),
+              label: getVendorDisplayNameFromPool((v.vendor || '').toLowerCase(), withScores) || v.vendor || '',
+              orderScore: v.bundleScore || 0,
+            };
+          }).filter(function (o) { return o.vendorKey; });
+        }
+      }
+      if (!vendorOptions.length) {
+        const uniqueVendors = [];
+        const seen = {};
+        withScores.forEach(function (x) {
+          const vk = (x.coffee.vendor || '').trim().toLowerCase();
+          if (vk && !seen[vk]) { seen[vk] = true; uniqueVendors.push(vk); }
+        });
+        vendorOptions = pickThreeVendorOptionsForResults(uniqueVendors, withScores);
+      }
+      window.__questionnaireVendorOptions = vendorOptions;
+      window.__questionnaireVendorAssignmentForText = currentUserText;
     }
 
     if (window.__questionnaireSelectedVendor && window.__questionnaireVendorOptions && window.__questionnaireVendorOptions.length) {
@@ -1280,11 +1592,11 @@
       const inList = window.__questionnaireVendorOptions.some(function (o) {
         return (o.vendorKey || '').toLowerCase() === want;
       });
-      if (!inList && vendorsWithMatches.indexOf(want) !== -1) {
-        const name = getVendorDisplayNameFromPool(want, positiveScores) || want;
-        const injectScore = (positiveScores || []).reduce(function (s, item) {
-          if ((item.coffee.vendor || '').trim().toLowerCase() === want) return s + (item.score || 0);
-          return s;
+      const vendorInScores = withScores.some(function (x) { return (x.coffee.vendor || '').trim().toLowerCase() === want; });
+      if (!inList && vendorInScores) {
+        const name = getVendorDisplayNameFromPool(want, withScores) || want;
+        const injectScore = withScores.reduce(function (s, item) {
+          return (item.coffee.vendor || '').trim().toLowerCase() === want ? s + (item.score || 0) : s;
         }, 0);
         window.__questionnaireVendorOptions[0] = { vendorKey: want, label: name, orderScore: Math.max(injectScore, 1) };
         window.__questionnaireVendorOptions = sortVendorOptionsByMatchDesc(window.__questionnaireVendorOptions);
@@ -1304,18 +1616,20 @@
     }
 
     const targetVendor = (window.__questionnaireSelectedVendor || '').toLowerCase();
-    if (!targetVendor) {
-      return [];
-    }
+    if (!targetVendor) return [];
 
-    const forVendor = positiveScores.filter(({ coffee }) => {
-      const v = (coffee.vendor || '').trim().toLowerCase();
-      return v === targetVendor;
-    });
+    const forVendor = withScores
+      .filter(function (item) {
+        return (item.coffee.vendor || '').trim().toLowerCase() === targetVendor;
+      })
+      .sort(function (a, b) {
+        const rpa = a.roastMeta && a.roastMeta.type === 'exact' ? 2 : a.roastMeta && a.roastMeta.type === 'partial' ? 1 : 0;
+        const rpb = b.roastMeta && b.roastMeta.type === 'exact' ? 2 : b.roastMeta && b.roastMeta.type === 'partial' ? 1 : 0;
+        if (rpb !== rpa) return rpb - rpa;
+        return b.score - a.score;
+      });
 
-    return forVendor
-      .map((item) => item.coffee)
-      .slice(0, 7);
+    return forVendor.map(function (item) { return item.coffee; }).slice(0, 7);
   }
 
   function formatQuestionnaireBundleWeightKg(grams) {
@@ -1344,7 +1658,7 @@
       if (!wEl) return;
       var dq = btn.getAttribute('data-qty');
       var q = dq ? parseInt(dq, 10) : 0;
-      if (!ut || typeof ut !== 'string' || !ut.length || !q) {
+      if (typeof ut !== 'string' || !q) {
         wEl.textContent = '';
         return;
       }
@@ -1862,6 +2176,7 @@
             typeof window.__questionnaireVendorAssignmentForText === 'string'
               ? window.__questionnaireVendorAssignmentForText
               : '',
+          questionnaireParams: window.__questionnaireParams || null,
           savedAt: Date.now(),
         })
       );
@@ -1890,6 +2205,9 @@
       }
       if (typeof parsedState.selectedVendor === 'string' && parsedState.selectedVendor.trim() !== '') {
         window.__questionnaireSelectedVendor = parsedState.selectedVendor.trim().toLowerCase();
+      }
+      if (parsedState.questionnaireParams && typeof parsedState.questionnaireParams === 'object') {
+        window.__questionnaireParams = parsedState.questionnaireParams;
       }
       if (typeof parsedState.vendorAssignmentUserText === 'string' && parsedState.vendorAssignmentUserText.length) {
         window.__questionnaireVendorAssignmentForText = parsedState.vendorAssignmentUserText;
@@ -2008,6 +2326,7 @@
         // if (!window.appliedFilters[filterName])
 
         if (filterName === 'filter.p.m.custom.coffee_tastes') {
+          window.__questionnaireTasteRawValues = selectedValues.slice();
           const coffeeTastes = getSuitTasteProfile(value);
           coffeeTastes.forEach((tastes) => {
             tastesArray = tastes.split(',').map((t) => t.trim());
@@ -2129,25 +2448,37 @@
   }
 
   function redirectToCollectionWithFilters() {
-    // Collect text from selected UI elements to support Hebrew matching
-    const selectedWrappers = document.querySelectorAll('.questionnaire-selection-wrapper.selected');
-    const selectedTexts = Array.from(selectedWrappers).map((el) => {
-      const textEl = el.querySelector('.questionnaire-text');
-      return textEl ? textEl.innerText : '';
+    const TASTE_FILTER_TO_CATEGORY = {
+      'Fruity & Floral': 'קלאסי',
+      'Sweet & Caramelly': 'מודרני',
+      'Rich & Chocolaty': 'גל שלישי',
+    };
+
+    const prepMethods = (window.appliedFilters['filter.p.m.custom.coffee_prep_methods'] || []).filter(Boolean);
+
+    const roastRanges = (window.appliedFilters['filter.p.m.custom.coffee_roast_level'] || []).filter(Boolean);
+    const roastLevels = [];
+    roastRanges.forEach(function (r) {
+      r.split(',').forEach(function (s) {
+        const t = s.trim();
+        if (t) roastLevels.push(t);
+      });
     });
 
-    // Also collect applied filter values (English)
-    const filterValues = [];
-    for (const key in window.appliedFilters) {
-      if (Array.isArray(window.appliedFilters[key])) {
-        filterValues.push(...window.appliedFilters[key]);
-      }
-    }
+    const tasteRaw = (window.__questionnaireTasteRawValues || []).filter(Boolean);
+    const tasteCategories = tasteRaw.map(function (v) { return TASTE_FILTER_TO_CATEGORY[v] || null; }).filter(Boolean);
 
-    const userText = selectedTexts.join(' ') + ' ' + filterValues.join(' ');
-    console.log('User Text for matching:', userText);
+    window.__questionnaireParams = {
+      prep_method: prepMethods,
+      roast_levels: roastLevels,
+      tastes: tasteCategories.length > 0 ? tasteCategories : ['הצג הכל'],
+    };
 
-    window.__questionnaireMatchUserText = userText;
+    const userText = prepMethods.join(' ') + ' ' + roastLevels.join(' ') + ' ' + tasteRaw.join(' ');
+    window.__questionnaireMatchUserText = userText.trim();
+
+    console.log('Questionnaire params:', window.__questionnaireParams);
+
     const matchedCoffees = matchQuestionnaireCoffees(userText);
     console.log('Matched Coffees:', matchedCoffees);
     saveResultsState(matchedCoffees);
@@ -2951,28 +3282,8 @@
     return emailRegex.test(email);
   }
 
-  // Add this function to handle disabling taste options if 'כהה' is selected
   function updateTasteOptionsDisabledState() {
-    // Check if 'כהה' is in the roast level filter
-    const roastLevels = window.appliedFilters && window.appliedFilters['filter.p.m.custom.coffee_roast_level'];
-    const isDarkSelected =
-      Array.isArray(roastLevels) &&
-      roastLevels.includes('כהה') &&
-      !roastLevels.includes('בהירה') &&
-      !roastLevels.includes('בינונית');
-
-    // Select the relevant taste option wrappers (update selector if needed)
-    const tasteWrappers = document.querySelectorAll(
-      '.questionnaire-icons-wrapper.active .questionnaire-selection-wrapper[data-filter-value="Fruity & Floral"], .questionnaire-icons-wrapper.active .questionnaire-selection-wrapper[data-filter-value="Sweet & Caramelly"]'
-    );
-
-    tasteWrappers.forEach((wrapper) => {
-      if (isDarkSelected) {
-        wrapper.classList.add('disabled');
-      } else {
-        wrapper.classList.remove('disabled');
-      }
-    });
+    // All options remain available regardless of previous step selections
   }
 
   // Initialize the questionnaire functionality
@@ -3041,30 +3352,23 @@
         const parentWrapper = this.closest('.questionnaire-icons-wrapper');
         if (!parentWrapper.classList.contains('active')) return;
 
-        //
-        const filterValue = wrapper.getAttribute('data-filter-value');
-        // Remove selection from all other wrappers in the same step
-        if (!filterValue || filterValue.trim() === '') {
-          if (this.classList.contains('selected')) {
-            this.classList.remove('selected');
-          } else {
-            // Remove 'selected' class from all wrappers in the current step
-            parentWrapper.querySelectorAll('.questionnaire-selection-wrapper.selected').forEach((el) => {
-              el.classList.remove('selected');
-            });
-            this.classList.add('selected');
-          }
-        } else {
-          if (parentWrapper.querySelector('.questionnaire-selection-wrapper[data-filter-value=""].selected')) {
-            parentWrapper
-              .querySelector('.questionnaire-selection-wrapper[data-filter-value=""].selected')
-              .classList.remove('selected');
-          }
-          this.classList.toggle('selected');
-        }
+        // Single-select: deselect all others, then select this one
+        parentWrapper.querySelectorAll('.questionnaire-selection-wrapper.selected').forEach((el) => {
+          el.classList.remove('selected');
+        });
+        this.classList.add('selected');
 
         // Update button state
         updateSelectButton();
+
+        // Auto-advance to the next step
+        const filterName = parentWrapper.getAttribute('data-filter-name');
+        const stepIndex = parseInt(parentWrapper.getAttribute('data-step-index'), 10);
+        if (filterName && stepIndex) {
+          setTimeout(function () {
+            getFilters(filterName, stepIndex);
+          }, 300);
+        }
       });
     });
 
