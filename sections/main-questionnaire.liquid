@@ -15,6 +15,33 @@
       var cfg = tnScript.getAttribute('tnv-data-config');
       tnScript.setAttribute('tnv-data-config', cfg.replace('"widgetLocation":"left"', '"widgetLocation":"right"'));
     }
+
+    // The TabNav button lives inside a shadow DOM so external CSS cannot reach it.
+    // Use JS to find the shadow host and nudge #tr-button-mobile downward.
+    function shiftTabNavButtonDown() {
+      var all = document.querySelectorAll('*');
+      for (var i = 0; i < all.length; i++) {
+        var el = all[i];
+        if (el.shadowRoot) {
+          var btn = el.shadowRoot.querySelector('#tr-button-mobile');
+          if (btn) {
+            btn.style.transform = (btn.style.transform || '') + ' translateY(20px)';
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    if (!shiftTabNavButtonDown()) {
+      var observer = new MutationObserver(function () {
+        if (shiftTabNavButtonDown()) {
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.documentElement, { childList: true, subtree: true });
+      setTimeout(function () { observer.disconnect(); }, 10000);
+    }
   })();
 </script>
 
@@ -424,7 +451,7 @@
       class="questionnaire-header questionnaire-header--results"
       role="banner"
       dir="ltr">
-      <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset" aria-label="{{ shop.name }}">
+      <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset" aria-label="{{ shop.name }}" onclick="clearResultsState()">
         <div class="header__heading-logo-wrapper">
           <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" class="header__heading-logo">
         </div>
@@ -693,8 +720,7 @@
             class="qty-option"
             data-qty="3">
             <span class="qty-option__stack">
-              {% comment %} <span class="qty-option__num">3</span> {% endcomment %}
-              <span class="qty-option__weight">(3ק״ג)</span>
+              <span class="qty-option__num">3 חבילות</span>
             </span>
           </button>
           <button
@@ -703,8 +729,7 @@
             data-qty="5">
             <span class="qty-option__discount-badge" aria-hidden="true">5%</span>
             <span class="qty-option__stack">
-              {% comment %} <span class="qty-option__num">5</span> {% endcomment %}
-              <span class="qty-option__weight">(3ק״ג)</span>
+              <span class="qty-option__num">5 חבילות</span>
             </span>
           </button>
           <button
@@ -713,8 +738,7 @@
             data-qty="7">
             <span class="qty-option__discount-badge" aria-hidden="true">10%</span>
             <span class="qty-option__stack">
-              {% comment %} <span class="qty-option__num">7</span> {% endcomment %}
-              <span class="qty-option__weight">(3ק״ג)</span>
+              <span class="qty-option__num">7 חבילות</span>
             </span>
           </button>
         </div>
