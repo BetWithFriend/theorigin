@@ -58,13 +58,13 @@ body.questionnaire-wrapper-open {
 .questionnaire-skip-btn {
     color: var(--q-text);
     font-family: "Assistant", sans-serif;
-    font-size: 16px;
-    line-height: 16px;
+    font-size: 13px;
+    line-height: 13px;
     font-weight: 400;
-    width: 87px;
-    height: 56px;
+    width: 68px;
+    height: 38px;
     /* text-decoration: underline; */
-    margin-top: 18px;
+    margin-top: 10px;
     cursor: pointer;
     border-radius: 8px;
     border: 1px solid #555555;
@@ -364,7 +364,7 @@ body.questionnaire-wrapper-open {
 .questionnaire-btn-wrapper {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
     gap: 16px;
     padding-right: 8px;
@@ -380,7 +380,7 @@ body.questionnaire-wrapper-open {
     justify-content: center;
     width: 100%;
     gap: 8px;
-    margin-top: 16px;
+    margin-bottom: 16px;
     padding: 0 8px;
 }
 
