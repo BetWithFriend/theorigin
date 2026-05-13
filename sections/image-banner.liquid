@@ -3,15 +3,14 @@
   rel="preload"
   href="{{ 'section-image-banner.css' | asset_url }}"
   as="style"
-  onload="this.onload=null;this.rel='stylesheet'"
->
+  onload="this.onload=null;this.rel='stylesheet'">
 <noscript>{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}</noscript>
 
 {%- if section.settings.image_height == 'adapt' and section.settings.image != blank -%}
   {%- style -%}
     @media screen and (max-width: 749px) {
       #Banner-{{ section.id }}::before,
-      #Banner-{{ section.id }} .banner__media::before,
+      #Banner-{{ section.id }}.banner__media::before,
       #Banner-{{ section.id }}:not(.banner--mobile-bottom) .banner__content::before {
         padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;
         content: '';
@@ -20,8 +19,9 @@
     }
 
     @media screen and (min-width: 750px) {
-      #Banner-{{ section.id }}::before,
-      #Banner-{{ section.id }} .banner__media::before {
+      #Banner-{{ section.id }}: : before
+      , #Banner-{{ section.id }}
+      .banner__media::before {
         padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;
         content: '';
         display: block;
@@ -279,7 +279,8 @@
   .scroll-indicator {
     display: none;
     position: absolute;
-    bottom: 60px; /* use 30px if not announcement bar used */
+    bottom: 60px;
+    /* use 30px if not announcement bar used */
     left: 50%;
     transform: translateX(-50%);
     color: white;
@@ -288,7 +289,7 @@
   }
 
   @keyframes bounce {
-    0%,
+    0,
     20%,
     50%,
     80%,
@@ -342,7 +343,7 @@
 
   @media (min-width: 768px) {
     .video-banner {
-      margin: 0px;
+      margin: 0;
       width: auto;
       height: 350px;
       border-radius: 16px;
@@ -408,8 +409,7 @@
   <div
     class="image-placeholder"
     id="imagePlaceholder"
-    style="background-image: url('https://cdn.shopify.com/s/files/1/0701/9151/3657/files/homepage-video-v4-still.jpg?v=1766840420');"
-  ></div>
+    style="background-image: url('https://cdn.shopify.com/s/files/1/0701/9151/3657/files/homepage-video-v4-still.jpg?v=1766840420');"></div>
 
   <!-- Loading overlay with spinner -->
   <div class="loading-overlay" id="loadingOverlay">
@@ -423,8 +423,7 @@
     muted
     loop
     playsinline
-    preload="none"
-  >
+    preload="none">
     <source id="videoSource" type="video/mp4">
     הדפדפן לא תומך בוידאו
   </video>
@@ -441,15 +440,25 @@
       קפה טרי, טעים יותר, מבתי הקלייה הנבחרים של ישראל
     </h2>
 
-    <a href="/pages/questionnaire" role="link" class="main-cta-button" id="mainCtaBtn">לשאלון הקפה</a>
-    <br>
-    <a href="/collections/חנות-קפה" role="link" class="main-cta-button" id="shopCtaBtn">קחו אותי לקפה טעים</a>
+    <a
+      href="/pages/questionnaire"
+      role="link"
+      class="main-cta-button"
+      id="mainCtaBtn">לשאלון הקפה</a>
+  {% comment %} <br>
+        <a href="/collections/חנות-קפה" role="link" class="main-cta-button" id="shopCtaBtn">קחו אותי לקפה טעים</a> {% endcomment %}
   </div>
 
   <!-- Video controls -->
   <div class="video-controls">
-    <button class="control-btn" id="muteBtn" title="Unmute">🔇</button>
-    <button class="control-btn" id="playBtn" title="Pause">⏸️</button>
+    <button
+      class="control-btn"
+      id="muteBtn"
+      title="Unmute">🔇</button>
+    <button
+      class="control-btn"
+      id="playBtn"
+      title="Pause">⏸️</button>
   </div>
 
   <!-- Scroll indicator -->
@@ -461,124 +470,106 @@
 
 {% comment %}
   <div
-    id="Banner-{{ section.id }}"
-    class="banner banner--content-align-{{ section.settings.desktop_content_alignment }} banner--content-align-mobile-{{ section.settings.mobile_content_alignment }} banner--{{ section.settings.image_height }}{% if section.settings.stack_images_on_mobile and section.settings.image != blank and section.settings.image_2 != blank %} banner--stacked{% endif %}{% if section.settings.image_height == 'adapt' and section.settings.image != blank %} banner--adapt{% endif %}{% if section.settings.show_text_below %} banner--mobile-bottom{%- endif -%}{% if section.settings.show_text_box == false %} banner--desktop-transparent{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+  id="Banner-{{ section.id }}"
+  class="banner banner--content-align-{{ section.settings.desktop_content_alignment }} banner--content-align-mobile-{{ section.settings.mobile_content_alignment }} banner--{{ section.settings.image_height }}{% if section.settings.stack_images_on_mobile and section.settings.image != blank and section.settings.image_2 != blank %} banner--stacked{% endif %}{% if section.settings.image_height == 'adapt' and section.settings.image != blank %} banner--adapt{% endif %}{% if section.settings.show_text_below %} banner--mobile-bottom{%- endif -%}{% if section.settings.show_text_box == false %} banner--desktop-transparent{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
   >
-    {%- if section.settings.image != blank -%}
-      <div class="banner__media media{% if section.settings.image == blank and section.settings.image_2 == blank %} placeholder{% endif %}{% if section.settings.image_2 != blank %} banner__media-half{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-        {%- liquid
-          assign image_height = section.settings.image.width | divided_by: section.settings.image.aspect_ratio
-          if section.settings.image_2 != blank
-            assign image_class = 'banner__media-image-half'
-          endif
-          if section.settings.image_2 != blank and section.settings.stack_images_on_mobile
-            assign sizes = stacked_sizes
-          elsif section.settings.image_2 != blank
-            assign sizes = half_width
-          else
-            assign sizes = full_width
-          endif
-        -%}
-        {{
-          section.settings.image
-          | image_url: width: 3840
-          | image_tag:
-            width: section.settings.image.width,
-            height: image_height,
-            class: image_class,
-            sizes: sizes,
-            widths: widths,
-            fetchpriority: fetch_priority
-        }}
-      </div>
-    {%- elsif section.settings.image_2 == blank -%}
-      {% comment %} <div class="banner__media media{% if section.settings.image == blank and section.settings.image_2 == blank %} placeholder{% endif %}{% if section.settings.image_2 != blank %} banner__media-half{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-        {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
-      </div> {% endcomment %}
-    {%- endif -%}
-    {%- if section.settings.image_2 != blank -%}
-      <div class="banner__media media{% if section.settings.image != blank %} banner__media-half{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-        {%- liquid
-          assign image_height_2 = section.settings.image_2.width | divided_by: section.settings.image_2.aspect_ratio
-          if section.settings.image != blank
-            assign image_class_2 = 'banner__media-image-half'
-          endif
-          if section.settings.image != blank and section.settings.stack_images_on_mobile
-            assign sizes = stacked_sizes
-          elsif section.settings.image_2 != blank
-            assign sizes = half_width
-          else
-            assign sizes = full_width
-          endif
-        -%}
-        {{
-          section.settings.image_2
-          | image_url: width: 3840
-          | image_tag:
-            width: section.settings.image_2.width,
-            height: image_height_2,
-            class: image_class_2,
-            sizes: sizes,
-            widths: widths,
-            fetchpriority: fetch_priority
-        }}
-      </div>
-    {%- endif -%}
-
-    <div class="banner__content banner__content--{{ section.settings.desktop_content_position }} page-width{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-      <img src={{ 'mainpage_top.png' |  asset_url }} alt="אוריגין - עלי ופולי קפה בעמוד הראשי" class="main-page-top-img"/>
-      <div class="banner__box content-container content-container--full-width-mobile color-{{ section.settings.color_scheme }} gradient">
-        {%- for block in section.blocks -%}
-          {%- case block.type -%}
-            {%- when 'heading' -%}
-              <h1
-                class="banner__heading inline-richtext {{ block.settings.heading_size }}"
-                {{ block.shopify_attributes }}>
-                {{ block.settings.heading }}
-                {% comment %} <div style="font-size: 55px;">במקום אחד</div> {% endcomment %}
-              </h1>
-            {%- when 'text' -%}
-              <div class="banner__text rte {{ block.settings.text_style }}" {{ block.shopify_attributes }}>
-                <h2>{{ block.settings.text }}</h2>
-              </div>
-            {%- when 'buttons' -%}
-              <div
-                class="banner__buttons{% if block.settings.button_label_1 != blank and block.settings.button_label_2 != blank %} banner__buttons--multiple{% endif %}"
-                {{ block.shopify_attributes }}
-              >
-                {%- if block.settings.button_label_1 != blank -%}
-                  <a
-                    {% if block.settings.button_link_1 == blank %}
-                      role="link" aria-disabled="true"
-                    {% else %}
-                      href="{{ block.settings.button_link_1 }}"
-                    {% endif %}
-                    class="button{% if block.settings.button_style_secondary_1 %} button--secondary{% else %} button--primary{% endif %}"
-                  >
-                    {{- block.settings.button_label_1 | escape -}}
-                  </a>
-                {%- endif -%}
-                {%- if block.settings.button_label_2 != blank -%}
-                  <a
-                    {% if block.settings.button_link_2 == blank %}
-                      role="link" aria-disabled="true"
-                    {% else %}
-                      href="{{ block.settings.button_link_2 }}"
-                    {% endif %}
-                    class="button{% if block.settings.button_style_secondary_2 %} button--secondary{% else %} button--primary{% endif %}"
-                  >
-                    {{- block.settings.button_label_2 | escape -}}
-                  </a>
-                {%- endif -%}
-              </div>
-          {%- endcase -%}
-        {%- endfor -%}
-      </div>
-    </div>
+  {%- if section.settings.image != blank -%}
+  <div class="banner__media media{% if section.settings.image == blank and section.settings.image_2 == blank %} placeholder{% endif %}{% if section.settings.image_2 != blank %} banner__media-half{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+  {%- liquid
+  assign image_height = section.settings.image.width | divided_by: section.settings.image.aspect_ratio
+  if section.settings.image_2 != blank
+  assign image_class = 'banner__media-image-half'
+  endif
+  if section.settings.image_2 != blank and section.settings.stack_images_on_mobile
+  assign sizes = stacked_sizes
+  elsif section.settings.image_2 != blank
+  assign sizes = half_width
+  else
+  assign sizes = full_width
+  endif
+  -%}
+  {{
+  section.settings.image
+  | image_url: width: 3840
+  | image_tag:
+  width: section.settings.image.width,
+  height: image_height,
+  class: image_class,
+  sizes: sizes,
+  widths: widths,
+  fetchpriority: fetch_priority
+  }}
+  </div>
+  {%- elsif section.settings.image_2 == blank -%}
+  {% comment %} <div class="banner__media media{% if section.settings.image == blank and section.settings.image_2 == blank %} placeholder{% endif %}{% if section.settings.image_2 != blank %} banner__media-half{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+  {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
   </div>
 {% endcomment %}
-
-<script>
+{%- endif -%}{%- if section.settings.image_2 != blank -%}
+<div class="banner__media media{% if section.settings.image != blank %} banner__media-half{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+  {%- liquid
+    assign image_height_2 = section.settings.image_2.width | divided_by: section.settings.image_2.aspect_ratio
+    if section.settings.image != blank
+      assign image_class_2 = 'banner__media-image-half'
+    endif
+    if section.settings.image != blank and section.settings.stack_images_on_mobile
+      assign sizes = stacked_sizes
+    elsif section.settings.image_2 != blank
+      assign sizes = half_width
+    else
+      assign sizes = full_width
+    endif
+  -%}
+  {{
+    section.settings.image_2 | image_url: width: 3840 | image_tag: width: section.settings.image_2.width, height: image_height_2, class: image_class_2, sizes: sizes, widths: widths, fetchpriority: fetch_priority
+  }}
+</div>{%- endif -%}<div class="banner__content banner__content--{{ section.settings.desktop_content_position }} page-width{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+<img
+  src={{ 'mainpage_top.png' | asset_url }}
+  alt="אוריגין - עלי ופולי קפה בעמוד הראשי"
+  class="main-page-top-img" />
+<div class="banner__box content-container content-container--full-width-mobile color-{{ section.settings.color_scheme }} gradient">
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when 'heading' -%}
+        <h1 class="banner__heading inline-richtext {{ block.settings.heading_size }}" {{ block.shopify_attributes }}>
+          {{ block.settings.heading }}
+        {% comment %} <div style="font-size: 55px;">במקום אחד</div> {% endcomment %}
+        </h1>
+      {%- when 'text' -%}
+        <div class="banner__text rte {{ block.settings.text_style }}" {{ block.shopify_attributes }}>
+          <h2>{{ block.settings.text }}</h2>
+        </div>
+      {%- when 'buttons' -%}
+        <div class="banner__buttons{% if block.settings.button_label_1 != blank and block.settings.button_label_2 != blank %} banner__buttons--multiple{% endif %}" {{ block.shopify_attributes }}>
+          {%- if block.settings.button_label_1 != blank -%}
+            <a
+              {% if block.settings.button_link_1 == blank %}
+              role="link"
+              aria-disabled="true"
+              {% else %}
+              href="{{ block.settings.button_link_1 }}"
+              {% endif %}
+              class="button{% if block.settings.button_style_secondary_1 %} button--secondary{% else %} button--primary{% endif %}">
+              {{- block.settings.button_label_1 | escape -}}
+            </a>
+          {%- endif -%}
+          {%- if block.settings.button_label_2 != blank -%}
+            <a
+              {% if block.settings.button_link_2 == blank %}
+              role="link"
+              aria-disabled="true"
+              {% else %}
+              href="{{ block.settings.button_link_2 }}"
+              {% endif %}
+              class="button{% if block.settings.button_style_secondary_2 %} button--secondary{% else %} button--primary{% endif %}">
+              {{- block.settings.button_label_2 | escape -}}
+            </a>
+          {%- endif -%}
+        </div>
+    {%- endcase -%}
+  {%- endfor -%}
+</div></div></div>{% endcomment %}<script>
   document.addEventListener('DOMContentLoaded', function () {
     var mainCta = document.getElementById('mainCtaBtn');
     var shopCta = document.getElementById('shopCtaBtn');
@@ -997,9 +988,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     new ProgressiveVideoLoader();
   });
-</script>
-
-{% schema %}
+</script>{% schema %}
 {
   "name": "t:sections.image-banner.name",
   "tag": "section",
@@ -1035,16 +1024,13 @@
         {
           "value": "adapt",
           "label": "t:sections.image-banner.settings.image_height.options__1.label"
-        },
-        {
+        }, {
           "value": "small",
           "label": "t:sections.image-banner.settings.image_height.options__2.label"
-        },
-        {
+        }, {
           "value": "medium",
           "label": "t:sections.image-banner.settings.image_height.options__3.label"
-        },
-        {
+        }, {
           "value": "large",
           "label": "t:sections.image-banner.settings.image_height.options__4.label"
         }
@@ -1052,8 +1038,7 @@
       "default": "medium",
       "label": "t:sections.image-banner.settings.image_height.label",
       "info": "t:sections.image-banner.settings.image_height.info"
-    },
-    {
+    }, {
       "type": "select",
       "id": "desktop_content_position",
       "options": [
@@ -1072,122 +1057,101 @@
         {
           "value": "middle-left",
           "label": "t:sections.image-banner.settings.desktop_content_position.options__4.label"
-        },
-        {
+        }, {
           "value": "middle-center",
           "label": "t:sections.image-banner.settings.desktop_content_position.options__5.label"
-        },
-        {
+        }, {
           "value": "middle-right",
           "label": "t:sections.image-banner.settings.desktop_content_position.options__6.label"
-        },
-        {
+        }, {
           "value": "bottom-left",
           "label": "t:sections.image-banner.settings.desktop_content_position.options__7.label"
-        },
-        {
+        }, {
           "value": "bottom-center",
           "label": "t:sections.image-banner.settings.desktop_content_position.options__8.label"
-        },
-        {
+        }, {
           "value": "bottom-right",
           "label": "t:sections.image-banner.settings.desktop_content_position.options__9.label"
         }
       ],
       "default": "middle-center",
       "label": "t:sections.image-banner.settings.desktop_content_position.label"
-    },
-    {
+    }, {
       "type": "checkbox",
       "id": "show_text_box",
       "default": true,
       "label": "t:sections.image-banner.settings.show_text_box.label"
-    },
-    {
+    }, {
       "type": "select",
       "id": "desktop_content_alignment",
       "options": [
         {
           "value": "left",
           "label": "t:sections.image-banner.settings.desktop_content_alignment.options__1.label"
-        },
-        {
+        }, {
           "value": "center",
           "label": "t:sections.image-banner.settings.desktop_content_alignment.options__2.label"
-        },
-        {
+        }, {
           "value": "right",
           "label": "t:sections.image-banner.settings.desktop_content_alignment.options__3.label"
         }
       ],
       "default": "center",
       "label": "t:sections.image-banner.settings.desktop_content_alignment.label"
-    },
-    {
+    }, {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "t:sections.all.colors.label",
       "default": "scheme-1"
-    },
-    {
+    }, {
       "type": "header",
       "content": "t:sections.all.animation.content"
-    },
-    {
+    }, {
       "type": "select",
       "id": "image_behavior",
       "options": [
         {
           "value": "none",
           "label": "t:sections.all.animation.image_behavior.options__1.label"
-        },
-        {
+        }, {
           "value": "ambient",
           "label": "t:sections.all.animation.image_behavior.options__2.label"
-        },
-        {
+        }, {
           "value": "fixed",
           "label": "t:sections.all.animation.image_behavior.options__3.label"
-        },
-        {
+        }, {
           "value": "zoom-in",
           "label": "t:sections.all.animation.image_behavior.options__4.label"
         }
       ],
       "default": "none",
       "label": "t:sections.all.animation.image_behavior.label"
-    },
-    {
+    }, {
       "type": "header",
       "content": "t:sections.image-banner.settings.mobile.content"
-    },
-    {
+    }, {
       "type": "select",
       "id": "mobile_content_alignment",
       "options": [
         {
           "value": "left",
           "label": "t:sections.image-banner.settings.mobile_content_alignment.options__1.label"
-        },
-        {
+        }, {
           "value": "center",
           "label": "t:sections.image-banner.settings.mobile_content_alignment.options__2.label"
-        },
-        {
+        }, {
           "value": "right",
           "label": "t:sections.image-banner.settings.mobile_content_alignment.options__3.label"
         }
       ],
       "default": "center",
       "label": "t:sections.image-banner.settings.mobile_content_alignment.label"
-    },
-    {
+    }, {
       "type": "checkbox",
       "id": "stack_images_on_mobile",
       "default": true,
       "label": "t:sections.image-banner.settings.stack_images_on_mobile.label"
-    },
-    {
+    }, {
       "type": "checkbox",
       "id": "show_text_below",
       "default": true,
@@ -1205,8 +1169,7 @@
           "id": "heading",
           "default": "t:sections.image-banner.blocks.heading.settings.heading.default",
           "label": "t:sections.image-banner.blocks.heading.settings.heading.label"
-        },
-        {
+        }, {
           "type": "select",
           "id": "heading_size",
           "options": [
@@ -1225,8 +1188,7 @@
             {
               "value": "hxl",
               "label": "t:sections.all.heading_size.options__4.label"
-            },
-            {
+            }, {
               "value": "hxxl",
               "label": "t:sections.all.heading_size.options__5.label"
             }
@@ -1235,8 +1197,7 @@
           "label": "t:sections.all.heading_size.label"
         }
       ]
-    },
-    {
+    }, {
       "type": "text",
       "name": "t:sections.image-banner.blocks.text.name",
       "limit": 1,
@@ -1246,20 +1207,17 @@
           "id": "text",
           "default": "t:sections.image-banner.blocks.text.settings.text.default",
           "label": "t:sections.image-banner.blocks.text.settings.text.label"
-        },
-        {
+        }, {
           "type": "select",
           "id": "text_style",
           "options": [
             {
               "value": "body",
               "label": "t:sections.image-banner.blocks.text.settings.text_style.options__1.label"
-            },
-            {
+            }, {
               "value": "subtitle",
               "label": "t:sections.image-banner.blocks.text.settings.text_style.options__2.label"
-            },
-            {
+            }, {
               "value": "caption-with-letter-spacing",
               "label": "t:sections.image-banner.blocks.text.settings.text_style.options__3.label"
             }
@@ -1268,8 +1226,7 @@
           "label": "t:sections.image-banner.blocks.text.settings.text_style.label"
         }
       ]
-    },
-    {
+    }, {
       "type": "buttons",
       "name": "t:sections.image-banner.blocks.buttons.name",
       "limit": 1,
@@ -1298,13 +1255,11 @@
           "default": "t:sections.image-banner.blocks.buttons.settings.button_label_2.default",
           "label": "t:sections.image-banner.blocks.buttons.settings.button_label_2.label",
           "info": "t:sections.image-banner.blocks.buttons.settings.button_label_2.info"
-        },
-        {
+        }, {
           "type": "url",
           "id": "button_link_2",
           "label": "t:sections.image-banner.blocks.buttons.settings.button_link_2.label"
-        },
-        {
+        }, {
           "type": "checkbox",
           "id": "button_style_secondary_2",
           "default": false,
@@ -1319,15 +1274,12 @@
       "blocks": [
         {
           "type": "heading"
-        },
-        {
+        }, {
           "type": "text"
-        },
-        {
+        }, {
           "type": "buttons"
         }
       ]
     }
   ]
-}
-{% endschema %}
+}{% endschema %}
