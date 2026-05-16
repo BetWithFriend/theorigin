@@ -256,79 +256,6 @@ body.questionnaire-wrapper-open {
     text-align: center;
 }
 
-.lets-be-friends-wrapper {
-    display: none;
-    /* display: flex; */
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--q-surface-selected);
-    width: 100%;
-    height: 100%;
-    padding: 0 32px;
-    position: absolute;
-    top: 0;
-    z-index: 10000;
-}
-
-.lets-be-friends-img {
-    width: 95px;
-    margin-bottom: 8px;
-}
-
-.lets-be-friends-wrapper.active {
-    display: flex;
-}
-
-.lets-be-friends-title {
-    font-family: "Assistant", sans-serif;
-    font-size: 36px;
-    line-height: 36px;
-    font-weight: 700;
-    color: #1C201D;
-    width: 100%;
-    text-align: center;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-}
-
-.lets-be-friends-text {
-    font-family: "Assistant", sans-serif;
-    font-size: 16px;
-    line-height: 25px;
-    font-weight: 400;
-    color: #1C201D;
-    text-align: center;
-    margin-bottom: 32px;
-}
-
-.lets-be-friends-input {
-    width: 100%;
-    height: 56px;
-    border-radius: 8px;
-    padding: 8px 16px;
-    background-color: #FAFCFE;
-    border: 1px solid #55555580;
-    font-family: "Assistant", sans-serif;
-    font-size: 16px;
-    line-height: 25px;
-    font-weight: 400;
-    color: #1C201D;
-    /* margin-bottom: 32px; */
-}
-
-.questionnaire-select-btn.form-submit {
-    margin-bottom: 16px;
-}
-
-.questionnaire-select-skip {
-    color: #1C201D;
-    font-family: "Assistant", sans-serif;
-    font-size: 16px;
-    line-height: 16px;
-    font-weight: 400;
-    text-decoration: underline;
-}
 
 .questionnaire-title-wrapper {
     display: flex;
@@ -401,10 +328,6 @@ body.questionnaire-wrapper-open {
     min-height: 100%;
 }
 
-.main-questionnaire-section .lets-be-friends-wrapper {
-    position: relative;
-    min-height: calc(100vh - 180px);
-}
 
 .grid-item-feed {
     flex-grow: 1;
@@ -417,14 +340,15 @@ body.questionnaire-wrapper-open {
         z-index: 10001;
     }
 
+    /* Cover the viewport below the header — prevents fixed elements (e.g. chat widgets) from showing through */
     .questionnaire-wrapper {
-        position: relative;
-        height: calc(100vh - 220px);
-    }
-
-    .lets-be-friends-wrapper {
-        height: calc(100vh - 220px);
-        position: relative;
+        position: fixed;
+        top: 80px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        min-height: unset;
+        overflow-y: auto;
     }
 
     .questionnaire-title {
@@ -434,19 +358,19 @@ body.questionnaire-wrapper-open {
     }
 
     .questionnaire-title-wrapper {
-        margin-bottom: 14px;
+        margin-bottom: 20px;
     }
 
+    /* Keep the mobile horizontal card style — just wider */
     .questionnaire-selection-wrapper {
-        width: 202px;
-        height: 148px;
+        width: 440px;
         cursor: pointer;
     }
 
+    /* Wrapper fits the wider cards */
     .questionnaire-icons-wrapper {
-        width: 630px;
+        width: 500px;
         padding: unset;
-        /* height: 68vh; */
     }
 
     .questionnaire-select-btn {
@@ -468,10 +392,6 @@ body.questionnaire-wrapper-open {
         position: unset;
     }
 
-    .lets-be-friends-input {
-        width: 440px;
-        margin-bottom: 0;
-    }
 }
 
 @media screen and (max-width: 360px) {
@@ -2725,4 +2645,24 @@ body.questionnaire-wrapper-open {
 
 .q-bundle-drawer__footer .questionnaire-add-btn {
     margin-top: 0;
+}
+
+/* ─── Desktop overrides ────────────────────────────────────────────────────────
+   Placed at end of file so they win the cascade over same-specificity base rules
+   ──────────────────────────────────────────────────────────────────────────── */
+@media screen and (min-width: 990px) {
+
+    /* Results step: narrower card area, centered, natural height (not flex-stretched) */
+    #questionnaireResultsStep {
+        /* max-width: 480px; */
+        width: 100%;
+        flex: 0 0 auto;
+        /* Shorter carousel so the footer fits on screen without scrolling */
+        --q-bundle-views-height: 240px;
+    }
+
+    /* Don't force the results step to fill the full wrapper height */
+    .questionnaire-wrapper.results-step-visible #questionnaireResultsStep {
+        min-height: unset;
+    }
 }
