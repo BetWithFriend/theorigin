@@ -1293,6 +1293,10 @@
           const r = roastScore(coffee.coffee_roast_level, sel, w.guidedRoastPerMatch);
           if (r.pts > bestRoast.pts) bestRoast = { pts: r.pts, type: r.type, sel: sel };
         });
+        // For "show all"/"לא בטוחים" taste mode, still keep roast close to selection.
+        if (showAll && bestRoast.pts <= 0) {
+          return { score: 0, roastMeta };
+        }
         if (bestRoast.pts > 0) score += bestRoast.pts;
         roastMeta = { type: bestRoast.type || 'none', selected: bestRoast.sel, product: coffee.coffee_roast_level || '' };
       }
@@ -1737,36 +1741,60 @@
     }
 
     const currentUserText = window.__questionnaireMatchUserText || userText || '';
+    const previousAssignedQty = window.__questionnaireVendorAssignmentForQty;
+    const qtyChanged = previousAssignedQty !== selectedBundleQty;
+    const sameQuestionnaireText = window.__questionnaireVendorAssignmentForText === currentUserText;
+    if (!sameQuestionnaireText || !window.__questionnaireVendorOptionsByQty || typeof window.__questionnaireVendorOptionsByQty !== 'object') {
+      window.__questionnaireVendorOptionsByQty = {};
+    }
+    if (!window.__questionnaireSelectedVendorByQty || typeof window.__questionnaireSelectedVendorByQty !== 'object') {
+      window.__questionnaireSelectedVendorByQty = {};
+    }
     const needsNewVendorOptions =
       !window.__questionnaireVendorOptions ||
       !window.__questionnaireVendorOptions.length ||
       window.__questionnaireVendorAssignmentForText !== currentUserText ||
-      window.__questionnaireVendorAssignmentForQty !== selectedBundleQty;
+      qtyChanged;
 
     if (needsNewVendorOptions) {
-      let vendorOptions = [];
-      if (bundleResult && bundleResult.ok && bundleResult.meta && bundleResult.meta.topVendors) {
-          const primary = bundleResult.meta.topVendors[selectedBundleQty] || [];
-          vendorOptions = primary.map(function (v) {
-            return {
-              vendorKey: (v.vendor || '').toLowerCase(),
-              label: getVendorDisplayNameFromPool((v.vendor || '').toLowerCase(), withScores) || v.vendor || '',
-              orderScore: v.bundleScore || 0,
-            };
-          }).filter(function (o) { return o.vendorKey; });
-      }
+      const cachedForQty = sameQuestionnaireText
+        ? window.__questionnaireVendorOptionsByQty[selectedBundleQty]
+        : null;
+      let vendorOptions = Array.isArray(cachedForQty) ? cachedForQty.slice() : [];
       if (!vendorOptions.length) {
-        const uniqueVendors = [];
-        const seen = {};
-        withScores.forEach(function (x) {
-          const vk = (x.coffee.vendor || '').trim().toLowerCase();
-          if (vk && !seen[vk]) { seen[vk] = true; uniqueVendors.push(vk); }
-        });
-        vendorOptions = pickThreeVendorOptionsForResults(uniqueVendors, withScores);
+        if (bundleResult && bundleResult.ok && bundleResult.meta && bundleResult.meta.topVendors) {
+            const primary = bundleResult.meta.topVendors[selectedBundleQty] || [];
+            vendorOptions = primary.map(function (v) {
+              return {
+                vendorKey: (v.vendor || '').toLowerCase(),
+                label: getVendorDisplayNameFromPool((v.vendor || '').toLowerCase(), withScores) || v.vendor || '',
+                orderScore: v.bundleScore || 0,
+              };
+            }).filter(function (o) { return o.vendorKey; });
+        }
+        if (!vendorOptions.length) {
+          const uniqueVendors = [];
+          const seen = {};
+          withScores.forEach(function (x) {
+            const vk = (x.coffee.vendor || '').trim().toLowerCase();
+            if (vk && !seen[vk]) { seen[vk] = true; uniqueVendors.push(vk); }
+          });
+          vendorOptions = pickThreeVendorOptionsForResults(uniqueVendors, withScores);
+        }
+        window.__questionnaireVendorOptionsByQty[selectedBundleQty] = vendorOptions.slice();
       }
       window.__questionnaireVendorOptions = vendorOptions;
       window.__questionnaireVendorAssignmentForText = currentUserText;
       window.__questionnaireVendorAssignmentForQty = selectedBundleQty;
+      // Keep simulator behavior: when package size changes, move to the top
+      // vendor for that size instead of preserving an older vendor selection.
+      if (qtyChanged && vendorOptions.length) {
+        const selectedForQty = String(window.__questionnaireSelectedVendorByQty[selectedBundleQty] || '').toLowerCase();
+        const existsForQty = vendorOptions.some(function (o) {
+          return String(o.vendorKey || '').toLowerCase() === selectedForQty;
+        });
+        window.__questionnaireSelectedVendor = existsForQty ? selectedForQty : vendorOptions[0].vendorKey;
+      }
     }
 
     if (window.__questionnaireSelectedVendor && window.__questionnaireVendorOptions && window.__questionnaireVendorOptions.length) {
@@ -1782,6 +1810,7 @@
         }, 0);
         window.__questionnaireVendorOptions[0] = { vendorKey: want, label: name, orderScore: Math.max(injectScore, 1) };
         window.__questionnaireVendorOptions = sortVendorOptionsByMatchDesc(window.__questionnaireVendorOptions);
+        window.__questionnaireVendorOptionsByQty[selectedBundleQty] = window.__questionnaireVendorOptions.slice();
       }
     }
 
@@ -1796,6 +1825,7 @@
     if (!sel || optionKeys.indexOf(sel) === -1) {
       window.__questionnaireSelectedVendor = window.__questionnaireVendorOptions[0].vendorKey;
     }
+    window.__questionnaireSelectedVendorByQty[selectedBundleQty] = window.__questionnaireSelectedVendor;
 
     const targetVendor = (window.__questionnaireSelectedVendor || '').toLowerCase();
     if (!targetVendor) return [];
@@ -2033,6 +2063,10 @@
       var raw = (btn.getAttribute('data-vendor') || '').trim();
       if (!raw) return;
       window.__questionnaireSelectedVendor = raw.toLowerCase();
+      if (!window.__questionnaireSelectedVendorByQty || typeof window.__questionnaireSelectedVendorByQty !== 'object') {
+        window.__questionnaireSelectedVendorByQty = {};
+      }
+      window.__questionnaireSelectedVendorByQty[getQuestionnaireResultsBundleQty()] = window.__questionnaireSelectedVendor;
       setResultsVendorMenuOpen(false);
       var ut = window.__questionnaireMatchUserText;
       if (typeof ut !== 'string' || !ut.length) return;
@@ -2390,6 +2424,14 @@
             typeof window.__questionnaireVendorAssignmentForText === 'string'
               ? window.__questionnaireVendorAssignmentForText
               : '',
+          vendorOptionsByQty:
+            window.__questionnaireVendorOptionsByQty && typeof window.__questionnaireVendorOptionsByQty === 'object'
+              ? window.__questionnaireVendorOptionsByQty
+              : null,
+          selectedVendorByQty:
+            window.__questionnaireSelectedVendorByQty && typeof window.__questionnaireSelectedVendorByQty === 'object'
+              ? window.__questionnaireSelectedVendorByQty
+              : null,
           questionnaireParams: window.__questionnaireParams || null,
           savedAt: Date.now(),
         })
@@ -2409,7 +2451,7 @@
         window.__questionnaireMatchUserText = parsedState.userText;
       }
       if (Array.isArray(parsedState.vendorOptions) && parsedState.vendorOptions.length) {
-        window.__questionnaireVendorOptions = sortVendorOptionsByMatchDesc(parsedState.vendorOptions);
+        window.__questionnaireVendorOptions = parsedState.vendorOptions.slice();
       } else if (parsedState.vendorByQty && typeof parsedState.vendorByQty === 'object') {
         const legacy = parsedState.vendorByQty[5] || parsedState.vendorByQty['5'];
         const v = (legacy != null && String(legacy).trim() !== '' ? String(legacy) : Object.values(parsedState.vendorByQty)[0]) || '';
@@ -2419,6 +2461,12 @@
       }
       if (typeof parsedState.selectedVendor === 'string' && parsedState.selectedVendor.trim() !== '') {
         window.__questionnaireSelectedVendor = parsedState.selectedVendor.trim().toLowerCase();
+      }
+      if (parsedState.vendorOptionsByQty && typeof parsedState.vendorOptionsByQty === 'object') {
+        window.__questionnaireVendorOptionsByQty = parsedState.vendorOptionsByQty;
+      }
+      if (parsedState.selectedVendorByQty && typeof parsedState.selectedVendorByQty === 'object') {
+        window.__questionnaireSelectedVendorByQty = parsedState.selectedVendorByQty;
       }
       if (parsedState.questionnaireParams && typeof parsedState.questionnaireParams === 'object') {
         window.__questionnaireParams = parsedState.questionnaireParams;
@@ -2444,6 +2492,8 @@
     } catch (error) {
       console.warn('Failed to clear questionnaire results state:', error);
     }
+    window.__questionnaireVendorOptionsByQty = null;
+    window.__questionnaireSelectedVendorByQty = null;
   }
 
   function restartQuestionnaire() {
@@ -2622,24 +2672,29 @@
     }
 
     if (stepIndex === 3) {
-      //   // Show loader for 3 seconds if it is active on page load
-      const loaderWrapper = document.querySelector('.questionnaire-icons-wrapper.active .questionnaire-loader-wrapper');
-      if (loaderWrapper) {
-        const questionnaireTitle = document.querySelector('.questionnaire-title');
-        questionnaireTitle.classList.add('hidden');
-        setTimeout(function () {
-          const loaderIconsWrapper = loaderWrapper.closest('.questionnaire-icons-wrapper');
-          if (loaderIconsWrapper) {
-            loaderIconsWrapper.classList.remove('active');
-            const mainWrapper = document.querySelector('.questionnaire-wrapper');
-            // Hide main element
-            if (mainWrapper) {
-              mainWrapper.classList.add('hidden');
-            }
-            redirectToCollectionWithFilters();
-          }
-        }, 2000);
+      // Always force the dedicated loader step visible before computing results.
+      const loaderWrapper = document.querySelector('.questionnaire-icons-wrapper .questionnaire-loader-wrapper');
+      const loaderIconsWrapper = loaderWrapper ? loaderWrapper.closest('.questionnaire-icons-wrapper') : null;
+      if (loaderIconsWrapper) {
+        document.querySelectorAll('.questionnaire-icons-wrapper').forEach(function (stepEl) {
+          stepEl.classList.remove('active');
+        });
+        loaderIconsWrapper.classList.add('active');
       }
+      const questionnaireTitle = document.querySelector('.questionnaire-title');
+      if (questionnaireTitle) questionnaireTitle.classList.add('hidden');
+
+      setTimeout(function () {
+        if (loaderIconsWrapper) {
+          loaderIconsWrapper.classList.remove('active');
+        }
+        const mainWrapper = document.querySelector('.questionnaire-wrapper');
+        // Hide main element
+        if (mainWrapper) {
+          mainWrapper.classList.add('hidden');
+        }
+        redirectToCollectionWithFilters();
+      }, 2000);
 
       enableScrollWithEvents();
     }
@@ -2678,6 +2733,8 @@
     // Fresh questionnaire submission: clear cached vendor assignment so pool randomness
     // can be re-applied even when answers are identical to a previous run.
     window.__questionnaireVendorOptions = null;
+    window.__questionnaireVendorOptionsByQty = null;
+    window.__questionnaireSelectedVendorByQty = null;
     window.__questionnaireVendorAssignmentForText = '';
     window.__questionnaireVendorAssignmentForQty = null;
     window.__questionnaireSelectedVendor = '';
@@ -3357,6 +3414,9 @@
           return response.json();
         })
         .then(function () {
+          if (redirectUrl === '/checkout') {
+            clearResultsState();
+          }
           window.location.assign(redirectUrl);
         })
         .catch(function (err) {
@@ -3394,16 +3454,20 @@
       });
     }
 
-    const bundleCheckoutBtn = document.getElementById('q-bundle-drawer-checkout');
-    if (bundleCheckoutBtn) {
+    const bundleCheckoutBtnOld = document.getElementById('q-bundle-drawer-checkout');
+    if (bundleCheckoutBtnOld && bundleCheckoutBtnOld.parentNode) {
+      const bundleCheckoutBtn = bundleCheckoutBtnOld.cloneNode(true);
+      bundleCheckoutBtnOld.parentNode.replaceChild(bundleCheckoutBtn, bundleCheckoutBtnOld);
       bundleCheckoutBtn.addEventListener('click', function () {
         const atcLabel = document.getElementById('q-footer-atc-label');
         submitQuestionnaireBundleToCart('/checkout', atcLabel);
       });
     }
 
-    const bundleContinueBtn = document.getElementById('q-bundle-drawer-continue-shopping');
-    if (bundleContinueBtn) {
+    const bundleContinueBtnOld = document.getElementById('q-bundle-drawer-continue-shopping');
+    if (bundleContinueBtnOld && bundleContinueBtnOld.parentNode) {
+      const bundleContinueBtn = bundleContinueBtnOld.cloneNode(true);
+      bundleContinueBtnOld.parentNode.replaceChild(bundleContinueBtn, bundleContinueBtnOld);
       bundleContinueBtn.addEventListener('click', function () {
         const shopLabel = document.getElementById('q-bundle-drawer-shop-label');
         submitQuestionnaireBundleToCart('/collections/חנות-קפה', shopLabel);
