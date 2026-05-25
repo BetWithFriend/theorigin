@@ -609,9 +609,61 @@
             </svg>
           </button>
 
-          <div class="q-carousel-viewport" id="qCarouselViewport">
-            <div class="q-carousel-track" id="Slider-questionnaireResultsGrid">
-              <!-- Product cards injected here by JS -->
+          <div class="q-desktop-product-media">
+            <div class="q-carousel-viewport" id="qCarouselViewport">
+              <div class="q-carousel-track" id="Slider-questionnaireResultsGrid">
+                <!-- Product cards injected here by JS -->
+              </div>
+            </div>
+
+            <div class="questionnaire-selection-info">
+              <button
+                type="button"
+                class="q-thumbs-arrow q-thumbs-arrow--up"
+                id="qThumbsPrev"
+                aria-label="גלילה למעלה"
+                aria-controls="q-selection-info-thumbs">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true">
+                  <path
+                    d="M18 15L12 9L6 15"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </button>
+              <div
+                class="questionnaire-selection-info__thumbs"
+                id="q-selection-info-thumbs"
+                role="tablist"
+                aria-label="מוצרים במארז"></div>
+              <button
+                type="button"
+                class="q-thumbs-arrow q-thumbs-arrow--down"
+                id="qThumbsNext"
+                aria-label="גלילה למטה"
+                aria-controls="q-selection-info-thumbs">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true">
+                  <path
+                    d="M6 9L12 15L18 9"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </button>
             </div>
           </div>
 
@@ -634,14 +686,6 @@
                 stroke-linejoin="round" />
             </svg>
           </button>
-        </div>
-
-        <div class="questionnaire-selection-info">
-          <div
-            class="questionnaire-selection-info__thumbs"
-            id="q-selection-info-thumbs"
-            role="tablist"
-            aria-label="מוצרים במארז"></div>
         </div>
       </div>
 
@@ -3005,8 +3049,13 @@
       const pad = Math.max(0, (vw - slideW) / 2);
       track.style.transform = '';
       track.style.transition = '';
-      track.style.paddingLeft = pad + 'px';
-      track.style.paddingRight = pad + 'px';
+      if (isDesktop()) {
+        track.style.paddingLeft = '0';
+        track.style.paddingRight = pad + 'px';
+      } else {
+        track.style.paddingLeft = pad + 'px';
+        track.style.paddingRight = pad + 'px';
+      }
       slides.forEach(function (slide) {
         slide.style.flex = '0 0 ' + slideW + 'px';
         slide.style.width = slideW + 'px';
@@ -3131,6 +3180,30 @@
           scrollToIndex(nextIndex, 'smooth');
         });
       });
+
+      requestAnimationFrame(syncDesktopThumbsAlign);
+    }
+
+    function syncDesktopThumbsAlign() {
+      const selectionInfo = thumbsEl && thumbsEl.closest('.questionnaire-selection-info');
+      if (!selectionInfo) return;
+      if (!isDesktop()) {
+        selectionInfo.style.marginTop = '';
+        return;
+      }
+      const activeSlide = track.querySelector('.q-carousel-slide.active');
+      const imageWrapper = activeSlide && activeSlide.querySelector('.questionnaire-product-image-wrapper');
+      const media = selectionInfo.closest('.q-desktop-product-media');
+      if (!imageWrapper || !media) {
+        selectionInfo.style.marginTop = '';
+        return;
+      }
+      const mediaTop = media.getBoundingClientRect().top;
+      const imageRect = imageWrapper.getBoundingClientRect();
+      const colHeight = selectionInfo.offsetHeight;
+      const imageCenter = imageRect.top + imageRect.height / 2 - mediaTop;
+      const top = Math.round(imageCenter - colHeight / 2);
+      selectionInfo.style.marginTop = Math.max(0, top) + 'px';
     }
 
     function syncFooter(index) {
@@ -3149,6 +3222,9 @@
           thumb.classList.toggle('is-active', isActive);
           thumb.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
+        if (isDesktop()) {
+          requestAnimationFrame(syncDesktopThumbsAlign);
+        }
       }
 
       // Bundle price (all products × qty)
@@ -3575,6 +3651,7 @@
         viewport.scrollLeft = scrollLeftToCenterIndex(current);
       }
       syncFromScrollPosition();
+      syncDesktopThumbsAlign();
     });
     if (viewport) {
       viewport.addEventListener('scroll', onCarouselViewportScroll, { passive: true });
@@ -3589,6 +3666,7 @@
     syncFooter(current);
     updateSlideActiveClasses(current);
     updateArrowDisabled();
+    syncDesktopThumbsAlign();
 
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
