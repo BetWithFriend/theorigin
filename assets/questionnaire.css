@@ -44,6 +44,15 @@ body.questionnaire-wrapper-open {
     margin: 0;
 }
 
+body.questionnaire-wrapper-open .shopify-section.shopify-section-group-header-group.announcement-bar-section {
+    display: none !important;
+}
+
+body.questionnaire-wrapper-open .header-wrapper,
+body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-center.page-width.header--has-menu.header--has-account {
+    display: none !important;
+}
+
 .questionnaire-back-text {
     font-family: "Assistant", sans-serif;
     font-weight: 400;
@@ -288,6 +297,7 @@ body.questionnaire-wrapper-open {
 }
 
 
+
 .questionnaire-btn-wrapper {
     display: flex;
     align-items: center;
@@ -336,14 +346,11 @@ body.questionnaire-wrapper-open {
 /* TabNav button position is overridden to "right" via inline script in questionnaire sections */
 
 @media screen and (min-width: 990px) {
-    .header-wrapper.questionnaire-wrapper-open {
-        z-index: 10001;
-    }
 
     /* Cover the viewport below the header — prevents fixed elements (e.g. chat widgets) from showing through */
     .questionnaire-wrapper {
         position: fixed;
-        top: 80px;
+        top: 0;
         left: 0;
         right: 0;
         bottom: 0;
@@ -788,7 +795,7 @@ body.questionnaire-wrapper-open {
     width: auto;
     margin: 0;
     /* margin-inline-start: auto; */
-    align-items: flex-start;
+    align-items: flex-end;
     pointer-events: none;
 }
 
@@ -805,6 +812,7 @@ body.questionnaire-wrapper-open {
 #questionnaireResultsStep .q-bundle-table__product {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 10px;
     min-width: 0;
 }
@@ -904,6 +912,7 @@ body.questionnaire-wrapper-open {
 
 /* Image + title: bounded by fixed shell; long titles clip rather than growing the block */
 #questionnaireResultsStep .q-carousel-slide .questionnaire-product-card {
+    height: 100%;
     max-height: 100%;
     min-height: 0;
     overflow: hidden;
@@ -1867,6 +1876,9 @@ body.questionnaire-wrapper-open {
 
 #questionnaireResultsStep .questionnaire-checkout-row {
     direction: rtl;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
 }
 
 .questionnaire-price-wrapper {
@@ -1876,8 +1888,8 @@ body.questionnaire-wrapper-open {
 }
 
 #questionnaireResultsStep .questionnaire-price-wrapper {
-    width: auto;
-    flex: 1 1 auto;
+    width: 100%;
+    flex: 0 0 auto;
     min-width: 0;
     display: flex;
     flex-direction: column;
@@ -1932,7 +1944,7 @@ body.questionnaire-wrapper-open {
 }
 
 #questionnaireResultsStep .questionnaire-add-to-cart-wrapper {
-    width: auto;
+    width: 100%;
     flex-shrink: 0;
 }
 
@@ -1945,7 +1957,7 @@ body.questionnaire-wrapper-open {
 }
 
 #questionnaireResultsStep .questionnaire-atc-actions {
-    width: auto;
+    width: 100%;
 }
 
 .questionnaire-add-btn {
@@ -2650,19 +2662,480 @@ body.questionnaire-wrapper-open {
 /* ─── Desktop overrides ────────────────────────────────────────────────────────
    Placed at end of file so they win the cascade over same-specificity base rules
    ──────────────────────────────────────────────────────────────────────────── */
+
+/* Hide the desktop-only continue button on mobile */
+.questionnaire-select-btn {
+    display: none;
+}
+
+/* Hide the desktop product info panel on mobile */
+.q-desktop-product-info {
+    display: none;
+}
+
 @media screen and (min-width: 990px) {
 
-    /* Results step: narrower card area, centered, natural height (not flex-stretched) */
-    #questionnaireResultsStep {
-        /* max-width: 480px; */
-        width: 100%;
-        flex: 0 0 auto;
-        /* Shorter carousel so the footer fits on screen without scrolling */
-        --q-bundle-views-height: 240px;
+    /* Initialization must win over desktop active-step grid rules */
+    .questionnaire-wrapper.initializing .questionnaire-icons-wrapper[data-step-index] {
+        display: none !important;
     }
 
-    /* Don't force the results step to fill the full wrapper height */
+    /* ── Question steps: grid tile layout ─────────────────────────────────── */
+
+    /* Keep only the active desktop question step visible */
+    .questionnaire-icons-wrapper[data-step-index]:not(.active) {
+        display: none !important;
+    }
+
+    /* Step 1 (prep method): 3-column grid — only when active */
+    .questionnaire-icons-wrapper[data-step-index="1"].active {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        max-width: 660px;
+        width: 660px;
+        padding: 0;
+        align-items: start;
+    }
+
+    /* Steps 2 (roast) and 3 (taste): 2-column grid — only when active */
+    .questionnaire-icons-wrapper[data-step-index="2"].active,
+    .questionnaire-icons-wrapper[data-step-index="3"].active {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        max-width: 660px;
+        width: 660px;
+        padding: 0;
+        align-items: start;
+    }
+
+    /* Full-width rows: progress bar, title, and btn-wrapper span all columns */
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-progress-bar-wrapper,
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-title-wrapper,
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-btn-wrapper {
+        grid-column: 1 / -1;
+    }
+
+    /* Visual order: progress bar → title → tiles → btn-wrapper */
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-progress-bar-wrapper {
+        order: 0;
+        margin-top: 0;
+        margin-bottom: 16px;
+        padding: 0;
+    }
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-title-wrapper {
+        order: 1;
+        margin-bottom: 24px;
+    }
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-selection-wrapper {
+        order: 2;
+    }
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-btn-wrapper {
+        order: 3;
+        margin-top: 8px;
+    }
+
+    /* ── Tile card redesign ────────────────────────────────────────────────── */
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-selection-wrapper {
+        position: relative;
+        width: auto;
+        min-height: 148px;
+        height: 148px;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-start;
+        padding: 16px;
+        border-radius: 12px;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+
+    /* Icon repositioned to top-right corner */
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-img-icon {
+        position: absolute;
+        top: 16px;
+        inset-inline-end: 16px;
+        width: 32px;
+        height: 32px;
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    /* Text wrapper: left-aligned at the bottom */
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-text-wrapper {
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-text {
+        font-size: 16px;
+        line-height: 1.3;
+        text-align: right;
+        height: auto;
+        justify-content: flex-start;
+    }
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-expl-text {
+        font-size: 13px;
+        text-align: right;
+        margin-top: 4px;
+    }
+
+    /* Empty placeholder tiles: hide so they don't occupy grid space */
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-selection-wrapper:empty {
+        display: none;
+    }
+
+    /* Title: larger, centered */
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-title-wrapper {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-title {
+        font-size: 28px;
+        line-height: 1.25;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    /* ── Bottom action bar: continue + back button ─────────────────────────── */
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-btn-wrapper {
+        display: flex;
+        flex-direction: row;
+        direction: ltr;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        padding: 0;
+        width: 100%;
+    }
+
+    /* Back button restyled to match Figma (bordered, same height as continue btn) */
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-skip-btn {
+        width: auto;
+        min-width: 88px;
+        height: 56px;
+        font-size: 16px;
+        border-radius: 8px;
+        flex-shrink: 0;
+        padding: 0 16px;
+        gap: 6px;
+    }
+
+    /* ── Results step: two-panel desktop layout ───────────────────────────── */
+
+    #questionnaireResultsStep:not(.active) {
+        display: none !important;
+    }
+
+    #questionnaireResultsStep.active {
+        width: min(calc(100% - 48px), 1160px);
+        max-width: 1160px;
+        margin: 0 auto;
+        flex: 0 0 auto;
+        display: grid;
+        grid-template-columns: minmax(320px, 450px) minmax(300px, 420px);
+        grid-template-rows: auto 1fr;
+        justify-content: center;
+        column-gap: 28px;
+        height: calc(100vh - 80px);
+        /* fill below the site header */
+        min-height: 0;
+        overflow: hidden;
+        --q-bundle-views-height: unset;
+        /* Keep physical grid columns stable: col1=left, col2=right. */
+        direction: ltr;
+    }
+
     .questionnaire-wrapper.results-step-visible #questionnaireResultsStep {
         min-height: unset;
+    }
+
+    /* Header spans both columns */
+    #questionnaireResultsStep .questionnaire-header--results {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    /* Left panel: footer content with product info + purchase controls */
+    #questionnaireResultsStep .questionnaire-footer-content {
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 28px 40px 32px;
+        /* border-inline-end: 1px solid var(--q-border); */
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin-top: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: var(--q-surface-warm);
+        flex: unset;
+        min-height: 0;
+        width: 100%;
+        max-width: 450px;
+        justify-self: start;
+        align-self: stretch;
+        /* Preserve RTL typography/alignment inside left panel content. */
+        direction: rtl;
+    }
+
+    /* Right panel: selected product image + thumbs list */
+    #questionnaireResultsStep .q-bundle-views {
+        grid-column: 2;
+        grid-row: 2;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+        padding: 28px 0 32px;
+        background: var(--q-surface-warm);
+        --q-bundle-views-height: 100%;
+        align-self: stretch;
+    }
+
+    /* Replace desktop carousel with image + thumbs layout from Figma */
+    #questionnaireResultsStep .q-bundle-view--carousel {
+        flex: 1 1 auto;
+        height: 100%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 6px;
+        padding: 0 20px;
+    }
+
+    #questionnaireResultsStep .q-carousel-arrow {
+        display: none;
+    }
+
+    #questionnaireResultsStep .q-carousel-container {
+        width: 100%;
+        flex: 1 1 0;
+        min-height: 0;
+        padding: 0;
+        align-items: stretch;
+        justify-content: center;
+    }
+
+    #questionnaireResultsStep .q-carousel-viewport {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+        transform: none;
+        padding: 0;
+    }
+
+    #questionnaireResultsStep .q-carousel-track {
+        height: 100%;
+        align-items: stretch;
+    }
+
+    /* JS centers carousel with track paddings; disable in desktop result split layout. */
+    /* #questionnaireResultsStep #Slider-questionnaireResultsGrid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    } */
+
+    #questionnaireResultsStep .q-carousel-slide {
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        height: 100%;
+        opacity: 1;
+        transform: none;
+        max-height: 100%;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide.active {
+        opacity: 1;
+        transform: none;
+    }
+
+    /* Desktop: show only the active product — no carousel scrolling */
+    #questionnaireResultsStep .q-carousel-slide:not(.active) {
+        display: none;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-image-wrapper {
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-height: none;
+        width: 100%;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-image {
+        max-height: min(55vh, 420px);
+        max-width: 90%;
+        width: auto;
+    }
+
+    /* Center the image+title block as a unit within the card */
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-card {
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-info {
+        flex-shrink: 0;
+        text-align: center;
+    }
+
+    #questionnaireResultsStep .questionnaire-selection-info {
+        min-height: 0;
+        height: auto;
+        padding: 0;
+        align-items: center;
+        justify-content: flex-end;
+        width: 100%;
+        margin-top: auto;
+        flex: 0 0 auto;
+    }
+
+    /* Override fixed 44px info-strip height used by mobile carousel layout. */
+    #questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-info {
+        min-height: 0;
+        max-height: none;
+        height: auto;
+        overflow: visible;
+    }
+
+    #questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-info__thumbs {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 8px 0 0;
+        gap: 12px;
+        direction: rtl;
+    }
+
+    #questionnaireResultsStep .questionnaire-selection-thumb {
+        width: 56px;
+        height: 56px;
+        border-radius: 8px;
+    }
+
+    #questionnaireResultsStep .q-results-view-toggle {
+        display: inline-flex;
+    }
+
+    /* Desktop results: show product title near the image. */
+    #questionnaireResultsStep .questionnaire-product-title__text {
+        display: inline;
+    }
+
+    /* ── Desktop product info panel ────────────────────────────────────────── */
+
+    .q-desktop-product-info {
+        display: block;
+        direction: rtl;
+        text-align: right;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--q-border);
+    }
+
+    .q-desktop-product-name {
+        margin: 0 0 4px;
+        font-family: 'Assistant', sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--q-text);
+        line-height: 1.25;
+    }
+
+    .q-desktop-product-vendor {
+        margin: 0 0 10px;
+        font-family: 'Assistant', sans-serif;
+        font-size: 15px;
+        color: var(--q-text-muted);
+        line-height: 1.3;
+    }
+
+    .q-desktop-product-short {
+        margin: 0 0 12px;
+        font-family: 'Assistant', sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #3a3a3a;
+        /* Reserve exactly 3 lines so the qty selector below never shifts */
+        min-height: calc(14px * 1.6 * 3);
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .q-desktop-product-taste {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        direction: rtl;
+        /* Reserve one chip-row height so varying chip counts don't shift content */
+        min-height: calc(12px * 1.2 + 8px);
+    }
+
+    .q-desktop-taste-chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--q-border);
+        background: #fafcfe;
+        font-family: 'Assistant', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--q-text);
+        line-height: 1.2;
+    }
+
+    /* Qty options: compact row on desktop */
+    #questionnaireResultsStep .questionnaire-qty-options {
+        margin-bottom: 16px;
+    }
+
+    /* Checkout row stacked for the left panel */
+    #questionnaireResultsStep .questionnaire-checkout-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #questionnaireResultsStep .questionnaire-add-to-cart-wrapper {
+        width: 100%;
+    }
+
+    #questionnaireResultsStep .questionnaire-price-wrapper {
+        width: 100%;
+        flex-direction: row;
+        align-items: baseline;
+        justify-content: space-between;
+    }
+
+    #questionnaireResultsStep .questionnaire-add-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Secure info row on desktop */
+    #questionnaireResultsStep .questionnaire-secure-info-wrapper {
+        margin-top: 12px;
     }
 }

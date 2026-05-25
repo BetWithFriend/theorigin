@@ -50,12 +50,13 @@
     (function () {
       var el = document.getElementById('questionnaireWrapperDesktop');
       if (!el) return;
-      var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-      var isReload = nav && nav.type === 'reload';
-      if (!isReload && typeof performance !== 'undefined' && performance.navigation) {
-        isReload = performance.navigation.type === 1;
+      var mainContent = document.getElementById('MainContent');
+      document.body.classList.add('questionnaire-wrapper-open');
+      if (mainContent) {
+        mainContent.classList.add('questionnaire-wrapper-open');
       }
-      if (isReload) el.classList.add('initializing');
+      // Keep the first step hidden on initial desktop paint; show only the init loader.
+      el.classList.add('initializing');
     })();
   </script>
   <div class="questionnaire-loader-wrapper questionnaire-init-loader">
@@ -243,6 +244,12 @@
     {% endcomment %}
     <div class="questionnaire-btn-wrapper">
       <button
+        class="questionnaire-select-btn"
+        onclick="getFilters(this.closest('[data-filter-name]').getAttribute('data-filter-name'), parseInt(this.closest('[data-step-index]').getAttribute('data-step-index'), 10))"
+        disabled>
+        {{ section.settings.select_button_text | default: 'בחרו אפשרות' }}
+      </button>
+      <button
         class="questionnaire-skip-btn disabled"
         onclick="goToPreviousStep(0)"
         disabled>
@@ -343,6 +350,12 @@
     <div class="questionnaire-selection-wrapper"></div>
     {% comment %} <div class="questionnaire-selection-wrapper"></div> {% endcomment %}
     <div class="questionnaire-btn-wrapper">
+      <button
+        class="questionnaire-select-btn"
+        onclick="getFilters(this.closest('[data-filter-name]').getAttribute('data-filter-name'), parseInt(this.closest('[data-step-index]').getAttribute('data-step-index'), 10))"
+        disabled>
+        {{ section.settings.select_button_text | default: 'בחרו אפשרות' }}
+      </button>
       <button class="questionnaire-skip-btn" onclick="goToPreviousStep(2)">
         <img
           class="questionnaire-back-icon"
@@ -449,6 +462,12 @@
     <div class="questionnaire-selection-wrapper"></div>
     {% comment %} <div class="questionnaire-selection-wrapper"></div> {% endcomment %}
     <div class="questionnaire-btn-wrapper">
+      <button
+        class="questionnaire-select-btn"
+        onclick="getFilters(this.closest('[data-filter-name]').getAttribute('data-filter-name'), parseInt(this.closest('[data-step-index]').getAttribute('data-step-index'), 10))"
+        disabled>
+        {{ section.settings.select_button_text | default: 'בחרו אפשרות' }}
+      </button>
       <button class="questionnaire-skip-btn" onclick="goToPreviousStep(3)">
         <img
           class="questionnaire-back-icon"
@@ -637,9 +656,9 @@
           <table class="q-bundle-table">
             <thead>
               <tr>
-                <th scope="col">מוצר</th>
-                <th scope="col">טעם</th>
                 <th scope="col">רמת קלייה</th>
+                <th scope="col">טעם</th>
+                <th scope="col">מוצר</th>
               </tr>
             </thead>
             <tbody id="q-bundle-table-body"></tbody>
@@ -649,6 +668,12 @@
     </div>
 
     <div class="questionnaire-footer-content">
+      <div class="q-desktop-product-info" id="q-desktop-product-info">
+        <h3 class="q-desktop-product-name" id="q-desktop-product-name"></h3>
+        <p class="q-desktop-product-vendor" id="q-desktop-product-vendor"></p>
+        <p class="q-desktop-product-short" id="q-desktop-product-short"></p>
+        <div class="q-desktop-product-taste" id="q-desktop-product-taste"></div>
+      </div>
       <div class="questionnaire-qty-selector-wrapper">
         <div
           class="results-header-bundle results-header-bundle--above-qty"
@@ -781,6 +806,15 @@
 
       <div class="questionnaire-checkout-section">
         <div class="questionnaire-checkout-row">
+          <div class="questionnaire-price-wrapper">
+            <div class="price-values-group">
+              <span class="price-line-primary">
+                <span class="price-current" id="q-footer-price"></span>
+                <span class="price-compare" id="q-footer-price-compare"></span>
+              </span>
+            </div>
+            <p class="price-shipping-note">כולל משלוח</p>
+          </div>
           <div class="questionnaire-add-to-cart-wrapper">
             <div class="questionnaire-atc-actions">
               <form
@@ -804,15 +838,6 @@
                 </button>
               </form>
             </div>
-          </div>
-          <div class="questionnaire-price-wrapper">
-            <div class="price-values-group">
-              <span class="price-line-primary">
-                <span class="price-current" id="q-footer-price"></span>
-                <span class="price-compare" id="q-footer-price-compare"></span>
-              </span>
-            </div>
-            <p class="price-shipping-note">כולל משלוח</p>
           </div>
         </div>
       </div>
@@ -2230,17 +2255,18 @@
           '<tr class="q-bundle-table__row" data-product-id="' +
           escapeHtml(String(merged.id)) +
           '">' +
-          '<td class="q-bundle-table__td q-bundle-table__td--product"><div class="q-bundle-table__product">' +
-          thumb +
-          '<span class="q-bundle-table__title">' +
-          title +
-          '</span></div></td>' +
-          '<td class="q-bundle-table__td q-bundle-table__td--taste">' +
-          tasteCell +
-          '</td>' +
           '<td class="q-bundle-table__td q-bundle-table__td--roast">' +
           roastCell +
           '</td>' +
+          '<td class="q-bundle-table__td q-bundle-table__td--taste">' +
+          tasteCell +
+          '</td>' +
+          '<td class="q-bundle-table__td q-bundle-table__td--product"><div class="q-bundle-table__product">' +
+          '<span class="q-bundle-table__title">' +
+          title +
+          '</span>' +
+          thumb +
+          '</div></td>' +
           '</tr>'
         );
       })
@@ -2828,7 +2854,6 @@
     const resultsGrid = document.getElementById('Slider-questionnaireResultsGrid');
     const resultsStep = document.getElementById('questionnaireResultsStep');
     const mainWrapper = document.querySelector('.questionnaire-wrapper');
-    document.body.classList.remove('questionnaire-wrapper-open');
 
     // Helper: render up to `qty` slides and (re-)init the carousel
     function renderBundleList(allProducts, qty) {
@@ -3152,6 +3177,21 @@
             : 'רכישת המארז';
         }
       }
+
+      // Desktop inline product info panel
+      var desktopNameEl   = document.getElementById('q-desktop-product-name');
+      var desktopVendorEl = document.getElementById('q-desktop-product-vendor');
+      var desktopShortEl  = document.getElementById('q-desktop-product-short');
+      var desktopTasteEl  = document.getElementById('q-desktop-product-taste');
+      if (desktopNameEl)   desktopNameEl.textContent   = product.title   || '';
+      if (desktopVendorEl) desktopVendorEl.textContent = product.vendor  || '';
+      if (desktopShortEl)  desktopShortEl.textContent  = product.short_description || '';
+      if (desktopTasteEl) {
+        var tasteLabels = product.taste_labels || [];
+        desktopTasteEl.innerHTML = tasteLabels
+          .map(function (l) { return '<span class="q-desktop-taste-chip">' + l + '</span>'; })
+          .join('');
+      }
     }
 
     function slideMetrics() {
@@ -3199,7 +3239,14 @@
       if (n) n.disabled = maxS <= eps || sl >= maxS - eps;
     }
 
+    var isDesktop = function () { return window.matchMedia('(min-width: 990px)').matches; };
+
     function syncFromScrollPosition() {
+      if (isDesktop()) {
+        updateSlideActiveClasses(current);
+        updateArrowDisabled();
+        return;
+      }
       const idx = indexFromScrollLeft();
       if (idx !== current) {
         current = idx;
@@ -3212,6 +3259,13 @@
     function scrollToIndex(index, behavior) {
       if (!viewport || slides.length === 0) return;
       const i = Math.max(0, Math.min(index, slides.length - 1));
+      if (isDesktop()) {
+        current = i;
+        updateSlideActiveClasses(i);
+        syncFooter(i);
+        updateArrowDisabled();
+        return;
+      }
       const beh = behavior === 'instant' ? 'auto' : behavior || 'smooth';
       viewport.scrollTo({ left: scrollLeftToCenterIndex(i), behavior: beh });
     }
@@ -3224,14 +3278,14 @@
       const newPrev = prevBtnOld.cloneNode(true);
       prevBtnOld.parentNode.replaceChild(newPrev, prevBtnOld);
       newPrev.addEventListener('click', function () {
-        scrollToIndex(indexFromScrollLeft() - 1, 'smooth');
+        scrollToIndex((isDesktop() ? current : indexFromScrollLeft()) - 1, 'smooth');
       });
     }
     if (nextBtnOld) {
       const newNext = nextBtnOld.cloneNode(true);
       nextBtnOld.parentNode.replaceChild(newNext, nextBtnOld);
       newNext.addEventListener('click', function () {
-        scrollToIndex(indexFromScrollLeft() + 1, 'smooth');
+        scrollToIndex((isDesktop() ? current : indexFromScrollLeft()) + 1, 'smooth');
       });
     }
 
@@ -3653,6 +3707,10 @@
     setupResultsVendorSelect();
 
     document.body.classList.add('questionnaire-wrapper-open');
+    var mainContent = document.getElementById('MainContent');
+    if (mainContent) {
+      mainContent.classList.add('questionnaire-wrapper-open');
+    }
 
     const qProductModalEl = document.getElementById('q-product-detail-modal');
     if (qProductModalEl) {
@@ -3986,7 +4044,9 @@
     } else {
       const questionnaireWrapper = document.getElementById('questionnaireWrapperDesktop');
       if (questionnaireWrapper) {
-        questionnaireWrapper.classList.remove('initializing');
+        setTimeout(function () {
+          questionnaireWrapper.classList.remove('initializing');
+        }, 900);
       }
     }
   });
