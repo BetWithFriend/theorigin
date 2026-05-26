@@ -2249,6 +2249,15 @@
     return String(r);
   }
 
+  function highlightBundleTableRow(index) {
+    if (!window.matchMedia('(min-width: 990px)').matches) return;
+    var tbody = document.getElementById('q-bundle-table-body');
+    if (!tbody) return;
+    tbody.querySelectorAll('.q-bundle-table__row').forEach(function (row, rowIndex) {
+      row.classList.toggle('is-selected', rowIndex === index);
+    });
+  }
+
   var _qBundleTableClickBound = false;
 
   function setupBundleTableRowActivation() {
@@ -2258,15 +2267,26 @@
     tbody.addEventListener('click', function (e) {
       var row = e.target.closest('.q-bundle-table__row');
       if (!row) return;
+      var pool = window.__qResultsShownProducts;
+      if (!Array.isArray(pool)) return;
       var pid = row.getAttribute('data-product-id');
       if (!pid) return;
-      var pool = window.__qResultsShownProducts;
-      var found =
-        Array.isArray(pool) &&
-        pool.find(function (p) {
+      var found = pool.find(function (p) {
+        return p && String(p.id) === String(pid);
+      });
+      if (!found) return;
+
+      if (window.matchMedia('(min-width: 990px)').matches) {
+        var index = pool.findIndex(function (p) {
           return p && String(p.id) === String(pid);
         });
-      if (found) openQuestionnaireProductModal(found);
+        if (index >= 0 && typeof window.__qCarouselSelectProductIndex === 'function') {
+          window.__qCarouselSelectProductIndex(index);
+        }
+        return;
+      }
+
+      openQuestionnaireProductModal(found);
     });
   }
 
@@ -2368,6 +2388,7 @@
   }
 
   function openQuestionnaireProductModal(product) {
+    if (window.matchMedia('(min-width: 990px)').matches) return;
     const merged = mergeProductFromCatalog(product);
     if (!merged) return;
 
@@ -3039,27 +3060,44 @@
     let current = 0;
     const viewport = track.parentElement;
     const thumbsEl = document.getElementById('q-selection-info-thumbs');
-    /** Fraction of viewport width for each slide (smaller = more of prev/next visible). */
-    const Q_CAROUSEL_SLIDE_FRAC = 0.46;
+    /** Fraction of viewport width/height for each slide (smaller = more of prev/next visible). */
+    const Q_CAROUSEL_SLIDE_FRAC = 0.54;
+    var isDesktop = function () { return window.matchMedia('(min-width: 990px)').matches; };
 
     function applySlideWidths() {
       if (!viewport) return;
-      const vw = viewport.clientWidth;
-      const slideW = vw * Q_CAROUSEL_SLIDE_FRAC;
-      const pad = Math.max(0, (vw - slideW) / 2);
       track.style.transform = '';
       track.style.transition = '';
       if (isDesktop()) {
+        const vh = viewport.clientHeight;
+        const slideH = vh * Q_CAROUSEL_SLIDE_FRAC;
+        const pad = Math.max(0, (vh - slideH) / 2);
+        track.style.paddingTop = pad + 'px';
+        track.style.paddingBottom = pad + 'px';
         track.style.paddingLeft = '0';
-        track.style.paddingRight = pad + 'px';
-      } else {
-        track.style.paddingLeft = pad + 'px';
-        track.style.paddingRight = pad + 'px';
+        track.style.paddingRight = '0';
+        slides.forEach(function (slide) {
+          slide.style.flex = '0 0 ' + slideH + 'px';
+          slide.style.height = slideH + 'px';
+          slide.style.minHeight = slideH + 'px';
+          slide.style.width = '100%';
+          slide.style.minWidth = '100%';
+        });
+        return;
       }
+      const vw = viewport.clientWidth;
+      const slideW = vw * Q_CAROUSEL_SLIDE_FRAC;
+      const pad = Math.max(0, (vw - slideW) / 2);
+      track.style.paddingLeft = pad + 'px';
+      track.style.paddingRight = pad + 'px';
+      track.style.paddingTop = '0';
+      track.style.paddingBottom = '0';
       slides.forEach(function (slide) {
         slide.style.flex = '0 0 ' + slideW + 'px';
         slide.style.width = slideW + 'px';
         slide.style.minWidth = slideW + 'px';
+        slide.style.height = '';
+        slide.style.minHeight = '';
       });
     }
 
@@ -3180,30 +3218,6 @@
           scrollToIndex(nextIndex, 'smooth');
         });
       });
-
-      requestAnimationFrame(syncDesktopThumbsAlign);
-    }
-
-    function syncDesktopThumbsAlign() {
-      const selectionInfo = thumbsEl && thumbsEl.closest('.questionnaire-selection-info');
-      if (!selectionInfo) return;
-      if (!isDesktop()) {
-        selectionInfo.style.marginTop = '';
-        return;
-      }
-      const activeSlide = track.querySelector('.q-carousel-slide.active');
-      const imageWrapper = activeSlide && activeSlide.querySelector('.questionnaire-product-image-wrapper');
-      const media = selectionInfo.closest('.q-desktop-product-media');
-      if (!imageWrapper || !media) {
-        selectionInfo.style.marginTop = '';
-        return;
-      }
-      const mediaTop = media.getBoundingClientRect().top;
-      const imageRect = imageWrapper.getBoundingClientRect();
-      const colHeight = selectionInfo.offsetHeight;
-      const imageCenter = imageRect.top + imageRect.height / 2 - mediaTop;
-      const top = Math.round(imageCenter - colHeight / 2);
-      selectionInfo.style.marginTop = Math.max(0, top) + 'px';
     }
 
     function syncFooter(index) {
@@ -3222,9 +3236,6 @@
           thumb.classList.toggle('is-active', isActive);
           thumb.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
-        if (isDesktop()) {
-          requestAnimationFrame(syncDesktopThumbsAlign);
-        }
       }
 
       // Bundle price (all products × qty)
@@ -3268,33 +3279,69 @@
           .map(function (l) { return '<span class="q-desktop-taste-chip">' + l + '</span>'; })
           .join('');
       }
+
+      highlightBundleTableRow(index);
     }
+
+    function selectProductByIndex(index, scrollBehavior) {
+      if (slides.length === 0 || slides[0].classList.contains('q-carousel-slide--empty')) return;
+      const i = Math.max(0, Math.min(index, slides.length - 1));
+      current = i;
+      syncFooter(i);
+      updateSlideActiveClasses(i);
+      updateArrowDisabled();
+
+      const step = document.getElementById('questionnaireResultsStep');
+      const inTableView = step && step.classList.contains('results-step--table-view');
+      if (!viewport || inTableView) return;
+
+      const beh = scrollBehavior === 'instant' ? 'auto' : scrollBehavior || 'smooth';
+      if (isDesktop()) {
+        viewport.scrollTo({ top: scrollOffsetToCenterIndex(i), behavior: beh });
+      } else {
+        viewport.scrollTo({ left: scrollOffsetToCenterIndex(i), behavior: beh });
+      }
+    }
+
+    window.__qCarouselSelectProductIndex = selectProductByIndex;
 
     function slideMetrics() {
-      if (!viewport) return { vw: 0, slideW: 0 };
+      if (!viewport) return { viewportSize: 0, slideSize: 0 };
+      if (isDesktop()) {
+        const vh = viewport.clientHeight;
+        return { viewportSize: vh, slideSize: vh * Q_CAROUSEL_SLIDE_FRAC };
+      }
       const vw = viewport.clientWidth;
-      return { vw, slideW: vw * Q_CAROUSEL_SLIDE_FRAC };
+      return { viewportSize: vw, slideSize: vw * Q_CAROUSEL_SLIDE_FRAC };
     }
 
-    function maxScrollLeft() {
+    function maxScrollOffset() {
       if (!viewport) return 0;
+      if (isDesktop()) {
+        return Math.max(0, viewport.scrollHeight - viewport.clientHeight);
+      }
       return Math.max(0, viewport.scrollWidth - viewport.clientWidth);
     }
 
-    /** Scroll position that places slide `index` in the horizontal center of the viewport. */
-    function scrollLeftToCenterIndex(index) {
-      const { vw, slideW } = slideMetrics();
-      if (!viewport || slideW <= 0) return 0;
-      const pad = (vw - slideW) / 2;
-      const target = pad + index * slideW + slideW / 2 - vw / 2;
-      return Math.max(0, Math.min(maxScrollLeft(), target));
+    /** Scroll position that places slide `index` in the center of the viewport. */
+    function scrollOffsetToCenterIndex(index) {
+      const metrics = slideMetrics();
+      const viewportSize = metrics.viewportSize;
+      const slideSize = metrics.slideSize;
+      if (!viewport || slideSize <= 0) return 0;
+      const pad = (viewportSize - slideSize) / 2;
+      const target = pad + index * slideSize + slideSize / 2 - viewportSize / 2;
+      return Math.max(0, Math.min(maxScrollOffset(), target));
     }
 
-    function indexFromScrollLeft() {
-      const { vw, slideW } = slideMetrics();
-      if (!viewport || slideW <= 0 || slides.length === 0) return 0;
-      const pad = (vw - slideW) / 2;
-      const raw = (viewport.scrollLeft + vw / 2 - pad - slideW / 2) / slideW;
+    function indexFromScrollOffset() {
+      const metrics = slideMetrics();
+      const viewportSize = metrics.viewportSize;
+      const slideSize = metrics.slideSize;
+      if (!viewport || slideSize <= 0 || slides.length === 0) return 0;
+      const pad = (viewportSize - slideSize) / 2;
+      const scrollPos = isDesktop() ? viewport.scrollTop : viewport.scrollLeft;
+      const raw = (scrollPos + viewportSize / 2 - pad - slideSize / 2) / slideSize;
       return Math.max(0, Math.min(slides.length - 1, Math.round(raw)));
     }
 
@@ -3305,25 +3352,23 @@
     }
 
     function updateArrowDisabled() {
-      if (!viewport) return;
+      if (!viewport || slides.length === 0) return;
       const p = document.getElementById('qCarouselPrev');
       const n = document.getElementById('qCarouselNext');
-      const sl = viewport.scrollLeft;
-      const maxS = maxScrollLeft();
-      const eps = 2;
-      if (p) p.disabled = sl <= eps;
-      if (n) n.disabled = maxS <= eps || sl >= maxS - eps;
-    }
-
-    var isDesktop = function () { return window.matchMedia('(min-width: 990px)').matches; };
-
-    function syncFromScrollPosition() {
-      if (isDesktop()) {
-        updateSlideActiveClasses(current);
-        updateArrowDisabled();
+      const isEmpty = slides[0].classList.contains('q-carousel-slide--empty');
+      if (isEmpty) {
+        if (p) p.disabled = true;
+        if (n) n.disabled = true;
         return;
       }
-      const idx = indexFromScrollLeft();
+      const idx = indexFromScrollOffset();
+      const lastIndex = slides.length - 1;
+      if (p) p.disabled = idx <= 0;
+      if (n) n.disabled = idx >= lastIndex;
+    }
+
+    function syncFromScrollPosition() {
+      const idx = indexFromScrollOffset();
       if (idx !== current) {
         current = idx;
         syncFooter(current);
@@ -3335,15 +3380,12 @@
     function scrollToIndex(index, behavior) {
       if (!viewport || slides.length === 0) return;
       const i = Math.max(0, Math.min(index, slides.length - 1));
+      const beh = behavior === 'instant' ? 'auto' : behavior || 'smooth';
       if (isDesktop()) {
-        current = i;
-        updateSlideActiveClasses(i);
-        syncFooter(i);
-        updateArrowDisabled();
+        viewport.scrollTo({ top: scrollOffsetToCenterIndex(i), behavior: beh });
         return;
       }
-      const beh = behavior === 'instant' ? 'auto' : behavior || 'smooth';
-      viewport.scrollTo({ left: scrollLeftToCenterIndex(i), behavior: beh });
+      viewport.scrollTo({ left: scrollOffsetToCenterIndex(i), behavior: beh });
     }
 
     // Wire up arrows — clone to clear any old listeners, then update refs
@@ -3354,14 +3396,16 @@
       const newPrev = prevBtnOld.cloneNode(true);
       prevBtnOld.parentNode.replaceChild(newPrev, prevBtnOld);
       newPrev.addEventListener('click', function () {
-        scrollToIndex((isDesktop() ? current : indexFromScrollLeft()) - 1, 'smooth');
+        if (newPrev.disabled) return;
+        scrollToIndex(indexFromScrollOffset() - 1, 'smooth');
       });
     }
     if (nextBtnOld) {
       const newNext = nextBtnOld.cloneNode(true);
       nextBtnOld.parentNode.replaceChild(newNext, nextBtnOld);
       newNext.addEventListener('click', function () {
-        scrollToIndex((isDesktop() ? current : indexFromScrollLeft()) + 1, 'smooth');
+        if (newNext.disabled) return;
+        scrollToIndex(indexFromScrollOffset() + 1, 'smooth');
       });
     }
 
@@ -3615,31 +3659,41 @@
       });
     }
 
-    function openModalFromSlideTarget(target) {
+    function handleProductCardClick(target) {
       const card = target && target.closest ? target.closest('.questionnaire-product-card') : null;
       if (!card) return;
       const slide = target.closest('.q-carousel-slide');
       if (!slide || slide.classList.contains('q-carousel-slide--empty')) return;
       const pid = slide.getAttribute('data-product-id');
       if (!pid) return;
+
+      if (isDesktop()) {
+        const index = products.findIndex(function (pr) {
+          return String(pr.id) === String(pid);
+        });
+        if (index < 0) return;
+        selectProductByIndex(index, 'smooth');
+        return;
+      }
+
       const found = products.find(function (pr) {
         return String(pr.id) === String(pid);
       });
-      if (!found) return;
-      openQuestionnaireProductModal(found);
+      if (found) openQuestionnaireProductModal(found);
     }
 
     track.addEventListener('click', function (e) {
-      openModalFromSlideTarget(e.target);
+      handleProductCardClick(e.target);
     });
 
     track.addEventListener('keydown', function (e) {
       if (e.key !== 'Enter') return;
-      openModalFromSlideTarget(e.target);
+      handleProductCardClick(e.target);
     });
 
     slides.forEach(function (slide) {
       if (slide.classList.contains('q-carousel-slide--empty')) return;
+      if (isDesktop()) return;
       const card = slide.querySelector('.questionnaire-product-card');
       if (card) card.setAttribute('tabindex', '0');
     });
@@ -3648,10 +3702,14 @@
     const ro = new ResizeObserver(function () {
       applySlideWidths();
       if (viewport && slides.length && !slides[0].classList.contains('q-carousel-slide--empty')) {
-        viewport.scrollLeft = scrollLeftToCenterIndex(current);
+        const centeredOffset = scrollOffsetToCenterIndex(current);
+        if (isDesktop()) {
+          viewport.scrollTop = centeredOffset;
+        } else {
+          viewport.scrollLeft = centeredOffset;
+        }
       }
       syncFromScrollPosition();
-      syncDesktopThumbsAlign();
     });
     if (viewport) {
       viewport.addEventListener('scroll', onCarouselViewportScroll, { passive: true });
@@ -3660,13 +3718,17 @@
     }
 
     if (viewport && slides.length && !slides[0].classList.contains('q-carousel-slide--empty')) {
-      viewport.scrollLeft = scrollLeftToCenterIndex(0);
+      const initialOffset = scrollOffsetToCenterIndex(0);
+      if (isDesktop()) {
+        viewport.scrollTop = initialOffset;
+      } else {
+        viewport.scrollLeft = initialOffset;
+      }
     }
-    current = indexFromScrollLeft();
+    current = indexFromScrollOffset();
     syncFooter(current);
     updateSlideActiveClasses(current);
     updateArrowDisabled();
-    syncDesktopThumbsAlign();
 
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
@@ -3688,6 +3750,7 @@
         track._qCarouselResizeObserver.disconnect();
         track._qCarouselResizeObserver = null;
       }
+      window.__qCarouselSelectProductIndex = null;
     };
   }
 

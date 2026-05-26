@@ -468,7 +468,6 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    /* Secondary icon — visible on light cards (Origin / Figma) */
     color: #6b6b6b;
 }
 
@@ -489,6 +488,13 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     height: 18px;
 }
 
+.questionnaire-product-vendor {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    color: #555555;
+    /* margin-bottom: 16px; */
+}
+
 /* Match PLP card title (component-card .card__heading) */
 #questionnaireResultsStep .questionnaire-product-title {
     font-size: 16px;
@@ -500,17 +506,18 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
 /* Taste tags on image — same chip spec as PLP (snippets/product-taste-icon-color.liquid) */
 #questionnaireResultsStep .questionnaire-product-taste-icons {
     position: absolute;
-    top: 4px;
-    inset-inline-end: 4px;
+    top: 40px;
+    inset-inline-end: 18px;
     z-index: 2;
     margin: 0;
     width: auto;
-    max-width: calc(100% - 12px);
+    max-width: calc(100% - 36px);
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 4px;
     pointer-events: none;
+    transform: translateX(-10px);
 }
 
 #questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper {
@@ -559,13 +566,6 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
 #questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper span.fruity {
     background-color: #ebe4cc;
     color: #1C201D;
-}
-
-.questionnaire-product-vendor {
-    font-family: 'Assistant', sans-serif;
-    font-size: 16px;
-    color: #555555;
-    /* margin-bottom: 16px; */
 }
 
 .questionnaire-qty-selector-wrapper {
@@ -844,7 +844,6 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
 }
 
 #questionnaireResultsStep .q-bundle-table__row {
-    cursor: pointer;
     transition: background 0.15s ease;
 }
 
@@ -893,7 +892,7 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     overflow-x: auto;
     overscroll-behavior-x: contain;
     overscroll-behavior-y: none;
-    /* Breathing room for active slide scale(1.04) + image drop-shadow without clipping */
+    /* Breathing room for active slide scale(1.08) + image drop-shadow without clipping */
     padding-top: 6px;
     padding-bottom: 6px;
 }
@@ -988,6 +987,16 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     flex: 0 0 18px;
     width: 18px;
     margin-inline-start: 6px;
+}
+
+@media screen and (max-width: 989px) {
+    .q-carousel-slide .questionnaire-product-card {
+        cursor: pointer;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__row {
+        cursor: pointer;
+    }
 }
 
 /* Results step header — logo (home) left | refresh + table/carousel toggle right */
@@ -1367,6 +1376,7 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
 .results-vendor-menu__name {
     flex: 1 1 auto;
     min-width: 0;
+    text-transform: uppercase;
 }
 
 /* List weight + price; row selected/hover must not change suffix typography */
@@ -1497,6 +1507,7 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     z-index: 10;
     color: #6B6B6B;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
 }
 
 #questionnaireResultsStep .q-carousel-arrow {
@@ -1507,11 +1518,14 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     background: var(--q-surface-warm);
     color: #1c201d;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
 }
 
-.q-carousel-arrow:disabled {
+.q-carousel-arrow:disabled,
+#questionnaireResultsStep .q-carousel-arrow:disabled {
     opacity: 0.35;
     cursor: default;
+    pointer-events: none;
 }
 
 /* Flip SVG icons to match swapped RTL arrow positions */
@@ -1583,7 +1597,7 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
 
 #questionnaireResultsStep .q-carousel-slide {
     opacity: 0.32;
-    transform: scaleX(-1) scale(0.94);
+    transform: scaleX(-1) scale(0.92);
     transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     max-height: 100%;
     min-height: 0;
@@ -1596,13 +1610,13 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
 
 .q-carousel-slide.active {
     opacity: 1;
-    transform: scaleX(-1) scale(1.04);
+    transform: scaleX(-1) scale(1.08);
     z-index: 1;
 }
 
 #questionnaireResultsStep .q-carousel-slide.active {
     opacity: 1;
-    transform: scaleX(-1) scale(1.04);
+    transform: scaleX(-1) scale(1.08);
 }
 
 /* Active slide: slightly larger product + soft lift on the image (carousel only) */
@@ -2126,11 +2140,7 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     margin-top: 32px;
 }
 
-/* Product detail modal (questionnaire results — tap product card) */
-.q-carousel-slide .questionnaire-product-card {
-    cursor: pointer;
-}
-
+/* Product detail modal (questionnaire results — mobile) */
 .q-product-modal {
     position: fixed;
     inset: 0;
@@ -2959,7 +2969,7 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
         align-self: stretch;
     }
 
-    /* Replace desktop carousel with image + thumbs layout from Figma */
+    /* Desktop results: vertical carousel + side thumb rail */
     #questionnaireResultsStep .q-bundle-view--carousel {
         flex: 1 1 auto;
         height: 100%;
@@ -2972,10 +2982,6 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
         padding: 0 12px 0 0;
     }
 
-    #questionnaireResultsStep .q-carousel-arrow {
-        display: none;
-    }
-
     #questionnaireResultsStep .q-carousel-container {
         width: 100%;
         flex: 1 1 0;
@@ -2983,72 +2989,113 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
         padding: 0;
         align-items: stretch;
         justify-content: center;
+        position: relative;
     }
 
     #questionnaireResultsStep .q-desktop-product-media {
         flex-direction: row;
-        align-items: flex-start;
+        align-items: center;
         justify-content: flex-start;
         gap: 12px;
         height: 100%;
         min-height: 0;
     }
 
+    /* Vertical carousel — same peek / scale behavior as mobile, scroll axis flipped */
     #questionnaireResultsStep .q-carousel-viewport {
         flex: 1 1 auto;
         width: auto;
         height: auto;
         min-height: 0;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: auto;
         transform: none;
-        padding: 0;
+        padding: 6px 0;
         max-width: calc(100% - 84px);
+        overscroll-behavior-y: contain;
+        overscroll-behavior-x: none;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #questionnaireResultsStep .q-carousel-viewport::-webkit-scrollbar {
+        display: none;
     }
 
     #questionnaireResultsStep .q-carousel-track {
-        height: 100%;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        width: 100%;
+        height: max-content;
+        min-height: 0;
         align-items: stretch;
     }
 
-    #questionnaireResultsStep #Slider-questionnaireResultsGrid {
-        padding-left: 0 !important;
-    }
-
     #questionnaireResultsStep .q-carousel-slide {
-        flex: 0 0 100% !important;
-        width: 100% !important;
-        min-width: 100% !important;
-        height: 100%;
-        opacity: 1;
-        transform: none;
-        max-height: 100%;
+        width: 100%;
+        min-width: 100%;
+        max-height: none;
+        opacity: 0.32;
+        transform: scale(0.92);
+        transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     #questionnaireResultsStep .q-carousel-slide.active {
         opacity: 1;
-        transform: none;
+        transform: scale(1.08);
     }
 
-    /* Desktop: show only the active product — no carousel scrolling */
-    #questionnaireResultsStep .q-carousel-slide:not(.active) {
-        display: none;
+    #questionnaireResultsStep .q-carousel-arrow {
+        z-index: 2;
+    }
+
+    #questionnaireResultsStep #qCarouselPrev {
+        top: 4px;
+        bottom: auto;
+        left: calc((100% - 68px) * 0.5);
+        right: auto;
+        transform: translateX(-50%);
+        cursor: pointer;
+    }
+
+    #questionnaireResultsStep #qCarouselNext {
+        top: auto;
+        bottom: 4px;
+        left: calc((100% - 68px) * 0.5);
+        right: auto;
+        transform: translateX(-50%);
+        cursor: pointer;
+    }
+
+    #questionnaireResultsStep .q-carousel-arrow--prev svg {
+        transform: rotate(90deg);
+    }
+
+    #questionnaireResultsStep .q-carousel-arrow--next svg {
+        transform: rotate(90deg);
     }
 
     #questionnaireResultsStep .q-carousel-slide .questionnaire-product-image-wrapper {
-        flex: 0 0 auto;
+        flex: 1 1 auto;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
-        max-height: none;
+        min-height: 0;
+        max-height: 100%;
         width: 100%;
         gap: 10px;
     }
 
     #questionnaireResultsStep .q-carousel-slide .questionnaire-product-image {
-        max-height: min(55vh, 420px);
+        flex: 1 1 0;
+        min-height: 0;
+        max-height: 100%;
         max-width: 90%;
         width: auto;
+        object-fit: contain;
     }
 
     /* Center the image+title block as a unit within the card */
@@ -3056,15 +3103,43 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
         justify-content: center;
         align-items: center;
         gap: 0;
+        height: 100%;
     }
 
     #questionnaireResultsStep .q-carousel-slide .questionnaire-product-info {
+        flex: 0 0 auto;
         flex-shrink: 0;
         width: 100%;
         max-width: 90%;
         display: flex;
         justify-content: center;
         text-align: center;
+        overflow: visible;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-title::before,
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-title__hint {
+        display: none;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-title__text {
+        order: unset;
+        flex: 0 1 auto;
+        min-width: 0;
+        max-width: 100%;
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 12px;
     }
 
     #questionnaireResultsStep .questionnaire-selection-info {
@@ -3074,12 +3149,12 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: center;
         gap: 0;
         width: auto;
         margin-top: 0;
         flex: 0 0 auto;
-        align-self: flex-start;
+        align-self: center;
     }
 
     /* Override fixed 44px info-strip height used by mobile carousel layout. */
@@ -3113,6 +3188,20 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
 
     #questionnaireResultsStep .q-results-view-toggle {
         display: inline-flex;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__row {
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__row.is-selected,
+    #questionnaireResultsStep .q-bundle-table__row.is-selected:hover {
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-card {
+        cursor: pointer;
     }
 
     /* ── Desktop product info panel ────────────────────────────────────────── */
