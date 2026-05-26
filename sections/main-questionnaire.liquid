@@ -617,53 +617,11 @@
             </div>
 
             <div class="questionnaire-selection-info">
-              <button
-                type="button"
-                class="q-thumbs-arrow q-thumbs-arrow--up"
-                id="qThumbsPrev"
-                aria-label="גלילה למעלה"
-                aria-controls="q-selection-info-thumbs">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true">
-                  <path
-                    d="M18 15L12 9L6 15"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round" />
-                </svg>
-              </button>
               <div
                 class="questionnaire-selection-info__thumbs"
                 id="q-selection-info-thumbs"
                 role="tablist"
                 aria-label="מוצרים במארז"></div>
-              <button
-                type="button"
-                class="q-thumbs-arrow q-thumbs-arrow--down"
-                id="qThumbsNext"
-                aria-label="גלילה למטה"
-                aria-controls="q-selection-info-thumbs">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true">
-                  <path
-                    d="M6 9L12 15L18 9"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round" />
-                </svg>
-              </button>
             </div>
           </div>
 
@@ -715,7 +673,10 @@
       <div class="q-desktop-product-info" id="q-desktop-product-info">
         <h3 class="q-desktop-product-name" id="q-desktop-product-name"></h3>
         <p class="q-desktop-product-vendor" id="q-desktop-product-vendor"></p>
-        <p class="q-desktop-product-short" id="q-desktop-product-short"></p>
+        <div class="q-desktop-product-short-wrap">
+          <div class="q-desktop-product-short" id="q-desktop-product-short"></div>
+          <div class="q-desktop-product-short-fade" aria-hidden="true">&nbsp;</div>
+        </div>
         <div class="q-desktop-product-taste" id="q-desktop-product-taste"></div>
       </div>
       <div class="questionnaire-qty-selector-wrapper">
@@ -851,13 +812,16 @@
       <div class="questionnaire-checkout-section">
         <div class="questionnaire-checkout-row">
           <div class="questionnaire-price-wrapper">
+            <div class="price-label-group">
+              <span class="price-label-main">סה״כ לתשלום</span>
+              <p class="price-shipping-note">כולל משלוח</p>
+            </div>
             <div class="price-values-group">
               <span class="price-line-primary">
                 <span class="price-current" id="q-footer-price"></span>
                 <span class="price-compare" id="q-footer-price-compare"></span>
               </span>
             </div>
-            <p class="price-shipping-note">כולל משלוח</p>
           </div>
           <div class="questionnaire-add-to-cart-wrapper">
             <div class="questionnaire-atc-actions">
@@ -2283,6 +2247,7 @@
         if (index >= 0 && typeof window.__qCarouselSelectProductIndex === 'function') {
           window.__qCarouselSelectProductIndex(index);
         }
+        openQuestionnaireProductModal(found);
         return;
       }
 
@@ -2388,7 +2353,6 @@
   }
 
   function openQuestionnaireProductModal(product) {
-    if (window.matchMedia('(min-width: 990px)').matches) return;
     const merged = mergeProductFromCatalog(product);
     if (!merged) return;
 
@@ -3063,6 +3027,13 @@
     /** Fraction of viewport width/height for each slide (smaller = more of prev/next visible). */
     const Q_CAROUSEL_SLIDE_FRAC = 0.54;
     var isDesktop = function () { return window.matchMedia('(min-width: 990px)').matches; };
+    var ignoreCarouselScrollSync = false;
+    var programmaticScrollClearTimer = null;
+
+    function defaultDesktopProductIndex() {
+      if (!products || !products.length) return 0;
+      return Math.max(0, Math.floor((products.length - 1) / 2));
+    }
 
     function applySlideWidths() {
       if (!viewport) return;
@@ -3180,11 +3151,13 @@
     function renderSelectionThumbs() {
       if (!thumbsEl) return;
 
+      const thumbActiveIndex = current;
+
       thumbsEl.innerHTML = products
         .map(function (product, index) {
           const vendorOrTitle = (product.vendor || '').trim() || (product.title || '').trim() || 'תערובת';
           const image = product.image || '';
-          const isActiveClass = index === current ? ' is-active' : '';
+          const isActiveClass = index === thumbActiveIndex ? ' is-active' : '';
           const imageMarkup = image
             ? '<img class="questionnaire-selection-thumb__image" src="' +
               image +
@@ -3199,7 +3172,7 @@
             '" data-index="' +
             index +
             '" role="tab" aria-selected="' +
-            (index === current ? 'true' : 'false') +
+            (index === thumbActiveIndex ? 'true' : 'false') +
             '" aria-label="' +
             vendorOrTitle +
             '" title="' +
@@ -3212,12 +3185,41 @@
         .join('');
 
       thumbsEl.querySelectorAll('.questionnaire-selection-thumb').forEach(function (btn) {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
           const nextIndex = parseInt(btn.getAttribute('data-index') || '0', 10);
           if (Number.isNaN(nextIndex)) return;
-          scrollToIndex(nextIndex, 'smooth');
+          selectProductByIndex(nextIndex, 'smooth');
         });
       });
+    }
+
+    function clearProgrammaticScrollSync() {
+      ignoreCarouselScrollSync = false;
+      if (programmaticScrollClearTimer !== null) {
+        clearTimeout(programmaticScrollClearTimer);
+        programmaticScrollClearTimer = null;
+      }
+      const idx = indexFromScrollOffset();
+      if (idx !== current) {
+        current = idx;
+        syncFooter(current);
+      }
+      updateSlideActiveClasses(current);
+      updateArrowDisabled();
+    }
+
+    function beginProgrammaticScroll(behavior) {
+      if (programmaticScrollClearTimer !== null) {
+        clearTimeout(programmaticScrollClearTimer);
+        programmaticScrollClearTimer = null;
+      }
+      if (behavior === 'auto') {
+        ignoreCarouselScrollSync = false;
+        return;
+      }
+      ignoreCarouselScrollSync = true;
+      programmaticScrollClearTimer = setTimeout(clearProgrammaticScrollSync, 600);
     }
 
     function syncFooter(index) {
@@ -3265,19 +3267,57 @@
         }
       }
 
-      // Desktop inline product info panel
+      // Desktop inline product info panel — package summary (not per-slide product)
       var desktopNameEl   = document.getElementById('q-desktop-product-name');
       var desktopVendorEl = document.getElementById('q-desktop-product-vendor');
       var desktopShortEl  = document.getElementById('q-desktop-product-short');
       var desktopTasteEl  = document.getElementById('q-desktop-product-taste');
-      if (desktopNameEl)   desktopNameEl.textContent   = product.title   || '';
-      if (desktopVendorEl) desktopVendorEl.textContent = product.vendor  || '';
-      if (desktopShortEl)  desktopShortEl.textContent  = product.short_description || '';
-      if (desktopTasteEl) {
-        var tasteLabels = product.taste_labels || [];
-        desktopTasteEl.innerHTML = tasteLabels
-          .map(function (l) { return '<span class="q-desktop-taste-chip">' + l + '</span>'; })
-          .join('');
+      if (isDesktop()) {
+        var vendorLabel = '';
+        var vendorOpts = window.__questionnaireVendorOptions;
+        if (Array.isArray(vendorOpts) && vendorOpts.length) {
+          var selectedVendorKey = (window.__questionnaireSelectedVendor || '').toLowerCase();
+          var selectedVendorOpt = vendorOpts.find(function (o) {
+            return (o.vendorKey || '').toLowerCase() === selectedVendorKey;
+          });
+          if (selectedVendorOpt) vendorLabel = selectedVendorOpt.label || selectedVendorOpt.vendorKey || '';
+        }
+        if (desktopNameEl) {
+          desktopNameEl.textContent = vendorLabel
+            ? 'מארז מבית הקלייה ' + vendorLabel
+            : 'מארז מבית הקלייה';
+        }
+        if (desktopVendorEl) desktopVendorEl.textContent = '';
+        if (desktopShortEl) {
+          if (products && products.length) {
+            desktopShortEl.innerHTML =
+              '<ul class="q-desktop-product-package-list">' +
+              products
+                .map(function (p) {
+                  var title = escapeHtml((p.title || '').trim() || '—');
+                  var desc = escapeHtml((p.short_description || '').trim());
+                  var line = '<strong>' + title + '</strong>';
+                  if (desc) line += ' - ' + desc;
+                  return '<li>' + line + '</li>';
+                })
+                .join('') +
+              '</ul>';
+          } else {
+            desktopShortEl.innerHTML = '';
+          }
+          desktopShortEl.scrollTop = 0;
+        }
+        if (desktopTasteEl) desktopTasteEl.innerHTML = '';
+      } else {
+        if (desktopNameEl)   desktopNameEl.textContent   = product.title   || '';
+        if (desktopVendorEl) desktopVendorEl.textContent = product.vendor  || '';
+        if (desktopShortEl)  desktopShortEl.textContent  = product.short_description || '';
+        if (desktopTasteEl) {
+          var tasteLabels = product.taste_labels || [];
+          desktopTasteEl.innerHTML = tasteLabels
+            .map(function (l) { return '<span class="q-desktop-taste-chip">' + l + '</span>'; })
+            .join('');
+        }
       }
 
       highlightBundleTableRow(index);
@@ -3293,9 +3333,11 @@
 
       const step = document.getElementById('questionnaireResultsStep');
       const inTableView = step && step.classList.contains('results-step--table-view');
+
       if (!viewport || inTableView) return;
 
       const beh = scrollBehavior === 'instant' ? 'auto' : scrollBehavior || 'smooth';
+      beginProgrammaticScroll(beh);
       if (isDesktop()) {
         viewport.scrollTo({ top: scrollOffsetToCenterIndex(i), behavior: beh });
       } else {
@@ -3369,6 +3411,11 @@
 
     function syncFromScrollPosition() {
       const idx = indexFromScrollOffset();
+      if (ignoreCarouselScrollSync) {
+        updateSlideActiveClasses(current);
+        updateArrowDisabled();
+        return;
+      }
       if (idx !== current) {
         current = idx;
         syncFooter(current);
@@ -3378,14 +3425,12 @@
     }
 
     function scrollToIndex(index, behavior) {
-      if (!viewport || slides.length === 0) return;
-      const i = Math.max(0, Math.min(index, slides.length - 1));
-      const beh = behavior === 'instant' ? 'auto' : behavior || 'smooth';
-      if (isDesktop()) {
-        viewport.scrollTo({ top: scrollOffsetToCenterIndex(i), behavior: beh });
-        return;
-      }
-      viewport.scrollTo({ left: scrollOffsetToCenterIndex(i), behavior: beh });
+      selectProductByIndex(index, behavior);
+    }
+
+    function onCarouselScrollEnd() {
+      if (!ignoreCarouselScrollSync) return;
+      clearProgrammaticScrollSync();
     }
 
     // Wire up arrows — clone to clear any old listeners, then update refs
@@ -3667,19 +3712,19 @@
       const pid = slide.getAttribute('data-product-id');
       if (!pid) return;
 
+      const found = products.find(function (pr) {
+        return String(pr.id) === String(pid);
+      });
+      if (!found) return;
+
       if (isDesktop()) {
         const index = products.findIndex(function (pr) {
           return String(pr.id) === String(pid);
         });
-        if (index < 0) return;
-        selectProductByIndex(index, 'smooth');
-        return;
+        if (index >= 0) selectProductByIndex(index, 'smooth');
       }
 
-      const found = products.find(function (pr) {
-        return String(pr.id) === String(pid);
-      });
-      if (found) openQuestionnaireProductModal(found);
+      openQuestionnaireProductModal(found);
     }
 
     track.addEventListener('click', function (e) {
@@ -3713,22 +3758,28 @@
     });
     if (viewport) {
       viewport.addEventListener('scroll', onCarouselViewportScroll, { passive: true });
+      viewport.addEventListener('scrollend', onCarouselScrollEnd);
       ro.observe(viewport);
       track._qCarouselResizeObserver = ro;
     }
 
     if (viewport && slides.length && !slides[0].classList.contains('q-carousel-slide--empty')) {
-      const initialOffset = scrollOffsetToCenterIndex(0);
       if (isDesktop()) {
-        viewport.scrollTop = initialOffset;
+        selectProductByIndex(defaultDesktopProductIndex(), 'instant');
       } else {
+        const initialOffset = scrollOffsetToCenterIndex(0);
         viewport.scrollLeft = initialOffset;
+        current = indexFromScrollOffset();
+        syncFooter(current);
+        updateSlideActiveClasses(current);
+        updateArrowDisabled();
       }
+    } else {
+      current = indexFromScrollOffset();
+      syncFooter(current);
+      updateSlideActiveClasses(current);
+      updateArrowDisabled();
     }
-    current = indexFromScrollOffset();
-    syncFooter(current);
-    updateSlideActiveClasses(current);
-    updateArrowDisabled();
 
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
@@ -3743,8 +3794,14 @@
         cancelAnimationFrame(carouselScrollRaf);
         carouselScrollRaf = null;
       }
+      if (programmaticScrollClearTimer !== null) {
+        clearTimeout(programmaticScrollClearTimer);
+        programmaticScrollClearTimer = null;
+      }
+      ignoreCarouselScrollSync = false;
       if (viewport) {
         viewport.removeEventListener('scroll', onCarouselViewportScroll);
+        viewport.removeEventListener('scrollend', onCarouselScrollEnd);
       }
       if (track._qCarouselResizeObserver) {
         track._qCarouselResizeObserver.disconnect();
