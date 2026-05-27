@@ -253,11 +253,11 @@
         class="questionnaire-skip-btn disabled"
         onclick="goToPreviousStep(0)"
         disabled>
+        <span class="questionnaire-back-text">חזור</span>
         <img
           class="questionnaire-back-icon"
           src="{{ 'questionnaire_back_icon.png' |  asset_url }}"
           alt="Close icon">
-        <span class="questionnaire-back-text">חזור</span>
       </button>
     </div>
   </div>
@@ -357,11 +357,11 @@
         {{ section.settings.select_button_text | default: 'בחרו אפשרות' }}
       </button>
       <button class="questionnaire-skip-btn" onclick="goToPreviousStep(2)">
+        <span class="questionnaire-back-text">חזור</span>
         <img
           class="questionnaire-back-icon"
           src="{{ 'questionnaire_back_icon.png' |  asset_url }}"
           alt="Close icon">
-        <span class="questionnaire-back-text">חזור</span>
       </button>
     </div>
   </div>
@@ -469,11 +469,11 @@
         {{ section.settings.select_button_text | default: 'בחרו אפשרות' }}
       </button>
       <button class="questionnaire-skip-btn" onclick="goToPreviousStep(3)">
+        <span class="questionnaire-back-text">חזור</span>
         <img
           class="questionnaire-back-icon"
           src="{{ 'questionnaire_back_icon.png' |  asset_url }}"
           alt="Close icon">
-        <span class="questionnaire-back-text">חזור</span>
       </button>
     </div>
   </div>
@@ -1106,6 +1106,59 @@
     }
     const fallback = parseInt(sel.textContent.trim(), 10);
     return [3, 5, 7].includes(fallback) ? fallback : 5;
+  }
+
+  function trackQuestionnaireAnalyticsClick(buttonName, properties) {
+    if (typeof analytics !== 'undefined' && analytics.trackClick) {
+      analytics.trackClick(buttonName, properties);
+    }
+  }
+
+  function trackQuestionnaireScreenView(screenName, properties) {
+    if (typeof analytics !== 'undefined' && analytics.trackScreenView) {
+      analytics.trackScreenView(screenName, properties);
+    }
+  }
+
+  function getQuestionnaireVendorDisplayName(vendorKey) {
+    const key = (vendorKey != null ? vendorKey : window.__questionnaireSelectedVendor || '').toLowerCase();
+    const opts = window.__questionnaireVendorOptions;
+    if (Array.isArray(opts)) {
+      const opt = opts.find(function (o) {
+        return (o.vendorKey || '').toLowerCase() === key;
+      });
+      if (opt) return opt.label || opt.vendorKey || key;
+    }
+    return key;
+  }
+
+  function getQuestionnaireBundlePurchaseProps(products) {
+    const qty = getQuestionnaireResultsBundleQty();
+    const prods = Array.isArray(products) ? products : [];
+    return {
+      'Bundle size': qty,
+      'Bundle Vendor': getQuestionnaireVendorDisplayName(),
+      'Bundle price': formatQuestionnaireMoney(bundleTotalCentsForQuestionnaireProducts(prods, qty)),
+    };
+  }
+
+  function getQuestionnaireQuizBackStepLabel(step) {
+    if (step === 1) return 'Step 1';
+    if (step === 2) return 'Step 2';
+    if (step === 3) return 'Step 3';
+    return null;
+  }
+
+  function getQuestionnaireSelectionTitle(item) {
+    if (!item) return '';
+    const titleEl = item.querySelector('.questionnaire-text');
+    return titleEl ? titleEl.textContent.trim() : '';
+  }
+
+  function trackQuizResultsScreenViewOnce() {
+    if (window.__questionnaireResultsScreenTracked) return;
+    window.__questionnaireResultsScreenTracked = true;
+    trackQuestionnaireScreenView('Quiz Results');
   }
 
   /**
@@ -2104,6 +2157,12 @@
       var ut = window.__questionnaireMatchUserText;
       if (typeof ut !== 'string' || !ut.length) return;
       var next = matchQuestionnaireCoffees(ut);
+      var vendorQty = getQuestionnaireResultsBundleQty();
+      trackQuestionnaireAnalyticsClick('Quiz - Choose vendor', {
+        'Vendor Chosen': getQuestionnaireVendorDisplayName(raw),
+        Price: formatQuestionnaireMoney(bundleTotalCentsForQuestionnaireProducts(next, vendorQty)),
+        'Bundle size': vendorQty,
+      });
       saveResultsState(next);
       renderQuestionnaireResults(next);
     });
@@ -2337,7 +2396,11 @@
     btn.addEventListener('click', function () {
       var step = document.getElementById('questionnaireResultsStep');
       var isTable = step && step.classList.contains('results-step--table-view');
-      setResultsBundleView(!isTable);
+      var willShowTable = !isTable;
+      setResultsBundleView(willShowTable);
+      trackQuestionnaireAnalyticsClick('Quiz - Tabular', {
+        'View Type': willShowTable ? 'Show Tabular' : 'Show Normal',
+      });
     });
   }
 
@@ -2355,6 +2418,11 @@
   function openQuestionnaireProductModal(product) {
     const merged = mergeProductFromCatalog(product);
     if (!merged) return;
+
+    trackQuestionnaireAnalyticsClick('Quiz - Product Clicked', {
+      'Product name': (merged.title || '').trim(),
+      'Product vendor': (merged.vendor || '').trim(),
+    });
 
     const modal = document.getElementById('q-product-detail-modal');
     if (!modal) return;
@@ -2552,13 +2620,20 @@
   }
 
   function restartQuestionnaire() {
+    trackQuestionnaireAnalyticsClick('Quiz - Restart', {
+      'Restart Type': 'Restart',
+    });
     clearResultsState();
+    window.__questionnaireResultsScreenTracked = false;
     window.location.reload();
   }
 
   function openRestartConfirmModal() {
     const modal = document.getElementById('q-restart-confirm-modal');
     if (!modal) return;
+    trackQuestionnaireAnalyticsClick('Quiz - Restart', {
+      'Restart Type': 'Open menu',
+    });
     _qRestartConfirmPreviousFocus = document.activeElement;
     closeQuestionnaireProductModal();
     modal.hidden = false;
@@ -2572,6 +2647,11 @@
   function closeRestartConfirmModal() {
     const modal = document.getElementById('q-restart-confirm-modal');
     if (!modal) return;
+    if (!modal.hidden) {
+      trackQuestionnaireAnalyticsClick('Quiz - Restart', {
+        'Restart Type': 'Cancel',
+      });
+    }
     modal.hidden = true;
     modal.setAttribute('aria-hidden', 'true');
     if (_qRestartConfirmPreviousFocus && typeof _qRestartConfirmPreviousFocus.focus === 'function') {
@@ -2631,11 +2711,21 @@
       }
     });
 
-    analytics.trackClick('Filter select', {
-      Filter: filterName,
-      step: stepIndex,
-      filters: selectedValues,
-    });
+    const selectedItem = selectedItems[0];
+    const selectedTitle = getQuestionnaireSelectionTitle(selectedItem);
+    if (stepIndex === 1) {
+      trackQuestionnaireAnalyticsClick('Quiz - Choose Prep Method', {
+        'Prep Method': selectedValues.length ? selectedValues.join(', ') : selectedTitle,
+      });
+    } else if (stepIndex === 2) {
+      trackQuestionnaireAnalyticsClick('Quiz - Roast Level', {
+        Roast: selectedTitle,
+      });
+    } else if (stepIndex === 3) {
+      trackQuestionnaireAnalyticsClick('Quiz - Choose Taste', {
+        Taste: selectedValues.length ? selectedValues.join(', ') : selectedTitle,
+      });
+    }
 
     window.appliedFilters[filterName] = [];
     if (selectedValues.length === 0) {
@@ -2693,9 +2783,12 @@
       updateTasteOptionsDisabledState();
     }
 
-    analytics.trackClick('Quiz Step Back', {
-      step: step,
-    });
+    const backStepLabel = getQuestionnaireQuizBackStepLabel(step);
+    if (backStepLabel) {
+      trackQuestionnaireAnalyticsClick('Quiz - Back', {
+        Step: backStepLabel,
+      });
+    }
   }
 
   function goToNextStep(stepIndex) {
@@ -2971,6 +3064,9 @@
           opt.classList.add('selected');
           const newQty =
             parseInt(opt.getAttribute('data-qty') || opt.textContent.trim(), 10) || products.length;
+          trackQuestionnaireAnalyticsClick('Quiz - Choose Bundle Size', {
+            'Bundle size': newQty,
+          });
           const ut = window.__questionnaireMatchUserText;
           if (typeof ut === 'string' && ut.length) {
             const next = matchQuestionnaireCoffees(ut);
@@ -2998,6 +3094,7 @@
       // Show results step
       resultsStep.classList.add('active');
       mainWrapper.classList.add('results-step-visible');
+      trackQuizResultsScreenViewOnce();
 
       // Scroll to top of results?
       resultsStep.scrollIntoView({ behavior: 'smooth' });
@@ -3516,6 +3613,8 @@
       const totalWeightNoteEl = document.getElementById('q-bundle-drawer-total-weight-note');
       if (!drawer || !itemsEl || !totalEl) return;
 
+      trackQuestionnaireAnalyticsClick('Quiz - Purchase Bundle', getQuestionnaireBundlePurchaseProps(products));
+
       const qty = getQuestionnaireResultsBundleQty();
       let totalGrams = 0;
       products.forEach(function (p) {
@@ -3597,12 +3696,7 @@
       if (drawerContinueBtn) drawerContinueBtn.disabled = true;
       if (activeLabelEl) activeLabelEl.textContent = 'מוסיף מוצרים...';
 
-      if (typeof analytics !== 'undefined' && analytics.trackClick) {
-        analytics.trackClick('Add To Cart', {
-          Source: 'Quiz bundle',
-          Items: items.length,
-        });
-      }
+      trackQuestionnaireAnalyticsClick('Quiz - Finish Purchase', getQuestionnaireBundlePurchaseProps(products));
 
       fetch('/cart/add.js', {
         method: 'POST',
@@ -3898,7 +3992,7 @@
 
   // Initialize the questionnaire functionality
   document.addEventListener('DOMContentLoaded', function () {
-    analytics.trackScreenView('Quiz', {
+    trackQuestionnaireScreenView('Quiz Flow', {
       page_load_time: performance.now(),
     });
 
