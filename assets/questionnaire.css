@@ -70,8 +70,10 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     font-size: 13px;
     line-height: 13px;
     font-weight: 400;
-    width: 68px;
+    width: auto;
+    min-width: 88px;
     height: 38px;
+    padding: 0 16px;
     /* text-decoration: underline; */
     margin-top: 10px;
     cursor: pointer;
@@ -79,8 +81,11 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     border: 1px solid #555555;
     background: transparent;
     display: flex;
+    flex-direction: row;
+    direction: ltr;
     align-items: center;
     justify-content: center;
+    gap: 6px;
 }
 
 .questionnaire-skip-btn.disabled {
@@ -788,20 +793,27 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
 }
 
 /* Table cell: same chip markup as carousel (product-taste-icons / plp-taste-text-wrapper), not image overlay */
-#questionnaireResultsStep .q-bundle-table__taste-icons {
+#questionnaireResultsStep .q-bundle-table__td--taste .q-bundle-table__taste-icons {
     position: static;
     inset: auto;
     top: auto;
     max-width: none;
-    width: auto;
+    width: fit-content;
     margin: 0;
-    /* margin-inline-start: auto; */
+    margin-inline-start: auto;
+    margin-inline-end: 0;
     align-items: flex-end;
     pointer-events: none;
 }
 
-#questionnaireResultsStep .q-bundle-table__taste-icons .plp-taste-text-wrapper {
+#questionnaireResultsStep .q-bundle-table__td--taste .q-bundle-table__taste-icons .plp-taste-text-wrapper {
     justify-content: flex-end;
+}
+
+/* Carousel cards share taste-icon markup; keep overlay on the product image */
+#questionnaireResultsStep .q-carousel-slide .questionnaire-product-taste-icons {
+    position: absolute;
+    top: 6px;
 }
 
 #questionnaireResultsStep .q-bundle-table__td--roast {
@@ -814,7 +826,7 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 10px;
+    gap: 4px;
     min-width: 0;
 }
 
@@ -905,8 +917,8 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
 
 #questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-info {
     flex-shrink: 0;
-    min-height: 44px;
-    max-height: 44px;
+    min-height: 32px;
+    max-height: 32px;
     overflow: hidden;
     box-sizing: border-box;
 }
@@ -990,12 +1002,80 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
 }
 
 @media screen and (max-width: 989px) {
+    .questionnaire-wrapper.results-step-visible {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: auto;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .questionnaire-wrapper.results-step-visible #questionnaireResultsStep {
+        min-height: 100%;
+        flex: 1 1 auto;
+    }
+
+    #questionnaireResultsStep .questionnaire-footer-content {
+        padding-bottom: max(28px, env(safe-area-inset-bottom));
+    }
+
+    #questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-info {
+        margin-top: 10px;
+    }
+
     .q-carousel-slide .questionnaire-product-card {
         cursor: pointer;
     }
 
     #questionnaireResultsStep .q-bundle-table__row {
         cursor: pointer;
+    }
+
+    /*
+     * Table inherits dir=rtl from the theme; columns and product flex reverse.
+     * LTR row layout: roast (left) | taste | product (right); inside product: title then thumb at inline-end.
+     */
+    #questionnaireResultsStep .q-bundle-view--table .q-bundle-table,
+    #questionnaireResultsStep .q-bundle-view--table .q-bundle-table thead,
+    #questionnaireResultsStep .q-bundle-view--table .q-bundle-table tbody,
+    #questionnaireResultsStep .q-bundle-view--table .q-bundle-table tr {
+        direction: ltr;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__product {
+        direction: ltr;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__title {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__td--taste {
+        max-width: none;
+        width: auto;
+        white-space: nowrap;
+        text-align: right;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__td--taste .q-bundle-table__taste-icons {
+        margin-inline-start: auto;
+        margin-inline-end: 0;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__td--roast {
+        width: 1%;
+        white-space: nowrap;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__td--product {
+        width: auto;
     }
 }
 
@@ -2950,7 +3030,7 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     #questionnaireResultsStep .questionnaire-footer-content {
         grid-column: 1;
         grid-row: 2;
-        padding: 28px 40px 32px;
+        padding: 28px 40px 40px;
         /* border-inline-end: 1px solid var(--q-border); */
         display: flex;
         flex-direction: column;
@@ -2965,8 +3045,17 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
         max-width: 450px;
         justify-self: start;
         align-self: stretch;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         /* Preserve RTL typography/alignment inside left panel content. */
         direction: rtl;
+    }
+
+    #questionnaireResultsStep .questionnaire-qty-selector-wrapper,
+    #questionnaireResultsStep .questionnaire-checkout-section,
+    #questionnaireResultsStep .questionnaire-secure-info-wrapper {
+        flex-shrink: 0;
     }
 
     /* Right panel: selected product image + thumbs list */
@@ -3103,7 +3192,7 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
         gap: 10px;
     }
 
-    #questionnaireResultsStep .questionnaire-product-taste-icons {
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-taste-icons {
         top: 40px;
     }
 
@@ -3250,7 +3339,9 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
         text-align: right;
         margin-bottom: 20px;
         padding-bottom: 20px;
-        border-bottom: 1px solid var(--q-border);
+        /* border-bottom: 1px solid var(--q-border); */
+        flex: 1 1 auto;
+        min-height: 0;
     }
 
     .q-desktop-product-name {
@@ -3270,7 +3361,9 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     .q-desktop-product-short-wrap {
         position: relative;
         margin: 0 0 12px;
-        height: calc(14px * 1.6 * 4 * 3 + 6px * 2);
+        height: calc(14px * 1.6 * 3 * 3 + 6px * 2);
+        flex-shrink: 0;
+        overflow: hidden;
     }
 
     .q-desktop-product-short {
@@ -3279,8 +3372,10 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
         font-size: 14px;
         line-height: 1.6;
         color: #3a3a3a;
-        overflow-y: auto;
         overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
     }
 
     .q-desktop-product-short-fade {
@@ -3288,10 +3383,16 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
         bottom: 0;
         left: 0;
         right: 0;
-        z-index: 1;
+        z-index: 2;
         height: 28px;
         background: linear-gradient(to bottom, rgba(250, 252, 254, 0), var(--q-surface-warm));
         pointer-events: none;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+
+    .q-desktop-product-short-fade.is-at-bottom {
+        opacity: 0;
+        visibility: hidden;
     }
 
     .q-desktop-product-package-list {
@@ -3351,6 +3452,11 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     #questionnaireResultsStep .questionnaire-add-btn {
         width: 100%;
         text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.25;
+        box-sizing: border-box;
     }
 
     /* Secure info row on desktop */
