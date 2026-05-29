@@ -8,6 +8,8 @@
 <nav class="header__inline-menu">
   <ul class="list-menu list-menu--inline" role="list">
     {%- for link in section.settings.menu.links -%}
+      {%- capture skip_header_link -%}{%- render 'header-menu-link-skipped', link: link -%}{%- endcapture -%}
+      {%- unless skip_header_link contains 'skip' -%}
       <li>
         {%- if link.links != blank -%}
           <header-menu>
@@ -35,6 +37,8 @@
                   role="list"
                 >
                   {%- for childlink in link.links -%}
+                    {%- capture skip_header_childlink -%}{%- render 'header-menu-link-skipped', link: childlink -%}{%- endcapture -%}
+                    {%- unless skip_header_childlink contains 'skip' -%}
                     <li>
                       <a
                         id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
@@ -65,6 +69,7 @@
                         </ul>
                       {%- endif -%}
                     </li>
+                    {%- endunless -%}
                   {%- endfor -%}
                 </ul>
               </div>
@@ -89,6 +94,10 @@
           </a>
         {%- endif -%}
       </li>
+      {%- if link.title == 'מארזי קפה' or link.handle == 'מארזי-קפה' -%}
+        {%- render 'header-questionnaire-menu-item', menu_context: 'desktop' -%}
+      {%- endif -%}
+      {%- endunless -%}
     {%- endfor -%}
   </ul>
 </nav>

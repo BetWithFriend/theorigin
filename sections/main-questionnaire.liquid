@@ -147,7 +147,9 @@
     <script>
           (function () {
       var INTRO_FLAG = 'questionnaireShowIntro';
-      var showIntro = sessionStorage.getItem(INTRO_FLAG) === '1';
+      var introParams = new URLSearchParams(window.location.search);
+      var showIntro =
+        sessionStorage.getItem(INTRO_FLAG) === '1' || introParams.get('intro') === '1';
       if (showIntro) {
         sessionStorage.removeItem(INTRO_FLAG);
         var intro = document.getElementById('questionnaireIntroStep');
@@ -4159,6 +4161,36 @@
     // All options remain available regardless of previous step selections
   }
 
+  function runQuestionnaireBootstrap() {
+    const savedResultsProducts = loadResultsState();
+    const questionnaireWrapper = document.getElementById('questionnaireWrapperDesktop');
+    preloadAllProductsWhenIdle();
+
+    if (savedResultsProducts) {
+      setupResultsVendorSelect();
+      renderQuestionnaireResults(savedResultsProducts);
+
+      if (typeof window.__questionnaireMatchUserText === 'string' && window.__questionnaireMatchUserText.length) {
+        const refreshVendorMeta = function () {
+          matchQuestionnaireCoffees(window.__questionnaireMatchUserText);
+          updateResultsVendorSelect();
+        };
+        if (typeof requestIdleCallback === 'function') {
+          requestIdleCallback(refreshVendorMeta, { timeout: 2000 });
+        } else {
+          setTimeout(refreshVendorMeta, 0);
+        }
+      }
+      return;
+    }
+
+    if (questionnaireWrapper) {
+      questionnaireWrapper.classList.remove('initializing');
+    }
+  }
+
+  runQuestionnaireBootstrap();
+
   // Initialize the questionnaire functionality
   document.addEventListener('DOMContentLoaded', function () {
     const intro = document.getElementById('questionnaireIntroStep');
@@ -4495,26 +4527,6 @@
     const startOverButton = document.querySelector('.questionnaire-start-over');
     if (startOverButton) {
       startOverButton.onclick = openRestartConfirmModal;
-    }
-
-    const savedResultsProducts = loadResultsState();
-    if (savedResultsProducts) {
-      ensureAllProductsLoaded();
-      let productsToShow = savedResultsProducts;
-      if (typeof window.__questionnaireMatchUserText === 'string' && window.__questionnaireMatchUserText.length) {
-        const q = getQuestionnaireBundleQtyFromDom();
-        productsToShow = matchQuestionnaireCoffees(window.__questionnaireMatchUserText);
-        saveResultsState(productsToShow);
-      }
-      renderQuestionnaireResults(productsToShow);
-    } else {
-      preloadAllProductsWhenIdle();
-      const questionnaireWrapper = document.getElementById('questionnaireWrapperDesktop');
-      if (questionnaireWrapper) {
-        setTimeout(function () {
-          questionnaireWrapper.classList.remove('initializing');
-        }, 900);
-      }
     }
   });
 </script>

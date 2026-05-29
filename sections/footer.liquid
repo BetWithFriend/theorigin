@@ -68,6 +68,23 @@
           </div>
           <div class="contact-us-wrapper">
               <div class="contact-us-contracts">
+                {%- liquid
+                  assign about_footer_link = nil
+                  assign articles_footer_link = nil
+                  for link in linklists['main-menu'].links
+                    if link.title == 'אודות'
+                      assign about_footer_link = link
+                    elsif link.title == 'מאמרים'
+                      assign articles_footer_link = link
+                    endif
+                  endfor
+                -%}
+                {%- if about_footer_link -%}
+                  <div class="contact-us" onclick="window.location.href='{{ about_footer_link.url }}'">{{ about_footer_link.title | escape }}</div>
+                {%- endif -%}
+                {%- if articles_footer_link -%}
+                  <div class="contact-us" onclick="window.location.href='{{ articles_footer_link.url }}'">{{ articles_footer_link.title | escape }}</div>
+                {%- endif -%}
                 <div class="contact-us" onclick="goToPage('pages/privacy')">מדיניות הפרטיות</div>
                 <div class="contact-us" onclick="goToPage('pages/site-terms')">תקנון האתר</div>
                 <div class="contact-us" onclick="goToPage('pages/accessibility-terms')">נגישות</div>

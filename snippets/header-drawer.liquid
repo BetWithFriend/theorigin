@@ -22,6 +22,8 @@
           <nav class="menu-drawer__navigation">
             <ul class="menu-drawer__menu has-submenu list-menu" role="list">
               {%- for link in section.settings.menu.links -%}
+                {%- capture skip_header_link -%}{%- render 'header-menu-link-skipped', link: link -%}{%- endcapture -%}
+                {%- unless skip_header_link contains 'skip' -%}
                 <li>
                   {%- if link.links != blank -%}
                     <details id="Details-menu-drawer-menu-item-{{ forloop.index }}">
@@ -51,6 +53,8 @@
                           </button>
                           <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
                             {%- for childlink in link.links -%}
+                              {%- capture skip_header_childlink -%}{%- render 'header-menu-link-skipped', link: childlink -%}{%- endcapture -%}
+                              {%- unless skip_header_childlink contains 'skip' -%}
                               <li>
                                 {%- if childlink.links == blank -%}
                                   <a
@@ -114,6 +118,7 @@
                                   </details>
                                 {%- endif -%}
                               </li>
+                              {%- endunless -%}
                             {%- endfor -%}
                           </ul>
                         </div>
@@ -132,6 +137,10 @@
                     </a>
                   {%- endif -%}
                 </li>
+                {%- if link.title == 'מארזי קפה' or link.handle == 'מארזי-קפה' -%}
+                  {%- render 'header-questionnaire-menu-item', menu_context: 'drawer' -%}
+                {%- endif -%}
+                {%- endunless -%}
               {%- endfor -%}
             </ul>
           </nav>

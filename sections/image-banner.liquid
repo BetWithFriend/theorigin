@@ -441,12 +441,12 @@
     </h2>
 
     <a
-      href="/pages/questionnaire"
+      href="/collections/חנות-קפה"
       role="link"
       class="main-cta-button"
-      id="mainCtaBtn">בואו נכין מארז קפה</a>
+      id="mainCtaBtn">קחו אותי לקפה טעים</a>
   {% comment %} <br>
-    <a href="/collections/חנות-קפה" role="link" class="main-cta-button" id="shopCtaBtn">קחו אותי לקפה טעים</a> {% endcomment %}
+        <a href="/collections/חנות-קפה" role="link" class="main-cta-button" id="shopCtaBtn">קחו אותי לקפה טעים</a> {% endcomment %}
   </div>
 
   <!-- Video controls -->
@@ -575,8 +575,7 @@
     var shopCta = document.getElementById('shopCtaBtn');
     if (mainCta) {
       mainCta.addEventListener('click', function () {
-        sessionStorage.setItem('questionnaireShowIntro', '1');
-        analytics.track('Main CTA', { type: 'quiz' });
+        analytics.track('Main CTA', { type: 'shop' });
       });
     }
     if (shopCta) {
