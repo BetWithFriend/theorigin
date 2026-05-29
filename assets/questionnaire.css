@@ -139,6 +139,148 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     display: flex;
 }
 
+/* ── Intro / preview screen ───────────────────────────────────────────── */
+.questionnaire-intro-wrapper {
+    width: 100%;
+    max-width: 390px;
+    padding: 0;
+    gap: 0;
+    align-items: stretch;
+}
+
+.questionnaire-intro-wrapper.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.questionnaire-intro-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.questionnaire-intro-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 32px 16px;
+    box-sizing: border-box;
+}
+
+.questionnaire-intro-image-wrapper {
+    width: 100%;
+    height: 170px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.questionnaire-intro-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.questionnaire-intro-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    text-align: center;
+    padding: 24px 0;
+}
+
+.questionnaire-intro-title {
+    font-family: 'Assistant', sans-serif;
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #000000;
+    margin: 0;
+}
+
+.questionnaire-intro-desc {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 400;
+    color: #000000;
+}
+
+.questionnaire-intro-desc p {
+    margin: 0 0 8px;
+}
+
+.questionnaire-intro-desc p:last-child {
+    margin-bottom: 0;
+}
+
+.questionnaire-intro-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    width: 100%;
+}
+
+.questionnaire-intro-start-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 56px;
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 16px 40px;
+    background-color: var(--q-accent);
+    color: #FBFCFE;
+    font-family: "Assistant", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    border: unset;
+}
+
+.questionnaire-intro-start-btn:hover {
+    opacity: 0.92;
+}
+
+.questionnaire-intro-social-proof {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+}
+
+.questionnaire-intro-stars {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: #E4AE8B;
+}
+
+.questionnaire-intro-star {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+.questionnaire-intro-social-text {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 400;
+    color: #000000;
+    text-align: center;
+    text-transform: capitalize;
+}
+
 .questionnaire-selection-wrapper {
     width: 320px;
     height: 80px;
@@ -402,6 +544,55 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     .questionnaire-loader-wrapper {
         height: 80vh;
         position: unset;
+    }
+
+    /* ── Intro / preview screen (desktop) ──────────────────────────────── */
+    .questionnaire-intro-wrapper {
+        width: 560px;
+        max-width: 560px;
+        padding: 0;
+    }
+
+    .questionnaire-intro-header {
+        padding: 0 0 8px;
+        justify-content: flex-start;
+    }
+
+    .questionnaire-intro-content {
+        padding: 0;
+    }
+
+    .questionnaire-intro-image-wrapper {
+        height: 220px;
+        border-radius: 16px;
+    }
+
+    .questionnaire-intro-text {
+        padding: 32px 0;
+        gap: 12px;
+    }
+
+    .questionnaire-intro-title {
+        font-size: 36px;
+        line-height: 1.2;
+    }
+
+    .questionnaire-intro-desc {
+        font-size: 18px;
+        line-height: 1.5;
+    }
+
+    .questionnaire-intro-start-btn {
+        width: 100%;
+    }
+
+    .questionnaire-intro-star {
+        width: 26px;
+        height: 26px;
+    }
+
+    .questionnaire-intro-social-text {
+        font-size: 18px;
     }
 
 }

@@ -575,6 +575,7 @@
     var shopCta = document.getElementById('shopCtaBtn');
     if (mainCta) {
       mainCta.addEventListener('click', function () {
+        sessionStorage.setItem('questionnaireShowIntro', '1');
         analytics.track('Main CTA', { type: 'quiz' });
       });
     }
