@@ -59,14 +59,13 @@
       height="26"
     >
     {% comment %} <div class="why-us-vertical-text" dir="rtl">משלוח עד הבית ב-39 ש״ח &#9679; חינם בקנייה מעל {{ vendor.min_order_for_free_shipping  }} ₪ בבית קלייה זה</div> {% endcomment %}
-    {%- if vendor.vendor_name.value == 'You Need Coffee' -%}
+    {%- if vendor.vendor_name.value == 'TEMP' -%}
       <div class="why-us-vertical-text" dir="rtl">
         משלוח עד הבית ב-55 ש״ח בלבד (מחיר זמנית גבוה יותר - רק בבית קלייה זה)
       </div>
     {% else %}
       <div class="why-us-vertical-text" dir="rtl">
-        משלוח עד הבית ב-35 ש״ח בלבד &#9679; לרוב מגיע תוך 3-2 ימים (עד 7 ימים למקומות מרוחקים) - עקב המצב הבטחוני ייתכנו
-        עיכובים
+        משלוח עד הבית ב-35 ש״ח בלבד &#9679; לרוב מגיע תוך 3-2 ימים (עד 7 ימים למקומות מרוחקים)
       </div>
     {% endif %}
   </div>
