@@ -1145,7 +1145,7 @@
     return {
       'Bundle size': qty,
       'Bundle Vendor': getQuestionnaireVendorDisplayName(),
-      'Bundle price': formatQuestionnaireMoney(bundleTotalCentsForQuestionnaireProducts(prods, qty)),
+      'Bundle price': formatQuestionnaireMoney(bundleTotalWithShippingCentsForQuestionnaireProducts(prods, qty)),
     };
   }
 
@@ -1170,7 +1170,20 @@
 
   const QUESTIONNAIRE_LINE_PROP_BUNDLE = '_questionnaire_bundle';
 
-  /** Mirrors footer bundle: avg price per matched product × qty. */
+  /** Per-vendor shipping (ILS) and free-shipping thresholds (cents); mirrors snippets/cart-drawer.liquid */
+  const QUESTIONNAIRE_VENDOR_SHIPPING = {
+    canopy: { shipping: 35, freeThresholdCents: 22500 },
+    blooms: { shipping: 35, freeThresholdCents: 22000 },
+    youneedcoffee: { shipping: 55, freeThresholdCents: 45000 },
+    coffeeorg: { shipping: 35, freeThresholdCents: 25000 },
+    coffeeculture: { shipping: 35, freeThresholdCents: 30000 },
+    elijahscoffee: { shipping: 35, freeThresholdCents: 30000 },
+    tostato: { shipping: 35, freeThresholdCents: 25000 },
+    brewbrothers: { shipping: 35, freeThresholdCents: 30000 },
+    uru: { shipping: 35, freeThresholdCents: 25000 },
+  };
+
+  /** Mirrors footer bundle: avg price per matched product × qty (subtotal, no shipping). */
   function bundleTotalCentsForQuestionnaireProducts(products, qty) {
     if (!Array.isArray(products) || !products.length) return 0;
     const n = products.length;
@@ -1180,6 +1193,34 @@
     });
     const avgCents = sumCents / n;
     return Math.round(avgCents * qty);
+  }
+
+  function questionnaireVendorKeyForBundle(products, vendorKey) {
+    if (vendorKey != null && String(vendorKey).trim()) {
+      return String(vendorKey).trim().toLowerCase();
+    }
+    const selected = (window.__questionnaireSelectedVendor || '').trim().toLowerCase();
+    if (selected) return selected;
+    if (!Array.isArray(products) || !products.length) return '';
+    const withVendor = products.find(function (p) {
+      return p && (p.vendor || '').trim();
+    });
+    return withVendor ? (withVendor.vendor || '').trim().toLowerCase() : '';
+  }
+
+  /** Shipping in cents for a vendor subtotal; 0 when free-shipping threshold is met. */
+  function questionnaireShippingCentsForVendor(vendorKey, subtotalCents) {
+    const cfg = QUESTIONNAIRE_VENDOR_SHIPPING[(vendorKey || '').toLowerCase()];
+    if (!cfg || !subtotalCents) return 0;
+    if (subtotalCents >= cfg.freeThresholdCents) return 0;
+    return cfg.shipping * 100;
+  }
+
+  /** Subtotal + vendor shipping (matches cart-drawer adjusted total for a single vendor). */
+  function bundleTotalWithShippingCentsForQuestionnaireProducts(products, qty, vendorKey) {
+    const subtotalCents = bundleTotalCentsForQuestionnaireProducts(products, qty);
+    const vk = questionnaireVendorKeyForBundle(products, vendorKey);
+    return subtotalCents + questionnaireShippingCentsForVendor(vk, subtotalCents);
   }
 
   function coffeesForVendorFromPositiveScores(positiveScores, vendorKeyLower) {
@@ -2085,7 +2126,7 @@
         });
         var weightInner =
           totalWeightGrams > 0 ? formatQuestionnaireBundleWeightKg(totalWeightGrams) : '';
-        var totalCents = bundleTotalCentsForQuestionnaireProducts(bundleProds, menuQty);
+        var totalCents = bundleTotalWithShippingCentsForQuestionnaireProducts(bundleProds, menuQty, vLower);
         var priceStr = formatQuestionnaireMoney(totalCents);
         var selected = vLower === cur;
         var suffixHtml =
@@ -2150,7 +2191,7 @@
       var vendorQty = getQuestionnaireResultsBundleQty();
       trackQuestionnaireAnalyticsClick('Quiz - Choose vendor', {
         'Vendor Chosen': getQuestionnaireVendorDisplayName(raw),
-        Price: formatQuestionnaireMoney(bundleTotalCentsForQuestionnaireProducts(next, vendorQty)),
+        Price: formatQuestionnaireMoney(bundleTotalWithShippingCentsForQuestionnaireProducts(next, vendorQty)),
         'Bundle size': vendorQty,
       });
       saveResultsState(next);
@@ -3218,9 +3259,12 @@
       });
 
       const avgCompareCents = sumCompareCents / n;
-      const totalCompareCents = Math.round(avgCompareCents * qty);
+      const subtotalCompareCents = Math.round(avgCompareCents * qty);
+      const vendorKey = questionnaireVendorKeyForBundle(products);
+      const totalCompareCents =
+        subtotalCompareCents + questionnaireShippingCentsForVendor(vendorKey, subtotalCompareCents);
 
-      const totalCents = bundleTotalCentsForQuestionnaireProducts(products, qty);
+      const totalCents = bundleTotalWithShippingCentsForQuestionnaireProducts(products, qty);
 
       const priceEl = document.getElementById('q-footer-price');
       const compareEl = document.getElementById('q-footer-price-compare');
@@ -3637,7 +3681,7 @@
         if (!p) return;
         totalGrams += p.weight_grams || 0;
       });
-      const totalCents = bundleTotalCentsForQuestionnaireProducts(products, qty);
+      const totalCents = bundleTotalWithShippingCentsForQuestionnaireProducts(products, qty);
 
       itemsEl.innerHTML = products
         .map(function (p) {
