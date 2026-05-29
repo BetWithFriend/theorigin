@@ -1271,6 +1271,10 @@
     uru: { shipping: 35, freeThresholdCents: 25000 },
   };
 
+  // Vendors temporarily excluded from questionnaire bundle results.
+  // Remove a vendor from this list to restore it.
+  const TEMPORARILY_EXCLUDED_VENDORS = ['coffeeculture'];
+
   /** Mirrors footer bundle: avg price per matched product × qty (subtotal, no shipping). */
   function bundleTotalCentsForQuestionnaireProducts(products, qty) {
     if (!Array.isArray(products) || !products.length) return 0;
@@ -1657,6 +1661,7 @@
       const vendorGroups = {};
       filtered.forEach(function (row) {
         const v = row.coffee.vendor || '';
+        if (TEMPORARILY_EXCLUDED_VENDORS.indexOf(v.toLowerCase()) !== -1) return;
         if (!vendorGroups[v]) vendorGroups[v] = { vendor: v, items: [] };
         const roastType = row.roastMeta && row.roastMeta.type ? row.roastMeta.type : null;
         const roastPriority = roastType === 'exact' ? 2 : roastType === 'partial' ? 1 : 0;
