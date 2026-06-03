@@ -1154,8 +1154,20 @@
     continueMultipleText: '{{ continue_multiple_js }}',
   };
   const QUESTIONNAIRE_RESULTS_STATE_KEY = 'questionnaireResultsState';
+  const QUESTIONNAIRE_ORIGIN_KEY = 'questionnaireOriginUrl';
   let _qModalPreviousFocus = null;
   let _qRestartConfirmPreviousFocus = null;
+
+  (function captureQuizOrigin() {
+    if (sessionStorage.getItem(QUESTIONNAIRE_ORIGIN_KEY)) return;
+    var ref = document.referrer;
+    if (ref && ref.indexOf(window.location.origin) === 0) {
+      var refPath = ref.replace(window.location.origin, '');
+      if (refPath.indexOf('/pages/questionnaire') !== 0) {
+        sessionStorage.setItem(QUESTIONNAIRE_ORIGIN_KEY, ref);
+      }
+    }
+  })();
 
   function ensureAllProductsLoaded() {
     if (window.allProducts && Array.isArray(window.allProducts)) {
@@ -4149,11 +4161,12 @@
       'Skip Email': skip,
     });
 
-    // Redirect to collection page with filters if skip is true, otherwise go to close redirect
     if (skip) {
       redirectToCollectionWithFilters();
     } else {
-      window.location.href = questionnaireSettings.closeRedirect || '/';
+      var origin = sessionStorage.getItem(QUESTIONNAIRE_ORIGIN_KEY);
+      sessionStorage.removeItem(QUESTIONNAIRE_ORIGIN_KEY);
+      window.location.href = origin || questionnaireSettings.closeRedirect || '/';
     }
   }
 
@@ -4545,19 +4558,19 @@
         "type": "text",
         "id": "intro_title",
         "label": "כותרת מסך פתיחה",
-        "default": "בואו נבנה לכם מארז מותאם אישית"
+        "default": "בואו נרכיב לכם מארז מותאם אישית"
       },
       {
         "type": "richtext",
         "id": "intro_description",
         "label": "תיאור מסך פתיחה",
-        "default": "<p>ענו על 3 שאלות קצרות לגבי ההעדפות שלכם בקפה, וקבלו מבחר מארזים מוכנים במיוחד בשבילכם - בגדלים משתנים ועם מחיר סופי שכולל משלוח עד הבית.</p><p>נשאר רק לבחור – ולהתחיל ליהנות מקפה מעולה וטרי.</p>"
+        "default": "<p>ענו על 3 שאלות קצרות לגבי ההעדפות שלכם בקפה, וקבלו מבחר מארזים מוכנים במיוחד בשבילכם - עם מחיר סופי שכולל משלוח עד הבית.</p><p>לכם נשאר רק לבחור – ולהתחיל ליהנות מקפה מעולה וטרי.</p>"
       },
       {
         "type": "text",
         "id": "intro_button_text",
         "label": "טקסט כפתור מסך פתיחה",
-        "default": "בואו נתחיל"
+        "default": "קדימה, בואו נתחיל"
       }, {
         "type": "text",
         "id": "intro_social_text",
