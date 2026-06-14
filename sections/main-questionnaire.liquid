@@ -1272,6 +1272,35 @@
 
   const QUESTIONNAIRE_LINE_PROP_BUNDLE = '_questionnaire_bundle';
 
+  /** Cart/order attributes (visible in Shopify Admin → order → Additional details). */
+  const QUESTIONNAIRE_CART_ATTR_SOURCE = 'Purchase source';
+  const QUESTIONNAIRE_CART_ATTR_SOURCE_VALUE = 'Questionnaire bundle';
+  const QUESTIONNAIRE_CART_ATTR_BUNDLE_SIZE = 'Bundle size';
+  const QUESTIONNAIRE_CART_ATTR_BUNDLE_VENDOR = 'Bundle vendor';
+
+  function getQuestionnaireOrderCartAttributes() {
+    return {
+      [QUESTIONNAIRE_CART_ATTR_SOURCE]: QUESTIONNAIRE_CART_ATTR_SOURCE_VALUE,
+      [QUESTIONNAIRE_CART_ATTR_BUNDLE_SIZE]: String(getQuestionnaireResultsBundleQty()),
+      [QUESTIONNAIRE_CART_ATTR_BUNDLE_VENDOR]: getQuestionnaireVendorDisplayName(),
+    };
+  }
+
+  function setQuestionnaireOrderCartAttributes() {
+    return fetch('/cart/update.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ attributes: getQuestionnaireOrderCartAttributes() }),
+    }).then(function (response) {
+      if (!response.ok) {
+        return response.json().then(function (err) {
+          throw err;
+        });
+      }
+      return response.json();
+    });
+  }
+
   /** Per-vendor shipping (ILS) and free-shipping thresholds (cents); mirrors snippets/cart-drawer.liquid */
   const QUESTIONNAIRE_VENDOR_SHIPPING = {
     canopy: { shipping: 35, freeThresholdCents: 22500 },
@@ -3896,6 +3925,9 @@
             });
           }
           return response.json();
+        })
+        .then(function () {
+          return setQuestionnaireOrderCartAttributes();
         })
         .then(function () {
           if (redirectUrl === '/checkout') {
