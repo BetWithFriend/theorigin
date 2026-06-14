@@ -881,10 +881,10 @@
             width="35"
             height="24">
             {% comment %} <img
-                          src="{{ 'payment-paypal.png' | asset_url }}"
-                          alt="PayPal"
-                          width="35"
-                        height="24"> {% endcomment %}
+                                        src="{{ 'payment-paypal.png' | asset_url }}"
+                                        alt="PayPal"
+                                        width="35"
+                                    height="24"> {% endcomment %}
           <img
             src="{{ 'payment-max.webp' | asset_url }}"
             alt="Max"
@@ -1305,7 +1305,7 @@
   const QUESTIONNAIRE_VENDOR_SHIPPING = {
     canopy: { shipping: 35, freeThresholdCents: 22500 },
     blooms: { shipping: 35, freeThresholdCents: 22000 },
-    youneedcoffee: { shipping: 55, freeThresholdCents: 45000 },
+    youneedcoffee: { shipping: 55, freeThresholdCents: 25000 },
     coffeeorg: { shipping: 35, freeThresholdCents: 25000 },
     coffeeculture: { shipping: 35, freeThresholdCents: 30000 },
     elijahscoffee: { shipping: 35, freeThresholdCents: 30000 },
@@ -1536,6 +1536,8 @@
           return Array.isArray(coffee.prep_method) && coffee.prep_method.includes(method);
         });
         if (matchedPrep.length > 0) score += w.guidedPrepPerMatch;
+      } else {
+        score += w.guidedPrepPerMatch;
       }
 
       if (selectedRoastLevels.length > 0) {
@@ -1550,6 +1552,8 @@
         }
         if (bestRoast.pts > 0) score += bestRoast.pts;
         roastMeta = { type: bestRoast.type || 'none', selected: bestRoast.sel, product: coffee.coffee_roast_level || '' };
+      } else {
+        score += w.guidedRoastPerMatch;
       }
 
       if (showAll) {
@@ -4590,13 +4594,13 @@
         "type": "text",
         "id": "intro_title",
         "label": "כותרת מסך פתיחה",
-        "default": "בואו נרכיב לכם מארז מותאם אישית"
+        "default": "בואו נרכיב לכם מארז קפה מותאם אישית"
       },
       {
         "type": "richtext",
         "id": "intro_description",
         "label": "תיאור מסך פתיחה",
-        "default": "<p>ענו על 3 שאלות קצרות לגבי ההעדפות שלכם בקפה, וקבלו מבחר מארזים מוכנים במיוחד בשבילכם - עם מחיר סופי שכולל משלוח עד הבית.</p><p>לכם נשאר רק לבחור – ולהתחיל ליהנות מקפה מעולה וטרי.</p>"
+        "default": "<p>ענו על 3 שאלות קצרות לגבי ההעדפות שלכם בקפה, וקבלו מבחר מארזים מוכנים במיוחד בשבילכם - עם מחיר סופי שכולל משלוח עד הבית.</p><p>לכם נשאר רק לבחור – ולהתחיל ליהנות מקפה מעולה בקלייה מקומית טרייה.</p>"
       },
       {
         "type": "text",

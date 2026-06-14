@@ -7,11 +7,19 @@
       padding-bottom: calc({{ settings.media_shadow_vertical_offset | at_least: 0 }}px + 2rem);
     }
   }
+
+  @media screen and (min-width: 750px) {
+    .bundles-link-wrapper.bundles-only {
+        padding: 0;
+        width: 100%;
+    }
+  }
 {%- endstyle -%}
 
 <script>
     analytics.trackScreenView('Catalogue', {
-        page_load_time: performance.now()
+        page_load_time: performance.now(),
+        catalogue_type: '{{ collection.handle | escape }}'
     });
 </script>
 
@@ -69,7 +77,7 @@
           {%- endcase -%}
         </h1>
         <div class="vendors-collection-title-submain">
-          הגיע הזמן לגלות ולהנות מקפה מהקולים הטובים בישראל. הקפה נקלה טרי ונשלח ישירות מבית הקלייה אליכם לבית. מקומי, טרי, טעים. 
+          הגיע הזמן לגלות ולהנות מקפה מהקולים הטובים בישראל. הקפה נקלה טרי ונשלח ישירות מבית הקלייה אליכם לבית. מקומי, טרי, טעים.
           </div>
     </div> 
       <!-- <h1 class="collection-hero__title">
@@ -86,6 +94,16 @@
       {% comment %} {%- if section.settings.show_collection_description -%}
         <div class="collection-hero__description rte">{{ collection.description }}</div>
       {%- endif -%} {% endcomment %}
+      
+      {%- if collection.handle == 'מארזי-קפה' -%}
+          {% comment %} <a href="/pages/questionnaire?intro=1" class="button button--primary">הרכיבו מארז משלכם</a> {% endcomment %}
+           <div class="bundles-link-wrapper bundles-only">
+            <div class="bundle-link-wrapper-internal">
+              <span>תנו לנו להתאים מארז רק עבורכם</span>
+              <button id="bundleToggleBtn" type="button" onclick="window.location.href = '/pages/questionnaire?intro=1';" aria-expanded="false" aria-haspopup="true" >הרכיבו לי</button>
+            </div>
+          </div>
+        {%- endif -%}
     </div>
 
 

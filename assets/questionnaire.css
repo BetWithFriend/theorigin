@@ -1001,6 +1001,10 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     justify-content: flex-end;
 }
 
+#questionnaireResultsStep .q-bundle-table__td--taste .q-bundle-table__taste-icons .plp-taste-text-wrapper span {
+    white-space: nowrap;
+}
+
 /* Carousel cards share taste-icon markup; keep overlay on the product image */
 #questionnaireResultsStep .q-carousel-slide .questionnaire-product-taste-icons {
     position: absolute;
