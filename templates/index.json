@@ -224,6 +224,10 @@
       "type": "new-roasters-slider",
       "settings": {}
     },
+    "quiz_cta": {
+      "type": "quiz-cta",
+      "settings": {}
+    },
     "main_page_footer_info": {
       "type": "main-page-footer-info",
       "settings": {}
@@ -272,6 +276,7 @@
     "why_us",
     "credibility_icons",
     "featured_collection_hp_specials",
+    "quiz_cta",
     "single_quote",
     "featured_collection_ErHj6f",
     "find_your_coffee",

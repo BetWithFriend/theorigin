@@ -1,0 +1,15 @@
+{% comment %}
+  Outputs "skip" when a main-menu link should not appear in the header.
+
+  Accepts:
+  - link: {link} menu link object
+{% endcomment %}
+{%- liquid
+  assign skip_header_menu_link = false
+  if link.title == 'אודות' or link.title == 'מאמרים'
+    assign skip_header_menu_link = true
+  elsif link.handle == 'about-us' or link.handle == 'about' or link.handle == 'מאמרים'
+    assign skip_header_menu_link = true
+  endif
+-%}
+{%- if skip_header_menu_link -%}skip{%- endif -%}

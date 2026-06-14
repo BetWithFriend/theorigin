@@ -1,20 +1,38 @@
+/* Origin questionnaire — tokens match PLP / card styles (design: Origin, Assistant) */
+:root {
+    --q-text: #1c201d;
+    --q-text-muted: #555555;
+    --q-border: #e3e0da;
+    --q-border-input: #a9a9a9;
+    --q-surface: #ffffff;
+    --q-surface-warm: #fafcfe;
+    --q-surface-selected: #f4f3f0;
+    --q-page-bg: #f9f9f9;
+    --q-accent: #ad7b7e;
+    --q-progress-track: #e3e0da;
+    --q-chip-radius: 4px;
+}
+
 .questionnaire-wrapper {
     position: absolute;
     width: 100%;
     height: 100%;
-    /* On top of the bot */
     z-index: 10000;
-    background-color: #FAFCFE;
+    background-color: var(--q-page-bg);
     top: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    /* display: none; */
 }
 
 .questionnaire-wrapper.hidden {
     display: none;
+}
+
+.questionnaire-wrapper.results-step-visible {
+    justify-content: flex-start;
+    background-color: var(--q-surface-warm);
 }
 
 body.questionnaire-wrapper-open {
@@ -26,23 +44,48 @@ body.questionnaire-wrapper-open {
     margin: 0;
 }
 
-.questionnaire-skip-btn {
-    color: #1C201D;
+body.questionnaire-wrapper-open .shopify-section.shopify-section-group-header-group.announcement-bar-section {
+    display: none !important;
+}
+
+body.questionnaire-wrapper-open .header-wrapper,
+body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-center.page-width.header--has-menu.header--has-account {
+    display: none !important;
+}
+
+.questionnaire-back-text {
     font-family: "Assistant", sans-serif;
-    font-size: 16px;
-    line-height: 16px;
     font-weight: 400;
-    width: 64px;
-    height: 56px;
+    color: var(--q-text);
+    font-size: 16px;
+    line-height: 25px;
+    letter-spacing: 2%;
+    text-align: right;
+
+}
+
+.questionnaire-skip-btn {
+    color: var(--q-text);
+    font-family: "Assistant", sans-serif;
+    font-size: 13px;
+    line-height: 13px;
+    font-weight: 400;
+    width: auto;
+    min-width: 88px;
+    height: 38px;
+    padding: 0 16px;
     /* text-decoration: underline; */
-    margin-top: 18px;
+    margin-top: 10px;
     cursor: pointer;
     border-radius: 8px;
     border: 1px solid #555555;
     background: transparent;
     display: flex;
+    flex-direction: row;
+    direction: ltr;
     align-items: center;
     justify-content: center;
+    gap: 6px;
 }
 
 .questionnaire-skip-btn.disabled {
@@ -55,7 +98,7 @@ body.questionnaire-wrapper-open {
     font-size: 20px;
     line-height: 20px;
     font-weight: 700;
-    color: #1C201D;
+    color: var(--q-text);
     width: 100%;
     text-align: center;
     /* padding: 60px 0 32px 0; */
@@ -67,7 +110,8 @@ body.questionnaire-wrapper-open {
 
 .questionnaire-icons-wrapper {
     display: none;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 8px;
@@ -79,15 +123,174 @@ body.questionnaire-wrapper-open {
     display: flex;
 }
 
+.questionnaire-loader-wrapper.questionnaire-init-loader {
+    display: none;
+}
+
+.questionnaire-loader-wrapper.questionnaire-init-loader .questionnaire-loader-text {
+    display: none;
+}
+
+.questionnaire-wrapper.initializing .questionnaire-icons-wrapper {
+    display: none;
+}
+
+.questionnaire-wrapper.initializing .questionnaire-loader-wrapper.questionnaire-init-loader {
+    display: flex;
+}
+
+/* ── Intro / preview screen ───────────────────────────────────────────── */
+.questionnaire-intro-wrapper {
+    width: 100%;
+    max-width: 390px;
+    padding: 0;
+    gap: 0;
+    align-items: stretch;
+}
+
+.questionnaire-intro-wrapper.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.questionnaire-intro-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.questionnaire-intro-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 32px 16px;
+    box-sizing: border-box;
+}
+
+.questionnaire-intro-image-wrapper {
+    width: 100%;
+    height: 170px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.questionnaire-intro-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.questionnaire-intro-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    text-align: center;
+    padding: 24px 0;
+}
+
+.questionnaire-intro-title {
+    font-family: 'Assistant', sans-serif;
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #000000;
+    margin: 0;
+}
+
+.questionnaire-intro-desc {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 400;
+    color: #000000;
+}
+
+.questionnaire-intro-desc p {
+    margin: 0 0 8px;
+}
+
+.questionnaire-intro-desc p:last-child {
+    margin-bottom: 0;
+}
+
+.questionnaire-intro-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    width: 100%;
+}
+
+.questionnaire-intro-start-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 56px;
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 16px 40px;
+    background-color: var(--q-accent);
+    color: #FBFCFE;
+    font-family: "Assistant", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    border: unset;
+}
+
+.questionnaire-intro-start-btn:hover {
+    opacity: 0.92;
+}
+
+.questionnaire-intro-social-proof {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+}
+
+.questionnaire-intro-stars {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: #E4AE8B;
+}
+
+.questionnaire-intro-star {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+.questionnaire-intro-social-text {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 400;
+    color: #000000;
+    text-align: center;
+    text-transform: capitalize;
+}
+
 .questionnaire-selection-wrapper {
-    width: 160px;
-    height: 150px;
+    width: 320px;
+    height: 80px;
     border-radius: 16px;
-    border: 1px solid #A9A9A9;
+    border: 1px solid var(--q-border-input);
     padding: 24px 16px;
     display: flex;
+    gap: 16px;
     align-items: start;
-    flex-direction: column;
+    /* flex-direction: column; */
     justify-content: start;
 }
 
@@ -106,7 +309,7 @@ body.questionnaire-wrapper-open {
 }
 
 .questionnaire-selection-wrapper.selected {
-    background-color: #E3E0DA;
+    background-color: var(--q-surface-selected);
 }
 
 .questionnaire-img-icon {
@@ -120,30 +323,44 @@ body.questionnaire-wrapper-open {
     font-size: 18px;
     line-height: 17px;
     font-weight: 600;
-    color: #1C201D;
+    color: var(--q-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
     /* margin-top: 8px; */
+}
+
+.questionnaire-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
 }
 
 .questionnaire-expl-text {
     font-family: 'Assistant', sans-serif;
-    font-size: 16px;
-    line-height: 18px;
-    font-weight: 400;
-    color: #1C201D;
+    color: var(--q-text);
     /* margin-top: 8px; */
+    font-weight: 200;
+    font-size: 16px;
+    line-height: 110%;
+    letter-spacing: 0%;
+    text-align: right;
+    text-transform: capitalize;
 }
 
 .questionnaire-select-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 235px;
     height: 56px;
     cursor: pointer;
     border-radius: 8px;
     padding: 16px 40px;
     margin-top: 20px;
-    background-color: #AD7B7E;
+    background-color: var(--q-accent);
     color: #FBFCFE;
     font-family: "Assistant", sans-serif;
     font-size: 18px;
@@ -191,83 +408,10 @@ body.questionnaire-wrapper-open {
     font-size: 20px;
     line-height: 30px;
     font-weight: 700;
-    color: #1C201D;
+    color: var(--q-text);
     text-align: center;
 }
 
-.lets-be-friends-wrapper {
-    display: none;
-    /* display: flex; */
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #F4F3F0;
-    width: 100%;
-    height: 100%;
-    padding: 0 32px;
-    position: absolute;
-    top: 0;
-    z-index: 10000;
-}
-
-.lets-be-friends-img {
-    width: 95px;
-    margin-bottom: 8px;
-}
-
-.lets-be-friends-wrapper.active {
-    display: flex;
-}
-
-.lets-be-friends-title {
-    font-family: "Assistant", sans-serif;
-    font-size: 36px;
-    line-height: 36px;
-    font-weight: 700;
-    color: #1C201D;
-    width: 100%;
-    text-align: center;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-}
-
-.lets-be-friends-text {
-    font-family: "Assistant", sans-serif;
-    font-size: 16px;
-    line-height: 25px;
-    font-weight: 400;
-    color: #1C201D;
-    text-align: center;
-    margin-bottom: 32px;
-}
-
-.lets-be-friends-input {
-    width: 100%;
-    height: 56px;
-    border-radius: 8px;
-    padding: 8px 16px;
-    background-color: #FAFCFE;
-    border: 1px solid #55555580;
-    font-family: "Assistant", sans-serif;
-    font-size: 16px;
-    line-height: 25px;
-    font-weight: 400;
-    color: #1C201D;
-    /* margin-bottom: 32px; */
-}
-
-.questionnaire-select-btn.form-submit {
-    margin-bottom: 16px;
-}
-
-.questionnaire-select-skip {
-    color: #1C201D;
-    font-family: "Assistant", sans-serif;
-    font-size: 16px;
-    line-height: 16px;
-    font-weight: 400;
-    text-decoration: underline;
-}
 
 .questionnaire-title-wrapper {
     display: flex;
@@ -300,10 +444,11 @@ body.questionnaire-wrapper-open {
 }
 
 
+
 .questionnaire-btn-wrapper {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
     gap: 16px;
     padding-right: 8px;
@@ -311,9 +456,7 @@ body.questionnaire-wrapper-open {
     /* flex-direction: column; */
 }
 
-.facets-wrapper--sticky.hide-filters {
-    /* display: none; */
-}
+
 
 .questionnaire-progress-bar-wrapper {
     display: flex;
@@ -321,34 +464,45 @@ body.questionnaire-wrapper-open {
     justify-content: center;
     width: 100%;
     gap: 8px;
-    margin-top: 16px;
+    margin-bottom: 16px;
     padding: 0 8px;
 }
 
 .questionnaire-progress-bar {
     width: 100%;
     height: 6px;
-    background-color: #E3E0DA;
+    background-color: var(--q-progress-track);
     border-radius: 24px;
 }
 
 .questionnaire-progress-bar.filled {
-    background-color: #AD7B7E;
+    background-color: var(--q-accent);
 }
 
+/* Standalone questionnaire page styles */
+.main-questionnaire-section .questionnaire-wrapper {
+    /* position: relative; */
+    min-height: 100%;
+}
+
+
+.grid-item-feed {
+    flex-grow: 1;
+}
+
+/* TabNav button position is overridden to "right" via inline script in questionnaire sections */
+
 @media screen and (min-width: 990px) {
-    .header-wrapper.questionnaire-wrapper-open {
-        z-index: 10001;
-    }
 
+    /* Cover the viewport below the header — prevents fixed elements (e.g. chat widgets) from showing through */
     .questionnaire-wrapper {
-        position: relative;
-        height: calc(100vh - 220px);
-    }
-
-    .lets-be-friends-wrapper {
-        height: calc(100vh - 220px);
-        position: relative;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        min-height: unset;
+        overflow-y: auto;
     }
 
     .questionnaire-title {
@@ -358,19 +512,19 @@ body.questionnaire-wrapper-open {
     }
 
     .questionnaire-title-wrapper {
-        margin-bottom: 14px;
+        margin-bottom: 20px;
     }
 
+    /* Keep the mobile horizontal card style — just wider */
     .questionnaire-selection-wrapper {
-        width: 202px;
-        height: 148px;
+        width: 440px;
         cursor: pointer;
     }
 
+    /* Wrapper fits the wider cards */
     .questionnaire-icons-wrapper {
-        width: 630px;
+        width: 500px;
         padding: unset;
-        /* height: 68vh; */
     }
 
     .questionnaire-select-btn {
@@ -392,14 +546,3116 @@ body.questionnaire-wrapper-open {
         position: unset;
     }
 
-    .lets-be-friends-input {
-        width: 440px;
-        margin-bottom: 0;
+    /* ── Intro / preview screen (desktop) ──────────────────────────────── */
+    .questionnaire-intro-wrapper {
+        width: 560px;
+        max-width: 560px;
+        padding: 0;
     }
+
+    .questionnaire-intro-header {
+        padding: 0 0 8px;
+        justify-content: flex-start;
+    }
+
+    .questionnaire-intro-content {
+        padding: 0;
+    }
+
+    .questionnaire-intro-image-wrapper {
+        height: 220px;
+        border-radius: 16px;
+    }
+
+    .questionnaire-intro-text {
+        padding: 32px 0;
+        gap: 12px;
+    }
+
+    .questionnaire-intro-title {
+        font-size: 36px;
+        line-height: 1.2;
+    }
+
+    .questionnaire-intro-desc {
+        font-size: 18px;
+        line-height: 1.5;
+    }
+
+    .questionnaire-intro-start-btn {
+        width: 100%;
+    }
+
+    .questionnaire-intro-star {
+        width: 26px;
+        height: 26px;
+    }
+
+    .questionnaire-intro-social-text {
+        font-size: 18px;
+    }
+
 }
 
 @media screen and (max-width: 360px) {
     .questionnaire-icons-wrapper {
         padding: unset;
+    }
+}
+
+/* Questionnaire Product Card Styles */
+.questionnaire-product-card {
+    background: var(--q-surface-warm);
+    /* border: 1px solid #E3E0DA; */
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.questionnaire-product-image-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.questionnaire-product-image {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: contain;
+}
+
+.questionnaire-product-title {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    font-family: 'Assistant', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1c201d;
+    margin-bottom: 4px;
+    margin-top: 0;
+    max-width: 100%;
+}
+
+.questionnaire-product-title__text {
+    min-width: 0;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.questionnaire-product-title__hint {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #6b6b6b;
+}
+
+.questionnaire-product-title__icon {
+    display: block;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.q-carousel-slide .questionnaire-product-card:hover .questionnaire-product-title__hint,
+.q-carousel-slide .questionnaire-product-card:focus-within .questionnaire-product-title__hint {
+    color: #1c201d;
+}
+
+#questionnaireResultsStep .questionnaire-product-title__icon {
+    width: 18px;
+    height: 18px;
+}
+
+.questionnaire-product-vendor {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    color: #555555;
+    /* margin-bottom: 16px; */
+}
+
+/* Match PLP card title (component-card .card__heading) */
+#questionnaireResultsStep .questionnaire-product-title {
+    font-size: 16px;
+    line-height: normal;
+    font-weight: 600;
+    color: var(--q-text);
+}
+
+/* Taste tags on image — same chip spec as PLP (snippets/product-taste-icon-color.liquid) */
+#questionnaireResultsStep .questionnaire-product-taste-icons {
+    position: absolute;
+    top: 6px;
+    inset-inline-end: 18px;
+    z-index: 2;
+    margin: 0;
+    width: auto;
+    max-width: calc(100% - 36px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    pointer-events: none;
+    transform: translateX(-10px);
+}
+
+#questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    row-gap: 4px;
+    column-gap: 4px;
+}
+
+#questionnaireResultsStep .questionnaire-product-taste-icons .selection-wrapper.plp-taste-text-wrapper {
+    font-size: 12px;
+    line-height: 15px;
+    font-weight: 400;
+    gap: 3px;
+}
+
+#questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper span {
+    padding: 3px 8px;
+    border-radius: var(--q-chip-radius);
+    font-size: 11px;
+    line-height: 15px;
+}
+
+/* Profile chip fills (same as snippets/product-taste-icon-color.liquid) — table rows are built in JS */
+#questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper span.chocolate {
+    background-color: rgb(162, 137, 114);
+    color: #fff;
+}
+
+#questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper span.sweet-chocolate {
+    background-color: #c1a089;
+    color: #1C201D;
+}
+
+#questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper span.sweet-balanced {
+    background-color: #dec2b5;
+    color: #1C201D;
+}
+
+#questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper span.sweet-fruity {
+    background-color: #f3d5b8;
+    color: #1C201D;
+}
+
+#questionnaireResultsStep .questionnaire-product-taste-icons .plp-taste-text-wrapper span.fruity {
+    background-color: #ebe4cc;
+    color: #1C201D;
+}
+
+.questionnaire-qty-selector-wrapper {
+    width: 100%;
+    margin: 16px 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.questionnaire-price-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 0;
+    margin-bottom: 12px;
+}
+
+.price-label-group {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.price-label-main {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--q-text);
+    line-height: 1.2;
+}
+
+.price-label-sub {
+    font-family: 'Assistant', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--q-text-muted);
+    line-height: 1.2;
+}
+
+.price-values-group {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: nowrap;
+    min-width: 0;
+}
+
+.price-line-primary {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.price-bundle-weight {
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--q-text-muted);
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.price-current {
+    font-family: 'Assistant', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--q-text);
+    line-height: 1;
+}
+
+.price-compare {
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #9A9A9A;
+    text-decoration: line-through;
+    line-height: 1;
+}
+
+.questionnaire-add-btn {
+    width: 100%;
+    background-color: var(--q-text);
+    color: #FFFFFF;
+    font-family: 'Assistant', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.questionnaire-add-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.questionnaire-secure-icons {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+/* Results Step Updated Styles */
+#questionnaireResultsStep {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    background-color: var(--q-surface-warm);
+    flex: 1 1 auto;
+    /* min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch; */
+    /* Single shell height: carousel ↔ table toggle must not shift the page (qty / thumb count). */
+    --q-bundle-views-height: 308px;
+}
+
+.questionnaire-wrapper.results-step-visible #questionnaireResultsStep {
+    min-height: 100%;
+}
+
+#questionnaireResultsStep .q-bundle-views {
+    width: 100%;
+    height: var(--q-bundle-views-height);
+    min-height: var(--q-bundle-views-height);
+    max-height: var(--q-bundle-views-height);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+#questionnaireResultsStep .q-bundle-view--carousel {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#questionnaireResultsStep .q-bundle-view--table {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#questionnaireResultsStep .q-bundle-view--carousel[hidden] {
+    display: none !important;
+}
+
+#questionnaireResultsStep .q-bundle-view--table[hidden] {
+    display: none !important;
+}
+
+#questionnaireResultsStep .q-bundle-table-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    box-sizing: border-box;
+    padding: 4px 12px 0;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#questionnaireResultsStep .q-bundle-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    color: var(--q-text);
+}
+
+#questionnaireResultsStep .q-bundle-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--q-surface);
+    text-align: right;
+    padding: 0 8px;
+    border-bottom: 1px solid var(--q-border);
+    font-weight: 600;
+    color: #555555;
+    white-space: nowrap;
+}
+
+#questionnaireResultsStep .q-bundle-table__td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #ECECEC;
+    vertical-align: middle;
+}
+
+#questionnaireResultsStep .q-bundle-table__td--taste {
+    color: #444444;
+    line-height: 1.4;
+    text-align: right;
+    max-width: 200px;
+}
+
+/* Table cell: same chip markup as carousel (product-taste-icons / plp-taste-text-wrapper), not image overlay */
+#questionnaireResultsStep .q-bundle-table__td--taste .q-bundle-table__taste-icons {
+    position: static;
+    inset: auto;
+    top: auto;
+    max-width: none;
+    width: fit-content;
+    margin: 0;
+    margin-inline-start: auto;
+    margin-inline-end: 0;
+    align-items: flex-end;
+    pointer-events: none;
+}
+
+#questionnaireResultsStep .q-bundle-table__td--taste .q-bundle-table__taste-icons .plp-taste-text-wrapper {
+    justify-content: flex-end;
+}
+
+#questionnaireResultsStep .q-bundle-table__td--taste .q-bundle-table__taste-icons .plp-taste-text-wrapper span {
+    white-space: nowrap;
+}
+
+/* Carousel cards share taste-icon markup; keep overlay on the product image */
+#questionnaireResultsStep .q-carousel-slide .questionnaire-product-taste-icons {
+    position: absolute;
+    top: 6px;
+}
+
+#questionnaireResultsStep .q-bundle-table__td--roast {
+    color: #444444;
+    text-align: right;
+    white-space: nowrap;
+}
+
+#questionnaireResultsStep .q-bundle-table__product {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    min-width: 0;
+}
+
+#questionnaireResultsStep .q-bundle-table__thumb-img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    border: 1px solid #E8E8E8;
+}
+
+#questionnaireResultsStep .q-bundle-table__thumb-fallback {
+    display: inline-block;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: #F2F2F2;
+    flex-shrink: 0;
+}
+
+#questionnaireResultsStep .q-bundle-table__title {
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: right;
+    word-break: break-word;
+}
+
+#questionnaireResultsStep .q-bundle-table__row {
+    transition: background 0.15s ease;
+}
+
+#questionnaireResultsStep .q-bundle-table__row:hover {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+#questionnaireResultsStep .q-bundle-table__empty {
+    text-align: center;
+    padding: 20px 12px;
+    color: #777777;
+}
+
+#questionnaireResultsStep .q-carousel-container {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 4px 0 0;
+    box-sizing: border-box;
+    align-items: stretch;
+    align-self: stretch;
+    width: 100%;
+}
+
+#questionnaireResultsStep .q-desktop-product-media {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: stretch;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+}
+
+#questionnaireResultsStep .q-carousel-viewport {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    max-height: 100%;
+    align-self: stretch;
+    width: 100%;
+    box-sizing: border-box;
+    /* With overflow-x not visible, overflow-y:visible is ignored → used value becomes auto, so the
+       viewport can gain a vertical scroll after layout changes. Keep Y locked to horizontal-only scroll. */
+    overflow-y: hidden;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    overscroll-behavior-y: none;
+    /* Breathing room for active slide scale(1.08) + image drop-shadow without clipping */
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+#questionnaireResultsStep .q-carousel-track {
+    height: 100%;
+    min-height: 0;
+    box-sizing: border-box;
+}
+
+#questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-info {
+    flex-shrink: 0;
+    min-height: 32px;
+    max-height: 32px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-info__thumbs {
+    flex-wrap: nowrap;
+    justify-content: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+}
+
+/* Image + title: bounded by fixed shell; long titles clip rather than growing the block */
+#questionnaireResultsStep .q-carousel-slide .questionnaire-product-card {
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#questionnaireResultsStep .q-carousel-slide .questionnaire-product-image-wrapper {
+    flex: 0 1 auto;
+    min-height: 0;
+    max-height: none;
+    align-items: center;
+    gap: 8px;
+}
+
+#questionnaireResultsStep .q-carousel-slide .questionnaire-product-image {
+    max-height: 200px;
+}
+
+#questionnaireResultsStep .q-carousel-slide .questionnaire-product-info {
+    flex-shrink: 0;
+    min-height: 0;
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+#questionnaireResultsStep .q-carousel-slide .questionnaire-product-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    gap: 0;
+}
+
+/* Invisible spacer mirrors the hint icon so only the text is centered to the image. */
+#questionnaireResultsStep .q-carousel-slide .questionnaire-product-title::before {
+    content: '';
+    display: block;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    order: 1;
+}
+
+#questionnaireResultsStep .q-carousel-slide .questionnaire-product-title__text {
+    order: 2;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: calc(100% - 42px);
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#questionnaireResultsStep .q-carousel-slide .questionnaire-product-title__hint {
+    order: 3;
+    flex: 0 0 18px;
+    width: 18px;
+    margin-inline-start: 6px;
+}
+
+@media screen and (max-width: 989px) {
+    .questionnaire-wrapper.results-step-visible {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: auto;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .questionnaire-wrapper.results-step-visible #questionnaireResultsStep {
+        min-height: 100%;
+        flex: 1 1 auto;
+    }
+
+    #questionnaireResultsStep .questionnaire-footer-content {
+        padding-bottom: max(28px, env(safe-area-inset-bottom));
+    }
+
+    #questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-info {
+        margin-top: 10px;
+    }
+
+    .q-carousel-slide .questionnaire-product-card {
+        cursor: pointer;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__row {
+        cursor: pointer;
+    }
+
+    /*
+     * Table inherits dir=rtl from the theme; columns and product flex reverse.
+     * LTR row layout: roast (left) | taste | product (right); inside product: title then thumb at inline-end.
+     */
+    #questionnaireResultsStep .q-bundle-view--table .q-bundle-table,
+    #questionnaireResultsStep .q-bundle-view--table .q-bundle-table thead,
+    #questionnaireResultsStep .q-bundle-view--table .q-bundle-table tbody,
+    #questionnaireResultsStep .q-bundle-view--table .q-bundle-table tr {
+        direction: ltr;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__product {
+        direction: ltr;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__title {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__td--taste {
+        max-width: none;
+        width: auto;
+        white-space: nowrap;
+        text-align: right;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__td--taste .q-bundle-table__taste-icons {
+        margin-inline-start: auto;
+        margin-inline-end: 0;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__td--roast {
+        width: 1%;
+        white-space: nowrap;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__td--product {
+        width: auto;
+    }
+}
+
+/* Results step header — logo (home) left | refresh + table/carousel toggle right */
+#questionnaireResultsStep .questionnaire-header--results {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 16px;
+    min-height: 56px;
+    background: var(--q-surface-warm);
+    border-bottom: none;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+#questionnaireResultsStep .questionnaire-header__actions {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+#questionnaireResultsStep .q-results-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: 1.5px solid #9ca3af;
+    border-radius: 10px;
+    background: transparent;
+    color: #1e2235;
+    cursor: pointer;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#questionnaireResultsStep .q-results-icon-btn:hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: #6b7280;
+    color: #1e2235;
+}
+
+#questionnaireResultsStep .q-results-icon-btn:focus-visible {
+    outline: 2px solid #333333;
+    outline-offset: 2px;
+}
+
+#questionnaireResultsStep .q-results-view-toggle__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#questionnaireResultsStep .q-results-view-toggle__icon img {
+    display: block;
+    width: 32px;
+    height: 32px;
+}
+
+#questionnaireResultsStep .q-results-view-toggle__icon--carousel {
+    display: none;
+}
+
+#questionnaireResultsStep.results-step--table-view .q-results-view-toggle__icon--table {
+    display: none;
+}
+
+#questionnaireResultsStep.results-step--table-view .q-results-view-toggle__icon--carousel {
+    display: flex;
+}
+
+#questionnaireResultsStep .header__heading-link {
+    flex-shrink: 0;
+    min-width: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#questionnaireResultsStep .header__heading-link:focus-visible {
+    outline: 2px solid #333333;
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+#questionnaireResultsStep .header__heading-logo-wrapper .header__heading-logo {
+    display: block;
+    max-height: 32px;
+    width: auto;
+}
+
+.results-header-bundle {
+    display: inline-flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 6px;
+    max-width: min(100%, 320px);
+    width: 100%;
+}
+
+.questionnaire-qty-selector-wrapper .results-header-bundle--below-qty,
+.questionnaire-qty-selector-wrapper .results-header-bundle--above-qty {
+    max-width: 100%;
+    align-self: stretch;
+}
+
+.questionnaire-qty-selector-wrapper .results-header-bundle--below-qty {
+    margin-top: 16px;
+}
+
+#questionnaireResultsStep .questionnaire-qty-selector-wrapper .results-header-bundle--above-qty {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#questionnaireResultsStep .questionnaire-qty-selector-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.results-vendor-select-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    width: 100%;
+}
+
+#questionnaireResultsStep .results-vendor-select-wrap,
+#questionnaireResultsStep .results-vendor-dropdown {
+    direction: rtl;
+    unicode-bidi: isolate;
+}
+
+.results-vendor-select__label {
+    margin: 0;
+    font-family: 'Assistant', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555555;
+    text-align: right;
+}
+
+/* Combobox: closed trigger, panel opens below with same list styling as before */
+.results-vendor-select-wrap,
+.results-vendor-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.results-vendor-dropdown {
+    z-index: 5;
+}
+
+.results-vendor-dropdown__trigger {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 8px 16px;
+    border: 1px solid #474747;
+    border-radius: 2px;
+    background: #FFFFFF;
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--q-text, #1C201D);
+    cursor: pointer;
+    text-align: right;
+    direction: rtl;
+    box-shadow: none;
+    transition: border-color 0.2s ease;
+    border-radius: 4px;
+}
+
+#questionnaireResultsStep .results-vendor-menu,
+#questionnaireResultsStep .results-vendor-menu__inner {
+    direction: rtl;
+    text-align: right;
+}
+
+.results-vendor-dropdown__trigger-body {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    /* RTL: main-start is on the right — align label block to the text side of the field */
+    justify-content: space-between;
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 18px;
+    width: 100%;
+}
+
+.results-vendor-trigger__weight {
+    flex-shrink: 0;
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0.02em;
+    color: var(--q-text);
+    white-space: nowrap;
+}
+
+.results-vendor-trigger__weight[hidden] {
+    display: none !important;
+}
+
+.results-vendor-trigger__suffix {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    direction: ltr;
+    flex-shrink: 0;
+}
+
+.results-vendor-trigger__sep {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #555555;
+    user-select: none;
+}
+
+.results-vendor-trigger__sep-icon {
+    display: block;
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+}
+
+.results-vendor-trigger__sep[hidden] {
+    display: none !important;
+}
+
+.results-vendor-trigger__price {
+    flex-shrink: 0;
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 0.02em;
+    color: var(--q-text);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.results-vendor-trigger__price[hidden] {
+    display: none !important;
+}
+
+.results-vendor-dropdown__trigger:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.results-vendor-dropdown__trigger:hover:not(:disabled) {
+    border-color: #AFAFAF;
+}
+
+.results-vendor-dropdown__trigger:focus-visible {
+    outline: 2px solid #1C201D;
+    outline-offset: 2px;
+}
+
+.results-vendor-dropdown__trigger-text {
+    flex: 0 1 auto;
+    min-width: 0;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 700;
+}
+
+.results-vendor-dropdown__chev {
+    flex-shrink: 0;
+    color: #555555;
+    transition: transform 0.2s ease;
+}
+
+.results-vendor-dropdown[data-open="true"] .results-vendor-dropdown__chev {
+    transform: rotate(180deg);
+}
+
+.results-vendor-dropdown__panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 4px;
+    z-index: 20;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* White menu: same as before, inside the floating panel */
+.results-vendor-menu {
+    width: 100%;
+    border: 1px solid var(--q-border, #D8D8D8);
+    border-radius: 10px;
+    background: #FFFFFF;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.results-vendor-menu[data-empty="true"] {
+    opacity: 0.9;
+}
+
+.results-vendor-menu__inner {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    direction: rtl;
+    text-align: right;
+}
+
+.results-vendor-menu__item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    margin: 0;
+    padding: 12px 14px;
+    border: none;
+    border-bottom: 1px solid #ECECEC;
+    border-radius: 0;
+    background: #FFFFFF;
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--q-text, #1C201D);
+    cursor: pointer;
+    text-align: right;
+    transition: background 0.15s ease;
+}
+
+.results-vendor-menu__item:last-child {
+    border-bottom: none;
+}
+
+.results-vendor-menu__item:hover {
+    background: #FAFAFA;
+}
+
+.results-vendor-menu__item.is-selected {
+    background: #F4F4F4;
+    font-weight: 600;
+}
+
+.results-vendor-menu__item:focus-visible {
+    outline: 2px solid #1C201D;
+    outline-offset: -2px;
+    z-index: 1;
+}
+
+.results-vendor-menu__name {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-transform: uppercase;
+}
+
+/* List weight + price; row selected/hover must not change suffix typography */
+#questionnaireResultsStep .results-vendor-menu__item .results-vendor-trigger__suffix {
+    font-size: 13px;
+    line-height: 18px;
+}
+
+#questionnaireResultsStep .results-vendor-menu__item .results-vendor-trigger__weight {
+    font-variant-numeric: tabular-nums;
+    font-weight: 400;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+#questionnaireResultsStep .results-vendor-menu__item .results-vendor-trigger__price {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+#questionnaireResultsStep .results-vendor-menu__item .results-vendor-trigger__sep {
+    color: #555555;
+}
+
+#questionnaireResultsStep .results-vendor-menu__item .results-vendor-trigger__sep-icon {
+    width: 8px;
+    height: 8px;
+}
+
+.results-vendor-menu__empty {
+    margin: 0;
+    padding: 12px 14px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    color: #555555;
+    text-align: center;
+}
+
+.results-vendor-select__hint {
+    margin: 0;
+    font-size: 11px;
+}
+
+.results-title-main {
+    margin: 0;
+    font-family: 'Assistant', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--q-text);
+    line-height: 1.25;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.results-title-counter {
+    font-weight: 600;
+    color: #555555;
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+}
+
+.results-title-counter[hidden] {
+    display: none !important;
+}
+
+.results-title-toggle {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #D8D8D8;
+    border-radius: 50%;
+    background: #FFFFFF;
+    color: #555555;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.results-title-toggle[aria-expanded='true'] svg {
+    transform: rotate(180deg);
+}
+
+.results-bundle-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    color: #555555;
+}
+
+.results-bundle-list__item,
+.results-bundle-list__empty {
+    line-height: 1.35;
+}
+
+.q-carousel-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    /* Neighbor slides peek inside the viewport; clipping happens on .q-carousel-viewport only */
+    overflow: visible;
+}
+
+.q-carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    background: #FFFFFF;
+    border: 1px solid #D8D8D8;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: #6B6B6B;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+}
+
+#questionnaireResultsStep .q-carousel-arrow {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 22px;
+    background: var(--q-surface-warm);
+    color: #1c201d;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+.q-carousel-arrow:disabled,
+#questionnaireResultsStep .q-carousel-arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* Flip SVG icons to match swapped RTL arrow positions */
+.q-carousel-arrow--prev svg,
+.q-carousel-arrow--next svg {
+    transform: scaleX(-1);
+}
+
+#qCarouselPrev {
+    right: 10px;
+}
+
+#qCarouselNext {
+    left: 10px;
+}
+
+#questionnaireResultsStep #qCarouselPrev {
+    right: 4px;
+}
+
+#questionnaireResultsStep #qCarouselNext {
+    left: 4px;
+}
+
+.q-carousel-viewport {
+    width: 100%;
+    position: relative;
+    /* Native horizontal scroll: continuous / momentum on touch, smooth wheel/trackpad */
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: none;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* Keep LTR so scrollLeft math is consistent across browsers. */
+    direction: ltr;
+    /* Visually flip the viewport so slides appear RTL (first slide on the right). */
+    transform: scaleX(-1);
+}
+
+.q-carousel-viewport::-webkit-scrollbar {
+    display: none;
+}
+
+.q-carousel-track {
+    display: flex;
+    width: max-content;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    /* Stretch so every slide matches the tallest card — avoids viewport height jumping between bundles */
+    align-items: stretch;
+    box-sizing: border-box;
+}
+
+.q-carousel-slide {
+    /* Width set in JS from viewport (see Q_CAROUSEL_SLIDE_FRAC) — % of track ≠ % of viewport */
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    opacity: 0.55;
+    transition: opacity 0.5s ease, transform 0.5s ease, filter 0.5s ease;
+    /* scaleX(-1) counters the viewport flip so slide content is not mirrored. */
+    transform: scaleX(-1) scale(0.9);
+    z-index: 0;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+}
+
+#questionnaireResultsStep .q-carousel-slide {
+    opacity: 0.32;
+    transform: scaleX(-1) scale(0.92);
+    transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: 100%;
+    min-height: 0;
+}
+
+.q-carousel-slide--empty {
+    align-items: center;
+    justify-content: center;
+}
+
+.q-carousel-slide.active {
+    opacity: 1;
+    transform: scaleX(-1) scale(1.08);
+    z-index: 1;
+}
+
+#questionnaireResultsStep .q-carousel-slide.active {
+    opacity: 1;
+    transform: scaleX(-1) scale(1.08);
+}
+
+/* Active slide: slightly larger product + soft lift on the image (carousel only) */
+.q-carousel-slide.active:not(.q-carousel-slide--empty) .questionnaire-product-image {
+    /* filter: drop-shadow(0 22px 36px rgba(0, 0, 0, 0.11)); */
+    transition: filter 0.45s ease;
+}
+
+.q-carousel-slide:not(.active):not(.q-carousel-slide--empty) .questionnaire-product-image {
+    /* filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.07)); */
+    transition: filter 0.45s ease;
+}
+
+.questionnaire-product-card {
+    background: transparent;
+    padding: 0;
+    border: none;
+}
+
+.questionnaire-product-image {
+    max-height: 172px;
+    /* filter: drop-shadow(0px 20px 30px rgba(0, 0, 0, 0.1)); */
+}
+
+.questionnaire-selection-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    /* margin-top: 12px; */
+    padding: 0 12px;
+    font-family: 'Assistant', sans-serif;
+    min-height: 44px;
+}
+
+.questionnaire-selection-info__thumbs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    /* RTL order so thumb 0 sits on the right, matching the flipped carousel where slide 0 is rightmost. */
+    direction: rtl;
+}
+
+.questionnaire-selection-thumb {
+    width: 24px;
+    height: 24px;
+    /* border-radius: 999px; */
+    border: 1px solid #D9D9D9;
+    background: #FFFFFF;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.questionnaire-selection-thumb:hover {
+    border-color: #AFAFAF;
+    transform: translateY(-1px);
+}
+
+.questionnaire-selection-thumb.is-active {
+    border-color: #1C201D;
+    box-shadow: 0 0 0 1px #1C201D;
+}
+
+.questionnaire-selection-thumb:focus-visible {
+    outline: 2px solid #1C201D;
+    outline-offset: 2px;
+}
+
+.questionnaire-selection-thumb__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.questionnaire-selection-thumb__fallback {
+    font-family: 'Assistant', sans-serif;
+    font-size: 12px;
+    line-height: 1;
+    color: #555555;
+    font-weight: 700;
+}
+
+.q-thumbs-arrow {
+    display: none;
+}
+
+.questionnaire-selection-info__hint {
+    display: inline-flex;
+    flex-shrink: 0;
+    opacity: 0.85;
+}
+
+#questionnaireResultsStep .questionnaire-footer-content {
+    width: 100%;
+    padding: 24px 24px 28px;
+    background: transparent;
+    margin-top: 0;
+    border-radius: 0;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.questionnaire-footer-content {
+    width: 100%;
+    padding: 12px 20px 28px;
+    background: var(--q-surface);
+    margin-top: 20px;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0px -4px 20px rgba(0, 0, 0, 0.06);
+}
+
+#questionnaireResultsStep .questionnaire-qty-selector-wrapper {
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 100%;
+}
+
+.questionnaire-qty-label {
+    text-align: center;
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #555555;
+    margin-bottom: 14px;
+}
+
+#questionnaireResultsStep .questionnaire-qty-label {
+    text-align: right;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    margin-bottom: 0;
+}
+
+.questionnaire-qty-options {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#questionnaireResultsStep .questionnaire-qty-options {
+    direction: rtl;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: nowrap;
+    margin-bottom: 32px;
+}
+
+.qty-option {
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+    cursor: pointer;
+    font: inherit;
+    border: 1.5px solid #1C201D;
+    border-radius: 999px;
+    padding: 10px 18px;
+    min-height: 48px;
+    min-width: 48px;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+    background: #FFFFFF;
+    color: #1C201D;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+#questionnaireResultsStep .qty-option {
+    position: relative;
+    direction: rtl;
+    flex-direction: row;
+    min-height: 40px;
+    height: 40px;
+    padding: 2px 16px;
+    border: 1px solid #000000;
+    border-radius: 50px;
+    gap: 4px;
+}
+
+#questionnaireResultsStep .qty-option.selected {
+    border-radius: 30px;
+}
+
+.qty-option__stack {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+
+#questionnaireResultsStep .qty-option__stack {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.qty-option__num {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+#questionnaireResultsStep .qty-option__num {
+    font-weight: 400;
+    letter-spacing: 0.02em;
+}
+
+.qty-option__weight {
+    font-family: 'Assistant', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.15;
+    opacity: 0.92;
+    white-space: nowrap;
+}
+
+#questionnaireResultsStep .qty-option__weight {
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    opacity: 1;
+}
+
+.qty-option.selected .qty-option__weight {
+    opacity: 0.95;
+}
+
+#questionnaireResultsStep .qty-option.selected .qty-option__weight {
+    opacity: 1;
+}
+
+.qty-option__discount {
+    font-family: 'Assistant', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    color: inherit;
+    opacity: 0.95;
+    white-space: nowrap;
+}
+
+.qty-option__discount-badge {
+    position: absolute;
+    top: -10px;
+    left: 25%;
+    transform: translateX(-50%);
+    min-width: 28px;
+    height: 18px;
+    padding: 0 8px;
+    border-radius: 5px;
+    background: #43c7b4;
+    font-family: 'Assistant', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0.02em;
+    color: var(--q-text);
+    text-align: center;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.qty-option--with-discount {
+    padding-inline: 14px;
+    gap: 8px;
+}
+
+
+.qty-option.selected {
+    background: #E3E0DA;
+    color: #1C201D;
+    border-color: #1C201D;
+}
+
+.qty-option.selected .qty-option__discount {
+    color: #FFFFFF;
+}
+
+.qty-option:focus-visible {
+    outline: 2px solid #1C201D;
+    outline-offset: 2px;
+}
+
+.questionnaire-checkout-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+#questionnaireResultsStep .questionnaire-checkout-section {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid #d9d9d9;
+    gap: 24px;
+}
+
+.questionnaire-checkout-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+#questionnaireResultsStep .questionnaire-checkout-row {
+    direction: rtl;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.questionnaire-price-wrapper {
+    margin-bottom: 0;
+    padding: 0;
+    width: 100%;
+}
+
+#questionnaireResultsStep .questionnaire-price-wrapper {
+    width: 100%;
+    flex: 0 0 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    text-align: right;
+    gap: 12px;
+}
+
+#questionnaireResultsStep .price-label-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+#questionnaireResultsStep .price-shipping-note {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--q-text-muted);
+}
+
+.price-label-main {
+    font-size: 20px;
+}
+
+#questionnaireResultsStep .price-values-group {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+#questionnaireResultsStep .price-line-primary {
+    direction: ltr;
+    unicode-bidi: isolate;
+}
+
+#questionnaireResultsStep .price-current {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+#questionnaireResultsStep .price-compare {
+    font-size: 18px;
+    font-weight: 300;
+}
+
+#questionnaireResultsStep #q-results-vendor-trigger-price {
+    font-size: 16px;
+    min-height: 22px;
+    line-height: 22px;
+}
+
+.price-shipping-note {
+    margin: 0;
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--q-text);
+    line-height: normal;
+}
+
+.questionnaire-add-to-cart-wrapper {
+    width: 100%;
+}
+
+#questionnaireResultsStep .questionnaire-add-to-cart-wrapper {
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.questionnaire-atc-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+}
+
+#questionnaireResultsStep .questionnaire-atc-actions {
+    width: 100%;
+}
+
+.questionnaire-add-btn {
+    border-radius: 8px;
+    padding: 14px;
+    font-weight: 700;
+}
+
+#questionnaireResultsStep .questionnaire-add-btn {
+    min-height: 45px;
+    padding: 0 40px;
+    font-size: 20px;
+    font-weight: 400;
+    /* background-color: #333634; */
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+.questionnaire-add-btn.questionnaire-add-btn--link {
+    background-color: transparent;
+    color: var(--q-text);
+    border: none;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding: 8px 4px;
+    box-shadow: none;
+}
+
+.questionnaire-add-btn.questionnaire-add-btn--link:hover {
+    opacity: 0.85;
+}
+
+.questionnaire-add-btn.questionnaire-add-btn--link:disabled {
+    opacity: 0.5;
+}
+
+.questionnaire-secure-info-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+#questionnaireResultsStep .questionnaire-secure-info-wrapper {
+    justify-content: center;
+    gap: 8px;
+    margin-top: 0;
+    direction: ltr;
+}
+
+.payment-icons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+}
+
+#questionnaireResultsStep .payment-icons {
+    gap: 4px;
+}
+
+.questionnaire-secure-icons {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555555;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+#questionnaireResultsStep .questionnaire-secure-icons {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--q-text);
+    letter-spacing: 0.02em;
+}
+
+.payment-icons img {
+    width: 35px;
+    height: 24px;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.8;
+}
+
+#questionnaireResultsStep .payment-icons img {
+    filter: none;
+    opacity: 1;
+}
+
+.questionnaire-secure-icons img {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+}
+
+.catalog-btn-wrapper {
+    margin-top: 32px;
+}
+
+/* Product detail modal (questionnaire results — mobile) */
+.q-product-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    box-sizing: border-box;
+    direction: rtl;
+}
+
+.q-product-modal[hidden] {
+    display: none !important;
+}
+
+.q-product-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(28, 32, 29, 0.48);
+    cursor: pointer;
+}
+
+.q-product-modal__panel {
+    position: relative;
+    z-index: 1;
+    width: min(440px, calc(100vw - 32px));
+    max-width: 440px;
+    max-height: min(88vh, 720px);
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.q-product-modal__close {
+    position: absolute;
+    top: 10px;
+    inset-inline-start: 10px;
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #1c201d;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.q-product-modal__close:focus-visible {
+    outline: 2px solid #1c201d;
+    outline-offset: 2px;
+}
+
+.q-product-modal__body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex: 1;
+    min-height: 0;
+}
+
+.q-product-modal__media {
+    flex-shrink: 0;
+    background: #fafcfe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 20px 12px;
+}
+
+.q-product-modal__image {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    max-height: 280px;
+    object-fit: contain;
+    filter: drop-shadow(0px 16px 24px rgba(0, 0, 0, 0.1));
+}
+
+.q-product-modal__content {
+    padding: 8px 22px 22px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.q-product-modal__title {
+    margin: 0 0 6px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1c201d;
+    line-height: 1.25;
+}
+
+.q-product-modal__vendor {
+    margin: 0 0 14px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    color: #555555;
+    line-height: 1.3;
+}
+
+.q-product-modal__lead {
+    margin: -6px 0 16px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #3a3a3a;
+}
+
+.q-product-modal__description-block {
+    margin-bottom: 20px;
+}
+
+.q-product-modal__section-title {
+    margin: 0 0 10px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #1c201d;
+    line-height: 1.3;
+}
+
+.q-product-modal__chips {
+    margin-bottom: 16px;
+}
+
+.q-product-modal__chip-group {
+    margin-bottom: 12px;
+}
+
+.q-product-modal__chip-group:last-child {
+    margin-bottom: 0;
+}
+
+.q-product-modal__chip-label {
+    display: block;
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555555;
+    margin-bottom: 6px;
+}
+
+.q-product-modal__chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.q-product-modal__chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid #e3e0da;
+    background: #fafcfe;
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1c201d;
+    line-height: 1.2;
+}
+
+.q-product-modal__description {
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: #3a3a3a;
+}
+
+.q-product-modal__description.rte p {
+    margin: 0 0 12px;
+}
+
+.q-product-modal__description.rte p:last-child {
+    margin-bottom: 0;
+}
+
+.q-product-modal__description.rte ul,
+.q-product-modal__description.rte ol {
+    margin: 0 0 12px;
+    padding-inline-start: 1.35em;
+}
+
+.q-product-modal__description.rte li {
+    margin-bottom: 6px;
+}
+
+.q-product-modal__description.rte li:last-child {
+    margin-bottom: 0;
+}
+
+.q-product-modal__description.rte strong {
+    font-weight: 700;
+    color: #1c201d;
+}
+
+.q-product-modal__description.rte a {
+    color: #1c201d;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.q-product-modal__description.rte h1,
+.q-product-modal__description.rte h2,
+.q-product-modal__description.rte h3,
+.q-product-modal__description.rte h4 {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1c201d;
+    margin: 16px 0 8px;
+    line-height: 1.35;
+}
+
+.q-product-modal__description.rte h1:first-child,
+.q-product-modal__description.rte h2:first-child,
+.q-product-modal__description.rte h3:first-child,
+.q-product-modal__description.rte h4:first-child {
+    margin-top: 0;
+}
+
+.q-product-modal__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 4px;
+    border-top: 1px solid #e3e0da;
+}
+
+.q-product-modal__price-row {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.q-product-modal__price-label {
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    color: #555555;
+}
+
+.q-product-modal__price {
+    font-family: 'Assistant', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1c201d;
+}
+
+.q-product-modal__actions .questionnaire-add-btn {
+    margin-top: 0;
+}
+
+.q-product-modal__pdp-link {
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1c201d;
+    text-align: center;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.q-product-modal__pdp-link:hover {
+    opacity: 0.85;
+}
+
+/* Restart questionnaire confirmation (results header refresh) */
+.q-restart-confirm-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100120;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    box-sizing: border-box;
+    direction: rtl;
+}
+
+.q-restart-confirm-modal[hidden] {
+    display: none !important;
+}
+
+.q-restart-confirm-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(28, 32, 29, 0.48);
+    cursor: pointer;
+}
+
+.q-restart-confirm-modal__panel {
+    position: relative;
+    z-index: 1;
+    width: min(360px, calc(100vw - 32px));
+    padding: 24px 22px 22px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+}
+
+.q-restart-confirm-modal__title {
+    margin: 0 0 12px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1c201d;
+    line-height: 1.3;
+}
+
+.q-restart-confirm-modal__text {
+    margin: 0 0 22px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+    color: #444444;
+}
+
+.q-restart-confirm-modal__actions {
+    display: flex;
+    /* flex-wrap: wrap; */
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+.q-restart-confirm-modal__actions .questionnaire-add-btn {
+    margin-top: 0;
+    flex: 0 1 auto;
+}
+
+/* Bundle review drawer (רכישת המארז — cart-like summary before checkout) */
+.q-bundle-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 100110;
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-end;
+    direction: ltr;
+    box-sizing: border-box;
+}
+
+.q-bundle-drawer[hidden] {
+    display: none !important;
+}
+
+.q-bundle-drawer__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(28, 32, 29, 0.45);
+    cursor: pointer;
+}
+
+.q-bundle-drawer__panel {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    direction: rtl;
+    width: min(420px, 100%);
+    max-width: 100%;
+    background: #ffffff;
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.12);
+    animation: q-bundle-drawer-in 0.28s ease-out;
+}
+
+@keyframes q-bundle-drawer-in {
+    from {
+        transform: translateX(100%);
+        opacity: 0.92;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.q-bundle-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid rgba(28, 32, 29, 0.1);
+    flex-shrink: 0;
+}
+
+.q-bundle-drawer__title {
+    margin: 0;
+    font-family: 'Assistant', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1c201d;
+    line-height: 1.3;
+}
+
+.q-bundle-drawer__close {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(28, 32, 29, 0.06);
+    color: #1c201d;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.q-bundle-drawer__close:focus-visible {
+    outline: 2px solid #1c201d;
+    outline-offset: 2px;
+}
+
+.q-bundle-drawer__body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.q-bundle-drawer__items {
+    padding: 12px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.q-bundle-drawer__line {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(28, 32, 29, 0.08);
+}
+
+.q-bundle-drawer__line:last-child {
+    border-bottom: none;
+}
+
+.q-bundle-drawer__thumb {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #f4f2ee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.q-bundle-drawer__thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.q-bundle-drawer__thumb-fallback {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: rgba(28, 32, 29, 0.12);
+}
+
+.q-bundle-drawer__line-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.q-bundle-drawer__line-title {
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1c201d;
+    line-height: 1.35;
+    margin-bottom: 4px;
+}
+
+.q-bundle-drawer__line-meta {
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    color: #555555;
+    line-height: 1.3;
+}
+
+.q-bundle-drawer__weight {
+    display: inline-block;
+}
+
+.q-bundle-drawer__footer {
+    flex-shrink: 0;
+    padding: 16px 18px max(20px, env(safe-area-inset-bottom));
+    border-top: 1px solid rgba(28, 32, 29, 0.1);
+    background: #fafaf8;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.q-bundle-drawer__total-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.q-bundle-drawer__total-label {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1c201d;
+}
+
+.q-bundle-drawer__total-values {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 4px;
+}
+
+.q-bundle-drawer__total-amount-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 6px 8px;
+}
+
+.q-bundle-drawer__total-value {
+    font-family: 'Assistant', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1c201d;
+}
+
+.q-bundle-drawer__total-weight-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 6px 8px;
+}
+
+.q-bundle-drawer__total-weight {
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #444444;
+    white-space: nowrap;
+    line-height: 1.25;
+}
+
+.q-bundle-drawer__total-hint,
+.q-bundle-drawer__total-weight-note {
+    margin: 0;
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    color: #666666;
+    font-weight: 400;
+    line-height: 1.25;
+}
+
+.q-bundle-drawer__total-weight-note[hidden] {
+    display: none;
+}
+
+.q-bundle-drawer__footer .questionnaire-add-btn {
+    margin-top: 0;
+}
+
+/* ─── Desktop overrides ────────────────────────────────────────────────────────
+   Placed at end of file so they win the cascade over same-specificity base rules
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Hide the desktop-only continue button on mobile */
+.questionnaire-select-btn {
+    display: none;
+}
+
+/* Hide the desktop product info panel on mobile */
+.q-desktop-product-info {
+    display: none;
+}
+
+@media screen and (min-width: 990px) {
+
+    /* Initialization must win over desktop active-step grid rules */
+    .questionnaire-wrapper.initializing .questionnaire-icons-wrapper[data-step-index] {
+        display: none !important;
+    }
+
+    /* ── Question steps: grid tile layout ─────────────────────────────────── */
+
+    /* Keep only the active desktop question step visible */
+    .questionnaire-icons-wrapper[data-step-index]:not(.active) {
+        display: none !important;
+    }
+
+    /* Step 1 (prep method): 3-column grid — only when active */
+    .questionnaire-icons-wrapper[data-step-index="1"].active {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        max-width: 660px;
+        width: 660px;
+        padding: 0;
+        align-items: start;
+    }
+
+    /* Steps 2 (roast) and 3 (taste): 2-column grid — only when active */
+    .questionnaire-icons-wrapper[data-step-index="2"].active,
+    .questionnaire-icons-wrapper[data-step-index="3"].active {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        max-width: 660px;
+        width: 660px;
+        padding: 0;
+        align-items: start;
+    }
+
+    /* Full-width rows: progress bar, title, and btn-wrapper span all columns */
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-progress-bar-wrapper,
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-title-wrapper,
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-btn-wrapper {
+        grid-column: 1 / -1;
+    }
+
+    /* Visual order: progress bar → title → tiles → btn-wrapper */
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-progress-bar-wrapper {
+        order: 0;
+        margin-top: 0;
+        margin-bottom: 16px;
+        padding: 0;
+    }
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-title-wrapper {
+        order: 1;
+        margin-bottom: 24px;
+    }
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-selection-wrapper {
+        order: 2;
+    }
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-btn-wrapper {
+        order: 3;
+        margin-top: 8px;
+    }
+
+    /* ── Tile card redesign ────────────────────────────────────────────────── */
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-selection-wrapper {
+        position: relative;
+        width: auto;
+        min-height: 148px;
+        height: 148px;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-start;
+        padding: 16px;
+        border-radius: 12px;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+
+    /* Icon repositioned to top-right corner */
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-img-icon {
+        position: absolute;
+        top: 16px;
+        inset-inline-end: 16px;
+        width: 32px;
+        height: 32px;
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    /* Text wrapper: left-aligned at the bottom */
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-text-wrapper {
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-text {
+        font-size: 16px;
+        line-height: 1.3;
+        text-align: right;
+        height: auto;
+        justify-content: flex-start;
+    }
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-expl-text {
+        font-size: 13px;
+        text-align: right;
+        margin-top: 4px;
+    }
+
+    /* Empty placeholder tiles: hide so they don't occupy grid space */
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-selection-wrapper:empty {
+        display: none;
+    }
+
+    /* Title: larger, centered */
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-title-wrapper {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-title {
+        font-size: 28px;
+        line-height: 1.25;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    /* ── Bottom action bar: continue + back button ─────────────────────────── */
+
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-btn-wrapper {
+        display: flex;
+        flex-direction: row;
+        direction: ltr;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        padding: 0;
+        width: 100%;
+    }
+
+    /* Back button restyled to match Figma (bordered, same height as continue btn) */
+    .questionnaire-icons-wrapper[data-step-index].active .questionnaire-skip-btn {
+        width: auto;
+        min-width: 88px;
+        height: 56px;
+        font-size: 16px;
+        border-radius: 8px;
+        flex-shrink: 0;
+        padding: 0 16px;
+        gap: 6px;
+    }
+
+    /* ── Results step: two-panel desktop layout ───────────────────────────── */
+
+    #questionnaireResultsStep:not(.active) {
+        display: none !important;
+    }
+
+    #questionnaireResultsStep.active {
+        width: min(calc(100% - 48px), 1160px);
+        max-width: 1160px;
+        margin: 0 auto;
+        flex: 0 0 auto;
+        display: grid;
+        grid-template-columns: minmax(320px, 450px) minmax(300px, 420px);
+        grid-template-rows: auto 1fr;
+        justify-content: center;
+        column-gap: 20px;
+        height: calc(100vh - 80px);
+        /* fill below the site header */
+        min-height: 0;
+        overflow: hidden;
+        --q-bundle-views-height: unset;
+        /* Keep physical grid columns stable: col1=left, col2=right. */
+        direction: ltr;
+    }
+
+    .questionnaire-wrapper.results-step-visible #questionnaireResultsStep {
+        min-height: unset;
+    }
+
+    /* Header spans both columns */
+    #questionnaireResultsStep .questionnaire-header--results {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    /* Left panel: footer content with product info + purchase controls */
+    #questionnaireResultsStep .questionnaire-footer-content {
+        grid-column: 1;
+        grid-row: 2;
+        padding: 28px 40px 40px;
+        /* border-inline-end: 1px solid var(--q-border); */
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin-top: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: var(--q-surface-warm);
+        flex: unset;
+        min-height: 0;
+        width: 100%;
+        max-width: 450px;
+        justify-self: start;
+        align-self: stretch;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        /* Preserve RTL typography/alignment inside left panel content. */
+        direction: rtl;
+    }
+
+    #questionnaireResultsStep .questionnaire-qty-selector-wrapper,
+    #questionnaireResultsStep .questionnaire-checkout-section,
+    #questionnaireResultsStep .questionnaire-secure-info-wrapper {
+        flex-shrink: 0;
+    }
+
+    /* Right panel: selected product image + thumbs list */
+    #questionnaireResultsStep .q-bundle-views {
+        grid-column: 2;
+        grid-row: 2;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+        padding: 28px 0 32px;
+        background: var(--q-surface-warm);
+        --q-bundle-views-height: 100%;
+        align-self: stretch;
+    }
+
+    /* Desktop results: vertical carousel + side thumb rail */
+    #questionnaireResultsStep .q-bundle-view--carousel {
+        flex: 1 1 auto;
+        height: 100%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 6px;
+        padding: 0 12px 0 0;
+    }
+
+    #questionnaireResultsStep .q-carousel-container {
+        width: 100%;
+        flex: 1 1 0;
+        min-height: 0;
+        padding: 0;
+        align-items: stretch;
+        justify-content: center;
+        position: relative;
+    }
+
+    #questionnaireResultsStep .q-desktop-product-media {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        height: 100%;
+        min-height: 0;
+    }
+
+    /* Vertical carousel — same peek / scale behavior as mobile, scroll axis flipped */
+    #questionnaireResultsStep .q-carousel-viewport {
+        flex: 1 1 auto;
+        width: auto;
+        height: auto;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        transform: none;
+        padding: 6px 0;
+        max-width: calc(100% - 84px);
+        overscroll-behavior-y: contain;
+        overscroll-behavior-x: none;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #questionnaireResultsStep .q-carousel-viewport::-webkit-scrollbar {
+        display: none;
+    }
+
+    #questionnaireResultsStep .q-carousel-track {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        width: 100%;
+        height: max-content;
+        min-height: 0;
+        align-items: stretch;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide {
+        width: 100%;
+        min-width: 100%;
+        max-height: none;
+        opacity: 0.32;
+        transform: scale(0.92);
+        transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #questionnaireResultsStep .q-carousel-slide.active {
+        opacity: 1;
+        transform: scale(1.08);
+    }
+
+    #questionnaireResultsStep .q-carousel-arrow {
+        z-index: 2;
+    }
+
+    #questionnaireResultsStep #qCarouselPrev {
+        top: 4px;
+        bottom: auto;
+        left: calc((100% - 68px) * 0.5);
+        right: auto;
+        transform: translateX(-50%);
+        cursor: pointer;
+    }
+
+    #questionnaireResultsStep #qCarouselNext {
+        top: auto;
+        bottom: 4px;
+        left: calc((100% - 68px) * 0.5);
+        right: auto;
+        transform: translateX(-50%);
+        cursor: pointer;
+    }
+
+    #questionnaireResultsStep .q-carousel-arrow--prev svg {
+        transform: rotate(90deg);
+    }
+
+    #questionnaireResultsStep .q-carousel-arrow--next svg {
+        transform: rotate(90deg);
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-image-wrapper {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 0;
+        max-height: 100%;
+        width: 100%;
+        gap: 10px;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-taste-icons {
+        top: 40px;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-image {
+        flex: 1 1 0;
+        min-height: 0;
+        max-height: 100%;
+        max-width: 90%;
+        width: auto;
+        object-fit: contain;
+    }
+
+    /* Center the image+title block as a unit within the card */
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-card {
+        justify-content: center;
+        align-items: center;
+        gap: 0;
+        height: 100%;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-info {
+        flex: 0 0 auto;
+        flex-shrink: 0;
+        width: 100%;
+        max-width: 90%;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        overflow: visible;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-title::before {
+        display: none;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-title__hint {
+        display: inline-flex;
+        order: 3;
+        flex: 0 0 18px;
+        width: 18px;
+        margin-inline-start: 6px;
+        cursor: pointer;
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-title__text {
+        order: unset;
+        flex: 0 1 auto;
+        min-width: 0;
+        max-width: calc(100% - 24px);
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 12px;
+    }
+
+    #questionnaireResultsStep .questionnaire-selection-info {
+        min-height: 0;
+        height: auto;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        width: auto;
+        margin-top: 0;
+        flex: 0 0 auto;
+        align-self: center;
+    }
+
+    /* Override fixed 44px info-strip height used by mobile carousel layout. */
+    #questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-info {
+        min-height: 0;
+        max-height: none;
+        height: auto;
+        overflow: visible;
+    }
+
+    #questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-info__thumbs {
+        width: 56px;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: flex-start;
+        overflow: visible;
+        gap: 10px;
+        direction: ltr;
+        height: auto;
+        max-height: none;
+        padding: 0;
+    }
+
+    #questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-thumb {
+        opacity: 0.32;
+        transform: scale(0.94);
+        transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    #questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-thumb.is-active,
+    #questionnaireResultsStep .q-bundle-view--carousel .questionnaire-selection-thumb.is-active:hover {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    #questionnaireResultsStep .questionnaire-selection-thumb {
+        width: 56px;
+        height: 56px;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+
+    #questionnaireResultsStep .q-results-view-toggle {
+        display: inline-flex;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__row {
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+
+    #questionnaireResultsStep .q-bundle-table__row.is-selected,
+    #questionnaireResultsStep .q-bundle-table__row.is-selected:hover {
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    #questionnaireResultsStep .q-carousel-slide .questionnaire-product-card {
+        cursor: pointer;
+    }
+
+    /* ── Desktop product info panel ────────────────────────────────────────── */
+
+    .q-desktop-product-info {
+        display: block;
+        direction: rtl;
+        text-align: right;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        /* border-bottom: 1px solid var(--q-border); */
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+
+    .q-desktop-product-name {
+        margin: 0 0 4px;
+        font-family: 'Assistant', sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--q-text);
+        line-height: 1.25;
+    }
+
+    .q-desktop-product-vendor,
+    .q-desktop-product-taste {
+        display: none !important;
+    }
+
+    .q-desktop-product-short-wrap {
+        position: relative;
+        margin: 0 0 12px;
+        height: calc(14px * 1.6 * 3 * 3 + 6px * 2);
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+
+    .q-desktop-product-short {
+        height: 100%;
+        font-family: 'Assistant', sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #3a3a3a;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+
+    .q-desktop-product-short-fade {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        height: 28px;
+        background: linear-gradient(to bottom, rgba(250, 252, 254, 0), var(--q-surface-warm));
+        pointer-events: none;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+
+    .q-desktop-product-short-fade.is-at-bottom {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .q-desktop-product-package-list {
+        margin: 0;
+        padding: 0 1.1em 0 0;
+        list-style: disc;
+    }
+
+    .q-desktop-product-package-list li {
+        margin-bottom: 6px;
+    }
+
+    .q-desktop-product-package-list li:last-child {
+        margin-bottom: 0;
+    }
+
+    .q-desktop-product-package-list strong {
+        font-weight: 700;
+    }
+
+    .q-desktop-taste-chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--q-border);
+        background: #fafcfe;
+        font-family: 'Assistant', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--q-text);
+        line-height: 1.2;
+    }
+
+    /* Qty options: compact row on desktop */
+    #questionnaireResultsStep .questionnaire-qty-options {
+        margin-bottom: 16px;
+    }
+
+    /* Checkout row stacked for the left panel */
+    #questionnaireResultsStep .questionnaire-checkout-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #questionnaireResultsStep .questionnaire-add-to-cart-wrapper {
+        width: 100%;
+    }
+
+    #questionnaireResultsStep .questionnaire-price-wrapper {
+        width: 100%;
+        flex-direction: row;
+        align-items: baseline;
+        justify-content: space-between;
+    }
+
+    #questionnaireResultsStep .questionnaire-add-btn {
+        width: 100%;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.25;
+        box-sizing: border-box;
+    }
+
+    /* Secure info row on desktop */
+    #questionnaireResultsStep .questionnaire-secure-info-wrapper {
+        margin-top: 12px;
     }
 }

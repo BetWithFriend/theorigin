@@ -1,0 +1,52 @@
+<div class="questionnaire-product-card">
+  <div class="questionnaire-product-image-wrapper">
+    <img
+      srcset="
+        {%- if card_product.featured_media.width >= 165 -%}{{ card_product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+        {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+        {%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+        {%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+        {{ card_product.featured_media | image_url: width: 533 }} {{ card_product.featured_media.width }}w
+      "
+      src="{{ card_product.featured_media | image_url: width: 533 }}"
+      sizes="(min-width: 1200px) 267px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+      alt="{{ card_product.featured_media.alt | escape }}"
+      class="questionnaire-product-image"
+      loading="lazy"
+      width="{{ card_product.featured_media.width }}"
+      height="{{ card_product.featured_media.height }}">
+    <div class="product-taste-icons questionnaire-product-taste-icons">
+      {% assign coffee_tastes = card_product.metafields.custom.coffee_taste %}
+      {% assign coffee_prep_methods_raw = card_product.metafields.custom.coffee_prep_methods | strip %}
+      {% assign coffee_prep_methods = coffee_prep_methods_raw | remove_first: '[' | remove_last: ']' | split: ',' %}
+      {% assign coffee_taste_list = card_product.metafields.custom.coffee_tastes.value %}
+      {% render 'product-taste-icon-color',
+        tastes: coffee_tastes,
+        prep_methods: coffee_prep_methods,
+        coffee_tastes_list: coffee_taste_list
+      %}
+    </div>
+
+    <div class="questionnaire-product-info">
+      <h3 class="questionnaire-product-title">
+        <span class="questionnaire-product-title__text">{{ card_product.title | escape }}</span>
+        <span class="questionnaire-product-title__hint" aria-hidden="true">
+          <svg
+            class="questionnaire-product-title__icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            focusable="false"
+          >
+            <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.75" />
+            <path d="M8.5 11h5M11 8.5v5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+            <path d="M16.2 16.2 21 21" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+          </svg>
+        </span>
+      </h3>
+    {% comment %} <div class="questionnaire-product-vendor">{{ card_product.vendor }}</div> {% endcomment %}
+    </div>
+  </div>
+</div>

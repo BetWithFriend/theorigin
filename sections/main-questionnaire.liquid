@@ -3,49 +3,169 @@
   rel="preload"
   href="{{ 'questionnaire.css' | asset_url }}"
   as="style"
-  onload="this.onload=null;this.rel='stylesheet'"
->
+  onload="this.onload=null;this.rel='stylesheet'">
 <noscript>{{ 'questionnaire.css' | asset_url | stylesheet_tag }}</noscript>
 <noscript>{{ 'component-slider.css' | asset_url | stylesheet_tag }}</noscript>
 <noscript>{{ 'template-collection.css' | asset_url | stylesheet_tag }}</noscript>
+<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+<script>
+  (function () {
+    var tnScript = document.querySelector('script[tnv-data-config]');
+    if (tnScript) {
+      var cfg = tnScript.getAttribute('tnv-data-config');
+      tnScript.setAttribute('tnv-data-config', cfg.replace('"widgetLocation":"left"', '"widgetLocation":"right"'));
+    }
+
+    // TabNav button is in shadow DOM; poll a shallow walk instead of scanning every node on each mutation.
+    function shiftTabNavButtonDown(root) {
+      if (!root) return false;
+      if (root.shadowRoot) {
+        var btn = root.shadowRoot.querySelector('#tr-button-mobile');
+        if (btn) {
+          btn.style.transform = (btn.style.transform || '') + ' translateY(20px)';
+          return true;
+        }
+      }
+      var children = root.children;
+      for (var i = 0; i < children.length; i++) {
+        if (shiftTabNavButtonDown(children[i])) return true;
+      }
+      return false;
+    }
+
+    (function pollTabNavShift(attempt) {
+      if (shiftTabNavButtonDown(document.body)) return;
+      if (attempt < 40) setTimeout(function () { pollTabNavShift(attempt + 1); }, 250);
+    })(0);
+  })();
+</script>
 
 <div class="questionnaire-wrapper" id="questionnaireWrapperDesktop">
-  <div class="questionnaire-icons-wrapper active">
-    {% paginate collections.all.products by 1000 %}
-      <script>
-        window.allProducts = [
-          {% for product in collections.all.products %}
-            {%- capture card_html -%}
-            {% comment %} <li class="grid__item slider__slide grid-item-feed" id="Slide-{{ section.id }}-{{ product.id }}"> {% endcomment %}
-              {% render 'questionnaire-product', card_product: product %}
-            {% comment %} </li> {% endcomment %}
-            {%- endcapture -%}
-             {% unless product.tags contains 'bundle' %}
-            {
-                "id": {{ product.id }},
-                "title": {{ product.title | json }},
-                "handle": {{ product.handle | json }},
-                "price": {{ product.price | money | json }},
-                "image": {{ product.featured_image | image_url: width: 600 | json }},
-                "metafields": {
-                  "coffee_roast_level": {{ product.metafields.custom.coffee_roast_level | json }},
-                  "coffee_prep_methods": {{ product.metafields.custom.coffee_prep_methods }},
-                  "coffee_tastes": {{ product.metafields.custom.coffee_tastes }}
-                },
-                "html_card": {{ card_html | json }}
-            },
-              {% endunless %}
-          {% endfor %}
-        ];
-      </script>
-    {% endpaginate %}
-
-    {% for product in collection.products %}
-      <!-- Access product data here -->
-      <h3>{{ product.title }}</h3>
-      <p>{{ product.description }}</p>
-    {% endfor %}
-
+  <script>
+    (function () {
+      var el = document.getElementById('questionnaireWrapperDesktop');
+      if (!el) return;
+      var mainContent = document.getElementById('MainContent');
+      document.body.classList.add('questionnaire-wrapper-open');
+      if (mainContent) {
+        mainContent.classList.add('questionnaire-wrapper-open');
+      }
+      // Keep the first step hidden on initial desktop paint; show only the init loader.
+      el.classList.add('initializing');
+    })();
+  </script>
+  <div class="questionnaire-loader-wrapper questionnaire-init-loader">
+    <img
+      class="questionnaire-loader-img"
+      src="{{ 'questionnaire_loader.png'  |  asset_url}}"
+      width="100"
+      alt="">
+    <div class="questionnaire-loader-text">
+      {{ section.settings.loader_text | default: 'מתאימים את פולי הקפה בדיוק בשבילך' }}
+    </div>
+  </div>
+  <div class="questionnaire-icons-wrapper questionnaire-intro-wrapper" id="questionnaireIntroStep">
+    <div class="questionnaire-intro-header">
+      <div class="questionnaire-close-icon" onclick="closeForm()">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          focusable="false">
+          <line
+            x1="6"
+            y1="6"
+            x2="18"
+            y2="18"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round" />
+          <line
+            x1="18"
+            y1="6"
+            x2="6"
+            y2="18"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round" />
+        </svg>
+      </div>
+    </div>
+    <div class="questionnaire-intro-content">
+      <div class="questionnaire-intro-image-wrapper">
+        <img
+          class="questionnaire-intro-image"
+          src="{{ 'questionnaire_intro_beans.png' | asset_url }}"
+          alt="פולי קפה בדרגות קלייה שונות"
+          width="462"
+          height="170">
+      </div>
+      <div class="questionnaire-intro-text">
+        <h2 class="questionnaire-intro-title">
+          {{ section.settings.intro_title | default: 'בואו נבנה לכם מארז מותאם אישית' }}
+        </h2>
+        <div class="questionnaire-intro-desc">
+          {{ section.settings.intro_description | default: '<p>ענו על 3 שאלות קצרות לגבי ההעדפות שלכם בקפה, וקבלו מבחר מארזים מוכנים במיוחד בשבילכם - בגדלים משתנים ועם מחיר סופי שכולל משלוח עד הבית.</p><p>נשאר רק לבחור – ולהתחיל ליהנות מקפה מעולה וטרי.</p>' }}
+        </div>
+      </div>
+      <div class="questionnaire-intro-actions">
+        <button
+          type="button"
+          class="questionnaire-intro-start-btn"
+          onclick="startQuestionnaireFromIntro()">
+          {{ section.settings.intro_button_text | default: 'בואו נתחיל' }}
+        </button>
+        <div class="questionnaire-intro-social-proof">
+          <div class="questionnaire-intro-stars" aria-hidden="true">
+            {% for i in (1..5) %}
+              <svg
+                class="questionnaire-intro-star"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2.5l2.69 5.45 6.02.88-4.35 4.24 1.03 5.99L12 16.7l-5.39 2.83 1.03-5.99-4.35-4.24 6.02-.88z" />
+              </svg>
+            {% endfor %}
+          </div>
+          <div class="questionnaire-intro-social-text">
+            {{ section.settings.intro_social_text | default: 'מאות לקוחות מרוצים' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="questionnaire-icons-wrapper active"
+    id="questionnaireStep1"
+    data-filter-name="filter.p.m.custom.coffee_prep_methods"
+    data-step-index="1">
+    <script>
+          (function () {
+      var INTRO_FLAG = 'questionnaireShowIntro';
+      var introParams = new URLSearchParams(window.location.search);
+      var showIntro =
+        sessionStorage.getItem(INTRO_FLAG) === '1' || introParams.get('intro') === '1';
+      if (showIntro) {
+        sessionStorage.removeItem(INTRO_FLAG);
+        var intro = document.getElementById('questionnaireIntroStep');
+        var step1 = document.getElementById('questionnaireStep1');
+        if (intro && step1) {
+          step1.classList.remove('active');
+          intro.classList.add('active');
+        }
+      }
+          })();
+    </script>
+    <div class="questionnaire-progress-bar-wrapper">
+      <div class="questionnaire-progress-bar filled">&nbsp;</div>
+      <div class="questionnaire-progress-bar">&nbsp;</div>
+      <div class="questionnaire-progress-bar">&nbsp;</div>
+    </div>
     <div class="questionnaire-title-wrapper">
       <div class="questionnaire-close-icon" onclick="closeForm()">
         <svg
@@ -55,8 +175,7 @@
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
-          focusable="false"
-        >
+          focusable="false">
           <line
             x1="6"
             y1="6"
@@ -85,82 +204,80 @@
       <img
         class="questionnaire-img-icon"
         src="{{ 'questionnaire_Espresso_Machine.png' |  asset_url }}"
-        alt="Espresso icon"
-      >
+        alt="Espresso icon">
       <div class="questionnaire-text">מכונת אספרסו</div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="MokaPot">
       <img
         class="questionnaire-img-icon"
         src="{{ 'questionnaire_Moka_Pot.png' |  asset_url }}"
-        alt="Moka pot icon"
-      >
+        alt="Moka pot icon">
       <div class="questionnaire-text">מקינטה</div>
     </div>
     {% comment %}
       <div class="questionnaire-selection-wrapper" data-filter-value="Black">
-        <img
-          class="questionnaire-img-icon"
-          src="{{ 'questionnaire_Turkish_Cezve.png' |  asset_url }}"
-          alt="Turkish icon"
-        >
-        <div class="questionnaire-text">קפה טורקי</div>
+      <img
+      class="questionnaire-img-icon"
+      src="{{ 'questionnaire_Turkish_Cezve.png' | asset_url }}"
+      alt="Turkish icon"
+      >
+      <div class="questionnaire-text">קפה טורקי</div>
       </div>
     {% endcomment %}
     <div class="questionnaire-selection-wrapper" data-filter-value="Filter">
       <img
         class="questionnaire-img-icon"
         src="{{ 'questionnaire_filter.png' |  asset_url }}"
-        alt="filter icon"
-      >
+        alt="filter icon">
       <div class="questionnaire-text">פילטר</div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="Espresso">
       <img
         class="questionnaire-img-icon"
         src="{{ 'questionnaire_milk.png' |  asset_url }}"
-        alt="Espresso Auto icon"
-      >
+        alt="Espresso Auto icon">
       <div class="questionnaire-text">משקאות חלב</div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="">
-      <div class="questionnaire-text">דלג, לא משנה לי</div>
+      <div class="questionnaire-text">דלגו, לא משנה לי</div>
     </div>
 
     {% comment %}
       <div class="questionnaire-selection-wrapper" data-filter-value="Aeropress">
-        <img
-          class="questionnaire-img-icon"
-          src="{{ 'questionnaire_Aeropress.png' |  asset_url }}"
-          alt="Aeropress icon"
-        >
-        <div class="questionnaire-text">אירופרס</div>
+      <img
+      class="questionnaire-img-icon"
+      src="{{ 'questionnaire_Aeropress.png' | asset_url }}"
+      alt="Aeropress icon"
+      >
+      <div class="questionnaire-text">אירופרס</div>
       </div>
     {% endcomment %}
     <div class="questionnaire-btn-wrapper">
-      <button class="questionnaire-skip-btn" onclick="goToPreviousStep(0)">
+      <button
+        class="questionnaire-select-btn"
+        onclick="getFilters(this.closest('[data-filter-name]').getAttribute('data-filter-name'), parseInt(this.closest('[data-step-index]').getAttribute('data-step-index'), 10))"
+        disabled>
+        {{ section.settings.select_button_text | default: 'בחרו אפשרות' }}
+      </button>
+      <button class="questionnaire-skip-btn" onclick="goToPreviousStep(1)">
+        <span class="questionnaire-back-text">חזור</span>
         <img
           class="questionnaire-back-icon"
           src="{{ 'questionnaire_back_icon.png' |  asset_url }}"
-          alt="Close icon"
-        >
-        <span class="questionnaire-back-text">חזור</span>
+          alt="Close icon">
       </button>
-      <button
-        class="questionnaire-select-btn"
-        onclick="getFilters('filter.p.m.custom.coffee_prep_methods', 1)"
-        disabled
-      >
-        בחרו אפשרות
-      </button>
-    </div>
-    <div class="questionnaire-progress-bar-wrapper">
-      <div class="questionnaire-progress-bar filled">&nbsp;</div>
-      <div class="questionnaire-progress-bar">&nbsp;</div>
-      <div class="questionnaire-progress-bar">&nbsp;</div>
     </div>
   </div>
-  <div class="questionnaire-icons-wrapper ">
+  <div
+    class="questionnaire-icons-wrapper "
+    id="questionnaireLoadingStep"
+    data-filter-name="filter.p.m.custom.coffee_roast_level"
+    data-step-index="2">
+    <div class="questionnaire-progress-bar-wrapper">
+      <div class="questionnaire-progress-bar filled">&nbsp;</div>
+      <div class="questionnaire-progress-bar filled">&nbsp;</div>
+      <div class="questionnaire-progress-bar">&nbsp;</div>
+    </div>
     <div class="questionnaire-title-wrapper">
       <div class="questionnaire-close-icon" onclick="closeForm()">
         <svg
@@ -170,8 +287,7 @@
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
-          focusable="false"
-        >
+          focusable="false">
           <line
             x1="6"
             y1="6"
@@ -195,74 +311,76 @@
         {% comment %} <img class="questionnaire-back-icon" src="{{ 'questionnaire_back_icon.png' |  asset_url }}" alt="Close icon" onclick="goToPreviousStep()"/> {% endcomment %}
       </div>
     </div>
-    <div class="questionnaire-selection-wrapper" data-filter-value="בהירה, בהירה-בינונית">
+    <div class="questionnaire-selection-wrapper" data-filter-value="בינונית-כהה, כהה">
       <img
         class="questionnaire-img-icon"
-        src="{{ 'questionnaire_light.png' |  asset_url }}"
-        alt="light roast icon"
-      >
+        src="{{ 'questionnaire_dark.png' |  asset_url }}"
+        alt="dark roast icon">
       <div class="questionnaire-text-wrapper">
-        <div class="questionnaire-text">בהירה</div>
-        <div class="questionnaire-expl-text">טעמים פירותיים וקלילים</div>
+        <div class="questionnaire-text">קלייה כהה</div>
+        <div class="questionnaire-expl-text">עוצמתי, גוף מלא, טעם עמוק ומעושן</div>
       </div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="בהירה-בינונית, בינונית, בינונית-כהה">
       <img
         class="questionnaire-img-icon"
         src="{{ 'questionnaire_medium.png' |  asset_url }}"
-        alt="medium roast icon"
-      >
+        alt="medium roast icon">
       <div class="questionnaire-text-wrapper">
-        <div class="questionnaire-text">בינונית</div>
-        <div class="questionnaire-expl-text">טעמים מתוקים יותר ומאוזנים</div>
+        <div class="questionnaire-text">קלייה בינונית</div>
+        <div class="questionnaire-expl-text">חלק, מתוק, קפה מודרני ומאוזן</div>
       </div>
     </div>
-    <div class="questionnaire-selection-wrapper" data-filter-value="בינונית-כהה, כהה">
+    <div class="questionnaire-selection-wrapper" data-filter-value="בהירה, בהירה-בינונית">
       <img
         class="questionnaire-img-icon"
-        src="{{ 'questionnaire_dark.png' |  asset_url }}"
-        alt="dark roast icon"
-      >
+        src="{{ 'questionnaire_light.png' |  asset_url }}"
+        alt="light roast icon">
       <div class="questionnaire-text-wrapper">
-        <div class="questionnaire-text">כהה</div>
-        <div class="questionnaire-expl-text">טעמים שוקולדיים וקצת מרירים</div>
+        <div class="questionnaire-text">קלייה בהירה</div>
+        <div class="questionnaire-expl-text">פירותי וקליל, כמעט כמו תה</div>
       </div>
     </div>
     <div class="questionnaire-selection-wrapper" data-filter-value="">
       {% comment %}
         <img
-          class="questionnaire-img-icon"
-          src="{{ 'questionnaire_dont_know.png' |  asset_url }}"
-          alt="dont know icon"
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_dont_know.png' | asset_url }}"
+        alt="dont know icon"
         >
       {% endcomment %}
-      <div class="questionnaire-text-wrapper">
-        <div class="questionnaire-text">לא יודעים</div>
-        <div class="questionnaire-expl-text">הציגו לי הכל</div>
-      </div>
+      {% comment %} <div class="questionnaire-text-wrapper"> {% endcomment %}
+      <div class="questionnaire-text">דלגו, לא משנה לי</div>
+    {% comment %} <div class="questionnaire-expl-text">הציגו לי הכל</div> {% endcomment %}
+    {% comment %} </div> {% endcomment %}
     </div>
     <div class="questionnaire-selection-wrapper"></div>
     {% comment %} <div class="questionnaire-selection-wrapper"></div> {% endcomment %}
     <div class="questionnaire-btn-wrapper">
+      <button
+        class="questionnaire-select-btn"
+        onclick="getFilters(this.closest('[data-filter-name]').getAttribute('data-filter-name'), parseInt(this.closest('[data-step-index]').getAttribute('data-step-index'), 10))"
+        disabled>
+        {{ section.settings.select_button_text | default: 'בחרו אפשרות' }}
+      </button>
       <button class="questionnaire-skip-btn" onclick="goToPreviousStep(2)">
+        <span class="questionnaire-back-text">חזור</span>
         <img
           class="questionnaire-back-icon"
           src="{{ 'questionnaire_back_icon.png' |  asset_url }}"
-          alt="Close icon"
-        >
-        <span class="questionnaire-back-text">חזור</span>
-      </button>
-      <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_roast_level', 2)">
-        בחרו אפשרות
+          alt="Close icon">
       </button>
     </div>
+  </div>
+  <div
+    class="questionnaire-icons-wrapper "
+    data-filter-name="filter.p.m.custom.coffee_tastes"
+    data-step-index="3">
     <div class="questionnaire-progress-bar-wrapper">
       <div class="questionnaire-progress-bar filled">&nbsp;</div>
       <div class="questionnaire-progress-bar filled">&nbsp;</div>
-      <div class="questionnaire-progress-bar">&nbsp;</div>
+      <div class="questionnaire-progress-bar filled">&nbsp;</div>
     </div>
-  </div>
-  <div class="questionnaire-icons-wrapper ">
     <div class="questionnaire-title-wrapper">
       <div class="questionnaire-close-icon" onclick="closeForm()">
         <svg
@@ -272,8 +390,7 @@
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
-          focusable="false"
-        >
+          focusable="false">
           <line
             x1="6"
             y1="6"
@@ -301,8 +418,7 @@
       <img
         class="questionnaire-img-icon"
         src="{{ 'questionnaire_Dark_2.png' |  asset_url }}"
-        alt="dark coffee icon"
-      >
+        alt="dark coffee icon">
       <div class="questionnaire-text-wrapper">
         <div class="questionnaire-text">קפה קלאסי</div>
         <div class="questionnaire-expl-text">מתוק, חלק ומעניין - מזכיר שוקולד וקרמל</div>
@@ -312,8 +428,7 @@
       <img
         class="questionnaire-img-icon"
         src="{{ 'questionnaire_soft.png' |  asset_url }}"
-        alt="soft coffee icon"
-      >
+        alt="soft coffee icon">
       <div class="questionnaire-text-wrapper">
         <div class="questionnaire-text">מודרני ומאוזן</div>
         <div class="questionnaire-expl-text">מצד אחד מתוק, מצד שני קצת פירותי</div>
@@ -323,8 +438,7 @@
       <img
         class="questionnaire-img-icon"
         src="{{ 'questionnaire_special.png' |  asset_url }}"
-        alt="Turkish icon"
-      >
+        alt="Turkish icon">
       <div class="questionnaire-text-wrapper">
         <div class="questionnaire-text">הגל השלישי</div>
         <div class="questionnaire-expl-text">קפה פירותי ופרחוני, טעמים מעניינים</div>
@@ -332,41 +446,42 @@
     </div>
     {% comment %}
       <div class="questionnaire-selection-wrapper" data-filter-value="">
-                                        <img class="questionnaire-img-icon" src="{{ 'questionnaire_milk.png' |  asset_url }}" alt="V60 icon"/>
-                                        <div class="questionnaire-text">עם חלב</div>
-                                        <div class="questionnaire-expl-text">קפוצ׳ינו, לאטה או הפוך</div>
+      <img class="questionnaire-img-icon" src="{{ 'questionnaire_milk.png' | asset_url }}" alt="V60 icon"/>
+      <div class="questionnaire-text">עם חלב</div>
+      <div class="questionnaire-expl-text">קפוצ׳ינו, לאטה או הפוך</div>
       </div>
     {% endcomment %}
     <div class="questionnaire-selection-wrapper" data-filter-value="">
       {% comment %}
         <img
-          class="questionnaire-img-icon"
-          src="{{ 'questionnaire_dont_know_2.png' |  asset_url }}"
-          alt="dont know icon"
+        class="questionnaire-img-icon"
+        src="{{ 'questionnaire_dont_know_2.png' | asset_url }}"
+        alt="dont know icon"
         >
       {% endcomment %}
       {% comment %} <div class="questionnaire-text">עדיין לא בטוחים</div> {% endcomment %}
-      <div class="questionnaire-expl-text">פתוחים להצעות</div>
+      {% comment %} <div class="questionnaire-expl-text">פתוחים להצעות</div> {% endcomment %}
+      {% comment %} <div class="questionnaire-text-wrapper"> {% endcomment %}
+      <div class="questionnaire-text">דלגו, לא משנה לי</div>
+    {% comment %} <div class="questionnaire-expl-text">הציגו לי הכל</div> {% endcomment %}
+    {% comment %} </div> {% endcomment %}
     </div>
     <div class="questionnaire-selection-wrapper"></div>
     {% comment %} <div class="questionnaire-selection-wrapper"></div> {% endcomment %}
     <div class="questionnaire-btn-wrapper">
+      <button
+        class="questionnaire-select-btn"
+        onclick="getFilters(this.closest('[data-filter-name]').getAttribute('data-filter-name'), parseInt(this.closest('[data-step-index]').getAttribute('data-step-index'), 10))"
+        disabled>
+        {{ section.settings.select_button_text | default: 'בחרו אפשרות' }}
+      </button>
       <button class="questionnaire-skip-btn" onclick="goToPreviousStep(3)">
+        <span class="questionnaire-back-text">חזור</span>
         <img
           class="questionnaire-back-icon"
           src="{{ 'questionnaire_back_icon.png' |  asset_url }}"
-          alt="Close icon"
-        >
-        <span class="questionnaire-back-text">חזור</span>
+          alt="Close icon">
       </button>
-      <button class="questionnaire-select-btn" onclick="getFilters('filter.p.m.custom.coffee_tastes', 3)">
-        בחרו אפשרות
-      </button>
-    </div>
-    <div class="questionnaire-progress-bar-wrapper">
-      <div class="questionnaire-progress-bar filled">&nbsp;</div>
-      <div class="questionnaire-progress-bar filled">&nbsp;</div>
-      <div class="questionnaire-progress-bar filled">&nbsp;</div>
     </div>
   </div>
   <div class="questionnaire-icons-wrapper ">
@@ -374,107 +489,584 @@
       <img
         class="questionnaire-loader-img"
         src="{{ 'questionnaire_loader.png'  |  asset_url}}"
-        alt=""
-      >
+        width="100"
+        alt="">
       <div class="questionnaire-loader-text">
         {{ section.settings.loader_text | default: 'מתאימים את פולי הקפה בדיוק בשבילך' }}
       </div>
     </div>
   </div>
   <div class="questionnaire-icons-wrapper" id="questionnaireResultsStep">
-    <div class="questionnaire-title-wrapper">
-      <div class="questionnaire-close-icon" onclick="closeForm()">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <line
-            x1="6"
-            y1="6"
-            x2="18"
-            y2="18"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round" />
-          <line
-            x1="18"
-            y1="6"
-            x2="6"
-            y2="18"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round" />
-        </svg>
+    <header
+      class="questionnaire-header questionnaire-header--results"
+      role="banner"
+      dir="ltr">
+      <a
+        href="{{ routes.root_url }}"
+        class="header__heading-link link link--text focus-inset"
+        aria-label="{{ shop.name }}"
+        onclick="clearResultsState()">
+        <div class="header__heading-logo-wrapper">
+          <img
+            src="{{ 'logo.png' | asset_url }}"
+            alt="{{ shop.name }}"
+            class="header__heading-logo">
+        </div>
+      </a>
+      <div class="questionnaire-header__actions" dir="ltr">
+        <button
+          type="button"
+          class="q-results-icon-btn q-results-icon-btn--refresh"
+          onclick="openRestartConfirmModal()"
+          aria-label="התחל מחדש"
+          title="התחל מחדש"
+          aria-haspopup="dialog">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true">
+            <path
+              d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path
+              d="M21 3v5h-5"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          id="q-results-view-toggle"
+          class="q-results-view-toggle q-results-icon-btn q-results-icon-btn--menu"
+          aria-pressed="false"
+          aria-label="הצג תצוגת טבלה"
+          title="תצוגת טבלה">
+          <span class="q-results-view-toggle__icon q-results-view-toggle__icon--table" aria-hidden="true">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M4 9h16M4 15h16"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round" />
+            </svg>
+          </span>
+          <span class="q-results-view-toggle__icon q-results-view-toggle__icon--carousel" aria-hidden="true">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <rect
+                x="3.5"
+                y="6"
+                width="9"
+                height="12"
+                rx="1.5"
+                stroke="currentColor"
+                stroke-width="1.6" />
+              <rect
+                x="11.5"
+                y="6"
+                width="9"
+                height="12"
+                rx="1.5"
+                stroke="currentColor"
+                stroke-width="1.6"
+                opacity="0.45" />
+            </svg>
+          </span>
+        </button>
       </div>
-      <div class="questionnaire-title">התוצאות שלך</div>
-      <div class="questionnaire-back-icon-wrapper"></div>
-    </div>
+    </header>
 
-    <div class="q-carousel-wrapper">
-      <button class="q-carousel-arrow q-carousel-arrow--prev" id="qCarouselPrev" aria-label="הקודם" type="button">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <div class="q-carousel-viewport" id="qCarouselViewport">
-        <div class="q-carousel-track" id="Slider-questionnaireResultsGrid">
-          <!-- Product cards injected here by JS -->
+    <div class="q-bundle-views" id="q-bundle-views">
+      <div class="q-bundle-view q-bundle-view--carousel" id="q-bundle-view-carousel">
+        <div class="q-carousel-container">
+          <button
+            class="q-carousel-arrow q-carousel-arrow--prev"
+            id="qCarouselPrev"
+            aria-label="הקודם"
+            type="button">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M15 18L9 12L15 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <div class="q-desktop-product-media">
+            <div class="q-carousel-viewport" id="qCarouselViewport">
+              <div class="q-carousel-track" id="Slider-questionnaireResultsGrid">
+                <!-- Product cards injected here by JS -->
+              </div>
+            </div>
+
+            <div class="questionnaire-selection-info">
+              <div
+                class="questionnaire-selection-info__thumbs"
+                id="q-selection-info-thumbs"
+                role="tablist"
+                aria-label="מוצרים במארז"></div>
+            </div>
+          </div>
+
+          <button
+            class="q-carousel-arrow q-carousel-arrow--next"
+            id="qCarouselNext"
+            aria-label="הבא"
+            type="button">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M9 18L15 12L9 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
         </div>
       </div>
-      <button class="q-carousel-arrow q-carousel-arrow--next" id="qCarouselNext" aria-label="הבא" type="button">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </div>
 
-    <div class="questionnaire-qty-selector-wrapper">
-      <div class="questionnaire-qty-label">חבילות קפה במארז</div>
-      <div class="questionnaire-qty-options">
-        <div class="qty-option">3</div>
-        <div class="qty-option">5</div>
-        <div class="qty-option selected">7 (10% הנחה)</div>
+      <div
+        class="q-bundle-view q-bundle-view--table"
+        id="q-bundle-view-table"
+        hidden>
+        <div
+          class="q-bundle-table-scroll"
+          role="region"
+          aria-label="פירוט מוצרים במארז">
+          <table class="q-bundle-table">
+            <thead>
+              <tr>
+                <th scope="col">רמת קלייה</th>
+                <th scope="col">טעם</th>
+                <th scope="col">מוצר</th>
+              </tr>
+            </thead>
+            <tbody id="q-bundle-table-body"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <div class="questionnaire-btn-wrapper">
-      <button class="questionnaire-select-btn" onclick="window.location.href='/collections/all'">לכל הקטלוג</button>
+    <div class="questionnaire-footer-content">
+      <div class="q-desktop-product-info" id="q-desktop-product-info">
+        <h3 class="q-desktop-product-name" id="q-desktop-product-name"></h3>
+        <p class="q-desktop-product-vendor" id="q-desktop-product-vendor"></p>
+        <div class="q-desktop-product-short-wrap">
+          <div class="q-desktop-product-short" id="q-desktop-product-short"></div>
+          <div
+            class="q-desktop-product-short-fade"
+            id="q-desktop-product-short-fade"
+            aria-hidden="true">&nbsp;</div>
+        </div>
+        <div class="q-desktop-product-taste" id="q-desktop-product-taste"></div>
+      </div>
+      <div class="questionnaire-qty-selector-wrapper">
+        <div
+          class="results-header-bundle results-header-bundle--above-qty"
+          role="group"
+          aria-label="בחירת מותג למארז">
+          <div class="results-vendor-select-wrap">
+            {% comment %} <div class="results-vendor-select__label" id="q-results-vendor-lbl">מותג קפה</div> {% endcomment %}
+            <div
+              class="results-vendor-dropdown"
+              id="q-results-vendor-dropdown"
+              dir="rtl"
+              data-open="false"
+              data-empty="true">
+              <button
+                type="button"
+                dir="rtl"
+                class="results-vendor-dropdown__trigger"
+                id="q-results-vendor-trigger"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+                aria-controls="q-results-vendor-list"
+                aria-disabled="true"
+                disabled>
+                <span class="results-vendor-dropdown__trigger-body">
+                  <span class="results-vendor-dropdown__trigger-text" id="q-results-vendor-trigger-label">—</span>
+                  <span class="results-vendor-trigger__suffix">
+                    <span
+                      class="results-vendor-trigger__price"
+                      id="q-results-vendor-trigger-price"
+                      hidden></span>
+                    <span
+                      class="results-vendor-trigger__sep"
+                      id="q-results-vendor-trigger-sep"
+                      hidden
+                      aria-hidden="true">
+                      <svg
+                        class="results-vendor-trigger__sep-icon"
+                        width="10"
+                        height="10"
+                        viewBox="0 0 10 10"
+                        aria-hidden="true"
+                        focusable="false"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <circle
+                          cx="5"
+                          cy="5"
+                          r="3.5"
+                          fill="currentColor" />
+                      </svg>
+                    </span>
+                    <span
+                      class="results-vendor-trigger__weight"
+                      id="q-results-vendor-trigger-weight"
+                      hidden></span>
+                  </span>
+                </span>
+                <svg
+                  class="results-vendor-dropdown__chev"
+                  width="14"
+                  height="8"
+                  viewBox="0 0 14 8"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true">
+                  <path
+                    d="M1 1.5L7 6.5L13 1.5"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </button>
+              <div
+                class="results-vendor-dropdown__panel"
+                id="q-results-vendor-panel"
+                dir="rtl"
+                hidden
+                data-position="bottom">
+                <div
+                  class="results-vendor-menu"
+                  id="q-results-vendor-menu"
+                  data-empty="true">
+                  <div
+                    class="results-vendor-menu__inner"
+                    id="q-results-vendor-list"
+                    role="listbox"
+                    aria-labelledby="q-results-vendor-lbl"
+                    aria-describedby="q-results-vendor-hint"></div>
+                </div>
+              </div>
+            </div>
+            <p id="q-results-vendor-hint" class="results-vendor-select__hint visually-hidden">
+              בחרו אחת משלושת ההתאמות. המחירים מחושבים לפי מארז וכמות החבילות. לחצו לפתיחת התפריט.
+            </p>
+          </div>
+        </div>
+        {% comment %} <div class="questionnaire-qty-label">חבילות קפה במארז</div> {% endcomment %}
+        <div
+          class="questionnaire-qty-options"
+          role="group"
+          aria-label="חבילות קפה במארז">
+          <button
+            type="button"
+            class="qty-option"
+            data-qty="3">
+            <span class="qty-option__stack">
+              <span class="qty-option__num">3 חבילות</span>
+            </span>
+          </button>
+          <button
+            type="button"
+            class="qty-option selected"
+            data-qty="5">
+            <span class="qty-option__stack">
+              <span class="qty-option__num">5 חבילות</span>
+            </span>
+          </button>
+          <button
+            type="button"
+            class="qty-option"
+            data-qty="7">
+            <span class="qty-option__stack">
+              <span class="qty-option__num">7 חבילות</span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <div class="questionnaire-checkout-section">
+        <div class="questionnaire-checkout-row">
+          <div class="questionnaire-price-wrapper">
+            <div class="price-label-group">
+              <span class="price-label-main">סה״כ לתשלום</span>
+              <p class="price-shipping-note">כולל משלוח</p>
+            </div>
+            <div class="price-values-group">
+              <span class="price-line-primary">
+                <span class="price-current" id="q-footer-price"></span>
+                <span class="price-compare" id="q-footer-price-compare"></span>
+              </span>
+            </div>
+          </div>
+          <div class="questionnaire-add-to-cart-wrapper">
+            <div class="questionnaire-atc-actions">
+              <form
+                id="q-footer-atc-form"
+                class="form product-form--questionnaire"
+                method="post"
+                action="/cart/add"
+                novalidate
+                data-type="add-to-cart-form">
+                <input
+                  type="hidden"
+                  name="id"
+                  id="q-footer-variant-id"
+                  value="">
+                <button
+                  type="submit"
+                  name="add"
+                  id="q-footer-atc-btn"
+                  class="questionnaire-add-btn">
+                  <span id="q-footer-atc-label">רכישת המארז</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="questionnaire-secure-info-wrapper">
+        <div class="payment-icons">
+          <img
+            src="{{ 'payment-mastercard.webp' | asset_url }}"
+            alt="Mastercard"
+            width="35"
+            height="24">
+          <img
+            src="{{ 'payment-google-pay.webp' | asset_url }}"
+            alt="Google Pay"
+            width="35"
+            height="24">
+          <img
+            src="{{ 'payment-visa.webp' | asset_url }}"
+            alt="Visa"
+            width="35"
+            height="24">
+          <img
+            src="{{ 'payment-apple-pay.webp' | asset_url }}"
+            alt="Apple Pay"
+            width="35"
+            height="24">
+            {% comment %} <img
+                          src="{{ 'payment-paypal.png' | asset_url }}"
+                          alt="PayPal"
+                          width="35"
+                        height="24"> {% endcomment %}
+          <img
+            src="{{ 'payment-max.webp' | asset_url }}"
+            alt="Max"
+            width="35"
+            height="24">
+        </div>
+        <div class="questionnaire-secure-icons" dir="rtl">
+          <div class="secure-text">רכישה מאובטחת</div>
+          <img
+            src="{{ 'secure_buy.png' | asset_url }}"
+            alt=""
+            width="24"
+            height="24"
+            class="questionnaire-secure-icons__lock"
+            role="presentation">
+        </div>
+      </div>
+
+      <div
+        id="q-bundle-review-drawer"
+        class="q-bundle-drawer"
+        hidden
+        role="dialog"
+        aria-modal="true"
+        aria-hidden="true"
+        aria-labelledby="q-bundle-drawer-title">
+        <div
+          class="q-bundle-drawer__overlay"
+          tabindex="-1"
+          data-q-bundle-drawer-close></div>
+        <div class="q-bundle-drawer__panel">
+          <div class="q-bundle-drawer__header">
+            <h2 id="q-bundle-drawer-title" class="q-bundle-drawer__title">סיכום הזמנה</h2>
+            <button
+              type="button"
+              class="q-bundle-drawer__close"
+              aria-label="סגירה"
+              data-q-bundle-drawer-close>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <path
+                  d="M6 6L18 18M18 6L6 18"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round" />
+              </svg>
+            </button>
+          </div>
+          <div class="q-bundle-drawer__body">
+            <div id="q-bundle-drawer-items" class="q-bundle-drawer__items"></div>
+          </div>
+          <div class="q-bundle-drawer__footer">
+            <div class="q-bundle-drawer__total-row">
+              <span class="q-bundle-drawer__total-label">סה״כ לתשלום</span>
+              <div class="q-bundle-drawer__total-values">
+                <div class="q-bundle-drawer__total-amount-line">
+                  <span class="q-bundle-drawer__total-value" id="q-bundle-drawer-total"></span>
+                  <span class="q-bundle-drawer__total-hint">(כולל משלוח)</span>
+                </div>
+                <div class="q-bundle-drawer__total-weight-line">
+                  <span class="q-bundle-drawer__total-weight" id="q-bundle-drawer-total-weight"></span>
+                  <span
+                    class="q-bundle-drawer__total-weight-note"
+                    id="q-bundle-drawer-total-weight-note"
+                    hidden>משקל כולל לחבילה</span>
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              id="q-bundle-drawer-checkout"
+              class="questionnaire-add-btn">
+              המשך לתשלום
+            </button>
+            <button
+              type="button"
+              id="q-bundle-drawer-continue-shopping"
+              class="questionnaire-add-btn questionnaire-add-btn--link">
+              <span id="q-bundle-drawer-shop-label">הוסף לסל והמשך לחנות</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-<div class="lets-be-friends-wrapper ">
-  <img
-    class="lets-be-friends-img"
-    src="{{ 'lets_be_friends.png' | asset_url }}"
-    alt="Lets be friends"
-  >
-  <div class="lets-be-friends-title">{{ section.settings.newsletter_title | default: 'בואו נהיה חברים' }}</div>
-  <div class="lets-be-friends-text">
-    {{
-      section.settings.newsletter_text
-      | default: 'הישאירו מייל כדי לשמוע על קפה חדש, בתי קלייה מעניינים, צורות הכנה ועוד. בלי ספאם. מבטיחים.'
-    }}
-  </div>
-  <input
-    type="email"
-    class="lets-be-friends-input"
-    placeholder="{{ section.settings.newsletter_placeholder | default: 'הכניסו מייל' }}"
-    id="newsletterEmail"
-    required
-  >
-  <button
-    onclick="subscribeUser(document.getElementById('newsletterEmail').value)"
-    class="questionnaire-select-btn form-submit"
-  >
-    {{ section.settings.newsletter_button_text | default: 'הרשמו' }}
-  </button>
-  <div onclick="closeForm(true)" class="questionnaire-select-skip">
-    {{ section.settings.newsletter_skip_text | default: 'בפעם אחרת' }}
+
+    <div
+      id="q-product-detail-modal"
+      class="q-product-modal"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+      aria-labelledby="q-product-modal-title">
+      <div
+        class="q-product-modal__backdrop"
+        tabindex="-1"
+        data-q-product-modal-close></div>
+      <div class="q-product-modal__panel">
+        <button
+          type="button"
+          class="q-product-modal__close"
+          aria-label="סגירה"
+          data-q-product-modal-close>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true">
+            <path
+              d="M6 6L18 18M18 6L6 18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round" />
+          </svg>
+        </button>
+        <div class="q-product-modal__body">
+          <div class="q-product-modal__media">
+            <img
+              id="q-product-modal-image"
+              class="q-product-modal__image"
+              src=""
+              alt=""
+              width="600"
+              height="600">
+          </div>
+          <div class="q-product-modal__content">
+            <h2 id="q-product-modal-title" class="q-product-modal__title"></h2>
+            <p id="q-product-modal-vendor" class="q-product-modal__vendor"></p>
+            <p
+              id="q-product-modal-short"
+              class="q-product-modal__lead"
+              hidden></p>
+            <div
+              id="q-product-modal-chips"
+              class="q-product-modal__chips"
+              hidden></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="q-restart-confirm-modal"
+      class="q-restart-confirm-modal"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+      aria-labelledby="q-restart-confirm-title">
+      <div
+        class="q-restart-confirm-modal__backdrop"
+        tabindex="-1"
+        data-q-restart-confirm-close></div>
+      <div class="q-restart-confirm-modal__panel">
+        <h2 id="q-restart-confirm-title" class="q-restart-confirm-modal__title">להתחיל מחדש?</h2>
+        <p class="q-restart-confirm-modal__text">
+          התוצאות הנוכחיות יימחקו ותחזרו לשאלון מתחילתו.
+        </p>
+        <div class="q-restart-confirm-modal__actions">
+          <button
+            type="button"
+            id="q-restart-confirm-accept"
+            class="questionnaire-add-btn">
+            להתחיל מחדש
+          </button>
+          <button
+            type="button"
+            id="q-restart-confirm-cancel"
+            class="questionnaire-add-btn questionnaire-add-btn--link"
+            data-q-restart-confirm-close>
+            ביטול
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -488,8 +1080,72 @@
 <div>
   <div id="my-custom-results-area"></div>
 </div>
+{% paginate collections.all.products by 1000 %}
+  <script type="application/json" id="questionnaire-products-data">
+    [
+      {%- assign q_product_first = true -%}
+      {% for product in collections.all.products %}
+         {% unless product.tags contains 'bundle'
+           or product.tags contains 'decaf'
+           or product.tags contains 'Decaf'
+           or product.metafields.custom.coffee_process == 'נטול קפאין'
+           or product.metafields.custom.coffee_process == 'decaf'
+           or product.metafields.custom.coffee_process == 'Decaf' %}
+        {%- unless q_product_first -%},{%- endunless -%}{%- assign q_product_first = false -%}
+        {%- liquid
+          assign qv = product.selected_or_first_available_variant
+          assign q_weight_g = qv.weight | times: 1
+          case qv.weight_unit
+            when 'kg'
+              assign q_weight_g = qv.weight | times: 1000
+            when 'lb'
+              assign q_weight_g = qv.weight | times: 453.592
+            when 'oz'
+              assign q_weight_g = qv.weight | times: 28.3495
+          endcase
+          assign q_weight_g = q_weight_g | round
+          if q_weight_g == 0
+            assign q_title_weight = qv.title | split: ' ' | first | plus: 0
+            if q_title_weight > 0
+              assign q_weight_g = q_title_weight
+            else
+              unless product.tags contains 'no-weight'
+                assign q_weight_g = 250
+              endunless
+            endif
+          endif
+          assign q_taste_labels = product.metafields.custom.coffee_tastes.value
+        -%}
+        {%- capture q_product_short_desc -%}{{ product.metafields.custom.short_description }}{%- endcapture -%}
+        {
+            "id": {{ product.id }},
+            "title": {{ product.title | json }},
+            "handle": {{ product.handle | json }},
+            "vendor": {{ product.vendor | json }},
+            "price": {{ product.price | money | json }},
+            "price_cents": {{ product.price }},
+            "weight_grams": {{ q_weight_g }},
+            "compare_at_price_cents": {{ product.compare_at_price | default: 0 }},
+            "variantId": {{ product.selected_or_first_available_variant.id }},
+            "available": {{ product.selected_or_first_available_variant.available }},
+            "image": {{ product.featured_image | image_url: width: 600 | json }},
+            "short_description": {{ q_product_short_desc | strip | json }},
+            "url": {{ product.url | json }},
+            "metafields": {
+              "coffee_roast_level": {{ product.metafields.custom.coffee_roast_level | json }},
+              "coffee_prep_methods": {{ product.metafields.custom.coffee_prep_methods }},
+              "coffee_tastes": {{ product.metafields.custom.coffee_tastes }},
+              "coffee_taste": {{ product.metafields.custom.coffee_taste | json }},
+              "vendor_short_name": {{ product.metafields.vendor_info.coffee_vendor.value.vendor_short_name | json }}
+            },
+            "taste_labels": {% if q_taste_labels %}{{ q_taste_labels | json }}{% else %}[]{% endif %}
+        }
+          {% endunless %}
+      {% endfor %}
+    ]
+  </script>
+{% endpaginate %}
 <script>
-  // Pass schema settings to JavaScript
   const questionnaireSettings = {
     redirectCollection: '{{ redirect_collection_url }}',
     closeRedirect: '{{ close_redirect_url }}',
@@ -497,6 +1153,1699 @@
     continueSingleText: '{{ continue_single_text }}',
     continueMultipleText: '{{ continue_multiple_js }}',
   };
+  const QUESTIONNAIRE_RESULTS_STATE_KEY = 'questionnaireResultsState';
+  const QUESTIONNAIRE_ORIGIN_KEY = 'questionnaireOriginUrl';
+  let _qModalPreviousFocus = null;
+  let _qRestartConfirmPreviousFocus = null;
+
+  (function captureQuizOrigin() {
+    if (sessionStorage.getItem(QUESTIONNAIRE_ORIGIN_KEY)) return;
+    var ref = document.referrer;
+    if (ref && ref.indexOf(window.location.origin) === 0) {
+      var refPath = ref.replace(window.location.origin, '');
+      if (refPath.indexOf('/pages/questionnaire') !== 0) {
+        sessionStorage.setItem(QUESTIONNAIRE_ORIGIN_KEY, ref);
+      }
+    }
+  })();
+
+  function ensureAllProductsLoaded() {
+    if (window.allProducts && Array.isArray(window.allProducts)) {
+      return window.allProducts;
+    }
+    var el = document.getElementById('questionnaire-products-data');
+    if (!el) {
+      window.allProducts = [];
+      return window.allProducts;
+    }
+    try {
+      window.allProducts = JSON.parse(el.textContent);
+    } catch (error) {
+      console.error('Failed to parse questionnaire product catalog:', error);
+      window.allProducts = [];
+    }
+    return window.allProducts;
+  }
+
+  function preloadAllProductsWhenIdle() {
+    var run = function () { ensureAllProductsLoaded(); };
+    if (typeof requestIdleCallback === 'function') {
+      requestIdleCallback(run, { timeout: 3000 });
+    } else {
+      setTimeout(run, 200);
+    }
+  }
+
+  function getQuestionnaireBundleQtyFromDom() {
+    const sel = document.querySelector('.questionnaire-qty-selector-wrapper .qty-option.selected');
+    if (!sel) return 5;
+    const dq = sel.getAttribute('data-qty');
+    const n = dq ? parseInt(dq, 10) : parseInt(sel.textContent.trim(), 10);
+    return [3, 5, 7].includes(n) ? n : 5;
+  }
+
+  /** Same as qty used for results footer / carousel bundle price. */
+  function getQuestionnaireResultsBundleQty() {
+    const sel = document.querySelector('.questionnaire-qty-selector-wrapper .qty-option.selected');
+    if (!sel) return 5;
+    const dq = sel.getAttribute('data-qty');
+    if (dq) {
+      const n = parseInt(dq, 10);
+      return [3, 5, 7].includes(n) ? n : 5;
+    }
+    const fallback = parseInt(sel.textContent.trim(), 10);
+    return [3, 5, 7].includes(fallback) ? fallback : 5;
+  }
+
+  function trackQuestionnaireAnalyticsClick(buttonName, properties) {
+    if (typeof analytics !== 'undefined' && analytics.trackClick) {
+      analytics.trackClick(buttonName, properties);
+    }
+  }
+
+  function trackQuestionnaireScreenView(screenName, properties) {
+    if (typeof analytics !== 'undefined' && analytics.trackScreenView) {
+      analytics.trackScreenView(screenName, properties);
+    }
+  }
+
+  function getQuestionnaireVendorDisplayName(vendorKey) {
+    const key = (vendorKey != null ? vendorKey : window.__questionnaireSelectedVendor || '').toLowerCase();
+    const opts = window.__questionnaireVendorOptions;
+    if (Array.isArray(opts)) {
+      const opt = opts.find(function (o) {
+        return (o.vendorKey || '').toLowerCase() === key;
+      });
+      if (opt) return opt.label || opt.vendorKey || key;
+    }
+    return key;
+  }
+
+  function getQuestionnaireBundlePurchaseProps(products) {
+    const qty = getQuestionnaireResultsBundleQty();
+    const prods = Array.isArray(products) ? products : [];
+    return {
+      'Bundle size': qty,
+      'Bundle Vendor': getQuestionnaireVendorDisplayName(),
+      'Bundle price': formatQuestionnaireMoney(bundleTotalWithShippingCentsForQuestionnaireProducts(prods, qty)),
+    };
+  }
+
+  function getQuestionnaireQuizBackStepLabel(step) {
+    if (step === 1) return 'Step 1';
+    if (step === 2) return 'Step 2';
+    if (step === 3) return 'Step 3';
+    return null;
+  }
+
+  function getQuestionnaireSelectionTitle(item) {
+    if (!item) return '';
+    const titleEl = item.querySelector('.questionnaire-text');
+    return titleEl ? titleEl.textContent.trim() : '';
+  }
+
+  function trackQuizResultsScreenViewOnce() {
+    if (window.__questionnaireResultsScreenTracked) return;
+    window.__questionnaireResultsScreenTracked = true;
+    trackQuestionnaireScreenView('Quiz Results');
+  }
+
+  const QUESTIONNAIRE_LINE_PROP_BUNDLE = '_questionnaire_bundle';
+
+  /** Per-vendor shipping (ILS) and free-shipping thresholds (cents); mirrors snippets/cart-drawer.liquid */
+  const QUESTIONNAIRE_VENDOR_SHIPPING = {
+    canopy: { shipping: 35, freeThresholdCents: 22500 },
+    blooms: { shipping: 35, freeThresholdCents: 22000 },
+    youneedcoffee: { shipping: 55, freeThresholdCents: 25000 },
+    coffeeorg: { shipping: 35, freeThresholdCents: 25000 },
+    coffeeculture: { shipping: 35, freeThresholdCents: 30000 },
+    elijahscoffee: { shipping: 35, freeThresholdCents: 30000 },
+    tostato: { shipping: 35, freeThresholdCents: 25000 },
+    brewbrothers: { shipping: 35, freeThresholdCents: 30000 },
+    uru: { shipping: 35, freeThresholdCents: 25000 },
+  };
+
+  // Vendors temporarily excluded from questionnaire bundle results.
+  // Remove a vendor from this list to restore it.
+  const TEMPORARILY_EXCLUDED_VENDORS = ['coffeeculture'];
+
+  /** Mirrors footer bundle: avg price per matched product × qty (subtotal, no shipping). */
+  function bundleTotalCentsForQuestionnaireProducts(products, qty) {
+    if (!Array.isArray(products) || !products.length) return 0;
+    const n = products.length;
+    let sumCents = 0;
+    products.forEach(function (p) {
+      sumCents += p.price_cents || 0;
+    });
+    const avgCents = sumCents / n;
+    return Math.round(avgCents * qty);
+  }
+
+  function questionnaireVendorKeyForBundle(products, vendorKey) {
+    if (vendorKey != null && String(vendorKey).trim()) {
+      return String(vendorKey).trim().toLowerCase();
+    }
+    const selected = (window.__questionnaireSelectedVendor || '').trim().toLowerCase();
+    if (selected) return selected;
+    if (!Array.isArray(products) || !products.length) return '';
+    const withVendor = products.find(function (p) {
+      return p && (p.vendor || '').trim();
+    });
+    return withVendor ? (withVendor.vendor || '').trim().toLowerCase() : '';
+  }
+
+  /** Shipping in cents for a vendor subtotal; 0 when free-shipping threshold is met. */
+  function questionnaireShippingCentsForVendor(vendorKey, subtotalCents) {
+    const cfg = QUESTIONNAIRE_VENDOR_SHIPPING[(vendorKey || '').toLowerCase()];
+    if (!cfg || !subtotalCents) return 0;
+    if (subtotalCents >= cfg.freeThresholdCents) return 0;
+    return cfg.shipping * 100;
+  }
+
+  /** Subtotal + vendor shipping (matches cart-drawer adjusted total for a single vendor). */
+  function bundleTotalWithShippingCentsForQuestionnaireProducts(products, qty, vendorKey) {
+    const subtotalCents = bundleTotalCentsForQuestionnaireProducts(products, qty);
+    const vk = questionnaireVendorKeyForBundle(products, vendorKey);
+    return subtotalCents + questionnaireShippingCentsForVendor(vk, subtotalCents);
+  }
+
+  function coffeesForVendorFromPositiveScores(positiveScores, vendorKeyLower) {
+    const v = (vendorKeyLower || '').toLowerCase();
+    if (!Array.isArray(positiveScores)) return [];
+    return positiveScores
+      .filter(function (item) {
+        return item.coffee && (item.coffee.vendor || '').trim().toLowerCase() === v;
+      })
+      .map(function (item) {
+        return item.coffee;
+      })
+      .slice(0, 7);
+  }
+
+  /* ——— QuestionnaireScoring engine ——— */
+  (function (global) {
+    const BUNDLE_SIZES = [3, 5, 7];
+
+    const DEFAULT_WEIGHTS = {
+      guidedPrepPerMatch: 1,
+      guidedRoastPerMatch: 3,
+      guidedTastePerMatch: 5,
+    };
+
+    const DEFAULT_MIN_BUNDLE_SCORE = { 3: 20, 5: 35, 7: 53 };
+
+    const DEFAULT_THRESHOLDS = {
+      minProductScore: 0,
+      minBundleScore: { ...DEFAULT_MIN_BUNDLE_SCORE },
+    };
+
+    const HEBREW_TO_ENGLISH_PREP = {
+      'מכונת אספרסו': 'Espresso',
+      'משקאות חלב': 'Espresso',
+      'קפה פילטר': 'Filter',
+      'מקינטה': 'MokaPot',
+    };
+
+    const TASTE_CATEGORY_MAP = {
+      'קלאסי':    ['Sweet', 'Sweet-Chocolate'],
+      'מודרני':   ['Sweet', 'Fruity-Sweet'],
+      'גל שלישי': ['Fruity', 'Fruity-Sweet'],
+    };
+
+    // Canonical taste spectrum for distance checks (roman questionnaire tool).
+    const TASTE_ORDER = ['Chocolate', 'Sweet-Chocolate', 'Sweet', 'Fruity-Sweet', 'Fruity'];
+    const TASTE_CATEGORY_ANCHOR = {
+      'קלאסי':    1,
+      'מודרני':   2,
+      'גל שלישי': 3,
+    };
+
+    const ROAST_ORDER = ['בהירה', 'בהירה-בינונית', 'בינונית', 'בינונית-כהה', 'כהה'];
+
+    // Maps aggregated UI roast choices to product roast levels (roman tool).
+    const ROAST_CATEGORY_MAP = {
+      'בהיר':   ['בהירה', 'בהירה-בינונית'],
+      'בינוני': ['בינונית', 'בהירה-בינונית', 'בינונית-כהה'],
+      'כהה':    ['כהה', 'בינונית-כהה'],
+    };
+
+    function escapeRegExp(s) {
+      return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function tasteMatches(coffeeTaste, selected) {
+      return (
+        coffeeTaste === selected ||
+        (typeof coffeeTaste === 'string' &&
+          typeof selected === 'string' &&
+          (coffeeTaste.includes(selected) || selected.includes(coffeeTaste)))
+      );
+    }
+
+    function tasteMatchMultiplier(coffeeTaste, selected) {
+      if (coffeeTaste == null || selected == null) return 0;
+      const ct = String(coffeeTaste).trim();
+      const se = String(selected).trim();
+      if (!ct || !se) return 0;
+      if (ct === se) return 1;
+      const esc = escapeRegExp(se);
+      if (new RegExp('^' + esc + '(?:-|$)').test(ct)) return 0.65;
+      if (new RegExp('-' + esc + '$').test(ct) || new RegExp('-' + esc + '-').test(ct)) return 0.4;
+      if (tasteMatches(ct, se)) return 0.5;
+      return 0;
+    }
+
+    function tasteBestForSelected(coffeeTastes, selectedTaste, w) {
+      const base = w.guidedTastePerMatch;
+      let best = { pts: 0, coffeeTaste: null };
+      for (let i = 0; i < coffeeTastes.length; i++) {
+        const ct = coffeeTastes[i];
+        const mult = tasteMatchMultiplier(ct, selectedTaste);
+        if (mult <= 0) continue;
+        const pts = Math.round(base * mult * 10) / 10;
+        if (pts > best.pts) best = { pts, coffeeTaste: ct };
+      }
+      return best;
+    }
+
+    function roastDistance(productRoast, selected) {
+      const ip = ROAST_ORDER.indexOf(productRoast);
+      const is = ROAST_ORDER.indexOf(selected);
+      if (ip < 0 || is < 0) return -1;
+      return Math.abs(ip - is);
+    }
+
+    function roastScore(productRoast, selected, fullPts) {
+      if (!productRoast || !selected) return { pts: 0, type: null };
+      const p = String(productRoast).trim();
+      const s = String(selected).trim();
+      if (!p || !s) return { pts: 0, type: null };
+      if (p === s) return { pts: fullPts, type: 'exact' };
+      const d = roastDistance(p, s);
+      let mult = 0;
+      if (d === 1) mult = 0.5;
+      else if (d === 2) mult = 0.25;
+      if (mult <= 0) return { pts: 0, type: null };
+      return { pts: Math.round(fullPts * mult * 10) / 10, type: 'partial' };
+    }
+
+    function tasteWithinRange(productTastes, selectedCategories) {
+      if (!selectedCategories || selectedCategories.length === 0) return true;
+      const anchors = [];
+      for (let i = 0; i < selectedCategories.length; i++) {
+        const c = selectedCategories[i];
+        const a = TASTE_CATEGORY_ANCHOR[c];
+        if (a != null) anchors.push(a);
+      }
+      if (anchors.length === 0) return true;
+      const list = Array.isArray(productTastes) ? productTastes : [];
+      const categoryTastes = list.filter(function (t) {
+        return TASTE_ORDER.indexOf(t) >= 0;
+      });
+      if (categoryTastes.length === 0) return true;
+      for (let t = 0; t < categoryTastes.length; t++) {
+        const pos = TASTE_ORDER.indexOf(categoryTastes[t]);
+        for (let ai = 0; ai < anchors.length; ai++) {
+          if (Math.abs(pos - anchors[ai]) <= 2) return true;
+        }
+      }
+      return false;
+    }
+
+    /** Expands abbreviated roast keys to canonical product roast labels (QuestionnaireTool / roman HTML). */
+    function expandRoastLevelsForMatching(rawLevels) {
+      if (!Array.isArray(rawLevels)) return [];
+      const out = [];
+      rawLevels.filter(Boolean).forEach(function (r) {
+        var mapped = ROAST_CATEGORY_MAP[r];
+        if (mapped && mapped.length) {
+          mapped.forEach(function (x) {
+            if (x) out.push(x);
+          });
+        } else {
+          out.push(r);
+        }
+      });
+      return out;
+    }
+
+    function scoreOneCoffeeGuided(coffee, englishPrepMethods, selectedRoastLevels, tasteCategories, showAll, w) {
+      let score = 0;
+      let roastMeta = { type: null, selected: null, product: coffee.coffee_roast_level || '' };
+
+      const tastesArr = Array.isArray(coffee.tastes) ? coffee.tastes : [];
+      if (
+        !showAll &&
+        tasteCategories.length > 0 &&
+        !tasteWithinRange(tastesArr, tasteCategories)
+      ) {
+        return { score: 0, roastMeta };
+      }
+
+      if (englishPrepMethods.length > 0) {
+        const matchedPrep = englishPrepMethods.filter(function (method) {
+          return Array.isArray(coffee.prep_method) && coffee.prep_method.includes(method);
+        });
+        if (matchedPrep.length > 0) score += w.guidedPrepPerMatch;
+      } else {
+        score += w.guidedPrepPerMatch;
+      }
+
+      if (selectedRoastLevels.length > 0) {
+        let bestRoast = { pts: 0, type: null, sel: selectedRoastLevels[0] };
+        selectedRoastLevels.forEach(function (sel) {
+          const r = roastScore(coffee.coffee_roast_level, sel, w.guidedRoastPerMatch);
+          if (r.pts > bestRoast.pts) bestRoast = { pts: r.pts, type: r.type, sel: sel };
+        });
+        // For "show all"/"לא בטוחים" taste mode, still keep roast close to selection.
+        if (showAll && bestRoast.pts <= 0) {
+          return { score: 0, roastMeta };
+        }
+        if (bestRoast.pts > 0) score += bestRoast.pts;
+        roastMeta = { type: bestRoast.type || 'none', selected: bestRoast.sel, product: coffee.coffee_roast_level || '' };
+      } else {
+        score += w.guidedRoastPerMatch;
+      }
+
+      if (showAll) {
+        score += w.guidedTastePerMatch;
+      } else if (tasteCategories.length > 0) {
+        tasteCategories.forEach(function (categoryHeb) {
+          const targets = TASTE_CATEGORY_MAP[categoryHeb] || [];
+          let best = { pts: 0 };
+          targets.forEach(function (targetEng) {
+            const b = tasteBestForSelected(tastesArr, targetEng, w);
+            if (b.pts > best.pts) best = b;
+          });
+          if (best.pts > 0) score += best.pts;
+        });
+      }
+
+      return { score, roastMeta };
+    }
+
+    function matchCoffees(params, coffeeDatabase, weights, thresholds) {
+      const w = { ...DEFAULT_WEIGHTS, ...weights };
+      const th = {
+        ...DEFAULT_THRESHOLDS,
+        ...thresholds,
+        minBundleScore: { ...DEFAULT_MIN_BUNDLE_SCORE, ...(thresholds && thresholds.minBundleScore) },
+      };
+      const minProd = Number(th.minProductScore) || 0;
+
+      const showAll = params.tastes && params.tastes.includes('הצג הכל');
+      const englishPrepMethods = params.prep_method
+        ? params.prep_method.map(function (m) { return HEBREW_TO_ENGLISH_PREP[m] || m; })
+        : [];
+      const tasteCategories = params.tastes && !showAll
+        ? params.tastes.filter(function (t) { return t !== 'הצג הכל'; })
+        : [];
+      const roastLevels = expandRoastLevelsForMatching(
+        Array.isArray(params.roast_levels) ? params.roast_levels : []
+      );
+
+      const scoredCoffees = coffeeDatabase.map(function (coffee) {
+        const d = scoreOneCoffeeGuided(coffee, englishPrepMethods, roastLevels, tasteCategories, showAll, w);
+        return { coffee: coffee, score: d.score, roastMeta: d.roastMeta };
+      });
+
+      let guidedBelowMin = false;
+      let sorted = scoredCoffees
+        .filter(function (item) { return showAll ? item.score >= 0 : item.score > minProd; })
+        .sort(function (a, b) { return b.score - a.score; });
+
+      if (sorted.length === 0) {
+        if (minProd > 0) {
+          const anyPositive = scoredCoffees.filter(function (x) { return x.score > 0; }).sort(function (a, b) { return b.score - a.score; });
+          sorted = anyPositive.length > 0 ? anyPositive : scoredCoffees.slice().sort(function (a, b) { return b.score - a.score; }).slice(0, 7);
+          guidedBelowMin = true;
+        }
+        if (!guidedBelowMin) {
+          sorted = coffeeDatabase.slice(0, 7).map(function (c, i) {
+            return { coffee: c, score: 7 - i, roastMeta: { type: null, selected: null, product: c.coffee_roast_level || '' } };
+          });
+        }
+      }
+
+      return {
+        coffees: sorted.map(function (item) { return item.coffee; }),
+        withScores: sorted,
+        mode: 'guided',
+        showAll: !!showAll,
+        belowMin: guidedBelowMin,
+      };
+    }
+
+    function shuffleArray(arr) {
+      const out = arr.slice();
+      for (let i = out.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = out[i];
+        out[i] = out[j];
+        out[j] = tmp;
+      }
+      return out;
+    }
+
+    function padItemsToSize(items, size) {
+      if (items.length >= size) return items.slice(0, size);
+      const result = items.slice();
+      const byScore = items.slice().sort(function (a, b) { return b.score - a.score; });
+      for (let i = 0; result.length < size; i++) {
+        result.push(byScore[i % byScore.length]);
+      }
+      return result;
+    }
+
+    function arrangeInitialVendors(top3For3, top3For5, top3For7) {
+      const arrays = [top3For3, top3For5, top3For7];
+      const lens = arrays.map(function (a) { return Math.max(a.length, 1); });
+      let bestCost = Infinity;
+      let bestIdx = [0, 0, 0];
+
+      for (let i = 0; i < lens[0]; i++) {
+        for (let j = 0; j < lens[1]; j++) {
+          for (let k = 0; k < lens[2]; k++) {
+            const vendors = [
+              arrays[0][i] && arrays[0][i].vendor,
+              arrays[1][j] && arrays[1][j].vendor,
+              arrays[2][k] && arrays[2][k].vendor,
+            ].filter(Boolean);
+
+            if (new Set(vendors).size === vendors.length) {
+              const cost = i + j + k;
+              if (cost < bestCost) {
+                bestCost = cost;
+                bestIdx = [i, j, k];
+              }
+            }
+          }
+        }
+      }
+
+      function rotateToFront(arr, idx) {
+        if (idx === 0 || arr.length === 0) return arr;
+        return arr.slice(idx).concat(arr.slice(0, idx));
+      }
+
+      return {
+        top3For3: rotateToFront(top3For3, bestIdx[0]),
+        top3For5: rotateToFront(top3For5, bestIdx[1]),
+        top3For7: rotateToFront(top3For7, bestIdx[2]),
+      };
+    }
+
+    function buildVendorBundles(withScores, thresholds, options) {
+      const relaxForShowAll = options && options.showAll;
+      const selectedRoastLevels = options && Array.isArray(options.selectedRoastLevels)
+        ? options.selectedRoastLevels.filter(Boolean) : [];
+      const hasRoastSelection = selectedRoastLevels.length > 0;
+      const th = {
+        ...DEFAULT_THRESHOLDS,
+        ...thresholds,
+        minBundleScore: { ...DEFAULT_MIN_BUNDLE_SCORE, ...(thresholds && thresholds.minBundleScore) },
+      };
+      const minProd = relaxForShowAll ? 0 : Number(th.minProductScore) || 0;
+
+      let filtered = withScores.filter(function (row) { return minProd > 0 ? row.score > minProd : row.score >= 0; });
+      let productsBelowMin = false;
+      if (filtered.length < 3) {
+        const relaxed = withScores.filter(function (row) { return row.score >= 0; }).sort(function (a, b) { return b.score - a.score; });
+        if (relaxed.length === 0) return { ok: false, reason: 'אין מוצרים בקטלוג.', bundles: null };
+        filtered = relaxed;
+        productsBelowMin = true;
+      }
+
+      const vendorGroups = {};
+      filtered.forEach(function (row) {
+        const v = row.coffee.vendor || '';
+        if (TEMPORARILY_EXCLUDED_VENDORS.indexOf(v.toLowerCase()) !== -1) return;
+        if (!vendorGroups[v]) vendorGroups[v] = { vendor: v, items: [] };
+        const roastType = row.roastMeta && row.roastMeta.type ? row.roastMeta.type : null;
+        const roastPriority = roastType === 'exact' ? 2 : roastType === 'partial' ? 1 : 0;
+        vendorGroups[v].items.push({ coffee: row.coffee, score: row.score, roastPriority: roastPriority, roastMeta: row.roastMeta || null });
+      });
+
+      Object.values(vendorGroups).forEach(function (vg) {
+        vg.items.sort(function (a, b) {
+          if (b.roastPriority !== a.roastPriority) return b.roastPriority - a.roastPriority;
+          return b.score - a.score;
+        });
+      });
+
+      function topItemsForVendor(vg, size) {
+        if (!hasRoastSelection) return vg.items.slice(0, size);
+        const roastMatched = vg.items.filter(function (item) { return item.roastPriority > 0; });
+        if (roastMatched.length >= size) return roastMatched.slice(0, size);
+        return vg.items.slice(0, size);
+      }
+
+      function getTopVendorsForSize(size) {
+        const minBundle = relaxForShowAll ? 0 : Number(th.minBundleScore[size]) || 0;
+        const candidates = Object.values(vendorGroups)
+          .filter(function (vg) { return vg.items.length >= size; })
+          .map(function (vg) {
+            const topItems = topItemsForVendor(vg, size);
+            const bundleScore = topItems.reduce(function (s, item) { return s + item.score; }, 0);
+            const roastHits = topItems.reduce(function (s, item) { return s + (item.roastPriority > 0 ? 1 : 0); }, 0);
+            const strictRoastEligible = hasRoastSelection
+              ? vg.items.filter(function (it) { return it.roastPriority > 0; }).length >= size
+              : false;
+            return { vendor: vg.vendor, items: vg.items, bundleScore: bundleScore, roastHits: roastHits, strictRoastEligible: strictRoastEligible, size: size, bundleItems: topItems };
+          })
+          .filter(function (x) { return x.bundleScore >= minBundle; });
+
+        if (candidates.length === 0) return [];
+
+        const POOL_PCT = 0.20;
+        const maxBundleScore = Math.max.apply(null, candidates.map(function (x) { return x.bundleScore; }));
+        const scoreFloor = maxBundleScore > 0 ? maxBundleScore * (1 - POOL_PCT) : 0;
+        const pool = candidates.filter(function (x) { return x.bundleScore >= scoreFloor; });
+        const rest = candidates
+          .filter(function (x) { return x.bundleScore < scoreFloor; })
+          .sort(function (a, b) {
+            if ((b.strictRoastEligible ? 1 : 0) !== (a.strictRoastEligible ? 1 : 0)) {
+              return (b.strictRoastEligible ? 1 : 0) - (a.strictRoastEligible ? 1 : 0);
+            }
+            if (b.roastHits !== a.roastHits) return b.roastHits - a.roastHits;
+            return b.bundleScore - a.bundleScore;
+          });
+
+        return shuffleArray(pool).concat(rest).slice(0, 3);
+      }
+
+      function getFallbackVendorsForSize(size) {
+        const withEnoughItems = Object.values(vendorGroups).filter(function (vg) { return vg.items.length >= size; });
+        if (withEnoughItems.length > 0) {
+          return withEnoughItems
+            .map(function (vg) {
+              const topItems = topItemsForVendor(vg, size);
+              const bundleScore = topItems.reduce(function (s, item) { return s + item.score; }, 0);
+              const roastHits = topItems.reduce(function (s, item) { return s + (item.roastPriority > 0 ? 1 : 0); }, 0);
+              return { vendor: vg.vendor, items: vg.items, bundleScore: bundleScore, roastHits: roastHits, size: size, bundleItems: topItems };
+            })
+            .sort(function (a, b) {
+              if (b.roastHits !== a.roastHits) return b.roastHits - a.roastHits;
+              return b.bundleScore - a.bundleScore;
+            })
+            .slice(0, 3);
+        }
+
+        return Object.values(vendorGroups)
+          .filter(function (vg) { return vg.items.length > 0; })
+          .map(function (vg) {
+            const paddedItems = padItemsToSize(vg.items, size);
+            const bundleScore = paddedItems.reduce(function (s, item) { return s + item.score; }, 0);
+            const roastHits = paddedItems.reduce(function (s, item) { return s + (item.roastPriority > 0 ? 1 : 0); }, 0);
+            return { vendor: vg.vendor, items: vg.items, bundleScore: bundleScore, roastHits: roastHits, size: size, bundleItems: paddedItems };
+          })
+          .sort(function (a, b) {
+            if (b.items.length !== a.items.length) return b.items.length - a.items.length;
+            return b.bundleScore - a.bundleScore;
+          })
+          .slice(0, 3);
+      }
+
+      let top3For3 = getTopVendorsForSize(3);
+      let top3For5 = getTopVendorsForSize(5);
+      let top3For7 = getTopVendorsForSize(7);
+
+      const belowMin3 = top3For3.length === 0;
+      const belowMin5 = top3For5.length === 0;
+      const belowMin7 = top3For7.length === 0;
+      if (belowMin3) top3For3 = getFallbackVendorsForSize(3);
+      if (belowMin5) top3For5 = getFallbackVendorsForSize(5);
+      if (belowMin7) top3For7 = getFallbackVendorsForSize(7);
+
+      if (!top3For3.length && !top3For5.length && !top3For7.length) {
+        return { ok: false, reason: 'אין ספקים עם מוצרים בקטלוג.', bundles: null };
+      }
+
+      const arranged = arrangeInitialVendors(top3For3, top3For5, top3For7);
+      top3For3 = arranged.top3For3;
+      top3For5 = arranged.top3For5;
+      top3For7 = arranged.top3For7;
+
+      const bundles = {
+        3: top3For3.map(function (v) { return (v.bundleItems || v.items.slice(0, 3)).map(function (item) { return item.coffee; }); }),
+        5: top3For5.map(function (v) { return (v.bundleItems || v.items.slice(0, 5)).map(function (item) { return item.coffee; }); }),
+        7: top3For7.map(function (v) { return (v.bundleItems || v.items.slice(0, 7)).map(function (item) { return item.coffee; }); }),
+      };
+
+      const sizesBelowMin = { 3: productsBelowMin || belowMin3, 5: productsBelowMin || belowMin5, 7: productsBelowMin || belowMin7 };
+      const meta = { topVendors: { 3: top3For3, 5: top3For5, 7: top3For7 }, sizesBelowMin: sizesBelowMin };
+
+      return { ok: true, bundles: bundles, meta: meta, belowMin: productsBelowMin || belowMin3 || belowMin5 || belowMin7 };
+    }
+
+    global.QuestionnaireScoring = {
+      matchCoffees: matchCoffees,
+      buildVendorBundles: buildVendorBundles,
+      BUNDLE_SIZES: BUNDLE_SIZES,
+      expandRoastLevelsForMatching: expandRoastLevelsForMatching,
+    };
+  })(typeof window !== 'undefined' ? window : globalThis);
+  /* ——— end QuestionnaireScoring engine ——— */
+
+  function shuffleVendorList(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = a[i];
+      a[i] = a[j];
+      a[j] = t;
+    }
+    return a;
+  }
+
+  function getVendorDisplayNameFromPool(vendorKeyLower, positiveScores) {
+    const k = (vendorKeyLower || '').toLowerCase();
+    for (var i = 0; i < positiveScores.length; i++) {
+      const coffee = positiveScores[i].coffee;
+      const v = (coffee.vendor || '').trim();
+      if (v && v.toLowerCase() === k) {
+        const shortName = (coffee.metafields && coffee.metafields.vendor_short_name) ? String(coffee.metafields.vendor_short_name).trim() : '';
+        if (shortName) {
+          return shortName.charAt(0).toUpperCase() + shortName.slice(1);
+        }
+        return v;
+      }
+    }
+    return '';
+  }
+
+  function sortVendorOptionsByMatchDesc(options) {
+    if (!Array.isArray(options) || !options.length) {
+      return options;
+    }
+    return options.slice().sort(function (a, b) {
+      const sb = (b.orderScore != null ? b.orderScore : b.matchPercent != null ? b.matchPercent : 0);
+      const sa = (a.orderScore != null ? a.orderScore : a.matchPercent != null ? a.matchPercent : 0);
+      if (sb !== sa) return sb - sa;
+      return Math.random() - 0.5;
+    });
+  }
+
+  /**
+   * Picks 3 random vendors (when possible) for the results menu.
+   * orderScore ranks by summed match score (higher = better); menu prices are computed in updateResultsVendorSelect.
+   */
+  function pickThreeVendorOptionsForResults(uniqueVendorsLower, positiveScores) {
+    const uniq = [...new Set((uniqueVendorsLower || []).map((v) => (v || '').trim().toLowerCase()).filter(Boolean))];
+    if (!uniq.length) {
+      return [];
+    }
+    const shuffled = shuffleVendorList(uniq);
+    let pickKeys;
+    if (shuffled.length >= 3) {
+      pickKeys = [shuffled[0], shuffled[1], shuffled[2]];
+    } else if (shuffled.length === 2) {
+      pickKeys = [shuffled[0], shuffled[1], shuffled[Math.random() < 0.5 ? 0 : 1]];
+    } else {
+      pickKeys = [shuffled[0], shuffled[0], shuffled[0]];
+    }
+    const rows = pickKeys.map((vendorKey) => {
+      const orderScore = (positiveScores || []).reduce(function (s, item) {
+        if ((item.coffee.vendor || '').trim().toLowerCase() === vendorKey) return s + (item.score || 0);
+        return s;
+      }, 0);
+      return {
+        vendorKey: vendorKey,
+        label: getVendorDisplayNameFromPool(vendorKey, positiveScores) || vendorKey,
+        orderScore: orderScore,
+      };
+    });
+    return sortVendorOptionsByMatchDesc(rows);
+  }
+
+  function matchQuestionnaireCoffees(userText) {
+    const catalog = ensureAllProductsLoaded();
+    if (!catalog.length) {
+      return [];
+    }
+
+    const S = window.QuestionnaireScoring;
+    const params = window.__questionnaireParams;
+
+    const WEIGHTS = {
+      guidedPrepPerMatch: 1,
+      guidedRoastPerMatch: 3,
+      guidedTastePerMatch: 5,
+    };
+    const THRESHOLDS = {
+      minProductScore: 0,
+      minBundleScore: { 3: 20, 5: 35, 7: 53 },
+    };
+
+    function getCoffeeProcessValue(product) {
+      const raw = product && product.metafields ? product.metafields.coffee_process : null;
+      if (raw && typeof raw === 'object' && raw !== null && raw.value != null) return String(raw.value);
+      return String(raw || '');
+    }
+
+    function isDecaf(product) {
+      const process = getCoffeeProcessValue(product);
+      const tags = Array.isArray(product && product.tags) ? product.tags.join(' ') : '';
+      const text = [
+        product && product.handle,
+        product && product.title,
+        product && product.short_description,
+        process,
+        tags,
+      ].filter(Boolean).join(' ').toLowerCase();
+      return (
+        text.indexOf('decaf') !== -1 ||
+        text.indexOf('d-caf') !== -1 ||
+        text.indexOf('נטול') !== -1 ||
+        text.indexOf('נטולת') !== -1 ||
+        text.indexOf('ללא קפאין') !== -1
+      );
+    }
+
+    const coffeeDatabase = catalog.map(function (product) {
+      const mf = product.metafields || {};
+      const roastRaw = mf.coffee_roast_level;
+      const coffeeRoastLevel =
+        roastRaw && typeof roastRaw === 'object' && roastRaw !== null && roastRaw.value != null
+          ? String(roastRaw.value)
+          : String(roastRaw || '');
+      return Object.assign({}, product, {
+        prep_method: normalizeMetaList(mf.coffee_prep_methods),
+        tastes: normalizeProductTasteKeys(mf),
+        coffee_roast_level: coffeeRoastLevel,
+      });
+    }).filter(function (product) {
+      return !isDecaf(product);
+    });
+
+    let withScores;
+    let matchShowAll = false;
+    const selectedBundleQty = getQuestionnaireResultsBundleQty();
+
+    if (S && params) {
+      const matchResult = S.matchCoffees(params, coffeeDatabase, WEIGHTS, THRESHOLDS);
+      withScores = matchResult.withScores || [];
+      matchShowAll = !!matchResult.showAll;
+    } else {
+      const text = (userText || '').toLowerCase();
+      withScores = coffeeDatabase.map(function (coffee) {
+        let score = 0;
+        (coffee.prep_method || []).forEach(function (m) { if (text.includes(m.toLowerCase())) score += 1; });
+        (coffee.tastes || []).forEach(function (t) { if (text.includes(t.toLowerCase())) score += 5; });
+        return { coffee: coffee, score: score, roastMeta: { type: null, selected: null, product: coffee.coffee_roast_level || '' } };
+      }).filter(function (x) { return x.score > 0; }).sort(function (a, b) { return b.score - a.score; });
+    }
+
+    window.__questionnaireLastWithScores = withScores;
+    window.__questionnaireLastPositiveScores = withScores;
+
+    let bundleResult = null;
+    if (S && withScores.length > 0) {
+      bundleResult = S.buildVendorBundles(withScores, THRESHOLDS, {
+        showAll: matchShowAll,
+        selectedRoastLevels: params ? S.expandRoastLevelsForMatching(params.roast_levels || []) : [],
+      });
+      window.__questionnaireBundleResult = bundleResult;
+    }
+
+    const currentUserText = window.__questionnaireMatchUserText || userText || '';
+    const previousAssignedQty = window.__questionnaireVendorAssignmentForQty;
+    const qtyChanged = previousAssignedQty !== selectedBundleQty;
+    const sameQuestionnaireText = window.__questionnaireVendorAssignmentForText === currentUserText;
+    if (!sameQuestionnaireText || !window.__questionnaireVendorOptionsByQty || typeof window.__questionnaireVendorOptionsByQty !== 'object') {
+      window.__questionnaireVendorOptionsByQty = {};
+    }
+    if (!window.__questionnaireSelectedVendorByQty || typeof window.__questionnaireSelectedVendorByQty !== 'object') {
+      window.__questionnaireSelectedVendorByQty = {};
+    }
+    const needsNewVendorOptions =
+      !window.__questionnaireVendorOptions ||
+      !window.__questionnaireVendorOptions.length ||
+      window.__questionnaireVendorAssignmentForText !== currentUserText ||
+      qtyChanged;
+
+    if (needsNewVendorOptions) {
+      const cachedForQty = sameQuestionnaireText
+        ? window.__questionnaireVendorOptionsByQty[selectedBundleQty]
+        : null;
+      let vendorOptions = Array.isArray(cachedForQty) ? cachedForQty.slice() : [];
+      if (!vendorOptions.length) {
+        if (bundleResult && bundleResult.ok && bundleResult.meta && bundleResult.meta.topVendors) {
+            const primary = bundleResult.meta.topVendors[selectedBundleQty] || [];
+            vendorOptions = primary.map(function (v) {
+              return {
+                vendorKey: (v.vendor || '').toLowerCase(),
+                label: getVendorDisplayNameFromPool((v.vendor || '').toLowerCase(), withScores) || v.vendor || '',
+                orderScore: v.bundleScore || 0,
+              };
+            }).filter(function (o) { return o.vendorKey; });
+        }
+        if (!vendorOptions.length) {
+          const uniqueVendors = [];
+          const seen = {};
+          withScores.forEach(function (x) {
+            const vk = (x.coffee.vendor || '').trim().toLowerCase();
+            if (vk && !seen[vk]) { seen[vk] = true; uniqueVendors.push(vk); }
+          });
+          vendorOptions = pickThreeVendorOptionsForResults(uniqueVendors, withScores);
+        }
+        window.__questionnaireVendorOptionsByQty[selectedBundleQty] = vendorOptions.slice();
+      }
+      window.__questionnaireVendorOptions = vendorOptions;
+      window.__questionnaireVendorAssignmentForText = currentUserText;
+      window.__questionnaireVendorAssignmentForQty = selectedBundleQty;
+      // Keep simulator behavior: when package size changes, move to the top
+      // vendor for that size instead of preserving an older vendor selection.
+      if (qtyChanged && vendorOptions.length) {
+        const selectedForQty = String(window.__questionnaireSelectedVendorByQty[selectedBundleQty] || '').toLowerCase();
+        const existsForQty = vendorOptions.some(function (o) {
+          return String(o.vendorKey || '').toLowerCase() === selectedForQty;
+        });
+        window.__questionnaireSelectedVendor = existsForQty ? selectedForQty : vendorOptions[0].vendorKey;
+      }
+    }
+
+    if (window.__questionnaireSelectedVendor && window.__questionnaireVendorOptions && window.__questionnaireVendorOptions.length) {
+      const want = (window.__questionnaireSelectedVendor || '').toLowerCase();
+      const inList = window.__questionnaireVendorOptions.some(function (o) {
+        return (o.vendorKey || '').toLowerCase() === want;
+      });
+      const vendorInScores = withScores.some(function (x) { return (x.coffee.vendor || '').trim().toLowerCase() === want; });
+      if (!inList && vendorInScores) {
+        const name = getVendorDisplayNameFromPool(want, withScores) || want;
+        const injectScore = withScores.reduce(function (s, item) {
+          return (item.coffee.vendor || '').trim().toLowerCase() === want ? s + (item.score || 0) : s;
+        }, 0);
+        window.__questionnaireVendorOptions[0] = { vendorKey: want, label: name, orderScore: Math.max(injectScore, 1) };
+        window.__questionnaireVendorOptions = sortVendorOptionsByMatchDesc(window.__questionnaireVendorOptions);
+        window.__questionnaireVendorOptionsByQty[selectedBundleQty] = window.__questionnaireVendorOptions.slice();
+      }
+    }
+
+    if (!window.__questionnaireVendorOptions || !window.__questionnaireVendorOptions.length) {
+      return [];
+    }
+
+    const optionKeys = window.__questionnaireVendorOptions.map(function (o) {
+      return (o.vendorKey || '').toLowerCase();
+    });
+    var sel = (window.__questionnaireSelectedVendor || '').toLowerCase();
+    if (!sel || optionKeys.indexOf(sel) === -1) {
+      window.__questionnaireSelectedVendor = window.__questionnaireVendorOptions[0].vendorKey;
+    }
+    window.__questionnaireSelectedVendorByQty[selectedBundleQty] = window.__questionnaireSelectedVendor;
+
+    const targetVendor = (window.__questionnaireSelectedVendor || '').toLowerCase();
+    if (!targetVendor) return [];
+
+    if (bundleResult && bundleResult.ok && bundleResult.meta && bundleResult.meta.topVendors && bundleResult.bundles) {
+      const topForSize = bundleResult.meta.topVendors[selectedBundleQty] || [];
+      const optionIdx = topForSize.findIndex(function (tv) {
+        return ((tv && tv.vendor) || '').trim().toLowerCase() === targetVendor;
+      });
+      const bundleOptions = bundleResult.bundles[selectedBundleQty] || [];
+      if (optionIdx >= 0 && Array.isArray(bundleOptions[optionIdx]) && bundleOptions[optionIdx].length) {
+        return bundleOptions[optionIdx].slice(0, 7);
+      }
+    }
+
+    const forVendor = withScores
+      .filter(function (item) {
+        return (item.coffee.vendor || '').trim().toLowerCase() === targetVendor;
+      })
+      .sort(function (a, b) {
+        const rpa = a.roastMeta && a.roastMeta.type === 'exact' ? 2 : a.roastMeta && a.roastMeta.type === 'partial' ? 1 : 0;
+        const rpb = b.roastMeta && b.roastMeta.type === 'exact' ? 2 : b.roastMeta && b.roastMeta.type === 'partial' ? 1 : 0;
+        if (rpb !== rpa) return rpb - rpa;
+        return b.score - a.score;
+      });
+
+    return forVendor.map(function (item) { return item.coffee; }).slice(0, 7);
+  }
+
+  function formatQuestionnaireBundleWeightKg(grams) {
+    if (grams == null || grams <= 0) return '';
+    var kg = grams / 1000;
+    var s = kg.toFixed(3).replace(/\.?0+$/, '');
+    return s + ' ק"ג';
+  }
+
+  function formatQuestionnaireProductWeight(grams) {
+    if (grams == null || grams <= 0) return '—';
+    if (grams >= 1000) return formatQuestionnaireBundleWeightKg(grams);
+    return Math.round(grams) + ' גרם';
+  }
+
+  function formatQuestionnaireMoney(cents) {
+    return '\u20AA' + (cents / 100).toFixed(0);
+  }
+
+  function updateQuestionnaireQtyOptionWeights() {
+    var ut = window.__questionnaireMatchUserText;
+    var wrapper = document.querySelector('.questionnaire-qty-selector-wrapper');
+    if (!wrapper) return;
+    wrapper.querySelectorAll('.qty-option').forEach(function (btn) {
+      var wEl = btn.querySelector('.qty-option__weight');
+      if (!wEl) return;
+      var dq = btn.getAttribute('data-qty');
+      var q = dq ? parseInt(dq, 10) : 0;
+      if (typeof ut !== 'string' || !q) {
+        wEl.textContent = '';
+        return;
+      }
+      var prods = matchQuestionnaireCoffees(ut);
+      var grams = 0;
+      prods.slice(0, q).forEach(function (p) {
+        grams += p.weight_grams || 0;
+      });
+      var w = formatQuestionnaireBundleWeightKg(grams);
+      wEl.textContent = w ? w : '';
+    });
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function setResultsVendorMenuOpen(isOpen) {
+    var drop = document.getElementById('q-results-vendor-dropdown');
+    var panel = document.getElementById('q-results-vendor-panel');
+    var tr = document.getElementById('q-results-vendor-trigger');
+    if (!drop || !panel || !tr) return;
+    if (isOpen) {
+      drop.setAttribute('data-open', 'true');
+      panel.removeAttribute('hidden');
+      tr.setAttribute('aria-expanded', 'true');
+    } else {
+      drop.setAttribute('data-open', 'false');
+      panel.setAttribute('hidden', 'hidden');
+      tr.setAttribute('aria-expanded', 'false');
+    }
+  }
+
+  function updateResultsVendorSelect() {
+    var list = document.getElementById('q-results-vendor-list');
+    if (!list) return;
+    var menu = document.getElementById('q-results-vendor-menu');
+    var drop = document.getElementById('q-results-vendor-dropdown');
+    var tr = document.getElementById('q-results-vendor-trigger');
+    var trLabel = document.getElementById('q-results-vendor-trigger-label');
+    var opts = window.__questionnaireVendorOptions;
+
+    setResultsVendorMenuOpen(false);
+
+    if (!Array.isArray(opts) || !opts.length) {
+      list.innerHTML = '<p class="results-vendor-menu__empty" role="status">' + escapeHtml('אין מותגים להצגה') + '</p>';
+      if (menu) menu.setAttribute('data-empty', 'true');
+      if (drop) drop.setAttribute('data-empty', 'true');
+      if (tr) {
+        tr.disabled = true;
+        tr.setAttribute('aria-disabled', 'true');
+      }
+      if (trLabel) trLabel.textContent = 'אין מותגים להצגה';
+      var trWeight = document.getElementById('q-results-vendor-trigger-weight');
+      if (trWeight) {
+        trWeight.textContent = '';
+        trWeight.hidden = true;
+      }
+      var trPrice = document.getElementById('q-results-vendor-trigger-price');
+      if (trPrice) {
+        trPrice.textContent = '';
+        trPrice.hidden = true;
+      }
+      var trSep = document.getElementById('q-results-vendor-trigger-sep');
+      if (trSep) {
+        trSep.hidden = true;
+      }
+      return;
+    }
+    if (menu) menu.setAttribute('data-empty', 'false');
+    if (drop) drop.setAttribute('data-empty', 'false');
+    if (tr) {
+      tr.disabled = false;
+      tr.removeAttribute('aria-disabled');
+    }
+    var optionKeys = opts.map(function (o) {
+      return (o.vendorKey || '').toLowerCase();
+    });
+    var cur = (window.__questionnaireSelectedVendor || '').toLowerCase();
+    if (optionKeys.indexOf(cur) === -1) {
+      window.__questionnaireSelectedVendor = opts[0].vendorKey;
+    }
+    cur = (window.__questionnaireSelectedVendor || '').toLowerCase();
+    var currentOpt = opts.find(function (o) {
+      return (o.vendorKey || '').toLowerCase() === cur;
+    });
+    if (trLabel && currentOpt) {
+      var tl = currentOpt.label || currentOpt.vendorKey;
+      trLabel.textContent = 'מארז מבית הקלייה ' + tl;
+    } else if (trLabel) {
+      trLabel.textContent = '—';
+    }
+    var posScores = window.__questionnaireLastPositiveScores;
+    if (!Array.isArray(posScores)) posScores = [];
+    var menuQty = getQuestionnaireResultsBundleQty();
+    var bundleResult = window.__questionnaireBundleResult;
+    var topForQty =
+      bundleResult && bundleResult.ok && bundleResult.meta && bundleResult.meta.topVendors
+        ? bundleResult.meta.topVendors[menuQty] || []
+        : [];
+    var bundleOptionsForQty =
+      bundleResult && bundleResult.ok && bundleResult.bundles
+        ? bundleResult.bundles[menuQty] || []
+        : [];
+    var sepSvg =
+      '<svg class="results-vendor-trigger__sep-icon" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="3.5" fill="currentColor"/></svg>';
+    list.innerHTML = opts
+      .map(function (o) {
+        var v = o.vendorKey || '';
+        var vLower = (v || '').toLowerCase();
+        var label = o.label || v;
+        var bundleIdx = topForQty.findIndex(function (tv) {
+          return ((tv && tv.vendor) || '').trim().toLowerCase() === vLower;
+        });
+        var bundleProds = bundleIdx >= 0 && Array.isArray(bundleOptionsForQty[bundleIdx])
+          ? bundleOptionsForQty[bundleIdx].slice(0, menuQty)
+          : coffeesForVendorFromPositiveScores(posScores, vLower).slice(0, menuQty);
+        var totalWeightGrams = 0;
+        bundleProds.forEach(function (p) {
+          totalWeightGrams += p.weight_grams || 0;
+        });
+        var weightInner =
+          totalWeightGrams > 0 ? formatQuestionnaireBundleWeightKg(totalWeightGrams) : '';
+        var totalCents = bundleTotalWithShippingCentsForQuestionnaireProducts(bundleProds, menuQty, vLower);
+        var priceStr = formatQuestionnaireMoney(totalCents);
+        var selected = vLower === cur;
+        var suffixHtml =
+          '<span class="results-vendor-trigger__suffix">' +
+          '<span class="results-vendor-trigger__price">' +
+          escapeHtml(priceStr) +
+          '</span>' +
+          (weightInner
+            ? '<span class="results-vendor-trigger__sep" aria-hidden="true">' +
+              sepSvg +
+              '</span>' +
+              '<span class="results-vendor-trigger__weight">' +
+              escapeHtml(weightInner) +
+              '</span>'
+            : '') +
+          '</span>';
+        return (
+          '<button type="button" class="results-vendor-menu__item' +
+          (selected ? ' is-selected' : '') +
+          '" role="option" data-vendor="' +
+          escapeHtml(String(v)) +
+          '" aria-selected="' +
+          (selected ? 'true' : 'false') +
+          '"><span class="results-vendor-menu__name">' +
+          escapeHtml(label) +
+          '</span>' +
+          suffixHtml +
+          '</button>'
+        );
+      })
+      .join('');
+  }
+
+  function setupResultsVendorSelect() {
+    var list = document.getElementById('q-results-vendor-list');
+    var drop = document.getElementById('q-results-vendor-dropdown');
+    var tr = document.getElementById('q-results-vendor-trigger');
+    if (!list || !drop || !tr || list._qVendorSelectBound) return;
+    list._qVendorSelectBound = true;
+    tr.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (tr.disabled) return;
+      var panel = document.getElementById('q-results-vendor-panel');
+      if (!panel) return;
+      setResultsVendorMenuOpen(!!panel.hidden);
+    });
+    list.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var btn = e.target.closest('.results-vendor-menu__item');
+      if (!btn) return;
+      var raw = (btn.getAttribute('data-vendor') || '').trim();
+      if (!raw) return;
+      window.__questionnaireSelectedVendor = raw.toLowerCase();
+      if (!window.__questionnaireSelectedVendorByQty || typeof window.__questionnaireSelectedVendorByQty !== 'object') {
+        window.__questionnaireSelectedVendorByQty = {};
+      }
+      window.__questionnaireSelectedVendorByQty[getQuestionnaireResultsBundleQty()] = window.__questionnaireSelectedVendor;
+      setResultsVendorMenuOpen(false);
+      var ut = window.__questionnaireMatchUserText;
+      if (typeof ut !== 'string' || !ut.length) return;
+      var next = matchQuestionnaireCoffees(ut);
+      var vendorQty = getQuestionnaireResultsBundleQty();
+      trackQuestionnaireAnalyticsClick('Quiz - Choose vendor', {
+        'Vendor Chosen': getQuestionnaireVendorDisplayName(raw),
+        Price: formatQuestionnaireMoney(bundleTotalWithShippingCentsForQuestionnaireProducts(next, vendorQty)),
+        'Bundle size': vendorQty,
+      });
+      saveResultsState(next);
+      renderQuestionnaireResults(next);
+    });
+    if (!window._qVendorMenuOutsideClick) {
+      window._qVendorMenuOutsideClick = true;
+      document.addEventListener(
+        'click',
+        function (e) {
+          if (!e.target || !e.target.closest) return;
+          if (e.target.closest('.results-vendor-dropdown')) return;
+          setResultsVendorMenuOpen(false);
+        },
+        true
+      );
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        if (!document.getElementById('q-results-vendor-dropdown') || !document.getElementById('q-results-vendor-panel')) return;
+        if (document.getElementById('q-results-vendor-panel').getAttribute('hidden') != null) return;
+        setResultsVendorMenuOpen(false);
+        var t = document.getElementById('q-results-vendor-trigger');
+        if (t) t.focus();
+      });
+    }
+  }
+
+  function normalizeMetaList(val) {
+    if (val == null || val === '') return [];
+    if (Array.isArray(val)) return val.filter(Boolean).map(String);
+    if (typeof val === 'string') return [val];
+    if (typeof val === 'object') {
+      if (Array.isArray(val.value)) return val.value.map(String).filter(Boolean);
+      if (val.value != null && val.value !== '') return [String(val.value)];
+    }
+    return [String(val)];
+  }
+
+  // Keep taste normalization aligned with the simulator scoring model.
+  const CANONICAL_TASTE_KEYS = ['Chocolate', 'Sweet-Chocolate', 'Sweet', 'Fruity-Sweet', 'Fruity'];
+  const HEBREW_TO_ENGLISH_TASTE = {
+    'שוקולד': 'Chocolate',
+    'מתוק-שוקולדי': 'Sweet-Chocolate',
+    'מתוק': 'Sweet',
+    'פירותי-מתוק': 'Fruity-Sweet',
+    'פירותי': 'Fruity',
+  };
+
+  function normalizeProductTasteKeys(mf) {
+    const fromProfile = normalizeMetaList(mf && mf.coffee_taste);
+    const fromLabels = normalizeMetaList(mf && mf.coffee_tastes).map(function (raw) {
+      const key = String(raw || '').trim();
+      return HEBREW_TO_ENGLISH_TASTE[key] || key;
+    });
+    const seen = {};
+    return fromProfile
+      .concat(fromLabels)
+      .map(function (raw) { return String(raw || '').trim(); })
+      .filter(function (key) {
+        if (!key || CANONICAL_TASTE_KEYS.indexOf(key) === -1) return false;
+        if (seen[key]) return false;
+        seen[key] = true;
+        return true;
+      });
+  }
+
+  /** Matches snippets/product-taste-icon-color.liquid (carousel / bundle card overlay). */
+  var Q_TASTE_PROFILE_BADGES = {
+    Fruity: { className: 'fruity', label: 'פירותי' },
+    Chocolate: { className: 'chocolate', label: 'שוקולדי' },
+    'Sweet-Chocolate': { className: 'sweet-chocolate', label: 'מתוק שוקולדי' },
+    Sweet: { className: 'sweet-balanced', label: 'מתוק מאוזן' },
+    'Fruity-Sweet': { className: 'sweet-fruity', label: 'פירותי מתוק' },
+  };
+
+  function buildQuestionnaireTasteProfileIconsHtml(product, forTable) {
+    if (!product) return '';
+    var mf = product.metafields || {};
+    var keys = normalizeMetaList(mf.coffee_taste);
+    var parts = [];
+    keys.forEach(function (raw) {
+      var key = String(raw).trim();
+      var spec = Q_TASTE_PROFILE_BADGES[key];
+      if (!spec) return;
+      parts.push(
+        '<span class="' +
+          spec.className +
+          '">' +
+          spec.label +
+          '</span>'
+      );
+    });
+    if (!parts.length) return '';
+    return (
+      '<div class="product-taste-icons questionnaire-product-taste-icons' +
+      (forTable ? ' q-bundle-table__taste-icons' : '') +
+      '">' +
+      '<div class="selection-wrapper plp-taste-text-wrapper">' +
+      parts.join('') +
+      '</div></div>'
+    );
+  }
+
+  function buildBundleTableTasteProfileIconsHtml(product) {
+    return buildQuestionnaireTasteProfileIconsHtml(product, true);
+  }
+
+  var Q_PRODUCT_CARD_HINT_SVG =
+    '<svg class="questionnaire-product-title__icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" focusable="false">' +
+    '<circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.75" />' +
+    '<path d="M8.5 11h5M11 8.5v5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />' +
+    '<path d="M16.2 16.2 21 21" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />' +
+    '</svg>';
+
+  function buildQuestionnaireProductCardHtml(product) {
+    if (!product) return '';
+    var title = escapeHtml((product.title || '').trim());
+    var image = escapeHtml(product.image || '');
+    var tasteIcons = buildQuestionnaireTasteProfileIconsHtml(product, false);
+    return (
+      '<div class="questionnaire-product-card">' +
+      '<div class="questionnaire-product-image-wrapper">' +
+      (image
+        ? '<img src="' +
+          image +
+          '" alt="' +
+          title +
+          '" class="questionnaire-product-image" loading="lazy" width="533" height="533">'
+        : '') +
+      tasteIcons +
+      '<div class="questionnaire-product-info">' +
+      '<h3 class="questionnaire-product-title">' +
+      '<span class="questionnaire-product-title__text">' +
+      title +
+      '</span>' +
+      '<span class="questionnaire-product-title__hint" aria-hidden="true">' +
+      Q_PRODUCT_CARD_HINT_SVG +
+      '</span>' +
+      '</h3>' +
+      '</div>' +
+      '</div>' +
+      '</div>'
+    );
+  }
+
+  function getBundleTableRoastDisplay(mf) {
+    if (!mf) return '';
+    var r = mf.coffee_roast_level;
+    if (r == null || r === '') return '';
+    if (typeof r === 'object' && r !== null && r.value != null && r.value !== '') {
+      return String(r.value);
+    }
+    return String(r);
+  }
+
+  function highlightBundleTableRow(index) {
+    if (!window.matchMedia('(min-width: 990px)').matches) return;
+    var tbody = document.getElementById('q-bundle-table-body');
+    if (!tbody) return;
+    tbody.querySelectorAll('.q-bundle-table__row').forEach(function (row, rowIndex) {
+      row.classList.toggle('is-selected', rowIndex === index);
+    });
+  }
+
+  var _qBundleTableClickBound = false;
+
+  function setupBundleTableRowActivation() {
+    var tbody = document.getElementById('q-bundle-table-body');
+    if (!tbody || _qBundleTableClickBound) return;
+    _qBundleTableClickBound = true;
+    tbody.addEventListener('click', function (e) {
+      var row = e.target.closest('.q-bundle-table__row');
+      if (!row) return;
+      var pool = window.__qResultsShownProducts;
+      if (!Array.isArray(pool)) return;
+      var pid = row.getAttribute('data-product-id');
+      if (!pid) return;
+      var found = pool.find(function (p) {
+        return p && String(p.id) === String(pid);
+      });
+      if (!found) return;
+
+      if (window.matchMedia('(min-width: 990px)').matches) {
+        var index = pool.findIndex(function (p) {
+          return p && String(p.id) === String(pid);
+        });
+        if (index >= 0 && typeof window.__qCarouselSelectProductIndex === 'function') {
+          window.__qCarouselSelectProductIndex(index);
+        }
+        openQuestionnaireProductModal(found);
+        return;
+      }
+
+      openQuestionnaireProductModal(found);
+    });
+  }
+
+  function renderBundleTableFromProducts(shownProducts) {
+    var tbody = document.getElementById('q-bundle-table-body');
+    if (!tbody) return;
+    window.__qResultsShownProducts = shownProducts;
+    setupBundleTableRowActivation();
+    if (!shownProducts || !shownProducts.length) {
+      tbody.innerHTML =
+        '<tr><td colspan="3" class="q-bundle-table__empty">אין מוצרים להצגה</td></tr>';
+      return;
+    }
+    tbody.innerHTML = shownProducts
+      .map(function (p) {
+        var merged = mergeProductFromCatalog(p) || p;
+        var title = escapeHtml((merged.title || '').trim() || '—');
+        var imgUrl = merged.image ? escapeHtml(merged.image) : '';
+        var thumb = imgUrl
+          ? '<img class="q-bundle-table__thumb-img" src="' +
+            imgUrl +
+            '" alt="" loading="lazy" width="44" height="44">'
+          : '<span class="q-bundle-table__thumb-fallback" aria-hidden="true"></span>';
+        var mf = merged.metafields || {};
+        var tasteIcons = buildBundleTableTasteProfileIconsHtml(merged);
+        var tasteCell = tasteIcons || '—';
+        var roastRaw = getBundleTableRoastDisplay(mf);
+        var roastCell = roastRaw ? 'קלייה ' + escapeHtml(roastRaw) : '—';
+        return (
+          '<tr class="q-bundle-table__row" data-product-id="' +
+          escapeHtml(String(merged.id)) +
+          '">' +
+          '<td class="q-bundle-table__td q-bundle-table__td--roast">' +
+          roastCell +
+          '</td>' +
+          '<td class="q-bundle-table__td q-bundle-table__td--taste">' +
+          tasteCell +
+          '</td>' +
+          '<td class="q-bundle-table__td q-bundle-table__td--product"><div class="q-bundle-table__product">' +
+          '<span class="q-bundle-table__title">' +
+          title +
+          '</span>' +
+          thumb +
+          '</div></td>' +
+          '</tr>'
+        );
+      })
+      .join('');
+  }
+
+  function setResultsBundleView(useTable) {
+    var step = document.getElementById('questionnaireResultsStep');
+    var carouselView = document.getElementById('q-bundle-view-carousel');
+    var tableView = document.getElementById('q-bundle-view-table');
+    var btn = document.getElementById('q-results-view-toggle');
+    if (!step || !carouselView || !tableView) return;
+    if (useTable) {
+      step.classList.add('results-step--table-view');
+      carouselView.hidden = true;
+      tableView.hidden = false;
+    } else {
+      step.classList.remove('results-step--table-view');
+      carouselView.hidden = false;
+      tableView.hidden = true;
+    }
+    if (btn) {
+      btn.setAttribute('aria-pressed', useTable ? 'true' : 'false');
+      btn.setAttribute('aria-label', useTable ? 'הצג תצוגת קרוסלה' : 'הצג תצוגת טבלה');
+      btn.setAttribute('title', useTable ? 'תצוגת קרוסלה' : 'תצוגת טבלה');
+    }
+  }
+
+  function resetBundleViewToCarousel() {
+    setResultsBundleView(false);
+  }
+
+  var _qResultsViewToggleBound = false;
+
+  function setupResultsViewToggle() {
+    var btn = document.getElementById('q-results-view-toggle');
+    if (!btn || _qResultsViewToggleBound) return;
+    _qResultsViewToggleBound = true;
+    btn.addEventListener('click', function () {
+      var step = document.getElementById('questionnaireResultsStep');
+      var isTable = step && step.classList.contains('results-step--table-view');
+      var willShowTable = !isTable;
+      setResultsBundleView(willShowTable);
+      trackQuestionnaireAnalyticsClick('Quiz - Tabular', {
+        'View Type': willShowTable ? 'Show Tabular' : 'Show Normal',
+      });
+    });
+  }
+
+  function mergeProductFromCatalog(product) {
+    if (!product) return product;
+    const catalog = ensureAllProductsLoaded();
+    if (!catalog.length) return product;
+    const full = catalog.find(function (p) {
+      return String(p.id) === String(product.id);
+    });
+    /* Session/saved hits may omit fields; overlay catalog row so description/url/metafields resolve. */
+    return full ? Object.assign({}, product, full) : product;
+  }
+
+  function openQuestionnaireProductModal(product) {
+    const merged = mergeProductFromCatalog(product);
+    if (!merged) return;
+
+    trackQuestionnaireAnalyticsClick('Quiz - Product Clicked', {
+      'Product name': (merged.title || '').trim(),
+      'Product vendor': (merged.vendor || '').trim(),
+    });
+
+    const modal = document.getElementById('q-product-detail-modal');
+    if (!modal) return;
+
+    const img = document.getElementById('q-product-modal-image');
+    const titleEl = document.getElementById('q-product-modal-title');
+    const vendorEl = document.getElementById('q-product-modal-vendor');
+    const chipsEl = document.getElementById('q-product-modal-chips');
+    const shortEl = document.getElementById('q-product-modal-short');
+    // const descBlock = document.getElementById('q-product-modal-description-block');
+    const descEl = document.getElementById('q-product-modal-description');
+    const priceEl = document.getElementById('q-product-modal-price');
+    const variantInput = document.getElementById('q-product-modal-variant-id');
+    const atcBtn = document.getElementById('q-product-modal-atc-btn');
+    const atcLabel = document.getElementById('q-product-modal-atc-label');
+    const pdpLink = document.getElementById('q-product-modal-pdp-link');
+
+    if (img) {
+      img.src = merged.image || '';
+      img.alt = merged.title || '';
+    }
+    if (titleEl) titleEl.textContent = merged.title || '';
+    if (vendorEl) {
+      vendorEl.textContent = merged.vendor || '';
+      vendorEl.style.display = merged.vendor ? '' : 'none';
+    }
+
+    const shortDesc = (merged.short_description || '').trim();
+    if (shortEl) {
+      shortEl.textContent = shortDesc;
+      shortEl.hidden = !shortDesc;
+    }
+
+    if (priceEl) priceEl.textContent = merged.price || '';
+
+    const mf = merged.metafields || {};
+    const roast = mf.coffee_roast_level;
+    const prep = normalizeMetaList(mf.coffee_prep_methods);
+    const tastes = normalizeMetaList(mf.coffee_tastes);
+
+    if (chipsEl) {
+      const sections = [];
+      if (roast) {
+        sections.push({ label: 'רמת קלייה', items: [String(roast)] });
+      }
+      // if (prep.length) sections.push({ label: 'שיטת הכנה', items: prep });
+      if (tastes.length) sections.push({ label: 'פרופיל טעם', items: tastes });
+
+      if (sections.length === 0) {
+        chipsEl.innerHTML = '';
+        chipsEl.hidden = true;
+      } else {
+        chipsEl.hidden = false;
+        chipsEl.innerHTML = sections
+          .map(function (sec) {
+            const chips = sec.items
+              .map(function (t) {
+                return '<span class="q-product-modal__chip">' + escapeHtml(t) + '</span>';
+              })
+              .join('');
+            return (
+              '<div class="q-product-modal__chip-group">' +
+              '<span class="q-product-modal__chip-label">' +
+              escapeHtml(sec.label) +
+              '</span>' +
+              '<div class="q-product-modal__chip-row">' +
+              chips +
+              '</div></div>'
+            );
+          })
+          .join('');
+      }
+    }
+
+    if (variantInput) variantInput.value = merged.variantId || '';
+    if (atcBtn && atcLabel) {
+      if (merged.available) {
+        atcBtn.disabled = false;
+        atcLabel.textContent = 'הוספה לסל';
+      } else {
+        atcBtn.disabled = true;
+        atcLabel.textContent = 'אזל המלאי';
+      }
+    }
+
+    if (pdpLink) {
+      pdpLink.href = merged.url || '#';
+      pdpLink.style.display = merged.url ? '' : 'none';
+    }
+
+    _qModalPreviousFocus = document.activeElement;
+    modal.hidden = false;
+    modal.removeAttribute('aria-hidden');
+    document.body.style.overflow = 'hidden';
+    const closeBtn = modal.querySelector('.q-product-modal__close');
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeQuestionnaireProductModal() {
+    const modal = document.getElementById('q-product-detail-modal');
+    if (!modal) return;
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (_qModalPreviousFocus && typeof _qModalPreviousFocus.focus === 'function') {
+      _qModalPreviousFocus.focus();
+    }
+    _qModalPreviousFocus = null;
+  }
+
+  function saveResultsState(products) {
+    try {
+      sessionStorage.setItem(
+        QUESTIONNAIRE_RESULTS_STATE_KEY,
+        JSON.stringify({
+          products: Array.isArray(products) ? products : [],
+          userText: typeof window.__questionnaireMatchUserText === 'string' ? window.__questionnaireMatchUserText : '',
+          vendorOptions: Array.isArray(window.__questionnaireVendorOptions) ? window.__questionnaireVendorOptions : null,
+          selectedVendor:
+            typeof window.__questionnaireSelectedVendor === 'string' ? window.__questionnaireSelectedVendor : '',
+          vendorAssignmentUserText:
+            typeof window.__questionnaireVendorAssignmentForText === 'string'
+              ? window.__questionnaireVendorAssignmentForText
+              : '',
+          vendorOptionsByQty:
+            window.__questionnaireVendorOptionsByQty && typeof window.__questionnaireVendorOptionsByQty === 'object'
+              ? window.__questionnaireVendorOptionsByQty
+              : null,
+          selectedVendorByQty:
+            window.__questionnaireSelectedVendorByQty && typeof window.__questionnaireSelectedVendorByQty === 'object'
+              ? window.__questionnaireSelectedVendorByQty
+              : null,
+          questionnaireParams: window.__questionnaireParams || null,
+          savedAt: Date.now(),
+        })
+      );
+    } catch (error) {
+      console.warn('Failed to save questionnaire results state:', error);
+    }
+  }
+
+  function loadResultsState() {
+    try {
+      const rawState = sessionStorage.getItem(QUESTIONNAIRE_RESULTS_STATE_KEY);
+      if (!rawState) return null;
+      const parsedState = JSON.parse(rawState);
+      if (!parsedState || !Array.isArray(parsedState.products)) return null;
+      if (typeof parsedState.userText === 'string' && parsedState.userText.length) {
+        window.__questionnaireMatchUserText = parsedState.userText;
+      }
+      if (Array.isArray(parsedState.vendorOptions) && parsedState.vendorOptions.length) {
+        window.__questionnaireVendorOptions = parsedState.vendorOptions.slice();
+      } else if (parsedState.vendorByQty && typeof parsedState.vendorByQty === 'object') {
+        const legacy = parsedState.vendorByQty[5] || parsedState.vendorByQty['5'];
+        const v = (legacy != null && String(legacy).trim() !== '' ? String(legacy) : Object.values(parsedState.vendorByQty)[0]) || '';
+        if (v) {
+          window.__questionnaireSelectedVendor = String(v).toLowerCase();
+        }
+      }
+      if (typeof parsedState.selectedVendor === 'string' && parsedState.selectedVendor.trim() !== '') {
+        window.__questionnaireSelectedVendor = parsedState.selectedVendor.trim().toLowerCase();
+      }
+      if (parsedState.vendorOptionsByQty && typeof parsedState.vendorOptionsByQty === 'object') {
+        window.__questionnaireVendorOptionsByQty = parsedState.vendorOptionsByQty;
+      }
+      if (parsedState.selectedVendorByQty && typeof parsedState.selectedVendorByQty === 'object') {
+        window.__questionnaireSelectedVendorByQty = parsedState.selectedVendorByQty;
+      }
+      if (parsedState.questionnaireParams && typeof parsedState.questionnaireParams === 'object') {
+        window.__questionnaireParams = parsedState.questionnaireParams;
+      }
+      if (typeof parsedState.vendorAssignmentUserText === 'string' && parsedState.vendorAssignmentUserText.length) {
+        window.__questionnaireVendorAssignmentForText = parsedState.vendorAssignmentUserText;
+      } else if (
+        (Array.isArray(parsedState.vendorOptions) && parsedState.vendorOptions.length) ||
+        (parsedState.vendorByQty && typeof window.__questionnaireMatchUserText === 'string')
+      ) {
+        window.__questionnaireVendorAssignmentForText = window.__questionnaireMatchUserText;
+      }
+      return parsedState.products;
+    } catch (error) {
+      console.warn('Failed to load questionnaire results state:', error);
+      return null;
+    }
+  }
+
+  function clearResultsState() {
+    try {
+      sessionStorage.removeItem(QUESTIONNAIRE_RESULTS_STATE_KEY);
+    } catch (error) {
+      console.warn('Failed to clear questionnaire results state:', error);
+    }
+    window.__questionnaireVendorOptionsByQty = null;
+    window.__questionnaireSelectedVendorByQty = null;
+  }
+
+  function restartQuestionnaire() {
+    trackQuestionnaireAnalyticsClick('Quiz - Restart', {
+      'Restart Type': 'Restart',
+    });
+    clearResultsState();
+    window.__questionnaireResultsScreenTracked = false;
+    sessionStorage.removeItem('questionnaireShowIntro');
+    window.location.reload();
+  }
+
+  function openRestartConfirmModal() {
+    const modal = document.getElementById('q-restart-confirm-modal');
+    if (!modal) return;
+    trackQuestionnaireAnalyticsClick('Quiz - Restart', {
+      'Restart Type': 'Open menu',
+    });
+    _qRestartConfirmPreviousFocus = document.activeElement;
+    closeQuestionnaireProductModal();
+    modal.hidden = false;
+    modal.removeAttribute('aria-hidden');
+    const cancelBtn = document.getElementById('q-restart-confirm-cancel');
+    if (cancelBtn && typeof cancelBtn.focus === 'function') {
+      cancelBtn.focus();
+    }
+  }
+
+  function closeRestartConfirmModal() {
+    const modal = document.getElementById('q-restart-confirm-modal');
+    if (!modal) return;
+    if (!modal.hidden) {
+      trackQuestionnaireAnalyticsClick('Quiz - Restart', {
+        'Restart Type': 'Cancel',
+      });
+    }
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+    if (_qRestartConfirmPreviousFocus && typeof _qRestartConfirmPreviousFocus.focus === 'function') {
+      _qRestartConfirmPreviousFocus.focus();
+    }
+    _qRestartConfirmPreviousFocus = null;
+  }
   function getSuitTasteProfile(selectedFilters) {
     if (!window.questionnaireData) return [];
 
@@ -549,11 +2898,21 @@
       }
     });
 
-    analytics.trackClick('Filter select', {
-      Filter: filterName,
-      step: stepIndex,
-      filters: selectedValues,
-    });
+    const selectedItem = selectedItems[0];
+    const selectedTitle = getQuestionnaireSelectionTitle(selectedItem);
+    if (stepIndex === 1) {
+      trackQuestionnaireAnalyticsClick('Quiz - Choose Prep Method', {
+        'Prep Method': selectedValues.length ? selectedValues.join(', ') : selectedTitle,
+      });
+    } else if (stepIndex === 2) {
+      trackQuestionnaireAnalyticsClick('Quiz - Roast Level', {
+        Roast: selectedTitle,
+      });
+    } else if (stepIndex === 3) {
+      trackQuestionnaireAnalyticsClick('Quiz - Choose Taste', {
+        Taste: selectedValues.length ? selectedValues.join(', ') : selectedTitle,
+      });
+    }
 
     window.appliedFilters[filterName] = [];
     if (selectedValues.length === 0) {
@@ -563,6 +2922,7 @@
         // if (!window.appliedFilters[filterName])
 
         if (filterName === 'filter.p.m.custom.coffee_tastes') {
+          window.__questionnaireTasteRawValues = selectedValues.slice();
           const coffeeTastes = getSuitTasteProfile(value);
           coffeeTastes.forEach((tastes) => {
             tastesArray = tastes.split(',').map((t) => t.trim());
@@ -580,6 +2940,24 @@
     }
     // Update disabled state for taste options
     updateTasteOptionsDisabledState();
+  }
+
+  function startQuestionnaireFromIntro() {
+    trackQuestionnaireAnalyticsClick('Quiz - Start Quiz', {
+      Step: 'Step 0',
+    });
+
+    const intro = document.getElementById('questionnaireIntroStep');
+    if (!intro) return;
+
+    intro.classList.remove('active');
+
+    const firstStep = intro.nextElementSibling;
+    if (firstStep && firstStep.classList.contains('questionnaire-icons-wrapper')) {
+      firstStep.classList.add('active');
+      updateSelectButton();
+      updateTasteOptionsDisabledState();
+    }
   }
 
   function goToPreviousStep(step = null) {
@@ -610,9 +2988,12 @@
       updateTasteOptionsDisabledState();
     }
 
-    analytics.trackClick('Quiz Step Back', {
-      step: step,
-    });
+    const backStepLabel = getQuestionnaireQuizBackStepLabel(step);
+    if (backStepLabel) {
+      trackQuestionnaireAnalyticsClick('Quiz - Back', {
+        Step: backStepLabel,
+      });
+    }
   }
 
   function goToNextStep(stepIndex) {
@@ -644,167 +3025,269 @@
     }
 
     if (stepIndex === 3) {
-      //   // Show loader for 3 seconds if it is active on page load
-      const loaderWrapper = document.querySelector('.questionnaire-icons-wrapper.active .questionnaire-loader-wrapper');
-      if (loaderWrapper) {
-        const questionnaireTitle = document.querySelector('.questionnaire-title');
-        questionnaireTitle.classList.add('hidden');
-        setTimeout(function () {
-          const loaderIconsWrapper = loaderWrapper.closest('.questionnaire-icons-wrapper');
-          if (loaderIconsWrapper) {
-            loaderIconsWrapper.classList.remove('active');
-            const mainWrapper = document.querySelector('.questionnaire-wrapper');
-            // Hide main element
-            if (mainWrapper) {
-              mainWrapper.classList.add('hidden');
-            }
-            // Show the "lets be friends" section
-            // Get the local storage item to prevent showing the form again
-            const mailSubscriptionPage = localStorage.getItem('mailSubscriptionPage');
-            if (mailSubscriptionPage !== 'true') {
-              const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
-              if (friendsWrapper) {
-                friendsWrapper.classList.add('active');
-                //save localStorage item to prevent showing the form again
-                localStorage.setItem('mailSubscriptionPage', 'true');
-                analytics.trackScreenView('Subscription', {
-                  page_load_time: performance.now(),
-                });
-              }
-            } else {
-              // Redirect to collection page with filters
-              redirectToCollectionWithFilters();
-            }
-          }
-        }, 2000);
+      // Always force the dedicated loader step visible before computing results.
+      const loaderWrapper = document.querySelector('.questionnaire-icons-wrapper .questionnaire-loader-wrapper');
+      const loaderIconsWrapper = loaderWrapper ? loaderWrapper.closest('.questionnaire-icons-wrapper') : null;
+      if (loaderIconsWrapper) {
+        document.querySelectorAll('.questionnaire-icons-wrapper').forEach(function (stepEl) {
+          stepEl.classList.remove('active');
+        });
+        loaderIconsWrapper.classList.add('active');
       }
+      const questionnaireTitle = document.querySelector('.questionnaire-title');
+      if (questionnaireTitle) questionnaireTitle.classList.add('hidden');
+
+      setTimeout(function () {
+        if (loaderIconsWrapper) {
+          loaderIconsWrapper.classList.remove('active');
+        }
+        const mainWrapper = document.querySelector('.questionnaire-wrapper');
+        // Hide main element
+        if (mainWrapper) {
+          mainWrapper.classList.add('hidden');
+        }
+        redirectToCollectionWithFilters();
+      }, 2000);
 
       enableScrollWithEvents();
     }
   }
 
   function redirectToCollectionWithFilters() {
-    // Collect text from selected UI elements to support Hebrew matching
-    const selectedWrappers = document.querySelectorAll('.questionnaire-selection-wrapper.selected');
-    const selectedTexts = Array.from(selectedWrappers).map((el) => {
-      const textEl = el.querySelector('.questionnaire-text');
-      return textEl ? textEl.innerText : '';
+    const TASTE_FILTER_TO_CATEGORY = {
+      'Fruity & Floral': 'קלאסי',
+      'Sweet & Caramelly': 'מודרני',
+      'Rich & Chocolaty': 'גל שלישי',
+    };
+
+    const prepMethods = (window.appliedFilters['filter.p.m.custom.coffee_prep_methods'] || []).filter(Boolean);
+
+    const roastRanges = (window.appliedFilters['filter.p.m.custom.coffee_roast_level'] || []).filter(Boolean);
+    const roastLevels = [];
+    roastRanges.forEach(function (r) {
+      r.split(',').forEach(function (s) {
+        const t = s.trim();
+        if (t) roastLevels.push(t);
+      });
     });
 
-    // Also collect applied filter values (English)
-    const filterValues = [];
-    for (const key in window.appliedFilters) {
-      if (Array.isArray(window.appliedFilters[key])) {
-        filterValues.push(...window.appliedFilters[key]);
-      }
+    const tasteRaw = (window.__questionnaireTasteRawValues || []).filter(Boolean);
+    const tasteCategories = tasteRaw.map(function (v) { return TASTE_FILTER_TO_CATEGORY[v] || null; }).filter(Boolean);
+
+    window.__questionnaireParams = {
+      prep_method: prepMethods,
+      roast_levels: roastLevels,
+      tastes: tasteCategories.length > 0 ? tasteCategories : ['הצג הכל'],
+    };
+
+    const userText = prepMethods.join(' ') + ' ' + roastLevels.join(' ') + ' ' + tasteRaw.join(' ');
+    window.__questionnaireMatchUserText = userText.trim();
+
+    // Fresh questionnaire submission: clear cached vendor assignment so pool randomness
+    // can be re-applied even when answers are identical to a previous run.
+    window.__questionnaireVendorOptions = null;
+    window.__questionnaireVendorOptionsByQty = null;
+    window.__questionnaireSelectedVendorByQty = null;
+    window.__questionnaireVendorAssignmentForText = '';
+    window.__questionnaireVendorAssignmentForQty = null;
+    window.__questionnaireSelectedVendor = '';
+    window.__questionnaireBundleResult = null;
+
+    console.log('Questionnaire params:', window.__questionnaireParams);
+
+    const matchedCoffees = matchQuestionnaireCoffees(userText);
+    const allScoreRows = (window.__questionnaireLastWithScores || []).map(function (row) {
+      const product = row && row.coffee ? row.coffee : {};
+      return {
+        productId: product.id,
+        title: product.title || '',
+        vendor: (product.vendor || '').trim(),
+        score: row && row.score != null ? row.score : 0,
+        roastMatchType: row && row.roastMeta ? (row.roastMeta.type || null) : null,
+        roastPriority: row && row.roastMeta && row.roastMeta.type === 'exact'
+          ? 2
+          : row && row.roastMeta && row.roastMeta.type === 'partial'
+            ? 1
+            : 0,
+      };
+    });
+
+    function buildPackageScoreSummary(productRows, packageSize) {
+      const packageProducts = productRows.slice(0, packageSize);
+      const totalScore = packageProducts.reduce(function (sum, row) {
+        return sum + (row.score || 0);
+      }, 0);
+      return {
+        packageSize: packageSize,
+        totalScore: totalScore,
+        products: packageProducts,
+      };
     }
 
-    const userText = selectedTexts.join(' ') + ' ' + filterValues.join(' ');
-    console.log('User Text for matching:', userText);
+    const rowsByVendor = {};
+    allScoreRows.forEach(function (row) {
+      const key = (row.vendor || 'unknown').toLowerCase();
+      if (!rowsByVendor[key]) rowsByVendor[key] = [];
+      rowsByVendor[key].push(row);
+    });
 
-    // Map window.allProducts to the structure expected by matchCoffeesFromText
-    const coffeeDatabase = window.allProducts.map((product) => ({
-      ...product,
-      prep_method: product.metafields.coffee_prep_methods || [],
-      tastes: product.metafields.coffee_tastes || [],
-    }));
-
-    function matchCoffeesFromText(userText) {
-      const text = userText.toLowerCase();
-      const scores = coffeeDatabase.map((coffee) => {
-        let score = 0;
-
-        // Match prep methods
-        if (Array.isArray(coffee.prep_method)) {
-          coffee.prep_method.forEach((method) => {
-            if (text.includes(method.toLowerCase())) score += 3;
-          });
-        }
-
-        // Match tastes
-        if (Array.isArray(coffee.tastes)) {
-          coffee.tastes.forEach((taste) => {
-            if (text.includes(taste.toLowerCase())) score += 2;
-          });
-        }
-
-        // Hebrew keyword matching for prep methods
-        if (Array.isArray(coffee.prep_method)) {
-          if (text.includes('אספרסו') || text.includes('חזק') || text.includes('עז')) {
-            if (coffee.prep_method.includes('Espresso')) score += 2;
-          }
-          if (
-            text.includes('חלב') ||
-            text.includes('לאטה') ||
-            text.includes("קפוצ'ינו") ||
-            text.includes('קפוצינו') ||
-            text.includes('קפה הפוך')
-          ) {
-            if (coffee.prep_method.includes('Espresso')) score += 2;
-          }
-          if (text.includes('פילטר') || text.includes('עדין') || text.includes('קל')) {
-            if (coffee.prep_method.includes('Filter')) score += 2;
-          }
-          if (text.includes('מקינטה') || text.includes('מוקה')) {
-            if (coffee.prep_method.includes('MokaPot')) score += 2;
-          }
-        }
-
-        // Hebrew keyword matching for tastes
-        if (Array.isArray(coffee.tastes)) {
-          if (text.includes('פירותי') || text.includes('בהיר') || text.includes('חמוץ') || text.includes('חמצמץ')) {
-            if (coffee.tastes.includes('Fruity') || coffee.tastes.includes('Fruity-Sweet')) score += 2;
-          }
-          if (text.includes('מתוק') || text.includes('מתיקות')) {
-            if (
-              coffee.tastes.includes('Sweet') ||
-              coffee.tastes.includes('Sweet-Chocolate') ||
-              coffee.tastes.includes('Fruity-Sweet')
-            )
-              score += 2;
-          }
-          if (text.includes('שוקולד') || text.includes('קקאו')) {
-            if (coffee.tastes.includes('Chocolate') || coffee.tastes.includes('Sweet-Chocolate')) score += 2;
-          }
-        }
-
-        return { coffee, score };
+    Object.keys(rowsByVendor).forEach(function (vendorKey) {
+      rowsByVendor[vendorKey].sort(function (a, b) {
+        if ((b.roastPriority || 0) !== (a.roastPriority || 0)) return (b.roastPriority || 0) - (a.roastPriority || 0);
+        return (b.score || 0) - (a.score || 0);
       });
-      return scores
-        .filter((item) => item.score > 0)
-        .sort((a, b) => b.score - a.score)
-        .map((item) => item.coffee)
-        .slice(0, 5);
-    }
-    const matchedCoffees = matchCoffeesFromText(userText);
-    console.log('Matched Coffees:', matchedCoffees);
+    });
+
+    const selectedVendorKeys = (window.__questionnaireVendorOptions || [])
+      .map(function (option) {
+        return ((option && option.vendorKey) || '').toLowerCase();
+      })
+      .filter(Boolean)
+      .slice(0, 3);
+
+    const selectedVendorsPackageScores = selectedVendorKeys.map(function (vendorKey) {
+      const vendorRows = rowsByVendor[vendorKey] || [];
+      const displayNameFromOptions = (window.__questionnaireVendorOptions || []).find(function (option) {
+        return ((option && option.vendorKey) || '').toLowerCase() === vendorKey;
+      });
+      const vendorLabel = displayNameFromOptions && displayNameFromOptions.label
+        ? displayNameFromOptions.label
+        : (vendorRows[0] && vendorRows[0].vendor ? vendorRows[0].vendor : vendorKey);
+      return {
+        vendorKey: vendorKey,
+        vendorLabel: vendorLabel,
+        availableProducts: vendorRows.length,
+        packages: {
+          3: buildPackageScoreSummary(vendorRows, 3),
+          5: buildPackageScoreSummary(vendorRows, 5),
+          7: buildPackageScoreSummary(vendorRows, 7),
+        },
+      };
+    });
+
+    console.log('boom:', {
+      selectedVendor: window.__questionnaireSelectedVendor || null,
+      selectedVendors: selectedVendorsPackageScores,
+    });
+    saveResultsState(matchedCoffees);
+
+    renderQuestionnaireResults(matchedCoffees);
+  }
+
+  function renderQuestionnaireResults(matchedCoffees) {
+    const products = Array.isArray(matchedCoffees) ? matchedCoffees : [];
 
     // Render results in the new step
     const resultsGrid = document.getElementById('Slider-questionnaireResultsGrid');
     const resultsStep = document.getElementById('questionnaireResultsStep');
     const mainWrapper = document.querySelector('.questionnaire-wrapper');
-    const friendsWrapper = document.querySelector('.lets-be-friends-wrapper');
-    document.body.classList.remove('questionnaire-wrapper-open');
 
-    if (resultsGrid && resultsStep && mainWrapper) {
-      // Populate results
-      if (matchedCoffees.length > 0) {
-        // Wrap each product html_card as a carousel slide
-        resultsGrid.innerHTML = matchedCoffees
-          .map((product) => `<div class="q-carousel-slide">${product.html_card}</div>`)
+    // Helper: render up to `qty` slides and (re-)init the carousel
+    function renderBundleList(allProducts, qty) {
+      const listEl = document.getElementById('qBundleList');
+      if (!listEl) return;
+      const shownProducts = allProducts.slice(0, qty);
+      if (!shownProducts.length) {
+        listEl.innerHTML = '<li class="results-bundle-list__empty">אין מוצרים להצגה</li>';
+        return;
+      }
+
+      listEl.innerHTML = shownProducts
+        .map(function (product, index) {
+          const vendorOrTitle = (product.vendor || '').trim() || (product.title || '').trim() || 'תערובת';
+          return '<li class="results-bundle-list__item">' + (index + 1) + '. ' + vendorOrTitle + '</li>';
+        })
+        .join('');
+    }
+
+    function renderCarousel(products, qty) {
+      const shown = products.slice(0, qty);
+
+      // Update counter text
+      const counterEl = document.getElementById('q-carousel-counter');
+      if (counterEl) {
+        counterEl.textContent = `(1/${shown.length})`;
+      }
+
+      if (shown.length > 0) {
+        resultsGrid.innerHTML = shown
+          .map(
+            (product) =>
+              `<div class="q-carousel-slide" data-product-id="${product.id}">${buildQuestionnaireProductCardHtml(product)}</div>`
+          )
           .join('');
       } else {
         resultsGrid.innerHTML =
           '<div class="q-carousel-slide q-carousel-slide--empty">לא נמצאו תוצאות מדוייקות, נסו שנית.</div>';
       }
-
-      // Init carousel
-      initProductCarousel();
-
-      // Hide friends wrapper if open
-      if (friendsWrapper) {
-        friendsWrapper.classList.remove('active');
+      renderBundleList(products, qty);
+      renderBundleTableFromProducts(shown);
+      const tableViewEl = document.getElementById('q-bundle-view-table');
+      const carouselViewEl = document.getElementById('q-bundle-view-carousel');
+      const restoreTableAfterLayout =
+        carouselViewEl && tableViewEl && !tableViewEl.hidden;
+      if (restoreTableAfterLayout) {
+        tableViewEl.hidden = true;
+        carouselViewEl.hidden = false;
       }
+      var afterTableRestore =
+        restoreTableAfterLayout &&
+        function () {
+          if (carouselViewEl) carouselViewEl.hidden = true;
+          if (tableViewEl) tableViewEl.hidden = false;
+        };
+      initProductCarousel(shown, afterTableRestore);
+    }
+
+    if (resultsGrid && resultsStep && mainWrapper) {
+      var preserveResultsTableView = resultsStep.classList.contains('results-step--table-view');
+      if (!preserveResultsTableView) {
+        resetBundleViewToCarousel();
+      }
+      updateResultsVendorSelect();
+      // Determine initial qty from the selected option (default 5)
+      const initialQtyEl = document.querySelector('.questionnaire-qty-selector-wrapper .qty-option.selected');
+      const initialQty = initialQtyEl
+        ? parseInt(initialQtyEl.getAttribute('data-qty') || initialQtyEl.textContent.trim(), 10) || 5
+        : 5;
+
+      // Render only the first `initialQty` products
+      renderCarousel(products, initialQty);
+      setupResultsViewToggle();
+
+      // Wire up qty selector — re-render carousel + price on change
+      const qtyWrapper = document.querySelector('.questionnaire-qty-selector-wrapper');
+      if (qtyWrapper) {
+        const newQtyWrapper = qtyWrapper.cloneNode(true);
+        qtyWrapper.parentNode.replaceChild(newQtyWrapper, qtyWrapper);
+        newQtyWrapper.addEventListener('click', function (e) {
+          const opt = e.target.closest('.qty-option');
+          if (!opt) return;
+          newQtyWrapper.querySelectorAll('.qty-option').forEach(function (o) {
+            o.classList.remove('selected');
+          });
+          opt.classList.add('selected');
+          const newQty =
+            parseInt(opt.getAttribute('data-qty') || opt.textContent.trim(), 10) || products.length;
+          trackQuestionnaireAnalyticsClick('Quiz - Choose Bundle Size', {
+            'Bundle size': newQty,
+          });
+          const ut = window.__questionnaireMatchUserText;
+          if (typeof ut === 'string' && ut.length) {
+            const next = matchQuestionnaireCoffees(ut);
+            saveResultsState(next);
+            renderQuestionnaireResults(next);
+            return;
+          }
+          renderCarousel(products, newQty);
+          updateQuestionnaireQtyOptionWeights();
+          updateResultsVendorSelect();
+        });
+        // cloneNode(true) replaces nodes; listeners are not cloned — re-bind vendor combobox.
+        setupResultsVendorSelect();
+      }
+
+      updateQuestionnaireQtyOptionWeights();
 
       // Show main wrapper
       mainWrapper.classList.remove('hidden');
@@ -815,32 +3298,454 @@
 
       // Show results step
       resultsStep.classList.add('active');
+      mainWrapper.classList.add('results-step-visible');
+      trackQuizResultsScreenViewOnce();
 
       // Scroll to top of results?
       resultsStep.scrollIntoView({ behavior: 'smooth' });
     }
+
+    const questionnaireWrapper = document.getElementById('questionnaireWrapperDesktop');
+    if (questionnaireWrapper) {
+      questionnaireWrapper.classList.remove('initializing');
+    }
   }
 
-  function initProductCarousel() {
+  function initProductCarousel(products, onAfterLayoutSync) {
     const track = document.getElementById('Slider-questionnaireResultsGrid');
-    if (!track) return;
+    if (!track) {
+      if (typeof onAfterLayoutSync === 'function') onAfterLayoutSync();
+      return;
+    }
+
+    if (track._qCarouselTeardown) {
+      track._qCarouselTeardown();
+    }
 
     const slides = Array.from(track.querySelectorAll('.q-carousel-slide'));
     let current = 0;
+    const viewport = track.parentElement;
+    const thumbsEl = document.getElementById('q-selection-info-thumbs');
+    /** Fraction of viewport width/height for each slide (smaller = more of prev/next visible). */
+    const Q_CAROUSEL_SLIDE_FRAC = 0.54;
+    var isDesktop = function () { return window.matchMedia('(min-width: 990px)').matches; };
+    var ignoreCarouselScrollSync = false;
+    var programmaticScrollClearTimer = null;
 
-    function goTo(index) {
-      current = Math.max(0, Math.min(index, slides.length - 1));
+    function defaultDesktopProductIndex() {
+      if (!products || !products.length) return 0;
+      return Math.max(0, Math.floor((products.length - 1) / 2));
+    }
 
-      // Show only the active slide
-      slides.forEach((slide, i) => {
-        slide.style.display = i === current ? '' : 'none';
+    function applySlideWidths() {
+      if (!viewport) return;
+      track.style.transform = '';
+      track.style.transition = '';
+      if (isDesktop()) {
+        const vh = viewport.clientHeight;
+        const slideH = vh * Q_CAROUSEL_SLIDE_FRAC;
+        const pad = Math.max(0, (vh - slideH) / 2);
+        track.style.paddingTop = pad + 'px';
+        track.style.paddingBottom = pad + 'px';
+        track.style.paddingLeft = '0';
+        track.style.paddingRight = '0';
+        slides.forEach(function (slide) {
+          slide.style.flex = '0 0 ' + slideH + 'px';
+          slide.style.height = slideH + 'px';
+          slide.style.minHeight = slideH + 'px';
+          slide.style.width = '100%';
+          slide.style.minWidth = '100%';
+        });
+        return;
+      }
+      const vw = viewport.clientWidth;
+      const slideW = vw * Q_CAROUSEL_SLIDE_FRAC;
+      const pad = Math.max(0, (vw - slideW) / 2);
+      track.style.paddingLeft = pad + 'px';
+      track.style.paddingRight = pad + 'px';
+      track.style.paddingTop = '0';
+      track.style.paddingBottom = '0';
+      slides.forEach(function (slide) {
+        slide.style.flex = '0 0 ' + slideW + 'px';
+        slide.style.width = slideW + 'px';
+        slide.style.minWidth = slideW + 'px';
+        slide.style.height = '';
+        slide.style.minHeight = '';
+      });
+    }
+
+    // ── Bundle price helpers ──────────────────────────────────────────────
+    function updateBundlePrice() {
+      if (!products || products.length === 0) return;
+      const qty = getQuestionnaireResultsBundleQty();
+      const n = products.length;
+
+      // Each carousel product counts as 1. The qty selector is the total number
+      // of products in the bundle (3, 5, or 7). We compute the average price per
+      // product across all matched results, then multiply by qty.
+      let sumCompareCents = 0;
+      products.forEach(function (p) {
+        sumCompareCents += p.price_cents || 0;
       });
 
-      // Update arrow disabled state (re-query after possible cloneNode replacement)
+      const avgCompareCents = sumCompareCents / n;
+      const subtotalCompareCents = Math.round(avgCompareCents * qty);
+      const vendorKey = questionnaireVendorKeyForBundle(products);
+      const totalCompareCents =
+        subtotalCompareCents + questionnaireShippingCentsForVendor(vendorKey, subtotalCompareCents);
+
+      const totalCents = bundleTotalWithShippingCentsForQuestionnaireProducts(products, qty);
+
+      const priceEl = document.getElementById('q-footer-price');
+      const compareEl = document.getElementById('q-footer-price-compare');
+      const triggerPriceEl = document.getElementById('q-results-vendor-trigger-price');
+      const triggerSepEl = document.getElementById('q-results-vendor-trigger-sep');
+      const triggerWeightEl = document.getElementById('q-results-vendor-trigger-weight');
+
+      if (priceEl) priceEl.textContent = formatQuestionnaireMoney(totalCents);
+
+      if (compareEl) {
+        if (totalCompareCents > totalCents) {
+          compareEl.textContent = formatQuestionnaireMoney(totalCompareCents);
+          compareEl.style.display = '';
+        } else {
+          compareEl.textContent = '';
+          compareEl.style.display = 'none';
+        }
+      }
+
+      if (triggerPriceEl) {
+        if (products && products.length) {
+          triggerPriceEl.textContent = formatQuestionnaireMoney(totalCents);
+          triggerPriceEl.hidden = false;
+        } else {
+          triggerPriceEl.textContent = '';
+          triggerPriceEl.hidden = true;
+        }
+      }
+
+      let totalGrams = 0;
+      products.forEach(function (p) {
+        totalGrams += p.weight_grams || 0;
+      });
+
+      if (triggerWeightEl) {
+        if (totalGrams > 0) {
+          triggerWeightEl.textContent = formatQuestionnaireBundleWeightKg(totalGrams);
+          triggerWeightEl.hidden = false;
+        } else {
+          triggerWeightEl.textContent = '';
+          triggerWeightEl.hidden = true;
+        }
+      }
+      if (triggerSepEl) {
+        triggerSepEl.hidden = totalGrams <= 0;
+      }
+      const bundleWeightEl = document.getElementById('q-footer-bundle-weight');
+      if (bundleWeightEl) {
+        if (totalGrams > 0) {
+          bundleWeightEl.textContent = '· סה״כ ' + totalGrams + ' גרם';
+          bundleWeightEl.hidden = false;
+        } else {
+          bundleWeightEl.textContent = '';
+          bundleWeightEl.hidden = true;
+        }
+      }
+    }
+
+    function renderSelectionThumbs() {
+      if (!thumbsEl) return;
+
+      const thumbActiveIndex = current;
+
+      thumbsEl.innerHTML = products
+        .map(function (product, index) {
+          const vendorOrTitle = (product.vendor || '').trim() || (product.title || '').trim() || 'תערובת';
+          const image = product.image || '';
+          const isActiveClass = index === thumbActiveIndex ? ' is-active' : '';
+          const imageMarkup = image
+            ? '<img class="questionnaire-selection-thumb__image" src="' +
+              image +
+              '" alt="' +
+              vendorOrTitle +
+              '" loading="lazy">'
+            : '<span class="questionnaire-selection-thumb__fallback">' + (index + 1) + '</span>';
+
+          return (
+            '<button type="button" class="questionnaire-selection-thumb' +
+            isActiveClass +
+            '" data-index="' +
+            index +
+            '" role="tab" aria-selected="' +
+            (index === thumbActiveIndex ? 'true' : 'false') +
+            '" aria-label="' +
+            vendorOrTitle +
+            '" title="' +
+            vendorOrTitle +
+            '">' +
+            imageMarkup +
+            '</button>'
+          );
+        })
+        .join('');
+
+      thumbsEl.querySelectorAll('.questionnaire-selection-thumb').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          const nextIndex = parseInt(btn.getAttribute('data-index') || '0', 10);
+          if (Number.isNaN(nextIndex)) return;
+          selectProductByIndex(nextIndex, 'smooth');
+        });
+      });
+    }
+
+    function clearProgrammaticScrollSync() {
+      ignoreCarouselScrollSync = false;
+      if (programmaticScrollClearTimer !== null) {
+        clearTimeout(programmaticScrollClearTimer);
+        programmaticScrollClearTimer = null;
+      }
+      const idx = indexFromScrollOffset();
+      if (idx !== current) {
+        current = idx;
+        syncFooter(current);
+      }
+      updateSlideActiveClasses(current);
+      updateArrowDisabled();
+    }
+
+    function beginProgrammaticScroll(behavior) {
+      if (programmaticScrollClearTimer !== null) {
+        clearTimeout(programmaticScrollClearTimer);
+        programmaticScrollClearTimer = null;
+      }
+      if (behavior === 'auto') {
+        ignoreCarouselScrollSync = false;
+        return;
+      }
+      ignoreCarouselScrollSync = true;
+      programmaticScrollClearTimer = setTimeout(clearProgrammaticScrollSync, 600);
+    }
+
+    function updateDesktopProductShortFade() {
+      var shortEl = document.getElementById('q-desktop-product-short');
+      var fadeEl = document.getElementById('q-desktop-product-short-fade');
+      if (!shortEl || !fadeEl || !isDesktop()) return;
+      var canScroll = shortEl.scrollHeight - shortEl.clientHeight > 1;
+      var atBottom = shortEl.scrollTop + shortEl.clientHeight >= shortEl.scrollHeight - 1;
+      fadeEl.classList.toggle('is-at-bottom', !canScroll || atBottom);
+    }
+
+    function syncFooter(index) {
+      const product = products && products[index];
+      if (!product) return;
+
+      // Update counter
+      const counterEl = document.getElementById('q-carousel-counter');
+      if (counterEl) {
+        counterEl.textContent = `(${index + 1}/${products.length})`;
+      }
+
+      if (thumbsEl) {
+        thumbsEl.querySelectorAll('.questionnaire-selection-thumb').forEach(function (thumb, thumbIndex) {
+          const isActive = thumbIndex === index;
+          thumb.classList.toggle('is-active', isActive);
+          thumb.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+      }
+
+      // Bundle price (all products × qty)
+      updateBundlePrice();
+
+      // Variant ID (for the visible product — informational; ATC adds the whole bundle)
+      const variantInput = document.getElementById('q-footer-variant-id');
+      if (variantInput) variantInput.value = product.variantId || '';
+
+      // Button label & state — enabled only when every product in the bundle can be purchased
+      const atcBtn = document.getElementById('q-footer-atc-btn');
+      const atcLabel = document.getElementById('q-footer-atc-label');
+      const bundleReady =
+        products.length > 0 &&
+        products.every(function (p) {
+          return p && p.available && p.variantId;
+        });
+      if (atcBtn && atcLabel) {
+        if (bundleReady) {
+          atcBtn.disabled = false;
+          atcLabel.textContent = 'רכישת המארז';
+        } else {
+          atcBtn.disabled = true;
+          atcLabel.textContent = products.length && products.some(function (p) { return p && !p.available; })
+            ? 'אזל המלאי'
+            : 'רכישת המארז';
+        }
+      }
+
+      // Desktop inline product info panel — package summary (not per-slide product)
+      var desktopNameEl   = document.getElementById('q-desktop-product-name');
+      var desktopVendorEl = document.getElementById('q-desktop-product-vendor');
+      var desktopShortEl  = document.getElementById('q-desktop-product-short');
+      var desktopTasteEl  = document.getElementById('q-desktop-product-taste');
+      if (isDesktop()) {
+        var vendorLabel = '';
+        var vendorOpts = window.__questionnaireVendorOptions;
+        if (Array.isArray(vendorOpts) && vendorOpts.length) {
+          var selectedVendorKey = (window.__questionnaireSelectedVendor || '').toLowerCase();
+          var selectedVendorOpt = vendorOpts.find(function (o) {
+            return (o.vendorKey || '').toLowerCase() === selectedVendorKey;
+          });
+          if (selectedVendorOpt) vendorLabel = selectedVendorOpt.label || selectedVendorOpt.vendorKey || '';
+        }
+        if (desktopNameEl) {
+          desktopNameEl.textContent = vendorLabel
+            ? 'מארז מבית הקלייה ' + vendorLabel
+            : 'מארז מבית הקלייה';
+        }
+        if (desktopVendorEl) desktopVendorEl.textContent = '';
+        if (desktopShortEl) {
+          if (products && products.length) {
+            desktopShortEl.innerHTML =
+              '<ul class="q-desktop-product-package-list">' +
+              products
+                .map(function (p) {
+                  var title = escapeHtml((p.title || '').trim() || '—');
+                  var desc = escapeHtml((p.short_description || '').trim());
+                  var line = '<strong>' + title + '</strong>';
+                  if (desc) line += ' - ' + desc;
+                  return '<li>' + line + '</li>';
+                })
+                .join('') +
+              '</ul>';
+          } else {
+            desktopShortEl.innerHTML = '';
+          }
+          desktopShortEl.scrollTop = 0;
+          requestAnimationFrame(updateDesktopProductShortFade);
+        }
+        if (desktopTasteEl) desktopTasteEl.innerHTML = '';
+      } else {
+        if (desktopNameEl)   desktopNameEl.textContent   = product.title   || '';
+        if (desktopVendorEl) desktopVendorEl.textContent = product.vendor  || '';
+        if (desktopShortEl)  desktopShortEl.textContent  = product.short_description || '';
+        if (desktopTasteEl) {
+          var tasteLabels = product.taste_labels || [];
+          desktopTasteEl.innerHTML = tasteLabels
+            .map(function (l) { return '<span class="q-desktop-taste-chip">' + l + '</span>'; })
+            .join('');
+        }
+      }
+
+      highlightBundleTableRow(index);
+    }
+
+    function selectProductByIndex(index, scrollBehavior) {
+      if (slides.length === 0 || slides[0].classList.contains('q-carousel-slide--empty')) return;
+      const i = Math.max(0, Math.min(index, slides.length - 1));
+      current = i;
+      syncFooter(i);
+      updateSlideActiveClasses(i);
+      updateArrowDisabled();
+
+      const step = document.getElementById('questionnaireResultsStep');
+      const inTableView = step && step.classList.contains('results-step--table-view');
+
+      if (!viewport || inTableView) return;
+
+      const beh = scrollBehavior === 'instant' ? 'auto' : scrollBehavior || 'smooth';
+      beginProgrammaticScroll(beh);
+      if (isDesktop()) {
+        viewport.scrollTo({ top: scrollOffsetToCenterIndex(i), behavior: beh });
+      } else {
+        viewport.scrollTo({ left: scrollOffsetToCenterIndex(i), behavior: beh });
+      }
+    }
+
+    window.__qCarouselSelectProductIndex = selectProductByIndex;
+
+    function slideMetrics() {
+      if (!viewport) return { viewportSize: 0, slideSize: 0 };
+      if (isDesktop()) {
+        const vh = viewport.clientHeight;
+        return { viewportSize: vh, slideSize: vh * Q_CAROUSEL_SLIDE_FRAC };
+      }
+      const vw = viewport.clientWidth;
+      return { viewportSize: vw, slideSize: vw * Q_CAROUSEL_SLIDE_FRAC };
+    }
+
+    function maxScrollOffset() {
+      if (!viewport) return 0;
+      if (isDesktop()) {
+        return Math.max(0, viewport.scrollHeight - viewport.clientHeight);
+      }
+      return Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+    }
+
+    /** Scroll position that places slide `index` in the center of the viewport. */
+    function scrollOffsetToCenterIndex(index) {
+      const metrics = slideMetrics();
+      const viewportSize = metrics.viewportSize;
+      const slideSize = metrics.slideSize;
+      if (!viewport || slideSize <= 0) return 0;
+      const pad = (viewportSize - slideSize) / 2;
+      const target = pad + index * slideSize + slideSize / 2 - viewportSize / 2;
+      return Math.max(0, Math.min(maxScrollOffset(), target));
+    }
+
+    function indexFromScrollOffset() {
+      const metrics = slideMetrics();
+      const viewportSize = metrics.viewportSize;
+      const slideSize = metrics.slideSize;
+      if (!viewport || slideSize <= 0 || slides.length === 0) return 0;
+      const pad = (viewportSize - slideSize) / 2;
+      const scrollPos = isDesktop() ? viewport.scrollTop : viewport.scrollLeft;
+      const raw = (scrollPos + viewportSize / 2 - pad - slideSize / 2) / slideSize;
+      return Math.max(0, Math.min(slides.length - 1, Math.round(raw)));
+    }
+
+    function updateSlideActiveClasses(index) {
+      slides.forEach(function (slide, i) {
+        slide.classList.toggle('active', i === index);
+      });
+    }
+
+    function updateArrowDisabled() {
+      if (!viewport || slides.length === 0) return;
       const p = document.getElementById('qCarouselPrev');
       const n = document.getElementById('qCarouselNext');
-      if (p) p.disabled = current === 0;
-      if (n) n.disabled = current === slides.length - 1;
+      const isEmpty = slides[0].classList.contains('q-carousel-slide--empty');
+      if (isEmpty) {
+        if (p) p.disabled = true;
+        if (n) n.disabled = true;
+        return;
+      }
+      const idx = indexFromScrollOffset();
+      const lastIndex = slides.length - 1;
+      if (p) p.disabled = idx <= 0;
+      if (n) n.disabled = idx >= lastIndex;
+    }
+
+    function syncFromScrollPosition() {
+      const idx = indexFromScrollOffset();
+      if (ignoreCarouselScrollSync) {
+        updateSlideActiveClasses(current);
+        updateArrowDisabled();
+        return;
+      }
+      if (idx !== current) {
+        current = idx;
+        syncFooter(current);
+      }
+      updateSlideActiveClasses(idx);
+      updateArrowDisabled();
+    }
+
+    function scrollToIndex(index, behavior) {
+      selectProductByIndex(index, behavior);
+    }
+
+    function onCarouselScrollEnd() {
+      if (!ignoreCarouselScrollSync) return;
+      clearProgrammaticScrollSync();
     }
 
     // Wire up arrows — clone to clear any old listeners, then update refs
@@ -850,33 +3755,341 @@
     if (prevBtnOld) {
       const newPrev = prevBtnOld.cloneNode(true);
       prevBtnOld.parentNode.replaceChild(newPrev, prevBtnOld);
-      newPrev.addEventListener('click', () => goTo(current - 1));
+      newPrev.addEventListener('click', function () {
+        if (newPrev.disabled) return;
+        scrollToIndex(indexFromScrollOffset() - 1, 'smooth');
+      });
     }
     if (nextBtnOld) {
       const newNext = nextBtnOld.cloneNode(true);
       nextBtnOld.parentNode.replaceChild(newNext, nextBtnOld);
-      newNext.addEventListener('click', () => goTo(current + 1));
+      newNext.addEventListener('click', function () {
+        if (newNext.disabled) return;
+        scrollToIndex(indexFromScrollOffset() + 1, 'smooth');
+      });
     }
 
-    // Touch / swipe support
-    let touchStartX = 0;
-    track.addEventListener(
-      'touchstart',
-      (e) => {
-        touchStartX = e.touches[0].clientX;
-      },
-      { passive: true }
-    );
-    track.addEventListener(
-      'touchend',
-      (e) => {
-        const diff = touchStartX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
-      },
-      { passive: true }
-    );
+    function buildQuestionnaireBundleCartItems() {
+      const byVariant = {};
+      products.forEach(function (p) {
+        if (!p || !p.variantId || !p.available) return;
+        const vid = String(p.variantId);
+        byVariant[vid] = (byVariant[vid] || 0) + 1;
+      });
+      const bundleProps = {};
+      bundleProps[QUESTIONNAIRE_LINE_PROP_BUNDLE] = 'true';
+      return Object.keys(byVariant).map(function (vid) {
+        return {
+          id: Number(vid),
+          quantity: byVariant[vid],
+          properties: Object.assign({}, bundleProps),
+        };
+      });
+    }
 
-    goTo(0);
+    function closeQuestionnaireBundleReviewDrawer() {
+      const drawer = document.getElementById('q-bundle-review-drawer');
+      if (!drawer) return;
+      drawer.hidden = true;
+      drawer.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    function openQuestionnaireBundleReviewDrawer() {
+      const drawer = document.getElementById('q-bundle-review-drawer');
+      const itemsEl = document.getElementById('q-bundle-drawer-items');
+      const totalEl = document.getElementById('q-bundle-drawer-total');
+      const totalWeightEl = document.getElementById('q-bundle-drawer-total-weight');
+      const totalWeightNoteEl = document.getElementById('q-bundle-drawer-total-weight-note');
+      if (!drawer || !itemsEl || !totalEl) return;
+
+      trackQuestionnaireAnalyticsClick('Quiz - Purchase Bundle', getQuestionnaireBundlePurchaseProps(products));
+
+      const qty = getQuestionnaireResultsBundleQty();
+      let totalGrams = 0;
+      products.forEach(function (p) {
+        if (!p) return;
+        totalGrams += p.weight_grams || 0;
+      });
+      const totalCents = bundleTotalWithShippingCentsForQuestionnaireProducts(products, qty);
+
+      itemsEl.innerHTML = products
+        .map(function (p) {
+          if (!p) return '';
+          const title = escapeHtml((p.title || '').trim() || 'מוצר');
+          const img = p.image
+            ? '<img class="q-bundle-drawer__thumb-img" src="' + escapeHtml(p.image) + '" alt="" loading="lazy">'
+            : '<span class="q-bundle-drawer__thumb-fallback" aria-hidden="true"></span>';
+          const w = formatQuestionnaireProductWeight(p.weight_grams);
+          return (
+            '<div class="q-bundle-drawer__line">' +
+            '<div class="q-bundle-drawer__thumb">' +
+            img +
+            '</div>' +
+            '<div class="q-bundle-drawer__line-main">' +
+            '<div class="q-bundle-drawer__line-title">' +
+            title +
+            '</div>' +
+            '<div class="q-bundle-drawer__line-meta">' +
+            '<span class="q-bundle-drawer__weight">' +
+            escapeHtml(w) +
+            '</span>' +
+            '</div>' +
+            '</div>' +
+            '</div>'
+          );
+        })
+        .join('');
+
+      totalEl.textContent = formatQuestionnaireMoney(totalCents);
+      if (totalWeightEl) {
+        totalWeightEl.textContent =
+          totalGrams > 0 ? formatQuestionnaireBundleWeightKg(totalGrams) : '—';
+      }
+      if (totalWeightNoteEl) {
+        totalWeightNoteEl.hidden = !totalGrams;
+      }
+
+      const dCheckout = document.getElementById('q-bundle-drawer-checkout');
+      const dContinue = document.getElementById('q-bundle-drawer-continue-shopping');
+      if (dCheckout) dCheckout.disabled = false;
+      if (dContinue) dContinue.disabled = false;
+
+      drawer.hidden = false;
+      drawer.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('overflow-hidden');
+
+      const focusClose = drawer.querySelector('.q-bundle-drawer__close');
+      if (focusClose && typeof focusClose.focus === 'function') {
+        setTimeout(function () {
+          focusClose.focus();
+        }, 0);
+      }
+    }
+
+    function submitQuestionnaireBundleToCart(redirectUrl, activeLabelEl) {
+      const items = buildQuestionnaireBundleCartItems();
+      if (!items.length) return;
+
+      closeQuestionnaireBundleReviewDrawer();
+
+      const atcBtn = document.getElementById('q-footer-atc-btn');
+      const atcLabel = document.getElementById('q-footer-atc-label');
+      const shopLabel = document.getElementById('q-bundle-drawer-shop-label');
+      const drawerCheckoutBtn = document.getElementById('q-bundle-drawer-checkout');
+      const drawerContinueBtn = document.getElementById('q-bundle-drawer-continue-shopping');
+      const originalAtc = atcLabel ? atcLabel.textContent : '';
+      const originalShop = shopLabel ? shopLabel.textContent : '';
+
+      if (atcBtn) atcBtn.disabled = true;
+      if (drawerCheckoutBtn) drawerCheckoutBtn.disabled = true;
+      if (drawerContinueBtn) drawerContinueBtn.disabled = true;
+      if (activeLabelEl) activeLabelEl.textContent = 'מוסיף מוצרים...';
+
+      trackQuestionnaireAnalyticsClick('Quiz - Finish Purchase', getQuestionnaireBundlePurchaseProps(products));
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: items }),
+      })
+        .then(function (response) {
+          if (!response.ok) {
+            return response.json().then(function (err) {
+              throw err;
+            });
+          }
+          return response.json();
+        })
+        .then(function () {
+          if (redirectUrl === '/checkout') {
+            clearResultsState();
+          }
+          window.location.assign(redirectUrl);
+        })
+        .catch(function (err) {
+          console.error('Questionnaire bundle add to cart:', err);
+          if (activeLabelEl) activeLabelEl.textContent = 'שגיאה';
+          if (atcBtn) atcBtn.disabled = false;
+          if (drawerCheckoutBtn) drawerCheckoutBtn.disabled = false;
+          if (drawerContinueBtn) drawerContinueBtn.disabled = false;
+          setTimeout(function () {
+            if (atcLabel) atcLabel.textContent = originalAtc;
+            if (shopLabel) shopLabel.textContent = originalShop;
+          }, 2000);
+        });
+    }
+
+    const footerAtcFormEl = document.getElementById('q-footer-atc-form');
+    if (footerAtcFormEl && footerAtcFormEl.parentNode) {
+      const freshFooterForm = footerAtcFormEl.cloneNode(true);
+      footerAtcFormEl.parentNode.replaceChild(freshFooterForm, footerAtcFormEl);
+      freshFooterForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        openQuestionnaireBundleReviewDrawer();
+      });
+    }
+
+    const bundleDrawerEl = document.getElementById('q-bundle-review-drawer');
+    if (bundleDrawerEl) {
+      bundleDrawerEl.querySelectorAll('[data-q-bundle-drawer-close]').forEach(function (node) {
+        node.addEventListener('click', function () {
+          closeQuestionnaireBundleReviewDrawer();
+        });
+      });
+      bundleDrawerEl.addEventListener('keyup', function (e) {
+        if (e.code === 'Escape') closeQuestionnaireBundleReviewDrawer();
+      });
+    }
+
+    const bundleCheckoutBtnOld = document.getElementById('q-bundle-drawer-checkout');
+    if (bundleCheckoutBtnOld && bundleCheckoutBtnOld.parentNode) {
+      const bundleCheckoutBtn = bundleCheckoutBtnOld.cloneNode(true);
+      bundleCheckoutBtnOld.parentNode.replaceChild(bundleCheckoutBtn, bundleCheckoutBtnOld);
+      bundleCheckoutBtn.addEventListener('click', function () {
+        const atcLabel = document.getElementById('q-footer-atc-label');
+        submitQuestionnaireBundleToCart('/checkout', atcLabel);
+      });
+    }
+
+    const bundleContinueBtnOld = document.getElementById('q-bundle-drawer-continue-shopping');
+    if (bundleContinueBtnOld && bundleContinueBtnOld.parentNode) {
+      const bundleContinueBtn = bundleContinueBtnOld.cloneNode(true);
+      bundleContinueBtnOld.parentNode.replaceChild(bundleContinueBtn, bundleContinueBtnOld);
+      bundleContinueBtn.addEventListener('click', function () {
+        const shopLabel = document.getElementById('q-bundle-drawer-shop-label');
+        submitQuestionnaireBundleToCart('/collections/חנות-קפה', shopLabel);
+      });
+    }
+
+    renderSelectionThumbs();
+
+    let carouselScrollRaf = null;
+    function onCarouselViewportScroll() {
+      if (carouselScrollRaf !== null) return;
+      carouselScrollRaf = requestAnimationFrame(function () {
+        carouselScrollRaf = null;
+        syncFromScrollPosition();
+      });
+    }
+
+    function handleProductCardClick(target) {
+      const card = target && target.closest ? target.closest('.questionnaire-product-card') : null;
+      if (!card) return;
+      const slide = target.closest('.q-carousel-slide');
+      if (!slide || slide.classList.contains('q-carousel-slide--empty')) return;
+      const pid = slide.getAttribute('data-product-id');
+      if (!pid) return;
+
+      const found = products.find(function (pr) {
+        return String(pr.id) === String(pid);
+      });
+      if (!found) return;
+
+      if (isDesktop()) {
+        const index = products.findIndex(function (pr) {
+          return String(pr.id) === String(pid);
+        });
+        if (index >= 0) selectProductByIndex(index, 'smooth');
+      }
+
+      openQuestionnaireProductModal(found);
+    }
+
+    track.addEventListener('click', function (e) {
+      handleProductCardClick(e.target);
+    });
+
+    track.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return;
+      handleProductCardClick(e.target);
+    });
+
+    slides.forEach(function (slide) {
+      if (slide.classList.contains('q-carousel-slide--empty')) return;
+      if (isDesktop()) return;
+      const card = slide.querySelector('.questionnaire-product-card');
+      if (card) card.setAttribute('tabindex', '0');
+    });
+
+    applySlideWidths();
+    const ro = new ResizeObserver(function () {
+      applySlideWidths();
+      if (viewport && slides.length && !slides[0].classList.contains('q-carousel-slide--empty')) {
+        const centeredOffset = scrollOffsetToCenterIndex(current);
+        if (isDesktop()) {
+          viewport.scrollTop = centeredOffset;
+        } else {
+          viewport.scrollLeft = centeredOffset;
+        }
+      }
+      syncFromScrollPosition();
+      updateDesktopProductShortFade();
+    });
+    var desktopShortScrollEl = document.getElementById('q-desktop-product-short');
+    function onDesktopProductShortScroll() {
+      updateDesktopProductShortFade();
+    }
+    if (desktopShortScrollEl) {
+      desktopShortScrollEl.addEventListener('scroll', onDesktopProductShortScroll, { passive: true });
+    }
+    if (viewport) {
+      viewport.addEventListener('scroll', onCarouselViewportScroll, { passive: true });
+      viewport.addEventListener('scrollend', onCarouselScrollEnd);
+      ro.observe(viewport);
+      track._qCarouselResizeObserver = ro;
+    }
+
+    if (viewport && slides.length && !slides[0].classList.contains('q-carousel-slide--empty')) {
+      if (isDesktop()) {
+        selectProductByIndex(defaultDesktopProductIndex(), 'instant');
+      } else {
+        const initialOffset = scrollOffsetToCenterIndex(0);
+        viewport.scrollLeft = initialOffset;
+        current = indexFromScrollOffset();
+        syncFooter(current);
+        updateSlideActiveClasses(current);
+        updateArrowDisabled();
+      }
+    } else {
+      current = indexFromScrollOffset();
+      syncFooter(current);
+      updateSlideActiveClasses(current);
+      updateArrowDisabled();
+    }
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        updateDesktopProductShortFade();
+        if (typeof onAfterLayoutSync === 'function') {
+          onAfterLayoutSync();
+        }
+      });
+    });
+
+    track._qCarouselTeardown = function () {
+      if (carouselScrollRaf !== null) {
+        cancelAnimationFrame(carouselScrollRaf);
+        carouselScrollRaf = null;
+      }
+      if (programmaticScrollClearTimer !== null) {
+        clearTimeout(programmaticScrollClearTimer);
+        programmaticScrollClearTimer = null;
+      }
+      ignoreCarouselScrollSync = false;
+      if (viewport) {
+        viewport.removeEventListener('scroll', onCarouselViewportScroll);
+        viewport.removeEventListener('scrollend', onCarouselScrollEnd);
+      }
+      if (track._qCarouselResizeObserver) {
+        track._qCarouselResizeObserver.disconnect();
+        track._qCarouselResizeObserver = null;
+      }
+      if (desktopShortScrollEl) {
+        desktopShortScrollEl.removeEventListener('scroll', onDesktopProductShortScroll);
+      }
+      window.__qCarouselSelectProductIndex = null;
+    };
   }
 
   function arrayToQueryString(filterData) {
@@ -952,79 +4165,102 @@
       'Skip Email': skip,
     });
 
-    // Redirect to collection page with filters if skip is true, otherwise go to close redirect
     if (skip) {
       redirectToCollectionWithFilters();
     } else {
-      window.location.href = questionnaireSettings.closeRedirect || '/';
+      var origin = sessionStorage.getItem(QUESTIONNAIRE_ORIGIN_KEY);
+      sessionStorage.removeItem(QUESTIONNAIRE_ORIGIN_KEY);
+      window.location.href = origin || questionnaireSettings.closeRedirect || '/';
     }
   }
 
-  function subscribeUser(email) {
-    analytics.trackClick('Quiz Email Subscribe', {
-      email: email,
-    });
-
-    if (isValidEmail(email)) {
-      const url = 'https://elghwmw2jd3c5ve65agcrezqru0lrwtc.lambda-url.us-east-1.on.aws/';
-      const data = { email };
-
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-        // .then(response => response.json())
-        .then((data) => {
-          redirectToCollectionWithFilters();
-        })
-        .catch((error) => {
-          console.error('Error subscribing:', error);
-        });
-    } else {
-      redirectToCollectionWithFilters();
-    }
-  }
-
-  // Email validation helper function
-  function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  // Add this function to handle disabling taste options if 'כהה' is selected
   function updateTasteOptionsDisabledState() {
-    // Check if 'כהה' is in the roast level filter
-    const roastLevels = window.appliedFilters && window.appliedFilters['filter.p.m.custom.coffee_roast_level'];
-    const isDarkSelected =
-      Array.isArray(roastLevels) &&
-      roastLevels.includes('כהה') &&
-      !roastLevels.includes('בהירה') &&
-      !roastLevels.includes('בינונית');
-
-    // Select the relevant taste option wrappers (update selector if needed)
-    const tasteWrappers = document.querySelectorAll(
-      '.questionnaire-icons-wrapper.active .questionnaire-selection-wrapper[data-filter-value="Fruity & Floral"], .questionnaire-icons-wrapper.active .questionnaire-selection-wrapper[data-filter-value="Sweet & Caramelly"]'
-    );
-
-    tasteWrappers.forEach((wrapper) => {
-      if (isDarkSelected) {
-        wrapper.classList.add('disabled');
-      } else {
-        wrapper.classList.remove('disabled');
-      }
-    });
+    // All options remain available regardless of previous step selections
   }
+
+  function runQuestionnaireBootstrap() {
+    const savedResultsProducts = loadResultsState();
+    const questionnaireWrapper = document.getElementById('questionnaireWrapperDesktop');
+    preloadAllProductsWhenIdle();
+
+    if (savedResultsProducts) {
+      setupResultsVendorSelect();
+      renderQuestionnaireResults(savedResultsProducts);
+
+      if (typeof window.__questionnaireMatchUserText === 'string' && window.__questionnaireMatchUserText.length) {
+        const refreshVendorMeta = function () {
+          matchQuestionnaireCoffees(window.__questionnaireMatchUserText);
+          updateResultsVendorSelect();
+        };
+        if (typeof requestIdleCallback === 'function') {
+          requestIdleCallback(refreshVendorMeta, { timeout: 2000 });
+        } else {
+          setTimeout(refreshVendorMeta, 0);
+        }
+      }
+      return;
+    }
+
+    if (questionnaireWrapper) {
+      questionnaireWrapper.classList.remove('initializing');
+    }
+  }
+
+  runQuestionnaireBootstrap();
 
   // Initialize the questionnaire functionality
   document.addEventListener('DOMContentLoaded', function () {
-    analytics.trackScreenView('Quiz', {
-      page_load_time: performance.now(),
-    });
+    const intro = document.getElementById('questionnaireIntroStep');
+    if (intro && intro.classList.contains('active')) {
+      trackQuestionnaireScreenView('Quiz Flow', {
+        Step: 'Start Quiz',
+        page_load_time: performance.now(),
+      });
+    }
+
+    setupResultsVendorSelect();
 
     document.body.classList.add('questionnaire-wrapper-open');
+    var mainContent = document.getElementById('MainContent');
+    if (mainContent) {
+      mainContent.classList.add('questionnaire-wrapper-open');
+    }
+
+    const qProductModalEl = document.getElementById('q-product-detail-modal');
+    if (qProductModalEl) {
+      qProductModalEl.addEventListener('click', function (e) {
+        if (e.target.closest('[data-q-product-modal-close]')) {
+          closeQuestionnaireProductModal();
+        }
+      });
+    }
+
+    const qRestartConfirmModalEl = document.getElementById('q-restart-confirm-modal');
+    if (qRestartConfirmModalEl) {
+      qRestartConfirmModalEl.addEventListener('click', function (e) {
+        if (e.target.closest('[data-q-restart-confirm-close]')) {
+          closeRestartConfirmModal();
+        }
+      });
+      const acceptBtn = document.getElementById('q-restart-confirm-accept');
+      if (acceptBtn) {
+        acceptBtn.addEventListener('click', function () {
+          restartQuestionnaire();
+        });
+      }
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      const restartModal = document.getElementById('q-restart-confirm-modal');
+      if (restartModal && !restartModal.hidden) {
+        closeRestartConfirmModal();
+        return;
+      }
+      const modal = document.getElementById('q-product-detail-modal');
+      if (!modal || modal.hidden) return;
+      closeQuestionnaireProductModal();
+    });
 
     // Object that will hold the filters data
     window.appliedFilters = [];
@@ -1046,30 +4282,23 @@
         const parentWrapper = this.closest('.questionnaire-icons-wrapper');
         if (!parentWrapper.classList.contains('active')) return;
 
-        //
-        const filterValue = wrapper.getAttribute('data-filter-value');
-        // Remove selection from all other wrappers in the same step
-        if (!filterValue || filterValue.trim() === '') {
-          if (this.classList.contains('selected')) {
-            this.classList.remove('selected');
-          } else {
-            // Remove 'selected' class from all wrappers in the current step
-            parentWrapper.querySelectorAll('.questionnaire-selection-wrapper.selected').forEach((el) => {
-              el.classList.remove('selected');
-            });
-            this.classList.add('selected');
-          }
-        } else {
-          if (parentWrapper.querySelector('.questionnaire-selection-wrapper[data-filter-value=""].selected')) {
-            parentWrapper
-              .querySelector('.questionnaire-selection-wrapper[data-filter-value=""].selected')
-              .classList.remove('selected');
-          }
-          this.classList.toggle('selected');
-        }
+        // Single-select: deselect all others, then select this one
+        parentWrapper.querySelectorAll('.questionnaire-selection-wrapper.selected').forEach((el) => {
+          el.classList.remove('selected');
+        });
+        this.classList.add('selected');
 
         // Update button state
         updateSelectButton();
+
+        // Auto-advance to the next step
+        const filterName = parentWrapper.getAttribute('data-filter-name');
+        const stepIndex = parseInt(parentWrapper.getAttribute('data-step-index'), 10);
+        if (filterName && stepIndex) {
+          setTimeout(function () {
+            getFilters(filterName, stepIndex);
+          }, 300);
+        }
       });
     });
 
@@ -1301,135 +4530,120 @@
       },
     ];
 
-    // Event delegation for quantity selector interaction
+    // Event delegation for quantity selector interaction (clicks may hit inner spans)
     document.addEventListener('click', function (e) {
-      if (e.target && e.target.classList.contains('qty-option')) {
-        const wrapper = e.target.closest('.questionnaire-qty-options');
-        if (wrapper) {
-          wrapper.querySelectorAll('.qty-option').forEach((el) => el.classList.remove('selected'));
-          e.target.classList.add('selected');
-        }
+      const opt = e.target.closest('.qty-option');
+      if (!opt) return;
+      const wrapper = opt.closest('.questionnaire-qty-options');
+      if (wrapper) {
+        wrapper.querySelectorAll('.qty-option').forEach((el) => el.classList.remove('selected'));
+        opt.classList.add('selected');
       }
     });
+
+    const startOverButton = document.querySelector('.questionnaire-start-over');
+    if (startOverButton) {
+      startOverButton.onclick = openRestartConfirmModal;
+    }
   });
 </script>
 
 {% schema %}
-{
-  "name": "Main Questionnaire",
-  "tag": "section",
-  "class": "main-questionnaire-section",
-  "settings": [
-    {
-      "type": "header",
-      "content": "כותרות שלבי השאלון"
-    },
-    {
-      "type": "text",
-      "id": "step1_title",
-      "label": "כותרת שלב 1 - שיטת הכנה",
-      "default": "איך אתם מכינים את הקפה?"
-    },
-    {
-      "type": "text",
-      "id": "step2_title",
-      "label": "כותרת שלב 2 - דרגת קלייה",
-      "default": "בחרו דרגת קלייה מועדפת"
-    },
-    {
-      "type": "text",
-      "id": "step3_title",
-      "label": "כותרת שלב 3 - טעמים",
-      "default": "בחרו טעמים מועדפים"
-    },
-    {
-      "type": "header",
-      "content": "טקסטים לכפתורים"
-    },
-    {
-      "type": "text",
-      "id": "select_button_text",
-      "label": "טקסט כפתור בחירה (ברירת מחדל)",
-      "default": "בחרו אפשרות"
-    },
-    {
-      "type": "text",
-      "id": "continue_single_text",
-      "label": "טקסט המשך עם בחירה אחת",
-      "default": "המשיכו עם בחירה אחת"
-    },
-    {
-      "type": "text",
-      "id": "continue_multiple_text",
-      "label": "טקסט המשך עם מספר בחירות",
-      "default": "המשיכו עם [count] בחירות",
-      "info": "השתמשו ב-[count] כדי להציג את מספר הבחירות"
-    },
-    {
-      "type": "header",
-      "content": "מסך טעינה"
-    },
-    {
-      "type": "text",
-      "id": "loader_text",
-      "label": "טקסט טעינה",
-      "default": "מתאימים את פולי הקפה בדיוק בשבילך"
-    },
-    {
-      "type": "header",
-      "content": "מסך הרשמה לניוזלטר"
-    },
-    {
-      "type": "text",
-      "id": "newsletter_title",
-      "label": "כותרת",
-      "default": "בואו נהיה חברים"
-    },
-    {
-      "type": "textarea",
-      "id": "newsletter_text",
-      "label": "טקסט",
-      "default": "הישאירו מייל כדי לשמוע על קפה חדש, בתי קלייה מעניינים, צורות הכנה ועוד. בלי ספאם. מבטיחים."
-    },
-    {
-      "type": "text",
-      "id": "newsletter_placeholder",
-      "label": "פלייסהולדר לשדה מייל",
-      "default": "הכניסו מייל"
-    },
-    {
-      "type": "text",
-      "id": "newsletter_button_text",
-      "label": "טקסט כפתור הרשמה",
-      "default": "הרשמו"
-    },
-    {
-      "type": "text",
-      "id": "newsletter_skip_text",
-      "label": "טקסט דילוג",
-      "default": "בפעם אחרת"
-    },
-    {
-      "type": "header",
-      "content": "הגדרות ניווט"
-    },
-    {
-      "type": "url",
-      "id": "redirect_collection",
-      "label": "קולקציה להפניה אחרי השאלון",
-      "info": "ברירת מחדל: /collections/all"
-    },
-    {
-      "type": "url",
-      "id": "close_redirect",
-      "label": "הפניה בסגירת השאלון",
-      "info": "ברירת מחדל: דף הבית"
-    }
-  ],
-  "presets": [
-    {
-      "name": "Main Questionnaire"
-    }
-  ]
-}
+  {
+    "name": "Main Questionnaire",
+    "tag": "section",
+    "class": "main-questionnaire-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "מסך פתיחה (תצוגה מקדימה)"
+      },
+      {
+        "type": "text",
+        "id": "intro_title",
+        "label": "כותרת מסך פתיחה",
+        "default": "בואו נרכיב לכם מארז קפה מותאם אישית"
+      },
+      {
+        "type": "richtext",
+        "id": "intro_description",
+        "label": "תיאור מסך פתיחה",
+        "default": "<p>ענו על 3 שאלות קצרות לגבי ההעדפות שלכם בקפה, וקבלו מבחר מארזים מוכנים במיוחד בשבילכם - עם מחיר סופי שכולל משלוח עד הבית.</p><p>לכם נשאר רק לבחור – ולהתחיל ליהנות מקפה מעולה בקלייה מקומית טרייה.</p>"
+      },
+      {
+        "type": "text",
+        "id": "intro_button_text",
+        "label": "טקסט כפתור מסך פתיחה",
+        "default": "קדימה, בואו נתחיל"
+      }, {
+        "type": "text",
+        "id": "intro_social_text",
+        "label": "טקסט המלצה חברתית",
+        "default": "מאות לקוחות מרוצים"
+      }, {
+        "type": "header",
+        "content": "כותרות שלבי השאלון"
+      }, {
+        "type": "text",
+        "id": "step1_title",
+        "label": "כותרת שלב 1 - שיטת הכנה",
+        "default": "איך אתם מכינים את הקפה?"
+      }, {
+        "type": "text",
+        "id": "step2_title",
+        "label": "כותרת שלב 2 - דרגת קלייה",
+        "default": "בחרו דרגת קלייה מועדפת"
+      }, {
+        "type": "text",
+        "id": "step3_title",
+        "label": "כותרת שלב 3 - טעמים",
+        "default": "בחרו טעמים מועדפים"
+      }, {
+        "type": "header",
+        "content": "טקסטים לכפתורים"
+      }, {
+        "type": "text",
+        "id": "select_button_text",
+        "label": "טקסט כפתור בחירה (ברירת מחדל)",
+        "default": "בחרו אפשרות"
+      }, {
+        "type": "text",
+        "id": "continue_single_text",
+        "label": "טקסט המשך עם בחירה אחת",
+        "default": "המשיכו עם בחירה אחת"
+      }, {
+        "type": "text",
+        "id": "continue_multiple_text",
+        "label": "טקסט המשך עם מספר בחירות",
+        "default": "המשיכו עם [count] בחירות",
+        "info": "השתמשו ב-[count] כדי להציג את מספר הבחירות"
+      }, {
+        "type": "header",
+        "content": "מסך טעינה"
+      }, {
+        "type": "text",
+        "id": "loader_text",
+        "label": "טקסט טעינה",
+        "default": "מתאימים את פולי הקפה בדיוק בשבילך"
+      }, {
+        "type": "header",
+        "content": "הגדרות ניווט"
+      }, {
+        "type": "url",
+        "id": "redirect_collection",
+        "label": "קולקציה להפניה אחרי השאלון",
+        "info": "ברירת מחדל: /collections/all"
+      }, {
+        "type": "url",
+        "id": "close_redirect",
+        "label": "הפניה בסגירת השאלון",
+        "info": "ברירת מחדל: דף הבית"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Main Questionnaire"
+      }
+    ]
+  }
 {% endschema %}

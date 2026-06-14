@@ -1,0 +1,33 @@
+{% comment %}
+  Questionnaire nav link — rendered after "מארזי קפה" in header menus.
+
+  Accepts:
+  - menu_context: {String} "drawer" or "desktop"
+{% endcomment %}
+
+{%- liquid
+  assign questionnaire_url = '/pages/questionnaire?intro=1'
+  assign questionnaire_label = 'הרכיבו מארז'
+-%}
+
+{%- if menu_context == 'drawer' -%}
+  <li>
+    <a
+      id="HeaderDrawer-questionnaire"
+      href="{{ questionnaire_url }}"
+      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+    >
+      {{ questionnaire_label | escape }}
+    </a>
+  </li>
+{%- else -%}
+  <li>
+    <a
+      id="HeaderMenu-questionnaire"
+      href="{{ questionnaire_url }}"
+      class="header__menu-item list-menu__item link link--text focus-inset"
+    >
+      <span>{{ questionnaire_label | escape }}</span>
+    </a>
+  </li>
+{%- endif -%}

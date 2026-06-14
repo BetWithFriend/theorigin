@@ -19,6 +19,13 @@
       <div class="blend-filter-text">הכי נמכרים</div>
     </div>
 
+    <div class="blends-filter-item" onclick="goToCollections('פולי-קפה-מארזי-קפה-לא-חמוץ')">
+      <div class="blends-filter-icon-circle filter-special-beans">
+        <img class="blends-filter-icon" src="{{ 'icon-new-coffee.svg' | asset_url }}" alt="פולי קפה לא חמוצים">
+      </div>
+      <div class="blend-filter-text">לא חמוץ</div>
+    </div>
+
     <div class="blends-filter-item" onclick="goToCalatogWithFilter('filter.p.m.custom.coffee_type', 'חד+זני')">
       <div class="blends-filter-icon-circle filter-single-origin">
         <img class="blends-filter-icon" src="{{ 'icon-single-origin.svg' | asset_url }}" alt="פילטר חד זני">
@@ -33,12 +40,12 @@
       <div class="blend-filter-text">תערובות</div>
     </div>
 
-    <div class="blends-filter-item" onclick="goToCollections('קפה-חדש-ומומלץ')">
+    {% comment %} <div class="blends-filter-item" onclick="goToCollections('קפה-חדש-ומומלץ')">
       <div class="blends-filter-icon-circle filter-special-beans">
         <img class="blends-filter-icon" src="{{ 'icon-new-coffee.svg' | asset_url }}" alt="פילטר פולי קפה חדשים">
       </div>
       <div class="blend-filter-text">חדשים</div>
-    </div>
+    </div> {% endcomment %}
 
     <div class="blends-filter-item" onclick="goToCollections('קפה-קלייה-בהירה')">
       <div class="blends-filter-icon-circle filter-light-roast">

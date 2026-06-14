@@ -249,3 +249,6 @@ function updateCartDrawer() {
     });
 }
 
+if (typeof window !== 'undefined') {
+  window.updateCartDrawerFromQuickAdd = updateCartDrawer;
+}
