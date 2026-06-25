@@ -570,7 +570,14 @@
   document.addEventListener('DOMContentLoaded', function () {
     var mainCta = document.getElementById('mainCtaBtn');
     var shopCta = document.getElementById('shopCtaBtn');
+
     if (mainCta) {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('showquiz') === 'true') {
+        mainCta.href = '/pages/questionnaire?intro=1';
+        mainCta.textContent = 'להרכבת מארז מותאם אישית';
+      }
+
       mainCta.addEventListener('click', function () {
         analytics.track('Main CTA', { type: 'shop' });
       });

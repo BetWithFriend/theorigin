@@ -109,7 +109,7 @@
                         </div>
                     </div>
 
-                    <div class="product-description-wrapper" id="product-description" dir="rtl" onclick="showMoreDetails('roast')">
+                    <div class="product-description-wrapper roaster-info" id="product-description" dir="rtl" onclick="showMoreDetails('roast')">
                         <div class="product-description-more-details-title">
                             <img class="side-arrow-more-details" src="{{'side-arrow-more-details.png' |  asset_url}}" alt="more details icon"/>
                             על בית הקלייה
@@ -522,7 +522,7 @@ function showMoreDetails(section) {
     if (section === 'details') {
         wrapper = document.querySelectorAll('.product-description-wrapper')[0];
     } else if (section === 'roast') {
-        wrapper = document.querySelectorAll('.product-description-wrapper')[1];
+        wrapper = document.querySelectorAll('.product-description-wrapper.roaster-info')[0];
     }
     
     // Toggle the 'expanded' class on the wrapper

@@ -1352,7 +1352,7 @@
       guidedTastePerMatch: 5,
     };
 
-    const DEFAULT_MIN_BUNDLE_SCORE = { 3: 20, 5: 35, 7: 53 };
+    const DEFAULT_MIN_BUNDLE_SCORE = { 3: 18, 5: 31, 7: 47 };
 
     const DEFAULT_THRESHOLDS = {
       minProductScore: 0,
@@ -1377,7 +1377,7 @@
     const TASTE_CATEGORY_ANCHOR = {
       'קלאסי':    1,
       'מודרני':   2,
-      'גל שלישי': 3,
+      'גל שלישי': 4,
     };
 
     const ROAST_ORDER = ['בהירה', 'בהירה-בינונית', 'בינונית', 'בינונית-כהה', 'כהה'];
@@ -1444,7 +1444,6 @@
       const d = roastDistance(p, s);
       let mult = 0;
       if (d === 1) mult = 0.5;
-      else if (d === 2) mult = 0.25;
       if (mult <= 0) return { pts: 0, type: null };
       return { pts: Math.round(fullPts * mult * 10) / 10, type: 'partial' };
     }
@@ -1466,7 +1465,7 @@
       for (let t = 0; t < categoryTastes.length; t++) {
         const pos = TASTE_ORDER.indexOf(categoryTastes[t]);
         for (let ai = 0; ai < anchors.length; ai++) {
-          if (Math.abs(pos - anchors[ai]) <= 2) return true;
+          if (Math.abs(pos - anchors[ai]) <= 1) return true;
         }
       }
       return false;
@@ -1517,8 +1516,7 @@
           const r = roastScore(coffee.coffee_roast_level, sel, w.guidedRoastPerMatch);
           if (r.pts > bestRoast.pts) bestRoast = { pts: r.pts, type: r.type, sel: sel };
         });
-        // For "show all"/"לא בטוחים" taste mode, still keep roast close to selection.
-        if (showAll && bestRoast.pts <= 0) {
+        if (bestRoast.pts <= 0) {
           return { score: 0, roastMeta };
         }
         if (bestRoast.pts > 0) score += bestRoast.pts;
