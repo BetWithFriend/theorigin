@@ -51,9 +51,9 @@
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 {%- endunless -%}
 
-{% comment %} {%- if section.settings.quick_add == 'standard' -%} {% endcomment %}
+{%- unless section.settings.quick_add == 'none' -%}
 <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
-{% comment %} {%- endif -%} {% endcomment %}
+{%- endunless -%}
 
 {%- if section.settings.quick_add == 'bulk' -%}
   <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
@@ -171,7 +171,8 @@
               skip_styles: skip_card_product_styles,
               section_id: section.id,
               quick_add: section.settings.quick_add,
-              not_catalog: true
+              not_catalog: true,
+              columns_mobile: section.settings.columns_mobile
             %}
             <hr class="card-product-divider">
             <div class="main-collection-cart-bottom-wrapper">
