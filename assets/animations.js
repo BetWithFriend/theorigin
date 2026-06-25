@@ -50,6 +50,15 @@ function initializeScrollZoomAnimationTrigger() {
 
   animationTriggerElements.forEach((element) => {
     let elementIsVisible = false;
+    // Cache layout values to avoid forced reflow inside the scroll handler
+    let cachedPositionY = element.getBoundingClientRect().top + window.scrollY;
+    let cachedHeight = element.offsetHeight;
+
+    window.addEventListener('resize', () => {
+      cachedPositionY = element.getBoundingClientRect().top + window.scrollY;
+      cachedHeight = element.offsetHeight;
+    }, { passive: true });
+
     const observer = new IntersectionObserver((elements) => {
       elements.forEach((entry) => {
         elementIsVisible = entry.isIntersecting;
@@ -57,35 +66,30 @@ function initializeScrollZoomAnimationTrigger() {
     });
     observer.observe(element);
 
-    element.style.setProperty('--zoom-in-ratio', 1 + scaleAmount * percentageSeen(element));
+    element.style.setProperty('--zoom-in-ratio', 1 + scaleAmount * percentageSeen(cachedPositionY, cachedHeight));
 
     window.addEventListener(
       'scroll',
       throttle(() => {
         if (!elementIsVisible) return;
 
-        element.style.setProperty('--zoom-in-ratio', 1 + scaleAmount * percentageSeen(element));
+        element.style.setProperty('--zoom-in-ratio', 1 + scaleAmount * percentageSeen(cachedPositionY, cachedHeight));
       }),
       { passive: true }
     );
   });
 }
 
-function percentageSeen(element) {
+function percentageSeen(elementPositionY, elementHeight) {
   const viewportHeight = window.innerHeight;
   const scrollY = window.scrollY;
-  const elementPositionY = element.getBoundingClientRect().top + scrollY;
-  const elementHeight = element.offsetHeight;
 
   if (elementPositionY > scrollY + viewportHeight) {
-    // If we haven't reached the image yet
     return 0;
   } else if (elementPositionY + elementHeight < scrollY) {
-    // If we've completely scrolled past the image
     return 100;
   }
 
-  // When the image is in the viewport
   const distance = scrollY + viewportHeight - elementPositionY;
   let percentage = distance / ((viewportHeight + elementHeight) / 100);
   return Math.round(percentage);

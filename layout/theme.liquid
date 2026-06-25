@@ -59,13 +59,16 @@
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
     >
-    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
+    </noscript>
 
     {{ content_for_header }}
 
@@ -426,6 +429,7 @@
     </script>
 
     <script type="text/javascript">
+      window.addEventListener('load', function () {
       (function (f, b) {
         if (!b.__SV) {
           var e, g, i, h;
@@ -498,6 +502,7 @@
         record_sessions_percent: 0, //records 100% of all sessions
         record_heatmap_data: false,
       });
+      }); // end load listener
     </script>
 
     <script src="{{ 'event_reporting.js' | asset_url }}" defer="defer"></script>
@@ -564,7 +569,6 @@
                 console.error('Error replaying analytics event:', event.method, error);
               }
             });
-            // Clear the queue
             eventQueue.length = 0;
           }
 
@@ -586,6 +590,7 @@
     ></script>
 
     <script>
+      window.addEventListener('load', function () {
       window['_fs_host'] = 'fullstory.com';
       window['_fs_script'] = 'edge.fullstory.com/s/fs.js';
       window['_fs_org'] = 'o-24DS62-na1';
@@ -735,6 +740,7 @@
             }),
           (g._v = '2.0.0'));
       })(window, document, window._fs_namespace, 'script', window._fs_script);
+      }); // end load listener
     </script>
 
     {%- comment -%} Load Enable accessibility script with lower priority {%- endcomment -%}
@@ -760,6 +766,9 @@
           class="tooltip-close"
           aria-label="Close tooltip"
           onclick="closeTooltip()"
+          width="36"
+          height="36"
+          loading="lazy"
         >
         <div class="whatsapp-tooltip-text">מתלבטים? אנחנו כאן כדי לעזור</div>
         <div class="tooltip-arrow">&nbsp;</div>
@@ -774,6 +783,9 @@
           class="whatsapp-icon"
           src="{{ 'WhatsApp.png' |  asset_url }}"
           alt="WhatsApp"
+          width="146"
+          height="157"
+          loading="lazy"
         >
       </a>
     </div>

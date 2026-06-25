@@ -42,9 +42,10 @@
   >
   <noscript>{{ 'quick-add.css' | asset_url | stylesheet_tag }}</noscript>
 {%- endunless -%}
-<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+{%- unless section.settings.quick_add == 'none' -%}
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+{%- endunless -%}
 {%- if section.settings.quick_add == 'standard' -%}
-  {% comment %} <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script> {% endcomment %}
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
@@ -139,7 +140,8 @@
     {%- endif -%}
 
     <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
-      {{ 'component-facets.css' | asset_url | stylesheet_tag }}
+      <link rel="preload" href="{{ 'component-facets.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      <noscript>{{ 'component-facets.css' | asset_url | stylesheet_tag }}</noscript>
       <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
       {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
         <aside
@@ -284,7 +286,8 @@
                           lazy_load: lazy_load,
                           skip_styles: skip_card_product_styles,
                           quick_add: section.settings.quick_add,
-                          section_id: section.id
+                          section_id: section.id,
+                          columns_mobile: section.settings.columns_mobile
                         %}
                         {% comment %} <hr class="card-product-divider"/> {% endcomment %}
                         {% render 'price', product: product, use_variant: true, render_weight: true %}
@@ -319,7 +322,8 @@
                       skip_styles: skip_card_product_styles,
                       quick_add: section.settings.quick_add,
                       section_id: section.id,
-                      not_catalog: false
+                      not_catalog: false,
+                      columns_mobile: section.settings.columns_mobile
                     %}
                     {% comment %} <hr class="card-product-divider"/> {% endcomment %}
                     <div class="main-collection-cart-bottom-wrapper">

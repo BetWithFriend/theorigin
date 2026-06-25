@@ -73,9 +73,12 @@
             {% if tag contains 'shotim:' %}
               {% assign tag_parts = tag | split: ':' %}
               {% capture filename %}{{ tag_parts[0] }}-{{ tag_parts[2] }}-{{ tag_parts[1] }}.png{% endcapture %}
-              <img src="{{ filename | asset_url }}" 
-                  alt="{{ tag_parts[1] }} tag" 
-                  class="cart-info-new-tag shotim" />
+              <img src="{{ filename | asset_url }}"
+                  alt="{{ tag_parts[1] }} tag"
+                  class="cart-info-new-tag shotim"
+                  width="80"
+                  height="24"
+                  loading="lazy" />
               {% break %}
             {% endif %}
           {% endfor %}
@@ -117,12 +120,15 @@
                   {{ card_product.featured_media | image_url }} {{ card_product.featured_media.width }}w
                 "
                 src="{{ card_product.featured_media | image_url: width: 533 }}"
-                sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                {%- assign mob_cols = columns_mobile | default: 2 | plus: 0 -%}
+                sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), {% if mob_cols == 1 %}calc(100vw - 35px){% else %}calc((100vw - 35px) / 2){% endif %}"
                 alt="{{ card_product.featured_media.alt | escape }}"
                 class="motion-reduce"
-                {% unless lazy_load == false %}
+                {% if lazy_load == false %}
+                  fetchpriority="high"
+                {% else %}
                   loading="lazy"
-                {% endunless %}
+                {% endif %}
                 width="{{ card_product.featured_media.width }}"
                 height="{{ card_product.featured_media.height }}"
               >
