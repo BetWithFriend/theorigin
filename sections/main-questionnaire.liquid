@@ -2007,6 +2007,23 @@
           });
           vendorOptions = pickThreeVendorOptionsForResults(uniqueVendors, withScores);
         }
+        // Sort vendor options by total bundle price ascending (cheapest first = default selection)
+        if (vendorOptions.length > 1) {
+          vendorOptions = vendorOptions.slice().sort(function(a, b) {
+            function getBundleProds(vk) {
+              var vl = (vk || '').toLowerCase();
+              if (bundleResult && bundleResult.ok && bundleResult.meta && bundleResult.meta.topVendors && bundleResult.bundles) {
+                var top = bundleResult.meta.topVendors[selectedBundleQty] || [];
+                var idx = top.findIndex(function(tv) { return ((tv && tv.vendor) || '').trim().toLowerCase() === vl; });
+                var bundleOpts = bundleResult.bundles[selectedBundleQty] || [];
+                if (idx >= 0 && Array.isArray(bundleOpts[idx]) && bundleOpts[idx].length) return bundleOpts[idx].slice(0, selectedBundleQty);
+              }
+              return coffeesForVendorFromPositiveScores(withScores, vl).slice(0, selectedBundleQty);
+            }
+            return bundleTotalWithShippingCentsForQuestionnaireProducts(getBundleProds(a.vendorKey), selectedBundleQty, a.vendorKey)
+                 - bundleTotalWithShippingCentsForQuestionnaireProducts(getBundleProds(b.vendorKey), selectedBundleQty, b.vendorKey);
+          });
+        }
         window.__questionnaireVendorOptionsByQty[selectedBundleQty] = vendorOptions.slice();
       }
       window.__questionnaireVendorOptions = vendorOptions;
@@ -2035,7 +2052,20 @@
           return (item.coffee.vendor || '').trim().toLowerCase() === want ? s + (item.score || 0) : s;
         }, 0);
         window.__questionnaireVendorOptions[0] = { vendorKey: want, label: name, orderScore: Math.max(injectScore, 1) };
-        window.__questionnaireVendorOptions = sortVendorOptionsByMatchDesc(window.__questionnaireVendorOptions);
+        window.__questionnaireVendorOptions = window.__questionnaireVendorOptions.slice().sort(function(a, b) {
+          function getBundleProds(vk) {
+            var vl = (vk || '').toLowerCase();
+            if (bundleResult && bundleResult.ok && bundleResult.meta && bundleResult.meta.topVendors && bundleResult.bundles) {
+              var top = bundleResult.meta.topVendors[selectedBundleQty] || [];
+              var idx = top.findIndex(function(tv) { return ((tv && tv.vendor) || '').trim().toLowerCase() === vl; });
+              var bundleOpts = bundleResult.bundles[selectedBundleQty] || [];
+              if (idx >= 0 && Array.isArray(bundleOpts[idx]) && bundleOpts[idx].length) return bundleOpts[idx].slice(0, selectedBundleQty);
+            }
+            return coffeesForVendorFromPositiveScores(withScores, vl).slice(0, selectedBundleQty);
+          }
+          return bundleTotalWithShippingCentsForQuestionnaireProducts(getBundleProds(a.vendorKey), selectedBundleQty, a.vendorKey)
+               - bundleTotalWithShippingCentsForQuestionnaireProducts(getBundleProds(b.vendorKey), selectedBundleQty, b.vendorKey);
+        });
         window.__questionnaireVendorOptionsByQty[selectedBundleQty] = window.__questionnaireVendorOptions.slice();
       }
     }

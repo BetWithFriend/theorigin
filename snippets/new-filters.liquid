@@ -1,9 +1,6 @@
-<link rel="preload" href="{{ 'horizontal-bubbles.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+{{- 'horizontal-bubbles.css' | asset_url | stylesheet_tag -}}
 <link rel="preload" href="{{ 'component-show-more.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript>
-  {{ 'horizontal-bubbles.css' | asset_url | stylesheet_tag }}
-  {{ 'component-show-more.css' | asset_url | stylesheet_tag }}
-</noscript>
+<noscript>{{ 'component-show-more.css' | asset_url | stylesheet_tag }}</noscript>
 
 <style>
   .all-new-filters-wrapper {

@@ -1,5 +1,11 @@
 {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
-{{ 'component-collection-hero.css' | asset_url | stylesheet_tag }}
+<link
+  rel="preload"
+  href="{{ 'component-collection-hero.css' | asset_url }}"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+>
+<noscript>{{ 'component-collection-hero.css' | asset_url | stylesheet_tag }}</noscript>
 
 {%- style -%}
   @media screen and (max-width: 749px) {
@@ -24,8 +30,6 @@
 </script>
 
   <script>
-    console.log('>>', '{{ collection.handle | escape }}');
-
     function updateCollectionTitle() {
       var titleElem = document.querySelector('.vendors-collection-title-main');
       var subtitleElem = document.querySelector('.vendors-collection-title-submain');

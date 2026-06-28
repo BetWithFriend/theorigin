@@ -140,7 +140,12 @@
     {%- endif -%}
 
     <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
-      <link rel="preload" href="{{ 'component-facets.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      <link
+        rel="preload"
+        href="{{ 'component-facets.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
       <noscript>{{ 'component-facets.css' | asset_url | stylesheet_tag }}</noscript>
       <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
       {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
@@ -362,6 +367,8 @@
                                 class="add-to-cart-catalog-img"
                                 src="{{ 'add-to-cart-catalog.png' |  asset_url }}"
                                 alt="add to cart icon"
+                                width="21"
+                                height="21"
                               >
                             {%- endunless -%}
                             {%- if vendor_downcase == 'temp_placeholder' -%}

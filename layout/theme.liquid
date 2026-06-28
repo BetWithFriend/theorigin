@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <meta name="theme-color" content="">
     <link rel="canonical" href="{{ canonical_url }}">
@@ -59,6 +58,7 @@
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
       rel="preload"
@@ -328,12 +328,17 @@
       }
     {% endstyle %}
 
-    {%- comment -%} CSS Loader Helper - Ensures preload compatibility {%- endcomment -%}
-    {% render 'css-loader-helper' %}
+    {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
 
-    {%- comment -%} Load base.css with preload for better performance {%- endcomment -%}
-    <link rel="preload" href="{{ 'base.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>{{ 'base.css' | asset_url | stylesheet_tag }}</noscript>
+    {%- comment -%} Pre-download above-fold section CSS for the home page so it is already cached
+        when the parser-blocking <link> tags appear in the body sections. {%- endcomment -%}
+    {%- if request.page_type == 'index' -%}
+      <link rel="preload" href="{{ 'our-vendors.css' | asset_url }}" as="style">
+      <link rel="preload" href="{{ 'blends-filter-icons.css' | asset_url }}" as="style">
+    {%- endif -%}
+
+    {%- comment -%} Polyfill for browsers that don't support CSS preload onload {%- endcomment -%}
+    {% render 'css-loader-helper' %}
 
     <link
       rel="stylesheet"
@@ -591,6 +596,7 @@
 
     <script>
       window.addEventListener('load', function () {
+      setTimeout(function () {
       window['_fs_host'] = 'fullstory.com';
       window['_fs_script'] = 'edge.fullstory.com/s/fs.js';
       window['_fs_org'] = 'o-24DS62-na1';
@@ -740,6 +746,7 @@
             }),
           (g._v = '2.0.0'));
       })(window, document, window._fs_namespace, 'script', window._fs_script);
+      }, 3000); // delay FullStory so video and above-fold content load first
       }); // end load listener
     </script>
 

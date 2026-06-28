@@ -1,24 +1,20 @@
 {%- comment -%}
-  CSS Loader Helper - Ensures CSS preloading works across all browsers
-  Usage: {% render 'css-loader-helper' %}
+  CSS Loader Helper - Fallback for browsers that don't support CSS preload.
+  Runs at DOMContentLoaded so all <link rel="preload"> elements exist.
 {%- endcomment -%}
 
 <script>
-  // Polyfill for CSS preload with onload (ensures compatibility)
-  (function() {
+  document.addEventListener('DOMContentLoaded', function () {
     var supportsPreload = false;
     try {
       supportsPreload = document.createElement('link').relList.supports('preload');
-    } catch(e) {}
-    
+    } catch (e) {}
+
     if (!supportsPreload) {
-      // Fallback for browsers that don't support preload
-      var preloadLinks = document.querySelectorAll('link[rel="preload"][as="style"]');
-      preloadLinks.forEach(function(link) {
+      document.querySelectorAll('link[rel="preload"][as="style"]').forEach(function (link) {
         link.setAttribute('rel', 'stylesheet');
         link.removeAttribute('onload');
       });
     }
-  })();
+  });
 </script>
-

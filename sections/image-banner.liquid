@@ -1,10 +1,4 @@
-{%- comment -%} Lazy load image banner CSS {%- endcomment -%}
-<link
-  rel="preload"
-  href="{{ 'section-image-banner.css' | asset_url }}"
-  as="style"
-  onload="this.onload=null;this.rel='stylesheet'">
-<noscript>{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}</noscript>
+{{ 'section-image-banner.css' | asset_url | stylesheet_tag: preload: true }}
 
 {%- if section.settings.image_height == 'adapt' and section.settings.image != blank -%}
   {%- style -%}
@@ -49,6 +43,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background: #111;
   }
 
   .video-placeholder {
@@ -78,8 +73,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center;
     transition: opacity 0.8s ease;
     z-index: 1;
   }
@@ -97,8 +90,9 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.3);
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
+    padding-bottom: 20px;
     transition: opacity 0.5s ease;
     z-index: 2;
   }
@@ -401,20 +395,8 @@
 -%}
 
 <section class="video-banner">
-  <!-- Network quality indicator -->
-  <div class="network-indicator" id="networkIndicator">טוען וידאו...</div>
-
-  <!-- Static image placeholder — <img> lets the browser preload scanner discover and prioritize it for LCP -->
-  <img
-    class="image-placeholder"
-    id="imagePlaceholder"
-    src="https://cdn.shopify.com/s/files/1/0701/9151/3657/files/homepage-video-v4-still.jpg?v=1766840420"
-    alt=""
-    fetchpriority="high"
-    decoding="async"
-    width="1920"
-    height="1080"
-  >
+  <!-- Static image placeholder — empty div, dark background from .video-banner; no image download avoids the ~4MB JPEG becoming the LCP element -->
+  <div class="image-placeholder" id="imagePlaceholder"></div>
 
   <!-- Loading overlay with spinner -->
   <div class="loading-overlay" id="loadingOverlay">
@@ -620,7 +602,18 @@
 
     init() {
       this.detectDeviceType();
-      this.loadVideo();
+
+      if (this.deviceType === 'mobile') {
+        // On mobile, delay video until after window.load to avoid competing with
+        // CSS and font downloads that determine LCP. Hide the spinner in the meantime.
+        this.loadingOverlay.classList.add('hidden');
+        window.addEventListener('load', () => {
+          setTimeout(() => this.loadVideo(), 2000);
+        }, { once: true });
+      } else {
+        this.loadVideo();
+      }
+
       this.setupControls();
       this.setupIntersectionObserver();
       this.setupResizeListener();
@@ -647,7 +640,7 @@
         this.showVideo();
         this.isVideoLoaded = true;
       } catch {
-        // Video unavailable — static image remains visible
+        this.loadingOverlay.classList.add('hidden');
       }
     }
 
@@ -741,7 +734,7 @@
     }
   }
 
-  window.addEventListener('load', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       new ProgressiveVideoLoader();
     }
