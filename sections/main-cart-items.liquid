@@ -52,6 +52,10 @@
       <div class="cart__items" id="main-cart-items">
         <div class="js-contents">
           {%- if cart != empty -%}
+            {%- capture q_bundle_discount_data -%}{%- render 'questionnaire-bundle-discount' -%}{%- endcapture -%}
+            {%- assign q_bundle_parts = q_bundle_discount_data | split: '|' -%}
+            {%- assign q_bundle_discount_cents = q_bundle_parts[0] | plus: 0 -%}
+            {%- assign q_bundle_discount_percent = q_bundle_parts[1] | plus: 0 -%}
             {%- assign vendors = "" -%}
             {%- for item in cart.items -%}
               {%- unless vendors contains item.vendor -%}
@@ -328,7 +332,24 @@
                             </ul>
                           </div>
                           
-                          {%- if item.original_price != item.final_price -%}
+                          {%- if item.properties._questionnaire_bundle == 'true' and q_bundle_discount_percent > 0 -%}
+                            <div class="cart-item__discounted-prices">
+                              {%- assign q_item_multiplier = 100 | minus: q_bundle_discount_percent -%}
+                              {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | divided_by: 100 -%}
+                              <span class="visually-hidden">
+                                {{ 'products.product.price.regular_price' | t }}
+                              </span>
+                              <s class="cart-item__old-price product-option">
+                                {{- item.line_price | money -}}
+                              </s>
+                              <span class="visually-hidden">
+                                {{ 'products.product.price.sale_price' | t }}
+                              </span>
+                              <strong class="cart-item__final-price product-option">
+                                {{ q_item_discounted_line | money }}
+                              </strong>
+                            </div>
+                          {%- elsif item.original_price != item.final_price -%}
                             <div class="cart-item__discounted-prices">
                               <span class="visually-hidden">
                                 {{ 'products.product.price.regular_price' | t }}
@@ -352,7 +373,26 @@
                           <div class="cart-item__totals right medium-hide large-up-hide">
                             {%- render 'loading-spinner' -%}
                             <div class="cart-item__price-wrapper">
-                              {%- if item.original_line_price != item.final_line_price -%}
+                              {%- if item.properties._questionnaire_bundle == 'true' and q_bundle_discount_percent > 0 -%}
+                                {%- assign q_item_multiplier = 100 | minus: q_bundle_discount_percent -%}
+                                {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | divided_by: 100 -%}
+                                <dl class="cart-item__discounted-prices">
+                                  <dt class="visually-hidden">
+                                    {{ 'products.product.price.regular_price' | t }}
+                                  </dt>
+                                  <dd>
+                                    <s class="cart-item__old-price price price--end">
+                                      {{ item.line_price | money }}
+                                    </s>
+                                  </dd>
+                                  <dt class="visually-hidden">
+                                    {{ 'products.product.price.sale_price' | t }}
+                                  </dt>
+                                  <dd class="price price--end">
+                                    {{ q_item_discounted_line | money }}
+                                  </dd>
+                                </dl>
+                              {%- elsif item.original_line_price != item.final_line_price -%}
                                 <dl class="cart-item__discounted-prices">
                                   <dt class="visually-hidden">
                                     {{ 'products.product.price.regular_price' | t }}
@@ -395,7 +435,26 @@
                           <div class="cart-item__totals right small-hide">
                             {%- render 'loading-spinner' -%}
                             <div class="cart-item__price-wrapper">
-                              {%- if item.original_line_price != item.final_line_price -%}
+                              {%- if item.properties._questionnaire_bundle == 'true' and q_bundle_discount_percent > 0 -%}
+                                {%- assign q_item_multiplier = 100 | minus: q_bundle_discount_percent -%}
+                                {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | divided_by: 100 -%}
+                                <dl class="cart-item__discounted-prices">
+                                  <dt class="visually-hidden">
+                                    {{ 'products.product.price.regular_price' | t }}
+                                  </dt>
+                                  <dd>
+                                    <s class="cart-item__old-price price price--end">
+                                      {{ item.line_price | money }}
+                                    </s>
+                                  </dd>
+                                  <dt class="visually-hidden">
+                                    {{ 'products.product.price.sale_price' | t }}
+                                  </dt>
+                                  <dd class="price price--end">
+                                    {{ q_item_discounted_line | money }}
+                                  </dd>
+                                </dl>
+                              {%- elsif item.original_line_price != item.final_line_price -%}
                                 <dl class="cart-item__discounted-prices">
                                   <dt class="visually-hidden">
                                     {{ 'products.product.price.regular_price' | t }}

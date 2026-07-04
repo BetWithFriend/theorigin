@@ -2053,6 +2053,7 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     gap: 12px;
     flex-wrap: nowrap;
     margin-bottom: 32px;
+    padding-top: 10px;
 }
 
 .qty-option {
@@ -2154,23 +2155,24 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
 
 .qty-option__discount-badge {
     position: absolute;
-    top: -10px;
-    left: 25%;
-    transform: translateX(-50%);
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
     min-width: 28px;
-    height: 18px;
-    padding: 0 8px;
-    border-radius: 5px;
+    height: auto;
+    padding: 0 10px;
+    border-radius: 78px;
     background: #43c7b4;
     font-family: 'Assistant', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 400;
-    line-height: 18px;
+    line-height: 25px;
     letter-spacing: 0.02em;
     color: var(--q-text);
     text-align: center;
     pointer-events: none;
     white-space: nowrap;
+    z-index: 1;
 }
 
 .qty-option--with-discount {
@@ -2187,6 +2189,10 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
 
 .qty-option.selected .qty-option__discount {
     color: #FFFFFF;
+}
+
+.qty-option.selected .qty-option__discount-badge {
+    color: var(--q-text);
 }
 
 .qty-option:focus-visible {
@@ -2972,6 +2978,8 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     align-items: baseline;
     justify-content: flex-end;
     gap: 6px 8px;
+    direction: ltr;
+    unicode-bidi: isolate;
 }
 
 .q-bundle-drawer__total-value {
@@ -2979,6 +2987,19 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     font-size: 22px;
     font-weight: 700;
     color: #1c201d;
+}
+
+.q-bundle-drawer__total-compare {
+    font-family: 'Assistant', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: #9A9A9A;
+    text-decoration: line-through;
+    line-height: 1.2;
+}
+
+.q-bundle-drawer__total-compare[hidden] {
+    display: none;
 }
 
 .q-bundle-drawer__total-weight-line {

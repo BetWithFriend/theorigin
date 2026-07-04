@@ -68,12 +68,31 @@
               {%- endfor -%}
 
               {%- assign vendor_array = vendors_list | split: ',' | uniq -%}
-              {%- assign vendor_count = vendor_array | size-%} 
+              {%- assign vendor_count = vendor_array | size-%}
+
+              {%- capture q_bundle_discount_data -%}{%- render 'questionnaire-bundle-discount' -%}{%- endcapture -%}
+              {%- assign q_bundle_parts = q_bundle_discount_data | split: '|' -%}
+              {%- assign q_bundle_discount_cents = q_bundle_parts[0] | plus: 0 -%}
+              {%- assign q_bundle_discount_percent = q_bundle_parts[1] | plus: 0 -%}
+              {%- assign q_bundle_coffee_total = cart.total_price | minus: q_bundle_discount_cents -%}
 
                 <div class="totals">
                   <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
+                  {%- if q_bundle_discount_cents > 0 -%}
+                    <p class="totals__total-value totals-value-secondary">
+                      <span>עלות קפה:</span>
+                      <span dir="ltr">
+                        <s>{{ cart.total_price | money_without_trailing_zeros }}</s>
+                        {{ q_bundle_coffee_total | money_without_trailing_zeros }}
+                      </span>
+                    </p>
+                    <p class="totals__total-value totals-value-secondary">
+                      <span>הנחת מארז ({{ q_bundle_discount_percent }}%):</span>
+                      <span dir="ltr">-{{ q_bundle_discount_cents | money_without_trailing_zeros }}</span>
+                    </p>
+                  {%- endif -%}
                   {%- assign vendor_fee_total = vendor_count | times: 3900 -%}
-                  {%- assign adjusted_total = cart.total_price | plus: vendor_fee_total -%}
+                  {%- assign adjusted_total = q_bundle_coffee_total | plus: vendor_fee_total -%}
                   <p class="totals__total-value" dir="ltr">{{ adjusted_total | money_with_currency }}</p>
                 </div>
 

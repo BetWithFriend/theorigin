@@ -1,0 +1,38 @@
+{%- comment -%}
+  Calculates questionnaire bundle quantity discount for cart display.
+  Outputs pipe-separated: discount_cents|discount_percent|bundle_subtotal_cents
+{%- endcomment -%}
+{%- liquid
+  assign q_bundle_subtotal = 0
+  assign q_bundle_qty = 0
+  assign q_bundle_discount_percent = 0
+  assign q_bundle_discount_cents = 0
+
+  for item in cart.items
+    if item.properties._questionnaire_bundle == 'true'
+      assign q_bundle_subtotal = q_bundle_subtotal | plus: item.line_price
+      if item.properties._questionnaire_bundle_qty != blank
+        assign q_bundle_qty = item.properties._questionnaire_bundle_qty | plus: 0
+      endif
+    endif
+  endfor
+
+  if q_bundle_qty == 0 and q_bundle_subtotal > 0
+    for item in cart.items
+      if item.properties._questionnaire_bundle == 'true'
+        assign q_bundle_qty = q_bundle_qty | plus: item.quantity
+      endif
+    endfor
+  endif
+
+  if q_bundle_qty == 5
+    assign q_bundle_discount_percent = 5
+  elsif q_bundle_qty == 7
+    assign q_bundle_discount_percent = 10
+  endif
+
+  if q_bundle_discount_percent > 0 and q_bundle_subtotal > 0
+    assign q_bundle_discount_cents = q_bundle_subtotal | times: q_bundle_discount_percent | divided_by: 100
+  endif
+-%}
+{{- q_bundle_discount_cents -}}|{{- q_bundle_discount_percent -}}|{{- q_bundle_subtotal -}}

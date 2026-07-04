@@ -240,6 +240,11 @@
         >
           <div id="CartDrawer-CartItems" class="drawer__contents js-contents">
             {%- if cart != empty -%}
+              {%- capture q_bundle_discount_data -%}{%- render 'questionnaire-bundle-discount' -%}{%- endcapture -%}
+              {%- assign q_bundle_parts = q_bundle_discount_data | split: '|' -%}
+              {%- assign q_bundle_discount_cents = q_bundle_parts[0] | plus: 0 -%}
+              {%- assign q_bundle_discount_percent = q_bundle_parts[1] | plus: 0 -%}
+              {%- assign q_bundle_subtotal = q_bundle_parts[2] | plus: 0 -%}
               {%- assign vendors = '' -%}
               {%- assign shipping_price = 0 -%}
               {% assign canopy_shipping = 35 %}
@@ -891,6 +896,14 @@
                                 {% endcomment %}
                             {%- endif -%}
                             <div class="cart-price-item-option" dir="ltr">
+                              {%- if item.properties._questionnaire_bundle == 'true' and q_bundle_discount_percent > 0 -%}
+                                {%- assign q_item_multiplier = 100 | minus: q_bundle_discount_percent -%}
+                                {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | divided_by: 100 -%}
+                                <span>{{ q_item_discounted_line | money_without_trailing_zeros }}</span>
+                                <div class="cart-price-item-option sale" dir="ltr">
+                                  {{ item.line_price | money_without_trailing_zeros }}
+                                </div>
+                              {%- else -%}
                               {{ item.discounted_price | times: item.quantity | money_without_trailing_zeros }}
                               {% if item.variant.compare_at_price > 0 %}
                                 <div class="cart-price-item-option sale" dir="ltr">
@@ -905,12 +918,32 @@
                                   {{ item.final_price | times: item.quantity | money_without_trailing_zeros }}
                                 </div>
                               {% endif %}
+                              {%- endif -%}
                             </div>
                           </div>
                           <div class="cart-item__totals right medium-hide large-up-hide">
                             {%- render 'loading-spinner' -%}
                             <div class="cart-item__price-wrapper">
-                              {%- if item.original_line_price != item.final_line_price -%}
+                              {%- if item.properties._questionnaire_bundle == 'true' and q_bundle_discount_percent > 0 -%}
+                                {%- assign q_item_multiplier = 100 | minus: q_bundle_discount_percent -%}
+                                {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | divided_by: 100 -%}
+                                <dl class="cart-item__discounted-prices">
+                                  <dt class="visually-hidden">
+                                    {{ 'products.product.price.regular_price' | t }}
+                                  </dt>
+                                  <dd>
+                                    <s class="cart-item__old-price price price--end">
+                                      {{ item.line_price | money }}
+                                    </s>
+                                  </dd>
+                                  <dt class="visually-hidden">
+                                    {{ 'products.product.price.sale_price' | t }}
+                                  </dt>
+                                  <dd class="price price--end">
+                                    {{ q_item_discounted_line | money }}
+                                  </dd>
+                                </dl>
+                              {%- elsif item.original_line_price != item.final_line_price -%}
                                 <dl class="cart-item__discounted-prices">
                                   <dt class="visually-hidden">
                                     {{ 'products.product.price.regular_price' | t }}
@@ -953,7 +986,26 @@
                           <div class="cart-item__totals right small-hide">
                             {%- render 'loading-spinner' -%}
                             <div class="cart-item__price-wrapper">
-                              {%- if item.original_line_price != item.final_line_price -%}
+                              {%- if item.properties._questionnaire_bundle == 'true' and q_bundle_discount_percent > 0 -%}
+                                {%- assign q_item_multiplier = 100 | minus: q_bundle_discount_percent -%}
+                                {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | divided_by: 100 -%}
+                                <dl class="cart-item__discounted-prices">
+                                  <dt class="visually-hidden">
+                                    {{ 'products.product.price.regular_price' | t }}
+                                  </dt>
+                                  <dd>
+                                    <s class="cart-item__old-price price price--end">
+                                      {{ item.line_price | money }}
+                                    </s>
+                                  </dd>
+                                  <dt class="visually-hidden">
+                                    {{ 'products.product.price.sale_price' | t }}
+                                  </dt>
+                                  <dd class="price price--end">
+                                    {{ q_item_discounted_line | money }}
+                                  </dd>
+                                </dl>
+                              {%- elsif item.original_line_price != item.final_line_price -%}
                                 <dl class="cart-item__discounted-prices">
                                   <dt class="visually-hidden">
                                     {{ 'products.product.price.regular_price' | t }}
@@ -1127,16 +1179,31 @@
 
           <div class="totals" role="status">
             {% comment %} <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2> {% endcomment %}
+            {%- capture q_bundle_discount_data_footer -%}{%- render 'questionnaire-bundle-discount' -%}{%- endcapture -%}
+            {%- assign q_bundle_parts_footer = q_bundle_discount_data_footer | split: '|' -%}
+            {%- assign q_bundle_discount_cents = q_bundle_parts_footer[0] | plus: 0 -%}
+            {%- assign q_bundle_discount_percent = q_bundle_parts_footer[1] | plus: 0 -%}
             {%- assign shipping_price_cents = shipping_price | times: 100 -%}
-
-            {%- assign adjusted_total = cart.total_price | plus: shipping_price_cents -%}
+            {%- assign q_bundle_coffee_total = cart.total_price | minus: q_bundle_discount_cents -%}
+            {%- assign adjusted_total = q_bundle_coffee_total | plus: shipping_price_cents -%}
 
             <p class="totals__total-value totals-value-secondary">
               <span>עלות קפה:</span>
               <span class="totals-value-secondary-value" dir="rtl">
-                {{- cart.total_price | money_without_trailing_zeros -}}
+                {%- if q_bundle_discount_cents > 0 -%}
+                  <s>{{ cart.total_price | money_without_trailing_zeros }}</s>
+                  {{ q_bundle_coffee_total | money_without_trailing_zeros }}
+                {%- else -%}
+                  {{- cart.total_price | money_without_trailing_zeros -}}
+                {%- endif -%}
               </span>
             </p>
+            {%- if q_bundle_discount_cents > 0 -%}
+              <p class="totals__total-value totals-value-secondary">
+                <span>הנחת מארז ({{ q_bundle_discount_percent }}%):</span>
+                <span class="totals-value-secondary-value">-{{ q_bundle_discount_cents | money_without_trailing_zeros }}</span>
+              </p>
+            {%- endif -%}
             {%- if shipping_items_paid > 0 %}
               <p class="totals__total-value totals-value-secondary">
                 <span>

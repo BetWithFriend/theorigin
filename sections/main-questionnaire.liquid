@@ -800,16 +800,18 @@
           </button>
           <button
             type="button"
-            class="qty-option selected"
+            class="qty-option qty-option--with-discount selected"
             data-qty="5">
+            <span class="qty-option__discount-badge" aria-hidden="true">5%</span>
             <span class="qty-option__stack">
               <span class="qty-option__num">5 חבילות</span>
             </span>
           </button>
           <button
             type="button"
-            class="qty-option"
+            class="qty-option qty-option--with-discount"
             data-qty="7">
+            <span class="qty-option__discount-badge" aria-hidden="true">10%</span>
             <span class="qty-option__stack">
               <span class="qty-option__num">7 חבילות</span>
             </span>
@@ -947,6 +949,7 @@
               <div class="q-bundle-drawer__total-values">
                 <div class="q-bundle-drawer__total-amount-line">
                   <span class="q-bundle-drawer__total-value" id="q-bundle-drawer-total"></span>
+                  <span class="q-bundle-drawer__total-compare" id="q-bundle-drawer-total-compare"></span>
                   <span class="q-bundle-drawer__total-hint">(כולל משלוח)</span>
                 </div>
                 <div class="q-bundle-drawer__total-weight-line">
@@ -1271,6 +1274,21 @@
   }
 
   const QUESTIONNAIRE_LINE_PROP_BUNDLE = '_questionnaire_bundle';
+  const QUESTIONNAIRE_LINE_PROP_BUNDLE_QTY = '_questionnaire_bundle_qty';
+  const QUESTIONNAIRE_BUNDLE_QTY_DISCOUNTS = { 3: 0, 5: 5, 7: 10 };
+
+  function questionnaireBundleQtyDiscountPercent(qty) {
+    const n = parseInt(qty, 10);
+    return Object.prototype.hasOwnProperty.call(QUESTIONNAIRE_BUNDLE_QTY_DISCOUNTS, n)
+      ? QUESTIONNAIRE_BUNDLE_QTY_DISCOUNTS[n]
+      : 0;
+  }
+
+  function applyQuestionnaireBundleQtyDiscount(subtotalCents, qty) {
+    const pct = questionnaireBundleQtyDiscountPercent(qty);
+    if (!pct || !subtotalCents) return subtotalCents;
+    return Math.round((subtotalCents * (100 - pct)) / 100);
+  }
 
   /** Per-vendor shipping (ILS) and free-shipping thresholds (cents); mirrors snippets/cart-drawer.liquid */
   const QUESTIONNAIRE_VENDOR_SHIPPING = {
@@ -1324,6 +1342,14 @@
 
   /** Subtotal + vendor shipping (matches cart-drawer adjusted total for a single vendor). */
   function bundleTotalWithShippingCentsForQuestionnaireProducts(products, qty, vendorKey) {
+    const subtotalCents = bundleTotalCentsForQuestionnaireProducts(products, qty);
+    const discountedSubtotalCents = applyQuestionnaireBundleQtyDiscount(subtotalCents, qty);
+    const vk = questionnaireVendorKeyForBundle(products, vendorKey);
+    return discountedSubtotalCents + questionnaireShippingCentsForVendor(vk, subtotalCents);
+  }
+
+  /** Undiscounted subtotal + shipping (for compare / strikethrough prices). */
+  function bundleCompareTotalWithShippingCentsForQuestionnaireProducts(products, qty, vendorKey) {
     const subtotalCents = bundleTotalCentsForQuestionnaireProducts(products, qty);
     const vk = questionnaireVendorKeyForBundle(products, vendorKey);
     return subtotalCents + questionnaireShippingCentsForVendor(vk, subtotalCents);
@@ -3406,22 +3432,12 @@
     function updateBundlePrice() {
       if (!products || products.length === 0) return;
       const qty = getQuestionnaireResultsBundleQty();
-      const n = products.length;
-
-      // Each carousel product counts as 1. The qty selector is the total number
-      // of products in the bundle (3, 5, or 7). We compute the average price per
-      // product across all matched results, then multiply by qty.
-      let sumCompareCents = 0;
-      products.forEach(function (p) {
-        sumCompareCents += p.price_cents || 0;
-      });
-
-      const avgCompareCents = sumCompareCents / n;
-      const subtotalCompareCents = Math.round(avgCompareCents * qty);
       const vendorKey = questionnaireVendorKeyForBundle(products);
-      const totalCompareCents =
-        subtotalCompareCents + questionnaireShippingCentsForVendor(vendorKey, subtotalCompareCents);
-
+      const totalCompareCents = bundleCompareTotalWithShippingCentsForQuestionnaireProducts(
+        products,
+        qty,
+        vendorKey
+      );
       const totalCents = bundleTotalWithShippingCentsForQuestionnaireProducts(products, qty);
 
       const priceEl = document.getElementById('q-footer-price');
@@ -3805,7 +3821,9 @@
         byVariant[vid] = (byVariant[vid] || 0) + 1;
       });
       const bundleProps = {};
+      const bundleQty = getQuestionnaireResultsBundleQty();
       bundleProps[QUESTIONNAIRE_LINE_PROP_BUNDLE] = 'true';
+      bundleProps[QUESTIONNAIRE_LINE_PROP_BUNDLE_QTY] = String(bundleQty);
       return Object.keys(byVariant).map(function (vid) {
         return {
           id: Number(vid),
@@ -3827,6 +3845,7 @@
       const drawer = document.getElementById('q-bundle-review-drawer');
       const itemsEl = document.getElementById('q-bundle-drawer-items');
       const totalEl = document.getElementById('q-bundle-drawer-total');
+      const totalCompareEl = document.getElementById('q-bundle-drawer-total-compare');
       const totalWeightEl = document.getElementById('q-bundle-drawer-total-weight');
       const totalWeightNoteEl = document.getElementById('q-bundle-drawer-total-weight-note');
       if (!drawer || !itemsEl || !totalEl) return;
@@ -3840,6 +3859,7 @@
         totalGrams += p.weight_grams || 0;
       });
       const totalCents = bundleTotalWithShippingCentsForQuestionnaireProducts(products, qty);
+      const totalCompareCents = bundleCompareTotalWithShippingCentsForQuestionnaireProducts(products, qty);
 
       itemsEl.innerHTML = products
         .map(function (p) {
@@ -3870,6 +3890,15 @@
         .join('');
 
       totalEl.textContent = formatQuestionnaireMoney(totalCents);
+      if (totalCompareEl) {
+        if (totalCompareCents > totalCents) {
+          totalCompareEl.textContent = formatQuestionnaireMoney(totalCompareCents);
+          totalCompareEl.hidden = false;
+        } else {
+          totalCompareEl.textContent = '';
+          totalCompareEl.hidden = true;
+        }
+      }
       if (totalWeightEl) {
         totalWeightEl.textContent =
           totalGrams > 0 ? formatQuestionnaireBundleWeightKg(totalGrams) : '—';
