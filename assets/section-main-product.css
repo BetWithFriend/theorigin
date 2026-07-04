@@ -1664,6 +1664,7 @@ a.product__text {
   line-height: 32px;
   font-weight: 700;
   text-transform: uppercase;
+  margin: 0;
 }
 
 .product-tastes-details-wrapper-outer {

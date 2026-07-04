@@ -123,20 +123,75 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     display: flex;
 }
 
-.questionnaire-loader-wrapper.questionnaire-init-loader {
-    display: none;
-}
 
-.questionnaire-loader-wrapper.questionnaire-init-loader .questionnaire-loader-text {
-    display: none;
-}
-
-.questionnaire-wrapper.initializing .questionnaire-icons-wrapper {
-    display: none;
-}
-
-.questionnaire-wrapper.initializing .questionnaire-loader-wrapper.questionnaire-init-loader {
+/* ── Coffee roaster animation ─────────────────────────────────────────── */
+.questionnaire-roaster-scene {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.questionnaire-roaster-scene svg {
+    max-width: 220px;
+    height: auto;
+}
+
+.questionnaire-drum-paddles {
+    transform-origin: 150px 175px;
+    animation: questionnaire-drum-spin 3s linear infinite;
+}
+
+@keyframes questionnaire-drum-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+.questionnaire-roaster-scene .bean-body {
+    fill: var(--bc, #7b3f1a);
+}
+
+.questionnaire-roaster-scene .bean-crease {
+    stroke: var(--bcs, #3d1a08);
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.questionnaire-heat-glow {
+    animation: questionnaire-heat-glow 1.8s ease-in-out infinite;
+}
+
+@keyframes questionnaire-heat-glow {
+    0%, 100% { opacity: 0.35; }
+    50%       { opacity: 0.7; }
+}
+
+.questionnaire-roaster-label {
+    font-family: "Assistant", sans-serif;
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 700;
+    color: var(--q-text);
+    text-align: center;
+    animation: questionnaire-label-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes questionnaire-label-pulse {
+    0%, 100% { opacity: 0.45; }
+    50%       { opacity: 1; }
+}
+
+.questionnaire-roaster-dots span {
+    animation: questionnaire-dot-blink 1.4s ease-in-out infinite;
+    opacity: 0;
+}
+.questionnaire-roaster-dots span:nth-child(1) { animation-delay: 0s; }
+.questionnaire-roaster-dots span:nth-child(2) { animation-delay: 0.22s; }
+.questionnaire-roaster-dots span:nth-child(3) { animation-delay: 0.44s; }
+
+@keyframes questionnaire-dot-blink {
+    0%, 60%, 100% { opacity: 0; }
+    30%            { opacity: 1; }
 }
 
 /* ── Intro / preview screen ───────────────────────────────────────────── */
@@ -3052,11 +3107,6 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
 }
 
 @media screen and (min-width: 990px) {
-
-    /* Initialization must win over desktop active-step grid rules */
-    .questionnaire-wrapper.initializing .questionnaire-icons-wrapper[data-step-index] {
-        display: none !important;
-    }
 
     /* ── Question steps: grid tile layout ─────────────────────────────────── */
 
