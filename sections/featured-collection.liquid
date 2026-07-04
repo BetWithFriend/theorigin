@@ -51,9 +51,9 @@
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 {%- endunless -%}
 
-{%- unless section.settings.quick_add == 'none' -%}
+{% comment %} {%- unless section.settings.quick_add == 'none' -%} {% endcomment %}
 <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
-{%- endunless -%}
+{% comment %} {%- endunless -%} {% endcomment %}
 
 {%- if section.settings.quick_add == 'bulk' -%}
   <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
