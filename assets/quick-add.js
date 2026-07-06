@@ -121,18 +121,29 @@ if (!customElements.get('quick-add-modal')) {
   );
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  // Handle quick add forms on collection page
-  if (!window.__quickAddSubmitListenerAdded) {
-    window.__quickAddSubmitListenerAdded = true;
-    document.addEventListener('submit', function (event) {
-      if (event.target.classList && event.target.classList.contains('js-quick-add-form')) {
-        event.preventDefault();
-        handleQuickAddToCart(event.target);
-      }
-    });
-  }
-});
+function initQuickAddSubmitListener() {
+  if (window.__quickAddSubmitListenerAdded) return;
+  window.__quickAddSubmitListenerAdded = true;
+
+  document.addEventListener(
+    'submit',
+    function (event) {
+      const form = event.target;
+      if (!form?.classList?.contains('js-quick-add-form')) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      handleQuickAddToCart(form);
+    },
+    true
+  );
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initQuickAddSubmitListener);
+} else {
+  initQuickAddSubmitListener();
+}
 
 function handleQuickAddToCart(form) {
 
@@ -162,8 +173,11 @@ function handleQuickAddToCart(form) {
       quantity: 1
     })
   })
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json().then((data) => ({ ok: response.ok, data })))
+    .then(({ ok, data }) => {
+      if (!ok || data.status) {
+        throw data;
+      }
       // Successfully added to cart
       originalText = originalText.replace('add-to-cart-catalog.png', 'add-to-cart-catalog-added.png')
       originalText = originalText.replace('הוספה לסל', 'נוסף לסל')

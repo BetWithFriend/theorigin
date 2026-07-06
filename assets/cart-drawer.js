@@ -198,3 +198,62 @@ class CartDrawerItems extends CartItems {
 }
 
 customElements.define('cart-drawer-items', CartDrawerItems);
+
+function blockCartPageNavigation() {
+  if (window.__cartDrawerNavigationBlocked) return;
+  window.__cartDrawerNavigationBlocked = true;
+
+  document.addEventListener(
+    'click',
+    (event) => {
+      const link = event.target.closest('a[href]');
+      if (!link) return;
+
+      let pathname;
+      try {
+        pathname = new URL(link.href, window.location.origin).pathname;
+      } catch (_error) {
+        return;
+      }
+
+      if (pathname !== '/cart') return;
+
+      const cartDrawer = document.querySelector('cart-drawer');
+      if (!cartDrawer) return;
+
+      event.preventDefault();
+      cartDrawer.open(link);
+    },
+    true
+  );
+
+  document.addEventListener(
+    'submit',
+    (event) => {
+      const form = event.target;
+      if (!(form instanceof HTMLFormElement)) return;
+
+      const action = form.getAttribute('action') || '';
+      const isAddToCartForm =
+        form.classList.contains('js-quick-add-form') ||
+        form.dataset.type === 'add-to-cart-form' ||
+        action.includes('/cart/add');
+
+      if (!isAddToCartForm) return;
+      if (form.classList.contains('js-quick-add-form')) return;
+      if (form.closest('product-form')) return;
+      if (form.id === 'CartDrawer-Form') return;
+      if (form.classList.contains('product-form--questionnaire')) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    true
+  );
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', blockCartPageNavigation);
+} else {
+  blockCartPageNavigation();
+}
