@@ -20,6 +20,7 @@
 {%- endstyle -%}
 
 {%- unless settings.cart_type == 'drawer' -%}
+  <script src="{{ 'vendor-bundle-discount-sync.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 {%- endunless -%}
 
@@ -75,6 +76,7 @@
                   {%- assign vendor_discount_parts = vendor_discount_data | split: '|' -%}
                   {%- assign vendor_discount_cents = vendor_discount_parts[0] | plus: 0 -%}
                   {%- assign vendor_discount_percent = vendor_discount_parts[1] | plus: 0 -%}
+                  {%- assign vendor_shopify_applied = vendor_discount_parts[4] | plus: 0 -%}
                   <div class="cart-item-wrapper"> 
                     <div class="cart-item-vendor">{{ vendor |  upcase }}</div> 
                     {%- for item in cart.items -%}
@@ -334,13 +336,19 @@
                           
                           {%- if vendor_discount_cents > 0 -%}
                             <div class="cart-item__discounted-prices">
-                              {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
-                              {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | divided_by: 100 -%}
+                              {%- if item.original_line_price != item.final_line_price -%}
+                                {%- assign q_item_old_price = item.original_line_price -%}
+                                {%- assign q_item_discounted_line = item.final_line_price -%}
+                              {%- else -%}
+                                {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
+                                {%- assign q_item_old_price = item.original_line_price -%}
+                                {%- assign q_item_discounted_line = item.original_line_price | times: q_item_multiplier | divided_by: 100 -%}
+                              {%- endif -%}
                               <span class="visually-hidden">
                                 {{ 'products.product.price.regular_price' | t }}
                               </span>
                               <s class="cart-item__old-price product-option">
-                                {{- item.line_price | money -}}
+                                {{- q_item_old_price | money -}}
                               </s>
                               <span class="visually-hidden">
                                 {{ 'products.product.price.sale_price' | t }}
@@ -374,15 +382,21 @@
                             {%- render 'loading-spinner' -%}
                             <div class="cart-item__price-wrapper">
                               {%- if vendor_discount_cents > 0 -%}
-                                {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
-                                {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | divided_by: 100 -%}
+                                {%- if item.original_line_price != item.final_line_price -%}
+                                  {%- assign q_item_old_price = item.original_line_price -%}
+                                  {%- assign q_item_discounted_line = item.final_line_price -%}
+                                {%- else -%}
+                                  {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
+                                  {%- assign q_item_old_price = item.original_line_price -%}
+                                  {%- assign q_item_discounted_line = item.original_line_price | times: q_item_multiplier | divided_by: 100 -%}
+                                {%- endif -%}
                                 <dl class="cart-item__discounted-prices">
                                   <dt class="visually-hidden">
                                     {{ 'products.product.price.regular_price' | t }}
                                   </dt>
                                   <dd>
                                     <s class="cart-item__old-price price price--end">
-                                      {{ item.line_price | money }}
+                                      {{ q_item_old_price | money }}
                                     </s>
                                   </dd>
                                   <dt class="visually-hidden">
@@ -436,15 +450,21 @@
                             {%- render 'loading-spinner' -%}
                             <div class="cart-item__price-wrapper">
                               {%- if vendor_discount_cents > 0 -%}
-                                {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
-                                {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | divided_by: 100 -%}
+                                {%- if item.original_line_price != item.final_line_price -%}
+                                  {%- assign q_item_old_price = item.original_line_price -%}
+                                  {%- assign q_item_discounted_line = item.final_line_price -%}
+                                {%- else -%}
+                                  {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
+                                  {%- assign q_item_old_price = item.original_line_price -%}
+                                  {%- assign q_item_discounted_line = item.original_line_price | times: q_item_multiplier | divided_by: 100 -%}
+                                {%- endif -%}
                                 <dl class="cart-item__discounted-prices">
                                   <dt class="visually-hidden">
                                     {{ 'products.product.price.regular_price' | t }}
                                   </dt>
                                   <dd>
                                     <s class="cart-item__old-price price price--end">
-                                      {{ item.line_price | money }}
+                                      {{ q_item_old_price | money }}
                                     </s>
                                   </dd>
                                   <dt class="visually-hidden">

@@ -1,7 +1,10 @@
 {%- comment -%}
   Calculates quantity bundle discount for a single vendor.
   5+ items from the same vendor → 5%; 7+ items → 10%.
-  Outputs pipe-separated: discount_cents|discount_percent|vendor_subtotal_cents|vendor_qty
+  Uses original_line_price so the amount stays correct when Shopify
+  has already applied the automatic bundle discount to line_price.
+  Outputs pipe-separated:
+  discount_cents|discount_percent|vendor_subtotal_cents|vendor_qty|shopify_applied
 {%- endcomment -%}
 {%- liquid
   assign vendor_key = vendor | default: ''
@@ -9,11 +12,15 @@
   assign vendor_subtotal = 0
   assign vendor_discount_percent = 0
   assign vendor_discount_cents = 0
+  assign vendor_shopify_applied = 0
 
   for item in cart.items
     if item.vendor == vendor_key
       assign vendor_qty = vendor_qty | plus: item.quantity
-      assign vendor_subtotal = vendor_subtotal | plus: item.line_price
+      assign vendor_subtotal = vendor_subtotal | plus: item.original_line_price
+      if item.original_line_price != item.final_line_price
+        assign vendor_shopify_applied = 1
+      endif
     endif
   endfor
 
@@ -27,4 +34,4 @@
     assign vendor_discount_cents = vendor_subtotal | times: vendor_discount_percent | plus: 50 | divided_by: 100
   endif
 -%}
-{{- vendor_discount_cents -}}|{{- vendor_discount_percent -}}|{{- vendor_subtotal -}}|{{- vendor_qty -}}
+{{- vendor_discount_cents -}}|{{- vendor_discount_percent -}}|{{- vendor_subtotal -}}|{{- vendor_qty -}}|{{- vendor_shopify_applied -}}

@@ -8,6 +8,7 @@
 {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 
+<script src="{{ 'vendor-bundle-discount-sync.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 {% comment %} {{ 'cart-shipping.js' | asset_url | script_tag }}</script> {% endcomment %}
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
@@ -408,6 +409,7 @@
                     {%- assign vendor_discount_parts = vendor_discount_data | split: '|' -%}
                     {%- assign vendor_discount_cents = vendor_discount_parts[0] | plus: 0 -%}
                     {%- assign vendor_discount_percent = vendor_discount_parts[1] | plus: 0 -%}
+                    {%- assign vendor_shopify_applied = vendor_discount_parts[4] | plus: 0 -%}
                     <div class="cart-item-wrapper" data-vendor="{{ vendor }}">
                       <div class="cart-item-vendor-container">
                         <div class="cart-item-logo">
@@ -857,12 +859,19 @@
                               {% endcomment %}
                               <div class="cart-price-item-option" dir="ltr">
                                 {%- if vendor_discount_cents > 0 -%}
-                                  {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
-                                  {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | plus: 50 | divided_by: 100 -%}
-                                  {{ q_item_discounted_line | money_without_trailing_zeros }}
-                                  <div class="cart-price-item-option sale" dir="ltr">
-                                    {{ item.line_price | money_without_trailing_zeros }}
-                                  </div>
+                                  {%- if item.original_line_price != item.final_line_price -%}
+                                    {{ item.final_line_price | money_without_trailing_zeros }}
+                                    <div class="cart-price-item-option sale" dir="ltr">
+                                      {{ item.original_line_price | money_without_trailing_zeros }}
+                                    </div>
+                                  {%- else -%}
+                                    {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
+                                    {%- assign q_item_discounted_line = item.original_line_price | times: q_item_multiplier | plus: 50 | divided_by: 100 -%}
+                                    {{ q_item_discounted_line | money_without_trailing_zeros }}
+                                    <div class="cart-price-item-option sale" dir="ltr">
+                                      {{ item.original_line_price | money_without_trailing_zeros }}
+                                    </div>
+                                  {%- endif -%}
                                 {%- else -%}
                                   {{ item.final_price | times: item.quantity | money_without_trailing_zeros }}
                                   {% if item.variant.compare_at_price > 0 %}
@@ -884,15 +893,21 @@
                             {%- render 'loading-spinner' -%}
                             <div class="cart-item__price-wrapper">
                               {%- if vendor_discount_cents > 0 -%}
-                                {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
-                                {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | plus: 50 | divided_by: 100 -%}
+                                {%- if item.original_line_price != item.final_line_price -%}
+                                  {%- assign q_item_old_price = item.original_line_price -%}
+                                  {%- assign q_item_discounted_line = item.final_line_price -%}
+                                {%- else -%}
+                                  {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
+                                  {%- assign q_item_old_price = item.original_line_price -%}
+                                  {%- assign q_item_discounted_line = item.original_line_price | times: q_item_multiplier | plus: 50 | divided_by: 100 -%}
+                                {%- endif -%}
                                 <dl class="cart-item__discounted-prices">
                                   <dt class="visually-hidden">
                                     {{ 'products.product.price.regular_price' | t }}
                                   </dt>
                                   <dd>
                                     <s class="cart-item__old-price price price--end">
-                                      {{ item.line_price | money_without_trailing_zeros }}
+                                      {{ q_item_old_price | money_without_trailing_zeros }}
                                     </s>
                                   </dd>
                                   <dt class="visually-hidden">
@@ -944,15 +959,21 @@
                             {%- render 'loading-spinner' -%}
                             <div class="cart-item__price-wrapper">
                               {%- if vendor_discount_cents > 0 -%}
-                                {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
-                                {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | plus: 50 | divided_by: 100 -%}
+                                {%- if item.original_line_price != item.final_line_price -%}
+                                  {%- assign q_item_old_price = item.original_line_price -%}
+                                  {%- assign q_item_discounted_line = item.final_line_price -%}
+                                {%- else -%}
+                                  {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
+                                  {%- assign q_item_old_price = item.original_line_price -%}
+                                  {%- assign q_item_discounted_line = item.original_line_price | times: q_item_multiplier | plus: 50 | divided_by: 100 -%}
+                                {%- endif -%}
                                 <dl class="cart-item__discounted-prices">
                                   <dt class="visually-hidden">
                                     {{ 'products.product.price.regular_price' | t }}
                                   </dt>
                                   <dd>
                                     <s class="cart-item__old-price price price--end">
-                                      {{ item.line_price | money_without_trailing_zeros }}
+                                      {{ q_item_old_price | money_without_trailing_zeros }}
                                     </s>
                                   </dd>
                                   <dt class="visually-hidden">
@@ -1159,19 +1180,29 @@
             {%- assign q_bundle_parts_footer = q_bundle_discount_data_footer | split: '|' -%}
             {%- assign q_bundle_discount_cents = q_bundle_parts_footer[0] | plus: 0 -%}
             {%- assign q_bundle_discount_percent = q_bundle_parts_footer[1] | plus: 0 -%}
+            {%- assign q_bundle_coffee_original = q_bundle_parts_footer[2] | plus: 0 -%}
+            {%- assign q_bundle_shopify_applied = q_bundle_parts_footer[3] | plus: 0 -%}
             {%- assign shipping_price_cents = shipping_price | times: 100 -%}
-            {%- assign q_bundle_coffee_total = cart.total_price | minus: q_bundle_discount_cents -%}
-            {%- assign adjusted_total = q_bundle_coffee_total | plus: shipping_price_cents -%}
+            {%- if q_bundle_discount_cents > 0 -%}
+              {%- if q_bundle_coffee_original > 0 -%}
+                {%- assign q_bundle_coffee_display = q_bundle_coffee_original -%}
+              {%- else -%}
+                {%- assign q_bundle_coffee_display = cart.original_total_price -%}
+              {%- endif -%}
+              {%- if q_bundle_shopify_applied > 0 -%}
+                {%- assign adjusted_total = cart.total_price | plus: shipping_price_cents -%}
+              {%- else -%}
+                {%- assign adjusted_total = cart.total_price | minus: q_bundle_discount_cents | plus: shipping_price_cents -%}
+              {%- endif -%}
+            {%- else -%}
+              {%- assign q_bundle_coffee_display = cart.total_price -%}
+              {%- assign adjusted_total = cart.total_price | plus: shipping_price_cents -%}
+            {%- endif -%}
 
             <p class="totals__total-value totals-value-secondary">
               <span>עלות קפה:</span>
               <span class="totals-value-secondary-value" dir="rtl">
-                {%- if q_bundle_discount_cents > 0 -%}
-                  <s>{{ cart.total_price | money_without_trailing_zeros }}</s>
-                  {{ q_bundle_coffee_total | money_without_trailing_zeros }}
-                {%- else -%}
-                  {{- cart.total_price | money_without_trailing_zeros -}}
-                {%- endif -%}
+                {{- q_bundle_coffee_display | money_without_trailing_zeros -}}
               </span>
             </p>
             {%- if q_bundle_discount_cents > 0 -%}
