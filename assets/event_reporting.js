@@ -9,20 +9,14 @@
  */
 
 class MixpanelReporter {
-  constructor() {
-    this.isInitialized = false;
-    this.checkMixpanelAvailability();
-  }
-
   /**
-   * Check if Mixpanel is available and initialized
+   * Check if Mixpanel is available and initialized.
+   * Mixpanel's real init() runs on window 'load' (deferred for performance), which
+   * can happen well after this reporter is constructed, so this must be re-checked
+   * on every call rather than cached once at construction time.
    */
-  checkMixpanelAvailability() {
-    if (typeof mixpanel !== 'undefined' && mixpanel.track) {
-      this.isInitialized = true;
-    } else {
-      console.warn('Mixpanel is not initialized. Make sure to initialize Mixpanel before using MixpanelReporter.');
-    }
+  isMixpanelReady() {
+    return typeof mixpanel !== 'undefined' && !!mixpanel.track;
   }
 
   /**
@@ -31,7 +25,7 @@ class MixpanelReporter {
    * @param {Object} properties - Additional properties to send with the event
    */
   track(eventName, properties = {}) {
-    if (!this.isInitialized) {
+    if (!this.isMixpanelReady()) {
       console.warn('Cannot track event: Mixpanel not initialized');
       return;
     }
@@ -131,7 +125,7 @@ class MixpanelReporter {
    * @param {Object} userProperties - Properties to associate with the user
    */
   identifyUser(userId, userProperties = {}) {
-    if (!this.isInitialized) {
+    if (!this.isMixpanelReady()) {
       console.warn('Cannot identify user: Mixpanel not initialized');
       return;
     }
@@ -149,7 +143,7 @@ class MixpanelReporter {
    * Reset user session (useful for logout)
    */
   reset() {
-    if (!this.isInitialized) {
+    if (!this.isMixpanelReady()) {
       console.warn('Cannot reset: Mixpanel not initialized');
       return;
     }
