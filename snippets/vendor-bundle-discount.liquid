@@ -1,0 +1,30 @@
+{%- comment -%}
+  Calculates quantity bundle discount for a single vendor.
+  5+ items from the same vendor → 5%; 7+ items → 10%.
+  Outputs pipe-separated: discount_cents|discount_percent|vendor_subtotal_cents|vendor_qty
+{%- endcomment -%}
+{%- liquid
+  assign vendor_key = vendor | default: ''
+  assign vendor_qty = 0
+  assign vendor_subtotal = 0
+  assign vendor_discount_percent = 0
+  assign vendor_discount_cents = 0
+
+  for item in cart.items
+    if item.vendor == vendor_key
+      assign vendor_qty = vendor_qty | plus: item.quantity
+      assign vendor_subtotal = vendor_subtotal | plus: item.line_price
+    endif
+  endfor
+
+  if vendor_qty >= 7
+    assign vendor_discount_percent = 10
+  elsif vendor_qty >= 5
+    assign vendor_discount_percent = 5
+  endif
+
+  if vendor_discount_percent > 0 and vendor_subtotal > 0
+    assign vendor_discount_cents = vendor_subtotal | times: vendor_discount_percent | plus: 50 | divided_by: 100
+  endif
+-%}
+{{- vendor_discount_cents -}}|{{- vendor_discount_percent -}}|{{- vendor_subtotal -}}|{{- vendor_qty -}}

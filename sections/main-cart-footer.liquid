@@ -87,7 +87,13 @@
                       </span>
                     </p>
                     <p class="totals__total-value totals-value-secondary">
-                      <span>הנחת מארז ({{ q_bundle_discount_percent }}%):</span>
+                      <span>
+                        {%- if q_bundle_discount_percent > 0 -%}
+                          הנחת מארז ({{ q_bundle_discount_percent }}%):
+                        {%- else -%}
+                          הנחת מארז:
+                        {%- endif -%}
+                      </span>
                       <span dir="ltr">-{{ q_bundle_discount_cents | money_without_trailing_zeros }}</span>
                     </p>
                   {%- endif -%}

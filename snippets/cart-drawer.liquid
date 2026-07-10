@@ -244,11 +244,6 @@
           method="post">
           <div id="CartDrawer-CartItems" class="drawer__contents js-contents">
             {%- if cart != empty -%}
-              {%- capture q_bundle_discount_data -%}{%- render 'questionnaire-bundle-discount' -%}{%- endcapture -%}
-              {%- assign q_bundle_parts = q_bundle_discount_data | split: '|' -%}
-              {%- assign q_bundle_discount_cents = q_bundle_parts[0] | plus: 0 -%}
-              {%- assign q_bundle_discount_percent = q_bundle_parts[1] | plus: 0 -%}
-              {%- assign q_bundle_subtotal = q_bundle_parts[2] | plus: 0 -%}
               {%- assign vendors = '' -%}
               {%- assign shipping_price = 0 -%}
               {% assign canopy_shipping = 35 %}
@@ -409,6 +404,10 @@
                   {%- endunless -%}
 
                   {%- if vendor_has_items -%}
+                    {%- capture vendor_discount_data -%}{%- render 'vendor-bundle-discount', vendor: vendor -%}{%- endcapture -%}
+                    {%- assign vendor_discount_parts = vendor_discount_data | split: '|' -%}
+                    {%- assign vendor_discount_cents = vendor_discount_parts[0] | plus: 0 -%}
+                    {%- assign vendor_discount_percent = vendor_discount_parts[1] | plus: 0 -%}
                     <div class="cart-item-wrapper" data-vendor="{{ vendor }}">
                       <div class="cart-item-vendor-container">
                         <div class="cart-item-logo">
@@ -857,8 +856,8 @@
                                 </div>
                               {% endcomment %}
                               <div class="cart-price-item-option" dir="ltr">
-                                {%- if item.properties._questionnaire_bundle == 'true' and q_bundle_discount_percent > 0 -%}
-                                  {%- assign q_item_multiplier = 100 | minus: q_bundle_discount_percent -%}
+                                {%- if vendor_discount_cents > 0 -%}
+                                  {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
                                   {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | plus: 50 | divided_by: 100 -%}
                                   {{ q_item_discounted_line | money_without_trailing_zeros }}
                                   <div class="cart-price-item-option sale" dir="ltr">
@@ -884,8 +883,8 @@
                           <div class="cart-item__totals right medium-hide large-up-hide">
                             {%- render 'loading-spinner' -%}
                             <div class="cart-item__price-wrapper">
-                              {%- if item.properties._questionnaire_bundle == 'true' and q_bundle_discount_percent > 0 -%}
-                                {%- assign q_item_multiplier = 100 | minus: q_bundle_discount_percent -%}
+                              {%- if vendor_discount_cents > 0 -%}
+                                {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
                                 {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | plus: 50 | divided_by: 100 -%}
                                 <dl class="cart-item__discounted-prices">
                                   <dt class="visually-hidden">
@@ -944,8 +943,8 @@
                           <div class="cart-item__totals right small-hide">
                             {%- render 'loading-spinner' -%}
                             <div class="cart-item__price-wrapper">
-                              {%- if item.properties._questionnaire_bundle == 'true' and q_bundle_discount_percent > 0 -%}
-                                {%- assign q_item_multiplier = 100 | minus: q_bundle_discount_percent -%}
+                              {%- if vendor_discount_cents > 0 -%}
+                                {%- assign q_item_multiplier = 100 | minus: vendor_discount_percent -%}
                                 {%- assign q_item_discounted_line = item.line_price | times: q_item_multiplier | plus: 50 | divided_by: 100 -%}
                                 <dl class="cart-item__discounted-prices">
                                   <dt class="visually-hidden">
@@ -1177,7 +1176,13 @@
             </p>
             {%- if q_bundle_discount_cents > 0 -%}
               <p class="totals__total-value totals-value-secondary">
-                <span>הנחת מארז ({{ q_bundle_discount_percent }}%):</span>
+                <span>
+                  {%- if q_bundle_discount_percent > 0 -%}
+                    הנחת מארז ({{ q_bundle_discount_percent }}%):
+                  {%- else -%}
+                    הנחת מארז:
+                  {%- endif -%}
+                </span>
                 <span class="totals-value-secondary-value">-{{ q_bundle_discount_cents | money_without_trailing_zeros }}</span>
               </p>
             {%- endif -%}
