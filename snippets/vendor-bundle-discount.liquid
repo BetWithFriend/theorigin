@@ -29,9 +29,17 @@
   elsif vendor_qty >= 5
     assign vendor_discount_percent = 5
   endif
-
   if vendor_discount_percent > 0 and vendor_subtotal > 0
-    assign vendor_discount_cents = vendor_subtotal | times: vendor_discount_percent | plus: 50 | divided_by: 100
+    for item in cart.items
+      if item.vendor == vendor_key
+        if item.original_line_price != item.final_line_price
+          assign line_discount = item.original_line_price | minus: item.final_line_price
+        else
+          assign line_discount = item.original_line_price | times: vendor_discount_percent | plus: 50 | divided_by: 100
+        endif
+        assign vendor_discount_cents = vendor_discount_cents | plus: line_discount
+      endif
+    endfor
   endif
 -%}
 {{- vendor_discount_cents -}}|{{- vendor_discount_percent -}}|{{- vendor_subtotal -}}|{{- vendor_qty -}}|{{- vendor_shopify_applied -}}

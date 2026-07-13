@@ -1,15 +1,10 @@
 (function () {
-  const BUNDLE_KEYS = [
-    '_questionnaire_bundle',
-    'questionnaire_bundle',
-    'questionnaire_bundle_qty',
-    '_questionnaire_bundle_qty',
-  ];
-
   const PROP_BUNDLE = '_questionnaire_bundle';
-  const PROP_BUNDLE_PUBLIC = 'questionnaire_bundle';
-  const PROP_BUNDLE_QTY = 'questionnaire_bundle_qty';
+  const PROP_BUNDLE_PUBLIC = 'בונה מארזים';
+  const PROP_BUNDLE_QTY = 'כמות במארז';
   const PROP_BUNDLE_QTY_PRIVATE = '_questionnaire_bundle_qty';
+
+  const BUNDLE_KEYS = [PROP_BUNDLE, PROP_BUNDLE_PUBLIC, PROP_BUNDLE_QTY, PROP_BUNDLE_QTY_PRIVATE];
 
   let syncing = false;
 
@@ -31,7 +26,7 @@
   function bundlePropsForTier(tier) {
     return {
       [PROP_BUNDLE]: 'true',
-      [PROP_BUNDLE_PUBLIC]: 'true',
+      [PROP_BUNDLE_PUBLIC]: 'כן',
       [PROP_BUNDLE_QTY]: String(tier),
       [PROP_BUNDLE_QTY_PRIVATE]: String(tier),
     };

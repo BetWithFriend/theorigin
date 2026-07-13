@@ -1344,8 +1344,8 @@
   }
 
   const QUESTIONNAIRE_LINE_PROP_BUNDLE = '_questionnaire_bundle';
-  const QUESTIONNAIRE_LINE_PROP_BUNDLE_PUBLIC = 'questionnaire_bundle';
-  const QUESTIONNAIRE_LINE_PROP_BUNDLE_QTY = 'questionnaire_bundle_qty';
+  const QUESTIONNAIRE_LINE_PROP_BUNDLE_PUBLIC = 'בונה מארזים';
+  const QUESTIONNAIRE_LINE_PROP_BUNDLE_QTY = 'כמות במארז';
   const QUESTIONNAIRE_LINE_PROP_BUNDLE_QTY_PRIVATE = '_questionnaire_bundle_qty';
   const QUESTIONNAIRE_BUNDLE_QTY_DISCOUNTS = { 3: 0, 5: 5, 7: 10 };
 
@@ -3895,7 +3895,7 @@
       const bundleProps = {};
       const bundleQty = getQuestionnaireResultsBundleQty();
       bundleProps[QUESTIONNAIRE_LINE_PROP_BUNDLE] = 'true';
-      bundleProps[QUESTIONNAIRE_LINE_PROP_BUNDLE_PUBLIC] = 'true';
+      bundleProps[QUESTIONNAIRE_LINE_PROP_BUNDLE_PUBLIC] = 'כן';
       bundleProps[QUESTIONNAIRE_LINE_PROP_BUNDLE_QTY] = String(bundleQty);
       bundleProps[QUESTIONNAIRE_LINE_PROP_BUNDLE_QTY_PRIVATE] = String(bundleQty);
       return Object.keys(byVariant).map(function (vid) {
