@@ -1,10 +1,20 @@
 (function () {
   const PROP_BUNDLE = '_questionnaire_bundle';
-  const PROP_BUNDLE_PUBLIC = 'בונה מארזים';
-  const PROP_BUNDLE_QTY = 'כמות במארז';
   const PROP_BUNDLE_QTY_PRIVATE = '_questionnaire_bundle_qty';
 
-  const BUNDLE_KEYS = [PROP_BUNDLE, PROP_BUNDLE_PUBLIC, PROP_BUNDLE_QTY, PROP_BUNDLE_QTY_PRIVATE];
+  // Only hidden ("_"-prefixed) keys are kept so nothing shows at cart/checkout.
+  const BUNDLE_KEYS = [PROP_BUNDLE, PROP_BUNDLE_QTY_PRIVATE];
+
+  // Old public keys (English + Hebrew) kept only so lingering cart items get cleaned up.
+  const LEGACY_BUNDLE_KEYS = [
+    'questionnaire_bundle',
+    'questionnaire_bundle_qty',
+    'בונה מארזים',
+    'כמות במארז',
+  ];
+
+  // Every bundle-related key that should be removed before re-adding clean props.
+  const STRIP_KEYS = [...BUNDLE_KEYS, ...LEGACY_BUNDLE_KEYS];
 
   let syncing = false;
 
@@ -26,8 +36,6 @@
   function bundlePropsForTier(tier) {
     return {
       [PROP_BUNDLE]: 'true',
-      [PROP_BUNDLE_PUBLIC]: 'כן',
-      [PROP_BUNDLE_QTY]: String(tier),
       [PROP_BUNDLE_QTY_PRIVATE]: String(tier),
     };
   }
@@ -39,15 +47,18 @@
   }
 
   function hasBundleKeysPresent(item) {
-    return BUNDLE_KEYS.some((key) => Object.prototype.hasOwnProperty.call(item.properties || {}, key));
+    return STRIP_KEYS.some((key) => Object.prototype.hasOwnProperty.call(item.properties || {}, key));
+  }
+
+  function hasLegacyBundleKeys(item) {
+    return LEGACY_BUNDLE_KEYS.some((key) =>
+      Object.prototype.hasOwnProperty.call(item.properties || {}, key)
+    );
   }
 
   function currentBundleTier(item) {
     if (bundlePropValue(item, PROP_BUNDLE) !== 'true') return 0;
-    const qty = parseInt(
-      bundlePropValue(item, PROP_BUNDLE_QTY) || bundlePropValue(item, PROP_BUNDLE_QTY_PRIVATE) || '0',
-      10
-    );
+    const qty = parseInt(bundlePropValue(item, PROP_BUNDLE_QTY_PRIVATE) || '0', 10);
     return qty === 5 || qty === 7 ? qty : 0;
   }
 
@@ -67,6 +78,9 @@
 
     if (currentBundleTier(item) !== targetTier) return false;
 
+    // Force a rebuild if legacy English keys are still attached so they get stripped.
+    if (hasLegacyBundleKeys(item)) return false;
+
     const expected = bundlePropsForTier(targetTier);
     return BUNDLE_KEYS.every((key) => bundlePropValue(item, key) === expected[key]);
   }
@@ -75,7 +89,7 @@
     const props = {};
 
     Object.entries(item.properties || {}).forEach(([key, value]) => {
-      if (BUNDLE_KEYS.includes(key)) return;
+      if (STRIP_KEYS.includes(key)) return;
       if (value != null && String(value).trim() !== '') {
         props[key] = String(value);
       }
