@@ -2247,7 +2247,7 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
 .qty-option__discount-badge {
     position: absolute;
     top: 0;
-    left: 0px;
+    left: -10px;
     transform: translateY(-50%);
     min-width: 28px;
     height: auto;
