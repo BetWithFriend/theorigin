@@ -1667,6 +1667,19 @@ a.product__text {
   margin: 0;
 }
 
+/* Event product titles (e.g. workshop names) tend to be longer than regular
+   coffee product titles, so scale the type down to avoid overflowing the
+   fixed-height stripe and overlapping the content below. Scoped to event
+   tagged products only so regular product pages are unaffected. */
+.background-stripe--event {
+  height: 220px;
+}
+
+.bg-strip-product-title--event {
+  font-size: 20px;
+  line-height: 24px;
+}
+
 .product-tastes-details-wrapper-outer {
   width: 100%;
   height: 100%;

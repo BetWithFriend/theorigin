@@ -1,4 +1,3 @@
-{% unless product.tags contains 'event' %}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {{ 'section-related-products.css' | asset_url | stylesheet_tag }}
@@ -42,9 +41,11 @@
     data-section-id="{{ section.id }}"
     data-product-id="{{ product.id }}">
     {% if recommendations.performed and recommendations.products_count > 0 %}
+      {% unless product.tags contains 'event' %}
       <h2 class="related-products__heading inline-richtext {{ section.settings.heading_size }}">
         {{ section.settings.heading }}
       </h2>
+      {% endunless %}
       <ul class="grid product-grid contains-card contains-card--product{% if settings.card_style == 'standard' %} contains-card--standard{% endif %} grid--{{ section.settings.columns_desktop }}-col-desktop{% if section.settings.collection == blank %} grid--1-col-tablet-down{% else %} grid--{{ section.settings.columns_mobile }}-col-tablet-down{% endif %}{% if show_mobile_slider or show_desktop_slider %} slider{% if show_desktop_slider %} slider--desktop{% endif %}{% if show_mobile_slider %} slider--tablet grid--peek{% endif %}{% endif %}" role="list">
         {% assign skip_card_product_styles = false %}
         {% for recommendation in recommendations.products %}
@@ -73,7 +74,6 @@
     {{ 'mask-arch.svg' | inline_asset_content }}
   {%- endif -%}
 </div>
-{% endunless %}
 {% schema %}
   {
     "name": "t:sections.related-products.name",
