@@ -580,7 +580,9 @@
       </div>
       <div class="background-stripe{% if product.tags contains 'event' %} background-stripe--event{% endif %}">
         <div class="bg-strip-text-wrapper">
-          <div class="bg-strip-vendor">{{ product.vendor }}</div>
+          {% unless product.tags contains 'event' %}
+            <div class="bg-strip-vendor">{{ product.vendor }}</div>
+          {% endunless %}
           <h1 class="bg-strip-product-title{% if product.tags contains 'event' %} bg-strip-product-title--event{% endif %}">{{ product.title }}</h1>
         </div>
         <div class="main-product-taste-icons">
