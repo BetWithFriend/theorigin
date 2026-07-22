@@ -414,6 +414,25 @@
     {%- endif -%}
   }
 
+  {%- if product.tags contains 'event' -%}
+    /* Event product pages use a dark (near-black) accent instead of the
+       theme's default button color for the selected date pill and the
+       add-to-cart button, to match the Figma design. Scoped to event
+       tagged products only so regular product pages are unaffected. */
+    #main-product-container .product-form__input--pill input[type='radio']:checked+label {
+      background-color: rgba(28, 32, 29, 0.75);
+      border-color: rgba(28, 32, 29, 0.75);
+      color: #FBFCFE;
+    }
+
+    #main-product-container .product-form__submit {
+      background-color: #1C201D;
+      border-color: #1C201D;
+      --border-opacity: #1C201D;
+      color: #FBFCFE;
+    }
+  {%- endif -%}
+
   @media screen and (min-width: 1050px) {
     #product-description-wrapper > div {
       width: 515px;
@@ -559,10 +578,12 @@
           {% render 'product-media-gallery', variant_images: variant_images %}
         </div>
       </div>
-      <div class="background-stripe">
+      <div class="background-stripe{% if product.tags contains 'event' %} background-stripe--event{% endif %}">
         <div class="bg-strip-text-wrapper">
-          <div class="bg-strip-vendor">{{ product.vendor }}</div>
-          <h1 class="bg-strip-product-title">{{ product.title }}</h1>
+          {% unless product.tags contains 'event' %}
+            <div class="bg-strip-vendor">{{ product.vendor }}</div>
+          {% endunless %}
+          <h1 class="bg-strip-product-title{% if product.tags contains 'event' %} bg-strip-product-title--event{% endif %}">{{ product.title }}</h1>
         </div>
         <div class="main-product-taste-icons">
             {% assign coffee_tastes = product.metafields.custom.coffee_taste %} 

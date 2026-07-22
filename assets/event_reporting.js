@@ -11,9 +11,9 @@
 class MixpanelReporter {
   /**
    * Check if Mixpanel is available and initialized.
-   * Mixpanel's real init() runs on window 'load' (deferred for performance), which
-   * can happen well after this reporter is constructed, so this must be re-checked
-   * on every call rather than cached once at construction time.
+   * The mixpanel stub (window.mixpanel) is created synchronously in <head>, but the
+   * actual library script loads async, so this must be re-checked on every call
+   * rather than cached once at construction time.
    */
   isMixpanelReady() {
     return typeof mixpanel !== 'undefined' && !!mixpanel.track;
