@@ -102,13 +102,23 @@
     return props;
   }
 
+  function cartHasCartLevelDiscount(cart) {
+    if (window.cartSingleDiscount?.cartHasCartLevelDiscount) {
+      return window.cartSingleDiscount.cartHasCartLevelDiscount(cart);
+    }
+    return (cart?.cart_level_discount_applications || []).some(
+      (discount) => (discount.total_allocated_amount || 0) > 0
+    );
+  }
+
   function lineChangesNeeded(cart) {
     const qtyMap = vendorQtyMap(cart.items);
     const changes = [];
+    const suppressBundleForCode = cartHasCartLevelDiscount(cart);
 
     (cart.items || []).forEach((item) => {
       const vendorQty = qtyMap[item.vendor] || 0;
-      const targetTier = targetTierForVendorQty(vendorQty);
+      const targetTier = suppressBundleForCode ? 0 : targetTierForVendorQty(vendorQty);
       if (!propertiesMatchTarget(item, targetTier)) {
         changes.push({
           item,
@@ -172,6 +182,14 @@
     try {
       let cart = cartOptional || (await fetchCart());
       let changed = false;
+
+      if (window.cartSingleDiscount?.enforceSingleCartDiscount) {
+        const enforceResult = await window.cartSingleDiscount.enforceSingleCartDiscount(cart);
+        if (enforceResult.changed) {
+          changed = true;
+          cart = enforceResult.cart;
+        }
+      }
 
       for (let attempt = 0; attempt < 20; attempt += 1) {
         const changes = lineChangesNeeded(cart);

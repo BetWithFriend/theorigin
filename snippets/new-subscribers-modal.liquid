@@ -1,3 +1,4 @@
+<script src="{{ 'cart-single-discount.js' | asset_url }}" defer="defer"></script>
 <style>
 .one-time-modal-overlay {
   position: fixed;
@@ -372,20 +373,53 @@ document.addEventListener('click', function(event) {
 
   // 2. Visual Feedback
   var originalText = couponEl.textContent;
-  couponEl.style.backgroundColor = '#d4f5d4'; 
-  couponEl.textContent = 'הועתק והופעל!'; // "Copied and Activated!"
+  couponEl.style.backgroundColor = '#d4f5d4';
 
-  // 3. APPLY WITHOUT REDIRECT
-  // We fetch the discount URL in the background. 
-  // This tells Shopify to associate the code with the current session.
-  fetch('/discount/' + encodeURIComponent(code))
-    .then(function() {
-      console.log('Discount applied successfully in background');
+  function applyPromoCode() {
+    fetch('/cart/update.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({ discount: code }),
     })
-    .catch(function() {
-      // Fallback: if fetch fails, we try a hidden iframe or image ping
-      var img = new Image();
-      img.src = '/discount/' + encodeURIComponent(code);
+      .then(function (response) {
+        if (!response.ok) throw new Error('Failed to apply discount');
+        return response.json();
+      })
+      .then(function () {
+        couponEl.textContent = 'הועתק והופעל!';
+        console.log('Discount applied successfully');
+      })
+      .catch(function () {
+        fetch('/discount/' + encodeURIComponent(code)).catch(function () {
+          var img = new Image();
+          img.src = '/discount/' + encodeURIComponent(code);
+        });
+        couponEl.textContent = 'הועתק והופעל!';
+      });
+  }
+
+  fetch('/cart.js')
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (cart) {
+      var bundleBlocked =
+        window.cartSingleDiscount &&
+        window.cartSingleDiscount.cartQualifiesForBundleDiscount(cart);
+
+      if (bundleBlocked) {
+        couponEl.style.backgroundColor = '#fde8e8';
+        couponEl.textContent = 'לא ניתן לשלב עם הנחת מארז';
+        return;
+      }
+
+      applyPromoCode();
+    })
+    .catch(function () {
+      applyPromoCode();
     });
 
   // 4. Optional: Close the modal after a short delay so they can keep shopping

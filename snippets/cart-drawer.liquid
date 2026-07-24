@@ -8,6 +8,7 @@
 {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 
+<script src="{{ 'cart-single-discount.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'vendor-bundle-discount-sync.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 {% comment %} {{ 'cart-shipping.js' | asset_url | script_tag }}</script> {% endcomment %}
@@ -245,6 +246,15 @@
           method="post">
           <div id="CartDrawer-CartItems" class="drawer__contents js-contents">
             {%- if cart != empty -%}
+              {%- capture cart_discount_display_data -%}{%- render 'cart-discount-display' -%}{%- endcapture -%}
+              {%- assign cart_discount_parts = cart_discount_display_data | split: '|' -%}
+              {%- assign show_bundle_discount = cart_discount_parts[0] -%}
+              {%- assign show_code_discount = cart_discount_parts[1] -%}
+              {%- assign q_bundle_discount_cents = cart_discount_parts[2] | plus: 0 -%}
+              {%- assign q_bundle_discount_percent = cart_discount_parts[3] | plus: 0 -%}
+              {%- assign q_bundle_coffee_original = cart_discount_parts[4] | plus: 0 -%}
+              {%- assign q_bundle_shopify_applied = cart_discount_parts[5] | plus: 0 -%}
+              {%- assign cart_code_discount_cents = cart_discount_parts[6] | plus: 0 -%}
               {%- assign vendors = '' -%}
               {%- assign shipping_price = 0 -%}
               {% assign canopy_shipping = 35 %}
@@ -331,10 +341,22 @@
                       {%- assign vendor_total = vendor_total | plus: item.line_price -%}
                       {%- unless item.product.tags contains 'event' -%}
                         {%- assign vendor_has_regular_items = true -%}
-                        {%- assign regular_items_total = regular_items_total | plus: item.line_price -%}
+                        {%- assign regular_items_total = regular_items_total | plus: item.original_line_price -%}
                       {%- endunless -%}
                     {%- endif -%}
                 {%- endfor -%}
+
+                  {%- capture vendor_discount_data -%}{%- render 'vendor-bundle-discount', vendor: vendor -%}{%- endcapture -%}
+                  {%- assign vendor_discount_parts = vendor_discount_data | split: '|' -%}
+                  {%- assign vendor_discount_cents = vendor_discount_parts[0] | plus: 0 -%}
+                  {%- assign vendor_discount_percent = vendor_discount_parts[1] | plus: 0 -%}
+                  {%- assign vendor_shopify_applied = vendor_discount_parts[4] | plus: 0 -%}
+
+                  {%- comment -%} Free-shipping eligibility is based on what the customer actually pays for coffee (post-discount), not the pre-discount price. {%- endcomment -%}
+                  {%- assign regular_items_total_for_shipping = regular_items_total -%}
+                  {%- if show_bundle_discount == 'true' and vendor_discount_cents > 0 -%}
+                    {%- assign regular_items_total_for_shipping = regular_items_total | minus: vendor_discount_cents -%}
+                  {%- endif -%}
 
                   {%- comment -%} Determine if vendor qualifies for free shipping (based on regular items only) {%- endcomment -%}
                   {%- assign vendor_qualifies_free_shipping = false -%}
@@ -345,55 +367,55 @@
                     {%- if vendor == 'canopy' -%}
                       {%- assign vendor_shipping_cost = canopy_shipping -%}
                       {%- assign vendor_free_threshold = canopy_free_shipping_threshold -%}
-                      {%- if regular_items_total >= canopy_free_shipping_threshold -%}
+                      {%- if regular_items_total_for_shipping >= canopy_free_shipping_threshold -%}
                         {%- assign vendor_qualifies_free_shipping = true -%}
                       {%- endif -%}
                     {%- elsif vendor == 'blooms' -%}
                       {%- assign vendor_shipping_cost = blooms_shipping -%}
                       {%- assign vendor_free_threshold = blooms_free_shipping_threshold -%}
-                      {%- if regular_items_total >= blooms_free_shipping_threshold -%}
+                      {%- if regular_items_total_for_shipping >= blooms_free_shipping_threshold -%}
                         {%- assign vendor_qualifies_free_shipping = true -%}
                       {%- endif -%}
                     {%- elsif vendor == 'youneedcoffee' -%}
                       {%- assign vendor_shipping_cost = youneedcoffee_shipping -%}
                       {%- assign vendor_free_threshold = ync_free_shipping_threshold -%}
-                      {%- if regular_items_total >= ync_free_shipping_threshold -%}
+                      {%- if regular_items_total_for_shipping >= ync_free_shipping_threshold -%}
                         {%- assign vendor_qualifies_free_shipping = true -%}
                       {%- endif -%}
                     {%- elsif vendor == 'coffeeorg' -%}
                       {%- assign vendor_shipping_cost = coffeeorg_shipping -%}
                       {%- assign vendor_free_threshold = coffeeorg_free_shipping_threshold -%}
-                      {%- if regular_items_total >= coffeeorg_free_shipping_threshold -%}
+                      {%- if regular_items_total_for_shipping >= coffeeorg_free_shipping_threshold -%}
                         {%- assign vendor_qualifies_free_shipping = true -%}
                       {%- endif -%}
                     {%- elsif vendor == 'coffeeculture' -%}
                       {%- assign vendor_shipping_cost = coffeeculture_shipping -%}
                       {%- assign vendor_free_threshold = coffeeculture_free_shipping_threshold -%}
-                      {%- if regular_items_total >= coffeeculture_free_shipping_threshold -%}
+                      {%- if regular_items_total_for_shipping >= coffeeculture_free_shipping_threshold -%}
                         {%- assign vendor_qualifies_free_shipping = true -%}
                       {%- endif -%}
                     {%- elsif vendor == 'elijahscoffee' -%}
                       {%- assign vendor_shipping_cost = elijahscoffee_shipping -%}
                       {%- assign vendor_free_threshold = elijahscoffee_free_shipping_threshold -%}
-                      {%- if regular_items_total >= elijahscoffee_free_shipping_threshold -%}
+                      {%- if regular_items_total_for_shipping >= elijahscoffee_free_shipping_threshold -%}
                         {%- assign vendor_qualifies_free_shipping = true -%}
                       {%- endif -%}
                     {%- elsif vendor == 'tostato' -%}
                       {%- assign vendor_shipping_cost = tostato_shipping -%}
                       {%- assign vendor_free_threshold = tostato_free_shipping_threshold -%}
-                      {%- if regular_items_total >= tostato_free_shipping_threshold -%}
+                      {%- if regular_items_total_for_shipping >= tostato_free_shipping_threshold -%}
                         {%- assign vendor_qualifies_free_shipping = true -%}
                       {%- endif -%}
                     {%- elsif vendor == 'brewbrothers' -%}
                       {%- assign vendor_shipping_cost = brew_brother_shipping -%}
                       {%- assign vendor_free_threshold = brew_brother_free_shipping_threshold -%}
-                      {%- if regular_items_total >= brew_brother_free_shipping_threshold -%}
+                      {%- if regular_items_total_for_shipping >= brew_brother_free_shipping_threshold -%}
                         {%- assign vendor_qualifies_free_shipping = true -%}
                       {%- endif -%}
                     {%- elsif vendor == 'uru' -%}
                       {%- assign vendor_shipping_cost = uru_shipping -%}
                       {%- assign vendor_free_threshold = uru_free_shipping_threshold -%}
-                      {%- if regular_items_total >= uru_free_shipping_threshold -%}
+                      {%- if regular_items_total_for_shipping >= uru_free_shipping_threshold -%}
                         {%- assign vendor_qualifies_free_shipping = true -%}
                       {%- endif -%}
                     {%- endif -%}
@@ -405,12 +427,7 @@
                   {%- endunless -%}
 
                   {%- if vendor_has_items -%}
-                    {%- capture vendor_discount_data -%}{%- render 'vendor-bundle-discount', vendor: vendor -%}{%- endcapture -%}
-                    {%- assign vendor_discount_parts = vendor_discount_data | split: '|' -%}
-                    {%- assign vendor_discount_cents = vendor_discount_parts[0] | plus: 0 -%}
-                    {%- assign vendor_discount_percent = vendor_discount_parts[1] | plus: 0 -%}
-                    {%- assign vendor_shopify_applied = vendor_discount_parts[4] | plus: 0 -%}
-                    <div class="cart-item-wrapper" data-vendor="{{ vendor }}">
+                      <div class="cart-item-wrapper" data-vendor="{{ vendor }}">
                       <div class="cart-item-vendor-container">
                         <div class="cart-item-logo">
                           <img
@@ -858,7 +875,7 @@
                                 </div>
                               {% endcomment %}
                               <div class="cart-price-item-option" dir="ltr">
-                                {%- if vendor_discount_cents > 0 -%}
+                                {%- if show_bundle_discount == 'true' and vendor_discount_cents > 0 -%}
                                   {%- if item.original_line_price != item.final_line_price -%}
                                     {{ item.final_line_price | money_without_trailing_zeros }}
                                     <div class="cart-price-item-option sale" dir="ltr">
@@ -892,7 +909,7 @@
                           <div class="cart-item__totals right medium-hide large-up-hide">
                             {%- render 'loading-spinner' -%}
                             <div class="cart-item__price-wrapper">
-                              {%- if vendor_discount_cents > 0 -%}
+                              {%- if show_bundle_discount == 'true' and vendor_discount_cents > 0 -%}
                                 {%- if item.original_line_price != item.final_line_price -%}
                                   {%- assign q_item_old_price = item.original_line_price -%}
                                   {%- assign q_item_discounted_line = item.final_line_price -%}
@@ -958,7 +975,7 @@
                           <div class="cart-item__totals right small-hide">
                             {%- render 'loading-spinner' -%}
                             <div class="cart-item__price-wrapper">
-                              {%- if vendor_discount_cents > 0 -%}
+                              {%- if show_bundle_discount == 'true' and vendor_discount_cents > 0 -%}
                                 {%- if item.original_line_price != item.final_line_price -%}
                                   {%- assign q_item_old_price = item.original_line_price -%}
                                   {%- assign q_item_discounted_line = item.final_line_price -%}
@@ -1158,7 +1175,7 @@
                 alt="Google Pay">
               {% comment %} <img src="{{ 'payment-paypal.png' | asset_url }}" alt="Pay Pal" /> {% endcomment %}
             </div>
-            {%- if cart.cart_level_discount_applications.size > 0 -%}
+            {%- if show_code_discount == 'true' and cart.cart_level_discount_applications.size > 0 -%}
               <ul
                 class="discounts list-unstyled"
                 role="list"
@@ -1176,14 +1193,10 @@
 
           <div class="totals" role="status">
             {% comment %} <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2> {% endcomment %}
-            {%- capture q_bundle_discount_data_footer -%}{%- render 'questionnaire-bundle-discount' -%}{%- endcapture -%}
-            {%- assign q_bundle_parts_footer = q_bundle_discount_data_footer | split: '|' -%}
-            {%- assign q_bundle_discount_cents = q_bundle_parts_footer[0] | plus: 0 -%}
-            {%- assign q_bundle_discount_percent = q_bundle_parts_footer[1] | plus: 0 -%}
-            {%- assign q_bundle_coffee_original = q_bundle_parts_footer[2] | plus: 0 -%}
-            {%- assign q_bundle_shopify_applied = q_bundle_parts_footer[3] | plus: 0 -%}
-            {%- assign shipping_price_cents = shipping_price | times: 100 -%}
-            {%- if q_bundle_discount_cents > 0 -%}
+          {%- assign shipping_price_cents = shipping_price | times: 100 -%}
+            {%- comment -%} The bundle discount only ever applies to the coffee price, never to shipping. {%- endcomment -%}
+            {%- assign q_bundle_display_discount = q_bundle_discount_cents -%}
+            {%- if show_bundle_discount == 'true' and q_bundle_discount_cents > 0 -%}
               {%- if q_bundle_coffee_original > 0 -%}
                 {%- assign q_bundle_coffee_display = q_bundle_coffee_original -%}
               {%- else -%}
@@ -1194,10 +1207,18 @@
               {%- else -%}
                 {%- assign adjusted_total = cart.total_price | minus: q_bundle_discount_cents | plus: shipping_price_cents -%}
               {%- endif -%}
+            {%- elsif show_code_discount == 'true' -%}
+              {%- assign q_bundle_coffee_display = cart.original_total_price -%}
+              {%- assign adjusted_total = cart.total_price | plus: shipping_price_cents -%}
             {%- else -%}
               {%- assign q_bundle_coffee_display = cart.total_price -%}
               {%- assign adjusted_total = cart.total_price | plus: shipping_price_cents -%}
-            {%- endif -%}
+          {%- endif -%}
+
+            {%- comment -%} Never show cents/agorot to the customer: round every displayed amount up to the nearest whole shekel. {%- endcomment -%}
+            {%- assign q_bundle_coffee_display = q_bundle_coffee_display | plus: 99 | divided_by: 100 | times: 100 -%}
+            {%- assign q_bundle_display_discount = q_bundle_display_discount | plus: 99 | divided_by: 100 | times: 100 -%}
+            {%- assign adjusted_total = adjusted_total | plus: 99 | divided_by: 100 | times: 100 -%}
 
             <p class="totals__total-value totals-value-secondary">
               <span>עלות קפה:</span>
@@ -1205,7 +1226,7 @@
                 {{- q_bundle_coffee_display | money_without_trailing_zeros -}}
               </span>
             </p>
-            {%- if q_bundle_discount_cents > 0 -%}
+            {%- if show_bundle_discount == 'true' and q_bundle_discount_cents > 0 -%}
               <p class="totals__total-value totals-value-secondary">
                 <span>
                   {%- if q_bundle_discount_percent > 0 -%}
@@ -1214,7 +1235,7 @@
                     הנחת מארז:
                   {%- endif -%}
                 </span>
-                <span class="totals-value-secondary-value">-{{ q_bundle_discount_cents | money_without_trailing_zeros }}</span>
+                <span class="totals-value-secondary-value">-{{ q_bundle_display_discount | money_without_trailing_zeros }}</span>
               </p>
             {%- endif -%}
             {%- if shipping_items_paid > 0 %}
@@ -1260,12 +1281,7 @@
           </div>
 
         <!--
-          <small class="tax-note caption-large rte">      {%- if cart.duties_included and cart.taxes_included -%}        {%- if shop.shipping_policy.body == blank -%}          {{ 'sections.cart.duties_and_taxes_included_shipping_at_checkout_without_policy' | t }}        {%- else -%}          {{            'sections.cart.duties_and_taxes_included_shipping_at_checkout_with_policy_html'            | t: link: shop.shipping_policy.url
-                  }}
-                {%- endif -%}
-              {%- elsif cart.duties_included == false and cart.taxes_included -%}
-                {%- if shop.shipping_policy.body == blank -%}
-                  {{ 'sections.cart.taxes_included_shipping_at_checkout_without_policy' | t }}
+          <small class="tax-note caption-large rte">      {%- if cart.duties_included and cart.taxes_included -%}        {%- if shop.shipping_policy.body == blank -%}          {{ 'sections.cart.duties_and_taxes_included_shipping_at_checkout_without_policy' | t }}        {%- else -%}          {{            'sections.cart.duties_and_taxes_included_shipping_at_checkout_with_policy_html'            | t: link: shop.shipping_policy.url          }}        {%- endif -%}      {%- elsif cart.duties_included == false and cart.taxes_included -%}        {%- if shop.shipping_policy.body == blank -%}          {{ 'sections.cart.taxes_included_shipping_at_checkout_without_policy' | t }}
                 {%- else -%}
                   {{
                     'sections.cart.taxes_included_shipping_at_checkout_with_policy_html'

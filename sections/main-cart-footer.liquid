@@ -45,8 +45,16 @@
               {% render block %}
             {%- when 'subtotal' -%}
               <div class="js-contents" {{ block.shopify_attributes }}>
+                {%- capture cart_discount_display_data -%}{%- render 'cart-discount-display' -%}{%- endcapture -%}
+                {%- assign cart_discount_parts = cart_discount_display_data | split: '|' -%}
+                {%- assign show_bundle_discount = cart_discount_parts[0] -%}
+                {%- assign show_code_discount = cart_discount_parts[1] -%}
+                {%- assign q_bundle_discount_cents = cart_discount_parts[2] | plus: 0 -%}
+                {%- assign q_bundle_discount_percent = cart_discount_parts[3] | plus: 0 -%}
+                {%- assign q_bundle_coffee_original = cart_discount_parts[4] | plus: 0 -%}
+                {%- assign q_bundle_shopify_applied = cart_discount_parts[5] | plus: 0 -%}
                 <div>
-                  {%- if cart.cart_level_discount_applications.size > 0 -%}
+                  {%- if show_code_discount == 'true' and cart.cart_level_discount_applications.size > 0 -%}
                     <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
                       {%- for discount in cart.cart_level_discount_applications -%}
                         <li class="discounts__discount discounts__discount--position">
@@ -70,26 +78,24 @@
               {%- assign vendor_array = vendors_list | split: ',' | uniq -%}
               {%- assign vendor_count = vendor_array | size-%}
 
-              {%- capture q_bundle_discount_data -%}{%- render 'questionnaire-bundle-discount' -%}{%- endcapture -%}
-              {%- assign q_bundle_parts = q_bundle_discount_data | split: '|' -%}
-              {%- assign q_bundle_discount_cents = q_bundle_parts[0] | plus: 0 -%}
-              {%- assign q_bundle_discount_percent = q_bundle_parts[1] | plus: 0 -%}
-              {%- assign q_bundle_coffee_original = q_bundle_parts[2] | plus: 0 -%}
-              {%- assign q_bundle_shopify_applied = q_bundle_parts[3] | plus: 0 -%}
-              {%- if q_bundle_discount_cents > 0 and q_bundle_coffee_original > 0 -%}
+              {%- if show_code_discount == 'true' -%}
+                {%- assign q_bundle_coffee_display = cart.original_total_price -%}
+                {%- assign q_bundle_coffee_total = cart.total_price -%}
+              {%- elsif show_bundle_discount == 'true' and q_bundle_discount_cents > 0 and q_bundle_coffee_original > 0 -%}
                 {%- assign q_bundle_coffee_display = q_bundle_coffee_original -%}
+                {%- if q_bundle_shopify_applied > 0 -%}
+                  {%- assign q_bundle_coffee_total = cart.total_price -%}
+                {%- else -%}
+                  {%- assign q_bundle_coffee_total = cart.total_price | minus: q_bundle_discount_cents -%}
+                {%- endif -%}
               {%- else -%}
                 {%- assign q_bundle_coffee_display = cart.total_price -%}
-              {%- endif -%}
-              {%- if q_bundle_shopify_applied > 0 -%}
                 {%- assign q_bundle_coffee_total = cart.total_price -%}
-              {%- else -%}
-                {%- assign q_bundle_coffee_total = cart.total_price | minus: q_bundle_discount_cents -%}
               {%- endif -%}
 
                 <div class="totals">
                   <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-                  {%- if q_bundle_discount_cents > 0 -%}
+                  {%- if show_bundle_discount == 'true' and q_bundle_discount_cents > 0 -%}
                     <p class="totals__total-value totals-value-secondary">
                       <span>עלות קפה:</span>
                       <span dir="ltr">{{ q_bundle_coffee_display | money_without_trailing_zeros }}</span>

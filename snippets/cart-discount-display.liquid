@@ -1,0 +1,43 @@
+{%- comment -%}
+  Resolves which single discount to show in cart UI (bundle vs promo code).
+  Mirrors Shopify: when both exist, prefer the discount Shopify actually applied.
+  Outputs pipe-separated:
+  show_bundle|show_code|discount_cents|discount_percent|coffee_original|shopify_applied|code_discount_cents
+{%- endcomment -%}
+{%- liquid
+  capture q_bundle_discount_data
+    render 'questionnaire-bundle-discount'
+  endcapture
+  assign q_bundle_parts = q_bundle_discount_data | split: '|'
+  assign q_bundle_discount_cents = q_bundle_parts[0] | plus: 0
+  assign q_bundle_discount_percent = q_bundle_parts[1] | plus: 0
+  assign q_bundle_coffee_original = q_bundle_parts[2] | plus: 0
+  assign q_bundle_shopify_applied = q_bundle_parts[3] | plus: 0
+
+  assign cart_code_discount_cents = 0
+  assign cart_has_code_discount = false
+  for discount in cart.cart_level_discount_applications
+    assign cart_has_code_discount = true
+    assign cart_code_discount_cents = cart_code_discount_cents | plus: discount.total_allocated_amount
+  endfor
+
+  assign show_bundle_discount = false
+  assign show_code_discount = false
+
+  if q_bundle_discount_cents > 0 and cart_has_code_discount
+    if q_bundle_shopify_applied > 0
+      assign show_bundle_discount = true
+    elsif cart_code_discount_cents > 0
+      assign show_code_discount = true
+    elsif q_bundle_discount_cents >= cart_code_discount_cents
+      assign show_bundle_discount = true
+    else
+      assign show_code_discount = true
+    endif
+  elsif q_bundle_discount_cents > 0
+    assign show_bundle_discount = true
+  elsif cart_has_code_discount
+    assign show_code_discount = true
+  endif
+-%}
+{{- show_bundle_discount -}}|{{- show_code_discount -}}|{{- q_bundle_discount_cents -}}|{{- q_bundle_discount_percent -}}|{{- q_bundle_coffee_original -}}|{{- q_bundle_shopify_applied -}}|{{- cart_code_discount_cents -}}

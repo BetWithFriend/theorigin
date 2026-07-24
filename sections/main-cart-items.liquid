@@ -20,6 +20,7 @@
 {%- endstyle -%}
 
 {%- unless settings.cart_type == 'drawer' -%}
+  <script src="{{ 'cart-single-discount.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'vendor-bundle-discount-sync.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 {%- endunless -%}
@@ -53,6 +54,10 @@
       <div class="cart__items" id="main-cart-items">
         <div class="js-contents">
           {%- if cart != empty -%}
+            {%- capture cart_discount_display_data -%}{%- render 'cart-discount-display' -%}{%- endcapture -%}
+            {%- assign cart_discount_parts = cart_discount_display_data | split: '|' -%}
+            {%- assign show_bundle_discount = cart_discount_parts[0] -%}
+            {%- assign show_code_discount = cart_discount_parts[1] -%}
             {%- assign vendors = "" -%}
             {%- for item in cart.items -%}
               {%- unless vendors contains item.vendor -%}
@@ -334,7 +339,7 @@
                             </ul>
                           </div>
                           
-                          {%- if vendor_discount_cents > 0 -%}
+                          {%- if show_bundle_discount == 'true' and vendor_discount_cents > 0 -%}
                             <div class="cart-item__discounted-prices">
                               {%- if item.original_line_price != item.final_line_price -%}
                                 {%- assign q_item_old_price = item.original_line_price -%}
@@ -381,7 +386,7 @@
                           <div class="cart-item__totals right medium-hide large-up-hide">
                             {%- render 'loading-spinner' -%}
                             <div class="cart-item__price-wrapper">
-                              {%- if vendor_discount_cents > 0 -%}
+                              {%- if show_bundle_discount == 'true' and vendor_discount_cents > 0 -%}
                                 {%- if item.original_line_price != item.final_line_price -%}
                                   {%- assign q_item_old_price = item.original_line_price -%}
                                   {%- assign q_item_discounted_line = item.final_line_price -%}
@@ -449,7 +454,7 @@
                           <div class="cart-item__totals right small-hide">
                             {%- render 'loading-spinner' -%}
                             <div class="cart-item__price-wrapper">
-                              {%- if vendor_discount_cents > 0 -%}
+                              {%- if show_bundle_discount == 'true' and vendor_discount_cents > 0 -%}
                                 {%- if item.original_line_price != item.final_line_price -%}
                                   {%- assign q_item_old_price = item.original_line_price -%}
                                   {%- assign q_item_discounted_line = item.final_line_price -%}
