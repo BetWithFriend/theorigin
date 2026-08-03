@@ -16,7 +16,7 @@
 
   function cartQualifiesForBundleDiscount(cart) {
     const qtyMap = vendorQtyMap(cart?.items || []);
-    return Object.values(qtyMap).some((qty) => qty >= 5);
+    return Object.values(qtyMap).some((qty) => qty >= 4);
   }
 
   function cartHasAppliedBundleDiscount(cart) {

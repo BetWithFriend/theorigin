@@ -28,8 +28,8 @@
   }
 
   function targetTierForVendorQty(qty) {
-    if (qty >= 7) return 7;
-    if (qty >= 5) return 5;
+    if (qty >= 8) return 8;
+    if (qty >= 4) return 4;
     return 0;
   }
 
@@ -59,7 +59,7 @@
   function currentBundleTier(item) {
     if (bundlePropValue(item, PROP_BUNDLE) !== 'true') return 0;
     const qty = parseInt(bundlePropValue(item, PROP_BUNDLE_QTY_PRIVATE) || '0', 10);
-    return qty === 5 || qty === 7 ? qty : 0;
+    return qty === 4 || qty === 8 ? qty : 0;
   }
 
   function hasBundleDiscountAllocation(item) {

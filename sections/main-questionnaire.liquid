@@ -1285,27 +1285,27 @@
         <button
           type="button"
           class="qty-option"
-          data-qty="3">
+          data-qty="2">
           <span class="qty-option__stack">
-            <span class="qty-option__num">3 חבילות</span>
+            <span class="qty-option__num">2 חבילות</span>
           </span>
         </button>
         <button
           type="button"
           class="qty-option qty-option--with-discount selected"
-          data-qty="5">
+          data-qty="4">
           <span class="qty-option__discount-badge" aria-hidden="true">5%</span>
           <span class="qty-option__stack">
-            <span class="qty-option__num">5 חבילות</span>
+            <span class="qty-option__num">4 חבילות</span>
           </span>
         </button>
         <button
           type="button"
           class="qty-option qty-option--with-discount"
-          data-qty="7">
-          <span class="qty-option__discount-badge" aria-hidden="true">10%</span>
+          data-qty="8">
+          <span class="qty-option__discount-badge" aria-hidden="true">8%</span>
           <span class="qty-option__stack">
-            <span class="qty-option__num">7 חבילות</span>
+            <span class="qty-option__num">8 חבילות</span>
           </span>
         </button>
       </div>
@@ -1679,23 +1679,23 @@
 
   function getQuestionnaireBundleQtyFromDom() {
     const sel = document.querySelector('.questionnaire-qty-selector-wrapper .qty-option.selected');
-    if (!sel) return 5;
+    if (!sel) return 4;
     const dq = sel.getAttribute('data-qty');
     const n = dq ? parseInt(dq, 10) : parseInt(sel.textContent.trim(), 10);
-    return [3, 5, 7].includes(n) ? n : 5;
+    return [2, 4, 8].includes(n) ? n : 4;
   }
 
   /** Same as qty used for results footer / carousel bundle price. */
   function getQuestionnaireResultsBundleQty() {
     const sel = document.querySelector('.questionnaire-qty-selector-wrapper .qty-option.selected');
-    if (!sel) return 5;
+    if (!sel) return 4;
     const dq = sel.getAttribute('data-qty');
     if (dq) {
       const n = parseInt(dq, 10);
-      return [3, 5, 7].includes(n) ? n : 5;
+      return [2, 4, 8].includes(n) ? n : 4;
     }
     const fallback = parseInt(sel.textContent.trim(), 10);
-    return [3, 5, 7].includes(fallback) ? fallback : 5;
+    return [2, 4, 8].includes(fallback) ? fallback : 4;
   }
 
   function trackQuestionnaireAnalyticsClick(buttonName, properties) {
@@ -1753,7 +1753,7 @@
 
   const QUESTIONNAIRE_LINE_PROP_BUNDLE = '_questionnaire_bundle';
   const QUESTIONNAIRE_LINE_PROP_BUNDLE_QTY_PRIVATE = '_questionnaire_bundle_qty';
-  const QUESTIONNAIRE_BUNDLE_QTY_DISCOUNTS = { 3: 0, 5: 5, 7: 10 };
+  const QUESTIONNAIRE_BUNDLE_QTY_DISCOUNTS = { 2: 0, 4: 5, 8: 8 };
   let questionnaireCartHasCodeDiscount = false;
   let questionnaireBundlePriceGeneration = 0;
 
@@ -1844,7 +1844,7 @@
 
   /**
    * Bundle pricing breakdown for questionnaire summary.
-   * The 5%/10% discount applies only to the coffee price, never to shipping.
+   * The 5%/8% discount applies only to the coffee price, never to shipping.
    */
   function questionnaireBundlePriceBreakdown(products, qty, vendorKey) {
     const subtotalCents = bundleTotalCentsForQuestionnaireProducts(products, qty);
@@ -1893,12 +1893,12 @@
       .map(function (item) {
         return item.coffee;
       })
-      .slice(0, 7);
+      .slice(0, 8);
   }
 
   /* ——— QuestionnaireScoring engine ——— */
   (function (global) {
-    const BUNDLE_SIZES = [3, 5, 7];
+    const BUNDLE_SIZES = [2, 4, 8];
 
     const DEFAULT_WEIGHTS = {
       guidedPrepPerMatch: 1,
@@ -1906,7 +1906,7 @@
       guidedTastePerMatch: 5,
     };
 
-    const DEFAULT_MIN_BUNDLE_SCORE = { 3: 18, 5: 31, 7: 47 };
+    const DEFAULT_MIN_BUNDLE_SCORE = { 2: 13, 4: 24, 8: 56 };
 
     const DEFAULT_THRESHOLDS = {
       minProductScore: 0,
@@ -2129,12 +2129,12 @@
       if (sorted.length === 0) {
         if (minProd > 0) {
           const anyPositive = scoredCoffees.filter(function (x) { return x.score > 0; }).sort(function (a, b) { return b.score - a.score; });
-          sorted = anyPositive.length > 0 ? anyPositive : scoredCoffees.slice().sort(function (a, b) { return b.score - a.score; }).slice(0, 7);
+          sorted = anyPositive.length > 0 ? anyPositive : scoredCoffees.slice().sort(function (a, b) { return b.score - a.score; }).slice(0, 8);
           guidedBelowMin = true;
         }
         if (!guidedBelowMin) {
-          sorted = coffeeDatabase.slice(0, 7).map(function (c, i) {
-            return { coffee: c, score: 7 - i, roastMeta: { type: null, selected: null, product: c.coffee_roast_level || '' } };
+          sorted = coffeeDatabase.slice(0, 8).map(function (c, i) {
+            return { coffee: c, score: 8 - i, roastMeta: { type: null, selected: null, product: c.coffee_roast_level || '' } };
           });
         }
       }
@@ -2169,8 +2169,8 @@
       return result;
     }
 
-    function arrangeInitialVendors(top3For3, top3For5, top3For7) {
-      const arrays = [top3For3, top3For5, top3For7];
+    function arrangeInitialVendors(topFor2, topFor4, topFor8) {
+      const arrays = [topFor2, topFor4, topFor8];
       const lens = arrays.map(function (a) { return Math.max(a.length, 1); });
       let bestCost = Infinity;
       let bestIdx = [0, 0, 0];
@@ -2201,9 +2201,9 @@
       }
 
       return {
-        top3For3: rotateToFront(top3For3, bestIdx[0]),
-        top3For5: rotateToFront(top3For5, bestIdx[1]),
-        top3For7: rotateToFront(top3For7, bestIdx[2]),
+        topFor2: rotateToFront(topFor2, bestIdx[0]),
+        topFor4: rotateToFront(topFor4, bestIdx[1]),
+        topFor8: rotateToFront(topFor8, bestIdx[2]),
       };
     }
 
@@ -2318,36 +2318,36 @@
           .slice(0, 3);
       }
 
-      let top3For3 = getTopVendorsForSize(3);
-      let top3For5 = getTopVendorsForSize(5);
-      let top3For7 = getTopVendorsForSize(7);
+      let topFor2 = getTopVendorsForSize(2);
+      let topFor4 = getTopVendorsForSize(4);
+      let topFor8 = getTopVendorsForSize(8);
 
-      const belowMin3 = top3For3.length === 0;
-      const belowMin5 = top3For5.length === 0;
-      const belowMin7 = top3For7.length === 0;
-      if (belowMin3) top3For3 = getFallbackVendorsForSize(3);
-      if (belowMin5) top3For5 = getFallbackVendorsForSize(5);
-      if (belowMin7) top3For7 = getFallbackVendorsForSize(7);
+      const belowMin2 = topFor2.length === 0;
+      const belowMin4 = topFor4.length === 0;
+      const belowMin8 = topFor8.length === 0;
+      if (belowMin2) topFor2 = getFallbackVendorsForSize(2);
+      if (belowMin4) topFor4 = getFallbackVendorsForSize(4);
+      if (belowMin8) topFor8 = getFallbackVendorsForSize(8);
 
-      if (!top3For3.length && !top3For5.length && !top3For7.length) {
+      if (!topFor2.length && !topFor4.length && !topFor8.length) {
         return { ok: false, reason: 'אין ספקים עם מוצרים בקטלוג.', bundles: null };
       }
 
-      const arranged = arrangeInitialVendors(top3For3, top3For5, top3For7);
-      top3For3 = arranged.top3For3;
-      top3For5 = arranged.top3For5;
-      top3For7 = arranged.top3For7;
+      const arranged = arrangeInitialVendors(topFor2, topFor4, topFor8);
+      topFor2 = arranged.topFor2;
+      topFor4 = arranged.topFor4;
+      topFor8 = arranged.topFor8;
 
       const bundles = {
-        3: top3For3.map(function (v) { return (v.bundleItems || v.items.slice(0, 3)).map(function (item) { return item.coffee; }); }),
-        5: top3For5.map(function (v) { return (v.bundleItems || v.items.slice(0, 5)).map(function (item) { return item.coffee; }); }),
-        7: top3For7.map(function (v) { return (v.bundleItems || v.items.slice(0, 7)).map(function (item) { return item.coffee; }); }),
+        2: topFor2.map(function (v) { return (v.bundleItems || v.items.slice(0, 2)).map(function (item) { return item.coffee; }); }),
+        4: topFor4.map(function (v) { return (v.bundleItems || v.items.slice(0, 4)).map(function (item) { return item.coffee; }); }),
+        8: topFor8.map(function (v) { return (v.bundleItems || v.items.slice(0, 8)).map(function (item) { return item.coffee; }); }),
       };
 
-      const sizesBelowMin = { 3: productsBelowMin || belowMin3, 5: productsBelowMin || belowMin5, 7: productsBelowMin || belowMin7 };
-      const meta = { topVendors: { 3: top3For3, 5: top3For5, 7: top3For7 }, sizesBelowMin: sizesBelowMin };
+      const sizesBelowMin = { 2: productsBelowMin || belowMin2, 4: productsBelowMin || belowMin4, 8: productsBelowMin || belowMin8 };
+      const meta = { topVendors: { 2: topFor2, 4: topFor4, 8: topFor8 }, sizesBelowMin: sizesBelowMin };
 
-      return { ok: true, bundles: bundles, meta: meta, belowMin: productsBelowMin || belowMin3 || belowMin5 || belowMin7 };
+      return { ok: true, bundles: bundles, meta: meta, belowMin: productsBelowMin || belowMin2 || belowMin4 || belowMin8 };
     }
 
     global.QuestionnaireScoring = {
@@ -2446,7 +2446,7 @@
     };
     const THRESHOLDS = {
       minProductScore: 0,
-      minBundleScore: { 3: 20, 5: 35, 7: 53 },
+      minBundleScore: { 2: 14, 4: 27, 8: 63 },
     };
 
     function getCoffeeProcessValue(product) {
@@ -2647,7 +2647,7 @@
       });
       const bundleOptions = bundleResult.bundles[selectedBundleQty] || [];
       if (optionIdx >= 0 && Array.isArray(bundleOptions[optionIdx]) && bundleOptions[optionIdx].length) {
-        return bundleOptions[optionIdx].slice(0, 7);
+        return bundleOptions[optionIdx].slice(0, 8);
       }
     }
 
@@ -2662,7 +2662,7 @@
         return b.score - a.score;
       });
 
-    return forVendor.map(function (item) { return item.coffee; }).slice(0, 7);
+    return forVendor.map(function (item) { return item.coffee; }).slice(0, 8);
   }
 
   function formatQuestionnaireBundleWeightKg(grams) {
@@ -3827,9 +3827,9 @@
         vendorLabel: vendorLabel,
         availableProducts: vendorRows.length,
         packages: {
-          3: buildPackageScoreSummary(vendorRows, 3),
-          5: buildPackageScoreSummary(vendorRows, 5),
-          7: buildPackageScoreSummary(vendorRows, 7),
+          2: buildPackageScoreSummary(vendorRows, 2),
+          4: buildPackageScoreSummary(vendorRows, 4),
+          8: buildPackageScoreSummary(vendorRows, 8),
         },
       };
     });
@@ -3914,11 +3914,11 @@
       if (!preserveResultsTableView) {
         resetBundleViewToCarousel();
       }
-      // Determine initial qty from the selected option (default 5)
+      // Determine initial qty from the selected option (default 4)
       const initialQtyEl = document.querySelector('.questionnaire-qty-selector-wrapper .qty-option.selected');
       const initialQty = initialQtyEl
-        ? parseInt(initialQtyEl.getAttribute('data-qty') || initialQtyEl.textContent.trim(), 10) || 5
-        : 5;
+        ? parseInt(initialQtyEl.getAttribute('data-qty') || initialQtyEl.textContent.trim(), 10) || 4
+        : 4;
 
       // Render only the first `initialQty` products
       renderCarousel(products, initialQty);
