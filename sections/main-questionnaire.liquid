@@ -1755,6 +1755,7 @@
   const QUESTIONNAIRE_LINE_PROP_BUNDLE_QTY_PRIVATE = '_questionnaire_bundle_qty';
   const QUESTIONNAIRE_BUNDLE_QTY_DISCOUNTS = { 3: 0, 5: 5, 7: 10 };
   let questionnaireCartHasCodeDiscount = false;
+  let questionnaireBundlePriceGeneration = 0;
 
   function refreshQuestionnaireCartDiscountState() {
     return fetch('/cart.js', { headers: { Accept: 'application/json' } })
@@ -1882,6 +1883,12 @@
     return positiveScores
       .filter(function (item) {
         return item.coffee && (item.coffee.vendor || '').trim().toLowerCase() === v;
+      })
+      .sort(function (a, b) {
+        const rpa = a.roastMeta && a.roastMeta.type === 'exact' ? 2 : a.roastMeta && a.roastMeta.type === 'partial' ? 1 : 0;
+        const rpb = b.roastMeta && b.roastMeta.type === 'exact' ? 2 : b.roastMeta && b.roastMeta.type === 'partial' ? 1 : 0;
+        if (rpb !== rpa) return rpb - rpa;
+        return b.score - a.score;
       })
       .map(function (item) {
         return item.coffee;
@@ -2723,6 +2730,104 @@
     }
   }
 
+  function getQuestionnaireVendorBundleProducts(vendorKeyLower, menuQty) {
+    var posScores = window.__questionnaireLastPositiveScores;
+    if (!Array.isArray(posScores)) posScores = [];
+    var bundleResult = window.__questionnaireBundleResult;
+    var topForQty =
+      bundleResult && bundleResult.ok && bundleResult.meta && bundleResult.meta.topVendors
+        ? bundleResult.meta.topVendors[menuQty] || []
+        : [];
+    var bundleOptionsForQty =
+      bundleResult && bundleResult.ok && bundleResult.bundles
+        ? bundleResult.bundles[menuQty] || []
+        : [];
+    var vLower = (vendorKeyLower || '').toLowerCase();
+    var bundleIdx = topForQty.findIndex(function (tv) {
+      return ((tv && tv.vendor) || '').trim().toLowerCase() === vLower;
+    });
+    if (bundleIdx >= 0 && Array.isArray(bundleOptionsForQty[bundleIdx])) {
+      return bundleOptionsForQty[bundleIdx].slice(0, menuQty);
+    }
+    return coffeesForVendorFromPositiveScores(posScores, vLower).slice(0, menuQty);
+  }
+
+  /** Keep trigger + footer prices in sync with the vendor menu (same bundle/qty logic). */
+  function syncQuestionnaireSelectedVendorPriceDisplay(bundleProds, menuQty, vendorKeyLower) {
+    if (!Array.isArray(bundleProds) || !bundleProds.length) return;
+    var priceBreakdown = questionnaireBundlePriceBreakdown(bundleProds, menuQty, vendorKeyLower);
+    var triggerPriceEl = document.getElementById('q-results-vendor-trigger-price');
+    var triggerSepEl = document.getElementById('q-results-vendor-trigger-sep');
+    var triggerWeightEl = document.getElementById('q-results-vendor-trigger-weight');
+    var priceEl = document.getElementById('q-footer-price');
+    var compareEl = document.getElementById('q-footer-price-compare');
+
+    if (triggerPriceEl) {
+      triggerPriceEl.textContent = formatQuestionnaireMoney(priceBreakdown.totalCents);
+      triggerPriceEl.hidden = false;
+    }
+
+    var totalGrams = 0;
+    bundleProds.forEach(function (p) {
+      totalGrams += p.weight_grams || 0;
+    });
+    if (triggerWeightEl) {
+      if (totalGrams > 0) {
+        triggerWeightEl.textContent = formatQuestionnaireBundleWeightKg(totalGrams);
+        triggerWeightEl.hidden = false;
+      } else {
+        triggerWeightEl.textContent = '';
+        triggerWeightEl.hidden = true;
+      }
+    }
+    if (triggerSepEl) {
+      triggerSepEl.hidden = totalGrams <= 0;
+    }
+    if (priceEl) {
+      priceEl.textContent = formatQuestionnaireMoney(priceBreakdown.totalCents);
+    }
+    if (compareEl) {
+      if (priceBreakdown.discountCents > 0 && priceBreakdown.compareCents > priceBreakdown.totalCents) {
+        compareEl.textContent = formatQuestionnaireMoney(priceBreakdown.compareCents);
+        compareEl.style.display = '';
+      } else {
+        compareEl.textContent = '';
+        compareEl.style.display = 'none';
+      }
+    }
+  }
+
+  /** Single source of truth for trigger/footer bundle price (vendor menu uses the same helpers). */
+  function refreshQuestionnaireBundlePriceDisplay() {
+    var qty = getQuestionnaireResultsBundleQty();
+    var vendorKey = (window.__questionnaireSelectedVendor || '').toLowerCase();
+    if (!vendorKey) return;
+    var bundleProds = getQuestionnaireVendorBundleProducts(vendorKey, qty);
+    syncQuestionnaireSelectedVendorPriceDisplay(bundleProds, qty, vendorKey);
+    var bundleWeightEl = document.getElementById('q-footer-bundle-weight');
+    if (bundleWeightEl) {
+      var totalGrams = 0;
+      bundleProds.forEach(function (p) {
+        totalGrams += p.weight_grams || 0;
+      });
+      if (totalGrams > 0) {
+        bundleWeightEl.textContent = '· סה״כ ' + totalGrams + ' גרם';
+        bundleWeightEl.hidden = false;
+      } else {
+        bundleWeightEl.textContent = '';
+        bundleWeightEl.hidden = true;
+      }
+    }
+  }
+
+  function scheduleQuestionnaireBundlePriceRefresh() {
+    var gen = ++questionnaireBundlePriceGeneration;
+    return refreshQuestionnaireCartDiscountState().then(function () {
+      if (gen !== questionnaireBundlePriceGeneration) return;
+      refreshQuestionnaireBundlePriceDisplay();
+    });
+  }
+
   function updateResultsVendorSelect() {
     var list = document.getElementById('q-results-vendor-list');
     if (!list) return;
@@ -2782,18 +2887,7 @@
     } else if (trLabel) {
       trLabel.textContent = '—';
     }
-    var posScores = window.__questionnaireLastPositiveScores;
-    if (!Array.isArray(posScores)) posScores = [];
     var menuQty = getQuestionnaireResultsBundleQty();
-    var bundleResult = window.__questionnaireBundleResult;
-    var topForQty =
-      bundleResult && bundleResult.ok && bundleResult.meta && bundleResult.meta.topVendors
-        ? bundleResult.meta.topVendors[menuQty] || []
-        : [];
-    var bundleOptionsForQty =
-      bundleResult && bundleResult.ok && bundleResult.bundles
-        ? bundleResult.bundles[menuQty] || []
-        : [];
     var sepSvg =
       '<svg class="results-vendor-trigger__sep-icon" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="3.5" fill="currentColor"/></svg>';
     list.innerHTML = opts
@@ -2801,12 +2895,7 @@
         var v = o.vendorKey || '';
         var vLower = (v || '').toLowerCase();
         var label = o.label || v;
-        var bundleIdx = topForQty.findIndex(function (tv) {
-          return ((tv && tv.vendor) || '').trim().toLowerCase() === vLower;
-        });
-        var bundleProds = bundleIdx >= 0 && Array.isArray(bundleOptionsForQty[bundleIdx])
-          ? bundleOptionsForQty[bundleIdx].slice(0, menuQty)
-          : coffeesForVendorFromPositiveScores(posScores, vLower).slice(0, menuQty);
+        var bundleProds = getQuestionnaireVendorBundleProducts(vLower, menuQty);
         var totalWeightGrams = 0;
         bundleProds.forEach(function (p) {
           totalWeightGrams += p.weight_grams || 0;
@@ -2845,6 +2934,8 @@
         );
       })
       .join('');
+
+    refreshQuestionnaireBundlePriceDisplay();
   }
 
   function setupResultsVendorSelect() {
@@ -3753,6 +3844,7 @@
   }
 
   function renderQuestionnaireResults(matchedCoffees) {
+    questionnaireBundlePriceGeneration++;
     const products = Array.isArray(matchedCoffees) ? matchedCoffees : [];
 
     // Render results in the new step
@@ -3822,7 +3914,6 @@
       if (!preserveResultsTableView) {
         resetBundleViewToCarousel();
       }
-      updateResultsVendorSelect();
       // Determine initial qty from the selected option (default 5)
       const initialQtyEl = document.querySelector('.questionnaire-qty-selector-wrapper .qty-option.selected');
       const initialQty = initialQtyEl
@@ -3832,6 +3923,7 @@
       // Render only the first `initialQty` products
       renderCarousel(products, initialQty);
       setupResultsViewToggle();
+      updateResultsVendorSelect();
 
       // Wire up qty selector — re-render carousel + price on change
       const qtyWrapper = document.querySelector('.questionnaire-qty-selector-wrapper');
@@ -3852,11 +3944,13 @@
           });
           const ut = window.__questionnaireMatchUserText;
           if (typeof ut === 'string' && ut.length) {
+            questionnaireBundlePriceGeneration++;
             const next = matchQuestionnaireCoffees(ut);
             saveResultsState(next);
             renderQuestionnaireResults(next);
             return;
           }
+          questionnaireBundlePriceGeneration++;
           renderCarousel(products, newQty);
           updateQuestionnaireQtyOptionWeights();
           updateResultsVendorSelect();
@@ -3954,73 +4048,11 @@
 
     // ── Bundle price helpers ──────────────────────────────────────────────
     function updateBundlePrice() {
-      if (!products || products.length === 0) return;
-      refreshQuestionnaireCartDiscountState().then(function () {
-        updateBundlePriceDisplay();
-      });
+      scheduleQuestionnaireBundlePriceRefresh();
     }
 
     function updateBundlePriceDisplay() {
-      if (!products || products.length === 0) return;
-      const qty = getQuestionnaireResultsBundleQty();
-      const vendorKey = questionnaireVendorKeyForBundle(products);
-      const priceBreakdown = questionnaireBundlePriceBreakdown(products, qty, vendorKey);
-
-      const priceEl = document.getElementById('q-footer-price');
-      const compareEl = document.getElementById('q-footer-price-compare');
-      const triggerPriceEl = document.getElementById('q-results-vendor-trigger-price');
-      const triggerSepEl = document.getElementById('q-results-vendor-trigger-sep');
-      const triggerWeightEl = document.getElementById('q-results-vendor-trigger-weight');
-
-      if (priceEl) priceEl.textContent = formatQuestionnaireMoney(priceBreakdown.totalCents);
-
-      if (compareEl) {
-        if (priceBreakdown.discountCents > 0 && priceBreakdown.compareCents > priceBreakdown.totalCents) {
-          compareEl.textContent = formatQuestionnaireMoney(priceBreakdown.compareCents);
-          compareEl.style.display = '';
-        } else {
-          compareEl.textContent = '';
-          compareEl.style.display = 'none';
-        }
-      }
-
-      if (triggerPriceEl) {
-        if (products && products.length) {
-          triggerPriceEl.textContent = formatQuestionnaireMoney(priceBreakdown.totalCents);
-          triggerPriceEl.hidden = false;
-        } else {
-          triggerPriceEl.textContent = '';
-          triggerPriceEl.hidden = true;
-        }
-      }
-
-      let totalGrams = 0;
-      products.forEach(function (p) {
-        totalGrams += p.weight_grams || 0;
-      });
-
-      if (triggerWeightEl) {
-        if (totalGrams > 0) {
-          triggerWeightEl.textContent = formatQuestionnaireBundleWeightKg(totalGrams);
-          triggerWeightEl.hidden = false;
-        } else {
-          triggerWeightEl.textContent = '';
-          triggerWeightEl.hidden = true;
-        }
-      }
-      if (triggerSepEl) {
-        triggerSepEl.hidden = totalGrams <= 0;
-      }
-      const bundleWeightEl = document.getElementById('q-footer-bundle-weight');
-      if (bundleWeightEl) {
-        if (totalGrams > 0) {
-          bundleWeightEl.textContent = '· סה״כ ' + totalGrams + ' גרם';
-          bundleWeightEl.hidden = false;
-        } else {
-          bundleWeightEl.textContent = '';
-          bundleWeightEl.hidden = true;
-        }
-      }
+      refreshQuestionnaireBundlePriceDisplay();
     }
 
     function renderSelectionThumbs() {
@@ -4683,6 +4715,7 @@
     });
 
     track._qCarouselTeardown = function () {
+      questionnaireBundlePriceGeneration++;
       if (carouselScrollRaf !== null) {
         cancelAnimationFrame(carouselScrollRaf);
         carouselScrollRaf = null;
@@ -5144,17 +5177,6 @@
           'שוקולד מריר, קקאו, אגוזים, אגוזי לוז, שקדים, תבלינים, אדמתי, עשבוני, טבק, ארז, פלפל שחור, ציפורן, קינמון, מרירות נעימה, גוף מלא',
       },
     ];
-
-    // Event delegation for quantity selector interaction (clicks may hit inner spans)
-    document.addEventListener('click', function (e) {
-      const opt = e.target.closest('.qty-option');
-      if (!opt) return;
-      const wrapper = opt.closest('.questionnaire-qty-options');
-      if (wrapper) {
-        wrapper.querySelectorAll('.qty-option').forEach((el) => el.classList.remove('selected'));
-        opt.classList.add('selected');
-      }
-    });
 
     const startOverButton = document.querySelector('.questionnaire-start-over');
     if (startOverButton) {
