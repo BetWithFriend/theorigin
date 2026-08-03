@@ -1082,7 +1082,7 @@
                         {%- if vendor_has_regular_items -%}
                           <div class="free-shipping-notice">
                             <div>
-                              {%- assign remaining_for_free = vendor_free_threshold | minus: regular_items_total -%}
+                              {%- assign remaining_for_free = vendor_free_threshold | minus: regular_items_total_for_shipping -%}
                               <img
                                 class="cart-icon-delivery "
                                 src="{{  'cart_icon_delivery.png' | asset_url }}"
