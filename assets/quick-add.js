@@ -209,56 +209,67 @@ function handleQuickAddToCart(form) {
 }
 
 function updateCartDrawer() {
-  // Fetch both the cart data and updated sections
-  Promise.all([
-    fetch('/cart.js').then(r => r.json()),
-    fetch(`${window.location.origin}?sections=cart-drawer,cart-icon-bubble`).then(r => r.json())
-  ])
-    .then(([cart, sections]) => {
-      // Update cart drawer content
-      const cartDrawerInner = document.querySelector('#CartDrawer .drawer__inner');
-      if (cartDrawerInner && sections['cart-drawer']) {
-        const parser = new DOMParser();
-        const newContent = parser.parseFromString(sections['cart-drawer'], 'text/html');
-        const newDrawerInner = newContent.querySelector('.drawer__inner');
+  const renderCart = (cart, sections) => {
+    // Update cart drawer content
+    const cartDrawerInner = document.querySelector('#CartDrawer .drawer__inner');
+    if (cartDrawerInner && sections['cart-drawer']) {
+      const parser = new DOMParser();
+      const newContent = parser.parseFromString(sections['cart-drawer'], 'text/html');
+      const newDrawerInner = newContent.querySelector('.drawer__inner');
 
-        if (newDrawerInner) {
-          cartDrawerInner.innerHTML = newDrawerInner.innerHTML;
-        }
+      if (newDrawerInner) {
+        cartDrawerInner.innerHTML = newDrawerInner.innerHTML;
       }
+    }
 
-      // Remove is-empty class if cart has items
-      if (cart.item_count > 0) {
+    // Remove is-empty class if cart has items
+    if (cart.item_count > 0) {
+      const cartDrawerElement = document.querySelector('cart-drawer');
+      if (cartDrawerElement) {
+        cartDrawerElement.classList.remove('is-empty');
+      }
+      if (cartDrawerInner) {
+        cartDrawerInner.classList.remove('is-empty');
+      }
+    }
+
+    // Update cart icon bubble
+    const cartIconBubble = document.getElementById('cart-icon-bubble');
+    if (cartIconBubble && sections['cart-icon-bubble']) {
+      const parser = new DOMParser();
+      const newContent = parser.parseFromString(sections['cart-icon-bubble'], 'text/html');
+
+      // Get the shopify-section wrapper
+      const sectionWrapper = newContent.querySelector('#shopify-section-cart-icon-bubble');
+      if (sectionWrapper) {
+        // The actual cart icon content is the innerHTML of the section
+        cartIconBubble.outerHTML = sectionWrapper.innerHTML;
+
+        // Re-attach event listeners
         const cartDrawerElement = document.querySelector('cart-drawer');
         if (cartDrawerElement) {
-          cartDrawerElement.classList.remove('is-empty');
-        }
-        if (cartDrawerInner) {
-          cartDrawerInner.classList.remove('is-empty');
+          cartDrawerElement.setHeaderCartIconAccessibility();
         }
       }
+    }
+  };
 
-      // Update cart icon bubble
-      const cartIconBubble = document.getElementById('cart-icon-bubble');
-      if (cartIconBubble && sections['cart-icon-bubble']) {
-        const parser = new DOMParser();
-        const newContent = parser.parseFromString(sections['cart-icon-bubble'], 'text/html');
+  const loadCartAndSections = () =>
+    Promise.all([
+      fetch('/cart.js').then((r) => r.json()),
+      fetch(`${window.location.origin}?sections=cart-drawer,cart-icon-bubble`).then((r) => r.json()),
+    ]);
 
-        // Get the shopify-section wrapper
-        const sectionWrapper = newContent.querySelector('#shopify-section-cart-icon-bubble');
-        if (sectionWrapper) {
-          // The actual cart icon content is the innerHTML of the section
-          cartIconBubble.outerHTML = sectionWrapper.innerHTML;
+  const syncThenLoad =
+    typeof window.syncVendorBundleDiscountProperties === 'function'
+      ? window.syncVendorBundleDiscountProperties().then(() => loadCartAndSections())
+      : loadCartAndSections();
 
-          // Re-attach event listeners
-          const cartDrawerElement = document.querySelector('cart-drawer');
-          if (cartDrawerElement) {
-            cartDrawerElement.setHeaderCartIconAccessibility();
-          }
-        }
-      }
+  syncThenLoad
+    .then(([cart, sections]) => {
+      renderCart(cart, sections);
     })
-    .catch(error => {
+    .catch((error) => {
       console.error('Error updating cart:', error);
     });
 }

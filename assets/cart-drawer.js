@@ -144,9 +144,8 @@ class CartDrawerItems extends CartItems {
   getSectionsToRender() {
     return [
       {
-        id: 'CartDrawer',
+        id: 'cart-drawer-items',
         section: 'cart-drawer',
-        selector: '.drawer__inner',
       },
       {
         id: 'cart-icon-bubble',
@@ -154,6 +153,89 @@ class CartDrawerItems extends CartItems {
         selector: '.shopify-section',
       },
     ];
+  }
+
+  syncDrawerEmptyState(sectionData, isEmpty) {
+    const drawerInner = document.querySelector('#CartDrawer .drawer__inner');
+    if (!drawerInner || !sectionData) return;
+
+    const doc = new DOMParser().parseFromString(sectionData, 'text/html');
+    const existingEmpty = drawerInner.querySelector('.drawer__inner-empty');
+    const existingEmptyBtn = drawerInner.querySelector('button.empty-cart-btn');
+
+    if (isEmpty) {
+      const newEmpty = doc.querySelector('.drawer__inner-empty');
+      const newEmptyBtn = doc.querySelector('button.empty-cart-btn');
+
+      if (newEmpty) {
+        const clone = newEmpty.cloneNode(true);
+        if (existingEmpty) {
+          existingEmpty.replaceWith(clone);
+        } else {
+          drawerInner.insertBefore(clone, drawerInner.firstChild);
+        }
+      }
+
+      if (newEmptyBtn) {
+        const clone = newEmptyBtn.cloneNode(true);
+        if (existingEmptyBtn) {
+          existingEmptyBtn.replaceWith(clone);
+        } else {
+          const emptyInner = drawerInner.querySelector('.drawer__inner-empty');
+          if (emptyInner) {
+            emptyInner.after(clone);
+          } else {
+            drawerInner.insertBefore(clone, drawerInner.firstChild);
+          }
+        }
+      }
+    } else {
+      existingEmpty?.remove();
+      existingEmptyBtn?.remove();
+    }
+  }
+
+  updateOtherSections(parsedState) {
+    const sectionData = parsedState.sections['cart-drawer'];
+    if (sectionData) {
+      try {
+        this.syncDrawerEmptyState(sectionData, parsedState.item_count === 0);
+
+        const doc = new DOMParser().parseFromString(sectionData, 'text/html');
+
+        const currentContents = this.querySelector('.js-contents');
+        const newContents = doc.querySelector('.js-contents');
+        if (currentContents && newContents) {
+          currentContents.innerHTML = newContents.innerHTML;
+        }
+
+        const currentFooter = document.querySelector('#CartDrawer .cart-drawer__footer');
+        const newFooter = doc.querySelector('.cart-drawer__footer');
+        if (currentFooter && newFooter) {
+          currentFooter.innerHTML = newFooter.innerHTML;
+        }
+      } catch (error) {
+        console.error('Error updating cart drawer:', error);
+      }
+    }
+
+    const bubbleSectionData = parsedState.sections['cart-icon-bubble'];
+    if (!bubbleSectionData) return;
+
+    try {
+      const container = document.getElementById('cart-icon-bubble');
+      if (!container) return;
+
+      const doc = new DOMParser().parseFromString(bubbleSectionData, 'text/html');
+      const newContent = doc.querySelector('.shopify-section') || doc.body.firstElementChild;
+      const elementToReplace = container.querySelector('.shopify-section') || container;
+
+      if (newContent && elementToReplace) {
+        elementToReplace.innerHTML = newContent.innerHTML;
+      }
+    } catch (error) {
+      console.error('Error updating cart icon bubble:', error);
+    }
   }
 }
 

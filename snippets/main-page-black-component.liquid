@@ -1,5 +1,5 @@
 {% comment %} {{ 'discover-the-roaster.css' | asset_url | stylesheet_tag }} {% endcomment %}
-<div class="discover-roaster-wrapper">
+<div class="discover-roaster-wrapper" id={{ item_id | default: '' }}>
     <div class="discover_roaster-title-wrap">
         <div class="discover-roaster-title">{{ title  }}</div>
         <div class="discover-roaster-subtitle" dir="rtl">{{ description }}</div>

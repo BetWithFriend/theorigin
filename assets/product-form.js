@@ -48,7 +48,7 @@ if (!customElements.get('product-form')) {
 
         fetch(`${routes.cart_add_url}`, config)
           .then((response) => response.json())
-          .then((response) => {
+          .then(async (response) => {
             if (response.status) {
               publish(PUB_SUB_EVENTS.cartError, {
                 source: 'product-form',
@@ -68,6 +68,24 @@ if (!customElements.get('product-form')) {
             } else if (!this.cart) {
               // window.location = window.routes.cart_url;
               return;
+            }
+
+            if (typeof window.syncVendorBundleDiscountProperties === 'function') {
+              try {
+                const syncResult = await window.syncVendorBundleDiscountProperties();
+                if (syncResult.changed && this.cart) {
+                  response.items = syncResult.cart.items;
+                  response.item_count = syncResult.cart.item_count;
+
+                  const sectionIds = this.cart.getSectionsToRender().map((section) => section.id);
+                  const sectionsHtml = await fetch(
+                    `${routes.cart_url}?sections=${sectionIds.join(',')}`
+                  ).then((res) => res.json());
+                  response.sections = { ...(response.sections || {}), ...sectionsHtml };
+                }
+              } catch (syncError) {
+                console.error('Bundle discount sync failed:', syncError);
+              }
             }
 
             if (!this.error)

@@ -8,6 +8,7 @@
 <noscript>{{ 'component-slider.css' | asset_url | stylesheet_tag }}</noscript>
 <noscript>{{ 'template-collection.css' | asset_url | stylesheet_tag }}</noscript>
 <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'cart-single-discount.js' | asset_url }}" defer="defer"></script>
 <script>
   (function () {
     var tnScript = document.querySelector('script[tnv-data-config]');
@@ -475,683 +476,1095 @@
   <div class="questionnaire-icons-wrapper ">
     <div class="questionnaire-loader-wrapper">
       <div class="questionnaire-roaster-scene">
-        <svg width="300" height="320" viewBox="0 0 300 320" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="300"
+          height="320"
+          viewBox="0 0 300 320"
+          xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <radialGradient id="wall-grad2" cx="35%" cy="28%" r="70%">
-              <stop offset="0%"   stop-color="#f0f2f4"/>
-              <stop offset="40%"  stop-color="#b8bec5"/>
-              <stop offset="75%"  stop-color="#7a8490"/>
-              <stop offset="100%" stop-color="#4a5260"/>
+            <radialGradient
+              id="wall-grad2"
+              cx="35%"
+              cy="28%"
+              r="70%">
+              <stop offset="0%" stop-color="#f0f2f4" />
+              <stop offset="40%" stop-color="#b8bec5" />
+              <stop offset="75%" stop-color="#7a8490" />
+              <stop offset="100%" stop-color="#4a5260" />
             </radialGradient>
-            <linearGradient id="rim-shine2" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.6"/>
-              <stop offset="50%"  stop-color="#9aaab8" stop-opacity="0.2"/>
-              <stop offset="100%" stop-color="#3a4250" stop-opacity="0.4"/>
+            <linearGradient
+              id="rim-shine2"
+              x1="0"
+              y1="0"
+              x2="1"
+              y2="1">
+              <stop
+                offset="0%"
+                stop-color="#ffffff"
+                stop-opacity="0.6" />
+              <stop
+                offset="50%"
+                stop-color="#9aaab8"
+                stop-opacity="0.2" />
+              <stop
+                offset="100%"
+                stop-color="#3a4250"
+                stop-opacity="0.4" />
             </linearGradient>
-            <radialGradient id="inner-grad2" cx="35%" cy="30%" r="70%">
-              <stop offset="0%"   stop-color="#f0f4f6"/>
-              <stop offset="50%"  stop-color="#c8d0d8"/>
-              <stop offset="100%" stop-color="#8a96a4"/>
+            <radialGradient
+              id="inner-grad2"
+              cx="35%"
+              cy="30%"
+              r="70%">
+              <stop offset="0%" stop-color="#f0f4f6" />
+              <stop offset="50%" stop-color="#c8d0d8" />
+              <stop offset="100%" stop-color="#8a96a4" />
             </radialGradient>
-            <radialGradient id="heat-grad2" cx="50%" cy="90%" r="60%">
-              <stop offset="0%"   stop-color="#ff5500" stop-opacity="0.55"/>
-              <stop offset="100%" stop-color="#ff5500" stop-opacity="0"/>
+            <radialGradient
+              id="heat-grad2"
+              cx="50%"
+              cy="90%"
+              r="60%">
+              <stop
+                offset="0%"
+                stop-color="#ff5500"
+                stop-opacity="0.55" />
+              <stop
+                offset="100%"
+                stop-color="#ff5500"
+                stop-opacity="0" />
             </radialGradient>
             <clipPath id="drum-clip2">
-              <circle cx="150" cy="175" r="102"/>
+              <circle
+                cx="150"
+                cy="175"
+                r="102" />
             </clipPath>
           </defs>
-          <ellipse class="questionnaire-heat-glow" cx="150" cy="294" rx="88" ry="18" fill="url(#heat-grad2)"/>
-          <ellipse cx="150" cy="293" rx="78" ry="9" fill="rgba(0,0,0,0.07)"/>
-          <circle cx="150" cy="175" r="118" fill="url(#wall-grad2)"/>
-          <circle cx="150" cy="175" r="102" fill="url(#inner-grad2)"/>
+          <ellipse
+            class="questionnaire-heat-glow"
+            cx="150"
+            cy="294"
+            rx="88"
+            ry="18"
+            fill="url(#heat-grad2)" />
+          <ellipse
+            cx="150"
+            cy="293"
+            rx="78"
+            ry="9"
+            fill="rgba(0,0,0,0.07)" />
+          <circle
+            cx="150"
+            cy="175"
+            r="118"
+            fill="url(#wall-grad2)" />
+          <circle
+            cx="150"
+            cy="175"
+            r="102"
+            fill="url(#inner-grad2)" />
           <g class="questionnaire-drum-paddles" clip-path="url(#drum-clip2)">
-            <rect x="150" y="73" width="7" height="102" rx="3.5" fill="#6a7888" opacity="0.75"/>
+            <rect
+              x="150"
+              y="73"
+              width="7"
+              height="102"
+              rx="3.5"
+              fill="#6a7888"
+              opacity="0.75" />
           </g>
-          <circle cx="150" cy="175" r="14" fill="#6a7480"/>
-          <circle cx="150" cy="175" r="8"  fill="#b0bcc8"/>
-          <circle cx="150" cy="175" r="3"  fill="#e8eef2"/>
+          <circle
+            cx="150"
+            cy="175"
+            r="14"
+            fill="#6a7480" />
+          <circle
+            cx="150"
+            cy="175"
+            r="8"
+            fill="#b0bcc8" />
+          <circle
+            cx="150"
+            cy="175"
+            r="3"
+            fill="#e8eef2" />
           <g>
-            <g class="questionnaire-bean" data-ring="0" style="--bc:#3d1a08;--bcs:#1a0804"><ellipse class="bean-body" rx="8"  ry="12"/><line class="bean-crease" x1="0" y1="-8"  x2="0" y2="8"/></g>
-            <g class="questionnaire-bean" data-ring="0" style="--bc:#5c2a10;--bcs:#2c1006"><ellipse class="bean-body" rx="9"  ry="13"/><line class="bean-crease" x1="0" y1="-9"  x2="0" y2="9"/></g>
-            <g class="questionnaire-bean" data-ring="0" style="--bc:#7b3c18;--bcs:#3d1a08"><ellipse class="bean-body" rx="8"  ry="12"/><line class="bean-crease" x1="0" y1="-8"  x2="0" y2="8"/></g>
-            <g class="questionnaire-bean" data-ring="0" style="--bc:#2a1006;--bcs:#120802"><ellipse class="bean-body" rx="9"  ry="13"/><line class="bean-crease" x1="0" y1="-9"  x2="0" y2="9"/></g>
-            <g class="questionnaire-bean" data-ring="0" style="--bc:#8c4820;--bcs:#4a2010"><ellipse class="bean-body" rx="7"  ry="11"/><line class="bean-crease" x1="0" y1="-7"  x2="0" y2="7"/></g>
-            <g class="questionnaire-bean" data-ring="0" style="--bc:#4a1e0a;--bcs:#200a04"><ellipse class="bean-body" rx="9"  ry="13"/><line class="bean-crease" x1="0" y1="-9"  x2="0" y2="9"/></g>
-            <g class="questionnaire-bean" data-ring="0" style="--bc:#6a3014;--bcs:#331408"><ellipse class="bean-body" rx="8"  ry="12"/><line class="bean-crease" x1="0" y1="-8"  x2="0" y2="8"/></g>
-            <g class="questionnaire-bean" data-ring="0" style="--bc:#a85a28;--bcs:#5c2c10"><ellipse class="bean-body" rx="7"  ry="11"/><line class="bean-crease" x1="0" y1="-7"  x2="0" y2="7"/></g>
-            <g class="questionnaire-bean" data-ring="0" style="--bc:#3a1608;--bcs:#180602"><ellipse class="bean-body" rx="9"  ry="13"/><line class="bean-crease" x1="0" y1="-9"  x2="0" y2="9"/></g>
-            <g class="questionnaire-bean" data-ring="0" style="--bc:#c47a3a;--bcs:#7a4218"><ellipse class="bean-body" rx="8"  ry="12"/><line class="bean-crease" x1="0" y1="-8"  x2="0" y2="8"/></g>
-            <g class="questionnaire-bean" data-ring="1" style="--bc:#5c2a10;--bcs:#2c1006"><ellipse class="bean-body" rx="8"  ry="12"/><line class="bean-crease" x1="0" y1="-8"  x2="0" y2="8"/></g>
-            <g class="questionnaire-bean" data-ring="1" style="--bc:#8c4820;--bcs:#4a2010"><ellipse class="bean-body" rx="9"  ry="13"/><line class="bean-crease" x1="0" y1="-9"  x2="0" y2="9"/></g>
-            <g class="questionnaire-bean" data-ring="1" style="--bc:#3d1a08;--bcs:#1a0804"><ellipse class="bean-body" rx="7"  ry="11"/><line class="bean-crease" x1="0" y1="-7"  x2="0" y2="7"/></g>
-            <g class="questionnaire-bean" data-ring="1" style="--bc:#7b3c18;--bcs:#3d1a08"><ellipse class="bean-body" rx="8"  ry="12"/><line class="bean-crease" x1="0" y1="-8"  x2="0" y2="8"/></g>
-            <g class="questionnaire-bean" data-ring="1" style="--bc:#2a1006;--bcs:#120802"><ellipse class="bean-body" rx="9"  ry="13"/><line class="bean-crease" x1="0" y1="-9"  x2="0" y2="9"/></g>
-            <g class="questionnaire-bean" data-ring="1" style="--bc:#4a1e0a;--bcs:#200a04"><ellipse class="bean-body" rx="7"  ry="11"/><line class="bean-crease" x1="0" y1="-7"  x2="0" y2="7"/></g>
-            <g class="questionnaire-bean" data-ring="1" style="--bc:#6a3014;--bcs:#331408"><ellipse class="bean-body" rx="8"  ry="12"/><line class="bean-crease" x1="0" y1="-8"  x2="0" y2="8"/></g>
-            <g class="questionnaire-bean" data-ring="2" style="--bc:#7b3c18;--bcs:#3d1a08"><ellipse class="bean-body" rx="7"  ry="11"/><line class="bean-crease" x1="0" y1="-7"  x2="0" y2="7"/></g>
-            <g class="questionnaire-bean" data-ring="2" style="--bc:#3d1a08;--bcs:#1a0804"><ellipse class="bean-body" rx="8"  ry="12"/><line class="bean-crease" x1="0" y1="-8"  x2="0" y2="8"/></g>
-            <g class="questionnaire-bean" data-ring="2" style="--bc:#5c2a10;--bcs:#2c1006"><ellipse class="bean-body" rx="7"  ry="11"/><line class="bean-crease" x1="0" y1="-7"  x2="0" y2="7"/></g>
-            <g class="questionnaire-bean" data-ring="2" style="--bc:#2a1006;--bcs:#120802"><ellipse class="bean-body" rx="6"  ry="10"/><line class="bean-crease" x1="0" y1="-6"  x2="0" y2="6"/></g>
-          </g>
-          <g clip-path="url(#drum-clip2)">
-            <circle cx="150" cy="258" r="4" fill="#5a6878" opacity="0.6"/>
-            <circle cx="168" cy="255" r="4" fill="#5a6878" opacity="0.6"/>
-            <circle cx="186" cy="247" r="4" fill="#5a6878" opacity="0.6"/>
-            <circle cx="201" cy="235" r="4" fill="#5a6878" opacity="0.6"/>
-            <circle cx="132" cy="255" r="4" fill="#5a6878" opacity="0.6"/>
-            <circle cx="114" cy="247" r="4" fill="#5a6878" opacity="0.6"/>
-            <circle cx="99"  cy="235" r="4" fill="#5a6878" opacity="0.6"/>
-            <circle cx="150" cy="243" r="3.5" fill="#5a6878" opacity="0.45"/>
-            <circle cx="165" cy="240" r="3.5" fill="#5a6878" opacity="0.45"/>
-            <circle cx="179" cy="233" r="3.5" fill="#5a6878" opacity="0.45"/>
-            <circle cx="135" cy="240" r="3.5" fill="#5a6878" opacity="0.45"/>
-            <circle cx="121" cy="233" r="3.5" fill="#5a6878" opacity="0.45"/>
-          </g>
-          <circle cx="150" cy="175" r="118" fill="none" stroke="#4a5260" stroke-width="5"/>
-          <circle cx="150" cy="175" r="118" fill="url(#rim-shine2)" style="pointer-events:none"/>
-          <circle cx="150" cy="175" r="113" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
-          <circle cx="150" cy="57"  r="5.5" fill="#6a7480"/>
-          <circle cx="150" cy="57"  r="2.5" fill="#d0dae2"/>
-          <circle cx="150" cy="293" r="5.5" fill="#6a7480"/>
-          <circle cx="150" cy="293" r="2.5" fill="#d0dae2"/>
-          <circle cx="32"  cy="175" r="5.5" fill="#6a7480"/>
-          <circle cx="32"  cy="175" r="2.5" fill="#d0dae2"/>
-          <circle cx="268" cy="175" r="5.5" fill="#6a7480"/>
-          <circle cx="268" cy="175" r="2.5" fill="#d0dae2"/>
-        </svg>
-        <div class="questionnaire-roaster-label">
-          {{ section.settings.loader_text | default: 'מתאימים את פולי הקפה בדיוק בשבילך' }}<span class="questionnaire-roaster-dots"><span>.</span><span>.</span><span>.</span></span>
-        </div>
+          <g
+            class="questionnaire-bean"
+            data-ring="0"
+            style="--bc:#3d1a08;--bcs:#1a0804"><ellipse
+              class="bean-body"
+              rx="8"
+              ry="12" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-8"
+              x2="0"
+              y2="8" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="0"
+            style="--bc:#5c2a10;--bcs:#2c1006"><ellipse
+              class="bean-body"
+              rx="9"
+              ry="13" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-9"
+              x2="0"
+              y2="9" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="0"
+            style="--bc:#7b3c18;--bcs:#3d1a08"><ellipse
+              class="bean-body"
+              rx="8"
+              ry="12" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-8"
+              x2="0"
+              y2="8" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="0"
+            style="--bc:#2a1006;--bcs:#120802"><ellipse
+              class="bean-body"
+              rx="9"
+              ry="13" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-9"
+              x2="0"
+              y2="9" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="0"
+            style="--bc:#8c4820;--bcs:#4a2010"><ellipse
+              class="bean-body"
+              rx="7"
+              ry="11" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-7"
+              x2="0"
+              y2="7" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="0"
+            style="--bc:#4a1e0a;--bcs:#200a04"><ellipse
+              class="bean-body"
+              rx="9"
+              ry="13" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-9"
+              x2="0"
+              y2="9" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="0"
+            style="--bc:#6a3014;--bcs:#331408"><ellipse
+              class="bean-body"
+              rx="8"
+              ry="12" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-8"
+              x2="0"
+              y2="8" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="0"
+            style="--bc:#a85a28;--bcs:#5c2c10"><ellipse
+              class="bean-body"
+              rx="7"
+              ry="11" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-7"
+              x2="0"
+              y2="7" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="0"
+            style="--bc:#3a1608;--bcs:#180602"><ellipse
+              class="bean-body"
+              rx="9"
+              ry="13" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-9"
+              x2="0"
+              y2="9" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="0"
+            style="--bc:#c47a3a;--bcs:#7a4218"><ellipse
+              class="bean-body"
+              rx="8"
+              ry="12" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-8"
+              x2="0"
+              y2="8" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="1"
+            style="--bc:#5c2a10;--bcs:#2c1006"><ellipse
+              class="bean-body"
+              rx="8"
+              ry="12" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-8"
+              x2="0"
+              y2="8" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="1"
+            style="--bc:#8c4820;--bcs:#4a2010"><ellipse
+              class="bean-body"
+              rx="9"
+              ry="13" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-9"
+              x2="0"
+              y2="9" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="1"
+            style="--bc:#3d1a08;--bcs:#1a0804"><ellipse
+              class="bean-body"
+              rx="7"
+              ry="11" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-7"
+              x2="0"
+              y2="7" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="1"
+            style="--bc:#7b3c18;--bcs:#3d1a08"><ellipse
+              class="bean-body"
+              rx="8"
+              ry="12" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-8"
+              x2="0"
+              y2="8" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="1"
+            style="--bc:#2a1006;--bcs:#120802"><ellipse
+              class="bean-body"
+              rx="9"
+              ry="13" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-9"
+              x2="0"
+              y2="9" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="1"
+            style="--bc:#4a1e0a;--bcs:#200a04"><ellipse
+              class="bean-body"
+              rx="7"
+              ry="11" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-7"
+              x2="0"
+              y2="7" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="1"
+            style="--bc:#6a3014;--bcs:#331408"><ellipse
+              class="bean-body"
+              rx="8"
+              ry="12" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-8"
+              x2="0"
+              y2="8" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="2"
+            style="--bc:#7b3c18;--bcs:#3d1a08"><ellipse
+              class="bean-body"
+              rx="7"
+              ry="11" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-7"
+              x2="0"
+              y2="7" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="2"
+            style="--bc:#3d1a08;--bcs:#1a0804"><ellipse
+              class="bean-body"
+              rx="8"
+              ry="12" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-8"
+              x2="0"
+              y2="8" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="2"
+            style="--bc:#5c2a10;--bcs:#2c1006"><ellipse
+              class="bean-body"
+              rx="7"
+              ry="11" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-7"
+              x2="0"
+              y2="7" /></g>
+          <g
+            class="questionnaire-bean"
+            data-ring="2"
+            style="--bc:#2a1006;--bcs:#120802"><ellipse
+              class="bean-body"
+              rx="6"
+              ry="10" /><line
+              class="bean-crease"
+              x1="0"
+              y1="-6"
+              x2="0"
+              y2="6" /></g>
+        </g>
+        <g clip-path="url(#drum-clip2)">
+          <circle
+            cx="150"
+            cy="258"
+            r="4"
+            fill="#5a6878"
+            opacity="0.6" />
+          <circle
+            cx="168"
+            cy="255"
+            r="4"
+            fill="#5a6878"
+            opacity="0.6" />
+          <circle
+            cx="186"
+            cy="247"
+            r="4"
+            fill="#5a6878"
+            opacity="0.6" />
+          <circle
+            cx="201"
+            cy="235"
+            r="4"
+            fill="#5a6878"
+            opacity="0.6" />
+          <circle
+            cx="132"
+            cy="255"
+            r="4"
+            fill="#5a6878"
+            opacity="0.6" />
+          <circle
+            cx="114"
+            cy="247"
+            r="4"
+            fill="#5a6878"
+            opacity="0.6" />
+          <circle
+            cx="99"
+            cy="235"
+            r="4"
+            fill="#5a6878"
+            opacity="0.6" />
+          <circle
+            cx="150"
+            cy="243"
+            r="3.5"
+            fill="#5a6878"
+            opacity="0.45" />
+          <circle
+            cx="165"
+            cy="240"
+            r="3.5"
+            fill="#5a6878"
+            opacity="0.45" />
+          <circle
+            cx="179"
+            cy="233"
+            r="3.5"
+            fill="#5a6878"
+            opacity="0.45" />
+          <circle
+            cx="135"
+            cy="240"
+            r="3.5"
+            fill="#5a6878"
+            opacity="0.45" />
+          <circle
+            cx="121"
+            cy="233"
+            r="3.5"
+            fill="#5a6878"
+            opacity="0.45" />
+        </g>
+        <circle
+          cx="150"
+          cy="175"
+          r="118"
+          fill="none"
+          stroke="#4a5260"
+          stroke-width="5" />
+        <circle
+          cx="150"
+          cy="175"
+          r="118"
+          fill="url(#rim-shine2)"
+          style="pointer-events:none" />
+        <circle
+          cx="150"
+          cy="175"
+          r="113"
+          fill="none"
+          stroke="rgba(255,255,255,0.3)"
+          stroke-width="2" />
+        <circle
+          cx="150"
+          cy="57"
+          r="5.5"
+          fill="#6a7480" />
+        <circle
+          cx="150"
+          cy="57"
+          r="2.5"
+          fill="#d0dae2" />
+        <circle
+          cx="150"
+          cy="293"
+          r="5.5"
+          fill="#6a7480" />
+        <circle
+          cx="150"
+          cy="293"
+          r="2.5"
+          fill="#d0dae2" />
+        <circle
+          cx="32"
+          cy="175"
+          r="5.5"
+          fill="#6a7480" />
+        <circle
+          cx="32"
+          cy="175"
+          r="2.5"
+          fill="#d0dae2" />
+        <circle
+          cx="268"
+          cy="175"
+          r="5.5"
+          fill="#6a7480" />
+        <circle
+          cx="268"
+          cy="175"
+          r="2.5"
+          fill="#d0dae2" />
+      </svg>
+      <div class="questionnaire-roaster-label">
+        {{ section.settings.loader_text | default: 'מתאימים את פולי הקפה בדיוק בשבילך' }}<span class="questionnaire-roaster-dots">
+          <span>.</span>
+          <span>.</span>
+          <span>.</span>
+        </span>
       </div>
     </div>
   </div>
-  <div class="questionnaire-icons-wrapper" id="questionnaireResultsStep">
-    <header
-      class="questionnaire-header questionnaire-header--results"
-      role="banner"
-      dir="ltr">
-      <a
-        href="{{ routes.root_url }}"
-        class="header__heading-link link link--text focus-inset"
-        aria-label="{{ shop.name }}"
-        onclick="clearResultsState()">
-        <div class="header__heading-logo-wrapper">
-          <img
-            src="{{ 'logo.png' | asset_url }}"
-            alt="{{ shop.name }}"
-            class="header__heading-logo">
-        </div>
-      </a>
-      <div class="questionnaire-header__actions" dir="ltr">
-        <button
-          type="button"
-          class="q-results-icon-btn q-results-icon-btn--refresh"
-          onclick="openRestartConfirmModal()"
-          aria-label="התחל מחדש"
-          title="התחל מחדש"
-          aria-haspopup="dialog">
+</div>
+<div class="questionnaire-icons-wrapper" id="questionnaireResultsStep">
+  <header
+    class="questionnaire-header questionnaire-header--results"
+    role="banner"
+    dir="ltr">
+    <a
+      href="{{ routes.root_url }}"
+      class="header__heading-link link link--text focus-inset"
+      aria-label="{{ shop.name }}"
+      onclick="clearResultsState()">
+      <div class="header__heading-logo-wrapper">
+        <img
+          src="{{ 'logo.png' | asset_url }}"
+          alt="{{ shop.name }}"
+          class="header__heading-logo">
+      </div>
+    </a>
+    <div class="questionnaire-header__actions" dir="ltr">
+      <button
+        type="button"
+        class="q-results-icon-btn q-results-icon-btn--refresh"
+        onclick="openRestartConfirmModal()"
+        aria-label="התחל מחדש"
+        title="התחל מחדש"
+        aria-haspopup="dialog">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true">
+          <path
+            d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path
+            d="M21 3v5h-5"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        id="q-results-view-toggle"
+        class="q-results-view-toggle q-results-icon-btn q-results-icon-btn--menu"
+        aria-pressed="false"
+        aria-label="הצג תצוגת טבלה"
+        title="תצוגת טבלה">
+        <span class="q-results-view-toggle__icon q-results-view-toggle__icon--table" aria-hidden="true">
           <svg
-            width="20"
-            height="20"
+            width="22"
+            height="22"
             viewBox="0 0 24 24"
             fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true">
+            xmlns="http://www.w3.org/2000/svg">
             <path
-              d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+              d="M4 9h16M4 15h16"
               stroke="currentColor"
               stroke-width="1.6"
-              stroke-linecap="round"
-              stroke-linejoin="round" />
-            <path
-              d="M21 3v5h-5"
+              stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="q-results-view-toggle__icon q-results-view-toggle__icon--carousel" aria-hidden="true">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <rect
+              x="3.5"
+              y="6"
+              width="9"
+              height="12"
+              rx="1.5"
+              stroke="currentColor"
+              stroke-width="1.6" />
+            <rect
+              x="11.5"
+              y="6"
+              width="9"
+              height="12"
+              rx="1.5"
               stroke="currentColor"
               stroke-width="1.6"
+              opacity="0.45" />
+          </svg>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <div class="q-bundle-views" id="q-bundle-views">
+    <div class="q-bundle-view q-bundle-view--carousel" id="q-bundle-view-carousel">
+      <div class="q-carousel-container">
+        <button
+          class="q-carousel-arrow q-carousel-arrow--prev"
+          id="qCarouselPrev"
+          aria-label="הקודם"
+          type="button">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M15 18L9 12L15 6"
+              stroke="currentColor"
+              stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round" />
           </svg>
         </button>
-        <button
-          type="button"
-          id="q-results-view-toggle"
-          class="q-results-view-toggle q-results-icon-btn q-results-icon-btn--menu"
-          aria-pressed="false"
-          aria-label="הצג תצוגת טבלה"
-          title="תצוגת טבלה">
-          <span class="q-results-view-toggle__icon q-results-view-toggle__icon--table" aria-hidden="true">
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M4 9h16M4 15h16"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round" />
-            </svg>
-          </span>
-          <span class="q-results-view-toggle__icon q-results-view-toggle__icon--carousel" aria-hidden="true">
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <rect
-                x="3.5"
-                y="6"
-                width="9"
-                height="12"
-                rx="1.5"
-                stroke="currentColor"
-                stroke-width="1.6" />
-              <rect
-                x="11.5"
-                y="6"
-                width="9"
-                height="12"
-                rx="1.5"
-                stroke="currentColor"
-                stroke-width="1.6"
-                opacity="0.45" />
-            </svg>
-          </span>
-        </button>
-      </div>
-    </header>
 
-    <div class="q-bundle-views" id="q-bundle-views">
-      <div class="q-bundle-view q-bundle-view--carousel" id="q-bundle-view-carousel">
-        <div class="q-carousel-container">
-          <button
-            class="q-carousel-arrow q-carousel-arrow--prev"
-            id="qCarouselPrev"
-            aria-label="הקודם"
-            type="button">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M15 18L9 12L15 6"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-          </button>
-
-          <div class="q-desktop-product-media">
-            <div class="q-carousel-viewport" id="qCarouselViewport">
-              <div class="q-carousel-track" id="Slider-questionnaireResultsGrid">
-                <!-- Product cards injected here by JS -->
-              </div>
-            </div>
-
-            <div class="questionnaire-selection-info">
-              <div
-                class="questionnaire-selection-info__thumbs"
-                id="q-selection-info-thumbs"
-                role="tablist"
-                aria-label="מוצרים במארז"></div>
+        <div class="q-desktop-product-media">
+          <div class="q-carousel-viewport" id="qCarouselViewport">
+            <div class="q-carousel-track" id="Slider-questionnaireResultsGrid">
+              <!-- Product cards injected here by JS -->
             </div>
           </div>
 
-          <button
-            class="q-carousel-arrow q-carousel-arrow--next"
-            id="qCarouselNext"
-            aria-label="הבא"
-            type="button">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M9 18L15 12L9 6"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-          </button>
+          <div class="questionnaire-selection-info">
+            <div
+              class="questionnaire-selection-info__thumbs"
+              id="q-selection-info-thumbs"
+              role="tablist"
+              aria-label="מוצרים במארז"></div>
+          </div>
         </div>
-      </div>
 
-      <div
-        class="q-bundle-view q-bundle-view--table"
-        id="q-bundle-view-table"
-        hidden>
-        <div
-          class="q-bundle-table-scroll"
-          role="region"
-          aria-label="פירוט מוצרים במארז">
-          <table class="q-bundle-table">
-            <thead>
-              <tr>
-                <th scope="col">רמת קלייה</th>
-                <th scope="col">טעם</th>
-                <th scope="col">מוצר</th>
-              </tr>
-            </thead>
-            <tbody id="q-bundle-table-body"></tbody>
-          </table>
-        </div>
+        <button
+          class="q-carousel-arrow q-carousel-arrow--next"
+          id="qCarouselNext"
+          aria-label="הבא"
+          type="button">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M9 18L15 12L9 6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
       </div>
     </div>
 
-    <div class="questionnaire-footer-content">
-      <div class="q-desktop-product-info" id="q-desktop-product-info">
-        <h3 class="q-desktop-product-name" id="q-desktop-product-name"></h3>
-        <p class="q-desktop-product-vendor" id="q-desktop-product-vendor"></p>
-        <div class="q-desktop-product-short-wrap">
-          <div class="q-desktop-product-short" id="q-desktop-product-short"></div>
-          <div
-            class="q-desktop-product-short-fade"
-            id="q-desktop-product-short-fade"
-            aria-hidden="true">&nbsp;</div>
-        </div>
-        <div class="q-desktop-product-taste" id="q-desktop-product-taste"></div>
-      </div>
-      <div class="questionnaire-qty-selector-wrapper">
-        <div
-          class="results-header-bundle results-header-bundle--above-qty"
-          role="group"
-          aria-label="בחירת מותג למארז">
-          <div class="results-vendor-select-wrap">
-            {% comment %} <div class="results-vendor-select__label" id="q-results-vendor-lbl">מותג קפה</div> {% endcomment %}
-            <div
-              class="results-vendor-dropdown"
-              id="q-results-vendor-dropdown"
-              dir="rtl"
-              data-open="false"
-              data-empty="true">
-              <button
-                type="button"
-                dir="rtl"
-                class="results-vendor-dropdown__trigger"
-                id="q-results-vendor-trigger"
-                aria-haspopup="listbox"
-                aria-expanded="false"
-                aria-controls="q-results-vendor-list"
-                aria-disabled="true"
-                disabled>
-                <span class="results-vendor-dropdown__trigger-body">
-                  <span class="results-vendor-dropdown__trigger-text" id="q-results-vendor-trigger-label">—</span>
-                  <span class="results-vendor-trigger__suffix">
-                    <span
-                      class="results-vendor-trigger__price"
-                      id="q-results-vendor-trigger-price"
-                      hidden></span>
-                    <span
-                      class="results-vendor-trigger__sep"
-                      id="q-results-vendor-trigger-sep"
-                      hidden
-                      aria-hidden="true">
-                      <svg
-                        class="results-vendor-trigger__sep-icon"
-                        width="10"
-                        height="10"
-                        viewBox="0 0 10 10"
-                        aria-hidden="true"
-                        focusable="false"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <circle
-                          cx="5"
-                          cy="5"
-                          r="3.5"
-                          fill="currentColor" />
-                      </svg>
-                    </span>
-                    <span
-                      class="results-vendor-trigger__weight"
-                      id="q-results-vendor-trigger-weight"
-                      hidden></span>
-                  </span>
-                </span>
-                <svg
-                  class="results-vendor-dropdown__chev"
-                  width="14"
-                  height="8"
-                  viewBox="0 0 14 8"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true">
-                  <path
-                    d="M1 1.5L7 6.5L13 1.5"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round" />
-                </svg>
-              </button>
-              <div
-                class="results-vendor-dropdown__panel"
-                id="q-results-vendor-panel"
-                dir="rtl"
-                hidden
-                data-position="bottom">
-                <div
-                  class="results-vendor-menu"
-                  id="q-results-vendor-menu"
-                  data-empty="true">
-                  <div
-                    class="results-vendor-menu__inner"
-                    id="q-results-vendor-list"
-                    role="listbox"
-                    aria-labelledby="q-results-vendor-lbl"
-                    aria-describedby="q-results-vendor-hint"></div>
-                </div>
-              </div>
-            </div>
-            <p id="q-results-vendor-hint" class="results-vendor-select__hint visually-hidden">
-              בחרו אחת משלושת ההתאמות. המחירים מחושבים לפי מארז וכמות החבילות. לחצו לפתיחת התפריט.
-            </p>
-          </div>
-        </div>
-        {% comment %} <div class="questionnaire-qty-label">חבילות קפה במארז</div> {% endcomment %}
-        <div
-          class="questionnaire-qty-options"
-          role="group"
-          aria-label="חבילות קפה במארז">
-          <button
-            type="button"
-            class="qty-option"
-            data-qty="3">
-            <span class="qty-option__stack">
-              <span class="qty-option__num">3 חבילות</span>
-            </span>
-          </button>
-          <button
-            type="button"
-            class="qty-option selected"
-            data-qty="5">
-            <span class="qty-option__stack">
-              <span class="qty-option__num">5 חבילות</span>
-            </span>
-          </button>
-          <button
-            type="button"
-            class="qty-option"
-            data-qty="7">
-            <span class="qty-option__stack">
-              <span class="qty-option__num">7 חבילות</span>
-            </span>
-          </button>
-        </div>
-      </div>
-
-      <div class="questionnaire-checkout-section">
-        <div class="questionnaire-checkout-row">
-          <div class="questionnaire-price-wrapper">
-            <div class="price-label-group">
-              <span class="price-label-main">סה״כ לתשלום</span>
-              <p class="price-shipping-note">כולל משלוח</p>
-            </div>
-            <div class="price-values-group">
-              <span class="price-line-primary">
-                <span class="price-current" id="q-footer-price"></span>
-                <span class="price-compare" id="q-footer-price-compare"></span>
-              </span>
-            </div>
-          </div>
-          <div class="questionnaire-add-to-cart-wrapper">
-            <div class="questionnaire-atc-actions">
-              <form
-                id="q-footer-atc-form"
-                class="form product-form--questionnaire"
-                method="post"
-                action="/cart/add"
-                novalidate
-                data-type="add-to-cart-form">
-                <input
-                  type="hidden"
-                  name="id"
-                  id="q-footer-variant-id"
-                  value="">
-                <button
-                  type="submit"
-                  name="add"
-                  id="q-footer-atc-btn"
-                  class="questionnaire-add-btn">
-                  <span id="q-footer-atc-label">רכישת המארז</span>
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="questionnaire-secure-info-wrapper">
-        <div class="payment-icons">
-          <img
-            src="{{ 'payment-mastercard.webp' | asset_url }}"
-            alt="Mastercard"
-            width="35"
-            height="24">
-          <img
-            src="{{ 'payment-google-pay.webp' | asset_url }}"
-            alt="Google Pay"
-            width="35"
-            height="24">
-          <img
-            src="{{ 'payment-visa.webp' | asset_url }}"
-            alt="Visa"
-            width="35"
-            height="24">
-          <img
-            src="{{ 'payment-apple-pay.webp' | asset_url }}"
-            alt="Apple Pay"
-            width="35"
-            height="24">
-            {% comment %} <img
-                          src="{{ 'payment-paypal.png' | asset_url }}"
-                          alt="PayPal"
-                          width="35"
-                        height="24"> {% endcomment %}
-          <img
-            src="{{ 'payment-max.webp' | asset_url }}"
-            alt="Max"
-            width="35"
-            height="24">
-        </div>
-        <div class="questionnaire-secure-icons" dir="rtl">
-          <div class="secure-text">רכישה מאובטחת</div>
-          <img
-            src="{{ 'secure_buy.png' | asset_url }}"
-            alt=""
-            width="24"
-            height="24"
-            class="questionnaire-secure-icons__lock"
-            role="presentation">
-        </div>
-      </div>
-
+    <div
+      class="q-bundle-view q-bundle-view--table"
+      id="q-bundle-view-table"
+      hidden>
       <div
-        id="q-bundle-review-drawer"
-        class="q-bundle-drawer"
-        hidden
-        role="dialog"
-        aria-modal="true"
-        aria-hidden="true"
-        aria-labelledby="q-bundle-drawer-title">
+        class="q-bundle-table-scroll"
+        role="region"
+        aria-label="פירוט מוצרים במארז">
+        <table class="q-bundle-table">
+          <thead>
+            <tr>
+              <th scope="col">רמת קלייה</th>
+              <th scope="col">טעם</th>
+              <th scope="col">מוצר</th>
+            </tr>
+          </thead>
+          <tbody id="q-bundle-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="questionnaire-footer-content">
+    <div class="q-desktop-product-info" id="q-desktop-product-info">
+      <h3 class="q-desktop-product-name" id="q-desktop-product-name"></h3>
+      <p class="q-desktop-product-vendor" id="q-desktop-product-vendor"></p>
+      <div class="q-desktop-product-short-wrap">
+        <div class="q-desktop-product-short" id="q-desktop-product-short"></div>
         <div
-          class="q-bundle-drawer__overlay"
-          tabindex="-1"
-          data-q-bundle-drawer-close></div>
-        <div class="q-bundle-drawer__panel">
-          <div class="q-bundle-drawer__header">
-            <h2 id="q-bundle-drawer-title" class="q-bundle-drawer__title">סיכום הזמנה</h2>
+          class="q-desktop-product-short-fade"
+          id="q-desktop-product-short-fade"
+          aria-hidden="true">&nbsp;</div>
+      </div>
+      <div class="q-desktop-product-taste" id="q-desktop-product-taste"></div>
+    </div>
+    <div class="questionnaire-qty-selector-wrapper">
+      <div
+        class="results-header-bundle results-header-bundle--above-qty"
+        role="group"
+        aria-label="בחירת מותג למארז">
+        <div class="results-vendor-select-wrap">
+          {% comment %} <div class="results-vendor-select__label" id="q-results-vendor-lbl">מותג קפה</div> {% endcomment %}
+          <div
+            class="results-vendor-dropdown"
+            id="q-results-vendor-dropdown"
+            dir="rtl"
+            data-open="false"
+            data-empty="true">
             <button
               type="button"
-              class="q-bundle-drawer__close"
-              aria-label="סגירה"
-              data-q-bundle-drawer-close>
+              dir="rtl"
+              class="results-vendor-dropdown__trigger"
+              id="q-results-vendor-trigger"
+              aria-haspopup="listbox"
+              aria-expanded="false"
+              aria-controls="q-results-vendor-list"
+              aria-disabled="true"
+              disabled>
+              <span class="results-vendor-dropdown__trigger-body">
+                <span class="results-vendor-dropdown__trigger-text" id="q-results-vendor-trigger-label">—</span>
+                <span class="results-vendor-trigger__suffix">
+                  <span
+                    class="results-vendor-trigger__price"
+                    id="q-results-vendor-trigger-price"
+                    hidden></span>
+                  <span
+                    class="results-vendor-trigger__sep"
+                    id="q-results-vendor-trigger-sep"
+                    hidden
+                    aria-hidden="true">
+                    <svg
+                      class="results-vendor-trigger__sep-icon"
+                      width="10"
+                      height="10"
+                      viewBox="0 0 10 10"
+                      aria-hidden="true"
+                      focusable="false"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <circle
+                        cx="5"
+                        cy="5"
+                        r="3.5"
+                        fill="currentColor" />
+                    </svg>
+                  </span>
+                  <span
+                    class="results-vendor-trigger__weight"
+                    id="q-results-vendor-trigger-weight"
+                    hidden></span>
+                </span>
+              </span>
               <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
+                class="results-vendor-dropdown__chev"
+                width="14"
+                height="8"
+                viewBox="0 0 14 8"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 aria-hidden="true">
                 <path
-                  d="M6 6L18 18M18 6L6 18"
+                  d="M1 1.5L7 6.5L13 1.5"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round" />
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
               </svg>
             </button>
-          </div>
-          <div class="q-bundle-drawer__body">
-            <div id="q-bundle-drawer-items" class="q-bundle-drawer__items"></div>
-          </div>
-          <div class="q-bundle-drawer__footer">
-            <div class="q-bundle-drawer__total-row">
-              <span class="q-bundle-drawer__total-label">סה״כ לתשלום</span>
-              <div class="q-bundle-drawer__total-values">
-                <div class="q-bundle-drawer__total-amount-line">
-                  <span class="q-bundle-drawer__total-value" id="q-bundle-drawer-total"></span>
-                  <span class="q-bundle-drawer__total-hint">(כולל משלוח)</span>
-                </div>
-                <div class="q-bundle-drawer__total-weight-line">
-                  <span class="q-bundle-drawer__total-weight" id="q-bundle-drawer-total-weight"></span>
-                  <span
-                    class="q-bundle-drawer__total-weight-note"
-                    id="q-bundle-drawer-total-weight-note"
-                    hidden>משקל כולל לחבילה</span>
-                </div>
+            <div
+              class="results-vendor-dropdown__panel"
+              id="q-results-vendor-panel"
+              dir="rtl"
+              hidden
+              data-position="bottom">
+              <div
+                class="results-vendor-menu"
+                id="q-results-vendor-menu"
+                data-empty="true">
+                <div
+                  class="results-vendor-menu__inner"
+                  id="q-results-vendor-list"
+                  role="listbox"
+                  aria-labelledby="q-results-vendor-lbl"
+                  aria-describedby="q-results-vendor-hint"></div>
               </div>
             </div>
-            <button
-              type="button"
-              id="q-bundle-drawer-checkout"
-              class="questionnaire-add-btn">
-              המשך לתשלום
-            </button>
-            <button
-              type="button"
-              id="q-bundle-drawer-continue-shopping"
-              class="questionnaire-add-btn questionnaire-add-btn--link">
-              <span id="q-bundle-drawer-shop-label">הוסף לסל והמשך לחנות</span>
-            </button>
           </div>
+          <p id="q-results-vendor-hint" class="results-vendor-select__hint visually-hidden">
+            בחרו אחת משלושת ההתאמות. המחירים מחושבים לפי מארז וכמות החבילות. לחצו לפתיחת התפריט.
+          </p>
         </div>
       </div>
-    </div>
-
-    <div
-      id="q-product-detail-modal"
-      class="q-product-modal"
-      hidden
-      role="dialog"
-      aria-modal="true"
-      aria-hidden="true"
-      aria-labelledby="q-product-modal-title">
+      {% comment %} <div class="questionnaire-qty-label">חבילות קפה במארז</div> {% endcomment %}
       <div
-        class="q-product-modal__backdrop"
-        tabindex="-1"
-        data-q-product-modal-close></div>
-      <div class="q-product-modal__panel">
+        class="questionnaire-qty-options"
+        role="group"
+        aria-label="חבילות קפה במארז">
         <button
           type="button"
-          class="q-product-modal__close"
-          aria-label="סגירה"
-          data-q-product-modal-close>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true">
-            <path
-              d="M6 6L18 18M18 6L6 18"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round" />
-          </svg>
+          class="qty-option"
+          data-qty="3">
+          <span class="qty-option__stack">
+            <span class="qty-option__num">3 חבילות</span>
+          </span>
         </button>
-        <div class="q-product-modal__body">
-          <div class="q-product-modal__media">
-            <img
-              id="q-product-modal-image"
-              class="q-product-modal__image"
-              src=""
-              alt=""
-              width="600"
-              height="600">
+        <button
+          type="button"
+          class="qty-option qty-option--with-discount selected"
+          data-qty="5">
+          <span class="qty-option__discount-badge" aria-hidden="true">5%</span>
+          <span class="qty-option__stack">
+            <span class="qty-option__num">5 חבילות</span>
+          </span>
+        </button>
+        <button
+          type="button"
+          class="qty-option qty-option--with-discount"
+          data-qty="7">
+          <span class="qty-option__discount-badge" aria-hidden="true">10%</span>
+          <span class="qty-option__stack">
+            <span class="qty-option__num">7 חבילות</span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="questionnaire-checkout-section">
+      <div class="questionnaire-checkout-row">
+        <div class="questionnaire-price-wrapper">
+          <div class="price-label-group">
+            <span class="price-label-main">סה״כ לתשלום</span>
+            <p class="price-shipping-note">כולל משלוח</p>
           </div>
-          <div class="q-product-modal__content">
-            <h2 id="q-product-modal-title" class="q-product-modal__title"></h2>
-            <p id="q-product-modal-vendor" class="q-product-modal__vendor"></p>
-            <p
-              id="q-product-modal-short"
-              class="q-product-modal__lead"
-              hidden></p>
-            <div
-              id="q-product-modal-chips"
-              class="q-product-modal__chips"
-              hidden></div>
+          <div class="price-values-group">
+            <span class="price-line-primary">
+              <span class="price-current" id="q-footer-price"></span>
+              <span class="price-compare" id="q-footer-price-compare"></span>
+            </span>
+          </div>
+        </div>
+        <div class="questionnaire-add-to-cart-wrapper">
+          <div class="questionnaire-atc-actions">
+            <form
+              id="q-footer-atc-form"
+              class="form product-form--questionnaire"
+              method="post"
+              action="/cart/add"
+              novalidate
+              data-type="add-to-cart-form">
+              <input
+                type="hidden"
+                name="id"
+                id="q-footer-variant-id"
+                value="">
+              <button
+                type="submit"
+                name="add"
+                id="q-footer-atc-btn"
+                class="questionnaire-add-btn">
+                <span id="q-footer-atc-label">רכישת המארז</span>
+              </button>
+            </form>
           </div>
         </div>
       </div>
     </div>
 
+    <div class="questionnaire-secure-info-wrapper">
+      <div class="payment-icons">
+        <img
+          src="{{ 'payment-mastercard.webp' | asset_url }}"
+          alt="Mastercard"
+          width="35"
+          height="24">
+        <img
+          src="{{ 'payment-google-pay.webp' | asset_url }}"
+          alt="Google Pay"
+          width="35"
+          height="24">
+        <img
+          src="{{ 'payment-visa.webp' | asset_url }}"
+          alt="Visa"
+          width="35"
+          height="24">
+        <img
+          src="{{ 'payment-apple-pay.webp' | asset_url }}"
+          alt="Apple Pay"
+          width="35"
+          height="24">
+          {% comment %} <img
+                                                  src="{{ 'payment-paypal.png' | asset_url }}"
+                                                  alt="PayPal"
+                                                  width="35"
+                                            height="24"> {% endcomment %}
+        <img
+          src="{{ 'payment-max.webp' | asset_url }}"
+          alt="Max"
+          width="35"
+          height="24">
+      </div>
+      <div class="questionnaire-secure-icons" dir="rtl">
+        <div class="secure-text">רכישה מאובטחת</div>
+        <img
+          src="{{ 'secure_buy.png' | asset_url }}"
+          alt=""
+          width="24"
+          height="24"
+          class="questionnaire-secure-icons__lock"
+          role="presentation">
+      </div>
+    </div>
+
     <div
-      id="q-restart-confirm-modal"
-      class="q-restart-confirm-modal"
+      id="q-bundle-review-drawer"
+      class="q-bundle-drawer"
       hidden
       role="dialog"
       aria-modal="true"
       aria-hidden="true"
-      aria-labelledby="q-restart-confirm-title">
+      aria-labelledby="q-bundle-drawer-title">
       <div
-        class="q-restart-confirm-modal__backdrop"
+        class="q-bundle-drawer__overlay"
         tabindex="-1"
-        data-q-restart-confirm-close></div>
-      <div class="q-restart-confirm-modal__panel">
-        <h2 id="q-restart-confirm-title" class="q-restart-confirm-modal__title">להתחיל מחדש?</h2>
-        <p class="q-restart-confirm-modal__text">
-          התוצאות הנוכחיות יימחקו ותחזרו לשאלון מתחילתו.
-        </p>
-        <div class="q-restart-confirm-modal__actions">
+        data-q-bundle-drawer-close></div>
+      <div class="q-bundle-drawer__panel">
+        <div class="q-bundle-drawer__header">
+          <h2 id="q-bundle-drawer-title" class="q-bundle-drawer__title">סיכום הזמנה</h2>
           <button
             type="button"
-            id="q-restart-confirm-accept"
+            class="q-bundle-drawer__close"
+            aria-label="סגירה"
+            data-q-bundle-drawer-close>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <path
+                d="M6 6L18 18M18 6L6 18"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+        <div class="q-bundle-drawer__body">
+          <div id="q-bundle-drawer-items" class="q-bundle-drawer__items"></div>
+        </div>
+        <div class="q-bundle-drawer__footer">
+          <div class="q-bundle-drawer__total-row">
+            <span class="q-bundle-drawer__total-label">סה״כ לתשלום</span>
+            <div class="q-bundle-drawer__total-values">
+              <div class="q-bundle-drawer__total-amount-line">
+                <span class="q-bundle-drawer__total-value" id="q-bundle-drawer-total"></span>
+                <span class="q-bundle-drawer__total-compare" id="q-bundle-drawer-total-compare"></span>
+                <span class="q-bundle-drawer__total-hint">(כולל משלוח)</span>
+              </div>
+              <div class="q-bundle-drawer__total-weight-line">
+                <span class="q-bundle-drawer__total-weight" id="q-bundle-drawer-total-weight"></span>
+                <span
+                  class="q-bundle-drawer__total-weight-note"
+                  id="q-bundle-drawer-total-weight-note"
+                  hidden>משקל כולל לחבילה</span>
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            id="q-bundle-drawer-checkout"
             class="questionnaire-add-btn">
-            להתחיל מחדש
+            המשך לתשלום
           </button>
           <button
             type="button"
-            id="q-restart-confirm-cancel"
-            class="questionnaire-add-btn questionnaire-add-btn--link"
-            data-q-restart-confirm-close>
-            ביטול
+            id="q-bundle-drawer-continue-shopping"
+            class="questionnaire-add-btn questionnaire-add-btn--link">
+            <span id="q-bundle-drawer-shop-label">הוסף לסל והמשך לחנות</span>
           </button>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-{%- assign default_continue_multiple = 'המשיכו עם [count] בחירות' -%}
-{%- assign continue_multiple_raw = section.settings.continue_multiple_text | default: default_continue_multiple -%}
-{%- assign continue_multiple_js = continue_multiple_raw | replace: '[count]', '{count}' -%}
-{%- assign redirect_collection_url = section.settings.redirect_collection | default: '/collections/all' -%}
-{%- assign close_redirect_url = section.settings.close_redirect | default: '/' -%}
-{%- assign select_btn_text = section.settings.select_button_text | default: 'בחרו אפשרות' -%}
-{%- assign continue_single_text = section.settings.continue_single_text | default: 'המשיכו עם בחירה אחת' -%}
-<div>
-  <div id="my-custom-results-area"></div>
-</div>
-{% paginate collections.all.products by 1000 %}
-  <script type="application/json" id="questionnaire-products-data">
+  <div
+    id="q-product-detail-modal"
+    class="q-product-modal"
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="q-product-modal-title">
+    <div
+      class="q-product-modal__backdrop"
+      tabindex="-1"
+      data-q-product-modal-close></div>
+    <div class="q-product-modal__panel">
+      <button
+        type="button"
+        class="q-product-modal__close"
+        aria-label="סגירה"
+        data-q-product-modal-close>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true">
+          <path
+            d="M6 6L18 18M18 6L6 18"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round" />
+        </svg>
+      </button>
+      <div class="q-product-modal__body">
+        <div class="q-product-modal__media">
+          <img
+            id="q-product-modal-image"
+            class="q-product-modal__image"
+            src=""
+            alt=""
+            width="600"
+            height="600">
+        </div>
+        <div class="q-product-modal__content">
+          <h2 id="q-product-modal-title" class="q-product-modal__title"></h2>
+          <p id="q-product-modal-vendor" class="q-product-modal__vendor"></p>
+          <p
+            id="q-product-modal-short"
+            class="q-product-modal__lead"
+            hidden></p>
+          <div
+            id="q-product-modal-chips"
+            class="q-product-modal__chips"
+            hidden></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="q-restart-confirm-modal"
+    class="q-restart-confirm-modal"
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="q-restart-confirm-title">
+    <div
+      class="q-restart-confirm-modal__backdrop"
+      tabindex="-1"
+      data-q-restart-confirm-close></div>
+    <div class="q-restart-confirm-modal__panel">
+      <h2 id="q-restart-confirm-title" class="q-restart-confirm-modal__title">להתחיל מחדש?</h2>
+      <p class="q-restart-confirm-modal__text">
+        התוצאות הנוכחיות יימחקו ותחזרו לשאלון מתחילתו.
+      </p>
+      <div class="q-restart-confirm-modal__actions">
+        <button
+          type="button"
+          id="q-restart-confirm-accept"
+          class="questionnaire-add-btn">
+          להתחיל מחדש
+        </button>
+        <button
+          type="button"
+          id="q-restart-confirm-cancel"
+          class="questionnaire-add-btn questionnaire-add-btn--link"
+          data-q-restart-confirm-close>
+          ביטול
+        </button>
+      </div>
+    </div>
+  </div>
+</div></div>{%- assign default_continue_multiple = 'המשיכו עם [count] בחירות' -%}{%- assign continue_multiple_raw = section.settings.continue_multiple_text | default: default_continue_multiple -%}{%- assign continue_multiple_js = continue_multiple_raw | replace: '[count]', '{count}' -%}{%- assign redirect_collection_url = section.settings.redirect_collection | default: '/collections/all' -%}{%- assign close_redirect_url = section.settings.close_redirect | default: '/' -%}{%- assign select_btn_text = section.settings.select_button_text | default: 'בחרו אפשרות' -%}{%- assign continue_single_text = section.settings.continue_single_text | default: 'המשיכו עם בחירה אחת' -%}<div>
+<div id="my-custom-results-area"></div></div>{% paginate collections.all.products by 1000 %}
+<script type="application/json" id="questionnaire-products-data">
     [
       {%- assign q_product_first = true -%}
       {% for product in collections.all.products %}
@@ -1213,9 +1626,7 @@
           {% endunless %}
       {% endfor %}
     ]
-  </script>
-{% endpaginate %}
-<script>
+</script>{% endpaginate %}<script>
   const questionnaireSettings = {
     redirectCollection: '{{ redirect_collection_url }}',
     closeRedirect: '{{ close_redirect_url }}',
@@ -1341,12 +1752,62 @@
   }
 
   const QUESTIONNAIRE_LINE_PROP_BUNDLE = '_questionnaire_bundle';
+  const QUESTIONNAIRE_LINE_PROP_BUNDLE_QTY_PRIVATE = '_questionnaire_bundle_qty';
+  const QUESTIONNAIRE_BUNDLE_QTY_DISCOUNTS = { 3: 0, 5: 5, 7: 10 };
+  let questionnaireCartHasCodeDiscount = false;
+
+  function refreshQuestionnaireCartDiscountState() {
+    return fetch('/cart.js', { headers: { Accept: 'application/json' } })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (cart) {
+        questionnaireCartHasCodeDiscount =
+          window.cartSingleDiscount &&
+          window.cartSingleDiscount.cartHasCartLevelDiscount(cart);
+      })
+      .catch(function () {
+        questionnaireCartHasCodeDiscount = false;
+      });
+  }
+
+  function questionnaireBundleQtyDiscountPercent(qty) {
+    const n = parseInt(qty, 10);
+    return Object.prototype.hasOwnProperty.call(QUESTIONNAIRE_BUNDLE_QTY_DISCOUNTS, n)
+      ? QUESTIONNAIRE_BUNDLE_QTY_DISCOUNTS[n]
+      : 0;
+  }
+
+  function applyQuestionnaireBundleQtyDiscount(amountCents, qty) {
+    if (questionnaireCartHasCodeDiscount) return amountCents;
+    const discountCents = questionnaireBundleDiscountCents(amountCents, qty);
+    return amountCents - discountCents;
+  }
+
+  function questionnaireBundleDiscountCents(amountCents, qty) {
+    if (questionnaireCartHasCodeDiscount) return 0;
+    const pct = questionnaireBundleQtyDiscountPercent(qty);
+    if (!pct || !amountCents) return 0;
+    return Math.round((amountCents * pct) / 100);
+  }
+
+  /** Coffee subtotal for the selected bundle qty (excludes shipping). */
+  function bundleTotalCentsForQuestionnaireProducts(products, qty) {
+    if (!Array.isArray(products) || !products.length) return 0;
+    const selectedQty = Math.max(0, parseInt(qty, 10) || 0);
+    if (!selectedQty) return 0;
+    let subtotalCents = 0;
+    products.slice(0, selectedQty).forEach(function (p) {
+      subtotalCents += p && p.price_cents ? p.price_cents : 0;
+    });
+    return subtotalCents;
+  }
 
   /** Per-vendor shipping (ILS) and free-shipping thresholds (cents); mirrors snippets/cart-drawer.liquid */
   const QUESTIONNAIRE_VENDOR_SHIPPING = {
     canopy: { shipping: 35, freeThresholdCents: 22500 },
     blooms: { shipping: 35, freeThresholdCents: 22000 },
-    youneedcoffee: { shipping: 55, freeThresholdCents: 25000 },
+    youneedcoffee: { shipping: 35, freeThresholdCents: 25000 },
     coffeeorg: { shipping: 35, freeThresholdCents: 25000 },
     coffeeculture: { shipping: 35, freeThresholdCents: 30000 },
     elijahscoffee: { shipping: 35, freeThresholdCents: 30000 },
@@ -1358,18 +1819,6 @@
   // Vendors temporarily excluded from questionnaire bundle results.
   // Remove a vendor from this list to restore it.
   const TEMPORARILY_EXCLUDED_VENDORS = ['coffeeculture'];
-
-  /** Mirrors footer bundle: avg price per matched product × qty (subtotal, no shipping). */
-  function bundleTotalCentsForQuestionnaireProducts(products, qty) {
-    if (!Array.isArray(products) || !products.length) return 0;
-    const n = products.length;
-    let sumCents = 0;
-    products.forEach(function (p) {
-      sumCents += p.price_cents || 0;
-    });
-    const avgCents = sumCents / n;
-    return Math.round(avgCents * qty);
-  }
 
   function questionnaireVendorKeyForBundle(products, vendorKey) {
     if (vendorKey != null && String(vendorKey).trim()) {
@@ -1392,11 +1841,39 @@
     return cfg.shipping * 100;
   }
 
-  /** Subtotal + vendor shipping (matches cart-drawer adjusted total for a single vendor). */
-  function bundleTotalWithShippingCentsForQuestionnaireProducts(products, qty, vendorKey) {
+  /**
+   * Bundle pricing breakdown for questionnaire summary.
+   * The 5%/10% discount applies only to the coffee price, never to shipping.
+   */
+  function questionnaireBundlePriceBreakdown(products, qty, vendorKey) {
     const subtotalCents = bundleTotalCentsForQuestionnaireProducts(products, qty);
     const vk = questionnaireVendorKeyForBundle(products, vendorKey);
-    return subtotalCents + questionnaireShippingCentsForVendor(vk, subtotalCents);
+    // Discount applies only to the coffee price, never to shipping.
+    const discountCents = questionnaireBundleDiscountCents(subtotalCents, qty);
+    const discountedSubtotalCents = subtotalCents - discountCents;
+    // Free-shipping eligibility is based on what the customer actually pays for coffee
+    // (post-discount), not the pre-discount price.
+    const shippingCents = questionnaireShippingCentsForVendor(vk, discountedSubtotalCents);
+    const compareShippingCents = questionnaireShippingCentsForVendor(vk, subtotalCents);
+    const compareCents = subtotalCents + compareShippingCents;
+    const totalCents = discountedSubtotalCents + shippingCents;
+    return {
+      subtotalCents: subtotalCents,
+      discountCents: discountCents,
+      shippingCents: shippingCents,
+      totalCents: totalCents,
+      compareCents: compareCents,
+    };
+  }
+
+  /** Subtotal + vendor shipping (matches cart-drawer adjusted total for a single vendor). */
+  function bundleTotalWithShippingCentsForQuestionnaireProducts(products, qty, vendorKey) {
+    return questionnaireBundlePriceBreakdown(products, qty, vendorKey).totalCents;
+  }
+
+  /** Undiscounted coffee + shipping (for compare / strikethrough prices). */
+  function bundleCompareTotalWithShippingCentsForQuestionnaireProducts(products, qty, vendorKey) {
+    return questionnaireBundlePriceBreakdown(products, qty, vendorKey).compareCents;
   }
 
   function coffeesForVendorFromPositiveScores(positiveScores, vendorKeyLower) {
@@ -2195,7 +2672,8 @@
   }
 
   function formatQuestionnaireMoney(cents) {
-    return '\u20AA' + (cents / 100).toFixed(0);
+    // Never show cents/agorot to the customer: always round the price up.
+    return '\u20AA' + Math.ceil((cents || 0) / 100);
   }
 
   function updateQuestionnaireQtyOptionWeights() {
@@ -2400,7 +2878,9 @@
       var vendorQty = getQuestionnaireResultsBundleQty();
       trackQuestionnaireAnalyticsClick('Quiz - Choose vendor', {
         'Vendor Chosen': getQuestionnaireVendorDisplayName(raw),
-        Price: formatQuestionnaireMoney(bundleTotalWithShippingCentsForQuestionnaireProducts(next, vendorQty)),
+        Price: formatQuestionnaireMoney(
+          bundleTotalWithShippingCentsForQuestionnaireProducts(next, vendorQty, raw.toLowerCase())
+        ),
         'Bundle size': vendorQty,
       });
       saveResultsState(next);
@@ -3475,24 +3955,16 @@
     // ── Bundle price helpers ──────────────────────────────────────────────
     function updateBundlePrice() {
       if (!products || products.length === 0) return;
-      const qty = getQuestionnaireResultsBundleQty();
-      const n = products.length;
-
-      // Each carousel product counts as 1. The qty selector is the total number
-      // of products in the bundle (3, 5, or 7). We compute the average price per
-      // product across all matched results, then multiply by qty.
-      let sumCompareCents = 0;
-      products.forEach(function (p) {
-        sumCompareCents += p.price_cents || 0;
+      refreshQuestionnaireCartDiscountState().then(function () {
+        updateBundlePriceDisplay();
       });
+    }
 
-      const avgCompareCents = sumCompareCents / n;
-      const subtotalCompareCents = Math.round(avgCompareCents * qty);
+    function updateBundlePriceDisplay() {
+      if (!products || products.length === 0) return;
+      const qty = getQuestionnaireResultsBundleQty();
       const vendorKey = questionnaireVendorKeyForBundle(products);
-      const totalCompareCents =
-        subtotalCompareCents + questionnaireShippingCentsForVendor(vendorKey, subtotalCompareCents);
-
-      const totalCents = bundleTotalWithShippingCentsForQuestionnaireProducts(products, qty);
+      const priceBreakdown = questionnaireBundlePriceBreakdown(products, qty, vendorKey);
 
       const priceEl = document.getElementById('q-footer-price');
       const compareEl = document.getElementById('q-footer-price-compare');
@@ -3500,11 +3972,11 @@
       const triggerSepEl = document.getElementById('q-results-vendor-trigger-sep');
       const triggerWeightEl = document.getElementById('q-results-vendor-trigger-weight');
 
-      if (priceEl) priceEl.textContent = formatQuestionnaireMoney(totalCents);
+      if (priceEl) priceEl.textContent = formatQuestionnaireMoney(priceBreakdown.totalCents);
 
       if (compareEl) {
-        if (totalCompareCents > totalCents) {
-          compareEl.textContent = formatQuestionnaireMoney(totalCompareCents);
+        if (priceBreakdown.discountCents > 0 && priceBreakdown.compareCents > priceBreakdown.totalCents) {
+          compareEl.textContent = formatQuestionnaireMoney(priceBreakdown.compareCents);
           compareEl.style.display = '';
         } else {
           compareEl.textContent = '';
@@ -3514,7 +3986,7 @@
 
       if (triggerPriceEl) {
         if (products && products.length) {
-          triggerPriceEl.textContent = formatQuestionnaireMoney(totalCents);
+          triggerPriceEl.textContent = formatQuestionnaireMoney(priceBreakdown.totalCents);
           triggerPriceEl.hidden = false;
         } else {
           triggerPriceEl.textContent = '';
@@ -3875,7 +4347,9 @@
         byVariant[vid] = (byVariant[vid] || 0) + 1;
       });
       const bundleProps = {};
+      const bundleQty = getQuestionnaireResultsBundleQty();
       bundleProps[QUESTIONNAIRE_LINE_PROP_BUNDLE] = 'true';
+      bundleProps[QUESTIONNAIRE_LINE_PROP_BUNDLE_QTY_PRIVATE] = String(bundleQty);
       return Object.keys(byVariant).map(function (vid) {
         return {
           id: Number(vid),
@@ -3897,19 +4371,41 @@
       const drawer = document.getElementById('q-bundle-review-drawer');
       const itemsEl = document.getElementById('q-bundle-drawer-items');
       const totalEl = document.getElementById('q-bundle-drawer-total');
+      const totalCompareEl = document.getElementById('q-bundle-drawer-total-compare');
       const totalWeightEl = document.getElementById('q-bundle-drawer-total-weight');
       const totalWeightNoteEl = document.getElementById('q-bundle-drawer-total-weight-note');
       if (!drawer || !itemsEl || !totalEl) return;
 
       trackQuestionnaireAnalyticsClick('Quiz - Purchase Bundle', getQuestionnaireBundlePurchaseProps(products));
 
+      refreshQuestionnaireCartDiscountState().then(function () {
+        renderQuestionnaireBundleReviewDrawer(
+          drawer,
+          itemsEl,
+          totalEl,
+          totalCompareEl,
+          totalWeightEl,
+          totalWeightNoteEl
+        );
+      });
+    }
+
+    function renderQuestionnaireBundleReviewDrawer(
+      drawer,
+      itemsEl,
+      totalEl,
+      totalCompareEl,
+      totalWeightEl,
+      totalWeightNoteEl
+    ) {
       const qty = getQuestionnaireResultsBundleQty();
+      const vendorKey = questionnaireVendorKeyForBundle(products);
+      const priceBreakdown = questionnaireBundlePriceBreakdown(products, qty, vendorKey);
       let totalGrams = 0;
       products.forEach(function (p) {
         if (!p) return;
         totalGrams += p.weight_grams || 0;
       });
-      const totalCents = bundleTotalWithShippingCentsForQuestionnaireProducts(products, qty);
 
       itemsEl.innerHTML = products
         .map(function (p) {
@@ -3939,7 +4435,16 @@
         })
         .join('');
 
-      totalEl.textContent = formatQuestionnaireMoney(totalCents);
+      totalEl.textContent = formatQuestionnaireMoney(priceBreakdown.totalCents);
+      if (totalCompareEl) {
+        if (priceBreakdown.discountCents > 0 && priceBreakdown.compareCents > priceBreakdown.totalCents) {
+          totalCompareEl.textContent = formatQuestionnaireMoney(priceBreakdown.compareCents);
+          totalCompareEl.hidden = false;
+        } else {
+          totalCompareEl.textContent = '';
+          totalCompareEl.hidden = true;
+        }
+      }
       if (totalWeightEl) {
         totalWeightEl.textContent =
           totalGrams > 0 ? formatQuestionnaireBundleWeightKg(totalGrams) : '—';
@@ -3986,19 +4491,31 @@
 
       trackQuestionnaireAnalyticsClick('Quiz - Finish Purchase', getQuestionnaireBundlePurchaseProps(products));
 
-      fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: items }),
-      })
-        .then(function (response) {
-          if (!response.ok) {
-            return response.json().then(function (err) {
-              throw err;
-            });
-          }
-          return response.json();
+      function addBundleItemsToCart() {
+        return fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: items }),
         })
+          .then(function (response) {
+            if (!response.ok) {
+              return response.json().then(function (err) {
+                throw err;
+              });
+            }
+            return response.json();
+          });
+      }
+
+      function clearExistingCartDiscount() {
+        if (!window.cartSingleDiscount?.clearCartLevelDiscount) {
+          return Promise.resolve();
+        }
+        return window.cartSingleDiscount.clearCartLevelDiscount().catch(function () {});
+      }
+
+      clearExistingCartDiscount()
+        .then(addBundleItemsToCart)
         .then(function () {
           if (redirectUrl === '/checkout') {
             clearResultsState();
@@ -4688,104 +5205,101 @@
     }
     requestAnimationFrame(frame);
   })();
-</script>
-
-{% schema %}
-  {
-    "name": "Main Questionnaire",
-    "tag": "section",
-    "class": "main-questionnaire-section",
-    "settings": [
-      {
-        "type": "header",
-        "content": "מסך פתיחה (תצוגה מקדימה)"
-      },
-      {
-        "type": "text",
-        "id": "intro_title",
-        "label": "כותרת מסך פתיחה",
-        "default": "בואו נרכיב לכם מארז קפה מותאם אישית"
-      },
-      {
-        "type": "richtext",
-        "id": "intro_description",
-        "label": "תיאור מסך פתיחה",
-        "default": "<p>ענו על 3 שאלות קצרות לגבי ההעדפות שלכם בקפה, וקבלו מבחר מארזים מוכנים במיוחד בשבילכם - עם מחיר סופי שכולל משלוח עד הבית.</p><p>לכם נשאר רק לבחור – ולהתחיל ליהנות מקפה מעולה בקלייה מקומית טרייה.</p>"
-      },
-      {
-        "type": "text",
-        "id": "intro_button_text",
-        "label": "טקסט כפתור מסך פתיחה",
-        "default": "קדימה, בואו נתחיל"
-      }, {
-        "type": "text",
-        "id": "intro_social_text",
-        "label": "טקסט המלצה חברתית",
-        "default": "מאות לקוחות מרוצים"
-      }, {
-        "type": "header",
-        "content": "כותרות שלבי השאלון"
-      }, {
-        "type": "text",
-        "id": "step1_title",
-        "label": "כותרת שלב 1 - שיטת הכנה",
-        "default": "איך אתם מכינים את הקפה?"
-      }, {
-        "type": "text",
-        "id": "step2_title",
-        "label": "כותרת שלב 2 - דרגת קלייה",
-        "default": "בחרו דרגת קלייה מועדפת"
-      }, {
-        "type": "text",
-        "id": "step3_title",
-        "label": "כותרת שלב 3 - טעמים",
-        "default": "בחרו טעמים מועדפים"
-      }, {
-        "type": "header",
-        "content": "טקסטים לכפתורים"
-      }, {
-        "type": "text",
-        "id": "select_button_text",
-        "label": "טקסט כפתור בחירה (ברירת מחדל)",
-        "default": "בחרו אפשרות"
-      }, {
-        "type": "text",
-        "id": "continue_single_text",
-        "label": "טקסט המשך עם בחירה אחת",
-        "default": "המשיכו עם בחירה אחת"
-      }, {
-        "type": "text",
-        "id": "continue_multiple_text",
-        "label": "טקסט המשך עם מספר בחירות",
-        "default": "המשיכו עם [count] בחירות",
-        "info": "השתמשו ב-[count] כדי להציג את מספר הבחירות"
-      }, {
-        "type": "header",
-        "content": "מסך טעינה"
-      }, {
-        "type": "text",
-        "id": "loader_text",
-        "label": "טקסט טעינה",
-        "default": "מתאימים את פולי הקפה בדיוק בשבילך"
-      }, {
-        "type": "header",
-        "content": "הגדרות ניווט"
-      }, {
-        "type": "url",
-        "id": "redirect_collection",
-        "label": "קולקציה להפניה אחרי השאלון",
-        "info": "ברירת מחדל: /collections/all"
-      }, {
-        "type": "url",
-        "id": "close_redirect",
-        "label": "הפניה בסגירת השאלון",
-        "info": "ברירת מחדל: דף הבית"
-      }
-    ],
-    "presets": [
-      {
-        "name": "Main Questionnaire"
-      }
-    ]
-  }
-{% endschema %}
+</script>{% schema %}
+{
+  "name": "Main Questionnaire",
+  "tag": "section",
+  "class": "main-questionnaire-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "מסך פתיחה (תצוגה מקדימה)"
+    },
+    {
+      "type": "text",
+      "id": "intro_title",
+      "label": "כותרת מסך פתיחה",
+      "default": "בואו נרכיב לכם מארז קפה מותאם אישית"
+    },
+    {
+      "type": "richtext",
+      "id": "intro_description",
+      "label": "תיאור מסך פתיחה",
+      "default": "<p>ענו על 3 שאלות קצרות לגבי ההעדפות שלכם בקפה, וקבלו מבחר מארזים מוכנים במיוחד בשבילכם - עם מחיר סופי שכולל משלוח עד הבית.</p><p>לכם נשאר רק לבחור – ולהתחיל ליהנות מקפה מעולה בקלייה מקומית טרייה.</p>"
+    },
+    {
+      "type": "text",
+      "id": "intro_button_text",
+      "label": "טקסט כפתור מסך פתיחה",
+      "default": "קדימה, בואו נתחיל"
+    }, {
+      "type": "text",
+      "id": "intro_social_text",
+      "label": "טקסט המלצה חברתית",
+      "default": "מאות לקוחות מרוצים"
+    }, {
+      "type": "header",
+      "content": "כותרות שלבי השאלון"
+    }, {
+      "type": "text",
+      "id": "step1_title",
+      "label": "כותרת שלב 1 - שיטת הכנה",
+      "default": "איך אתם מכינים את הקפה?"
+    }, {
+      "type": "text",
+      "id": "step2_title",
+      "label": "כותרת שלב 2 - דרגת קלייה",
+      "default": "בחרו דרגת קלייה מועדפת"
+    }, {
+      "type": "text",
+      "id": "step3_title",
+      "label": "כותרת שלב 3 - טעמים",
+      "default": "בחרו טעמים מועדפים"
+    }, {
+      "type": "header",
+      "content": "טקסטים לכפתורים"
+    }, {
+      "type": "text",
+      "id": "select_button_text",
+      "label": "טקסט כפתור בחירה (ברירת מחדל)",
+      "default": "בחרו אפשרות"
+    }, {
+      "type": "text",
+      "id": "continue_single_text",
+      "label": "טקסט המשך עם בחירה אחת",
+      "default": "המשיכו עם בחירה אחת"
+    }, {
+      "type": "text",
+      "id": "continue_multiple_text",
+      "label": "טקסט המשך עם מספר בחירות",
+      "default": "המשיכו עם [count] בחירות",
+      "info": "השתמשו ב-[count] כדי להציג את מספר הבחירות"
+    }, {
+      "type": "header",
+      "content": "מסך טעינה"
+    }, {
+      "type": "text",
+      "id": "loader_text",
+      "label": "טקסט טעינה",
+      "default": "מתאימים את פולי הקפה בדיוק בשבילך"
+    }, {
+      "type": "header",
+      "content": "הגדרות ניווט"
+    }, {
+      "type": "url",
+      "id": "redirect_collection",
+      "label": "קולקציה להפניה אחרי השאלון",
+      "info": "ברירת מחדל: /collections/all"
+    }, {
+      "type": "url",
+      "id": "close_redirect",
+      "label": "הפניה בסגירת השאלון",
+      "info": "ברירת מחדל: דף הבית"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Main Questionnaire"
+    }
+  ]
+}{% endschema %}

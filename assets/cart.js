@@ -235,7 +235,7 @@ class CartItems extends HTMLElement {
         }
         return response.text();
       })
-      .then((state) => {
+      .then(async (state) => {
         // console.log('Cart update response:', state);
 
         let parsedState;
@@ -271,6 +271,24 @@ class CartItems extends HTMLElement {
 
           this.updateLiveRegions(lineNumber, errorMessage);
           return;
+        }
+
+        if (typeof window.syncVendorBundleDiscountProperties === 'function') {
+          try {
+            const syncResult = await window.syncVendorBundleDiscountProperties(parsedState);
+            if (syncResult.changed) {
+              parsedState.items = syncResult.cart.items;
+              parsedState.item_count = syncResult.cart.item_count;
+              parsedState.total_price = syncResult.cart.total_price;
+
+              const sectionsHtml = await fetch(
+                `${routes.cart_url}?sections=${sectionsToRequest.join(',')}`
+              ).then((response) => response.json());
+              parsedState.sections = { ...(parsedState.sections || {}), ...sectionsHtml };
+            }
+          } catch (syncError) {
+            console.error('Bundle discount sync failed:', syncError);
+          }
         }
 
         // Validate response structure

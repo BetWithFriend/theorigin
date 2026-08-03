@@ -1,0 +1,64 @@
+{%- comment -%}
+  Calculates total cart bundle quantity discount across all vendors.
+  Per vendor: 5+ items → 5%; 7+ items → 10%.
+  discount_percent is set only when every qualifying vendor uses the same rate.
+  Outputs pipe-separated:
+  discount_cents|discount_percent|bundle_subtotal_cents|shopify_applied
+{%- endcomment -%}
+{%- liquid
+  assign q_bundle_subtotal = 0
+  assign q_bundle_discount_percent = 0
+  assign q_bundle_discount_cents = 0
+  assign q_bundle_discount_percents = ''
+  assign q_bundle_vendors = ''
+  assign q_bundle_shopify_applied = 0
+
+  for item in cart.items
+    unless q_bundle_vendors contains item.vendor
+      assign q_bundle_vendors = q_bundle_vendors | append: item.vendor | append: ','
+    endunless
+  endfor
+
+  assign q_bundle_vendor_array = q_bundle_vendors | split: ',' | uniq
+
+  for vendor in q_bundle_vendor_array
+    if vendor != blank
+      capture vendor_discount_data
+        render 'vendor-bundle-discount', vendor: vendor
+      endcapture
+      assign vendor_discount_parts = vendor_discount_data | split: '|'
+      assign vendor_discount_cents = vendor_discount_parts[0] | plus: 0
+      assign vendor_discount_percent = vendor_discount_parts[1] | plus: 0
+      assign vendor_subtotal = vendor_discount_parts[2] | plus: 0
+      assign vendor_shopify_applied = vendor_discount_parts[4] | plus: 0
+
+      assign q_bundle_discount_cents = q_bundle_discount_cents | plus: vendor_discount_cents
+      assign q_bundle_subtotal = q_bundle_subtotal | plus: vendor_subtotal
+
+      if vendor_shopify_applied > 0
+        assign q_bundle_shopify_applied = 1
+      endif
+
+      if vendor_discount_percent > 0
+        assign percent_token = vendor_discount_percent | append: ','
+        unless q_bundle_discount_percents contains percent_token
+          assign q_bundle_discount_percents = q_bundle_discount_percents | append: percent_token
+        endunless
+      endif
+    endif
+  endfor
+
+  assign q_bundle_percent_parts = q_bundle_discount_percents | split: ','
+  assign q_bundle_unique_percent_count = 0
+  for part in q_bundle_percent_parts
+    if part != blank
+      assign q_bundle_unique_percent_count = q_bundle_unique_percent_count | plus: 1
+      assign q_bundle_discount_percent = part | plus: 0
+    endif
+  endfor
+
+  if q_bundle_unique_percent_count != 1
+    assign q_bundle_discount_percent = 0
+  endif
+-%}
+{{- q_bundle_discount_cents -}}|{{- q_bundle_discount_percent -}}|{{- q_bundle_subtotal -}}|{{- q_bundle_shopify_applied -}}
