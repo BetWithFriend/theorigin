@@ -758,6 +758,25 @@ body.questionnaire-wrapper-open .header.header--middle-center.header--mobile-cen
     color: #6b6b6b;
 }
 
+/* Shown next to a product that appears more than once in a bundle (e.g. ×2). */
+.q-product-multiplier-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: #43c7b4;
+    color: #ffffff;
+    font-family: 'Assistant', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.6;
+    white-space: nowrap;
+    vertical-align: middle;
+    margin-inline-start: 4px;
+}
+
 .questionnaire-product-title__icon {
     display: block;
     width: 18px;

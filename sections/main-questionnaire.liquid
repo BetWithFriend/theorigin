@@ -1877,10 +1877,18 @@
     return questionnaireBundlePriceBreakdown(products, qty, vendorKey).compareCents;
   }
 
-  function coffeesForVendorFromPositiveScores(positiveScores, vendorKeyLower) {
+  /**
+   * Coffees for a vendor, best-first. When the vendor doesn't have enough distinct
+   * products to reach `qty`, the top-scoring ones are repeated (capped at 2x each) —
+   * mirrors QuestionnaireScoring's buildBundleItemsForSize so every code path that
+   * falls back to this helper (dropdown, sorting, etc.) shows the same product/weight
+   * total as the primary bundle-building path.
+   */
+  function coffeesForVendorFromPositiveScores(positiveScores, vendorKeyLower, qty) {
     const v = (vendorKeyLower || '').toLowerCase();
+    const targetQty = qty || 8;
     if (!Array.isArray(positiveScores)) return [];
-    return positiveScores
+    const distinct = positiveScores
       .filter(function (item) {
         return item.coffee && (item.coffee.vendor || '').trim().toLowerCase() === v;
       })
@@ -1892,8 +1900,16 @@
       })
       .map(function (item) {
         return item.coffee;
-      })
-      .slice(0, 8);
+      });
+
+    if (!distinct.length) return [];
+    if (distinct.length >= targetQty) return distinct.slice(0, targetQty);
+    const extraCount = Math.min(targetQty - distinct.length, distinct.length);
+    const result = distinct.slice();
+    for (let i = 0; i < extraCount; i++) {
+      result.push(distinct[i]);
+    }
+    return result;
   }
 
   /* ——— QuestionnaireScoring engine ——— */
@@ -2159,14 +2175,28 @@
       return out;
     }
 
-    function padItemsToSize(items, size) {
+    /**
+     * Builds a bundle of `size` items from a vendor's (already best-first sorted) item list.
+     * When there aren't enough distinct items to fill `size`, the top-scoring items are
+     * repeated to make up the difference — but each item is capped at appearing twice
+     * (i.e. no more than 2x the same product). If even doubling every item can't reach
+     * `size`, the result is simply shorter than `size`.
+     */
+    function buildBundleItemsForSize(items, size) {
+      if (!Array.isArray(items) || !items.length) return [];
       if (items.length >= size) return items.slice(0, size);
-      const result = items.slice();
-      const byScore = items.slice().sort(function (a, b) { return b.score - a.score; });
-      for (let i = 0; result.length < size; i++) {
-        result.push(byScore[i % byScore.length]);
+      const distinct = items.slice();
+      const extraCount = Math.min(size - distinct.length, distinct.length);
+      const result = distinct.slice();
+      for (let i = 0; i < extraCount; i++) {
+        result.push(distinct[i]);
       }
       return result;
+    }
+
+    function rotateToFront(arr, idx) {
+      if (idx === 0 || arr.length === 0) return arr;
+      return arr.slice(idx).concat(arr.slice(0, idx));
     }
 
     function arrangeInitialVendors(topFor2, topFor4, topFor8) {
@@ -2195,16 +2225,57 @@
         }
       }
 
-      function rotateToFront(arr, idx) {
-        if (idx === 0 || arr.length === 0) return arr;
-        return arr.slice(idx).concat(arr.slice(0, idx));
-      }
-
       return {
         topFor2: rotateToFront(topFor2, bestIdx[0]),
         topFor4: rotateToFront(topFor4, bestIdx[1]),
         topFor8: rotateToFront(topFor8, bestIdx[2]),
       };
+    }
+
+    function distinctCoffeeIds(bundleItems) {
+      const ids = new Set();
+      (bundleItems || []).forEach(function (item) {
+        if (item && item.coffee && item.coffee.id != null) ids.add(item.coffee.id);
+      });
+      return ids;
+    }
+
+    /**
+     * When the same vendor ends up as the default pick for both the 4-pack and the
+     * 8-pack, the 8-pack shouldn't just be "the 4-pack, doubled" — it should include
+     * at least MIN_NEW_ITEMS products the customer doesn't already see in the 4-pack.
+     * If that vendor can't offer enough extra products, prefer a different vendor for
+     * the 8-pack instead (falling back to the same vendor only if there's no alternative).
+     */
+    function ensureEightPackDiffersFromFourPack(topFor4, topFor8, topFor2) {
+      const MIN_NEW_ITEMS = 2;
+      if (!topFor4.length || topFor8.length < 2) return topFor8;
+
+      const vendor4 = (topFor4[0].vendor || '').toLowerCase();
+      const vendor8 = (topFor8[0].vendor || '').toLowerCase();
+      if (vendor4 !== vendor8) return topFor8;
+
+      const ids4 = distinctCoffeeIds(topFor4[0].bundleItems);
+      const ids8 = distinctCoffeeIds(topFor8[0].bundleItems);
+      let newCount = 0;
+      ids8.forEach(function (id) { if (!ids4.has(id)) newCount++; });
+      if (newCount >= MIN_NEW_ITEMS) return topFor8;
+
+      const vendor2 = topFor2 && topFor2[0] ? (topFor2[0].vendor || '').toLowerCase() : null;
+
+      // Prefer an alternative that also avoids the 2-pack's vendor; fall back to any
+      // vendor different from the 4-pack's if that's not possible.
+      let altIndex = topFor8.findIndex(function (v, idx) {
+        const vk = (v.vendor || '').toLowerCase();
+        return idx > 0 && vk !== vendor4 && vk !== vendor2;
+      });
+      if (altIndex === -1) {
+        altIndex = topFor8.findIndex(function (v, idx) {
+          return idx > 0 && (v.vendor || '').toLowerCase() !== vendor4;
+        });
+      }
+      if (altIndex === -1) return topFor8;
+      return rotateToFront(topFor8, altIndex);
     }
 
     function buildVendorBundles(withScores, thresholds, options) {
@@ -2246,16 +2317,26 @@
       });
 
       function topItemsForVendor(vg, size) {
-        if (!hasRoastSelection) return vg.items.slice(0, size);
-        const roastMatched = vg.items.filter(function (item) { return item.roastPriority > 0; });
-        if (roastMatched.length >= size) return roastMatched.slice(0, size);
-        return vg.items.slice(0, size);
+        if (hasRoastSelection) {
+          const roastMatched = vg.items.filter(function (item) { return item.roastPriority > 0; });
+          if (roastMatched.length >= size) return roastMatched.slice(0, size);
+        }
+        return buildBundleItemsForSize(vg.items, size);
+      }
+
+      // Minimum distinct products a vendor needs to be considered for a bundle of `size`.
+      // The 8-pack specifically requires at least 5 distinct products (not just half of 8)
+      // so it never degenerates into a small set of products repeated too many times.
+      function minDistinctForSize(size) {
+        if (size === 8) return 5;
+        return Math.ceil(size / 2);
       }
 
       function getTopVendorsForSize(size) {
         const minBundle = relaxForShowAll ? 0 : Number(th.minBundleScore[size]) || 0;
+        const minDistinct = minDistinctForSize(size);
         const candidates = Object.values(vendorGroups)
-          .filter(function (vg) { return vg.items.length >= size; })
+          .filter(function (vg) { return vg.items.length >= minDistinct; })
           .map(function (vg) {
             const topItems = topItemsForVendor(vg, size);
             const bundleScore = topItems.reduce(function (s, item) { return s + item.score; }, 0);
@@ -2287,32 +2368,28 @@
       }
 
       function getFallbackVendorsForSize(size) {
-        const withEnoughItems = Object.values(vendorGroups).filter(function (vg) { return vg.items.length >= size; });
-        if (withEnoughItems.length > 0) {
-          return withEnoughItems
-            .map(function (vg) {
-              const topItems = topItemsForVendor(vg, size);
-              const bundleScore = topItems.reduce(function (s, item) { return s + item.score; }, 0);
-              const roastHits = topItems.reduce(function (s, item) { return s + (item.roastPriority > 0 ? 1 : 0); }, 0);
-              return { vendor: vg.vendor, items: vg.items, bundleScore: bundleScore, roastHits: roastHits, size: size, bundleItems: topItems };
-            })
-            .sort(function (a, b) {
-              if (b.roastHits !== a.roastHits) return b.roastHits - a.roastHits;
-              return b.bundleScore - a.bundleScore;
-            })
-            .slice(0, 3);
-        }
-
-        return Object.values(vendorGroups)
+        // Prefer vendors whose bundle actually reaches `size` (whether via enough distinct
+        // items or via capped doubling), then fall back to whoever gets closest.
+        const minDistinct = minDistinctForSize(size);
+        const allCandidates = Object.values(vendorGroups)
           .filter(function (vg) { return vg.items.length > 0; })
           .map(function (vg) {
-            const paddedItems = padItemsToSize(vg.items, size);
-            const bundleScore = paddedItems.reduce(function (s, item) { return s + item.score; }, 0);
-            const roastHits = paddedItems.reduce(function (s, item) { return s + (item.roastPriority > 0 ? 1 : 0); }, 0);
-            return { vendor: vg.vendor, items: vg.items, bundleScore: bundleScore, roastHits: roastHits, size: size, bundleItems: paddedItems };
-          })
+            const bundleItems = buildBundleItemsForSize(vg.items, size);
+            const bundleScore = bundleItems.reduce(function (s, item) { return s + item.score; }, 0);
+            const roastHits = bundleItems.reduce(function (s, item) { return s + (item.roastPriority > 0 ? 1 : 0); }, 0);
+            return { vendor: vg.vendor, items: vg.items, bundleScore: bundleScore, roastHits: roastHits, size: size, bundleItems: bundleItems, distinctCount: vg.items.length };
+          });
+
+        // Only relax below the distinct-product minimum if literally no vendor meets it —
+        // in that case, pick whoever offers the most distinct products (still capped at 2x each).
+        const meetingMinDistinct = allCandidates.filter(function (x) { return x.distinctCount >= minDistinct; });
+        const pool = meetingMinDistinct.length > 0 ? meetingMinDistinct : allCandidates;
+
+        return pool
           .sort(function (a, b) {
-            if (b.items.length !== a.items.length) return b.items.length - a.items.length;
+            if (b.bundleItems.length !== a.bundleItems.length) return b.bundleItems.length - a.bundleItems.length;
+            if (b.distinctCount !== a.distinctCount) return b.distinctCount - a.distinctCount;
+            if (b.roastHits !== a.roastHits) return b.roastHits - a.roastHits;
             return b.bundleScore - a.bundleScore;
           })
           .slice(0, 3);
@@ -2337,6 +2414,8 @@
       topFor2 = arranged.topFor2;
       topFor4 = arranged.topFor4;
       topFor8 = arranged.topFor8;
+
+      topFor8 = ensureEightPackDiffersFromFourPack(topFor4, topFor8, topFor2);
 
       const bundles = {
         2: topFor2.map(function (v) { return (v.bundleItems || v.items.slice(0, 2)).map(function (item) { return item.coffee; }); }),
@@ -2572,7 +2651,7 @@
                 var bundleOpts = bundleResult.bundles[selectedBundleQty] || [];
                 if (idx >= 0 && Array.isArray(bundleOpts[idx]) && bundleOpts[idx].length) return bundleOpts[idx].slice(0, selectedBundleQty);
               }
-              return coffeesForVendorFromPositiveScores(withScores, vl).slice(0, selectedBundleQty);
+              return coffeesForVendorFromPositiveScores(withScores, vl, selectedBundleQty);
             }
             return bundleTotalWithShippingCentsForQuestionnaireProducts(getBundleProds(a.vendorKey), selectedBundleQty, a.vendorKey)
                  - bundleTotalWithShippingCentsForQuestionnaireProducts(getBundleProds(b.vendorKey), selectedBundleQty, b.vendorKey);
@@ -2615,7 +2694,7 @@
               var bundleOpts = bundleResult.bundles[selectedBundleQty] || [];
               if (idx >= 0 && Array.isArray(bundleOpts[idx]) && bundleOpts[idx].length) return bundleOpts[idx].slice(0, selectedBundleQty);
             }
-            return coffeesForVendorFromPositiveScores(withScores, vl).slice(0, selectedBundleQty);
+            return coffeesForVendorFromPositiveScores(withScores, vl, selectedBundleQty);
           }
           return bundleTotalWithShippingCentsForQuestionnaireProducts(getBundleProds(a.vendorKey), selectedBundleQty, a.vendorKey)
                - bundleTotalWithShippingCentsForQuestionnaireProducts(getBundleProds(b.vendorKey), selectedBundleQty, b.vendorKey);
@@ -2651,18 +2730,7 @@
       }
     }
 
-    const forVendor = withScores
-      .filter(function (item) {
-        return (item.coffee.vendor || '').trim().toLowerCase() === targetVendor;
-      })
-      .sort(function (a, b) {
-        const rpa = a.roastMeta && a.roastMeta.type === 'exact' ? 2 : a.roastMeta && a.roastMeta.type === 'partial' ? 1 : 0;
-        const rpb = b.roastMeta && b.roastMeta.type === 'exact' ? 2 : b.roastMeta && b.roastMeta.type === 'partial' ? 1 : 0;
-        if (rpb !== rpa) return rpb - rpa;
-        return b.score - a.score;
-      });
-
-    return forVendor.map(function (item) { return item.coffee; }).slice(0, 8);
+    return coffeesForVendorFromPositiveScores(withScores, targetVendor, selectedBundleQty);
   }
 
   function formatQuestionnaireBundleWeightKg(grams) {
@@ -2714,6 +2782,44 @@
       .replace(/"/g, '&quot;');
   }
 
+  /**
+   * Bundles can include the same product more than once (max 2x) when a vendor doesn't
+   * have enough distinct products to fill the selected bundle size. Collapses a products
+   * array into one entry per distinct product, tracking how many units of each are included.
+   */
+  function dedupeBundleProductsWithQty(products) {
+    var list = Array.isArray(products) ? products : [];
+    var order = [];
+    var byId = {};
+    list.forEach(function (p) {
+      if (!p) return;
+      var key = String(p.id);
+      if (!byId[key]) {
+        byId[key] = { product: p, qty: 0 };
+        order.push(byId[key]);
+      }
+      byId[key].qty += 1;
+    });
+    return order;
+  }
+
+  /** How many units of `product` are present in `products` (min 1). */
+  function getProductBundleQty(products, product) {
+    if (!Array.isArray(products) || !product) return 1;
+    var pid = String(product.id);
+    var count = 0;
+    for (var i = 0; i < products.length; i++) {
+      if (products[i] && String(products[i].id) === pid) count++;
+    }
+    return count || 1;
+  }
+
+  /** Small "×N" markup shown next to a product that appears more than once in the bundle. */
+  function buildBundleQtyBadgeHtml(qty) {
+    if (!qty || qty < 2) return '';
+    return '<span class="q-product-multiplier-badge">×' + Math.round(qty) + '</span>';
+  }
+
   function setResultsVendorMenuOpen(isOpen) {
     var drop = document.getElementById('q-results-vendor-dropdown');
     var panel = document.getElementById('q-results-vendor-panel');
@@ -2749,7 +2855,7 @@
     if (bundleIdx >= 0 && Array.isArray(bundleOptionsForQty[bundleIdx])) {
       return bundleOptionsForQty[bundleIdx].slice(0, menuQty);
     }
-    return coffeesForVendorFromPositiveScores(posScores, vLower).slice(0, menuQty);
+    return coffeesForVendorFromPositiveScores(posScores, vLower, menuQty);
   }
 
   /** Keep trigger + footer prices in sync with the vendor menu (same bundle/qty logic). */
@@ -3086,11 +3192,12 @@
     '<path d="M16.2 16.2 21 21" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />' +
     '</svg>';
 
-  function buildQuestionnaireProductCardHtml(product) {
+  function buildQuestionnaireProductCardHtml(product, bundleQty) {
     if (!product) return '';
     var title = escapeHtml((product.title || '').trim());
     var image = escapeHtml(product.image || '');
     var tasteIcons = buildQuestionnaireTasteProfileIconsHtml(product, false);
+    var qtyBadge = buildBundleQtyBadgeHtml(bundleQty);
     return (
       '<div class="questionnaire-product-card">' +
       '<div class="questionnaire-product-image-wrapper">' +
@@ -3107,6 +3214,7 @@
       '<span class="questionnaire-product-title__text">' +
       title +
       '</span>' +
+      qtyBadge +
       '<span class="questionnaire-product-title__hint" aria-hidden="true">' +
       Q_PRODUCT_CARD_HINT_SVG +
       '</span>' +
@@ -3179,10 +3287,13 @@
         '<tr><td colspan="3" class="q-bundle-table__empty">אין מוצרים להצגה</td></tr>';
       return;
     }
-    tbody.innerHTML = shownProducts
-      .map(function (p) {
+    var rows = dedupeBundleProductsWithQty(shownProducts);
+    tbody.innerHTML = rows
+      .map(function (row) {
+        var p = row.product;
         var merged = mergeProductFromCatalog(p) || p;
         var title = escapeHtml((merged.title || '').trim() || '—');
+        var qtyBadge = buildBundleQtyBadgeHtml(row.qty);
         var imgUrl = merged.image ? escapeHtml(merged.image) : '';
         var thumb = imgUrl
           ? '<img class="q-bundle-table__thumb-img" src="' +
@@ -3208,6 +3319,7 @@
           '<span class="q-bundle-table__title">' +
           title +
           '</span>' +
+          qtyBadge +
           thumb +
           '</div></td>' +
           '</tr>'
@@ -3883,7 +3995,7 @@
         resultsGrid.innerHTML = shown
           .map(
             (product) =>
-              `<div class="q-carousel-slide" data-product-id="${product.id}">${buildQuestionnaireProductCardHtml(product)}</div>`
+              `<div class="q-carousel-slide" data-product-id="${product.id}">${buildQuestionnaireProductCardHtml(product, getProductBundleQty(shown, product))}</div>`
           )
           .join('');
       } else {
@@ -4058,13 +4170,23 @@
     function renderSelectionThumbs() {
       if (!thumbsEl) return;
 
-      const thumbActiveIndex = current;
+      const activeProduct = products[current];
+      const activeId = activeProduct ? String(activeProduct.id) : null;
 
-      thumbsEl.innerHTML = products
-        .map(function (product, index) {
+      // The bundle can include the same product more than once (max 2x); show it only
+      // once here, pointing at its first slide index.
+      const distinctProducts = dedupeBundleProductsWithQty(products).map(function (row) {
+        const firstIndex = products.findIndex(function (p) { return p && String(p.id) === String(row.product.id); });
+        return { product: row.product, index: firstIndex };
+      });
+
+      thumbsEl.innerHTML = distinctProducts
+        .map(function (entry) {
+          const product = entry.product;
+          const index = entry.index;
           const vendorOrTitle = (product.vendor || '').trim() || (product.title || '').trim() || 'תערובת';
           const image = product.image || '';
-          const isActiveClass = index === thumbActiveIndex ? ' is-active' : '';
+          const isActive = activeId !== null && String(product.id) === activeId;
           const imageMarkup = image
             ? '<img class="questionnaire-selection-thumb__image" src="' +
               image +
@@ -4075,11 +4197,11 @@
 
           return (
             '<button type="button" class="questionnaire-selection-thumb' +
-            isActiveClass +
+            (isActive ? ' is-active' : '') +
             '" data-index="' +
             index +
             '" role="tab" aria-selected="' +
-            (index === thumbActiveIndex ? 'true' : 'false') +
+            (isActive ? 'true' : 'false') +
             '" aria-label="' +
             vendorOrTitle +
             '" title="' +
@@ -4149,8 +4271,13 @@
       }
 
       if (thumbsEl) {
-        thumbsEl.querySelectorAll('.questionnaire-selection-thumb').forEach(function (thumb, thumbIndex) {
-          const isActive = thumbIndex === index;
+        // Thumbs are deduped (one per distinct product), so match by product id rather
+        // than by position — a duplicated product's 2nd slide still highlights its 1 thumb.
+        const activeIdForThumbs = product ? String(product.id) : null;
+        thumbsEl.querySelectorAll('.questionnaire-selection-thumb').forEach(function (thumb) {
+          const thumbIndex = parseInt(thumb.getAttribute('data-index') || '-1', 10);
+          const thumbProduct = products[thumbIndex];
+          const isActive = !!(activeIdForThumbs && thumbProduct && String(thumbProduct.id) === activeIdForThumbs);
           thumb.classList.toggle('is-active', isActive);
           thumb.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
@@ -4208,11 +4335,12 @@
           if (products && products.length) {
             desktopShortEl.innerHTML =
               '<ul class="q-desktop-product-package-list">' +
-              products
-                .map(function (p) {
+              dedupeBundleProductsWithQty(products)
+                .map(function (row) {
+                  var p = row.product;
                   var title = escapeHtml((p.title || '').trim() || '—');
                   var desc = escapeHtml((p.short_description || '').trim());
-                  var line = '<strong>' + title + '</strong>';
+                  var line = '<strong>' + title + '</strong>' + buildBundleQtyBadgeHtml(row.qty);
                   if (desc) line += ' - ' + desc;
                   return '<li>' + line + '</li>';
                 })
@@ -4439,14 +4567,16 @@
         totalGrams += p.weight_grams || 0;
       });
 
-      itemsEl.innerHTML = products
-        .map(function (p) {
+      itemsEl.innerHTML = dedupeBundleProductsWithQty(products)
+        .map(function (row) {
+          const p = row.product;
           if (!p) return '';
           const title = escapeHtml((p.title || '').trim() || 'מוצר');
+          const qtyBadge = buildBundleQtyBadgeHtml(row.qty);
           const img = p.image
             ? '<img class="q-bundle-drawer__thumb-img" src="' + escapeHtml(p.image) + '" alt="" loading="lazy">'
             : '<span class="q-bundle-drawer__thumb-fallback" aria-hidden="true"></span>';
-          const w = formatQuestionnaireProductWeight(p.weight_grams);
+          const w = formatQuestionnaireProductWeight((p.weight_grams || 0) * row.qty);
           return (
             '<div class="q-bundle-drawer__line">' +
             '<div class="q-bundle-drawer__thumb">' +
@@ -4455,6 +4585,7 @@
             '<div class="q-bundle-drawer__line-main">' +
             '<div class="q-bundle-drawer__line-title">' +
             title +
+            qtyBadge +
             '</div>' +
             '<div class="q-bundle-drawer__line-meta">' +
             '<span class="q-bundle-drawer__weight">' +
