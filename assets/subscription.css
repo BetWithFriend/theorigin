@@ -24,7 +24,7 @@
     background-color: var(--sub-page-bg);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-direction: column;
 }
 
@@ -215,6 +215,26 @@ body.subscription-wrapper-open .header.header--middle-center.header--mobile-cent
     font-weight: 700;
     padding: 3px 10px;
     border-radius: 20px;
+}
+
+.subscription-option--frequency {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.subscription-option-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px;
+}
+
+.subscription-option-note {
+    font-size: 13px;
+    font-weight: 700;
+    color: inherit;
 }
 
 /* ── Results screen ───────────────────────────────────────────────────── */

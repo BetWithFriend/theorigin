@@ -11,11 +11,12 @@
  */
 (function () {
   var SUBSCRIPTION_RESULTS_STATE_KEY = 'subscriptionResultsState';
-  var SUBSCRIPTION_TOTAL_STEPS = 4;
+  var SUBSCRIPTION_TOTAL_STEPS = 5;
   var SUBSCRIPTION_AUTO_ADVANCE_MS = 300;
   var SUBSCRIPTION_FIELD_TO_SHEET_ID = {
     tier: 'subscriptionEditTier',
     quantity: 'subscriptionEditQuantity',
+    frequency: 'subscriptionEditFrequency',
     profile: 'subscriptionEditProfile',
     grind: 'subscriptionEditGrind',
   };
@@ -23,6 +24,10 @@
   var SUBSCRIPTION_TIER_LABELS = {
     specialty: 'Origin Specialty',
     premium: 'Origin Premium',
+  };
+  var SUBSCRIPTION_FREQUENCY_LABELS = {
+    monthly: 'פעם בחודש',
+    bimonthly: 'פעם בחודשיים',
   };
   var SUBSCRIPTION_PROFILE_LABELS = {
     classic: 'הקלאסי',
@@ -62,6 +67,7 @@
   window.subscriptionAnswers = window.subscriptionAnswers || {
     tier: null,
     quantity: null,
+    frequency: null,
     profile: null,
     grind: null,
   };
@@ -156,12 +162,20 @@
   }
 
   /* ── Step machine ──────────────────────────────────────────────────────── */
+  function syncSubscriptionDynamicBindings() {
+    var quantity = window.subscriptionAnswers.quantity;
+    document.querySelectorAll('[data-bind-quantity]').forEach(function (el) {
+      el.textContent = quantity != null ? quantity : 'X';
+    });
+  }
+
   function activateSubscriptionStep(stepIndex) {
     document.querySelectorAll('.subscription-step').forEach(function (el) {
       el.classList.remove('active');
     });
     var target = document.querySelector('.subscription-step[data-step-index="' + stepIndex + '"]');
     if (target) target.classList.add('active');
+    syncSubscriptionDynamicBindings();
   }
 
   function currentSubscriptionStepIndex() {
@@ -245,6 +259,7 @@
       var entries = [
         ['רמת המנוי', SUBSCRIPTION_TIER_LABELS[answers.tier] || ''],
         ['כמות שקיות', answers.quantity ? answers.quantity + ' שקיות (' + kg + ' ק"ג)' : ''],
+        ['תדירות המשלוח', SUBSCRIPTION_FREQUENCY_LABELS[answers.frequency] || ''],
         ['הפרופיל', profileValue],
         ['הטחינה', SUBSCRIPTION_GRIND_LABELS[answers.grind] || ''],
       ];
@@ -311,7 +326,7 @@
 
   function restartSubscriptionFlow() {
     clearSubscriptionResultsState();
-    window.subscriptionAnswers = { tier: null, quantity: null, profile: null, grind: null };
+    window.subscriptionAnswers = { tier: null, quantity: null, frequency: null, profile: null, grind: null };
     document.querySelectorAll('.subscription-option.selected').forEach(function (el) {
       el.classList.remove('selected');
     });
@@ -358,7 +373,7 @@
   /* ── Add to cart ───────────────────────────────────────────────────────── */
   function submitSubscriptionToCart() {
     var answers = window.subscriptionAnswers;
-    if (!answers.tier || !answers.quantity || !answers.profile || !answers.grind) return;
+    if (!answers.tier || !answers.quantity || !answers.frequency || !answers.profile || !answers.grind) return;
 
     var btn = document.getElementById('subscriptionCtaBtn');
     var label = document.getElementById('subscriptionCtaLabel');
@@ -390,6 +405,7 @@
             properties: {
               _subscription_tier: answers.tier,
               _subscription_quantity: String(answers.quantity),
+              _subscription_frequency: answers.frequency,
               _subscription_profile: answers.profile,
               _subscription_grind: answers.grind,
               _subscription_vendor: (picked && (picked.vendorShortName || picked.vendorName)) || '',
@@ -427,7 +443,7 @@
       var parsed = JSON.parse(raw);
       if (parsed && parsed.answers) {
         window.subscriptionAnswers = Object.assign(
-          { tier: null, quantity: null, profile: null, grind: null },
+          { tier: null, quantity: null, frequency: null, profile: null, grind: null },
           parsed.answers
         );
         syncSubscriptionOptionSelectedStates();
