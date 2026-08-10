@@ -409,7 +409,15 @@
       "title": "Account",
       "details": "Account details",
       "view_addresses": "View addresses",
-      "return": "Return to Account details"
+      "return": "Return to Account details",
+      "tab_profile": "Profile",
+      "tab_orders": "Orders",
+      "tab_addresses": "Addresses",
+      "profile_heading": "Personal information",
+      "profile_saved": "Profile updated successfully.",
+      "phone": "Phone number",
+      "save_profile": "Save changes",
+      "password_reset_hint": "Want to change your password?"
     },
     "account_fallback": "Account",
     "activate_account": {

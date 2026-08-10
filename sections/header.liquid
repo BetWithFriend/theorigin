@@ -263,7 +263,6 @@
       <!--Ido - Remove search from header  -->
       <!-- {% render 'header-search', input_id: 'Search-In-Modal' %} -->
 
-      <!-- Roman: Remove account from header 
       {%- if shop.customer_accounts_enabled -%}
         <a
           href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
@@ -292,7 +291,6 @@
           </span>
         </a>
       {%- endif -%}
-    -->
 
       {%- for block in section.blocks -%}
         {%- case block.type -%}

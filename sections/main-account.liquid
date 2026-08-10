@@ -15,9 +15,9 @@
 {%- endstyle -%}
 
 <div class="customer account section-{{ section.id }}-padding">
-  <div>
+  <div class="account__header">
     <h1 class="customer__title">{{ 'customer.account.title' | t }}</h1>
-    <a href="{{ routes.account_logout_url }}">
+    <a href="{{ routes.account_logout_url }}" class="account__logout-link">
       <span class="svg-wrapper">
         {{- 'icon-account.svg' | inline_asset_content -}}
       </span>
@@ -25,70 +25,179 @@
     </a>
   </div>
 
-  <div>
-    <div>
-      <h2>{{ 'customer.orders.title' | t }}</h2>
+  <div class="account__tabs" role="tablist" aria-label="{{ 'customer.account.title' | t }}">
+    <button
+      class="account__tab account__tab--active"
+      role="tab"
+      aria-selected="true"
+      aria-controls="panel-profile"
+      id="tab-profile"
+    >
+      {{ 'customer.account.tab_profile' | t }}
+    </button>
+    <button
+      class="account__tab"
+      role="tab"
+      aria-selected="false"
+      aria-controls="panel-orders"
+      id="tab-orders"
+      tabindex="-1"
+    >
+      {{ 'customer.account.tab_orders' | t }}
+    </button>
+    <button
+      class="account__tab"
+      role="tab"
+      aria-selected="false"
+      aria-controls="panel-addresses"
+      id="tab-addresses"
+      tabindex="-1"
+    >
+      {{ 'customer.account.tab_addresses' | t }}
+      {%- if customer.addresses_count > 0 -%}
+        <span class="account__tab-badge">{{ customer.addresses_count }}</span>
+      {%- endif -%}
+    </button>
+  </div>
 
-      {% paginate customer.orders by 20 %}
-        {%- if customer.orders.size > 0 -%}
-          <table role="table" class="order-history">
-            <caption class="visually-hidden">
-              {{ 'customer.orders.title' | t }}
-            </caption>
-            <thead role="rowgroup">
+  <!-- Profile Info Panel -->
+  <div id="panel-profile" role="tabpanel" aria-labelledby="tab-profile" class="account__panel account__panel--active">
+    <h2>{{ 'customer.account.profile_heading' | t }}</h2>
+    {%- form 'customer', novalidate: 'novalidate' -%}
+      {%- if form.errors -%}
+        <h3 class="form__message" tabindex="-1" autofocus>
+          <span class="svg-wrapper">
+            {{- 'icon-error.svg' | inline_asset_content -}}
+          </span>
+          {{ 'templates.contact.form.error_heading' | t }}
+        </h3>
+        {{ form.errors | default_errors }}
+      {%- endif -%}
+
+      {%- if form.posted_successfully? -%}
+        <h3 class="form__message" tabindex="-1" autofocus>
+          <span class="svg-wrapper">
+            {{- 'icon-success.svg' | inline_asset_content -}}
+          </span>
+          {{ 'customer.account.profile_saved' | t }}
+        </h3>
+      {%- endif -%}
+
+      <div class="account__profile-fields">
+        <div class="field">
+          <input
+            type="text"
+            name="customer[first_name]"
+            id="ProfileFirstName"
+            value="{{ customer.first_name }}"
+            autocomplete="given-name"
+            placeholder="{{ 'customer.register.first_name' | t }}"
+          >
+          <label for="ProfileFirstName">{{ 'customer.register.first_name' | t }}</label>
+        </div>
+
+        <div class="field">
+          <input
+            type="text"
+            name="customer[last_name]"
+            id="ProfileLastName"
+            value="{{ customer.last_name }}"
+            autocomplete="family-name"
+            placeholder="{{ 'customer.register.last_name' | t }}"
+          >
+          <label for="ProfileLastName">{{ 'customer.register.last_name' | t }}</label>
+        </div>
+
+        <div class="field">
+          <input
+            type="email"
+            name="customer[email]"
+            id="ProfileEmail"
+            value="{{ customer.email }}"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            {% if form.errors contains 'email' %}
+              aria-invalid="true"
+              aria-describedby="ProfileEmail-error"
+            {% endif %}
+            placeholder="{{ 'customer.login_page.email' | t }}"
+          >
+          <label for="ProfileEmail">{{ 'customer.login_page.email' | t }}</label>
+          {%- if form.errors contains 'email' -%}
+            <small id="ProfileEmail-error" class="form__message">
+              <span class="svg-wrapper">{{- 'icon-error.svg' | inline_asset_content -}}</span>
+              {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}.
+            </small>
+          {%- endif -%}
+        </div>
+
+        <div class="field">
+          <input
+            type="tel"
+            name="customer[phone]"
+            id="ProfilePhone"
+            value="{{ customer.phone }}"
+            autocomplete="tel"
+            placeholder="{{ 'customer.account.phone' | t }}"
+          >
+          <label for="ProfilePhone">{{ 'customer.account.phone' | t }}</label>
+        </div>
+      </div>
+
+      <button type="submit" class="button button--full-width">
+        {{ 'customer.account.save_profile' | t }}
+      </button>
+    {%- endform -%}
+
+    <div class="account__password-reset">
+      <p>{{ 'customer.account.password_reset_hint' | t }}</p>
+      <a href="#recover" class="link">{{ 'customer.login_page.forgot_password' | t }}</a>
+    </div>
+  </div>
+
+  <!-- Orders Panel -->
+  <div id="panel-orders" role="tabpanel" aria-labelledby="tab-orders" class="account__panel" hidden>
+    <h2>{{ 'customer.orders.title' | t }}</h2>
+
+    {% paginate customer.orders by 20 %}
+      {%- if customer.orders.size > 0 -%}
+        <table role="table" class="order-history">
+          <caption class="visually-hidden">{{ 'customer.orders.title' | t }}</caption>
+          <thead role="rowgroup">
+            <tr role="row">
+              <th id="ColumnOrder" scope="col" role="columnheader">{{ 'customer.orders.order_number' | t }}</th>
+              <th id="ColumnDate" scope="col" role="columnheader">{{ 'customer.orders.date' | t }}</th>
+              <th id="ColumnPayment" scope="col" role="columnheader">{{ 'customer.orders.payment_status' | t }}</th>
+              <th id="ColumnFulfillment" scope="col" role="columnheader">{{ 'customer.orders.fulfillment_status' | t }}</th>
+              <th id="ColumnTotal" scope="col" role="columnheader">{{ 'customer.orders.total' | t }}</th>
+            </tr>
+          </thead>
+          <tbody role="rowgroup">
+            {%- for order in customer.orders -%}
               <tr role="row">
-                <th id="ColumnOrder" scope="col" role="columnheader">{{ 'customer.orders.order_number' | t }}</th>
-                <th id="ColumnDate" scope="col" role="columnheader">{{ 'customer.orders.date' | t }}</th>
-                <th id="ColumnPayment" scope="col" role="columnheader">{{ 'customer.orders.payment_status' | t }}</th>
-                <th id="ColumnFulfillment" scope="col" role="columnheader">
-                  {{ 'customer.orders.fulfillment_status' | t }}
-                </th>
-                <th id="ColumnTotal" scope="col" role="columnheader">{{ 'customer.orders.total' | t }}</th>
+                <td id="RowOrder" role="cell" headers="ColumnOrder" data-label="{{ 'customer.orders.order_number' | t }}">
+                  <a href="{{ order.customer_url }}" aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}">
+                    {{ order.name }}
+                  </a>
+                </td>
+                <td headers="RowOrder ColumnDate" role="cell" data-label="{{ 'customer.orders.date' | t }}">
+                  {{ order.created_at | time_tag: format: 'date' }}
+                </td>
+                <td headers="RowOrder ColumnPayment" role="cell" data-label="{{ 'customer.orders.payment_status' | t }}">
+                  {{ order.financial_status_label }}
+                </td>
+                <td headers="RowOrder ColumnFulfillment" role="cell" data-label="{{ 'customer.orders.fulfillment_status' | t }}">
+                  {{ order.fulfillment_status_label }}
+                </td>
+                <td headers="RowOrder ColumnTotal" role="cell" data-label="{{ 'customer.orders.total' | t }}">
+                  {{ order.total_net_amount | money_with_currency }}
+                </td>
               </tr>
-            </thead>
-            <tbody role="rowgroup">
-              {%- for order in customer.orders -%}
-                <tr role="row">
-                  <td
-                    id="RowOrder"
-                    role="cell"
-                    headers="ColumnOrder"
-                    data-label="{{ 'customer.orders.order_number' | t }}"
-                  >
-                    <a
-                      href="{{ order.customer_url }}"
-                      aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}"
-                    >
-                      {{ order.name }}
-                    </a>
-                  </td>
-                  <td headers="RowOrder ColumnDate" role="cell" data-label="{{ 'customer.orders.date' | t }}">
-                    {{ order.created_at | time_tag: format: 'date' }}
-                  </td>
-                  <td
-                    headers="RowOrder ColumnPayment"
-                    role="cell"
-                    data-label="{{ 'customer.orders.payment_status' | t }}"
-                  >
-                    {{ order.financial_status_label }}
-                  </td>
-                  <td
-                    headers="RowOrder ColumnFulfillment"
-                    role="cell"
-                    data-label="{{ 'customer.orders.fulfillment_status' | t }}"
-                  >
-                    {{ order.fulfillment_status_label }}
-                  </td>
-                  <td headers="RowOrder ColumnTotal" role="cell" data-label="{{ 'customer.orders.total' | t }}">
-                    {{ order.total_net_amount | money_with_currency }}
-                  </td>
-                </tr>
-              {%- endfor -%}
-            </tbody>
-          </table>
-        {%- else -%}
-          <p>{{ 'customer.orders.none' | t }}</p>
-        {%- endif -%}
+            {%- endfor -%}
+          </tbody>
+        </table>
 
         {%- if paginate.pages > 1 -%}
           {%- if paginate.parts.size > 0 -%}
@@ -97,37 +206,27 @@
                 {%- if paginate.previous -%}
                   <li>
                     <a href="{{ paginate.previous.url }}" aria-label="{{ 'general.pagination.previous' | t }}">
-                      <span class="svg-wrapper">
-                        {{- 'icon-caret.svg' | inline_asset_content -}}
-                      </span>
+                      <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
                     </a>
                   </li>
                 {%- endif -%}
-
                 {%- for part in paginate.parts -%}
                   <li>
                     {%- if part.is_link -%}
-                      <a href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
-                        {{- part.title -}}
-                      </a>
+                      <a href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
                     {%- else -%}
                       {%- if part.title == paginate.current_page -%}
-                        <span aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
-                          {{- part.title -}}
-                        </span>
+                        <span aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</span>
                       {%- else -%}
                         <span>{{ part.title }}</span>
                       {%- endif -%}
                     {%- endif -%}
                   </li>
                 {%- endfor -%}
-
                 {%- if paginate.next -%}
                   <li>
                     <a href="{{ paginate.next.url }}" aria-label="{{ 'general.pagination.next' | t }}">
-                      <span class="svg-wrapper">
-                        {{- 'icon-caret.svg' | inline_asset_content -}}
-                      </span>
+                      <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
                     </a>
                   </li>
                 {%- endif -%}
@@ -135,20 +234,71 @@
             </nav>
           {%- endif -%}
         {%- endif -%}
-      {% endpaginate %}
-    </div>
+      {%- else -%}
+        <p>{{ 'customer.orders.none' | t }}</p>
+      {%- endif -%}
+    {% endpaginate %}
+  </div>
 
-    <div>
-      <h2>{{ 'customer.account.details' | t }}</h2>
+  <!-- Addresses Panel -->
+  <div id="panel-addresses" role="tabpanel" aria-labelledby="tab-addresses" class="account__panel" hidden>
+    <h2>{{ 'customer.account.details' | t }}</h2>
 
-      {{ customer.default_address | format_address }}
+    {{ customer.default_address | format_address }}
 
-      <a href="{{ routes.account_addresses_url }}">
-        {{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})
-      </a>
-    </div>
+    <a href="{{ routes.account_addresses_url }}" class="button button--secondary">
+      {{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})
+    </a>
   </div>
 </div>
+
+<script>
+  (function () {
+    const tabs = document.querySelectorAll('.account__tab');
+    const panels = document.querySelectorAll('.account__panel');
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t) {
+          t.classList.remove('account__tab--active');
+          t.setAttribute('aria-selected', 'false');
+          t.setAttribute('tabindex', '-1');
+        });
+        panels.forEach(function (p) {
+          p.classList.remove('account__panel--active');
+          p.hidden = true;
+        });
+
+        tab.classList.add('account__tab--active');
+        tab.setAttribute('aria-selected', 'true');
+        tab.removeAttribute('tabindex');
+
+        var panelId = tab.getAttribute('aria-controls');
+        var panel = document.getElementById(panelId);
+        if (panel) {
+          panel.classList.add('account__panel--active');
+          panel.hidden = false;
+        }
+      });
+
+      tab.addEventListener('keydown', function (e) {
+        var idx = Array.from(tabs).indexOf(tab);
+        if (e.key === 'ArrowRight') {
+          tabs[(idx + 1) % tabs.length].focus();
+          tabs[(idx + 1) % tabs.length].click();
+        } else if (e.key === 'ArrowLeft') {
+          tabs[(idx - 1 + tabs.length) % tabs.length].focus();
+          tabs[(idx - 1 + tabs.length) % tabs.length].click();
+        }
+      });
+    });
+
+    {%- if form.posted_successfully? or form.errors -%}
+      var profileTab = document.getElementById('tab-profile');
+      if (profileTab) profileTab.click();
+    {%- endif -%}
+  })();
+</script>
 
 {% schema %}
 {
