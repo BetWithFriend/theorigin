@@ -673,16 +673,28 @@
                               -%}
                                 <dl class="option-item-wrapper">
                                   {%- if item.product.has_only_default_variant == false -%}
-                                    {%- for option in item.options_with_values -%}
-                                      <div class="product-option">
-                                        {% comment %} <dt>{{ option.name }}:</dt> {% endcomment %}
-                                        <dd>{{ option.value }}</dd>
-                                        {% comment %} {%- unless forloop.last -%} {% endcomment %}
-                                        &nbsp;|&nbsp;פולים
+                                    {%- liquid
+                                      # Products without a grind option are always sold as whole beans,
+                                      # so the grind is hard-coded for them. Products that do have a
+                                      # grind option (e.g. jaffa-blend) already carry it in their values.
+                                      assign has_grind_option = false
+                                      for option in item.options_with_values
+                                        assign option_name = option.name | downcase
+                                        if option_name contains 'grind' or option_name contains 'טחינה'
+                                          assign has_grind_option = true
+                                          break
+                                        endif
+                                      endfor
 
-                                      {% comment %} {%- endunless -%} {% endcomment %}
-                                      </div>
-                                    {%- endfor -%}
+                                      assign option_values = item.options_with_values | map: 'value' | join: '&nbsp;|&nbsp;'
+                                    -%}
+                                    <div class="product-option">
+                                      {% comment %} <dt>{{ option.name }}:</dt> {% endcomment %}
+                                      <dd>{{ option_values }}</dd>
+                                      {%- unless has_grind_option -%}
+                                        &nbsp;|&nbsp;פולים
+                                      {%- endunless -%}
+                                    </div>
                                   {%- endif -%}
                                 </dl>
 
