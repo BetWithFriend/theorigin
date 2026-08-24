@@ -7,6 +7,34 @@
 <noscript>{{ 'subscription.css' | asset_url | stylesheet_tag }}</noscript>
 <script src="{{ 'subscription.js' | asset_url }}" defer="defer"></script>
 
+{%- liquid
+  assign subscription_product = section.settings.subscription_product
+  if subscription_product == blank
+    assign subscription_product = all_products['מנוי-קפה']
+  endif
+
+  assign sub_price_1kg_monthly = 17000
+  assign sub_price_2kg_monthly = 35000
+  assign sub_price_4kg_monthly = 68000
+
+  if subscription_product != blank
+    for variant in subscription_product.variants
+      assign weight_token = variant.option1 | split: ' ' | first
+      assign length_token = variant.option2 | split: ' ' | first
+      if length_token == '3'
+        assign monthly_cents = variant.price | divided_by: 3
+        if weight_token == '1'
+          assign sub_price_1kg_monthly = monthly_cents
+        elsif weight_token == '2'
+          assign sub_price_2kg_monthly = monthly_cents
+        elsif weight_token == '4'
+          assign sub_price_4kg_monthly = monthly_cents
+        endif
+      endif
+    endfor
+  endif
+-%}
+
 <div class="subscription-wrapper" id="subscriptionWrapper">
   <script>
     (function () {
@@ -20,7 +48,7 @@
     })();
   </script>
 
-  {%- comment -%} ── Step 1: Subscription level ─────────────────────────── {%- endcomment -%}
+  {%- comment -%} ── Step 1: Preferred taste profile ────────────────────── {%- endcomment -%}
   <div
     class="subscription-step active"
     id="subscriptionStep1"
@@ -30,7 +58,7 @@
         {% render 'subscription-icon'
           , icon: 'close' %}
       </div>
-      <div class="subscription-title">{{ section.settings.step1_title | default: 'רמת המנוי' }}</div>
+      <div class="subscription-title">{{ section.settings.step1_title | default: 'פרופיל הטעם המועדף' }}</div>
       <div class="subscription-back-icon-wrapper"></div>
     </div>
     <div class="subscription-progress-bar-wrapper">
@@ -40,35 +68,62 @@
       <div class="subscription-progress-bar">&nbsp;</div>
       <div class="subscription-progress-bar">&nbsp;</div>
     </div>
-    <div class="subscription-options" data-field="tier">
+    <div class="subscription-options" data-field="profile">
       <button
         type="button"
-        class="subscription-option subscription-option--tier"
-        data-value="specialty">
-        <span class="subscription-option-icon">{% render 'subscription-icon'
-, icon: 'ribbon' %}</span>
+        class="subscription-option subscription-option--profile"
+        data-value="italian">
+        <span class="subscription-option-icon">
+          <img
+            src="{{ 'subscription_icon_nut.png' | asset_url }}"
+            alt=""
+            class="subscription-option-img"
+            width="32"
+            height="32">
+        </span>
         <span class="subscription-option-body">
-          <span class="subscription-option-title">Origin Specialty:</span>
-          <span class="subscription-option-desc">בחירה מעולה ליומיום. בלנדים וזנים איכותיים מבית קלייה מתחלף.</span>
-          <span class="subscription-option-price">170 ₪ למארז (4 שקיות)</span>
+          <span class="subscription-option-title">סגנון איטלקי ועשיר:</span>
+          <span class="subscription-option-desc">קפה עשיר, טעמי שוקולד, אגוזים וקקאו עמוקים</span>
         </span>
       </button>
       <button
         type="button"
-        class="subscription-option subscription-option--tier"
-        data-value="premium">
-        <span class="subscription-option-icon">{% render 'subscription-icon'
-, icon: 'crown' %}</span>
+        class="subscription-option subscription-option--profile"
+        data-value="classic">
+        <span class="subscription-option-icon">
+          <img
+            src="{{ 'subscription_icon_chocolate.png' | asset_url }}"
+            alt=""
+            class="subscription-option-img"
+            width="32"
+            height="32">
+        </span>
         <span class="subscription-option-body">
-          <span class="subscription-option-title">Origin Premium:</span>
-          <span class="subscription-option-desc">לאלו שמחפשים את היוצא מהכלל, פולים נדירים, עיבודים מיוחדים וציונים גבוהים במיוחד.</span>
-          <span class="subscription-option-price">210 ₪ למארז (4 שקיות)</span>
+          <span class="subscription-option-title">סגנון קלאסי "בית קפה":</span>
+          <span class="subscription-option-desc">טעמים עדינים יותר, מתיקות גבוהה, שוקולדיות נעימה</span>
+        </span>
+      </button>
+      <button
+        type="button"
+        class="subscription-option subscription-option--profile"
+        data-value="modern">
+        <span class="subscription-option-icon">
+          <img
+            src="{{ 'subscription_icon_cherries.png' | asset_url }}"
+            alt=""
+            class="subscription-option-img"
+            width="32"
+            height="32">
+        </span>
+        <span class="subscription-option-body">
+          <span class="subscription-option-title">סגנון מודרני:</span>
+          <span class="subscription-option-desc">טעמים פירותיים, עסיסי וקליל יותר, "הגל השלישי"</span>
         </span>
       </button>
     </div>
   </div>
 
-  {%- comment -%} ── Step 2: Quantity & consumption ─────────────────────── {%- endcomment -%}
+  {%- comment -%} ── Step 2: Preparation method (grind) ─────────────────── {%- endcomment -%}
   <div
     class="subscription-step"
     id="subscriptionStep2"
@@ -78,7 +133,7 @@
         {% render 'subscription-icon'
           , icon: 'close' %}
       </div>
-      <div class="subscription-title">{{ section.settings.step2_title | default: 'כמות וצריכה' }}</div>
+      <div class="subscription-title">{{ section.settings.step2_title | default: 'שיטת ההכנה (הטחינה)' }}</div>
       <div class="subscription-back-icon-wrapper" onclick="goToPreviousSubscriptionStep()">
         <img
           class="subscription-back-icon"
@@ -94,218 +149,6 @@
       <div class="subscription-progress-bar">&nbsp;</div>
       <div class="subscription-progress-bar">&nbsp;</div>
       <div class="subscription-progress-bar">&nbsp;</div>
-    </div>
-    <div class="subscription-options" data-field="quantity">
-      <button
-        type="button"
-        class="subscription-option subscription-option--qty"
-        data-value="4">
-        <span class="subscription-option-icon">{% render 'subscription-icon'
-, icon: 'bag' %}</span>
-        <span class="subscription-option-body">
-          <span class="subscription-option-title">4 שקיות (1 ק"ג):</span>
-          <span class="subscription-option-desc">כוס אחת ביום (מתאים ליחיד/זוג)</span>
-          <span class="subscription-option-price">מחיר: 170 ₪</span>
-        </span>
-      </button>
-      <button
-        type="button"
-        class="subscription-option subscription-option--qty"
-        data-value="8">
-        <span class="subscription-option-icon">{% render 'subscription-icon'
-, icon: 'bag' %}</span>
-        <span class="subscription-option-body">
-          <span class="subscription-option-title">8 שקיות (2 ק"ג):</span>
-          <span class="subscription-option-desc">2-3 כוסות ביום (מתאים למשפחה או משרד קטן)</span>
-          <span class="subscription-option-badge">חסכת 20 ₪</span>
-          <span class="subscription-option-price">מחיר: 320 ₪</span>
-        </span>
-      </button>
-      <button
-        type="button"
-        class="subscription-option subscription-option--qty"
-        data-value="16">
-        <span class="subscription-option-icon">{% render 'subscription-icon'
-, icon: 'bag' %}</span>
-        <span class="subscription-option-body">
-          <span class="subscription-option-title">16 שקיות (4 ק"ג):</span>
-          <span class="subscription-option-desc">צריכה גבוהה (משרדים או חובבי קפה כבדים)</span>
-          <span class="subscription-option-badge">חסכת 80 ₪ + משלוח חינם</span>
-          <span class="subscription-option-price">מחיר: 600 ₪</span>
-        </span>
-      </button>
-    </div>
-  </div>
-
-  {%- comment -%} ── Step 3: Delivery frequency ─────────────────────────── {%- endcomment -%}
-  <div
-    class="subscription-step"
-    id="subscriptionStep3"
-    data-step-index="3">
-    <div class="subscription-title-wrapper">
-      <div class="subscription-close-icon" onclick="closeSubscriptionForm()">
-        {% render 'subscription-icon'
-          , icon: 'close' %}
-      </div>
-      <div class="subscription-title">{{ section.settings.step3_title | default: 'תדירות המשלוח' }}</div>
-      <div class="subscription-back-icon-wrapper" onclick="goToPreviousSubscriptionStep()">
-        <img
-          class="subscription-back-icon"
-          src="{{ 'questionnaire_back_icon.png' | asset_url }}"
-          alt="חזרה"
-          width="20"
-          height="20">
-      </div>
-    </div>
-    <div class="subscription-progress-bar-wrapper">
-      <div class="subscription-progress-bar filled">&nbsp;</div>
-      <div class="subscription-progress-bar filled">&nbsp;</div>
-      <div class="subscription-progress-bar filled">&nbsp;</div>
-      <div class="subscription-progress-bar">&nbsp;</div>
-      <div class="subscription-progress-bar">&nbsp;</div>
-    </div>
-    <div class="subscription-options" data-field="frequency">
-      <button
-        type="button"
-        class="subscription-option subscription-option--frequency"
-        data-value="monthly">
-        <span class="subscription-option-row">
-          <span class="subscription-option-body">
-            <span class="subscription-option-title">פעם בחודש:</span>
-            <span class="subscription-option-desc">קצב גילוי קבוע ורציף (מומלץ)</span>
-          </span>
-          <span class="subscription-option-icon">{% render 'subscription-icon'
-, icon: 'calendar' %}</span>
-        </span>
-        <span class="subscription-option-note">חיוב חודשי של
-          <span data-bind-quantity>X</span>
-          שקיות</span>
-      </button>
-      <button
-        type="button"
-        class="subscription-option subscription-option--frequency"
-        data-value="bimonthly">
-        <span class="subscription-option-row">
-          <span class="subscription-option-body">
-            <span class="subscription-option-title">פעם בחודשיים:</span>
-            <span class="subscription-option-desc">קצב נינוח יותר</span>
-          </span>
-          <span class="subscription-option-icon">{% render 'subscription-icon'
-, icon: 'calendar' %}</span>
-        </span>
-        <span class="subscription-option-note">חיוב פעם בחודשיים, רק במועד המשלוח</span>
-      </button>
-    </div>
-  </div>
-
-  {%- comment -%} ── Step 4: Preferred taste profile ────────────────────── {%- endcomment -%}
-  <div
-    class="subscription-step"
-    id="subscriptionStep4"
-    data-step-index="4">
-    <div class="subscription-title-wrapper">
-      <div class="subscription-close-icon" onclick="closeSubscriptionForm()">
-        {% render 'subscription-icon'
-          , icon: 'close' %}
-      </div>
-      <div class="subscription-title">{{ section.settings.step4_title | default: 'פרופיל הטעם המועדף' }}</div>
-      <div class="subscription-back-icon-wrapper" onclick="goToPreviousSubscriptionStep()">
-        <img
-          class="subscription-back-icon"
-          src="{{ 'questionnaire_back_icon.png' | asset_url }}"
-          alt="חזרה"
-          width="20"
-          height="20">
-      </div>
-    </div>
-    <div class="subscription-progress-bar-wrapper">
-      <div class="subscription-progress-bar filled">&nbsp;</div>
-      <div class="subscription-progress-bar filled">&nbsp;</div>
-      <div class="subscription-progress-bar filled">&nbsp;</div>
-      <div class="subscription-progress-bar filled">&nbsp;</div>
-      <div class="subscription-progress-bar">&nbsp;</div>
-    </div>
-    <div class="subscription-options" data-field="profile">
-      <button
-        type="button"
-        class="subscription-option subscription-option--profile"
-        data-value="classic">
-        <span class="subscription-option-icon">
-          <img
-            src="{{ 'questionnaire_Dark_2.png' | asset_url }}"
-            alt=""
-            class="subscription-option-img"
-            width="32"
-            height="32">
-        </span>
-        <span class="subscription-option-body">
-          <span class="subscription-option-title">הקלאסי:</span>
-          <span class="subscription-option-desc">עשיר ושוקולדי (קקאו, אגוזים, קרמל).</span>
-        </span>
-      </button>
-      <button
-        type="button"
-        class="subscription-option subscription-option--profile"
-        data-value="balanced">
-        <span class="subscription-option-icon">
-          <img
-            src="{{ 'questionnaire_soft.png' | asset_url }}"
-            alt=""
-            class="subscription-option-img"
-            width="32"
-            height="32">
-        </span>
-        <span class="subscription-option-body">
-          <span class="subscription-option-title">המאוזן:</span>
-          <span class="subscription-option-desc">מתוק עם נגיעות פרי (שוקולד חלב, פירותיות מעודנת)</span>
-        </span>
-      </button>
-      <button
-        type="button"
-        class="subscription-option subscription-option--profile"
-        data-value="adventurous">
-        <span class="subscription-option-icon">
-          <img
-            src="{{ 'questionnaire_special.png' | asset_url }}"
-            alt=""
-            class="subscription-option-img"
-            width="32"
-            height="32">
-        </span>
-        <span class="subscription-option-body">
-          <span class="subscription-option-title">הרפתקני:</span>
-          <span class="subscription-option-desc">פירותי ופרחוני (קליל, חמצמץ, "הגל השלישי")</span>
-        </span>
-      </button>
-    </div>
-  </div>
-
-  {%- comment -%} ── Step 5: Preparation method (grind) ─────────────────── {%- endcomment -%}
-  <div
-    class="subscription-step"
-    id="subscriptionStep5"
-    data-step-index="5">
-    <div class="subscription-title-wrapper">
-      <div class="subscription-close-icon" onclick="closeSubscriptionForm()">
-        {% render 'subscription-icon'
-          , icon: 'close' %}
-      </div>
-      <div class="subscription-title">{{ section.settings.step5_title | default: 'שיטת ההכנה (הטחינה)' }}</div>
-      <div class="subscription-back-icon-wrapper" onclick="goToPreviousSubscriptionStep()">
-        <img
-          class="subscription-back-icon"
-          src="{{ 'questionnaire_back_icon.png' | asset_url }}"
-          alt="חזרה"
-          width="20"
-          height="20">
-      </div>
-    </div>
-    <div class="subscription-progress-bar-wrapper">
-      <div class="subscription-progress-bar filled">&nbsp;</div>
-      <div class="subscription-progress-bar filled">&nbsp;</div>
-      <div class="subscription-progress-bar filled">&nbsp;</div>
-      <div class="subscription-progress-bar filled">&nbsp;</div>
-      <div class="subscription-progress-bar filled">&nbsp;</div>
     </div>
     <div class="subscription-options" data-field="grind">
       <button
@@ -314,7 +157,7 @@
         data-value="whole">
         <span class="subscription-option-icon">
           <img
-            src="{{ 'questionnaire_intro_beans.png' | asset_url }}"
+            src="{{ 'subscription_icon_grinder.png' | asset_url }}"
             alt=""
             class="subscription-option-img"
             width="32"
@@ -331,14 +174,14 @@
         data-value="espresso">
         <span class="subscription-option-icon">
           <img
-            src="{{ 'questionnaire_Espresso_Machine.png' | asset_url }}"
+            src="{{ 'subscription_icon_espresso.png' | asset_url }}"
             alt=""
             class="subscription-option-img"
             width="32"
             height="32">
         </span>
         <span class="subscription-option-body">
-          <span class="subscription-option-title">אספרסו:</span>
+          <span class="subscription-option-title">טחינה לאספרסו:</span>
           <span class="subscription-option-desc">טחינה דקה למכונה ביתית</span>
         </span>
       </button>
@@ -348,14 +191,14 @@
         data-value="moka">
         <span class="subscription-option-icon">
           <img
-            src="{{ 'questionnaire_Moka_Pot.png' | asset_url }}"
+            src="{{ 'subscription_icon_moka.png' | asset_url }}"
             alt=""
             class="subscription-option-img"
             width="32"
             height="32">
         </span>
         <span class="subscription-option-body">
-          <span class="subscription-option-title">מקינטה / קפה שחור:</span>
+          <span class="subscription-option-title">טחינה למקינטה / קפה שחור:</span>
           <span class="subscription-option-desc">טחינה דקה-בינונית</span>
         </span>
       </button>
@@ -365,14 +208,14 @@
         data-value="v60">
         <span class="subscription-option-icon">
           <img
-            src="{{ 'questionnaire_v60.png' | asset_url }}"
+            src="{{ 'subscription_icon_v60.png' | asset_url }}"
             alt=""
             class="subscription-option-img"
             width="32"
             height="32">
         </span>
         <span class="subscription-option-body">
-          <span class="subscription-option-title">V60 / פילטר:</span>
+          <span class="subscription-option-title">טחינה לפילטר / V60:</span>
           <span class="subscription-option-desc">טחינה בינונית</span>
         </span>
       </button>
@@ -382,18 +225,249 @@
         data-value="frenchpress">
         <span class="subscription-option-icon">
           <img
-            src="{{ 'questionnaire_Aeropress.png' | asset_url }}"
+            src="{{ 'subscription_icon_frenchpress.png' | asset_url }}"
             alt=""
             class="subscription-option-img"
             width="32"
             height="32">
         </span>
         <span class="subscription-option-body">
-          <span class="subscription-option-title">Cold Brew / פרנץ' פרס:</span>
+          <span class="subscription-option-title">טחינה לפרנץ' פרס / Cold Brew:</span>
           <span class="subscription-option-desc">טחינה גסה</span>
         </span>
       </button>
     </div>
+  </div>
+
+  {%- comment -%} ── Step 3: Quantity & consumption ─────────────────────── {%- endcomment -%}
+  <div
+    class="subscription-step"
+    id="subscriptionStep3"
+    data-step-index="3">
+    <div class="subscription-title-wrapper">
+      <div class="subscription-close-icon" onclick="closeSubscriptionForm()">
+        {% render 'subscription-icon'
+          , icon: 'close' %}
+      </div>
+      <div class="subscription-title">{{ section.settings.step3_title | default: 'כמות וצריכה' }}</div>
+      <div class="subscription-back-icon-wrapper" onclick="goToPreviousSubscriptionStep()">
+        <img
+          class="subscription-back-icon"
+          src="{{ 'questionnaire_back_icon.png' | asset_url }}"
+          alt="חזרה"
+          width="20"
+          height="20">
+      </div>
+    </div>
+    <div class="subscription-progress-bar-wrapper">
+      <div class="subscription-progress-bar filled">&nbsp;</div>
+      <div class="subscription-progress-bar filled">&nbsp;</div>
+      <div class="subscription-progress-bar filled">&nbsp;</div>
+      <div class="subscription-progress-bar">&nbsp;</div>
+      <div class="subscription-progress-bar">&nbsp;</div>
+    </div>
+    <div class="subscription-options" data-field="quantity">
+      <button
+        type="button"
+        class="subscription-option subscription-option--qty"
+        data-value="4">
+        <span class="subscription-option-icon">
+          <img
+            src="{{ 'subscription_icon_bag.png' | asset_url }}"
+            alt=""
+            class="subscription-option-img"
+            width="32"
+            height="32">
+        </span>
+        <span class="subscription-option-body">
+          <span class="subscription-option-title">4 שקיות (1 ק"ג):</span>
+          <span class="subscription-option-desc">כוס אחת ביום (מתאים ליחיד/זוג)</span>
+          <span class="subscription-option-price">מחיר: {{ sub_price_1kg_monthly | money_without_trailing_zeros }}</span>
+        </span>
+      </button>
+      <button
+        type="button"
+        class="subscription-option subscription-option--qty"
+        data-value="8">
+        <span class="subscription-option-icon">
+          <img
+            src="{{ 'subscription_icon_bag.png' | asset_url }}"
+            alt=""
+            class="subscription-option-img"
+            width="32"
+            height="32">
+        </span>
+        <span class="subscription-option-body">
+          <span class="subscription-option-title">8 שקיות (2 ק"ג):</span>
+          <span class="subscription-option-desc">2-3 כוסות ביום (מתאים למשפחה או משרד קטן)</span>
+          <span class="subscription-option-price">מחיר: {{ sub_price_2kg_monthly | money_without_trailing_zeros }}</span>
+        </span>
+      </button>
+      <button
+        type="button"
+        class="subscription-option subscription-option--qty"
+        data-value="16">
+        <span class="subscription-option-icon">
+          <img
+            src="{{ 'subscription_icon_bag.png' | asset_url }}"
+            alt=""
+            class="subscription-option-img"
+            width="32"
+            height="32">
+        </span>
+        <span class="subscription-option-body">
+          <span class="subscription-option-title">16 שקיות (4 ק"ג):</span>
+          <span class="subscription-option-desc">צריכה גבוהה (משרדים או חובבי קפה כבדים)</span>
+          <span class="subscription-option-price">מחיר: {{ sub_price_4kg_monthly | money_without_trailing_zeros }}</span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  {%- comment -%} ── Step 4: Subscription frequency ─────────────────────── {%- endcomment -%}
+  <div
+    class="subscription-step"
+    id="subscriptionStep4"
+    data-step-index="4">
+    <div class="subscription-title-wrapper">
+      <div class="subscription-close-icon" onclick="closeSubscriptionForm()">
+        {% render 'subscription-icon'
+          , icon: 'close' %}
+      </div>
+      <div class="subscription-title">{{ section.settings.step4_title | default: 'תדירות המשלוח' }}</div>
+      <div class="subscription-back-icon-wrapper" onclick="goToPreviousSubscriptionStep()">
+        <img
+          class="subscription-back-icon"
+          src="{{ 'questionnaire_back_icon.png' | asset_url }}"
+          alt="חזרה"
+          width="20"
+          height="20">
+      </div>
+    </div>
+    <div class="subscription-progress-bar-wrapper">
+      <div class="subscription-progress-bar filled">&nbsp;</div>
+      <div class="subscription-progress-bar filled">&nbsp;</div>
+      <div class="subscription-progress-bar filled">&nbsp;</div>
+      <div class="subscription-progress-bar filled">&nbsp;</div>
+      <div class="subscription-progress-bar">&nbsp;</div>
+    </div>
+    <div class="subscription-options" data-field="frequency">
+      <button
+        type="button"
+        class="subscription-option subscription-option--compact subscription-option--frequency"
+        data-value="3">
+        <span class="subscription-option-icon">
+          <img
+            src="{{ 'subscription_icon_calendar.png' | asset_url }}"
+            alt=""
+            class="subscription-option-img"
+            width="32"
+            height="32">
+        </span>
+        <span class="subscription-option-body">
+          <span class="subscription-option-title">3 חודשים</span>
+        </span>
+      </button>
+      <button
+        type="button"
+        class="subscription-option subscription-option--compact subscription-option--frequency"
+        data-value="6">
+        <span class="subscription-option-icon">
+          <img
+            src="{{ 'subscription_icon_calendar.png' | asset_url }}"
+            alt=""
+            class="subscription-option-img"
+            width="32"
+            height="32">
+        </span>
+        <span class="subscription-option-body">
+          <span class="subscription-option-title">6 חודשים</span>
+        </span>
+      </button>
+      <button
+        type="button"
+        class="subscription-option subscription-option--compact subscription-option--frequency"
+        data-value="12">
+        <span class="subscription-option-icon">
+          <img
+            src="{{ 'subscription_icon_calendar.png' | asset_url }}"
+            alt=""
+            class="subscription-option-img"
+            width="32"
+            height="32">
+        </span>
+        <span class="subscription-option-body">
+          <span class="subscription-option-title">12 חודשים</span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  {%- comment -%} ── Step 5: Delivery day of month ──────────────────────── {%- endcomment -%}
+  <div
+    class="subscription-step"
+    id="subscriptionStep5"
+    data-step-index="5">
+    <div class="subscription-title-wrapper">
+      <div class="subscription-close-icon" onclick="closeSubscriptionForm()">
+        {% render 'subscription-icon'
+          , icon: 'close' %}
+      </div>
+      <div class="subscription-title">{{ section.settings.step5_title | default: 'מתי אקבל את המשלוח' }}</div>
+      <div class="subscription-back-icon-wrapper" onclick="goToPreviousSubscriptionStep()">
+        <img
+          class="subscription-back-icon"
+          src="{{ 'questionnaire_back_icon.png' | asset_url }}"
+          alt="חזרה"
+          width="20"
+          height="20">
+      </div>
+    </div>
+    <div class="subscription-progress-bar-wrapper">
+      <div class="subscription-progress-bar filled">&nbsp;</div>
+      <div class="subscription-progress-bar filled">&nbsp;</div>
+      <div class="subscription-progress-bar filled">&nbsp;</div>
+      <div class="subscription-progress-bar filled">&nbsp;</div>
+      <div class="subscription-progress-bar filled">&nbsp;</div>
+    </div>
+    <div class="subscription-options" data-field="deliveryDay">
+      <button
+        type="button"
+        class="subscription-option subscription-option--compact subscription-option--delivery"
+        data-value="10">
+        <span class="subscription-option-icon">
+          <img
+            src="{{ 'subscription_icon_calendar.png' | asset_url }}"
+            alt=""
+            class="subscription-option-img"
+            width="32"
+            height="32">
+        </span>
+        <span class="subscription-option-body">
+          <span class="subscription-option-title">10 בחודש</span>
+        </span>
+      </button>
+      <button
+        type="button"
+        class="subscription-option subscription-option--compact subscription-option--delivery"
+        data-value="20">
+        <span class="subscription-option-icon">
+          <img
+            src="{{ 'subscription_icon_calendar.png' | asset_url }}"
+            alt=""
+            class="subscription-option-img"
+            width="32"
+            height="32">
+        </span>
+        <span class="subscription-option-body">
+          <span class="subscription-option-title">20 בחודש</span>
+        </span>
+      </button>
+    </div>
+    <ul class="subscription-step-notes">
+      <li>המשלוח הראשון יגיע מייד עם סיום ההזמנה.</li>
+      <li>בחירת התאריך מתייחסת לחודשים הבאים</li>
+    </ul>
   </div>
 
   {%- comment -%} ── Results ─────────────────────────────────────────────── {%- endcomment -%}
@@ -401,102 +475,143 @@
     class="subscription-step subscription-results"
     id="subscriptionResultsStep"
     data-step-index="results">
-    <header class="subscription-results-header">
-      <a
-        href="{{ routes.root_url }}"
-        class="subscription-results-logo-link"
-        aria-label="{{ shop.name }}"
-        onclick="clearSubscriptionResultsState()">
-        <img
-          src="{{ 'logo.png' | asset_url }}"
-          alt="{{ shop.name }}"
-          class="subscription-results-logo"
-          width="120"
-          height="26">
-      </a>
+    <div class="subscription-results-scroll">
+      <header class="subscription-results-header">
+        <a
+          href="{{ routes.root_url }}"
+          class="subscription-results-logo-link"
+          aria-label="{{ shop.name }}"
+          onclick="clearSubscriptionResultsState()">
+          <img
+            src="{{ 'logo.png' | asset_url }}"
+            alt="{{ shop.name }}"
+            class="subscription-results-logo"
+            width="120"
+            height="26">
+        </a>
+        <button
+          type="button"
+          class="subscription-results-reload-btn"
+          onclick="restartSubscriptionFlow()"
+          aria-label="התחל מחדש"
+          title="התחל מחדש">
+          {% render 'subscription-icon'
+            , icon: 'reload' %}
+        </button>
+      </header>
+
+      <h1 class="subscription-results-title">{{ section.settings.results_title | default: 'המנוי שלך מוכן!' }}</h1>
+      <p class="subscription-results-subtitle">
+        {{
+          section.settings.results_subtitle | default: 'התאמנו לך את חוויית הקפה המדויקת ביותר עבורך. בכל חודש נחכה לך סיפור חדש במעטפה.'
+        }}
+      </p>
+
+      <div class="subscription-edit-link-row">
+        <button
+          type="button"
+          class="subscription-edit-link"
+          onclick="openSubscriptionEditSheet()"
+          aria-label="{{ section.settings.edit_sheet_title | default: 'עריכת העדפות' }}">
+          <span class="subscription-edit-link-icon">{% render 'subscription-icon'
+            , icon: 'pencil' %}</span>
+          <span>{{ section.settings.edit_link_text | default: 'עריכת בחירות' }}</span>
+        </button>
+      </div>
+
+      <div class="subscription-summary-grid">
+        <div class="subscription-summary-tile" data-tile="profile">
+          <span class="subscription-summary-tile-icon">{% render 'subscription-icon'
+            , icon: 'bandage' %}</span>
+          <span class="subscription-summary-tile-value" id="subscriptionTileProfile"></span>
+        </div>
+        <div class="subscription-summary-tile" data-tile="grind">
+          <span class="subscription-summary-tile-icon">{% render 'subscription-icon'
+            , icon: 'cup' %}</span>
+          <span class="subscription-summary-tile-value" id="subscriptionTileGrind"></span>
+        </div>
+        <div class="subscription-summary-tile" data-tile="frequency">
+          <span class="subscription-summary-tile-icon">{% render 'subscription-icon'
+            , icon: 'calendar-blank' %}</span>
+          <span class="subscription-summary-tile-value" id="subscriptionTileFrequency"></span>
+        </div>
+        <div class="subscription-summary-tile" data-tile="quantity">
+          <span class="subscription-summary-tile-icon">{% render 'subscription-icon'
+            , icon: 'bag' %}</span>
+          <span class="subscription-summary-tile-value" id="subscriptionTileQuantity"></span>
+        </div>
+      </div>
+
+      <div class="subscription-how-it-works">
+        <button
+          type="button"
+          class="subscription-how-it-works-toggle"
+          onclick="toggleSubscriptionHowItWorks()"
+          aria-expanded="false"
+          aria-controls="subscriptionHowItWorksBody">
+          {{ section.settings.how_it_works_title | default: 'איך זה עובד?' }}
+        </button>
+        <div class="subscription-how-it-works-body" id="subscriptionHowItWorksBody">
+          {{
+            section.settings.how_it_works_text | default: 'בכל חודש נשלח לך מבחר קפה טרי מותאם אישית לפי ההעדפות שבחרת. ניתן לעדכן, להשהות או לבטל את המנוי בכל עת דרך אזור האישי.'
+          }}
+        </div>
+      </div>
+    </div>
+
+    <div class="subscription-results-footer">
+      <div class="subscription-price-row">
+        <span class="subscription-price-annual" id="subscriptionPriceAnnual"></span>
+        <span class="subscription-price-monthly-note" id="subscriptionPriceMonthlyNote"></span>
+      </div>
+
       <button
         type="button"
-        class="subscription-results-reload-btn"
-        onclick="restartSubscriptionFlow()"
-        aria-label="התחל מחדש"
-        title="התחל מחדש">
-        {% render 'subscription-icon'
-          , icon: 'reload' %}
+        class="subscription-cta-btn"
+        id="subscriptionCtaBtn"
+        onclick="submitSubscriptionToCart()">
+        <span id="subscriptionCtaLabel">{{ section.settings.cta_text | default: 'הצטרפות למנוי' }}</span>
       </button>
-    </header>
 
-    <div class="subscription-results-icon">{% render 'subscription-icon'
-, icon: 'calendar' %}</div>
-    <h1 class="subscription-results-title">{{ section.settings.results_title | default: 'המנוי האישי שלך מוכן!' }}</h1>
-    <p class="subscription-results-subtitle">
-      {{
-        section.settings.results_subtitle | default: 'התאמנו לך את חוויית הקפה המדויקת ביותר עבורך. בכל חודש נחכה לך סיפור חדש במעטפה.'
-      }}
-    </p>
-
-    <div class="subscription-summary-card">
-      <button
-        type="button"
-        class="subscription-summary-edit-btn"
-        onclick="openSubscriptionEditSheet()"
-        aria-label="{{ section.settings.edit_sheet_title | default: 'עריכת העדפות' }}">
-        {% render 'subscription-icon'
-          , icon: 'pencil' %}
-      </button>
-      <div class="subscription-summary-title">{{ section.settings.summary_title | default: 'סיכום בחירות' }}</div>
-      <div class="subscription-summary-rows" id="subscriptionSummaryRows"></div>
-    </div>
-
-    <div class="subscription-vendor-blurb" id="subscriptionVendorBlurb"></div>
-
-    <div class="subscription-price-row">
-      <span class="subscription-price-original" id="subscriptionPriceOriginal"></span>
-      <span class="subscription-price-discounted" id="subscriptionPriceDiscounted"></span>
-      <span class="subscription-price-caption">{{ section.settings.price_caption | default: 'כולל משלוח' }}</span>
-    </div>
-
-    <button
-      type="button"
-      class="subscription-cta-btn"
-      id="subscriptionCtaBtn"
-      onclick="submitSubscriptionToCart()">
-      <span id="subscriptionCtaLabel">{{ section.settings.cta_text | default: 'הצטרפות למנוי' }}</span>
-    </button>
-
-    <div class="subscription-payment-row">
-      <img
-        class="subscription-payment-icon"
-        src="{{ 'payment-visa.webp' | asset_url }}"
-        alt="Visa"
-        width="32"
-        height="18">
-      <img
-        class="subscription-payment-icon"
-        src="{{ 'payment-mastercard.webp' | asset_url }}"
-        alt="MasterCard"
-        width="32"
-        height="18">
-      <img
-        class="subscription-payment-icon"
-        src="{{ 'payment-google-pay.webp' | asset_url }}"
-        alt="Google Pay"
-        width="32"
-        height="18">
-      <img
-        class="subscription-payment-icon"
-        src="{{ 'payment-apple-pay.webp' | asset_url }}"
-        alt="Apple Pay"
-        width="32"
-        height="18">
-    </div>
-    <div class="subscription-secure-note">
-      <img
-        class="subscription-secure-icon"
-        src="{{ 'secure_buy.png' | asset_url }}"
-        alt=""
-        width="16"
-        height="16">
-      <span>רכישה מאובטחת</span>
+      <div class="subscription-payment-secure-row">
+        <div class="subscription-payment-row">
+          <img
+            class="subscription-payment-icon"
+            src="{{ 'payment-mastercard.webp' | asset_url }}"
+            alt="MasterCard"
+            width="32"
+            height="18">
+          <img
+            class="subscription-payment-icon"
+            src="{{ 'payment-google-pay.webp' | asset_url }}"
+            alt="Google Pay"
+            width="32"
+            height="18">
+          <img
+            class="subscription-payment-icon"
+            src="{{ 'payment-visa.webp' | asset_url }}"
+            alt="Visa"
+            width="32"
+            height="18">
+          <img
+            class="subscription-payment-icon"
+            src="{{ 'payment-apple-pay.webp' | asset_url }}"
+            alt="Apple Pay"
+            width="32"
+            height="18">
+          <img
+            class="subscription-payment-icon"
+            src="{{ 'payment-paypal.png' | asset_url }}"
+            alt="PayPal"
+            width="32"
+            height="18">
+        </div>
+        <div class="subscription-secure-note">
+          <span>רכישה מאובטחת</span>
+          <span class="subscription-secure-icon">{% render 'subscription-icon'
+            , icon: 'lock' %}</span>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -527,21 +642,6 @@
       </div>
 
       <div class="subscription-sheet-row">
-        <span class="subscription-sheet-label">רמת המנוי</span>
-        <span class="subscription-sheet-select-wrapper">
-          <select
-            class="subscription-sheet-select"
-            id="subscriptionEditTier"
-            data-field="tier">
-            <option value="specialty">Origin Specialty</option>
-            <option value="premium">Origin Premium</option>
-          </select>
-          <span class="subscription-sheet-chevron">{% render 'subscription-icon'
-, icon: 'chevron' %}</span>
-        </span>
-      </div>
-
-      <div class="subscription-sheet-row">
         <span class="subscription-sheet-label">כמות שקיות</span>
         <span class="subscription-sheet-select-wrapper">
           <select
@@ -564,8 +664,24 @@
             class="subscription-sheet-select"
             id="subscriptionEditFrequency"
             data-field="frequency">
-            <option value="monthly">פעם בחודש</option>
-            <option value="bimonthly">פעם בחודשיים</option>
+            <option value="3">3 חודשים</option>
+            <option value="6">6 חודשים</option>
+            <option value="12">12 חודשים</option>
+          </select>
+          <span class="subscription-sheet-chevron">{% render 'subscription-icon'
+, icon: 'chevron' %}</span>
+        </span>
+      </div>
+
+      <div class="subscription-sheet-row">
+        <span class="subscription-sheet-label">מועד המשלוח</span>
+        <span class="subscription-sheet-select-wrapper">
+          <select
+            class="subscription-sheet-select"
+            id="subscriptionEditDeliveryDay"
+            data-field="deliveryDay">
+            <option value="10">10 בחודש</option>
+            <option value="20">20 בחודש</option>
           </select>
           <span class="subscription-sheet-chevron">{% render 'subscription-icon'
 , icon: 'chevron' %}</span>
@@ -579,9 +695,9 @@
             class="subscription-sheet-select"
             id="subscriptionEditProfile"
             data-field="profile">
-            <option value="classic">הקלאסי</option>
-            <option value="balanced">המאוזן</option>
-            <option value="adventurous">הרפתקני</option>
+            <option value="italian">סגנון איטלקי ועשיר</option>
+            <option value="classic">סגנון קלאסי "בית קפה"</option>
+            <option value="modern">סגנון מודרני</option>
           </select>
           <span class="subscription-sheet-chevron">{% render 'subscription-icon'
 , icon: 'chevron' %}</span>
@@ -596,10 +712,10 @@
             id="subscriptionEditGrind"
             data-field="grind">
             <option value="whole">פולים שלמים</option>
-            <option value="espresso">אספרסו - טחינה דקה</option>
-            <option value="moka">מקינטה / קפה שחור - טחינה דקה-בינונית</option>
-            <option value="v60">V60 / פילטר - טחינה בינונית</option>
-            <option value="frenchpress">Cold Brew / פרנץ' פרס - טחינה גסה</option>
+            <option value="espresso">טחינה לאספרסו - דקה</option>
+            <option value="moka">טחינה למקינטה / קפה שחור - דקה-בינונית</option>
+            <option value="v60">טחינה לפילטר / V60 - בינונית</option>
+            <option value="frenchpress">טחינה לפרנץ' פרס / Cold Brew - גסה</option>
           </select>
           <span class="subscription-sheet-chevron">{% render 'subscription-icon'
 , icon: 'chevron' %}</span>
@@ -653,22 +769,31 @@
     </script>
   {% endpaginate %}
 
+  <script type="application/json" id="subscription-product-data">
+    {
+      "id": {{ subscription_product.id | default: 8382216568889 }},
+      "handle": {{ subscription_product.handle | default: 'מנוי-קפה' | json }},
+      "title": {{ subscription_product.title | default: 'מנוי קפה' | json }},
+      "variants": [
+        {%- if subscription_product != blank -%}
+          {%- for variant in subscription_product.variants -%}
+            {
+              "id": {{ variant.id }},
+              "title": {{ variant.title | json }},
+              "available": {{ variant.available }},
+              "price": {{ variant.price }},
+              "option1": {{ variant.option1 | json }},
+              "option2": {{ variant.option2 | json }}
+            }{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        {%- endif -%}
+      ]
+    }
+  </script>
+
   <script>
     window.subscriptionSettings = {
-      closeRedirect: {{ section.settings.close_redirect | default: '/' | json }},
-      pricing: {
-        specialty: {
-          4: {{ section.settings.specialty_price_4 | default: 170 }},
-          8: {{ section.settings.specialty_price_8 | default: 320 }},
-          16: {{ section.settings.specialty_price_16 | default: 600 }}
-        },
-        premium: {
-          4: {{ section.settings.premium_price_4 | default: 210 }},
-          8: {{ section.settings.premium_price_8 | default: 395 }},
-          16: {{ section.settings.premium_price_16 | default: 740 }}
-        }
-      },
-      promoDiscountPercent: {{ section.settings.promo_discount_percent | default: 20 }}
+      closeRedirect: {{ section.settings.close_redirect | default: '/' | json }}
     };
   </script>
 </div>
@@ -686,30 +811,30 @@
       {
         "type": "text",
         "id": "step1_title",
-        "label": "כותרת שלב 1 - רמת מנוי",
-        "default": "רמת המנוי"
+        "label": "כותרת שלב 1 - פרופיל טעם",
+        "default": "פרופיל הטעם המועדף"
       },
       {
         "type": "text",
         "id": "step2_title",
-        "label": "כותרת שלב 2 - כמות וצריכה",
-        "default": "כמות וצריכה"
+        "label": "כותרת שלב 2 - שיטת הכנה",
+        "default": "שיטת ההכנה (הטחינה)"
       },
       {
         "type": "text",
         "id": "step3_title",
-        "label": "כותרת שלב 3 - תדירות משלוח",
-        "default": "תדירות המשלוח"
+        "label": "כותרת שלב 3 - כמות וצריכה",
+        "default": "כמות וצריכה"
       }, {
         "type": "text",
         "id": "step4_title",
-        "label": "כותרת שלב 4 - פרופיל טעם",
-        "default": "פרופיל הטעם המועדף"
+        "label": "כותרת שלב 4 - תדירות",
+        "default": "תדירות המשלוח"
       }, {
         "type": "text",
         "id": "step5_title",
-        "label": "כותרת שלב 5 - שיטת הכנה",
-        "default": "שיטת ההכנה (הטחינה)"
+        "label": "כותרת שלב 5 - מועד המשלוח",
+        "default": "מתי אקבל את המשלוח"
       }, {
         "type": "header",
         "content": "מסך תוצאה"
@@ -725,14 +850,19 @@
         "default": "התאמנו לך את חוויית הקפה המדויקת ביותר עבורך. בכל חודש נחכה לך סיפור חדש במעטפה."
       }, {
         "type": "text",
-        "id": "summary_title",
-        "label": "כותרת כרטיס סיכום",
-        "default": "סיכום בחירות"
+        "id": "edit_link_text",
+        "label": "טקסט קישור עריכת בחירות",
+        "default": "עריכת בחירות"
       }, {
         "type": "text",
-        "id": "price_caption",
-        "label": "טקסט מתחת למחיר",
-        "default": "כולל משלוח"
+        "id": "how_it_works_title",
+        "label": "כותרת \"איך זה עובד?\"",
+        "default": "איך זה עובד?"
+      }, {
+        "type": "textarea",
+        "id": "how_it_works_text",
+        "label": "תוכן \"איך זה עובד?\"",
+        "default": "בכל חודש נשלח לך מבחר קפה טרי מותאם אישית לפי ההעדפות שבחרת. ניתן לעדכן, להשהות או לבטל את המנוי בכל עת דרך האזור האישי."
       }, {
         "type": "text",
         "id": "cta_text",
@@ -750,46 +880,12 @@
         "default": "עדכן"
       }, {
         "type": "header",
-        "content": "מחירים (סימולציה - עד לגיבוש לוגיקת התמחור הסופית)"
+        "content": "מוצר המנוי"
       }, {
-        "type": "number",
-        "id": "specialty_price_4",
-        "label": "Origin Specialty - 4 שקיות (₪)",
-        "default": 170
-      }, {
-        "type": "number",
-        "id": "specialty_price_8",
-        "label": "Origin Specialty - 8 שקיות (₪)",
-        "default": 320
-      }, {
-        "type": "number",
-        "id": "specialty_price_16",
-        "label": "Origin Specialty - 16 שקיות (₪)",
-        "default": 600
-      }, {
-        "type": "number",
-        "id": "premium_price_4",
-        "label": "Origin Premium - 4 שקיות (₪)",
-        "default": 210
-      }, {
-        "type": "number",
-        "id": "premium_price_8",
-        "label": "Origin Premium - 8 שקיות (₪)",
-        "default": 395
-      }, {
-        "type": "number",
-        "id": "premium_price_16",
-        "label": "Origin Premium - 16 שקיות (₪)",
-        "default": 740
-      }, {
-        "type": "range",
-        "id": "promo_discount_percent",
-        "label": "אחוז הנחת השקה (מוצג כמחיר מקורי מחוק מול מחיר מוזל)",
-        "min": 0,
-        "max": 50,
-        "step": 1,
-        "unit": "%",
-        "default": 20
+        "type": "product",
+        "id": "subscription_product",
+        "label": "מוצר המנוי",
+        "info": "המוצר שמתווסף לסל. הכמות והתדירות נבחרות כוריאנטים, ושאר הבחירות כמאפיינים."
       }, {
         "type": "header",
         "content": "הגדרות ניווט"

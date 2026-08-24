@@ -4,56 +4,56 @@
  * interaction patterns (step machine, auto-advance, sessionStorage persistence)
  * re-implemented here as a standalone module.
  *
- * NOTE: The vendor/bundle recommendation (see SubscriptionScoring below) and the
- * pricing table are explicit SIMULATIONS standing in for business logic that is
- * still being finalized. Replace both once the real subscription bundle service
- * is ready — everything else (step UI, cart submission) should keep working.
+ * NOTE: The vendor/roastery blurb (see SubscriptionScoring below) is still a
+ * simulation. Cart + price always use the dedicated subscription product
+ * (quantity + frequency as variants, remaining answers as line-item properties).
  */
 (function () {
   var SUBSCRIPTION_RESULTS_STATE_KEY = 'subscriptionResultsState';
   var SUBSCRIPTION_TOTAL_STEPS = 5;
   var SUBSCRIPTION_AUTO_ADVANCE_MS = 300;
   var SUBSCRIPTION_FIELD_TO_SHEET_ID = {
-    tier: 'subscriptionEditTier',
     quantity: 'subscriptionEditQuantity',
     frequency: 'subscriptionEditFrequency',
+    deliveryDay: 'subscriptionEditDeliveryDay',
     profile: 'subscriptionEditProfile',
     grind: 'subscriptionEditGrind',
   };
 
-  var SUBSCRIPTION_TIER_LABELS = {
-    specialty: 'Origin Specialty',
-    premium: 'Origin Premium',
-  };
   var SUBSCRIPTION_FREQUENCY_LABELS = {
-    monthly: 'פעם בחודש',
-    bimonthly: 'פעם בחודשיים',
+    3: '3 חודשים',
+    6: '6 חודשים',
+    12: '12 חודשים',
+  };
+  var SUBSCRIPTION_DELIVERY_DAY_LABELS = {
+    10: '10 בחודש',
+    20: '20 בחודש',
   };
   var SUBSCRIPTION_PROFILE_LABELS = {
-    classic: 'הקלאסי',
-    balanced: 'המאוזן',
-    adventurous: 'הרפתקני',
+    italian: 'סגנון איטלקי ועשיר',
+    classic: 'סגנון קלאסי "בית קפה"',
+    modern: 'סגנון מודרני',
   };
   var SUBSCRIPTION_PROFILE_SHORT_DESC = {
-    classic: 'עשיר ושוקולדי',
-    balanced: 'מתוק עם נגיעות פרי',
-    adventurous: 'פירותי ופרחוני',
+    italian: 'עשיר ושוקולדי',
+    classic: 'עדין ומתוק',
+    modern: 'פירותי וקליל',
   };
   var SUBSCRIPTION_GRIND_LABELS = {
     whole: 'פולים שלמים',
-    espresso: 'אספרסו - טחינה דקה',
-    moka: 'מקינטה / קפה שחור - טחינה דקה-בינונית',
-    v60: 'V60 / פילטר - טחינה בינונית',
-    frenchpress: "Cold Brew / פרנץ' פרס - טחינה גסה",
+    espresso: 'טחינה לאספרסו - דקה',
+    moka: 'טחינה למקינטה / קפה שחור - דקה-בינונית',
+    v60: 'טחינה לפילטר / V60 - בינונית',
+    frenchpress: "טחינה לפרנץ' פרס / Cold Brew - גסה",
   };
 
   /* PLACEHOLDER: content-based mapping from this flow's answers to the existing
      coffee_tastes / coffee_prep_methods metafield tags, used only to simulate a
      vendor recommendation. Replace when the real subscription logic exists. */
   var SUBSCRIPTION_PROFILE_TASTE_TAG = {
-    classic: 'Rich & Chocolaty',
-    balanced: 'Sweet & Caramelly',
-    adventurous: 'Fruity & Floral',
+    italian: 'Rich & Chocolaty',
+    classic: 'Sweet & Caramelly',
+    modern: 'Fruity & Floral',
   };
   var SUBSCRIPTION_GRIND_PREP_TAG = {
     whole: null,
@@ -65,9 +65,9 @@
   var SUBSCRIPTION_FALLBACK_VENDORS = ['אור זך', 'קנופי', 'קפה איכות', 'הקליה המקומית'];
 
   window.subscriptionAnswers = window.subscriptionAnswers || {
-    tier: null,
     quantity: null,
     frequency: null,
+    deliveryDay: null,
     profile: null,
     grind: null,
   };
@@ -149,33 +149,78 @@
     return { pickVendor: pickVendor };
   })();
 
-  /* ── Pricing (simulation) ──────────────────────────────────────────────── */
+  /* ── Subscription product (quantity + frequency variants) ─────────────── */
+  var SUBSCRIPTION_QUANTITY_TO_KG = { 4: 1, 8: 2, 16: 4 };
+
+  function loadSubscriptionProduct() {
+    if (window.subscriptionProduct && window.subscriptionProduct.variants) {
+      return window.subscriptionProduct;
+    }
+    var el = document.getElementById('subscription-product-data');
+    if (!el) {
+      window.subscriptionProduct = { variants: [] };
+      return window.subscriptionProduct;
+    }
+    try {
+      window.subscriptionProduct = JSON.parse(el.textContent || '{}') || { variants: [] };
+    } catch (e) {
+      window.subscriptionProduct = { variants: [] };
+    }
+    if (!window.subscriptionProduct.variants) window.subscriptionProduct.variants = [];
+    return window.subscriptionProduct;
+  }
+
+  function subscriptionOptionNumber(value) {
+    var match = String(value || '').match(/(\d+)/);
+    return match ? parseInt(match[1], 10) : null;
+  }
+
+  function findSubscriptionVariant(quantity, frequency) {
+    var kg = SUBSCRIPTION_QUANTITY_TO_KG[quantity];
+    var months = parseInt(frequency, 10);
+    if (!kg || !months) return null;
+    var variants = loadSubscriptionProduct().variants || [];
+    for (var i = 0; i < variants.length; i++) {
+      var variant = variants[i];
+      if (
+        subscriptionOptionNumber(variant.option1) === kg &&
+        subscriptionOptionNumber(variant.option2) === months
+      ) {
+        return variant;
+      }
+    }
+    return null;
+  }
+
+  function formatSubscriptionShekels(amount) {
+    return Math.round(amount) + ' ₪';
+  }
+
   function computeSubscriptionPrice(answers) {
-    var settings = window.subscriptionSettings;
-    if (!settings || !settings.pricing || !answers.tier || !answers.quantity) return null;
-    var tierTable = settings.pricing[answers.tier];
-    var base = tierTable && tierTable[answers.quantity];
-    if (typeof base !== 'number') return null;
-    var discountPct = (settings.promoDiscountPercent || 0) / 100;
-    var discounted = Math.round(base * (1 - discountPct));
-    return { original: base, discounted: discounted };
+    var variant = findSubscriptionVariant(answers.quantity, answers.frequency);
+    if (!variant || typeof variant.price !== 'number') return null;
+    var months = parseInt(answers.frequency, 10) || 1;
+    var total = variant.price / 100;
+    var monthly = Math.round(total / months);
+    return {
+      variant: variant,
+      total: total,
+      monthly: monthly,
+      annual: monthly * 12,
+    };
   }
 
   /* ── Step machine ──────────────────────────────────────────────────────── */
-  function syncSubscriptionDynamicBindings() {
-    var quantity = window.subscriptionAnswers.quantity;
-    document.querySelectorAll('[data-bind-quantity]').forEach(function (el) {
-      el.textContent = quantity != null ? quantity : 'X';
-    });
-  }
-
   function activateSubscriptionStep(stepIndex) {
     document.querySelectorAll('.subscription-step').forEach(function (el) {
       el.classList.remove('active');
     });
     var target = document.querySelector('.subscription-step[data-step-index="' + stepIndex + '"]');
     if (target) target.classList.add('active');
-    syncSubscriptionDynamicBindings();
+    var wrapper = document.getElementById('subscriptionWrapper');
+    if (wrapper) {
+      wrapper.classList.toggle('subscription-results-visible', stepIndex === 'results');
+    }
   }
 
   function currentSubscriptionStepIndex() {
@@ -248,56 +293,42 @@
   function renderSubscriptionResults() {
     var answers = window.subscriptionAnswers;
 
-    var rowsEl = document.getElementById('subscriptionSummaryRows');
-    if (rowsEl) {
-      rowsEl.innerHTML = '';
-      var kg = answers.quantity ? answers.quantity / 4 : null;
-      var profileValue = SUBSCRIPTION_PROFILE_LABELS[answers.profile] || '';
-      if (profileValue && SUBSCRIPTION_PROFILE_SHORT_DESC[answers.profile]) {
-        profileValue += ': ' + SUBSCRIPTION_PROFILE_SHORT_DESC[answers.profile];
-      }
-      var entries = [
-        ['רמת המנוי', SUBSCRIPTION_TIER_LABELS[answers.tier] || ''],
-        ['כמות שקיות', answers.quantity ? answers.quantity + ' שקיות (' + kg + ' ק"ג)' : ''],
-        ['תדירות המשלוח', SUBSCRIPTION_FREQUENCY_LABELS[answers.frequency] || ''],
-        ['הפרופיל', profileValue],
-        ['הטחינה', SUBSCRIPTION_GRIND_LABELS[answers.grind] || ''],
-      ];
-      entries.forEach(function (entry) {
-        var row = document.createElement('div');
-        row.className = 'subscription-summary-row';
-
-        var label = document.createElement('span');
-        label.className = 'subscription-summary-row-label';
-        label.textContent = entry[0] + ': ';
-
-        var value = document.createElement('span');
-        value.className = 'subscription-summary-row-value';
-        value.textContent = entry[1];
-
-        row.appendChild(label);
-        row.appendChild(value);
-        rowsEl.appendChild(row);
-      });
+    var kg = answers.quantity ? answers.quantity / 4 : null;
+    var profileValue = SUBSCRIPTION_PROFILE_LABELS[answers.profile] || '';
+    if (profileValue && SUBSCRIPTION_PROFILE_SHORT_DESC[answers.profile]) {
+      profileValue += ': ' + SUBSCRIPTION_PROFILE_SHORT_DESC[answers.profile];
     }
 
-    var vendorBlurbEl = document.getElementById('subscriptionVendorBlurb');
-    var picked = window.SubscriptionScoring ? window.SubscriptionScoring.pickVendor(answers.profile, answers.grind) : null;
-    window.__subscriptionPickedVendor = picked;
-    if (vendorBlurbEl) {
-      vendorBlurbEl.textContent =
-        picked && picked.vendorName ? 'החודש מתחילים עם בית הקלייה ' + picked.vendorName : '';
-    }
+    var tileValues = {
+      subscriptionTileProfile: profileValue,
+      subscriptionTileGrind: SUBSCRIPTION_GRIND_LABELS[answers.grind] || '',
+      subscriptionTileFrequency:
+        SUBSCRIPTION_DELIVERY_DAY_LABELS[answers.deliveryDay] || SUBSCRIPTION_FREQUENCY_LABELS[answers.frequency] || '',
+      subscriptionTileQuantity: answers.quantity ? answers.quantity + ' שקיות (' + kg + ' ק"ג)' : '',
+    };
+    Object.keys(tileValues).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = tileValues[id];
+    });
 
     var price = computeSubscriptionPrice(answers);
-    var originalEl = document.getElementById('subscriptionPriceOriginal');
-    var discountedEl = document.getElementById('subscriptionPriceDiscounted');
+    var annualEl = document.getElementById('subscriptionPriceAnnual');
+    var monthlyNoteEl = document.getElementById('subscriptionPriceMonthlyNote');
     if (price) {
-      originalEl.textContent = price.discounted < price.original ? price.original + ' ₪' : '';
-      discountedEl.textContent = price.discounted + ' ₪';
-    } else if (originalEl && discountedEl) {
-      originalEl.textContent = '';
-      discountedEl.textContent = '';
+      var months = parseInt(answers.frequency, 10);
+      var headline = formatSubscriptionShekels(price.total);
+      if (months === 12) {
+        headline += ' לשנה';
+      } else if (SUBSCRIPTION_FREQUENCY_LABELS[months]) {
+        headline += ' ל-' + SUBSCRIPTION_FREQUENCY_LABELS[months];
+      }
+      if (annualEl) annualEl.textContent = headline;
+      if (monthlyNoteEl) {
+        monthlyNoteEl.textContent = formatSubscriptionShekels(price.monthly) + ' לחודש (ניתן לחלק לתשלומים)';
+      }
+    } else {
+      if (annualEl) annualEl.textContent = '';
+      if (monthlyNoteEl) monthlyNoteEl.textContent = '';
     }
 
     persistSubscriptionState();
@@ -307,6 +338,16 @@
     activateSubscriptionStep('results');
     renderSubscriptionResults();
   }
+
+  /* ── How it works disclosure ───────────────────────────────────────────── */
+  function toggleSubscriptionHowItWorks() {
+    var wrapper = document.querySelector('.subscription-how-it-works');
+    if (!wrapper) return;
+    var isOpen = wrapper.classList.toggle('open');
+    var toggle = wrapper.querySelector('.subscription-how-it-works-toggle');
+    if (toggle) toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+  window.toggleSubscriptionHowItWorks = toggleSubscriptionHowItWorks;
 
   /* ── Close / restart ───────────────────────────────────────────────────── */
   function closeSubscriptionForm() {
@@ -326,7 +367,7 @@
 
   function restartSubscriptionFlow() {
     clearSubscriptionResultsState();
-    window.subscriptionAnswers = { tier: null, quantity: null, frequency: null, profile: null, grind: null };
+    window.subscriptionAnswers = { quantity: null, frequency: null, deliveryDay: null, profile: null, grind: null };
     document.querySelectorAll('.subscription-option.selected').forEach(function (el) {
       el.classList.remove('selected');
     });
@@ -373,17 +414,19 @@
   /* ── Add to cart ───────────────────────────────────────────────────────── */
   function submitSubscriptionToCart() {
     var answers = window.subscriptionAnswers;
-    if (!answers.tier || !answers.quantity || !answers.frequency || !answers.profile || !answers.grind) return;
+    if (!answers.quantity || !answers.frequency || !answers.deliveryDay || !answers.profile || !answers.grind) return;
 
     var btn = document.getElementById('subscriptionCtaBtn');
     var label = document.getElementById('subscriptionCtaLabel');
+    var originalLabel = label ? label.textContent : '';
     var picked =
       window.__subscriptionPickedVendor ||
       (window.SubscriptionScoring ? window.SubscriptionScoring.pickVendor(answers.profile, answers.grind) : null);
-    var variantId = picked && picked.product && picked.product.variantId;
+    var variant = findSubscriptionVariant(answers.quantity, answers.frequency);
+    var variantId = variant && variant.id;
 
     if (!variantId) {
-      console.error('Subscription add to cart: simulated recommendation engine found no matching product/variant.');
+      console.error('Subscription add to cart: no matching quantity/frequency variant on the subscription product.');
       if (label) label.textContent = 'שגיאה, נסו שוב';
       return;
     }
@@ -391,8 +434,18 @@
     if (btn) btn.disabled = true;
     if (label) label.textContent = 'מוסיף...';
 
-    var price = computeSubscriptionPrice(answers);
-    var originalLabel = label ? label.textContent : '';
+    var profileLabel = SUBSCRIPTION_PROFILE_LABELS[answers.profile] || answers.profile;
+    if (profileLabel && SUBSCRIPTION_PROFILE_SHORT_DESC[answers.profile]) {
+      profileLabel += ': ' + SUBSCRIPTION_PROFILE_SHORT_DESC[answers.profile];
+    }
+
+    var properties = {
+      הפרופיל: profileLabel,
+      הטחינה: SUBSCRIPTION_GRIND_LABELS[answers.grind] || answers.grind,
+      'מועד המשלוח': SUBSCRIPTION_DELIVERY_DAY_LABELS[answers.deliveryDay] || answers.deliveryDay,
+    };
+    var vendorName = picked && (picked.vendorName || picked.vendorShortName);
+    if (vendorName) properties['בית הקלייה'] = vendorName;
 
     fetch('/cart/add.js', {
       method: 'POST',
@@ -402,15 +455,7 @@
           {
             id: variantId,
             quantity: 1,
-            properties: {
-              _subscription_tier: answers.tier,
-              _subscription_quantity: String(answers.quantity),
-              _subscription_frequency: answers.frequency,
-              _subscription_profile: answers.profile,
-              _subscription_grind: answers.grind,
-              _subscription_vendor: (picked && (picked.vendorShortName || picked.vendorName)) || '',
-              _subscription_price: price ? String(price.discounted) : '',
-            },
+            properties: properties,
           },
         ],
       }),
@@ -443,7 +488,7 @@
       var parsed = JSON.parse(raw);
       if (parsed && parsed.answers) {
         window.subscriptionAnswers = Object.assign(
-          { tier: null, quantity: null, frequency: null, profile: null, grind: null },
+          { quantity: null, frequency: null, deliveryDay: null, profile: null, grind: null },
           parsed.answers
         );
         syncSubscriptionOptionSelectedStates();
