@@ -139,6 +139,7 @@
                 </li>
                 {%- if link.title == 'מארזי קפה' or link.handle == 'מארזי-קפה' -%}
                   {%- render 'header-questionnaire-menu-item', menu_context: 'drawer' -%}
+                  {%- render 'header-subscription-menu-item', menu_context: 'drawer' -%}
                 {%- endif -%}
                 {%- endunless -%}
               {%- endfor -%}
