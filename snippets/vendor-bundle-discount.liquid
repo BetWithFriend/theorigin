@@ -1,6 +1,6 @@
 {%- comment -%}
   Calculates quantity bundle discount for a single vendor.
-  5+ items from the same vendor → 5%; 7+ items → 10%.
+  4+ items from the same vendor → 4%; 8+ items → 8%.
   Uses original_line_price so the amount stays correct when Shopify
   has already applied the automatic bundle discount to line_price.
   Outputs pipe-separated:
@@ -24,10 +24,10 @@
     endif
   endfor
 
-  if vendor_qty >= 7
-    assign vendor_discount_percent = 10
-  elsif vendor_qty >= 5
-    assign vendor_discount_percent = 5
+  if vendor_qty >= 8
+    assign vendor_discount_percent = 8
+  elsif vendor_qty >= 4
+    assign vendor_discount_percent = 4
   endif
   if vendor_discount_percent > 0 and vendor_subtotal > 0
     for item in cart.items
