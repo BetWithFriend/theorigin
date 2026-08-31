@@ -1878,17 +1878,14 @@
   }
 
   /**
-   * Coffees for a vendor, best-first. When the vendor doesn't have enough distinct
-   * products to reach `qty`, the top-scoring ones are repeated (capped at 2x each) —
-   * mirrors QuestionnaireScoring's buildBundleItemsForSize so every code path that
-   * falls back to this helper (dropdown, sorting, etc.) shows the same product/weight
-   * total as the primary bundle-building path.
+   * Coffees for a vendor, best-first by roast match then score.
+   * At most one of each product — never pad a bundle by repeating SKUs.
    */
   function coffeesForVendorFromPositiveScores(positiveScores, vendorKeyLower, qty) {
     const v = (vendorKeyLower || '').toLowerCase();
     const targetQty = qty || 8;
     if (!Array.isArray(positiveScores)) return [];
-    const distinct = positiveScores
+    return positiveScores
       .filter(function (item) {
         return item.coffee && (item.coffee.vendor || '').trim().toLowerCase() === v;
       })
@@ -1900,16 +1897,8 @@
       })
       .map(function (item) {
         return item.coffee;
-      });
-
-    if (!distinct.length) return [];
-    if (distinct.length >= targetQty) return distinct.slice(0, targetQty);
-    const extraCount = Math.min(targetQty - distinct.length, distinct.length);
-    const result = distinct.slice();
-    for (let i = 0; i < extraCount; i++) {
-      result.push(distinct[i]);
-    }
-    return result;
+      })
+      .slice(0, targetQty);
   }
 
   /* ——— QuestionnaireScoring engine ——— */
@@ -2176,22 +2165,12 @@
     }
 
     /**
-     * Builds a bundle of `size` items from a vendor's (already best-first sorted) item list.
-     * When there aren't enough distinct items to fill `size`, the top-scoring items are
-     * repeated to make up the difference — but each item is capped at appearing twice
-     * (i.e. no more than 2x the same product). If even doubling every item can't reach
-     * `size`, the result is simply shorter than `size`.
+     * Top `size` distinct items from a vendor's (already best-first sorted) list.
+     * Never repeats a product to fill the bundle.
      */
     function buildBundleItemsForSize(items, size) {
       if (!Array.isArray(items) || !items.length) return [];
-      if (items.length >= size) return items.slice(0, size);
-      const distinct = items.slice();
-      const extraCount = Math.min(size - distinct.length, distinct.length);
-      const result = distinct.slice();
-      for (let i = 0; i < extraCount; i++) {
-        result.push(distinct[i]);
-      }
-      return result;
+      return items.slice(0, size);
     }
 
     function rotateToFront(arr, idx) {
@@ -2324,19 +2303,10 @@
         return buildBundleItemsForSize(vg.items, size);
       }
 
-      // Minimum distinct products a vendor needs to be considered for a bundle of `size`.
-      // The 8-pack specifically requires at least 5 distinct products (not just half of 8)
-      // so it never degenerates into a small set of products repeated too many times.
-      function minDistinctForSize(size) {
-        if (size === 8) return 5;
-        return Math.ceil(size / 2);
-      }
-
       function getTopVendorsForSize(size) {
         const minBundle = relaxForShowAll ? 0 : Number(th.minBundleScore[size]) || 0;
-        const minDistinct = minDistinctForSize(size);
         const candidates = Object.values(vendorGroups)
-          .filter(function (vg) { return vg.items.length >= minDistinct; })
+          .filter(function (vg) { return vg.items.length >= size; })
           .map(function (vg) {
             const topItems = topItemsForVendor(vg, size);
             const bundleScore = topItems.reduce(function (s, item) { return s + item.score; }, 0);
@@ -2368,9 +2338,8 @@
       }
 
       function getFallbackVendorsForSize(size) {
-        // Prefer vendors whose bundle actually reaches `size` (whether via enough distinct
-        // items or via capped doubling), then fall back to whoever gets closest.
-        const minDistinct = minDistinctForSize(size);
+        // Prefer vendors with enough distinct products to fill `size`, then whoever
+        // gets closest — still one of each product, no repeats.
         const allCandidates = Object.values(vendorGroups)
           .filter(function (vg) { return vg.items.length > 0; })
           .map(function (vg) {
@@ -2380,10 +2349,8 @@
             return { vendor: vg.vendor, items: vg.items, bundleScore: bundleScore, roastHits: roastHits, size: size, bundleItems: bundleItems, distinctCount: vg.items.length };
           });
 
-        // Only relax below the distinct-product minimum if literally no vendor meets it —
-        // in that case, pick whoever offers the most distinct products (still capped at 2x each).
-        const meetingMinDistinct = allCandidates.filter(function (x) { return x.distinctCount >= minDistinct; });
-        const pool = meetingMinDistinct.length > 0 ? meetingMinDistinct : allCandidates;
+        const meetingSize = allCandidates.filter(function (x) { return x.distinctCount >= size; });
+        const pool = meetingSize.length > 0 ? meetingSize : allCandidates;
 
         return pool
           .sort(function (a, b) {
@@ -2783,9 +2750,8 @@
   }
 
   /**
-   * Bundles can include the same product more than once (max 2x) when a vendor doesn't
-   * have enough distinct products to fill the selected bundle size. Collapses a products
-   * array into one entry per distinct product, tracking how many units of each are included.
+   * Collapses a products array into one entry per distinct product (qty stays 1
+   * unless a list is built with repeats).
    */
   function dedupeBundleProductsWithQty(products) {
     var list = Array.isArray(products) ? products : [];
