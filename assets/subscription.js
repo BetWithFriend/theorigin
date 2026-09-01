@@ -46,6 +46,18 @@
     v60: 'טחינה לפילטר / V60 - בינונית',
     frenchpress: "טחינה לפרנץ' פרס / Cold Brew - גסה",
   };
+  var SUBSCRIPTION_GRIND_SHORT_LABELS = {
+    whole: 'פולים שלמים',
+    espresso: 'אספרסו - טחינה',
+    moka: 'מקינטה - טחינה',
+    v60: 'פילטר / V60 - טחינה',
+    frenchpress: "פרנץ' פרס - טחינה",
+  };
+  var SUBSCRIPTION_PROFILE_TILE_LABELS = {
+    italian: 'האיטלקי: עשיר',
+    classic: 'הקלאסי: מאוזן',
+    modern: 'המודרני: פירותי',
+  };
 
   /* PLACEHOLDER: content-based mapping from this flow's answers to the existing
      coffee_tastes / coffee_prep_methods metafield tags, used only to simulate a
@@ -202,11 +214,21 @@
     var months = parseInt(answers.frequency, 10) || 1;
     var total = variant.price / 100;
     var monthly = Math.round(total / months);
+    // Baseline: monthly rate for the shortest commitment (3 months) at the same quantity.
+    var baselineVariant = findSubscriptionVariant(answers.quantity, 3);
+    var baselineMonthly =
+      baselineVariant && typeof baselineVariant.price === 'number'
+        ? baselineVariant.price / 100 / 3
+        : monthly;
+    var savings = Math.max(0, Math.round((baselineMonthly - monthly) * months));
     return {
       variant: variant,
       total: total,
       monthly: monthly,
       annual: monthly * 12,
+      shipments: months,
+      perShipment: monthly,
+      savings: savings,
     };
   }
 
@@ -294,16 +316,14 @@
     var answers = window.subscriptionAnswers;
 
     var kg = answers.quantity ? answers.quantity / 4 : null;
-    var profileValue = SUBSCRIPTION_PROFILE_LABELS[answers.profile] || '';
-    if (profileValue && SUBSCRIPTION_PROFILE_SHORT_DESC[answers.profile]) {
-      profileValue += ': ' + SUBSCRIPTION_PROFILE_SHORT_DESC[answers.profile];
-    }
+    var profileValue =
+      SUBSCRIPTION_PROFILE_TILE_LABELS[answers.profile] || SUBSCRIPTION_PROFILE_LABELS[answers.profile] || '';
 
     var tileValues = {
       subscriptionTileProfile: profileValue,
-      subscriptionTileGrind: SUBSCRIPTION_GRIND_LABELS[answers.grind] || '',
-      subscriptionTileFrequency:
-        SUBSCRIPTION_DELIVERY_DAY_LABELS[answers.deliveryDay] || SUBSCRIPTION_FREQUENCY_LABELS[answers.frequency] || '',
+      subscriptionTileGrind:
+        SUBSCRIPTION_GRIND_SHORT_LABELS[answers.grind] || SUBSCRIPTION_GRIND_LABELS[answers.grind] || '',
+      subscriptionTileDeliveryDay: SUBSCRIPTION_DELIVERY_DAY_LABELS[answers.deliveryDay] || '',
       subscriptionTileQuantity: answers.quantity ? answers.quantity + ' שקיות (' + kg + ' ק"ג)' : '',
     };
     Object.keys(tileValues).forEach(function (id) {
@@ -312,23 +332,37 @@
     });
 
     var price = computeSubscriptionPrice(answers);
-    var annualEl = document.getElementById('subscriptionPriceAnnual');
-    var monthlyNoteEl = document.getElementById('subscriptionPriceMonthlyNote');
+    var perShipmentEl = document.getElementById('subscriptionPricePerShipment');
+    var totalNoteEl = document.getElementById('subscriptionPriceTotalNote');
+    var savingsBanner = document.getElementById('subscriptionSavingsBanner');
+    var savingsPill = document.getElementById('subscriptionSavingsPill');
     if (price) {
-      var months = parseInt(answers.frequency, 10);
-      var headline = formatSubscriptionShekels(price.total);
-      if (months === 12) {
-        headline += ' לשנה';
-      } else if (SUBSCRIPTION_FREQUENCY_LABELS[months]) {
-        headline += ' ל-' + SUBSCRIPTION_FREQUENCY_LABELS[months];
+      if (perShipmentEl) {
+        perShipmentEl.innerHTML =
+          '<span class="subscription-price-per-shipment-amount">' +
+          formatSubscriptionShekels(price.perShipment) +
+          '</span>' +
+          '<span class="subscription-price-per-shipment-label">' +
+          'למשלוח ' +
+          price.shipments +
+          'x משלוחים' +
+          '</span>';
       }
-      if (annualEl) annualEl.textContent = headline;
-      if (monthlyNoteEl) {
-        monthlyNoteEl.textContent = formatSubscriptionShekels(price.monthly) + ' לחודש (ניתן לחלק לתשלומים)';
+      if (totalNoteEl) {
+        totalNoteEl.textContent =
+          'סה״כ ' + formatSubscriptionShekels(price.total) + ' (ניתן לחלק עד 12 תשלומים)';
       }
+      if (savingsPill) {
+        savingsPill.textContent =
+          price.savings > 0
+            ? 'חסכת ' + formatSubscriptionShekels(price.savings) + ' ומשלוח חינם'
+            : 'משלוח חינם';
+      }
+      if (savingsBanner) savingsBanner.hidden = false;
     } else {
-      if (annualEl) annualEl.textContent = '';
-      if (monthlyNoteEl) monthlyNoteEl.textContent = '';
+      if (perShipmentEl) perShipmentEl.textContent = '';
+      if (totalNoteEl) totalNoteEl.textContent = '';
+      if (savingsBanner) savingsBanner.hidden = true;
     }
 
     persistSubscriptionState();
@@ -338,16 +372,6 @@
     activateSubscriptionStep('results');
     renderSubscriptionResults();
   }
-
-  /* ── How it works disclosure ───────────────────────────────────────────── */
-  function toggleSubscriptionHowItWorks() {
-    var wrapper = document.querySelector('.subscription-how-it-works');
-    if (!wrapper) return;
-    var isOpen = wrapper.classList.toggle('open');
-    var toggle = wrapper.querySelector('.subscription-how-it-works-toggle');
-    if (toggle) toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  }
-  window.toggleSubscriptionHowItWorks = toggleSubscriptionHowItWorks;
 
   /* ── Close / restart ───────────────────────────────────────────────────── */
   function closeSubscriptionForm() {

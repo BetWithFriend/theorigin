@@ -521,36 +521,43 @@
 
       <div class="subscription-summary-grid">
         <div class="subscription-summary-tile" data-tile="profile">
+          <div class="subscription-summary-tile-text">
+            <span class="subscription-summary-tile-label">הפרופיל</span>
+            <span class="subscription-summary-tile-value" id="subscriptionTileProfile"></span>
+          </div>
           <span class="subscription-summary-tile-icon">{% render 'subscription-icon'
             , icon: 'bandage' %}</span>
-          <span class="subscription-summary-tile-value" id="subscriptionTileProfile"></span>
         </div>
         <div class="subscription-summary-tile" data-tile="grind">
+          <div class="subscription-summary-tile-text">
+            <span class="subscription-summary-tile-label">שיטות הכנה</span>
+            <span class="subscription-summary-tile-value" id="subscriptionTileGrind"></span>
+          </div>
           <span class="subscription-summary-tile-icon">{% render 'subscription-icon'
             , icon: 'cup' %}</span>
-          <span class="subscription-summary-tile-value" id="subscriptionTileGrind"></span>
-        </div>
-        <div class="subscription-summary-tile" data-tile="frequency">
-          <span class="subscription-summary-tile-icon">{% render 'subscription-icon'
-            , icon: 'calendar-blank' %}</span>
-          <span class="subscription-summary-tile-value" id="subscriptionTileFrequency"></span>
         </div>
         <div class="subscription-summary-tile" data-tile="quantity">
+          <div class="subscription-summary-tile-text">
+            <span class="subscription-summary-tile-label">כמות שקיות</span>
+            <span class="subscription-summary-tile-value" id="subscriptionTileQuantity"></span>
+          </div>
           <span class="subscription-summary-tile-icon">{% render 'subscription-icon'
             , icon: 'bag' %}</span>
-          <span class="subscription-summary-tile-value" id="subscriptionTileQuantity"></span>
+        </div>
+        <div class="subscription-summary-tile" data-tile="deliveryDay">
+          <div class="subscription-summary-tile-text">
+            <span class="subscription-summary-tile-label">מתי יגיע</span>
+            <span class="subscription-summary-tile-value" id="subscriptionTileDeliveryDay"></span>
+          </div>
+          <span class="subscription-summary-tile-icon">{% render 'subscription-icon'
+            , icon: 'calendar-blank' %}</span>
         </div>
       </div>
 
       <div class="subscription-how-it-works">
-        <button
-          type="button"
-          class="subscription-how-it-works-toggle"
-          onclick="toggleSubscriptionHowItWorks()"
-          aria-expanded="false"
-          aria-controls="subscriptionHowItWorksBody">
+        <p class="subscription-how-it-works-toggle">
           {{ section.settings.how_it_works_title | default: 'איך זה עובד?' }}
-        </button>
+        </p>
         <div class="subscription-how-it-works-body" id="subscriptionHowItWorksBody">
           {{
             section.settings.how_it_works_text | default: 'בכל חודש נשלח לך מבחר קפה טרי מותאם אישית לפי ההעדפות שבחרת. ניתן לעדכן, להשהות או לבטל את המנוי בכל עת דרך אזור האישי.'
@@ -560,9 +567,17 @@
     </div>
 
     <div class="subscription-results-footer">
+      <div class="subscription-savings-banner" id="subscriptionSavingsBanner">
+        <span class="subscription-savings-pill" id="subscriptionSavingsPill"></span>
+        <span class="subscription-savings-fineprint">
+          <span class="subscription-savings-fineprint-strong">בלי אותיות קטנות:</span>
+          <span>ניתן לבטל או להקפיא את הרכוש בכל רגע נתון</span>
+        </span>
+      </div>
+
       <div class="subscription-price-row">
-        <span class="subscription-price-annual" id="subscriptionPriceAnnual"></span>
-        <span class="subscription-price-monthly-note" id="subscriptionPriceMonthlyNote"></span>
+        <div class="subscription-price-per-shipment" id="subscriptionPricePerShipment"></div>
+        <div class="subscription-price-total-note" id="subscriptionPriceTotalNote"></div>
       </div>
 
       <button
@@ -570,7 +585,7 @@
         class="subscription-cta-btn"
         id="subscriptionCtaBtn"
         onclick="submitSubscriptionToCart()">
-        <span id="subscriptionCtaLabel">{{ section.settings.cta_text | default: 'הצטרפות למנוי' }}</span>
+        <span id="subscriptionCtaLabel">{{ section.settings.cta_text | default: 'הצטרפות ומעבר לתשלום' }}</span>
       </button>
 
       <div class="subscription-payment-secure-row">
@@ -867,7 +882,7 @@
         "type": "text",
         "id": "cta_text",
         "label": "טקסט כפתור הצטרפות",
-        "default": "הצטרפות למנוי"
+        "default": "הצטרפות ומעבר לתשלום"
       }, {
         "type": "text",
         "id": "edit_sheet_title",
