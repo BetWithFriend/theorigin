@@ -70,27 +70,31 @@
 <script>
   let currentIndex = 0;
   let slideDirection = 'right'; // Track slide direction
-    const slides = document.querySelectorAll('.new-rosters-slider-content-wrapper > .new-roasters-slider-content-wrapper');
+    const slidesContainer = document.querySelector('.new-rosters-slider-content-wrapper');
+    const slides = Array.from(document.querySelectorAll('.new-rosters-slider-content-wrapper > .new-roasters-slider-content-wrapper'));
     const bullets = document.querySelectorAll('.new-roasters-slider-bullet');
+
+    // Randomize the roaster order on every page load (Fisher-Yates)
+    for (let i = slides.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [slides[i], slides[j]] = [slides[j], slides[i]];
+    }
+    slides.forEach(slide => slidesContainer.appendChild(slide));
     
-    // Set initial state
+    const TRANSITION_MS = 500; // keep in sync with the card transition in new-roasters-slider.css
+    let isAnimating = false;
+
+    // Set initial state: the first card sits in place, the rest wait off-screen.
+    // Transitions are disabled for this pass so nothing animates on page load.
     slides.forEach((slide, index) => {
-      const isDesktop = window.innerWidth >= 768;
-      slide.style.position = 'absolute';
-      slide.style.top = '0';
-      slide.style.left = '0';
-      slide.style.width = '100%';
-      
-      if (index === 0) {
-        slide.style.display = isDesktop ? 'grid' : 'flex';
-        slide.style.opacity = '1';
-        slide.style.transform = 'translateX(0)';
-      } else {
-        slide.style.display = 'none';
-        slide.style.opacity = '0';
-        slide.style.transform = slideDirection === 'right' ? 'translateX(-100%)' : 'translateX(100%)';
-      }
+      slide.style.transition = 'none';
+      slide.style.display = index === currentIndex ? '' : 'none';
+      slide.style.transform = index === currentIndex ? 'translateX(0)' : 'translateX(100%)';
     });
+    if (slides.length) {
+      slides[0].offsetHeight; // flush the initial positions before transitions come back
+      slides.forEach(slide => { slide.style.transition = ''; });
+    }
     updateBullets();
     
     // Add click handlers for left and right arrows directly
@@ -112,65 +116,44 @@
     }
     
     function slideVendor(direction) {
+      if (isAnimating || slides.length < 2) return;
+      
       slideDirection = direction; // Set the direction for the transition
+      const previousIndex = currentIndex;
       if (direction === 'right') {
         currentIndex = (currentIndex - 1 + slides.length) % slides.length;
       } else if (direction === 'left') {
         currentIndex = (currentIndex + 1) % slides.length;
       }
       
-      updateSlides();
+      pushSlides(slides[previousIndex], slides[currentIndex]);
       updateBullets();
     }
     
-    function updateSlides() {
-      slides.forEach((slide, index) => {
-        const isDesktop = window.innerWidth >= 768;
-        
-        if (index === currentIndex) {
-          // Show current slide
-          slide.style.display = isDesktop ? 'grid' : 'flex';
-          slide.style.position = 'absolute';
-          slide.style.top = '0';
-          slide.style.left = '0';
-          slide.style.width = '100%';
-          slide.style.opacity = '0';
-          
-          // Set initial position based on direction
-          if (slideDirection === 'right') {
-            slide.style.transform = 'translateX(100%)'; // Slide in from right
-          } else {
-            slide.style.transform = 'translateX(-100%)'; // Slide in from left
-          }
-          
-          // Force reflow to ensure transition works
-          slide.offsetHeight;
-          
-          slide.style.opacity = '1';
-          slide.style.transform = 'translateX(0)';
-        } else {
-          // Hide other slides
-          slide.style.opacity = '0';
-          slide.style.position = 'absolute';
-          slide.style.top = '0';
-          slide.style.left = '0';
-          slide.style.width = '100%';
-          
-          // Set exit position based on direction
-          if (slideDirection === 'right') {
-            slide.style.transform = 'translateX(-100%)'; // Slide out to left
-          } else {
-            slide.style.transform = 'translateX(100%)'; // Slide out to right
-          }
-          
-          // Hide after transition
-          setTimeout(() => {
-            if (slide.style.opacity === '0') {
-              slide.style.display = 'none';
-            }
-          }, 500);
-        }
-      });
+    function pushSlides(outgoing, incoming) {
+      const enterFrom = slideDirection === 'right' ? '100%' : '-100%';
+      const exitTo = slideDirection === 'right' ? '-100%' : '100%';
+      
+      isAnimating = true;
+      
+      // Park the incoming card just off-screen, without animating it there.
+      incoming.style.transition = 'none';
+      incoming.style.display = '';
+      incoming.style.transform = 'translateX(' + enterFrom + ')';
+      incoming.offsetHeight; // flush the parked position before re-enabling the transition
+      incoming.style.transition = '';
+      
+      // Move both cards by the same amount, in the same direction, at the same
+      // time: the incoming card appears to push the outgoing one off-screen.
+      incoming.style.transform = 'translateX(0)';
+      outgoing.style.transform = 'translateX(' + exitTo + ')';
+      
+      setTimeout(() => {
+        outgoing.style.display = 'none';
+        const outgoingVideo = outgoing.querySelector('video');
+        if (outgoingVideo) outgoingVideo.pause();
+        isAnimating = false;
+      }, TRANSITION_MS);
     }
     
     function updateBullets() {

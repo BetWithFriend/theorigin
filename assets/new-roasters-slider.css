@@ -49,7 +49,7 @@
     /* Align cards to the top */
     gap: 16px;
     /* Gap between cards in the slider */
-    overflow-x: auto;
+    overflow-x: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
     overflow-y: visible;
@@ -71,9 +71,10 @@
     gap: 16px;
     padding: 16px;
     /* Padding for mobile card content */
-    opacity: 0;
+    opacity: 1;
     transform: translateX(100%);
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
     position: absolute;
     top: 0;
     left: 0;
@@ -266,9 +267,9 @@
         padding-bottom: 64px;
         background-color: #E6E3DE;
         border-radius: 12px;
-        opacity: 0;
+        opacity: 1;
         transform: translateX(100%);
-        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         position: absolute;
         top: 0;
         left: 0;
