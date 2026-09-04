@@ -464,12 +464,14 @@
     }
 
     var properties = {
-      הפרופיל: profileLabel,
-      הטחינה: SUBSCRIPTION_GRIND_LABELS[answers.grind] || answers.grind,
-      'מועד המשלוח': SUBSCRIPTION_DELIVERY_DAY_LABELS[answers.deliveryDay] || answers.deliveryDay,
+      פרופיל: profileLabel,
+      טחינה: SUBSCRIPTION_GRIND_LABELS[answers.grind] || answers.grind,
+      משלוח: SUBSCRIPTION_DELIVERY_DAY_LABELS[answers.deliveryDay] || answers.deliveryDay,
+      משך: SUBSCRIPTION_FREQUENCY_LABELS[answers.frequency] || answers.frequency,
+      כמות: answers.quantity + ' מארזים במשלוח'
     };
     var vendorName = picked && (picked.vendorName || picked.vendorShortName);
-    if (vendorName) properties['בית הקלייה'] = vendorName;
+    // if (vendorName) properties['בית הקלייה'] = vendorName;
 
     fetch('/cart/add.js', {
       method: 'POST',
