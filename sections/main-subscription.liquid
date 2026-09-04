@@ -513,8 +513,6 @@
           class="subscription-edit-link"
           onclick="openSubscriptionEditSheet()"
           aria-label="{{ section.settings.edit_sheet_title | default: 'עריכת העדפות' }}">
-          <span class="subscription-edit-link-icon">{% render 'subscription-icon'
-, icon: 'pencil' %}</span>
           <span>{{ section.settings.edit_link_text | default: 'עריכת בחירות' }}</span>
         </button>
       </div>
@@ -536,14 +534,6 @@
           <span class="subscription-summary-tile-icon">{% render 'subscription-icon'
 , icon: 'cup' %}</span>
         </div>
-        <div class="subscription-summary-tile" data-tile="quantity">
-          <div class="subscription-summary-tile-text">
-            <span class="subscription-summary-tile-label">כמות שקיות</span>
-            <span class="subscription-summary-tile-value" id="subscriptionTileQuantity"></span>
-          </div>
-          <span class="subscription-summary-tile-icon">{% render 'subscription-icon'
-, icon: 'bag' %}</span>
-        </div>
         <div class="subscription-summary-tile" data-tile="deliveryDay">
           <div class="subscription-summary-tile-text">
             <span class="subscription-summary-tile-label">מתי יגיע</span>
@@ -552,6 +542,14 @@
           <span class="subscription-summary-tile-icon">{% render 'subscription-icon'
 , icon: 'calendar-blank' %}</span>
         </div>
+        <div class="subscription-summary-tile" data-tile="quantity">
+          <div class="subscription-summary-tile-text">
+            <span class="subscription-summary-tile-label">כמות שקיות</span>
+            <span class="subscription-summary-tile-value" id="subscriptionTileQuantity"></span>
+          </div>
+          <span class="subscription-summary-tile-icon">{% render 'subscription-icon'
+, icon: 'bag' %}</span>
+        </div>
       </div>
 
       <div class="subscription-how-it-works">
@@ -559,25 +557,29 @@
           {{ section.settings.how_it_works_title | default: 'איך זה עובד?' }}
         </p>
         <div class="subscription-how-it-works-body" id="subscriptionHowItWorksBody">
-          {{
-            section.settings.how_it_works_text | default: 'בכל חודש נשלח לך מבחר קפה טרי מותאם אישית לפי ההעדפות שבחרת. ניתן לעדכן, להשהות או לבטל את המנוי בכל עת דרך אזור האישי.'
-          }}
+          <p class="subscription-how-it-works-item">
+            <span class="subscription-how-it-works-lead">בלי אותיות קטנות:</span>
+            <span>ניתן לבטל או להקפיא את המנוי בכל רגע באזור האישי.</span>
+          </p>
+          <p class="subscription-how-it-works-item">
+            <span class="subscription-how-it-works-lead">טריות מעל הכל:</span>
+            <span>הקפה נקלה במיוחד עבורך ונשלח ישר מבית הקלייה.</span>
+          </p>
+          <p class="subscription-how-it-works-item">
+            <span class="subscription-how-it-works-lead subscription-how-it-works-lead--shipping">משלוח חינם:</span>
+            <span>כלול במחיר המנוי (במסלול פרימיום).</span>
+          </p>
         </div>
       </div>
     </div>
 
     <div class="subscription-results-footer">
-      <div class="subscription-savings-banner" id="subscriptionSavingsBanner">
-        <span class="subscription-savings-pill" id="subscriptionSavingsPill"></span>
-        <span class="subscription-savings-fineprint">
-          <span class="subscription-savings-fineprint-strong">בלי אותיות קטנות:</span>
-          <span>ניתן לבטל או להקפיא את המנוי בכל רגע נתון</span>
-        </span>
-      </div>
-
-      <div class="subscription-price-row">
-        <div class="subscription-price-per-shipment" id="subscriptionPricePerShipment"></div>
-        <div class="subscription-price-total-note" id="subscriptionPriceTotalNote"></div>
+      <div class="subscription-price-block">
+        <span class="subscription-savings-pill" id="subscriptionSavingsPill" hidden></span>
+        <div class="subscription-price-row">
+          <div class="subscription-price-per-shipment" id="subscriptionPricePerShipment"></div>
+          <div class="subscription-price-total-note" id="subscriptionPriceTotalNote"></div>
+        </div>
       </div>
 
       <button

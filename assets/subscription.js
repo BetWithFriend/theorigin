@@ -334,7 +334,6 @@
     var price = computeSubscriptionPrice(answers);
     var perShipmentEl = document.getElementById('subscriptionPricePerShipment');
     var totalNoteEl = document.getElementById('subscriptionPriceTotalNote');
-    var savingsBanner = document.getElementById('subscriptionSavingsBanner');
     var savingsPill = document.getElementById('subscriptionSavingsPill');
     if (price) {
       if (perShipmentEl) {
@@ -357,12 +356,15 @@
           price.savings > 0
             ? 'חסכת ' + formatSubscriptionShekels(price.savings) + ' ומשלוח חינם'
             : 'משלוח חינם';
+        savingsPill.hidden = false;
       }
-      if (savingsBanner) savingsBanner.hidden = false;
     } else {
       if (perShipmentEl) perShipmentEl.textContent = '';
       if (totalNoteEl) totalNoteEl.textContent = '';
-      if (savingsBanner) savingsBanner.hidden = true;
+      if (savingsPill) {
+        savingsPill.textContent = '';
+        savingsPill.hidden = true;
+      }
     }
 
     persistSubscriptionState();
@@ -443,9 +445,6 @@
     var btn = document.getElementById('subscriptionCtaBtn');
     var label = document.getElementById('subscriptionCtaLabel');
     var originalLabel = label ? label.textContent : '';
-    var picked =
-      window.__subscriptionPickedVendor ||
-      (window.SubscriptionScoring ? window.SubscriptionScoring.pickVendor(answers.profile, answers.grind) : null);
     var variant = findSubscriptionVariant(answers.quantity, answers.frequency);
     var variantId = variant && variant.id;
 
@@ -458,21 +457,30 @@
     if (btn) btn.disabled = true;
     if (label) label.textContent = 'מוסיף...';
 
-    var profileLabel = SUBSCRIPTION_PROFILE_LABELS[answers.profile] || answers.profile;
-    if (profileLabel && SUBSCRIPTION_PROFILE_SHORT_DESC[answers.profile]) {
-      profileLabel += ': ' + SUBSCRIPTION_PROFILE_SHORT_DESC[answers.profile];
-    }
+    var SUBSCRIPTION_PROFILE_CART_LABELS = {
+      italian: 'שוקולדי',
+      classic: 'מאוזן',
+      modern: 'מודרני',
+    };
+    var SUBSCRIPTION_GRIND_CART_LABELS = {
+      whole: 'פולים שלמים',
+      espresso: 'אספרסו',
+      moka: 'מקינטה',
+      v60: 'פילטר',
+      frenchpress: "פרנץ' פרס",
+    };
+    var SUBSCRIPTION_DELIVERY_DAY_CART_LABELS = {
+      10: '10',
+      20: '20',
+    };
 
     var properties = {
-      פרופיל: profileLabel,
-      טחינה: SUBSCRIPTION_GRIND_LABELS[answers.grind] || answers.grind,
-      משלוח: SUBSCRIPTION_DELIVERY_DAY_LABELS[answers.deliveryDay] || answers.deliveryDay,
+      פרופיל: SUBSCRIPTION_PROFILE_CART_LABELS[answers.profile] || answers.profile,
+      טחינה: SUBSCRIPTION_GRIND_CART_LABELS[answers.grind] || answers.grind,
+      'מועד משלוח': SUBSCRIPTION_DELIVERY_DAY_CART_LABELS[answers.deliveryDay] || answers.deliveryDay,
       משך: SUBSCRIPTION_FREQUENCY_LABELS[answers.frequency] || answers.frequency,
       כמות: answers.quantity + ' מארזים במשלוח'
     };
-    var vendorName = picked && (picked.vendorName || picked.vendorShortName);
-    // if (vendorName) properties['בית הקלייה'] = vendorName;
-
     fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
