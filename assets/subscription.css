@@ -689,6 +689,7 @@ body.subscription-wrapper-open .header.header--middle-center.header--mobile-cent
     border-radius: 10px;
     padding: 12px 14px;
     gap: 12px;
+    cursor: pointer;
 }
 
 .subscription-sheet-label {
@@ -784,5 +785,77 @@ body.subscription-wrapper-open .header.header--middle-center.header--mobile-cent
     .subscription-sheet {
         border-radius: 20px;
         max-width: 420px;
+    }
+
+    /* ── Results screen: fit within viewport, full-bleed footer shadow ── */
+    .subscription-wrapper.subscription-results-visible .subscription-results {
+        max-width: 760px;
+        width: 100%;
+        margin-inline: auto;
+        padding: 24px 32px 220px; /* bottom padding reserves space for fixed footer */
+        overflow: hidden;
+    }
+
+    .subscription-results-scroll {
+        gap: 12px;
+        overflow: visible;
+    }
+
+    .subscription-results-title {
+        font-size: 28px;
+        margin-top: 0;
+    }
+
+    .subscription-results-subtitle {
+        font-size: 15px;
+        margin-top: 2px;
+    }
+
+    .subscription-edit-link-row {
+        margin-top: 0;
+    }
+
+    .subscription-summary-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        column-gap: 12px;
+        row-gap: 12px;
+    }
+
+    .subscription-summary-tile {
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .subscription-how-it-works {
+        padding: 14px 18px;
+    }
+
+    .subscription-how-it-works-toggle {
+        margin-bottom: 8px;
+    }
+
+    .subscription-how-it-works-body {
+        gap: 6px;
+    }
+
+    /* Full-bleed footer pinned to the bottom of the viewport with a
+       shadow that spans the entire page width. */
+    .subscription-results-footer {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        margin: 0;
+        padding: 16px max(32px, calc((100vw - 760px) / 2 + 32px)) 20px;
+        padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+        background: var(--sub-page-bg);
+        box-shadow: 0px -2px 12px 0px rgba(0, 0, 0, 0.18);
+        z-index: 5;
+        gap: 8px;
+    }
+
+    .subscription-price-block {
+        padding-top: 20px;
     }
 }

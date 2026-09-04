@@ -535,8 +535,28 @@
     }
   }
 
+  function attachSubscriptionSheetRowListeners() {
+    var rows = document.querySelectorAll('.subscription-sheet-row');
+    rows.forEach(function (row) {
+      var select = row.querySelector('.subscription-sheet-select');
+      if (!select) return;
+      row.addEventListener('click', function (e) {
+        if (e.target === select) return;
+        if (typeof select.showPicker === 'function') {
+          try {
+            select.showPicker();
+            return;
+          } catch (err) {}
+        }
+        select.focus();
+        select.click();
+      });
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     attachSubscriptionOptionListeners();
+    attachSubscriptionSheetRowListeners();
     restoreSubscriptionState();
   });
 })();
