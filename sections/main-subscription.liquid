@@ -281,7 +281,7 @@
         </span>
         <span class="subscription-option-body">
           <span class="subscription-option-title">4 שקיות (1 ק"ג):</span>
-          <span class="subscription-option-desc">כוס אחת ביום (מתאים ליחיד/זוג)</span>
+          <span class="subscription-option-desc">1-2 כוסות ביום (מתאים ליחיד/זוג)</span>
           <span class="subscription-option-price">מחיר: {{ sub_price_1kg_monthly | money_without_trailing_zeros }}</span>
         </span>
       </button>
@@ -444,7 +444,7 @@
             height="32">
         </span>
         <span class="subscription-option-body">
-          <span class="subscription-option-title">10 בחודש</span>
+          <span class="subscription-option-title">כל 10 לחודש</span>
         </span>
       </button>
       <button
@@ -460,13 +460,13 @@
             height="32">
         </span>
         <span class="subscription-option-body">
-          <span class="subscription-option-title">20 בחודש</span>
+          <span class="subscription-option-title">כל 20 לחודש</span>
         </span>
       </button>
     </div>
     <ul class="subscription-step-notes">
       <li>המשלוח הראשון יצא סמוך לסיום ההזמנה.</li>
-      <li>בחירת התאריך מתייחסת לחודשים הבאים.</li>
+      <li>בחירת התאריך מתייחסת למשלוח השני והלאה.</li>
     </ul>
   </div>
 
@@ -503,7 +503,7 @@
       <h1 class="subscription-results-title">{{ section.settings.results_title | default: 'המנוי שלך מוכן!' }}</h1>
       <p class="subscription-results-subtitle">
         {{
-          section.settings.results_subtitle | default: 'התאמנו לך את חוויית הקפה המדויקת ביותר עבורך. בכל חודש נחכה לך סיפור חדש במעטפה.'
+          section.settings.results_subtitle | default: 'התאמנו לך את חוויית הקפה המדויקת ביותר עבורך. בכל חודש תוכלו לחוות חוויית טעמים חדשים. איזה כיף.'
         }}
       </p>
 
@@ -700,8 +700,8 @@
             class="subscription-sheet-select"
             id="subscriptionEditDeliveryDay"
             data-field="deliveryDay">
-            <option value="10">10 בחודש</option>
-            <option value="20">20 בחודש</option>
+            <option value="10">כל 10 לחודש</option>
+            <option value="20">כל 20 לחודש</option>
           </select>
           <span class="subscription-sheet-chevron">{% render 'subscription-icon'
 , icon: 'chevron' %}</span>
@@ -848,8 +848,8 @@
       }, {
         "type": "text",
         "id": "step4_title",
-        "label": "כותרת שלב 4 - אורך המנוי",
-        "default": "אורך המנוי"
+        "label": "כותרת שלב 4 - משך המנוי",
+        "default": "משך המנוי"
       }, {
         "type": "text",
         "id": "step5_title",
@@ -867,7 +867,7 @@
         "type": "textarea",
         "id": "results_subtitle",
         "label": "תת-כותרת מסך תוצאה",
-        "default": "התאמנו לך את חוויית הקפה המדויקת ביותר עבורך. בכל חודש נחכה לך סיפור חדש במעטפה."
+        "default": "איזה כיף! התאמנו לך את חוויית הקפה המדויקת ביותר עבורך. בכל חודש תוכלו לחוות חוויית טעמים חדשים."
       }, {
         "type": "text",
         "id": "edit_link_text",

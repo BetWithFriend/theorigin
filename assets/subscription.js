@@ -21,13 +21,13 @@
   };
 
   var SUBSCRIPTION_FREQUENCY_LABELS = {
-    3: '3 חודשים',
-    6: '6 חודשים',
-    12: '12 חודשים',
+    3: '3',
+    6: '6',
+    12: '12',
   };
   var SUBSCRIPTION_DELIVERY_DAY_LABELS = {
-    10: '10 בחודש',
-    20: '20 בחודש',
+    10: 'כל 10 לחודש',
+    20: 'כל 20 לחודש',
   };
   var SUBSCRIPTION_PROFILE_LABELS = {
     italian: 'סגנון איטלקי ועשיר',
@@ -342,14 +342,14 @@
           formatSubscriptionShekels(price.perShipment) +
           '</span>' +
           '<span class="subscription-price-per-shipment-label">' +
-          'למשלוח ' +
+          'לחודש ' +
           price.shipments +
-          'x משלוחים' +
+          'x חודשים' +
           '</span>';
       }
       if (totalNoteEl) {
         totalNoteEl.textContent =
-          'סה״כ ' + formatSubscriptionShekels(price.total) + ' (ניתן לחלק עד 12 תשלומים)';
+          'סה״כ ' + formatSubscriptionShekels(price.total) + ' (ניתן לחלק עד 6 תשלומים)';
       }
       if (savingsPill) {
         savingsPill.textContent =
@@ -477,7 +477,7 @@
     var properties = {
       פרופיל: SUBSCRIPTION_PROFILE_CART_LABELS[answers.profile] || answers.profile,
       טחינה: SUBSCRIPTION_GRIND_CART_LABELS[answers.grind] || answers.grind,
-      'מועד משלוח': SUBSCRIPTION_DELIVERY_DAY_CART_LABELS[answers.deliveryDay] || answers.deliveryDay,
+      מועד: SUBSCRIPTION_DELIVERY_DAY_CART_LABELS[answers.deliveryDay] || answers.deliveryDay,
       משך: SUBSCRIPTION_FREQUENCY_LABELS[answers.frequency] || answers.frequency,
       כמות: answers.quantity + ' מארזים במשלוח'
     };
