@@ -252,10 +252,15 @@
 
   function goToPreviousSubscriptionStep() {
     var current = currentSubscriptionStepIndex();
-    if (!current || current === '1' || current === 'results') return;
+    if (!current || current === '1' || current === 'intro' || current === 'results') return;
     activateSubscriptionStep(String(parseInt(current, 10) - 1));
   }
   window.goToPreviousSubscriptionStep = goToPreviousSubscriptionStep;
+
+  function startSubscriptionFromIntro() {
+    activateSubscriptionStep('1');
+  }
+  window.startSubscriptionFromIntro = startSubscriptionFromIntro;
 
   function goToNextSubscriptionStep() {
     var current = currentSubscriptionStepIndex();
@@ -342,21 +347,27 @@
           formatSubscriptionShekels(price.perShipment) +
           '</span>' +
           '<span class="subscription-price-per-shipment-label">' +
-          'לחודש ' +
+          'למשלוח ' +
           price.shipments +
-          'x חודשים' +
+          'x משלוחים' +
           '</span>';
       }
       if (totalNoteEl) {
         totalNoteEl.textContent =
-          'סה״כ ' + formatSubscriptionShekels(price.total) + ' (ניתן לחלק עד 6 תשלומים)';
+          'סה״כ ' + formatSubscriptionShekels(price.total) + ' (ניתן לחלק עד 12 תשלומים)';
       }
       if (savingsPill) {
-        savingsPill.textContent =
-          price.savings > 0
-            ? 'חסכת ' + formatSubscriptionShekels(price.savings) + ' ומשלוח חינם'
-            : 'משלוח חינם';
-        savingsPill.hidden = false;
+        var freeShipping = kg && kg >= 2;
+        var pillText = '';
+        if (price.savings > 0 && freeShipping) {
+          pillText = 'חסכת ' + formatSubscriptionShekels(price.savings) + ' ומשלוח חינם';
+        } else if (price.savings > 0) {
+          pillText = 'חסכת ' + formatSubscriptionShekels(price.savings);
+        } else if (freeShipping) {
+          pillText = 'משלוח חינם';
+        }
+        savingsPill.textContent = pillText;
+        savingsPill.hidden = !pillText;
       }
     } else {
       if (perShipmentEl) perShipmentEl.textContent = '';
@@ -397,7 +408,7 @@
     document.querySelectorAll('.subscription-option.selected').forEach(function (el) {
       el.classList.remove('selected');
     });
-    activateSubscriptionStep('1');
+    activateSubscriptionStep('intro');
   }
   window.restartSubscriptionFlow = restartSubscriptionFlow;
 
@@ -528,6 +539,11 @@
         syncSubscriptionOptionSelectedStates();
         if (parsed.showResults) {
           showSubscriptionResults();
+        } else {
+          // Skip the intro if the user already started answering in this session.
+          var a = window.subscriptionAnswers;
+          var hasProgress = a.quantity || a.frequency || a.deliveryDay || a.profile || a.grind;
+          if (hasProgress) activateSubscriptionStep('1');
         }
       }
     } catch (e) {
@@ -546,7 +562,7 @@
           try {
             select.showPicker();
             return;
-          } catch (err) {}
+          } catch (err) { }
         }
         select.focus();
         select.click();

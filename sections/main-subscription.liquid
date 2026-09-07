@@ -48,9 +48,74 @@
     })();
   </script>
 
+  {%- comment -%} ── Intro / preview screen ─────────────────────────────── {%- endcomment -%}
+  <div
+    class="subscription-step subscription-intro active"
+    id="subscriptionIntroStep"
+    data-step-index="intro">
+    <div class="subscription-intro-header">
+      <div class="subscription-close-icon" onclick="closeSubscriptionForm()">
+        {% render 'subscription-icon'
+          , icon: 'close' %}
+      </div>
+    </div>
+    <div class="subscription-intro-content">
+      <div class="subscription-intro-image-wrapper">
+        <img
+          class="subscription-intro-image"
+          src="{{ 'questionnaire_intro_beans.png' | asset_url }}"
+          alt="פולי קפה בדרגות קלייה שונות"
+          width="462"
+          height="170"
+          loading="eager">
+      </div>
+      <div class="subscription-intro-text">
+        <h2 class="subscription-intro-title">
+          {{ section.settings.intro_title | default: 'מנוי הקפה שלכם מתחיל כאן' }}
+        </h2>
+        <p class="subscription-intro-subtitle">
+          {{
+            section.settings.intro_subtitle | default: 'קפה ספשלטי טרי מבית קלייה משתנה, בכל חודש אצלכם בדלת.'
+          }}
+        </p>
+        <div class="subscription-intro-desc">
+          {{
+            section.settings.intro_description | default: '<p>עונים על שאלון קצר: העדפות טעם, כמה קפה, מתי ועוד קצת – ומקבלים קפה מותאם אישית עד הבית, כל חודש.</p><p>אנחנו נבחר כמה סוגי קפה מושלמים כל חודש ונשלח ישר אליכם.<br>לכם נשאר רק להנות מקפה מעולה!</p>'
+          }}
+        </div>
+      </div>
+      <div class="subscription-intro-actions">
+        <button
+          type="button"
+          class="subscription-intro-start-btn"
+          onclick="startSubscriptionFromIntro()">
+          {{ section.settings.intro_button_text | default: 'בואו נתחיל' }}
+        </button>
+        <div class="subscription-intro-social-proof">
+          <div class="subscription-intro-stars" aria-hidden="true">
+            {% for i in (1..5) %}
+              <svg
+                class="subscription-intro-star"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2.5l2.69 5.45 6.02.88-4.35 4.24 1.03 5.99L12 16.7l-5.39 2.83 1.03-5.99-4.35-4.24 6.02-.88z" />
+              </svg>
+            {% endfor %}
+          </div>
+          <div class="subscription-intro-social-text">
+            {{ section.settings.intro_social_text | default: 'מאות לקוחות מרוצים' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   {%- comment -%} ── Step 1: Preferred taste profile ────────────────────── {%- endcomment -%}
   <div
-    class="subscription-step active"
+    class="subscription-step"
     id="subscriptionStep1"
     data-step-index="1">
     <div class="subscription-title-wrapper">
@@ -282,7 +347,7 @@
         <span class="subscription-option-body">
           <span class="subscription-option-title">4 שקיות (1 ק"ג):</span>
           <span class="subscription-option-desc">1-2 כוסות ביום (מתאים ליחיד/זוג)</span>
-          <span class="subscription-option-price">מחיר: {{ sub_price_1kg_monthly | money_without_trailing_zeros }}</span>
+          <span class="subscription-option-price">מחיר: {{ sub_price_1kg_monthly | money_without_trailing_zeros }} + משלוח</span>
         </span>
       </button>
       <button
@@ -300,7 +365,7 @@
         <span class="subscription-option-body">
           <span class="subscription-option-title">8 שקיות (2 ק"ג):</span>
           <span class="subscription-option-desc">2-3 כוסות ביום (מתאים למשפחה או משרד קטן)</span>
-          <span class="subscription-option-price">מחיר: {{ sub_price_2kg_monthly | money_without_trailing_zeros }}</span>
+          <span class="subscription-option-price">מחיר: {{ sub_price_2kg_monthly | money_without_trailing_zeros }} + משלוח חינם</span>
         </span>
       </button>
       <button
@@ -318,7 +383,7 @@
         <span class="subscription-option-body">
           <span class="subscription-option-title">16 שקיות (4 ק"ג):</span>
           <span class="subscription-option-desc">צריכה גבוהה (משרדים או חובבי קפה כבדים)</span>
-          <span class="subscription-option-price">מחיר: {{ sub_price_4kg_monthly | money_without_trailing_zeros }}</span>
+          <span class="subscription-option-price">מחיר: {{ sub_price_4kg_monthly | money_without_trailing_zeros }} + משלוח חינם</span>
         </span>
       </button>
     </div>
@@ -567,7 +632,7 @@
           </p>
           <p class="subscription-how-it-works-item">
             <span class="subscription-how-it-works-lead subscription-how-it-works-lead--shipping">משלוח חינם:</span>
-            <span>כלול במחיר המנוי (במסלול פרימיום).</span>
+            <span>בהזמנה של 2 ק״ג ומעלה.</span>
           </p>
         </div>
       </div>
@@ -826,21 +891,49 @@
     "settings": [
       {
         "type": "header",
-        "content": "כותרות שלבי המנוי"
+        "content": "מסך פתיחה (Intro)"
       },
       {
+        "type": "text",
+        "id": "intro_title",
+        "label": "כותרת מסך פתיחה",
+        "default": "מנוי הקפה שלכם מתחיל כאן"
+      },
+      {
+        "type": "text",
+        "id": "intro_subtitle",
+        "label": "תת-כותרת מסך פתיחה",
+        "default": "קפה ספשלטי טרי מבית קלייה משתנה, בכל חודש אצלכם בדלת."
+      },
+      {
+        "type": "richtext",
+        "id": "intro_description",
+        "label": "תיאור מסך פתיחה",
+        "default": "<p>עונים על שאלון קצר: העדפות טעם, כמה קפה, מתי ועוד קצת – ומקבלים קפה מותאם אישית עד הבית, כל חודש.</p><p>אנחנו נבחר כמה סוגי קפה מושלמים כל חודש ונשלח ישר אליכם. לכם נשאר רק להנות מקפה מעולה!</p>"
+      }, {
+        "type": "text",
+        "id": "intro_button_text",
+        "label": "טקסט כפתור התחלה",
+        "default": "בואו נתחיל"
+      }, {
+        "type": "text",
+        "id": "intro_social_text",
+        "label": "טקסט הוכחה חברתית",
+        "default": "מאות לקוחות מרוצים"
+      }, {
+        "type": "header",
+        "content": "כותרות שלבי המנוי"
+      }, {
         "type": "text",
         "id": "step1_title",
         "label": "כותרת שלב 1 - פרופיל טעם",
         "default": "פרופיל הטעם המועדף"
-      },
-      {
+      }, {
         "type": "text",
         "id": "step2_title",
         "label": "כותרת שלב 2 - שיטת הכנה",
         "default": "רמת הטחינה"
-      },
-      {
+      }, {
         "type": "text",
         "id": "step3_title",
         "label": "כותרת שלב 3 - כמות וצריכה",
