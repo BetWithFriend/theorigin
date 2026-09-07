@@ -261,7 +261,7 @@
               {% assign blooms_shipping = 35 %}
               {% assign youneedcoffee_shipping = 35 %}
               {% assign coffeeorg_shipping = 35 %}
-              {% assign coffeeculture_shipping = 35 %}
+              {% assign eeza_shipping = 35 %}
               {% assign elijahscoffee_shipping = 35 %}
               {% assign tostato_shipping = 35 %}
               {% assign brew_brother_shipping = 35 %}
@@ -271,7 +271,7 @@
               {%- comment -%} Free shipping thresholds in cents {%- endcomment -%}
               {% assign canopy_free_shipping_threshold = 22500 %}
               {% assign blooms_free_shipping_threshold = 22000 %}
-              {% assign coffeeculture_free_shipping_threshold = 30000 %}
+              {% assign eeza_free_shipping_threshold = 30000 %}
               {% assign coffeeorg_free_shipping_threshold = 25000 %}
               {% assign ync_free_shipping_threshold = 25000 %}
               {% assign elijahscoffee_free_shipping_threshold = 30000 %}
@@ -405,10 +405,10 @@
                       {%- if regular_items_total_for_shipping >= coffeeorg_free_shipping_threshold -%}
                         {%- assign vendor_qualifies_free_shipping = true -%}
                       {%- endif -%}
-                    {%- elsif vendor == 'coffeeculture' -%}
-                      {%- assign vendor_shipping_cost = coffeeculture_shipping -%}
-                      {%- assign vendor_free_threshold = coffeeculture_free_shipping_threshold -%}
-                      {%- if regular_items_total_for_shipping >= coffeeculture_free_shipping_threshold -%}
+                    {%- elsif vendor == 'eeza' -%}
+                      {%- assign vendor_shipping_cost = eeza_shipping -%}
+                      {%- assign vendor_free_threshold = eeza_free_shipping_threshold -%}
+                      {%- if regular_items_total_for_shipping >= eeza_free_shipping_threshold -%}
                         {%- assign vendor_qualifies_free_shipping = true -%}
                       {%- endif -%}
                     {%- elsif vendor == 'elijahscoffee' -%}
