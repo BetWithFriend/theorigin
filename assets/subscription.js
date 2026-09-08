@@ -358,15 +358,27 @@
       }
       if (savingsPill) {
         var freeShipping = kg && kg >= 2;
+        // Savings vs the 1kg per-bag rate at the same frequency (matches the
+        // "חסכת X ₪" tag shown on the step-3 quantity cards).
+        var quantitySavings = 0;
+        if (kg && kg > 1) {
+          var oneKgVariant = findSubscriptionVariant(4, answers.frequency);
+          if (oneKgVariant && typeof oneKgVariant.price === 'number') {
+            var oneKgMonthly = oneKgVariant.price / 100 / (parseInt(answers.frequency, 10) || 1);
+            quantitySavings = Math.max(0, Math.round(oneKgMonthly * kg - price.monthly));
+          }
+        }
         var pillText = '';
-        if (price.savings > 0 && freeShipping) {
-          pillText = 'חסכת ' + formatSubscriptionShekels(price.savings) + ' ומשלוח חינם';
-        } else if (price.savings > 0) {
-          pillText = 'חסכת ' + formatSubscriptionShekels(price.savings);
+        if (quantitySavings > 0 && freeShipping) {
+          pillText = 'חסכת ' + formatSubscriptionShekels(quantitySavings) + ' + משלוח חינם';
+        } else if (quantitySavings > 0) {
+          pillText = 'חסכת ' + formatSubscriptionShekels(quantitySavings);
         } else if (freeShipping) {
           pillText = 'משלוח חינם';
         }
-        savingsPill.textContent = pillText;
+        savingsPill.innerHTML = pillText
+          ? '<span class="subscription-savings-pill-tag">' + pillText + '</span>'
+          : '';
         savingsPill.hidden = !pillText;
       }
     } else {
