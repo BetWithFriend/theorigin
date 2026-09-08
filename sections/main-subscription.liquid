@@ -365,7 +365,10 @@
         <span class="subscription-option-body">
           <span class="subscription-option-title">8 שקיות (2 ק"ג)</span>
           <span class="subscription-option-desc">2-3 כוסות ביום (מתאים למשפחה או משרד קטן)</span>
-          <span class="subscription-option-price">מחיר: {{ sub_price_2kg_monthly | money_without_trailing_zeros }} + משלוח חינם</span>
+          <span class="subscription-option-price">מחיר: {{ sub_price_2kg_monthly | money_without_trailing_zeros }} לחודש</span>
+        </span>
+        <span class="subscription-option-tags">
+          <span class="subscription-option-tag">משלוח חינם</span>
         </span>
       </button>
       <button
@@ -383,7 +386,10 @@
         <span class="subscription-option-body">
           <span class="subscription-option-title">16 שקיות (4 ק"ג)</span>
           <span class="subscription-option-desc">צריכה גבוהה (משרדים או חובבי קפה כבדים)</span>
-          <span class="subscription-option-price">מחיר: {{ sub_price_4kg_monthly | money_without_trailing_zeros }} + משלוח חינם</span>
+          <span class="subscription-option-price">מחיר: {{ sub_price_4kg_monthly | money_without_trailing_zeros }} לחודש</span>
+        </span>
+        <span class="subscription-option-tags">
+          <span class="subscription-option-tag">חסכת 80 ₪ + משלוח חינם</span>
         </span>
       </button>
     </div>
@@ -906,24 +912,24 @@
         "type": "text",
         "id": "intro_title",
         "label": "כותרת מסך פתיחה",
-        "default": "מנוי הקפה שלכם מתחיל כאן"
+        "default": "מנוי הקפה שלך מתחיל כאן"
       },
       {
         "type": "text",
         "id": "intro_subtitle",
         "label": "תת-כותרת מסך פתיחה",
-        "default": "קפה ספשלטי טרי מבית קלייה משתנה, בכל חודש אצלכם בדלת."
+        "default": "קפה ספשלטי טרי מבית קלייה משתנה, בכל חודש אצלך בדלת."
       },
       {
         "type": "richtext",
         "id": "intro_description",
         "label": "תיאור מסך פתיחה",
-        "default": "<p>עונים על שאלון קצר: העדפות טעם, כמה קפה, מתי ועוד קצת – ומקבלים קפה מותאם אישית עד הבית, כל חודש.</p><p>אנחנו נבחר כמה סוגי קפה מושלמים כל חודש ונשלח ישר אליכם. לכם נשאר רק להנות מקפה מעולה!</p>"
+        "default": "<p>שאלון קצר של דקה – והקפה המושלם בדרך אליך.</p>"
       }, {
         "type": "text",
         "id": "intro_button_text",
         "label": "טקסט כפתור התחלה",
-        "default": "בואו נתחיל"
+        "default": "להתאמת המנוי שלי"
       }, {
         "type": "text",
         "id": "intro_social_text",

@@ -236,6 +236,34 @@ body.subscription-wrapper-open .header.header--middle-center.header--mobile-cent
     border-radius: 20px;
 }
 
+.subscription-option--qty {
+    position: relative;
+}
+
+.subscription-option-tags {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    direction: rtl;
+    pointer-events: none;
+}
+
+.subscription-option-tag {
+    display: inline-block;
+    background: #59ae94;
+    color: #ffffff;
+    font-family: 'Assistant', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1;
+    padding: 5px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
 /* Title-only cards (frequency / delivery day) */
 .subscription-option--compact {
     align-items: center;
@@ -513,6 +541,17 @@ body.subscription-wrapper-open .header.header--middle-center.header--mobile-cent
        it straddles the shadow. */
     top: -23px;
     left: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    direction: rtl;
+}
+
+.subscription-savings-pill[hidden] {
+    display: none;
+}
+
+.subscription-savings-pill-tag {
     background: #59ae94;
     color: #ffffff;
     font-family: 'Assistant', sans-serif;
@@ -521,12 +560,7 @@ body.subscription-wrapper-open .header.header--middle-center.header--mobile-cent
     padding: 4px 8px;
     border-radius: 6px;
     white-space: nowrap;
-    direction: rtl;
     line-height: 1;
-}
-
-.subscription-savings-pill[hidden] {
-    display: none;
 }
 
 .subscription-price-row {

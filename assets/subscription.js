@@ -369,7 +369,11 @@
           }
         }
         var pillText = '';
-        if (quantitySavings > 0 && freeShipping) {
+        if (parseInt(answers.quantity, 10) === 16) {
+          // Match the "חסכת 80 ₪ + משלוח חינם" tag shown on the step-3
+          // quantity card for the 16 bags (4kg) bundle.
+          pillText = 'חסכת 80 ₪ + משלוח חינם';
+        } else if (quantitySavings > 0 && freeShipping) {
           pillText = 'חסכת ' + formatSubscriptionShekels(quantitySavings) + ' + משלוח חינם';
         } else if (quantitySavings > 0) {
           pillText = 'חסכת ' + formatSubscriptionShekels(quantitySavings);
