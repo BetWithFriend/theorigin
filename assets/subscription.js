@@ -413,6 +413,36 @@
   window.restartSubscriptionFlow = restartSubscriptionFlow;
 
   /* ── Edit preferences bottom sheet ─────────────────────────────────────── */
+  /*
+   * Refresh the quantity <option> labels so each one shows its per-shipment
+   * price given the currently selected frequency. Prices are pulled from the
+   * dedicated subscription product's variants (same source of truth used by
+   * computeSubscriptionPrice / findSubscriptionVariant).
+   */
+  function updateSubscriptionEditQuantityPrices() {
+    var quantitySelect = document.getElementById('subscriptionEditQuantity');
+    var frequencySelect = document.getElementById('subscriptionEditFrequency');
+    if (!quantitySelect) return;
+    var frequency =
+      (frequencySelect && parseInt(frequencySelect.value, 10)) ||
+      window.subscriptionAnswers.frequency ||
+      3;
+    for (var i = 0; i < quantitySelect.options.length; i++) {
+      var opt = quantitySelect.options[i];
+      if (!opt.dataset.baseLabel) opt.dataset.baseLabel = opt.textContent;
+      var qty = parseInt(opt.value, 10);
+      var variant = findSubscriptionVariant(qty, frequency);
+      var months = parseInt(frequency, 10) || 1;
+      if (variant && typeof variant.price === 'number') {
+        var perShipment = Math.round(variant.price / 100 / months);
+        opt.textContent = opt.dataset.baseLabel + ' — ' + formatSubscriptionShekels(perShipment);
+      } else {
+        opt.textContent = opt.dataset.baseLabel;
+      }
+    }
+    updateSubscriptionSheetRowValue(quantitySelect);
+  }
+
   function populateSubscriptionEditSheet() {
     var answers = window.subscriptionAnswers;
     Object.keys(SUBSCRIPTION_FIELD_TO_SHEET_ID).forEach(function (field) {
@@ -420,7 +450,9 @@
       if (el && answers[field] != null) {
         el.value = String(answers[field]);
       }
+      if (el) updateSubscriptionSheetRowValue(el);
     });
+    updateSubscriptionEditQuantityPrices();
   }
 
   function openSubscriptionEditSheet() {
@@ -551,23 +583,42 @@
     }
   }
 
+  function updateSubscriptionSheetRowValue(select) {
+    if (!select) return;
+    var row = select.closest('.subscription-sheet-row');
+    if (!row) return;
+    var valueEl = row.querySelector('.subscription-sheet-value');
+    if (!valueEl) return;
+    var opt = select.options[select.selectedIndex];
+    valueEl.textContent = opt ? opt.textContent : '';
+  }
+
+  function updateAllSubscriptionSheetRowValues() {
+    document.querySelectorAll('.subscription-sheet-select').forEach(updateSubscriptionSheetRowValue);
+  }
+
+  /*
+   * The native <select> is absolutely-positioned across the entire row with
+   * opacity 0 (see subscription.css). That makes the whole row a real hit
+   * target for the OS-native picker — necessary for Safari, where
+   * HTMLSelectElement.showPicker() is unavailable and a synthetic .click()
+   * on a <select> does not open the picker. We only need to keep the visible
+   * value display in sync with the current selection.
+   */
   function attachSubscriptionSheetRowListeners() {
-    var rows = document.querySelectorAll('.subscription-sheet-row');
-    rows.forEach(function (row) {
-      var select = row.querySelector('.subscription-sheet-select');
-      if (!select) return;
-      row.addEventListener('click', function (e) {
-        if (e.target === select) return;
-        if (typeof select.showPicker === 'function') {
-          try {
-            select.showPicker();
-            return;
-          } catch (err) { }
+    var selects = document.querySelectorAll('.subscription-sheet-select');
+    selects.forEach(function (select) {
+      select.addEventListener('change', function () {
+        updateSubscriptionSheetRowValue(select);
+        // Quantity prices depend on the selected frequency, so re-render them
+        // whenever frequency changes (and re-run on quantity change to keep
+        // the visible value display in sync with the priced label).
+        if (select.id === 'subscriptionEditFrequency' || select.id === 'subscriptionEditQuantity') {
+          updateSubscriptionEditQuantityPrices();
         }
-        select.focus();
-        select.click();
       });
     });
+    updateAllSubscriptionSheetRowValues();
   }
 
   document.addEventListener('DOMContentLoaded', function () {

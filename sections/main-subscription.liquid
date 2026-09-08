@@ -347,7 +347,7 @@
         <span class="subscription-option-body">
           <span class="subscription-option-title">4 שקיות (1 ק"ג):</span>
           <span class="subscription-option-desc">1-2 כוסות ביום (מתאים ליחיד/זוג)</span>
-          <span class="subscription-option-price">מחיר: {{ sub_price_1kg_monthly | money_without_trailing_zeros }} + משלוח</span>
+          <span class="subscription-option-price">מחיר: {{ sub_price_1kg_monthly | money_without_trailing_zeros }} + משלוח 35 ₪</span>
         </span>
       </button>
       <button
@@ -737,6 +737,7 @@
             <option value="8">8 שקיות (2 ק"ג)</option>
             <option value="16">16 שקיות (4 ק"ג)</option>
           </select>
+          <span class="subscription-sheet-value" aria-hidden="true"></span>
           <span class="subscription-sheet-chevron">{% render 'subscription-icon'
 , icon: 'chevron' %}</span>
         </span>
@@ -753,6 +754,7 @@
             <option value="6">6 חודשים</option>
             <option value="12">12 חודשים</option>
           </select>
+          <span class="subscription-sheet-value" aria-hidden="true"></span>
           <span class="subscription-sheet-chevron">{% render 'subscription-icon'
 , icon: 'chevron' %}</span>
         </span>
@@ -768,6 +770,7 @@
             <option value="10">כל 10 לחודש</option>
             <option value="20">כל 20 לחודש</option>
           </select>
+          <span class="subscription-sheet-value" aria-hidden="true"></span>
           <span class="subscription-sheet-chevron">{% render 'subscription-icon'
 , icon: 'chevron' %}</span>
         </span>
@@ -784,6 +787,7 @@
             <option value="classic">סגנון קלאסי "בית קפה"</option>
             <option value="modern">סגנון מודרני</option>
           </select>
+          <span class="subscription-sheet-value" aria-hidden="true"></span>
           <span class="subscription-sheet-chevron">{% render 'subscription-icon'
 , icon: 'chevron' %}</span>
         </span>
@@ -802,6 +806,7 @@
             <option value="v60">טחינה לפילטר / V60 - בינונית</option>
             <option value="frenchpress">טחינה לפרנץ' פרס / Cold Brew - גסה</option>
           </select>
+          <span class="subscription-sheet-value" aria-hidden="true"></span>
           <span class="subscription-sheet-chevron">{% render 'subscription-icon'
 , icon: 'chevron' %}</span>
         </span>
