@@ -1,0 +1,42 @@
+{% comment %}
+  Subscription nav link — rendered after the questionnaire item in header menus.
+
+  Accepts:
+  - menu_context: {String} "drawer" or "desktop"
+{% endcomment %}
+
+{%- liquid
+  assign subscription_page = pages['subscription']
+  if subscription_page != blank and subscription_page.url != blank
+    assign subscription_url = subscription_page.url
+  else
+    assign subscription_url = '/pages/subscription'
+  endif
+  if subscription_page.title != blank
+    assign subscription_label = subscription_page.title
+  else
+    assign subscription_label = 'מנוי קפה'
+  endif
+-%}
+
+{%- if menu_context == 'drawer' -%}
+  <li>
+    <a
+      id="HeaderDrawer-subscription"
+      href="{{ subscription_url }}"
+      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+    >
+      {{ subscription_label | escape }}
+    </a>
+  </li>
+{%- else -%}
+  <li>
+    <a
+      id="HeaderMenu-subscription"
+      href="{{ subscription_url }}"
+      class="header__menu-item list-menu__item link link--text focus-inset"
+    >
+      <span>{{ subscription_label | escape }}</span>
+    </a>
+  </li>
+{%- endif -%}

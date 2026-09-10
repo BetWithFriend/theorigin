@@ -1,0 +1,1121 @@
+/* Origin subscription flow — completely separate stylesheet from questionnaire.css.
+   Same general spirit (Assistant font, card-based steps) but its own token set
+   (teal accent, dark "selected" cards) to match the Figma subscription mockups. */
+:root {
+    --sub-text: #1c201d;
+    --sub-text-muted: #6b6b6b;
+    --sub-border: #e3e8e4;
+    --sub-surface: #ffffff;
+    --sub-surface-muted: #f4f3f0;
+    --sub-page-bg: #f9f9f9;
+    --sub-accent: #2f9e8e;
+    --sub-selected-bg: #1c201d;
+    --sub-selected-text: #ffffff;
+    --sub-progress-track: #e3e0da;
+    --sub-tile-accent: #c1685a;
+}
+
+/* ── Wrapper / hide theme header while the flow is open ─────────────────── */
+.subscription-wrapper {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+    z-index: 10000;
+    background-color: var(--sub-page-bg);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.subscription-wrapper.subscription-results-visible {
+    overflow: hidden;
+    align-items: stretch;
+}
+
+.subscription-wrapper.subscription-results-visible .subscription-results {
+    flex: 1 1 auto;
+    margin-inline: auto;
+}
+
+body.subscription-wrapper-open {
+    overflow: hidden;
+    height: 100vh;
+    height: 100dvh;
+}
+
+#MainContent.subscription-wrapper-open {
+    margin: 0;
+}
+
+body.subscription-wrapper-open .shopify-section.shopify-section-group-header-group.announcement-bar-section {
+    display: none !important;
+}
+
+body.subscription-wrapper-open .header-wrapper,
+body.subscription-wrapper-open .header.header--middle-center.header--mobile-center.page-width.header--has-menu.header--has-account {
+    display: none !important;
+}
+
+/* ── Step machine ─────────────────────────────────────────────────────── */
+.subscription-step {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 420px;
+    padding: 32px 22px 24px;
+    box-sizing: border-box;
+}
+
+.subscription-step.active {
+    display: flex;
+}
+
+.subscription-progress-bar-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 0 4px;
+}
+
+.subscription-progress-bar {
+    width: 100%;
+    height: 6px;
+    background-color: var(--sub-progress-track);
+    border-radius: 24px;
+}
+
+.subscription-progress-bar.filled {
+    background-color: var(--sub-accent);
+}
+
+.subscription-title-wrapper {
+    direction: ltr;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.subscription-close-icon,
+.subscription-back-icon-wrapper {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--sub-text);
+    cursor: pointer;
+}
+
+.subscription-back-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.subscription-title {
+    flex: 1;
+    text-align: center;
+    font-family: 'Assistant', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--sub-text);
+    direction: rtl;
+}
+
+/* ── Option cards ─────────────────────────────────────────────────────── */
+.subscription-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.subscription-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--sub-border);
+    color: #000000;
+    border-radius: 16px;
+    padding: 16px;
+    background: var(--sub-surface);
+    cursor: pointer;
+    text-align: right;
+    direction: rtl;
+    font-family: 'Assistant', sans-serif;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.subscription-option:hover {
+    border-color: var(--sub-text-muted);
+}
+
+.subscription-option.selected {
+    background: var(--sub-selected-bg);
+    border-color: var(--sub-selected-bg);
+    color: var(--sub-selected-text);
+}
+
+.subscription-option-icon {
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--sub-text);
+}
+
+.subscription-option.selected .subscription-option-icon {
+    color: var(--sub-selected-text);
+}
+
+.subscription-option-img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.subscription-option.selected .subscription-option-img {
+    filter: invert(1);
+}
+
+.subscription-option-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.subscription-option-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: inherit;
+}
+
+.subscription-option-desc {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--sub-text-muted);
+}
+
+.subscription-option.selected .subscription-option-desc {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.subscription-option-price {
+    font-size: 13px;
+    font-weight: 600;
+    color: inherit;
+    margin-top: 2px;
+}
+
+.subscription-option-badge {
+    display: inline-block;
+    background: var(--sub-accent);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.subscription-option--qty {
+    position: relative;
+}
+
+.subscription-option-tags {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    direction: rtl;
+    pointer-events: none;
+}
+
+.subscription-option-tag {
+    display: inline-block;
+    background: #59ae94;
+    color: #ffffff;
+    font-family: 'Assistant', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1;
+    padding: 5px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+/* Title-only cards (frequency / delivery day) */
+.subscription-option--compact {
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.subscription-option--compact .subscription-option-body {
+    justify-content: center;
+}
+
+/* Informational bullets under a step's options */
+.subscription-step-notes {
+    width: 100%;
+    box-sizing: border-box;
+    direction: rtl;
+    list-style: disc;
+    margin: 14px 0 0;
+    padding: 0 20px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--sub-text);
+}
+
+.subscription-step-notes li {
+    display: list-item;
+}
+
+/* ── Results screen ───────────────────────────────────────────────────── */
+.subscription-results {
+    max-width: 420px;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    padding: 16px 16px 10px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    gap: 0;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.subscription-results-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.subscription-results-footer {
+    flex: 0 0 auto;
+    width: calc(100% + 32px);
+    margin-left: -16px;
+    margin-right: -16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px 0;
+    background: var(--sub-page-bg);
+    box-shadow: 0px -2px 4px 0px #00000040;
+    z-index: 1;
+}
+
+.subscription-results-header {
+    direction: ltr;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.subscription-results-logo {
+    height: 26px;
+    width: auto;
+}
+
+.subscription-results-reload-btn {
+    background: transparent;
+    border: none;
+    padding: 6px;
+    color: var(--sub-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.subscription-results-title {
+    font-family: 'Assistant', sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--sub-text);
+    text-align: right;
+    direction: rtl;
+    margin: 8px 0 0;
+    width: 100%;
+    line-height: 1.15;
+}
+
+.subscription-results-subtitle {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--sub-text);
+    text-align: right;
+    direction: rtl;
+    width: 100%;
+    margin: 4px 0 0;
+}
+
+.subscription-edit-link-row {
+    direction: rtl;
+    display: flex;
+    width: 100%;
+    margin-top: 4px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.subscription-edit-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--sub-text);
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+.subscription-summary-grid {
+    width: 100%;
+    display: grid;
+    direction: rtl;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 10px;
+    row-gap: 12px;
+}
+
+.subscription-summary-tile {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 24px;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--sub-border);
+    border-radius: 16px;
+    padding: 16px;
+    background: var(--sub-surface);
+    direction: rtl;
+    text-align: right;
+}
+
+.subscription-summary-tile-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+}
+
+.subscription-summary-tile-label {
+    font-family: 'Assistant', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #555;
+}
+
+.subscription-summary-tile-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: #ad7b7e;
+    flex: 0 0 20px;
+}
+
+.subscription-summary-tile-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.subscription-summary-tile-value {
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--sub-text);
+    white-space: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.subscription-how-it-works {
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--sub-surface);
+    border: 1px solid var(--sub-border);
+    border-radius: 20px;
+    padding: 18px;
+    direction: rtl;
+    text-align: right;
+}
+
+.subscription-how-it-works-toggle {
+    width: 100%;
+    margin: 0 0 12px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--sub-text);
+    text-align: right;
+}
+
+.subscription-how-it-works-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--sub-text);
+    text-align: right;
+    direction: rtl;
+}
+
+.subscription-how-it-works-item {
+    margin: 0;
+}
+
+.subscription-how-it-works-lead {
+    color: #ad7b7e;
+    font-weight: 700;
+    margin-left: 4px;
+}
+
+.subscription-how-it-works-lead--shipping {
+    color: #d95d39;
+}
+
+.subscription-price-block {
+    position: relative;
+    width: 100%;
+    direction: rtl;
+}
+
+.subscription-savings-pill {
+    position: absolute;
+    /* Sit centered on the footer's top box-shadow line.
+       Containing block (.subscription-price-block) starts 12px below the
+       footer's top edge (footer padding-top), so -23px lifts the pill so
+       it straddles the shadow. */
+    top: -23px;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    direction: rtl;
+}
+
+.subscription-savings-pill[hidden] {
+    display: none;
+}
+
+.subscription-savings-pill-tag {
+    background: #59ae94;
+    color: #ffffff;
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 4px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.subscription-price-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    width: 100%;
+    direction: rtl;
+    text-align: right;
+}
+
+.subscription-price-per-shipment {
+    direction: rtl;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    font-family: 'Assistant', sans-serif;
+    color: var(--sub-text);
+}
+
+.subscription-price-per-shipment-amount {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.subscription-price-per-shipment-label {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.subscription-price-total-note {
+    direction: rtl;
+    font-family: 'Assistant', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #555;
+    text-align: right;
+}
+
+.subscription-cta-btn {
+    width: 100%;
+    height: 52px;
+    border-radius: 8px;
+    border: none;
+    background: #333634;
+    color: #fbfcfe;
+    font-family: 'Assistant', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.subscription-cta-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.subscription-payment-secure-row {
+    direction: ltr;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+}
+
+.subscription-payment-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.subscription-payment-icon {
+    height: 18px;
+    width: auto;
+    object-fit: contain;
+}
+
+.subscription-secure-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Assistant', sans-serif;
+    font-size: 12px;
+    color: var(--sub-text-muted);
+    white-space: nowrap;
+}
+
+.subscription-secure-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    color: var(--sub-text-muted);
+}
+
+/* ── Edit preferences bottom sheet ────────────────────────────────────── */
+.subscription-sheet-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10010;
+    background: rgba(28, 32, 29, 0.45);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.subscription-sheet-overlay.open {
+    display: flex;
+}
+
+.subscription-sheet {
+    width: 100%;
+    max-width: 480px;
+    box-sizing: border-box;
+    background: var(--sub-surface);
+    border-radius: 20px 20px 0 0;
+    padding: 20px 20px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.subscription-sheet-header {
+    direction: ltr;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.subscription-sheet-close {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--sub-text);
+    cursor: pointer;
+    padding: 0;
+}
+
+.subscription-sheet-title {
+    flex: 1;
+    text-align: center;
+    font-family: 'Assistant', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--sub-text);
+    direction: rtl;
+}
+
+.subscription-sheet-row {
+    position: relative;
+    direction: rtl;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--sub-border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.subscription-sheet-label {
+    font-family: 'Assistant', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--sub-text-muted);
+    flex: 0 0 auto;
+}
+
+.subscription-sheet-select-wrapper {
+    direction: ltr;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+    justify-content: flex-end;
+}
+
+/*
+ * The native <select> is stretched across the entire row and made fully
+ * transparent so the whole row is a real hit target for the browser's native
+ * picker (this is the only reliable way to open the picker in Safari — both
+ * showPicker() and a synthetic .click() on a <select> are unsupported).
+ * The visible selected value is rendered by .subscription-sheet-value below.
+ */
+.subscription-sheet-select {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    /* 16px prevents iOS Safari from zooming when the picker opens */
+    font-size: 16px;
+    color: transparent;
+    opacity: 0;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    z-index: 2;
+}
+
+.subscription-sheet-select:focus {
+    outline: none;
+}
+
+.subscription-sheet-value {
+    direction: rtl;
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--sub-text);
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.subscription-sheet-chevron {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--sub-text-muted);
+    pointer-events: none;
+}
+
+.subscription-sheet-update-btn {
+    width: 100%;
+    height: 48px;
+    border-radius: 8px;
+    border: none;
+    background: var(--sub-selected-bg);
+    color: #ffffff;
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+/* ── Desktop ───────────────────────────────────────────────────────────── */
+@media screen and (min-width: 990px) {
+    .subscription-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        min-height: unset;
+        overflow-y: auto;
+    }
+
+    .subscription-step {
+        max-width: 480px;
+        padding-top: 48px;
+    }
+
+    .subscription-title {
+        font-size: 24px;
+    }
+
+    .subscription-option {
+        padding: 20px 22px;
+    }
+
+    .subscription-sheet-overlay {
+        align-items: center;
+    }
+
+    .subscription-sheet {
+        border-radius: 20px;
+        max-width: 420px;
+    }
+
+    /* ── Results screen: fit within viewport, full-bleed footer shadow ── */
+    .subscription-wrapper.subscription-results-visible .subscription-results {
+        max-width: 760px;
+        width: 100%;
+        margin-inline: auto;
+        padding: 24px 32px 220px;
+        /* bottom padding reserves space for fixed footer */
+        overflow: hidden;
+    }
+
+    .subscription-results-scroll {
+        gap: 12px;
+        overflow: visible;
+    }
+
+    .subscription-results-title {
+        font-size: 28px;
+        margin-top: 0;
+    }
+
+    .subscription-results-subtitle {
+        font-size: 15px;
+        margin-top: 2px;
+    }
+
+    .subscription-edit-link-row {
+        margin-top: 0;
+    }
+
+    .subscription-summary-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        column-gap: 12px;
+        row-gap: 12px;
+    }
+
+    .subscription-summary-tile {
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .subscription-how-it-works {
+        padding: 14px 18px;
+    }
+
+    .subscription-how-it-works-toggle {
+        margin-bottom: 8px;
+    }
+
+    .subscription-how-it-works-body {
+        gap: 6px;
+    }
+
+    /* Full-bleed footer pinned to the bottom of the viewport with a
+       shadow that spans the entire page width. */
+    .subscription-results-footer {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        margin: 0;
+        padding: 16px max(32px, calc((100vw - 760px) / 2 + 32px)) 20px;
+        padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+        background: var(--sub-page-bg);
+        box-shadow: 0px -2px 12px 0px rgba(0, 0, 0, 0.18);
+        z-index: 5;
+        gap: 8px;
+    }
+
+    .subscription-price-block {
+        padding-top: 0;
+    }
+
+    /* ── Intro (desktop) ───────────────────────────────────────────────── */
+    .subscription-intro {
+        max-width: 560px;
+        padding: 24px 0;
+    }
+
+    .subscription-intro-image-wrapper {
+        height: 220px;
+        border-radius: 16px;
+    }
+
+    .subscription-intro-text {
+        padding: 32px 0 24px;
+        gap: 12px;
+    }
+
+    .subscription-intro-title {
+        font-size: 36px;
+    }
+
+    .subscription-intro-subtitle {
+        font-size: 20px;
+    }
+
+    .subscription-intro-desc {
+        font-size: 18px;
+        line-height: 1.5;
+    }
+
+    .subscription-intro-star {
+        width: 26px;
+        height: 26px;
+    }
+
+    .subscription-intro-social-text {
+        font-size: 18px;
+    }
+}
+
+/* ── Intro / preview screen (mobile) ─────────────────────────────────── */
+.subscription-step.subscription-intro {
+    max-width: 420px;
+    padding: 0;
+    gap: 0;
+    align-items: stretch;
+}
+
+.subscription-step.subscription-intro.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.subscription-intro-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.subscription-intro-header .subscription-close-icon {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--sub-text);
+}
+
+.subscription-intro-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 24px 24px;
+    box-sizing: border-box;
+}
+
+.subscription-intro-image-wrapper {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.subscription-intro-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.subscription-intro-text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    text-align: center;
+    padding: 24px 0 20px;
+}
+
+.subscription-intro-title {
+    font-family: 'Assistant', sans-serif;
+    font-size: 26px;
+    line-height: 1.2;
+    font-weight: 700;
+    color: var(--sub-text);
+    margin: 0;
+}
+
+.subscription-intro-subtitle {
+    font-family: 'Assistant', sans-serif;
+    font-size: 18px;
+    line-height: 1.35;
+    font-weight: 700;
+    color: var(--sub-text);
+    margin: 0;
+}
+
+.subscription-intro-desc {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 400;
+    color: var(--sub-text);
+}
+
+.subscription-intro-desc p {
+    margin: 0 0 12px;
+}
+
+.subscription-intro-desc p:last-child {
+    margin-bottom: 0;
+}
+
+.subscription-intro-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.subscription-intro-start-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 56px;
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 16px 40px;
+    background-color: var(--sub-selected-bg);
+    color: var(--sub-selected-text);
+    font-family: 'Assistant', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    border: unset;
+}
+
+.subscription-intro-start-btn:hover {
+    opacity: 0.92;
+}
+
+.subscription-intro-social-proof {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+}
+
+.subscription-intro-stars {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: #e4ae8b;
+}
+
+.subscription-intro-star {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+.subscription-intro-social-text {
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 400;
+    color: var(--sub-text);
+    text-align: center;
+}
