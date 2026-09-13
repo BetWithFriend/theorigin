@@ -347,14 +347,26 @@
           formatSubscriptionShekels(price.perShipment) +
           '</span>' +
           '<span class="subscription-price-per-shipment-label">' +
-          'למשלוח ' +
+          'לחבילה · ' +
           price.shipments +
-          'x משלוחים' +
+          ' חבילות' +
           '</span>';
       }
       if (totalNoteEl) {
-        totalNoteEl.textContent =
-          'סה״כ ' + formatSubscriptionShekels(price.total) + ' (ניתן לחלק עד 12 תשלומים)';
+        var freeShippingNote = kg && kg >= 2;
+        var subNoteParts = ['ניתן לחלק עד 12 תשלומים'];
+        if (!freeShippingNote) {
+          subNoteParts.push('בתוספת משלוח 35 ₪ להזמנה');
+        }
+        totalNoteEl.innerHTML =
+          '<span class="subscription-price-total-main">' +
+          'סה״כ ' +
+          formatSubscriptionShekels(price.total) +
+          ' עבור הקפה' +
+          '</span>' +
+          '<span class="subscription-price-total-sub">' +
+          subNoteParts.join(' · ') +
+          '</span>';
       }
       if (savingsPill) {
         var freeShipping = kg && kg >= 2;

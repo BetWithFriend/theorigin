@@ -597,10 +597,24 @@ body.subscription-wrapper-open .header.header--middle-center.header--mobile-cent
 .subscription-price-total-note {
     direction: rtl;
     font-family: 'Assistant', sans-serif;
-    font-size: 18px;
-    font-weight: 400;
     color: #555;
     text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.subscription-price-total-main {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.subscription-price-total-sub {
+    font-size: 13px;
+    font-weight: 400;
+    color: #777;
+    line-height: 1.2;
 }
 
 .subscription-cta-btn {
