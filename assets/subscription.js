@@ -75,6 +75,13 @@
     frenchpress: null,
   };
   var SUBSCRIPTION_FALLBACK_VENDORS = ['אור זך', 'קנופי', 'קפה איכות', 'הקליה המקומית'];
+  var SUBSCRIPTION_FIELD_TO_STEP = {
+    profile: 'Taste',
+    grind: 'Grind',
+    quantity: 'Amount',
+    frequency: 'Term',
+    deliveryDay: 'Date',
+  };
 
   window.subscriptionAnswers = window.subscriptionAnswers || {
     quantity: null,
@@ -315,6 +322,52 @@
     else stopSubscriptionA11yPinning();
   }
 
+  /* ── Analytics ─────────────────────────────────────────────────────────── */
+  function subscriptionScreenName(stepIndex) {
+    if (stepIndex === 'intro') return 'Subscription:Intro';
+    if (stepIndex === 'results') return 'Subscription:Final Offer';
+    var page = parseInt(stepIndex, 10);
+    if (page >= 1 && page <= SUBSCRIPTION_TOTAL_STEPS) return 'Subscription:Page ' + page;
+    return null;
+  }
+
+  function trackSubscriptionScreenView(stepIndex) {
+    var screenName = subscriptionScreenName(stepIndex);
+    if (!screenName) return;
+    if (typeof analytics !== 'undefined' && analytics.trackScreenView) {
+      analytics.trackScreenView(screenName);
+    }
+  }
+
+  function trackSubscriptionSelection(field, selection) {
+    var step = SUBSCRIPTION_FIELD_TO_STEP[field];
+    if (!step) return;
+    if (typeof analytics !== 'undefined' && analytics.track) {
+      analytics.track('Subscription Selection', {
+        Step: step,
+        Selection: selection,
+      });
+    }
+  }
+
+  function subscriptionCheckoutProperties(answers) {
+    return {
+      Taste: answers.profile,
+      Grind: answers.grind,
+      Amount: answers.quantity,
+      Term: answers.frequency,
+      Date: answers.deliveryDay,
+    };
+  }
+
+  function trackSubscriptionCheckout(answers) {
+    if (typeof analytics !== 'undefined' && analytics.track) {
+      analytics.track('Subscription Checkout', {
+        Properties: JSON.stringify(subscriptionCheckoutProperties(answers)),
+      });
+    }
+  }
+
   /* ── Step machine ──────────────────────────────────────────────────────── */
   function activateSubscriptionStep(stepIndex) {
     document.querySelectorAll('.subscription-step').forEach(function (el) {
@@ -327,6 +380,7 @@
       wrapper.classList.toggle('subscription-results-visible', stepIndex === 'results');
     }
     syncSubscriptionA11yButton(stepIndex === 'results');
+    trackSubscriptionScreenView(stepIndex);
   }
 
   function currentSubscriptionStepIndex() {
@@ -389,6 +443,7 @@
         btn.addEventListener('click', function () {
           var value = btn.getAttribute('data-value');
           window.subscriptionAnswers[field] = field === 'quantity' ? parseInt(value, 10) : value;
+          trackSubscriptionSelection(field, window.subscriptionAnswers[field]);
           group.querySelectorAll('.subscription-option.selected').forEach(function (el) {
             el.classList.remove('selected');
           });
@@ -576,7 +631,12 @@
     Object.keys(SUBSCRIPTION_FIELD_TO_SHEET_ID).forEach(function (field) {
       var el = document.getElementById(SUBSCRIPTION_FIELD_TO_SHEET_ID[field]);
       if (!el) return;
-      window.subscriptionAnswers[field] = field === 'quantity' ? parseInt(el.value, 10) : el.value;
+      var nextValue = field === 'quantity' ? parseInt(el.value, 10) : el.value;
+      var previous = window.subscriptionAnswers[field];
+      window.subscriptionAnswers[field] = nextValue;
+      if (String(previous) !== String(nextValue)) {
+        trackSubscriptionSelection(field, nextValue);
+      }
     });
     syncSubscriptionOptionSelectedStates();
     renderSubscriptionResults();
@@ -603,6 +663,7 @@
 
     if (btn) btn.disabled = true;
     if (label) label.textContent = 'מוסיף...';
+    trackSubscriptionCheckout(answers);
 
     var SUBSCRIPTION_PROFILE_CART_LABELS = {
       italian: 'שוקולדי',
@@ -729,6 +790,9 @@
     attachSubscriptionOptionListeners();
     attachSubscriptionSheetRowListeners();
     restoreSubscriptionState();
+    if (currentSubscriptionStepIndex() === 'intro') {
+      trackSubscriptionScreenView('intro');
+    }
     var resultsScroll = document.querySelector('.subscription-results-scroll');
     if (resultsScroll) {
       resultsScroll.addEventListener('scroll', function () {

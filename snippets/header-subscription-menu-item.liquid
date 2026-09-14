@@ -12,11 +12,7 @@
   else
     assign subscription_url = '/pages/subscription'
   endif
-  if subscription_page.title != blank
-    assign subscription_label = subscription_page.title
-  else
-    assign subscription_label = 'מנוי קפה'
-  endif
+  assign subscription_label = 'מנוי'
 -%}
 
 {%- if menu_context == 'drawer' -%}
