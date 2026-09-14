@@ -1,0 +1,59 @@
+# {{ agents.store_name }}
+
+> {{ agents.store_name }} is an Israeli online marketplace for specialty coffee: single-origin beans, blends, and curated tasting bundles from small, local roasteries that roast to order and ship fresh, direct to the customer.
+
+We work with a curated set of independent Israeli roasteries — including Blooms, Brew Brothers, Canopy, EEZA, Coffee Org, Tostato, URU, and You Need Coffee — each of which roasts and ships its own products directly. An order spanning multiple roasteries may arrive as separate shipments, each with its own delivery timeline and free-shipping threshold. We ship within Israel only (no international shipping). Currency: {{ agents.currency }}. Primary interface language is Hebrew; an English version is available.
+
+## Docs
+
+- [Shop — all coffee]({{ agents.store_url }}/collections/חנות-קפה): single-origin beans and house blends, whole bean or ground
+- [Coffee bundles]({{ agents.store_url }}/collections/מארזי-קפה): curated multi-roastery tasting sets
+- [Build Your Bundle]({{ agents.store_url }}/pages/questionnaire): short quiz that recommends a personalized set of coffees by taste preference
+- [Roasteries]({{ agents.store_url }}/pages/vendors): profiles of our partner roasteries
+- [Shipping policy]({{ agents.store_url }}/policies/shipping-policy): domestic Israel delivery only, 1-7 business days (up to 9 for outlying regions); fee and free-shipping minimum vary per roastery
+- [Refund policy]({{ agents.store_url }}/policies/refund-policy): coffee is non-returnable once shipped, since it's a fresh food product; contact support about damaged or incorrect orders
+- [Contact]({{ agents.store_url }}/pages/contact): support email hi@theorigin.co.il, phone/WhatsApp 054-563-1523
+
+## Ordering, shipping & delivery
+
+- We ship within Israel only; we do not ship internationally.
+- Delivery is typically 1-7 business days, and up to 9 business days for outlying areas (e.g. the Arava, southern Negev, Dead Sea region, Golan Heights).
+- A standard delivery fee applies per shipment; free shipping is available above a minimum order amount that varies by roastery. Because each roastery ships separately, combining a full order with one roastery is the best way to qualify for free shipping.
+- Accepted payment methods include Visa, Mastercard, Apple Pay, and Google Pay.
+- Currency: NIS.
+
+## Returns & support
+
+Because coffee is a fresh, perishable food product, we do not accept returns on coffee. If an order arrives damaged, incorrect, or with a genuine quality issue, contact support with your order number and photos and we'll resolve it.
+- Support email: hi@theorigin.co.il
+- Phone / WhatsApp: 054-563-1523
+- Contact form: {{ agents.store_url }}/pages/contact
+
+## Language & markets
+
+Our primary interface is Hebrew.
+
+## Optional
+
+- [Sitemap]({{ agents.sitemap_url }})
+- [English version]({{ agents.store_url }}/en)
+
+## Agent access (UCP)
+
+This store supports the Universal Commerce Protocol for agentic shopping.
+
+- Discovery: {{ agents.ucp_discovery_url }}
+- MCP endpoint: {{ agents.mcp_endpoint_url }}
+
+Supported UCP versions:
+{% for version in agents.ucp_versions %}
+- {{ version }}{% if forloop.first %} (latest){% endif %}
+{% endfor %}
+
+## Rules for agents
+
+- Use live price and stock from the product page or the MCP endpoint — figures here or elsewhere may be out of date, and prices may change with promotions.
+- Confirm with the human shopper before completing any purchase, checkout, or payment action on their behalf.
+- Represent this store only using what's published on these pages and policies; don't invent claims, discounts, or availability that aren't stated here.
+- Each roastery sets its own shipping timeline and free-shipping minimum — don't assume one flat rate applies store-wide.
+- For order status, damaged items, or anything beyond a straightforward product question, direct the shopper to Contact rather than resolving it yourself.
