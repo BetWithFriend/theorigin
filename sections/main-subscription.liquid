@@ -347,7 +347,7 @@
         <span class="subscription-option-body">
           <span class="subscription-option-title">4 שקיות (1 ק"ג)</span>
           <span class="subscription-option-desc">1-2 כוסות ביום (מתאים ליחיד/זוג)</span>
-          <span class="subscription-option-price">מחיר: {{ sub_price_1kg_monthly | money_without_trailing_zeros }} + משלוח 35 ₪ לחודש</span>
+          <span class="subscription-option-price">מחיר: {{ sub_price_1kg_monthly | minus: 3500 | money_without_trailing_zeros }} לחודש + משלוח 35 ₪</span>
         </span>
       </button>
       <button
@@ -366,9 +366,9 @@
           <span class="subscription-option-title">8 שקיות (2 ק"ג)</span>
           <span class="subscription-option-desc">2-3 כוסות ביום (מתאים למשפחה או משרד קטן)</span>
           <span class="subscription-option-price">מחיר: {{ sub_price_2kg_monthly | money_without_trailing_zeros }} לחודש</span>
-        </span>
-        <span class="subscription-option-tags">
-          <span class="subscription-option-tag">משלוח חינם</span>
+          <span class="subscription-option-tags">
+            <span class="subscription-option-tag">משלוח חינם</span>
+          </span>
         </span>
       </button>
       <button
@@ -387,9 +387,9 @@
           <span class="subscription-option-title">16 שקיות (4 ק"ג)</span>
           <span class="subscription-option-desc">צריכה גבוהה (משרדים או חובבי קפה כבדים)</span>
           <span class="subscription-option-price">מחיר: {{ sub_price_4kg_monthly | money_without_trailing_zeros }} לחודש</span>
-        </span>
-        <span class="subscription-option-tags">
-          <span class="subscription-option-tag">חסכת 80 ₪ + משלוח חינם</span>
+          <span class="subscription-option-tags">
+            <span class="subscription-option-tag">חסכון 20 ש״ח למשלוח + משלוח חינם</span>
+          </span>
         </span>
       </button>
     </div>

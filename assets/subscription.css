@@ -238,6 +238,7 @@ body.subscription-wrapper-open .header.header--middle-center.header--mobile-cent
 
 .subscription-option--qty {
     position: relative;
+    min-height: 128px;
 }
 
 .subscription-option-tags {
@@ -261,7 +262,9 @@ body.subscription-wrapper-open .header.header--middle-center.header--mobile-cent
     line-height: 1;
     padding: 5px 8px;
     border-radius: 6px;
-    white-space: nowrap;
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
 }
 
 /* Title-only cards (frequency / delivery day) */
@@ -597,24 +600,10 @@ body.subscription-wrapper-open .header.header--middle-center.header--mobile-cent
 .subscription-price-total-note {
     direction: rtl;
     font-family: 'Assistant', sans-serif;
-    color: #555;
-    text-align: right;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.subscription-price-total-main {
     font-size: 18px;
     font-weight: 400;
-    line-height: 1.2;
-}
-
-.subscription-price-total-sub {
-    font-size: 13px;
-    font-weight: 400;
-    color: #777;
-    line-height: 1.2;
+    color: #555;
+    text-align: right;
 }
 
 .subscription-cta-btn {

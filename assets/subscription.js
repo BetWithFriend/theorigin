@@ -347,26 +347,14 @@
           formatSubscriptionShekels(price.perShipment) +
           '</span>' +
           '<span class="subscription-price-per-shipment-label">' +
-          'לחבילה · ' +
+          'למשלוח ' +
           price.shipments +
-          ' חבילות' +
+          'x משלוחים' +
           '</span>';
       }
       if (totalNoteEl) {
-        var freeShippingNote = kg && kg >= 2;
-        var subNoteParts = ['ניתן לחלק עד 12 תשלומים'];
-        if (!freeShippingNote) {
-          subNoteParts.push('בתוספת משלוח 35 ₪ להזמנה');
-        }
-        totalNoteEl.innerHTML =
-          '<span class="subscription-price-total-main">' +
-          'סה״כ ' +
-          formatSubscriptionShekels(price.total) +
-          ' עבור הקפה' +
-          '</span>' +
-          '<span class="subscription-price-total-sub">' +
-          subNoteParts.join(' · ') +
-          '</span>';
+        totalNoteEl.textContent =
+          'סה״כ ' + formatSubscriptionShekels(price.total) + ' (ניתן לחלק עד 12 תשלומים)';
       }
       if (savingsPill) {
         var freeShipping = kg && kg >= 2;
@@ -382,9 +370,13 @@
         }
         var pillText = '';
         if (parseInt(answers.quantity, 10) === 16) {
-          // Match the "חסכת 80 ₪ + משלוח חינם" tag shown on the step-3
-          // quantity card for the 16 bags (4kg) bundle.
-          pillText = 'חסכת 80 ₪ + משלוח חינם';
+          // 4kg (16 bags) bundle: 20 ₪ discount per delivery/package,
+          // multiplied by the number of deliveries (frequency in months).
+          var fourKgSavings = 20 * (price.shipments || 0);
+          pillText = 'חסכת ' + formatSubscriptionShekels(fourKgSavings) + ' + משלוח חינם';
+        } else if (parseInt(answers.quantity, 10) === 8) {
+          // 2kg (8 bags) bundle: only free shipping, no quantity discount.
+          pillText = 'משלוח חינם';
         } else if (quantitySavings > 0 && freeShipping) {
           pillText = 'חסכת ' + formatSubscriptionShekels(quantitySavings) + ' + משלוח חינם';
         } else if (quantitySavings > 0) {
