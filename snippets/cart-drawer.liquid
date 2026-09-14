@@ -333,16 +333,33 @@
                   {%- assign vendor_total = 0 -%}
                   {%- assign vendor_has_regular_items = false -%}
                   {%- assign regular_items_total = 0 -%}
+                  {%- assign vendor_has_subscription = false -%}
+                  {%- assign vendor_has_subscription_1kg = false -%}
 
-                  {%- comment -%} Calculate total for this vendor, separating event and regular items {%- endcomment -%}
+                  {%- comment -%} Calculate total for this vendor, separating event, subscription, and regular items {%- endcomment -%}
                   {%- for item in cart.items -%}
                     {%- if item.vendor == vendor -%}
                       {%- assign vendor_has_items = true -%}
                       {%- assign vendor_total = vendor_total | plus: item.line_price -%}
-                      {%- unless item.product.tags contains 'event' -%}
+                      {%- assign is_subscription_item = false -%}
+                      {%- if item.product.handle == 'מנוי-קפה'
+                        or item.product.tags contains 'subscription'
+                        or item.product.tags contains 'מנוי'
+                        or item.variant.option2 contains 'חודש'
+                      -%}
+                        {%- assign is_subscription_item = true -%}
+                      {%- endif -%}
+                      {%- if is_subscription_item -%}
+                        {%- assign vendor_has_subscription = true -%}
+                        {%- assign sub_weight_token = item.variant.option1 | split: ' ' | first -%}
+                        {%- if sub_weight_token == '1' -%}
+                          {%- assign vendor_has_subscription_1kg = true -%}
+                        {%- endif -%}
+                      {%- elsif item.product.tags contains 'event' -%}
+                      {%- else -%}
                         {%- assign vendor_has_regular_items = true -%}
                         {%- assign regular_items_total = regular_items_total | plus: item.original_line_price -%}
-                      {%- endunless -%}
+                      {%- endif -%}
                     {%- endif -%}
                 {%- endfor -%}
 
@@ -418,6 +435,18 @@
                       {%- if regular_items_total_for_shipping >= uru_free_shipping_threshold -%}
                         {%- assign vendor_qualifies_free_shipping = true -%}
                       {%- endif -%}
+                    {%- endif -%}
+                  {%- endif -%}
+
+                  {%- comment -%} Subscription shipping is charged only for the 1kg bundle. 2kg/4kg are free. {%- endcomment -%}
+                  {%- if vendor_has_subscription -%}
+                    {%- if vendor_has_subscription_1kg -%}
+                      {%- assign vendor_qualifies_free_shipping = false -%}
+                      {%- if vendor_shipping_cost == 0 -%}
+                        {%- assign vendor_shipping_cost = 35 -%}
+                      {%- endif -%}
+                    {%- elsif vendor_has_regular_items == false -%}
+                      {%- assign vendor_qualifies_free_shipping = true -%}
                     {%- endif -%}
                   {%- endif -%}
 
@@ -1078,7 +1107,7 @@
                         </div>
                         {%- assign shipping_items_paid = shipping_items_paid | plus: 1 -%}
                       {%- elsif vendor_qualifies_free_shipping -%}
-                        {%- if vendor_has_regular_items -%}
+                        {%- if vendor_has_regular_items or vendor_has_subscription -%}
                           <div class="free-shipping-notice">
                           <img
                               class="cart-icon-delivery "
@@ -1091,7 +1120,7 @@
                         {%- endif -%}
                       {%- else -%}
                         {%- assign shipping_items_paid = shipping_items_paid | plus: 1 -%}
-                        {%- if vendor_has_regular_items -%}
+                        {%- if vendor_has_regular_items or vendor_has_subscription -%}
                           <div class="free-shipping-notice">
                             <div>
                               {%- assign remaining_for_free = vendor_free_threshold | minus: regular_items_total_for_shipping -%}
@@ -1107,8 +1136,10 @@
                                   ₪35
                                 {% endif %}
                               </span>
-                              {% assign formatted_amount = remaining_for_free | money_without_trailing_zeros %}
-                              {{ 'sections.cart.free_shipping_text' | t: amount: formatted_amount }}
+                              {%- unless vendor_has_subscription_1kg -%}
+                                {% assign formatted_amount = remaining_for_free | money_without_trailing_zeros %}
+                                {{ 'sections.cart.free_shipping_text' | t: amount: formatted_amount }}
+                              {%- endunless -%}
 
                             {% comment %} משלוח חינם מעל {{ vendor_free_threshold | money_without_trailing_zeros }} {% endcomment %}
                             </div>

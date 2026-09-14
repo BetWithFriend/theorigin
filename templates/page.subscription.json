@@ -11,7 +11,9 @@
     "sections": {
         "main-subscription": {
             "type": "main-subscription",
-            "settings": {}
+            "settings": {
+                "subscription_product": "מנוי-קפה"
+            }
         }
     },
     "order": [
