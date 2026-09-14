@@ -571,7 +571,13 @@
         </button>
       </header>
 
-      <h1 class="subscription-results-title">{{ section.settings.results_title | default: 'המנוי שלך מוכן!' }}</h1>
+      <div class="subscription-results-title-row">
+        <h1 class="subscription-results-title">{{ section.settings.results_title | default: 'המנוי שלך מוכן!' }}</h1>
+        <span
+          class="subscription-results-a11y-slot"
+          id="subscriptionResultsA11ySlot"
+          aria-hidden="true"></span>
+      </div>
       <p class="subscription-results-subtitle">
         {{
           section.settings.results_subtitle | default: 'התאמנו לך את חוויית הקפה המדויקת ביותר עבורך. בכל חודש תוכלו לחוות חוויית טעמים חדשים. איזה כיף.'
@@ -970,7 +976,7 @@
         "type": "text",
         "id": "results_title",
         "label": "כותרת מסך תוצאה",
-        "default": "המנוי האישי שלך מוכן!"
+        "default": "המנוי שלך מוכן!"
       }, {
         "type": "textarea",
         "id": "results_subtitle",
